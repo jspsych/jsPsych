@@ -8,11 +8,10 @@
       
       
       
-      
         <link rel="canonical" href="https://www.jspsych.org/7.2/reference/jspsych-randomization/">
       
       <link rel="icon" href="../../img/jspsych-favicon.png">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
     
     
       
@@ -20,10 +19,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.f7f47774.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.e411adfe.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cc9b2e1e.min.css">
         
           
           
@@ -35,21 +34,20 @@
     
       
         
+        
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
-        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
-    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
-
   
 
 
   
-
   
 
 
@@ -70,7 +68,6 @@
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="orange">
   
     
-    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -87,7 +84,16 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      <div data-md-component="outdated" hidden>
+        <aside class="md-banner md-banner--warning">
+          
+        </aside>
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../.." title="jsPsych" class="md-header__button md-logo" aria-label="jsPsych" data-md-component="logo">
       
@@ -95,7 +101,7 @@
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -117,22 +123,21 @@
     
     
       <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
-      
-<div class="md-search" data-md-component="search" role="dialog">
+      <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
       
@@ -152,11 +157,10 @@
     
     
       <div class="md-header__source">
-        
-<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     jspsych/jspsych
@@ -165,11 +169,14 @@
       </div>
     
   </nav>
+  
 </header>
     
     <div class="md-container" data-md-component="container">
       
       
+        
+          
         
       
       <main class="md-main" data-md-component="main">
@@ -194,11 +201,10 @@
   </label>
   
     <div class="md-nav__source">
-      
-<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     jspsych/jspsych
@@ -236,10 +242,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
       
-      <label class="md-nav__link" for="__nav_2">
-        Tutorials
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Tutorials
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
         <label class="md-nav__title" for="__nav_2">
           <span class="md-nav__icon md-icon"></span>
@@ -248,6 +258,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -258,8 +269,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -270,8 +283,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -282,6 +297,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -302,10 +318,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
       
-      <label class="md-nav__link" for="__nav_3">
-        Overview
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Overview
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Overview" data-md-level="1">
         <label class="md-nav__title" for="__nav_3">
           <span class="md-nav__icon md-icon"></span>
@@ -314,6 +334,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -324,8 +345,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -336,8 +359,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -348,8 +373,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -360,8 +387,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -372,8 +401,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -384,8 +415,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -396,8 +429,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -408,8 +443,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -420,8 +457,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -432,8 +471,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -444,8 +485,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -456,8 +499,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -468,8 +513,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -480,8 +527,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -492,8 +541,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -504,8 +555,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -516,8 +569,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -528,8 +583,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -540,8 +597,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -552,6 +611,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -574,10 +634,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
       
-      <label class="md-nav__link" for="__nav_4">
-        Reference
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Reference" data-md-level="1">
         <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
@@ -586,6 +650,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -596,8 +661,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -608,8 +675,10 @@
     </li>
   
 
+            
           
             
+              
   
   
     
@@ -633,6 +702,7 @@
       </a>
       
         
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1385,8 +1455,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1397,8 +1469,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1409,6 +1483,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -1429,10 +1504,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
       
-      <label class="md-nav__link" for="__nav_5">
-        Plugins
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Plugins
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Plugins" data-md-level="1">
         <label class="md-nav__title" for="__nav_5">
           <span class="md-nav__icon md-icon"></span>
@@ -1441,6 +1520,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -1451,8 +1531,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1463,8 +1545,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1475,8 +1559,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1487,8 +1573,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1499,8 +1587,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1511,8 +1601,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1523,8 +1615,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1535,8 +1629,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1547,8 +1643,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1559,8 +1657,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1571,8 +1671,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1583,8 +1685,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1595,8 +1699,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1607,8 +1713,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1619,8 +1727,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1631,8 +1741,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1643,8 +1755,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1655,8 +1769,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1667,8 +1783,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1679,8 +1797,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1691,8 +1811,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1703,8 +1825,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1715,8 +1839,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1727,8 +1853,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1739,8 +1867,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1751,8 +1881,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1763,8 +1895,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1775,8 +1909,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1787,8 +1923,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1799,8 +1937,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1811,8 +1951,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1823,8 +1965,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1835,8 +1979,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1847,8 +1993,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1859,8 +2007,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1871,8 +2021,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1883,8 +2035,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1895,8 +2049,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1907,8 +2063,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1919,8 +2077,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1931,8 +2091,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1943,8 +2105,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1955,8 +2119,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1967,8 +2133,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1979,8 +2147,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1991,8 +2161,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2003,8 +2175,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2015,8 +2189,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2027,8 +2203,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2039,8 +2217,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2051,6 +2231,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2071,10 +2252,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
       
-      <label class="md-nav__link" for="__nav_6">
-        Extensions
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Extensions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Extensions" data-md-level="1">
         <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
@@ -2083,6 +2268,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -2093,8 +2279,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2105,8 +2293,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2117,6 +2307,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2137,10 +2328,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
       
-      <label class="md-nav__link" for="__nav_7">
-        Developers
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Developers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Developers" data-md-level="1">
         <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
@@ -2149,6 +2344,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -2159,8 +2355,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2171,8 +2369,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2183,8 +2383,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2195,6 +2397,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2215,10 +2418,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
       
-      <label class="md-nav__link" for="__nav_8">
-        Support
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          Support
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Support" data-md-level="1">
         <label class="md-nav__title" for="__nav_8">
           <span class="md-nav__icon md-icon"></span>
@@ -2227,6 +2434,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -2237,8 +2445,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2249,6 +2459,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2269,10 +2480,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
       
-      <label class="md-nav__link" for="__nav_9">
-        About
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          About
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="About" data-md-level="1">
         <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
@@ -2281,6 +2496,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -2291,8 +2507,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2303,6 +2521,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2322,6 +2541,7 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -3079,16 +3299,17 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/jspsych/jsPsych/edit/main/docs/reference/jspsych-randomization.md" title="Edit this page" class="md-content__button md-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
-                  </a>
-                
-                
-                <h1 id="jspsychrandomization">jsPsych.randomization<a class="headerlink" href="#jspsychrandomization" title="Permanent link">&para;</a></h1>
+  <a href="https://github.com/jspsych/jsPsych/edit/main/docs/reference/jspsych-randomization.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="jspsychrandomization">jsPsych.randomization<a class="headerlink" href="#jspsychrandomization" title="Permanent link">&para;</a></h1>
 <p>The jsPsych.randomization module contains methods that are useful for generating random lists of trial variables.</p>
 <hr />
 <h2 id="jspsychrandomizationfactorial">jsPsych.randomization.factorial<a class="headerlink" href="#jspsychrandomizationfactorial" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">factorial</span><span class="p">(</span><span class="nx">factors</span><span class="p">,</span> <span class="nx">repetitions</span><span class="p">,</span> <span class="nx">unpack</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">factorial</span><span class="p">(</span><span class="nx">factors</span><span class="p">,</span><span class="w"> </span><span class="nx">repetitions</span><span class="p">,</span><span class="w"> </span><span class="nx">unpack</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
 <table>
@@ -3123,12 +3344,12 @@
 <p>This method takes a list of factors and their levels, and creates a full factorial design by creating each unique combination of the factors. The returned set of combinations is in a random order.</p>
 <h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
 <h4 id="create-full-factorial-design">Create full factorial design<a class="headerlink" href="#create-full-factorial-design" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">factors</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;a.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;b.jpg&#39;</span><span class="p">],</span>
-    <span class="nx">ms_delay</span><span class="o">:</span> <span class="p">[</span><span class="mf">100</span><span class="p">,</span> <span class="mf">200</span><span class="p">]</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">factors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;a.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;b.jpg&#39;</span><span class="p">],</span><span class="w"></span>
+<span class="w">    </span><span class="nx">ms_delay</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">100</span><span class="p">,</span><span class="w"> </span><span class="mf">200</span><span class="p">]</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">full_design</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">factorial</span><span class="p">(</span><span class="nx">factors</span><span class="p">,</span> <span class="mf">1</span><span class="p">);</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">full_design</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">factorial</span><span class="p">(</span><span class="nx">factors</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">);</span><span class="w"></span>
 
 <span class="cm">/*</span>
 <span class="cm">output:</span>
@@ -3138,15 +3359,15 @@
 <span class="cm">    {stimulus: &#39;b.jpg&#39;, ms_delay: 100},</span>
 <span class="cm">    {stimulus: &#39;a.jpg&#39;, ms_delay: 100},</span>
 <span class="cm">]</span>
-<span class="cm">*/</span>
+<span class="cm">*/</span><span class="w"></span>
 </code></pre></div>
 <h4 id="create-full-factorial-design-with-repeats">Create full factorial design with repeats<a class="headerlink" href="#create-full-factorial-design-with-repeats" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">factors</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;a.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;b.jpg&#39;</span><span class="p">],</span>
-    <span class="nx">ms_delay</span><span class="o">:</span> <span class="p">[</span><span class="mf">100</span><span class="p">,</span> <span class="mf">200</span><span class="p">]</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">factors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;a.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;b.jpg&#39;</span><span class="p">],</span><span class="w"></span>
+<span class="w">    </span><span class="nx">ms_delay</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">100</span><span class="p">,</span><span class="w"> </span><span class="mf">200</span><span class="p">]</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">full_design</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">factorial</span><span class="p">(</span><span class="nx">factors</span><span class="p">,</span> <span class="mf">2</span><span class="p">);</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">full_design</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">factorial</span><span class="p">(</span><span class="nx">factors</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">);</span><span class="w"></span>
 
 <span class="cm">/*</span>
 <span class="cm">output:</span>
@@ -3160,15 +3381,15 @@
 <span class="cm">    {stimulus: &#39;a.jpg&#39;, ms_delay: 100},</span>
 <span class="cm">    {stimulus: &#39;a.jpg&#39;, ms_delay: 200},</span>
 <span class="cm">]</span>
-<span class="cm">*/</span>
+<span class="cm">*/</span><span class="w"></span>
 </code></pre></div>
 <h4 id="create-full-factorial-design-unpacked">Create full factorial design, unpacked<a class="headerlink" href="#create-full-factorial-design-unpacked" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">factors</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;a.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;b.jpg&#39;</span><span class="p">],</span>
-    <span class="nx">ms_delay</span><span class="o">:</span> <span class="p">[</span><span class="mf">100</span><span class="p">,</span> <span class="mf">200</span><span class="p">]</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">factors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;a.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;b.jpg&#39;</span><span class="p">],</span><span class="w"></span>
+<span class="w">    </span><span class="nx">ms_delay</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">100</span><span class="p">,</span><span class="w"> </span><span class="mf">200</span><span class="p">]</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">full_design</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">factorial</span><span class="p">(</span><span class="nx">factors</span><span class="p">,</span> <span class="mf">1</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">full_design</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">factorial</span><span class="p">(</span><span class="nx">factors</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span><span class="w"></span>
 
 <span class="cm">/*</span>
 <span class="cm">output:</span>
@@ -3176,11 +3397,11 @@
 <span class="cm">    stimulus: [&#39;a.jpg&#39;,&#39;b.jpg&#39;,&#39;b.jpg&#39;,&#39;a.jpg&#39;],</span>
 <span class="cm">    ms_delay: [200, 100, 200, 100]</span>
 <span class="cm">]</span>
-<span class="cm">*/</span>
+<span class="cm">*/</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationrandomid">jsPsych.randomization.randomID<a class="headerlink" href="#jspsychrandomizationrandomid" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">randomID</span><span class="p">(</span><span class="nx">length</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">randomID</span><span class="p">(</span><span class="nx">length</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_1">Parameters<a class="headerlink" href="#parameters_1" title="Permanent link">&para;</a></h3>
 <table>
@@ -3204,15 +3425,15 @@
 <h3 id="description_1">Description<a class="headerlink" href="#description_1" title="Permanent link">&para;</a></h3>
 <p>Generates a random string that is likely to be unique. If length is undefined, then the string length is 32.</p>
 <h3 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">randomID</span><span class="p">());</span>
-<span class="c1">// outputs: &quot;t7dwz0e713pc8juuaayyfvpkdd9un239&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">randomID</span><span class="p">());</span><span class="w"></span>
+<span class="c1">// outputs: &quot;t7dwz0e713pc8juuaayyfvpkdd9un239&quot;</span><span class="w"></span>
 
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">randomID</span><span class="p">(</span><span class="mf">8</span><span class="p">));</span>
-<span class="c1">// outputs: &quot;3xtpcbck&quot;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">randomID</span><span class="p">(</span><span class="mf">8</span><span class="p">));</span><span class="w"></span>
+<span class="c1">// outputs: &quot;3xtpcbck&quot;</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationrandomint">jsPsych.randomization.randomInt<a class="headerlink" href="#jspsychrandomizationrandomint" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">randomInt</span><span class="p">(</span><span class="nx">lower</span><span class="p">,</span> <span class="nx">upper</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">randomInt</span><span class="p">(</span><span class="nx">lower</span><span class="p">,</span><span class="w"> </span><span class="nx">upper</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_2">Parameters<a class="headerlink" href="#parameters_2" title="Permanent link">&para;</a></h3>
 <table>
@@ -3241,12 +3462,12 @@
 <h3 id="description_2">Description<a class="headerlink" href="#description_2" title="Permanent link">&para;</a></h3>
 <p>Generates a random integer from <code>lower</code> to <code>upper</code></p>
 <h3 id="example_1">Example<a class="headerlink" href="#example_1" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">randomInt</span><span class="p">(</span><span class="mf">2</span><span class="p">,</span><span class="mf">4</span><span class="p">));</span>
-<span class="c1">// outputs: 2 or 3 or 4.</span>
+<div class="highlight"><pre><span></span><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">randomInt</span><span class="p">(</span><span class="mf">2</span><span class="p">,</span><span class="mf">4</span><span class="p">));</span><span class="w"></span>
+<span class="c1">// outputs: 2 or 3 or 4.</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationrepeat">jsPsych.randomization.repeat<a class="headerlink" href="#jspsychrandomizationrepeat" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span> <span class="nx">repetitions</span><span class="p">,</span> <span class="nx">unpack</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span><span class="w"> </span><span class="nx">repetitions</span><span class="p">,</span><span class="w"> </span><span class="nx">unpack</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_3">Parameters<a class="headerlink" href="#parameters_3" title="Permanent link">&para;</a></h3>
 <table>
@@ -3282,60 +3503,60 @@
 <p>If the array elements are objects with the same set of properties, then this method can optionally return a single object where each property is a randomized order of the properties defined in the original set of objects. This is useful for randomizing sets of parameters that are used to define a jsPsych block.</p>
 <h3 id="examples_1">Examples<a class="headerlink" href="#examples_1" title="Permanent link">&para;</a></h3>
 <h4 id="shuffle-an-array-no-repeats">Shuffle an array, no repeats<a class="headerlink" href="#shuffle-an-array-no-repeats" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
-<span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mf">1</span><span class="p">);</span>
-<span class="c1">// output: shuffledArray = [3,2,4,1,5]</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">myArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">shuffledArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// output: shuffledArray = [3,2,4,1,5]</span><span class="w"></span>
 </code></pre></div>
 <h4 id="shuffle-an-array-with-repeats">Shuffle an array with repeats<a class="headerlink" href="#shuffle-an-array-with-repeats" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
-<span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mf">2</span><span class="p">);</span>
-<span class="c1">// output: shuffledArray = [1,3,4,2,2,4,5,1,5,3]</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">myArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">shuffledArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// output: shuffledArray = [1,3,4,2,2,4,5,1,5,3]</span><span class="w"></span>
 </code></pre></div>
 <h4 id="shuffle-an-array-of-objects">Shuffle an array of objects<a class="headerlink" href="#shuffle-an-array-of-objects" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial1</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/faceA.jpg&#39;</span><span class="p">,</span>
-    <span class="nx">correct_key</span><span class="o">:</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span>
-    <span class="nx">person_name</span><span class="o">:</span> <span class="s1">&#39;Joe&#39;</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;img/faceA.jpg&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">correct_key</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">person_name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Joe&#39;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">trial2</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/faceB.jpg&#39;</span><span class="p">,</span>
-    <span class="nx">correct_key</span><span class="o">:</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span>
-    <span class="nx">person_name</span><span class="o">:</span> <span class="s1">&#39;Fred&#39;</span>
-<span class="p">}</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">trial2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;img/faceB.jpg&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">correct_key</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">person_name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Fred&#39;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">trial3</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/faceC.jpg&#39;</span><span class="p">,</span>
-    <span class="nx">correct_key</span><span class="o">:</span> <span class="s1">&#39;q&#39;</span><span class="p">,</span>
-    <span class="nx">person_name</span><span class="o">:</span> <span class="s1">&#39;Mary&#39;</span>
-<span class="p">}</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">trial3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;img/faceC.jpg&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">correct_key</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;q&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">person_name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Mary&#39;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span> <span class="nx">trial1</span><span class="p">,</span> <span class="nx">trial2</span><span class="p">,</span> <span class="nx">trial3</span> <span class="p">];</span>
-<span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mf">2</span><span class="p">);</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">myArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="nx">trial1</span><span class="p">,</span><span class="w"> </span><span class="nx">trial2</span><span class="p">,</span><span class="w"> </span><span class="nx">trial3</span><span class="w"> </span><span class="p">];</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">shuffledArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">);</span><span class="w"></span>
 
-<span class="c1">// output: shuffledArray = [ trial1, trial3, trial3, trial2, trial1, trial2 ]</span>
+<span class="c1">// output: shuffledArray = [ trial1, trial3, trial3, trial2, trial1, trial2 ]</span><span class="w"></span>
 </code></pre></div>
 <h4 id="shuffle-an-array-of-objects-with-unpack">Shuffle an array of objects, with unpack<a class="headerlink" href="#shuffle-an-array-of-objects-with-unpack" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial1</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/faceA.jpg&#39;</span><span class="p">,</span>
-    <span class="nx">correct_key</span><span class="o">:</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span>
-    <span class="nx">person_name</span><span class="o">:</span> <span class="s1">&#39;Joe&#39;</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;img/faceA.jpg&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">correct_key</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">person_name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Joe&#39;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">trial2</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/faceB.jpg&#39;</span><span class="p">,</span>
-    <span class="nx">correct_key</span><span class="o">:</span> <span class="s1">&#39;p&#39;</span><span class="p">,</span>
-    <span class="nx">person_name</span><span class="o">:</span> <span class="s1">&#39;Fred&#39;</span>
-<span class="p">}</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">trial2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;img/faceB.jpg&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">correct_key</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">person_name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Fred&#39;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">trial3</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;img/faceC.jpg&#39;</span><span class="p">,</span>
-    <span class="nx">correct_key</span><span class="o">:</span> <span class="s1">&#39;q&#39;</span><span class="p">,</span>
-    <span class="nx">person_name</span><span class="o">:</span> <span class="s1">&#39;Mary&#39;</span>
-<span class="p">}</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">trial3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;img/faceC.jpg&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">correct_key</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;q&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">person_name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Mary&#39;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span> <span class="nx">trial1</span><span class="p">,</span> <span class="nx">trial2</span><span class="p">,</span> <span class="nx">trial3</span> <span class="p">];</span>
-<span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mf">2</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">myArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="nx">trial1</span><span class="p">,</span><span class="w"> </span><span class="nx">trial2</span><span class="p">,</span><span class="w"> </span><span class="nx">trial3</span><span class="w"> </span><span class="p">];</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">shuffledArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">);</span><span class="w"></span>
 
 <span class="cm">/*</span>
 <span class="cm">output: shuffledArray = {</span>
@@ -3343,11 +3564,11 @@
 <span class="cm">    correct_key: [&#39;p&#39;, &#39;p&#39;, &#39;q&#39;, &#39;p&#39;, &#39;q&#39;, &#39;p&#39;],</span>
 <span class="cm">    person_name: [&#39;Fred&#39;, &#39;Joe&#39;, &#39;Mary&#39;, &#39;Joe&#39;, &#39;Mary&#39;, &#39;Fred&#39;]</span>
 <span class="cm">}</span>
-<span class="cm">*/</span>
+<span class="cm">*/</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationsamplebernoulli">jsPsych.randomization.sampleBernoulli<a class="headerlink" href="#jspsychrandomizationsamplebernoulli" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleBernoulli</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleBernoulli</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_4">Parameters<a class="headerlink" href="#parameters_4" title="Permanent link">&para;</a></h3>
 <table>
@@ -3372,15 +3593,15 @@
 <p>Generates a random sample from a Bernoulli distribution.</p>
 <h3 id="examples_2">Examples<a class="headerlink" href="#examples_2" title="Permanent link">&para;</a></h3>
 <h4 id="sample-a-value">Sample a value<a class="headerlink" href="#sample-a-value" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleBernoulli</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)){</span>
-    <span class="c1">// this happens 80% of the time</span>
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="c1">// this happens 20% of the time</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleBernoulli</span><span class="p">(</span><span class="mf">0.8</span><span class="p">)){</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// this happens 80% of the time</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// this happens 20% of the time</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationsampleexgaussian">jsPsych.randomization.sampleExGaussian<a class="headerlink" href="#jspsychrandomizationsampleexgaussian" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleExGaussian</span><span class="p">(</span><span class="nx">mean</span><span class="p">,</span> <span class="nx">standard_deviation</span><span class="p">,</span> <span class="nx">rate</span><span class="p">,</span> <span class="nx">positive</span><span class="o">=</span><span class="kc">false</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleExGaussian</span><span class="p">(</span><span class="nx">mean</span><span class="p">,</span><span class="w"> </span><span class="nx">standard_deviation</span><span class="p">,</span><span class="w"> </span><span class="nx">rate</span><span class="p">,</span><span class="w"> </span><span class="nx">positive</span><span class="o">=</span><span class="kc">false</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_5">Parameters<a class="headerlink" href="#parameters_5" title="Permanent link">&para;</a></h3>
 <table>
@@ -3420,11 +3641,11 @@
 <p>Generates a random sample from an exponentially modified Gaussian distribution.</p>
 <h3 id="examples_3">Examples<a class="headerlink" href="#examples_3" title="Permanent link">&para;</a></h3>
 <h4 id="sample-a-value_1">Sample a value<a class="headerlink" href="#sample-a-value_1" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">rand_sample_exg</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleExGaussian</span><span class="p">(</span><span class="mf">500</span><span class="p">,</span> <span class="mf">100</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">rand_sample_exg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleExGaussian</span><span class="p">(</span><span class="mf">500</span><span class="p">,</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span><span class="w"> </span><span class="mf">0.01</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationsampleexponential">jsPsych.randomization.sampleExponential<a class="headerlink" href="#jspsychrandomizationsampleexponential" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleExponential</span><span class="p">(</span><span class="nx">rate</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleExponential</span><span class="p">(</span><span class="nx">rate</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_6">Parameters<a class="headerlink" href="#parameters_6" title="Permanent link">&para;</a></h3>
 <table>
@@ -3449,11 +3670,11 @@
 <p>Generates a random sample from an exponential distribution.</p>
 <h3 id="examples_4">Examples<a class="headerlink" href="#examples_4" title="Permanent link">&para;</a></h3>
 <h4 id="sample-a-value_2">Sample a value<a class="headerlink" href="#sample-a-value_2" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">rand_sample_exg</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleExponential</span><span class="p">(</span><span class="mf">0.01</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">rand_sample_exg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleExponential</span><span class="p">(</span><span class="mf">0.01</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationsamplenormal">jsPsych.randomization.sampleNormal<a class="headerlink" href="#jspsychrandomizationsamplenormal" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleNormal</span><span class="p">(</span><span class="nx">mean</span><span class="p">,</span> <span class="nx">standard_deviation</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleNormal</span><span class="p">(</span><span class="nx">mean</span><span class="p">,</span><span class="w"> </span><span class="nx">standard_deviation</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_7">Parameters<a class="headerlink" href="#parameters_7" title="Permanent link">&para;</a></h3>
 <table>
@@ -3483,11 +3704,11 @@
 <p>Generates a random sample from a normal distribution.</p>
 <h3 id="examples_5">Examples<a class="headerlink" href="#examples_5" title="Permanent link">&para;</a></h3>
 <h4 id="sample-a-value_3">Sample a value<a class="headerlink" href="#sample-a-value_3" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">rand_sample_exg</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleNormal</span><span class="p">(</span><span class="mf">500</span><span class="p">,</span> <span class="mf">250</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">rand_sample_exg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleNormal</span><span class="p">(</span><span class="mf">500</span><span class="p">,</span><span class="w"> </span><span class="mf">250</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationsamplewithreplacement">jsPsych.randomization.sampleWithReplacement<a class="headerlink" href="#jspsychrandomizationsamplewithreplacement" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithReplacement</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span> <span class="nx">sampleSize</span><span class="p">,</span> <span class="nx">weights</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithReplacement</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span><span class="w"> </span><span class="nx">sampleSize</span><span class="p">,</span><span class="w"> </span><span class="nx">weights</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_8">Parameters<a class="headerlink" href="#parameters_8" title="Permanent link">&para;</a></h3>
 <table>
@@ -3522,18 +3743,18 @@
 <p>This method returns a sample drawn at random from a set of values with replacement. The relative probability of drawing each item can be controlled by specifying the <code>weights</code>.</p>
 <h3 id="examples_6">Examples<a class="headerlink" href="#examples_6" title="Permanent link">&para;</a></h3>
 <h4 id="sample-with-equal-probability">Sample with equal probability<a class="headerlink" href="#sample-with-equal-probability" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
-<span class="kd">var</span> <span class="nx">sample</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithReplacement</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mf">10</span><span class="p">);</span>
-<span class="c1">// output: sample = [3, 1, 2, 2, 5, 1, 4, 3, 1, 5];</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">myArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">sample</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithReplacement</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span><span class="w"> </span><span class="mf">10</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// output: sample = [3, 1, 2, 2, 5, 1, 4, 3, 1, 5];</span><span class="w"></span>
 </code></pre></div>
 <h4 id="sample-with-unequal-probability">Sample with unequal probability<a class="headerlink" href="#sample-with-unequal-probability" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
-<span class="kd">var</span> <span class="nx">sample</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithReplacement</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mf">10</span><span class="p">,</span> <span class="p">[</span><span class="mf">6</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">1</span><span class="p">]);</span>
-<span class="c1">// output: sample = [3, 4, 5, 1, 2, 1, 3, 1, 1, 1];</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">myArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">sample</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithReplacement</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="mf">6</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">1</span><span class="p">]);</span><span class="w"></span>
+<span class="c1">// output: sample = [3, 4, 5, 1, 2, 1, 3, 1, 1, 1];</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationsamplewithoutreplacement">jsPsych.randomization.sampleWithoutReplacement<a class="headerlink" href="#jspsychrandomizationsamplewithoutreplacement" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span> <span class="nx">sampleSize</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span><span class="w"> </span><span class="nx">sampleSize</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_9">Parameters<a class="headerlink" href="#parameters_9" title="Permanent link">&para;</a></h3>
 <table>
@@ -3563,13 +3784,13 @@
 <p>This method returns a sample drawn at random from a set of values without replacement. The sample size must be less than or equal to the length of the array.</p>
 <h3 id="examples_7">Examples<a class="headerlink" href="#examples_7" title="Permanent link">&para;</a></h3>
 <h4 id="sample-without-replacement">Sample without replacement<a class="headerlink" href="#sample-without-replacement" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
-<span class="kd">var</span> <span class="nx">sample</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span> <span class="mf">2</span><span class="p">);</span>
-<span class="c1">// output: sample = [3,2];</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">myArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">sample</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">(</span><span class="nx">myArray</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// output: sample = [3,2];</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationsetseed">jsPsych.randomization.setSeed<a class="headerlink" href="#jspsychrandomizationsetseed" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">setSeed</span><span class="p">(</span><span class="nx">seed</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">setSeed</span><span class="p">(</span><span class="nx">seed</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_10">Parameters<a class="headerlink" href="#parameters_10" title="Permanent link">&para;</a></h3>
 <table>
@@ -3599,17 +3820,17 @@ If you have non-jsPsych components on the page that use <code>Math.random()</cod
 The seed value will be returned from the function call, allowing you to save it in the data for the experiment if needed.</p>
 <h3 id="examples_8">Examples<a class="headerlink" href="#examples_8" title="Permanent link">&para;</a></h3>
 <h4 id="use-a-random-32-bit-seed-and-save-to-data">Use a random 32-bit seed and save to data<a class="headerlink" href="#use-a-random-32-bit-seed-and-save-to-data" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">seed</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">setSeed</span><span class="p">();</span>
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">addProperties</span><span class="p">({</span>
-    <span class="nx">rng_seed</span><span class="o">:</span> <span class="nx">seed</span>
-<span class="p">});</span>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">seed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">setSeed</span><span class="p">();</span><span class="w"></span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">addProperties</span><span class="p">({</span><span class="w"></span>
+<span class="w">    </span><span class="nx">rng_seed</span><span class="o">:</span><span class="w"> </span><span class="nx">seed</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
 </code></pre></div>
 <h4 id="use-your-own-seed">Use your own seed<a class="headerlink" href="#use-your-own-seed" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">setSeed</span><span class="p">(</span><span class="s2">&quot;jspsych&quot;</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">setSeed</span><span class="p">(</span><span class="s2">&quot;jspsych&quot;</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationshuffle">jsPsych.randomization.shuffle<a class="headerlink" href="#jspsychrandomizationshuffle" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">(</span><span class="nx">array</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">(</span><span class="nx">array</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_11">Parameters<a class="headerlink" href="#parameters_11" title="Permanent link">&para;</a></h3>
 <table>
@@ -3634,13 +3855,13 @@ The seed value will be returned from the function call, allowing you to save it 
 <p>A simple method for shuffling the order of an array.</p>
 <h3 id="examples_9">Examples<a class="headerlink" href="#examples_9" title="Permanent link">&para;</a></h3>
 <h4 id="shuffle-an-array">Shuffle an array<a class="headerlink" href="#shuffle-an-array" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
-<span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">(</span><span class="nx">myArray</span><span class="p">);</span>
-<span class="c1">// output: shuffledArray = [3,2,4,1,5]</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">myArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">shuffledArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">(</span><span class="nx">myArray</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// output: shuffledArray = [3,2,4,1,5]</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrandomizationshufflenorepeats">jsPsych.randomization.shuffleNoRepeats<a class="headerlink" href="#jspsychrandomizationshufflenorepeats" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffleNoRepeats</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span> <span class="nx">equalityTest</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffleNoRepeats</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span><span class="w"> </span><span class="nx">equalityTest</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_12">Parameters<a class="headerlink" href="#parameters_12" title="Permanent link">&para;</a></h3>
 <table>
@@ -3671,29 +3892,24 @@ The seed value will be returned from the function call, allowing you to save it 
 <p><em>Warning: if you provide an array that has very few valid permutations with no neighboring elements, then this method will fail and cause the browser to hang.</em></p>
 <h3 id="examples_10">Examples<a class="headerlink" href="#examples_10" title="Permanent link">&para;</a></h3>
 <h4 id="basic-example">Basic example<a class="headerlink" href="#basic-example" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
-<span class="kd">var</span> <span class="nx">shuffledArray</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffleNoRepeats</span><span class="p">(</span><span class="nx">myArray</span><span class="p">);</span>
-<span class="c1">// output: shuffledArray = [2, 3, 5, 1, 2, 4, 1, 5, 4, 1, 3, 5, 4, 3, 2]</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">myArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">,</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">shuffledArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffleNoRepeats</span><span class="p">(</span><span class="nx">myArray</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// output: shuffledArray = [2, 3, 5, 1, 2, 4, 1, 5, 4, 1, 3, 5, 4, 3, 2]</span><span class="w"></span>
 </code></pre></div>
 <h4 id="custom-equalitytest">Custom equalityTest<a class="headerlink" href="#custom-equalitytest" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">myObjects</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s2">&quot;blue&quot;</span><span class="p">},</span>
-    <span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s2">&quot;red&quot;</span><span class="p">},</span>
-    <span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s2">&quot;yellow&quot;</span><span class="p">},</span>
-    <span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s2">&quot;orange&quot;</span><span class="p">}</span>
-<span class="p">];</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">myObjects</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">  </span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s2">&quot;blue&quot;</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s2">&quot;red&quot;</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s2">&quot;yellow&quot;</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s2">&quot;orange&quot;</span><span class="p">}</span><span class="w"></span>
+<span class="p">];</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">repeatedSet</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myObjects</span><span class="p">,</span><span class="mf">3</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">shuffled</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffleNoRepeats</span><span class="p">(</span><span class="nx">repeatedSet</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">a</span><span class="p">.</span><span class="nx">color</span> <span class="o">===</span> <span class="nx">b</span><span class="p">.</span><span class="nx">color</span> <span class="p">});</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">repeatedSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="nx">myObjects</span><span class="p">,</span><span class="mf">3</span><span class="p">);</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">shuffled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffleNoRepeats</span><span class="p">(</span><span class="nx">repeatedSet</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">a</span><span class="p">.</span><span class="nx">color</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">color</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
 
-<span class="c1">// console.log(JSON.stringify(shuffled))</span>
-<span class="c1">// &quot;[{&quot;color&quot;:&quot;red&quot;},{&quot;color&quot;:&quot;yellow&quot;},{&quot;color&quot;:&quot;blue&quot;},{&quot;color&quot;:&quot;yellow&quot;},{&quot;color&quot;:&quot;orange&quot;},{&quot;color&quot;:&quot;red&quot;},{&quot;color&quot;:&quot;yellow&quot;},{&quot;color&quot;:&quot;orange&quot;},{&quot;color&quot;:&quot;blue&quot;},{&quot;color&quot;:&quot;orange&quot;},{&quot;color&quot;:&quot;red&quot;},{&quot;color&quot;:&quot;blue&quot;}]&quot;</span>
+<span class="c1">// console.log(JSON.stringify(shuffled))</span><span class="w"></span>
+<span class="c1">// &quot;[{&quot;color&quot;:&quot;red&quot;},{&quot;color&quot;:&quot;yellow&quot;},{&quot;color&quot;:&quot;blue&quot;},{&quot;color&quot;:&quot;yellow&quot;},{&quot;color&quot;:&quot;orange&quot;},{&quot;color&quot;:&quot;red&quot;},{&quot;color&quot;:&quot;yellow&quot;},{&quot;color&quot;:&quot;orange&quot;},{&quot;color&quot;:&quot;blue&quot;},{&quot;color&quot;:&quot;orange&quot;},{&quot;color&quot;:&quot;red&quot;},{&quot;color&quot;:&quot;blue&quot;}]&quot;</span><span class="w"></span>
 </code></pre></div>
-                
-              
-              
-                
-
 
               
             </article>
@@ -3702,15 +3918,14 @@ The seed value will be returned from the function call, allowing you to save it 
         
       </main>
       
-        
-<footer class="md-footer">
+        <footer class="md-footer">
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
         <a href="../jspsych-data/" class="md-footer__link md-footer__link--prev" aria-label="Previous: jsPsych.data" rel="prev">
           <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
           <div class="md-footer__title">
             <div class="md-ellipsis">
@@ -3734,7 +3949,7 @@ The seed value will be returned from the function call, allowing you to save it 
             </div>
           </div>
           <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
           </div>
         </a>
       
@@ -3742,41 +3957,42 @@ The seed value will be returned from the function call, allowing you to save it 
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
-      <div class="md-footer-copyright">
-        
-          <div class="md-footer-copyright__highlight">
-            Copyright &copy; 2012-2021 Josh de Leeuw
-          </div>
-        
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-          Material for MkDocs
-        </a>
-        
-      </div>
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2012-2022 Josh de Leeuw
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
       
-  <div class="md-footer-social">
+        <div class="md-social">
+  
+    
     
       
       
-        
-        
-      
-      <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
-      </a>
+    
+    <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
     
       
       
-        
-        
-      
-      <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
-      </a>
     
-  </div>
-
+    <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+</div>
+      
     </div>
   </div>
 </footer>
@@ -3785,10 +4001,10 @@ The seed value will be returned from the function call, allowing you to save it 
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.709b4209.min.js", "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.febc23d1.min.js"></script>
+      <script src="../../assets/javascripts/bundle.ed9748b7.min.js"></script>
       
     
   </body>

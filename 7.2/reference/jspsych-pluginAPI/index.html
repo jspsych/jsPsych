@@ -8,11 +8,10 @@
       
       
       
-      
         <link rel="canonical" href="https://www.jspsych.org/7.2/reference/jspsych-pluginAPI/">
       
       <link rel="icon" href="../../img/jspsych-favicon.png">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
     
     
       
@@ -20,10 +19,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.f7f47774.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.e411adfe.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cc9b2e1e.min.css">
         
           
           
@@ -35,21 +34,20 @@
     
       
         
+        
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
-        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
-    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
-
   
 
 
   
-
   
 
 
@@ -70,7 +68,6 @@
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="orange">
   
     
-    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -87,7 +84,16 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      <div data-md-component="outdated" hidden>
+        <aside class="md-banner md-banner--warning">
+          
+        </aside>
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../.." title="jsPsych" class="md-header__button md-logo" aria-label="jsPsych" data-md-component="logo">
       
@@ -95,7 +101,7 @@
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -117,22 +123,21 @@
     
     
       <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
-      
-<div class="md-search" data-md-component="search" role="dialog">
+      <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
       
@@ -152,11 +157,10 @@
     
     
       <div class="md-header__source">
-        
-<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     jspsych/jspsych
@@ -165,11 +169,14 @@
       </div>
     
   </nav>
+  
 </header>
     
     <div class="md-container" data-md-component="container">
       
       
+        
+          
         
       
       <main class="md-main" data-md-component="main">
@@ -194,11 +201,10 @@
   </label>
   
     <div class="md-nav__source">
-      
-<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     jspsych/jspsych
@@ -236,10 +242,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
       
-      <label class="md-nav__link" for="__nav_2">
-        Tutorials
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Tutorials
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
         <label class="md-nav__title" for="__nav_2">
           <span class="md-nav__icon md-icon"></span>
@@ -248,6 +258,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -258,8 +269,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -270,8 +283,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -282,6 +297,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -302,10 +318,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
       
-      <label class="md-nav__link" for="__nav_3">
-        Overview
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Overview
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Overview" data-md-level="1">
         <label class="md-nav__title" for="__nav_3">
           <span class="md-nav__icon md-icon"></span>
@@ -314,6 +334,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -324,8 +345,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -336,8 +359,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -348,8 +373,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -360,8 +387,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -372,8 +401,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -384,8 +415,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -396,8 +429,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -408,8 +443,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -420,8 +457,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -432,8 +471,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -444,8 +485,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -456,8 +499,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -468,8 +513,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -480,8 +527,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -492,8 +541,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -504,8 +555,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -516,8 +569,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -528,8 +583,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -540,8 +597,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -552,6 +611,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -574,10 +634,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
       
-      <label class="md-nav__link" for="__nav_4">
-        Reference
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Reference" data-md-level="1">
         <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
@@ -586,6 +650,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -596,8 +661,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -608,8 +675,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -620,8 +689,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -632,8 +703,10 @@
     </li>
   
 
+            
           
             
+              
   
   
     
@@ -657,6 +730,7 @@
       </a>
       
         
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1669,6 +1743,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -1689,10 +1764,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
       
-      <label class="md-nav__link" for="__nav_5">
-        Plugins
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Plugins
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Plugins" data-md-level="1">
         <label class="md-nav__title" for="__nav_5">
           <span class="md-nav__icon md-icon"></span>
@@ -1701,6 +1780,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -1711,8 +1791,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1723,8 +1805,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1735,8 +1819,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1747,8 +1833,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1759,8 +1847,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1771,8 +1861,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1783,8 +1875,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1795,8 +1889,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1807,8 +1903,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1819,8 +1917,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1831,8 +1931,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1843,8 +1945,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1855,8 +1959,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1867,8 +1973,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1879,8 +1987,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1891,8 +2001,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1903,8 +2015,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1915,8 +2029,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1927,8 +2043,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1939,8 +2057,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1951,8 +2071,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1963,8 +2085,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1975,8 +2099,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1987,8 +2113,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1999,8 +2127,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2011,8 +2141,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2023,8 +2155,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2035,8 +2169,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2047,8 +2183,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2059,8 +2197,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2071,8 +2211,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2083,8 +2225,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2095,8 +2239,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2107,8 +2253,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2119,8 +2267,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2131,8 +2281,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2143,8 +2295,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2155,8 +2309,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2167,8 +2323,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2179,8 +2337,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2191,8 +2351,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2203,8 +2365,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2215,8 +2379,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2227,8 +2393,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2239,8 +2407,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2251,8 +2421,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2263,8 +2435,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2275,8 +2449,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2287,8 +2463,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2299,8 +2477,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2311,6 +2491,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2331,10 +2512,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
       
-      <label class="md-nav__link" for="__nav_6">
-        Extensions
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Extensions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Extensions" data-md-level="1">
         <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
@@ -2343,6 +2528,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -2353,8 +2539,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2365,8 +2553,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2377,6 +2567,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2397,10 +2588,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
       
-      <label class="md-nav__link" for="__nav_7">
-        Developers
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Developers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Developers" data-md-level="1">
         <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
@@ -2409,6 +2604,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -2419,8 +2615,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2431,8 +2629,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2443,8 +2643,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2455,6 +2657,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2475,10 +2678,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
       
-      <label class="md-nav__link" for="__nav_8">
-        Support
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          Support
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Support" data-md-level="1">
         <label class="md-nav__title" for="__nav_8">
           <span class="md-nav__icon md-icon"></span>
@@ -2487,6 +2694,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -2497,8 +2705,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2509,6 +2719,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2529,10 +2740,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
       
-      <label class="md-nav__link" for="__nav_9">
-        About
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          About
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="About" data-md-level="1">
         <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
@@ -2541,6 +2756,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -2551,8 +2767,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2563,6 +2781,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2582,6 +2801,7 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -3599,16 +3819,17 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/jspsych/jsPsych/edit/main/docs/reference/jspsych-pluginAPI.md" title="Edit this page" class="md-content__button md-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
-                  </a>
-                
-                
-                <h1 id="jspsychpluginapi">jsPsych.pluginAPI<a class="headerlink" href="#jspsychpluginapi" title="Permanent link">&para;</a></h1>
+  <a href="https://github.com/jspsych/jsPsych/edit/main/docs/reference/jspsych-pluginAPI.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="jspsychpluginapi">jsPsych.pluginAPI<a class="headerlink" href="#jspsychpluginapi" title="Permanent link">&para;</a></h1>
 <p>The pluginAPI module contains functions that are useful when developing plugins. All of the functions are accessible through the <code>pluginAPI</code> object. In this documentation we've divided them up based on different kinds of functionality.</p>
 <h2 id="keyboard-input">Keyboard Input<a class="headerlink" href="#keyboard-input" title="Permanent link">&para;</a></h2>
 <h3 id="cancelallkeyboardresponses">cancelAllKeyboardResponses<a class="headerlink" href="#cancelallkeyboardresponses" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelAllKeyboardResponses</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelAllKeyboardResponses</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h4>
 <p>None.</p>
@@ -3617,11 +3838,11 @@
 <h4 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h4>
 <p>Cancels all currently active keyboard listeners created by <code>jsPsych.pluginAPI.getKeyboardResponse</code>.</p>
 <h4 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelAllKeyboardResponses</span><span class="p">();</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelAllKeyboardResponses</span><span class="p">();</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h3 id="cancelkeyboardresponse">cancelKeyboardResponse<a class="headerlink" href="#cancelkeyboardresponse" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelKeyboardResponse</span><span class="p">(</span><span class="nx">listener_id</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelKeyboardResponse</span><span class="p">(</span><span class="nx">listener_id</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_1">Parameters<a class="headerlink" href="#parameters_1" title="Permanent link">&para;</a></h4>
 <table>
@@ -3645,21 +3866,21 @@
 <h4 id="description_1">Description<a class="headerlink" href="#description_1" title="Permanent link">&para;</a></h4>
 <p>Cancels a specific keyboard listener created by <code>jsPsych.pluginAPI.getKeyboardResponse</code>.</p>
 <h4 id="example_1">Example<a class="headerlink" href="#example_1" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="c1">// create a persistent keyboard listener</span>
-<span class="kd">var</span> <span class="nx">listener_id</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getKeyboardResponse</span><span class="p">({</span>
-    <span class="nx">callback_function</span><span class="o">:</span> <span class="nx">after_response</span><span class="p">,</span> 
-    <span class="nx">valid_responses</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="s1">&#39;q&#39;</span><span class="p">],</span> 
-    <span class="nx">rt_method</span><span class="o">:</span> <span class="s1">&#39;performance&#39;</span><span class="p">,</span> 
-    <span class="nx">persist</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="nx">allow_held_key</span><span class="o">:</span> <span class="kc">false</span>
-<span class="p">});</span>
+<div class="highlight"><pre><span></span><code><span class="c1">// create a persistent keyboard listener</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">listener_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getKeyboardResponse</span><span class="p">({</span><span class="w"></span>
+<span class="w">    </span><span class="nx">callback_function</span><span class="o">:</span><span class="w"> </span><span class="nx">after_response</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="nx">valid_responses</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="s1">&#39;q&#39;</span><span class="p">],</span><span class="w"> </span>
+<span class="w">    </span><span class="nx">rt_method</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;performance&#39;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="nx">persist</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">allow_held_key</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
 
-<span class="c1">// cancel keyboard listener</span>
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelKeyboardResponse</span><span class="p">(</span><span class="nx">listener_id</span><span class="p">);</span>
+<span class="c1">// cancel keyboard listener</span><span class="w"></span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelKeyboardResponse</span><span class="p">(</span><span class="nx">listener_id</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h3 id="comparekeys">compareKeys<a class="headerlink" href="#comparekeys" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">key1</span><span class="p">,</span> <span class="nx">key2</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">key1</span><span class="p">,</span><span class="w"> </span><span class="nx">key2</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_2">Parameters<a class="headerlink" href="#parameters_2" title="Permanent link">&para;</a></h4>
 <table>
@@ -3691,47 +3912,47 @@
 <p>We recommend using this function to compare keys in all plugin and experiment code, rather than using something like <code>if (response == 'j')...</code>. This is because the response key returned by the <code>jsPsych.pluginAPI.getKeyboardResponse</code> function will be converted to lowercase when <code>case_sensitive_responses</code> is <code>false</code>, and it will match the exact key press representation when <code>case_sensitive_responses</code> is <code>true</code>. Using this <code>compareKeys</code> function will ensure that your key comparisons work appropriately based on the experiment's <code>case_sensitive_responses</code> setting, and that you do not need to remember to check key responses against different case versions of the comparison key (e.g. <code>if (response == 'ArrowLeft' || response == 'arrowleft')...</code>). </p>
 <h4 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h4>
 <h5 id="basic-examples">Basic examples<a class="headerlink" href="#basic-examples" title="Permanent link">&para;</a></h5>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">);</span>
-<span class="c1">// returns true when case_sensitive_responses is false in initJsPsych</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;A&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// returns true when case_sensitive_responses is false in initJsPsych</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">);</span>
-<span class="c1">// returns false when case_sensitive_responses is true in initJsPsych</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;A&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// returns false when case_sensitive_responses is true in initJsPsych</span><span class="w"></span>
 
-<span class="c1">// also works with numeric key codes (but note that numeric keyCode values are now deprecated)</span>
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mf">65</span><span class="p">);</span>
-<span class="c1">// returns true</span>
+<span class="c1">// also works with numeric key codes (but note that numeric keyCode values are now deprecated)</span><span class="w"></span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="w"> </span><span class="mf">65</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// returns true</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="s1">&#39;space&#39;</span><span class="p">,</span> <span class="mf">31</span><span class="p">);</span>
-<span class="c1">// returns false</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="s1">&#39;space&#39;</span><span class="p">,</span><span class="w"> </span><span class="mf">31</span><span class="p">);</span><span class="w"></span>
+<span class="c1">// returns false</span><span class="w"></span>
 </code></pre></div>
 <h5 id="comparing-a-key-response-and-key-parameter-value-in-plugins">Comparing a key response and key parameter value in plugins<a class="headerlink" href="#comparing-a-key-response-and-key-parameter-value-in-plugins" title="Permanent link">&para;</a></h5>
-<div class="highlight"><pre><span></span><code><span class="c1">// this is the callback_function passed to jsPsych.pluginAPI.getKeyboardResponse</span>
-<span class="kd">var</span> <span class="nx">after_response</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// score the response by comparing the key that was pressed against the trial&#39;s key_answer parameter</span>
-  <span class="kd">var</span> <span class="nx">correct</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">trial</span><span class="p">.</span><span class="nx">key_answer</span><span class="p">,</span> <span class="nx">info</span><span class="p">.</span><span class="nx">key</span><span class="p">);</span>
-  <span class="c1">//...</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="c1">// this is the callback_function passed to jsPsych.pluginAPI.getKeyboardResponse</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">after_response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// score the response by comparing the key that was pressed against the trial&#39;s key_answer parameter</span><span class="w"></span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">correct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">trial</span><span class="p">.</span><span class="nx">key_answer</span><span class="p">,</span><span class="w"> </span><span class="nx">info</span><span class="p">.</span><span class="nx">key</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="c1">//...</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h5 id="scoring-a-key-response-in-experiment-code">Scoring a key response in experiment code<a class="headerlink" href="#scoring-a-key-response-in-experiment-code" title="Permanent link">&para;</a></h5>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;&lt;&lt;&lt;&lt;&#39;</span><span class="p">,</span>
-  <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;j&#39;</span><span class="p">],</span>
-  <span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;Press f for left. Press j for right.&#39;</span><span class="p">,</span>
-  <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-    <span class="c1">// score the response by comparing the key that was pressed (data.response) against the </span>
-    <span class="c1">// correct response for this trial (&#39;f&#39;), and store reponse accuracy in the trial data</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">)){</span>
-      <span class="nx">data</span><span class="p">.</span><span class="nx">correct</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="nx">data</span><span class="p">.</span><span class="nx">correct</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> 
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;&lt;&lt;&lt;&lt;&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;j&#39;</span><span class="p">],</span><span class="w"></span>
+<span class="w">  </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Press f for left. Press j for right.&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// score the response by comparing the key that was pressed (data.response) against the </span><span class="w"></span>
+<span class="w">    </span><span class="c1">// correct response for this trial (&#39;f&#39;), and store reponse accuracy in the trial data</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;f&#39;</span><span class="p">)){</span><span class="w"></span>
+<span class="w">      </span><span class="nx">data</span><span class="p">.</span><span class="nx">correct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nx">data</span><span class="p">.</span><span class="nx">correct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w"> </span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h3 id="getkeyboardresponse">getKeyboardResponse<a class="headerlink" href="#getkeyboardresponse" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getKeyboardResponse</span><span class="p">(</span><span class="nx">parameters</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getKeyboardResponse</span><span class="p">(</span><span class="nx">parameters</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_3">Parameters<a class="headerlink" href="#parameters_3" title="Permanent link">&para;</a></h4>
 <p>The method accepts an object of parameter values (see example below). The valid keys for this object are listed in the table below.</p>
@@ -3790,36 +4011,36 @@
 <p>This function uses the <code>.key</code> value of the keyboard event, which is <em>case sensitive</em>. When <code>case_sensitive_responses</code> is <code>false</code> in <code>initJsPsych</code> (the default), this function will convert both the <code>valid_responses</code> strings and the response key to lowercase before comparing them, and it will pass the lowercase version of the response key to the <code>callback_function</code>. For example, if <code>valid_responses</code> is <code>['a']</code>, then both 'A' and 'a' will be considered valid key presses, and 'a' will be returned as the response key. When <code>case_sensitive_responses</code> is <code>true</code> in <code>initJsPsych</code>, this function will not convert the case when comparing the <code>valid_responses</code> and response key, and it will not convert the case of the response key that is passed to the <code>callback_function</code>. For example, if <code>valid_responses</code> is <code>['a']</code>, then 'a' will be the only valid key press, and 'A' (i.e. 'a' with CapsLock on or Shift held down) will not be accepted. Also, if <code>valid_responses</code> includes multiple letter case options (e.g. <code>"ALL_KEYS"</code>), then you may need to check the response key against both letter cases when scoring etc., e.g. <code>if (response == 'ArrowLeft' || response =='arrowleft') ...</code>.</p>
 <h4 id="examples_1">Examples<a class="headerlink" href="#examples_1" title="Permanent link">&para;</a></h4>
 <h5 id="get-a-single-response-from-any-key">Get a single response from any key<a class="headerlink" href="#get-a-single-response-from-any-key" title="Permanent link">&para;</a></h5>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">after_response</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">){</span>
-    <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;You pressed key &#39;</span><span class="o">+</span><span class="nx">info</span><span class="p">.</span><span class="nx">key</span><span class="o">+</span><span class="s1">&#39; after &#39;</span><span class="o">+</span><span class="nx">info</span><span class="p">.</span><span class="nx">rt</span><span class="o">+</span><span class="s1">&#39;ms&#39;</span><span class="p">);</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">after_response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;You pressed key &#39;</span><span class="o">+</span><span class="nx">info</span><span class="p">.</span><span class="nx">key</span><span class="o">+</span><span class="s1">&#39; after &#39;</span><span class="o">+</span><span class="nx">info</span><span class="p">.</span><span class="nx">rt</span><span class="o">+</span><span class="s1">&#39;ms&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getKeyboardResponse</span><span class="p">({</span>
-  <span class="nx">callback_function</span><span class="o">:</span><span class="nx">after_response</span><span class="p">,</span>
-  <span class="nx">valid_responses</span><span class="o">:</span> <span class="s2">&quot;ALL_KEYS&quot;</span><span class="p">,</span>
-  <span class="nx">rt_method</span><span class="o">:</span> <span class="s1">&#39;performance&#39;</span><span class="p">,</span>
-  <span class="nx">persist</span><span class="o">:</span> <span class="kc">false</span>
-<span class="p">});</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getKeyboardResponse</span><span class="p">({</span><span class="w"></span>
+<span class="w">  </span><span class="nx">callback_function</span><span class="o">:</span><span class="nx">after_response</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">valid_responses</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;ALL_KEYS&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">rt_method</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;performance&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">persist</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
 </code></pre></div>
 <h5 id="get-a-responses-from-a-key-until-the-letter-q-is-pressed">Get a responses from a key until the letter q is pressed<a class="headerlink" href="#get-a-responses-from-a-key-until-the-letter-q-is-pressed" title="Permanent link">&para;</a></h5>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">after_response</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">){</span>
-    <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;You pressed key &#39;</span><span class="o">+</span><span class="nx">info</span><span class="p">.</span><span class="nx">key</span><span class="o">+</span><span class="s1">&#39; after &#39;</span><span class="o">+</span><span class="nx">info</span><span class="p">.</span><span class="nx">rt</span><span class="o">+</span><span class="s1">&#39;ms&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">after_response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">info</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;You pressed key &#39;</span><span class="o">+</span><span class="nx">info</span><span class="p">.</span><span class="nx">key</span><span class="o">+</span><span class="s1">&#39; after &#39;</span><span class="o">+</span><span class="nx">info</span><span class="p">.</span><span class="nx">rt</span><span class="o">+</span><span class="s1">&#39;ms&#39;</span><span class="p">);</span><span class="w"></span>
 
-    <span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">info</span><span class="p">.</span><span class="nx">key</span><span class="p">,</span><span class="s1">&#39;q&#39;</span><span class="p">)){</span> <span class="err">/</span>
-        <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelKeyboardResponse</span><span class="p">(</span><span class="nx">listener</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">info</span><span class="p">.</span><span class="nx">key</span><span class="p">,</span><span class="s1">&#39;q&#39;</span><span class="p">)){</span><span class="w"> </span><span class="err">/</span><span class="w"></span>
+<span class="w">        </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">cancelKeyboardResponse</span><span class="p">(</span><span class="nx">listener</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">listener</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getKeyboardResponse</span><span class="p">({</span>
-  <span class="nx">callback_function</span><span class="o">:</span><span class="nx">after_response</span><span class="p">,</span>
-  <span class="nx">valid_responses</span><span class="o">:</span> <span class="s2">&quot;ALL_KEYS&quot;</span><span class="p">,</span>
-  <span class="nx">rt_method</span><span class="o">:</span> <span class="s1">&#39;performance&#39;</span><span class="p">,</span>
-  <span class="nx">persist</span><span class="o">:</span> <span class="kc">true</span>
-<span class="p">});</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">listener</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getKeyboardResponse</span><span class="p">({</span><span class="w"></span>
+<span class="w">  </span><span class="nx">callback_function</span><span class="o">:</span><span class="nx">after_response</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">valid_responses</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;ALL_KEYS&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">rt_method</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;performance&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">persist</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
 </code></pre></div>
 <h2 id="media">Media<a class="headerlink" href="#media" title="Permanent link">&para;</a></h2>
 <h3 id="getaudiobuffer">getAudioBuffer<a class="headerlink" href="#getaudiobuffer" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAudioBuffer</span><span class="p">(</span><span class="nx">filepath</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAudioBuffer</span><span class="p">(</span><span class="nx">filepath</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_4">Parameters<a class="headerlink" href="#parameters_4" title="Permanent link">&para;</a></h4>
 <table>
@@ -3845,32 +4066,32 @@
 <p>It is strongly recommended that you preload audio files before calling this method. This method will load the files if they are not preloaded, but this may result in delays during the experiment as audio is downloaded.</p>
 <h4 id="examples_2">Examples<a class="headerlink" href="#examples_2" title="Permanent link">&para;</a></h4>
 <h5 id="html-5-audio">HTML 5 Audio<a class="headerlink" href="#html-5-audio" title="Permanent link">&para;</a></h5>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAudioBuffer</span><span class="p">(</span><span class="s1">&#39;my-sound.mp3&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">audio</span><span class="p">){</span>
-    <span class="nx">audio</span><span class="p">.</span><span class="nx">play</span><span class="p">();</span>
-  <span class="p">})</span>
-  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Audio file failed to load&#39;</span><span class="p">)</span>
-  <span class="p">})</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAudioBuffer</span><span class="p">(</span><span class="s1">&#39;my-sound.mp3&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">audio</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="nx">audio</span><span class="p">.</span><span class="nx">play</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="p">})</span><span class="w"></span>
+<span class="w">  </span><span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Audio file failed to load&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">})</span><span class="w"></span>
 </code></pre></div>
 <h5 id="webaudio-api">WebAudio API<a class="headerlink" href="#webaudio-api" title="Permanent link">&para;</a></h5>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">audioContext</span><span class="p">();</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">audioContext</span><span class="p">();</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAudioBuffer</span><span class="p">(</span><span class="s1">&#39;my-sound.mp3&#39;</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">buffer</span><span class="p">){</span>
-    <span class="nx">audio</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">createBufferSource</span><span class="p">();</span>
-    <span class="nx">audio</span><span class="p">.</span><span class="nx">buffer</span> <span class="o">=</span> <span class="nx">buffer</span><span class="p">;</span>
-    <span class="nx">audio</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">destination</span><span class="p">);</span>
-    <span class="nx">audio</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">currentTime</span><span class="p">);</span>
-  <span class="p">})</span>
-  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Audio file failed to load&#39;</span><span class="p">)</span>
-  <span class="p">})</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAudioBuffer</span><span class="p">(</span><span class="s1">&#39;my-sound.mp3&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">buffer</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="nx">audio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">createBufferSource</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="nx">audio</span><span class="p">.</span><span class="nx">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">buffer</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nx">audio</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">destination</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="nx">audio</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">currentTime</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">})</span><span class="w"></span>
+<span class="w">  </span><span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Audio file failed to load&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="p">})</span><span class="w"></span>
 </code></pre></div>
 <p>See the <code>audio-keyboard-response</code> plugin for an example in a fuller context.</p>
 <hr />
 <h3 id="getautopreloadlist">getAutoPreloadList<a class="headerlink" href="#getautopreloadlist" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAutoPreloadList</span><span class="p">(</span><span class="nx">timeline</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAutoPreloadList</span><span class="p">(</span><span class="nx">timeline</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_5">Parameters<a class="headerlink" href="#parameters_5" title="Permanent link">&para;</a></h4>
 <table>
@@ -3898,28 +4119,28 @@ When a file path is returned to the trial parameter from a function (including t
 In these cases, the file should be preloaded manually.
 See <a href="../../overview/media-preloading/">Media Preloading</a> for more information.</p>
 <h4 id="example_2">Example<a class="headerlink" href="#example_2" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">audio_trial</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychAudioKeyboardResponse</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;file.mp3&#39;</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">audio_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychAudioKeyboardResponse</span><span class="w"></span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;file.mp3&#39;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">image_trial</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychImageKeyboardResponse</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;file.png&#39;</span>
-<span class="p">}</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">image_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="w"></span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;file.png&#39;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">video_trial</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychVideoKeyboardResponse</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;file.mp4&#39;</span>
-<span class="p">}</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">video_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychVideoKeyboardResponse</span><span class="w"></span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;file.mp4&#39;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[</span><span class="nx">audio_trial</span><span class="p">,</span> <span class="nx">image_trial</span><span class="p">,</span> <span class="nx">video_trial</span><span class="p">];</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">timeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nx">audio_trial</span><span class="p">,</span><span class="w"> </span><span class="nx">image_trial</span><span class="p">,</span><span class="w"> </span><span class="nx">video_trial</span><span class="p">];</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAutoPreloadList</span><span class="p">(</span><span class="nx">timeline</span><span class="p">);</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAutoPreloadList</span><span class="p">(</span><span class="nx">timeline</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h3 id="getmicrophonerecorder">getMicrophoneRecorder<a class="headerlink" href="#getmicrophonerecorder" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getMicrophoneRecorder</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getMicrophoneRecorder</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_6">Parameters<a class="headerlink" href="#parameters_6" title="Permanent link">&para;</a></h4>
 <p>None</p>
@@ -3929,11 +4150,11 @@ See <a href="../../overview/media-preloading/">Media Preloading</a> for more inf
 <p>Provides access to the <code>MediaRecorder</code> created by <a href="#initializemicrophonerecorder">initializeMicrophoneRecorder()</a>.
 If no microphone recorder exists, it returns <code>null</code>.</p>
 <h4 id="example_3">Example<a class="headerlink" href="#example_3" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">recorder</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getMicrophoneRecorder</span><span class="p">();</span>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">recorder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getMicrophoneRecorder</span><span class="p">();</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h3 id="initializemicrophonerecorder">initializeMicrophoneRecorder<a class="headerlink" href="#initializemicrophonerecorder" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">initializeMicrophoneRecorder</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">initializeMicrophoneRecorder</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_7">Parameters<a class="headerlink" href="#parameters_7" title="Permanent link">&para;</a></h4>
 <table>
@@ -3957,13 +4178,13 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
 <h4 id="description_7">Description<a class="headerlink" href="#description_7" title="Permanent link">&para;</a></h4>
 <p>Generates a <code>MediaRecorder</code> object from provided <code>MediaStream</code> and stores this for access via <a href="#getmicrophonerecorder">getMicrophoneRecorder()</a>.</p>
 <h4 id="example_4">Example<a class="headerlink" href="#example_4" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">stream</span> <span class="o">=</span> <span class="nx">await</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">mediaDevices</span><span class="p">.</span><span class="nx">getUserMedia</span><span class="p">({</span> <span class="nx">audio</span><span class="o">:</span> <span class="p">{</span> <span class="nx">deviceId</span><span class="o">:</span> <span class="nx">mic_id</span> <span class="p">}</span> <span class="p">});</span>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">navigator</span><span class="p">.</span><span class="nx">mediaDevices</span><span class="p">.</span><span class="nx">getUserMedia</span><span class="p">({</span><span class="w"> </span><span class="nx">audio</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">deviceId</span><span class="o">:</span><span class="w"> </span><span class="nx">mic_id</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">initializeMicrophoneRecorder</span><span class="p">(</span><span class="nx">stream</span><span class="p">);</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">initializeMicrophoneRecorder</span><span class="p">(</span><span class="nx">stream</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h3 id="preloadaudio">preloadAudio<a class="headerlink" href="#preloadaudio" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadAudio</span><span class="p">(</span><span class="nx">files</span><span class="p">,</span> <span class="nx">callback_complete</span><span class="p">,</span> <span class="nx">callback_load</span><span class="p">,</span> <span class="nx">callback_error</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadAudio</span><span class="p">(</span><span class="nx">files</span><span class="p">,</span><span class="w"> </span><span class="nx">callback_complete</span><span class="p">,</span><span class="w"> </span><span class="nx">callback_load</span><span class="p">,</span><span class="w"> </span><span class="nx">callback_error</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_8">Parameters<a class="headerlink" href="#parameters_8" title="Permanent link">&para;</a></h4>
 <table>
@@ -4005,40 +4226,40 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
 <p>The <code>callback_load</code> and <code>callback_error</code> functions are called after each file has either loaded or produced an error, so these functions can also be used to monitor loading progress. See example below.</p>
 <h4 id="examples_3">Examples<a class="headerlink" href="#examples_3" title="Permanent link">&para;</a></h4>
 <h5 id="basic-use">Basic use<a class="headerlink" href="#basic-use" title="Permanent link">&para;</a></h5>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">sounds</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;file1.mp3&#39;</span><span class="p">,</span> <span class="s1">&#39;file2.mp3&#39;</span><span class="p">,</span> <span class="s1">&#39;file3.mp3&#39;</span><span class="p">];</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">sounds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;file1.mp3&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;file2.mp3&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;file3.mp3&#39;</span><span class="p">];</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadAudio</span><span class="p">(</span><span class="nx">sounds</span><span class="p">,</span> 
-    <span class="kd">function</span><span class="p">(){</span> <span class="nx">startExperiment</span><span class="p">();</span> <span class="p">},</span>
-    <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;file loaded: &#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span> <span class="p">}</span>
-    <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;error loading file: &#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span> <span class="p">}</span>
-<span class="p">);</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadAudio</span><span class="p">(</span><span class="nx">sounds</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="kd">function</span><span class="p">(){</span><span class="w"> </span><span class="nx">startExperiment</span><span class="p">();</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;file loaded: &#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">file</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;error loading file: &#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">file</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
 
-<span class="kd">function</span> <span class="nx">startExperiment</span><span class="p">(){</span>
-    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">startExperiment</span><span class="p">(){</span><span class="w"></span>
+<span class="w">    </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h5 id="show-progress-of-loading">Show progress of loading<a class="headerlink" href="#show-progress-of-loading" title="Permanent link">&para;</a></h5>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">sounds</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;file1.mp3&#39;</span><span class="p">,</span> <span class="s1">&#39;file2.mp3&#39;</span><span class="p">,</span> <span class="s1">&#39;file3.mp3&#39;</span><span class="p">];</span>
-<span class="kd">var</span> <span class="nx">n_loaded</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">sounds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;file1.mp3&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;file2.mp3&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;file3.mp3&#39;</span><span class="p">];</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">n_loaded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadAudio</span><span class="p">(</span><span class="nx">sounds</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">startExperiment</span><span class="p">();</span> <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span> <span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span> <span class="p">});</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadAudio</span><span class="p">(</span><span class="nx">sounds</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span><span class="w"> </span><span class="nx">startExperiment</span><span class="p">();</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
 
-<span class="kd">function</span> <span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span>
-  <span class="nx">n_loaded</span><span class="o">++</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">percentcomplete</span> <span class="o">=</span> <span class="nx">n_loaded</span> <span class="o">/</span> <span class="nx">sounds</span><span class="p">.</span><span class="nx">length</span> <span class="o">*</span> <span class="mf">100</span><span class="p">;</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span><span class="w"></span>
+<span class="w">  </span><span class="nx">n_loaded</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">percentcomplete</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">n_loaded</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">sounds</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100</span><span class="p">;</span><span class="w"></span>
 
-    <span class="c1">// could put something fancier here, like a progress bar</span>
-    <span class="c1">// or updating text in the DOM.</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Loaded &#39;</span><span class="o">+</span><span class="nx">percentcomplete</span><span class="o">+</span><span class="s1">&#39;% of audio files&#39;</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="c1">// could put something fancier here, like a progress bar</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// or updating text in the DOM.</span><span class="w"></span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Loaded &#39;</span><span class="o">+</span><span class="nx">percentcomplete</span><span class="o">+</span><span class="s1">&#39;% of audio files&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">function</span> <span class="nx">startExperiment</span><span class="p">(){</span>
-  <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">startExperiment</span><span class="p">(){</span><span class="w"></span>
+<span class="w">  </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h3 id="preloadimages">preloadImages<a class="headerlink" href="#preloadimages" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadImages</span><span class="p">(</span><span class="nx">images</span><span class="p">,</span> <span class="nx">callback_complete</span><span class="p">,</span> <span class="nx">callback_load</span><span class="p">,</span> <span class="nx">callback_error</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadImages</span><span class="p">(</span><span class="nx">images</span><span class="p">,</span><span class="w"> </span><span class="nx">callback_complete</span><span class="p">,</span><span class="w"> </span><span class="nx">callback_load</span><span class="p">,</span><span class="w"> </span><span class="nx">callback_error</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_9">Parameters<a class="headerlink" href="#parameters_9" title="Permanent link">&para;</a></h4>
 <table>
@@ -4080,40 +4301,40 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
 <p>The <code>callback_load</code> and <code>callback_error</code> functions are called after each file has either loaded or produced an error, so these functions can also be used to monitor loading progress. See example below.</p>
 <h4 id="examples_4">Examples<a class="headerlink" href="#examples_4" title="Permanent link">&para;</a></h4>
 <h5 id="basic-use_1">Basic use<a class="headerlink" href="#basic-use_1" title="Permanent link">&para;</a></h5>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">images</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;img/file1.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/file2.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/file3.png&#39;</span><span class="p">];</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;img/file1.png&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;img/file2.png&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;img/file3.png&#39;</span><span class="p">];</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadImages</span><span class="p">(</span><span class="nx">images</span><span class="p">,</span> 
-    <span class="kd">function</span><span class="p">(){</span> <span class="nx">startExperiment</span><span class="p">();</span> <span class="p">},</span>
-    <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;file loaded: &#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span> <span class="p">}</span>
-    <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;error loading file: &#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span> <span class="p">}</span>
-<span class="p">);</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadImages</span><span class="p">(</span><span class="nx">images</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="kd">function</span><span class="p">(){</span><span class="w"> </span><span class="nx">startExperiment</span><span class="p">();</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;file loaded: &#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">file</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;error loading file: &#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">file</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
 
-<span class="kd">function</span> <span class="nx">startExperiment</span><span class="p">(){</span>
-    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">startExperiment</span><span class="p">(){</span><span class="w"></span>
+<span class="w">    </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h5 id="show-progress-of-loading_1">Show progress of loading<a class="headerlink" href="#show-progress-of-loading_1" title="Permanent link">&para;</a></h5>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">images</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;img/file1.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/file2.png&#39;</span><span class="p">,</span> <span class="s1">&#39;img/file3.png&#39;</span><span class="p">];</span>
-<span class="kd">var</span> <span class="nx">n_loaded</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;img/file1.png&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;img/file2.png&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;img/file3.png&#39;</span><span class="p">];</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">n_loaded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadImages</span><span class="p">(</span><span class="nx">images</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">startExperiment</span><span class="p">();</span> <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span> <span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span> <span class="p">});</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadImages</span><span class="p">(</span><span class="nx">images</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span><span class="w"> </span><span class="nx">startExperiment</span><span class="p">();</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
 
-<span class="kd">function</span> <span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span>
-  <span class="nx">n_loaded</span><span class="o">++</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">percentcomplete</span> <span class="o">=</span> <span class="nx">n_loaded</span> <span class="o">/</span> <span class="nx">images</span><span class="p">.</span><span class="nx">length</span> <span class="o">*</span> <span class="mf">100</span><span class="p">;</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span><span class="w"></span>
+<span class="w">  </span><span class="nx">n_loaded</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">percentcomplete</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">n_loaded</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">images</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100</span><span class="p">;</span><span class="w"></span>
 
-    <span class="c1">// could put something fancier here, like a progress bar</span>
-    <span class="c1">// or updating text in the DOM.</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Loaded &#39;</span><span class="o">+</span><span class="nx">percentcomplete</span><span class="o">+</span><span class="s1">&#39;% of images&#39;</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="c1">// could put something fancier here, like a progress bar</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// or updating text in the DOM.</span><span class="w"></span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Loaded &#39;</span><span class="o">+</span><span class="nx">percentcomplete</span><span class="o">+</span><span class="s1">&#39;% of images&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">function</span> <span class="nx">startExperiment</span><span class="p">(){</span>
-  <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">startExperiment</span><span class="p">(){</span><span class="w"></span>
+<span class="w">  </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h3 id="preloadvideo">preloadVideo<a class="headerlink" href="#preloadvideo" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadVideo</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span> <span class="nx">callback_complete</span><span class="p">,</span> <span class="nx">callback_load</span><span class="p">,</span> <span class="nx">callback_error</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadVideo</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span><span class="w"> </span><span class="nx">callback_complete</span><span class="p">,</span><span class="w"> </span><span class="nx">callback_load</span><span class="p">,</span><span class="w"> </span><span class="nx">callback_error</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_10">Parameters<a class="headerlink" href="#parameters_10" title="Permanent link">&para;</a></h4>
 <table>
@@ -4155,41 +4376,41 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
 <p>The <code>callback_load</code> and <code>callback_error</code> functions are called after each file has either loaded or produced an error, so these functions can also be used to monitor loading progress. See example below.</p>
 <h4 id="examples_5">Examples<a class="headerlink" href="#examples_5" title="Permanent link">&para;</a></h4>
 <h5 id="basic-use_2">Basic use<a class="headerlink" href="#basic-use_2" title="Permanent link">&para;</a></h5>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">videos</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;vid/file1.mp4&#39;</span><span class="p">,</span> <span class="s1">&#39;vid/file2.mp4&#39;</span><span class="p">,</span> <span class="s1">&#39;vid/file3.mp4&#39;</span><span class="p">];</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">videos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;vid/file1.mp4&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;vid/file2.mp4&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;vid/file3.mp4&#39;</span><span class="p">];</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadVideo</span><span class="p">(</span><span class="nx">videos</span><span class="p">,</span> 
-  <span class="kd">function</span><span class="p">(){</span> <span class="nx">startExperiment</span><span class="p">();</span> <span class="p">},</span>
-  <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;file loaded: &#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span> <span class="p">}</span>
-  <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;error loading file: &#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">);</span> <span class="p">}</span>
-<span class="p">);</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadVideo</span><span class="p">(</span><span class="nx">videos</span><span class="p">,</span><span class="w"> </span>
+<span class="w">  </span><span class="kd">function</span><span class="p">(){</span><span class="w"> </span><span class="nx">startExperiment</span><span class="p">();</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
+<span class="w">  </span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;file loaded: &#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">file</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;error loading file: &#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">file</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
 
-<span class="kd">function</span> <span class="nx">startExperiment</span><span class="p">(){</span>
-  <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">startExperiment</span><span class="p">(){</span><span class="w"></span>
+<span class="w">  </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h5 id="show-progress-of-loading_2">Show progress of loading<a class="headerlink" href="#show-progress-of-loading_2" title="Permanent link">&para;</a></h5>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">videos</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;vid/file1.mp4&#39;</span><span class="p">,</span> <span class="s1">&#39;vid/file2.mp4&#39;</span><span class="p">,</span> <span class="s1">&#39;vid/file3.mp4&#39;</span><span class="p">];</span>
-<span class="kd">var</span> <span class="nx">n_loaded</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">videos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;vid/file1.mp4&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;vid/file2.mp4&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;vid/file3.mp4&#39;</span><span class="p">];</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">n_loaded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadVideo</span><span class="p">(</span><span class="nx">videos</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">startExperiment</span><span class="p">();</span> <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span> <span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span> <span class="p">});</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">preloadVideo</span><span class="p">(</span><span class="nx">videos</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span><span class="w"> </span><span class="nx">startExperiment</span><span class="p">();</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span><span class="w"> </span><span class="p">});</span><span class="w"></span>
 
-<span class="kd">function</span> <span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span>
-  <span class="nx">n_loaded</span><span class="o">++</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">percentcomplete</span> <span class="o">=</span> <span class="nx">n_loaded</span> <span class="o">/</span> <span class="nx">videos</span><span class="p">.</span><span class="nx">length</span> <span class="o">*</span> <span class="mf">100</span><span class="p">;</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">updateLoadedCount</span><span class="p">(</span><span class="nx">file</span><span class="p">){</span><span class="w"></span>
+<span class="w">  </span><span class="nx">n_loaded</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">percentcomplete</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">n_loaded</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">videos</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">100</span><span class="p">;</span><span class="w"></span>
 
-    <span class="c1">// could put something fancier here, like a progress bar</span>
-    <span class="c1">// or updating text in the DOM.</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Loaded &#39;</span><span class="o">+</span><span class="nx">percentcomplete</span><span class="o">+</span><span class="s1">&#39;% of videos&#39;</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="c1">// could put something fancier here, like a progress bar</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// or updating text in the DOM.</span><span class="w"></span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Loaded &#39;</span><span class="o">+</span><span class="nx">percentcomplete</span><span class="o">+</span><span class="s1">&#39;% of videos&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">function</span> <span class="nx">startExperiment</span><span class="p">(){</span>
-  <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">startExperiment</span><span class="p">(){</span><span class="w"></span>
+<span class="w">  </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">exp</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="simulation">Simulation<a class="headerlink" href="#simulation" title="Permanent link">&para;</a></h2>
 <h3 id="clicktarget">clickTarget<a class="headerlink" href="#clicktarget" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">clickTarget</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">delay</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">clickTarget</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span><span class="w"> </span><span class="nx">delay</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_11">Parameters<a class="headerlink" href="#parameters_11" title="Permanent link">&para;</a></h4>
 <table>
@@ -4218,13 +4439,13 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
 <h4 id="description_11">Description<a class="headerlink" href="#description_11" title="Permanent link">&para;</a></h4>
 <p>Simulates clicking on a DOM element by dispatching three MouseEvents on the <code>target</code>: <code>'mousedown'</code>, then <code>'mouseup'</code>, then <code>'click'</code>. If <code>delay</code> is positive, then the events are scheduled to execute after the delay via <code>setTimeout</code>.</p>
 <h4 id="example_5">Example<a class="headerlink" href="#example_5" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">target</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.jspsych-btn&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.jspsych-btn&#39;</span><span class="p">);</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">clickTarget</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="mf">500</span><span class="p">);</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">clickTarget</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span><span class="w"> </span><span class="mf">500</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h3 id="ensuresimulationdataconsistency">ensureSimulationDataConsistency<a class="headerlink" href="#ensuresimulationdataconsistency" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">ensureSimulationDataConsistency</span><span class="p">(</span><span class="nx">trial</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">ensureSimulationDataConsistency</span><span class="p">(</span><span class="nx">trial</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_12">Parameters<a class="headerlink" href="#parameters_12" title="Permanent link">&para;</a></h4>
 <table>
@@ -4253,11 +4474,11 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
 <h4 id="description_12">Description<a class="headerlink" href="#description_12" title="Permanent link">&para;</a></h4>
 <p>Performs some basic consistency checks on the <code>data</code> based on the parameters specified in <code>trial</code>. For example, if <code>trial.choices</code> is <code>"NO_KEYS"</code> but <code>data.response</code> is a key string then <code>data.response</code> and <code>data.rt</code> are set to <code>null</code>.</p>
 <h4 id="example_6">Example<a class="headerlink" href="#example_6" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">ensureSimulationDataConsistency</span><span class="p">(</span><span class="nx">trial</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">ensureSimulationDataConsistency</span><span class="p">(</span><span class="nx">trial</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h3 id="filltextinput">fillTextInput<a class="headerlink" href="#filltextinput" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">fillTextInput</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">text</span><span class="p">,</span> <span class="nx">delay</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">fillTextInput</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span><span class="w"> </span><span class="nx">text</span><span class="p">,</span><span class="w"> </span><span class="nx">delay</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_13">Parameters<a class="headerlink" href="#parameters_13" title="Permanent link">&para;</a></h4>
 <table>
@@ -4291,13 +4512,13 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
 <h4 id="description_13">Description<a class="headerlink" href="#description_13" title="Permanent link">&para;</a></h4>
 <p>Sets the value of the <code>target</code> HTMLInputElement to equal <code>text</code>. </p>
 <h4 id="example_7">Example<a class="headerlink" href="#example_7" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">target</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;input[type=&quot;text&quot;]&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;input[type=&quot;text&quot;]&#39;</span><span class="p">);</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">fillTextInput</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="s2">&quot;hello!&quot;</span><span class="p">,</span> <span class="mf">500</span><span class="p">);</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">fillTextInput</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;hello!&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">500</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h3 id="getvalidkey">getValidKey<a class="headerlink" href="#getvalidkey" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getValidKey</span><span class="p">(</span><span class="nx">choices</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getValidKey</span><span class="p">(</span><span class="nx">choices</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_14">Parameters<a class="headerlink" href="#parameters_14" title="Permanent link">&para;</a></h4>
 <table>
@@ -4321,11 +4542,11 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
 <h4 id="description_14">Description<a class="headerlink" href="#description_14" title="Permanent link">&para;</a></h4>
 <p>Picks a random key given a set of options. Currently it only picks letters and numbers when <code>choices</code> is <code>"ALL_KEYS"</code>.</p>
 <h4 id="example_8">Example<a class="headerlink" href="#example_8" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">random_key</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getValidKey</span><span class="p">(</span><span class="nx">trial</span><span class="p">.</span><span class="nx">choices</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">random_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getValidKey</span><span class="p">(</span><span class="nx">trial</span><span class="p">.</span><span class="nx">choices</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h3 id="keydown">keyDown<a class="headerlink" href="#keydown" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">keyDown</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">keyDown</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_15">Parameters<a class="headerlink" href="#parameters_15" title="Permanent link">&para;</a></h4>
 <table>
@@ -4349,11 +4570,11 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
 <h4 id="description_15">Description<a class="headerlink" href="#description_15" title="Permanent link">&para;</a></h4>
 <p>Dispatches a <code>'keydown'</code> event for the specified <code>key</code>. </p>
 <h4 id="example_9">Example<a class="headerlink" href="#example_9" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">keyDown</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">keyDown</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h3 id="keyup">keyUp<a class="headerlink" href="#keyup" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">keyUp</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">keyUp</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_16">Parameters<a class="headerlink" href="#parameters_16" title="Permanent link">&para;</a></h4>
 <table>
@@ -4377,11 +4598,11 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
 <h4 id="description_16">Description<a class="headerlink" href="#description_16" title="Permanent link">&para;</a></h4>
 <p>Dispatches a <code>'keyup'</code> event for the specified <code>key</code>. </p>
 <h4 id="example_10">Example<a class="headerlink" href="#example_10" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">keyUp</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">keyUp</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h3 id="mergesimulationdata">mergeSimulationData<a class="headerlink" href="#mergesimulationdata" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">mergeSimulationData</span><span class="p">(</span><span class="nx">default_data</span><span class="p">,</span> <span class="nx">simulation_options</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">mergeSimulationData</span><span class="p">(</span><span class="nx">default_data</span><span class="p">,</span><span class="w"> </span><span class="nx">simulation_options</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_17">Parameters<a class="headerlink" href="#parameters_17" title="Permanent link">&para;</a></h4>
 <table>
@@ -4410,25 +4631,25 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
 <h4 id="description_17">Description<a class="headerlink" href="#description_17" title="Permanent link">&para;</a></h4>
 <p>This method merges the <code>default_data</code> with any data specified in <code>simulation_options.data</code>, giving priority to values specified in <code>simulation_options.data</code>. It returns the merged data.</p>
 <h4 id="example_11">Example<a class="headerlink" href="#example_11" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">default_data</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">rt</span><span class="o">:</span> <span class="mf">500</span><span class="p">,</span>
-  <span class="nx">response</span><span class="o">:</span> <span class="s1">&#39;a&#39;</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">default_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">rt</span><span class="o">:</span><span class="w"> </span><span class="mf">500</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">response</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;a&#39;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kr">const</span> <span class="nx">simulation_options</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">rt</span><span class="o">:</span> <span class="mf">200</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">simulation_options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">rt</span><span class="o">:</span><span class="w"> </span><span class="mf">200</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kr">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">mergeSimulationData</span><span class="p">(</span><span class="nx">default_data</span><span class="p">,</span> <span class="nx">simulation_options</span><span class="p">);</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">mergeSimulationData</span><span class="p">(</span><span class="nx">default_data</span><span class="p">,</span><span class="w"> </span><span class="nx">simulation_options</span><span class="p">);</span><span class="w"></span>
 
-<span class="nx">data</span><span class="p">.</span><span class="nx">rt</span> <span class="o">===</span> <span class="mf">200</span><span class="p">;</span> <span class="c1">// true</span>
+<span class="nx">data</span><span class="p">.</span><span class="nx">rt</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">200</span><span class="p">;</span><span class="w"> </span><span class="c1">// true</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="timeouts">Timeouts<a class="headerlink" href="#timeouts" title="Permanent link">&para;</a></h2>
 <h3 id="clearalltimeouts">clearAllTimeouts<a class="headerlink" href="#clearalltimeouts" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">clearAllTimeouts</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">clearAllTimeouts</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_18">Parameters<a class="headerlink" href="#parameters_18" title="Permanent link">&para;</a></h4>
 <p>None.</p>
@@ -4438,7 +4659,7 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
 <p>Clears any pending timeouts that were set using jsPsych.pluginAPI.setTimeout().</p>
 <hr />
 <h3 id="settimeout">setTimeout<a class="headerlink" href="#settimeout" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">callback</span><span class="p">,</span> <span class="nx">delay</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">callback</span><span class="p">,</span><span class="w"> </span><span class="nx">delay</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h4 id="parameters_19">Parameters<a class="headerlink" href="#parameters_19" title="Permanent link">&para;</a></h4>
 <table>
@@ -4467,19 +4688,14 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
 <h4 id="description_19">Description<a class="headerlink" href="#description_19" title="Permanent link">&para;</a></h4>
 <p>This is simply a call to the standard setTimeout function in JavaScript with the added benefit of registering the setTimeout call in a central list. This is useful for scenarios where some other event (the trial ending, aborting the experiment) should stop the execution of queued timeouts.</p>
 <h4 id="example_12">Example<a class="headerlink" href="#example_12" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="c1">// print the time</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">())</span>
+<div class="highlight"><pre><span></span><code><span class="c1">// print the time</span><span class="w"></span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">())</span><span class="w"></span>
 
-<span class="c1">// print the time 1s later</span>
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">())</span>
-<span class="p">},</span> <span class="mf">1000</span><span class="p">);</span>
+<span class="c1">// print the time 1s later</span><span class="w"></span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="w"></span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">())</span><span class="w"></span>
+<span class="p">},</span><span class="w"> </span><span class="mf">1000</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
-                
-              
-              
-                
-
 
               
             </article>
@@ -4488,15 +4704,14 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
         
       </main>
       
-        
-<footer class="md-footer">
+        <footer class="md-footer">
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
         <a href="../jspsych-turk/" class="md-footer__link md-footer__link--prev" aria-label="Previous: jsPsych.turk" rel="prev">
           <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
           <div class="md-footer__title">
             <div class="md-ellipsis">
@@ -4520,7 +4735,7 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
             </div>
           </div>
           <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
           </div>
         </a>
       
@@ -4528,41 +4743,42 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
-      <div class="md-footer-copyright">
-        
-          <div class="md-footer-copyright__highlight">
-            Copyright &copy; 2012-2021 Josh de Leeuw
-          </div>
-        
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-          Material for MkDocs
-        </a>
-        
-      </div>
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2012-2022 Josh de Leeuw
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
       
-  <div class="md-footer-social">
+        <div class="md-social">
+  
+    
     
       
       
-        
-        
-      
-      <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
-      </a>
+    
+    <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
     
       
       
-        
-        
-      
-      <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
-      </a>
     
-  </div>
-
+    <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+</div>
+      
     </div>
   </div>
 </footer>
@@ -4571,10 +4787,10 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.709b4209.min.js", "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.febc23d1.min.js"></script>
+      <script src="../../assets/javascripts/bundle.ed9748b7.min.js"></script>
       
     
   </body>

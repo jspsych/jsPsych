@@ -8,11 +8,10 @@
       
       
       
-      
         <link rel="canonical" href="https://www.jspsych.org/7.2/reference/jspsych/">
       
       <link rel="icon" href="../../img/jspsych-favicon.png">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
     
     
       
@@ -20,10 +19,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.f7f47774.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.e411adfe.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cc9b2e1e.min.css">
         
           
           
@@ -35,21 +34,20 @@
     
       
         
+        
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
-        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
-    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
-
   
 
 
   
-
   
 
 
@@ -70,7 +68,6 @@
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="orange">
   
     
-    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -87,7 +84,16 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      <div data-md-component="outdated" hidden>
+        <aside class="md-banner md-banner--warning">
+          
+        </aside>
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../.." title="jsPsych" class="md-header__button md-logo" aria-label="jsPsych" data-md-component="logo">
       
@@ -95,7 +101,7 @@
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -117,22 +123,21 @@
     
     
       <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
-      
-<div class="md-search" data-md-component="search" role="dialog">
+      <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
       
@@ -152,11 +157,10 @@
     
     
       <div class="md-header__source">
-        
-<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     jspsych/jspsych
@@ -165,11 +169,14 @@
       </div>
     
   </nav>
+  
 </header>
     
     <div class="md-container" data-md-component="container">
       
       
+        
+          
         
       
       <main class="md-main" data-md-component="main">
@@ -194,11 +201,10 @@
   </label>
   
     <div class="md-nav__source">
-      
-<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     jspsych/jspsych
@@ -236,10 +242,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
       
-      <label class="md-nav__link" for="__nav_2">
-        Tutorials
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Tutorials
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
         <label class="md-nav__title" for="__nav_2">
           <span class="md-nav__icon md-icon"></span>
@@ -248,6 +258,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -258,8 +269,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -270,8 +283,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -282,6 +297,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -302,10 +318,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
       
-      <label class="md-nav__link" for="__nav_3">
-        Overview
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Overview
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Overview" data-md-level="1">
         <label class="md-nav__title" for="__nav_3">
           <span class="md-nav__icon md-icon"></span>
@@ -314,6 +334,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -324,8 +345,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -336,8 +359,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -348,8 +373,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -360,8 +387,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -372,8 +401,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -384,8 +415,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -396,8 +429,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -408,8 +443,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -420,8 +457,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -432,8 +471,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -444,8 +485,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -456,8 +499,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -468,8 +513,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -480,8 +527,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -492,8 +541,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -504,8 +555,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -516,8 +569,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -528,8 +583,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -540,8 +597,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -552,6 +611,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -574,10 +634,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
       
-      <label class="md-nav__link" for="__nav_4">
-        Reference
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Reference" data-md-level="1">
         <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
@@ -586,6 +650,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
     
@@ -609,6 +674,7 @@
       </a>
       
         
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1506,8 +1572,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1518,8 +1586,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1530,8 +1600,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1542,8 +1614,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1554,6 +1628,7 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -1574,10 +1649,14 @@ el.style.visibility = &#39;hidden&#39;;
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
       
-      <label class="md-nav__link" for="__nav_5">
-        Plugins
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Plugins
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Plugins" data-md-level="1">
         <label class="md-nav__title" for="__nav_5">
           <span class="md-nav__icon md-icon"></span>
@@ -1586,6 +1665,7 @@ el.style.visibility = &#39;hidden&#39;;
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -1596,8 +1676,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1608,8 +1690,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1620,8 +1704,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1632,8 +1718,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1644,8 +1732,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1656,8 +1746,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1668,8 +1760,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1680,8 +1774,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1692,8 +1788,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1704,8 +1802,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1716,8 +1816,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1728,8 +1830,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1740,8 +1844,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1752,8 +1858,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1764,8 +1872,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1776,8 +1886,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1788,8 +1900,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1800,8 +1914,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1812,8 +1928,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1824,8 +1942,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1836,8 +1956,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1848,8 +1970,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1860,8 +1984,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1872,8 +1998,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1884,8 +2012,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1896,8 +2026,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1908,8 +2040,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1920,8 +2054,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1932,8 +2068,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1944,8 +2082,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1956,8 +2096,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1968,8 +2110,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1980,8 +2124,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1992,8 +2138,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2004,8 +2152,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2016,8 +2166,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2028,8 +2180,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2040,8 +2194,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2052,8 +2208,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2064,8 +2222,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2076,8 +2236,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2088,8 +2250,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2100,8 +2264,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2112,8 +2278,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2124,8 +2292,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2136,8 +2306,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2148,8 +2320,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2160,8 +2334,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2172,8 +2348,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2184,8 +2362,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2196,6 +2376,7 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2216,10 +2397,14 @@ el.style.visibility = &#39;hidden&#39;;
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
       
-      <label class="md-nav__link" for="__nav_6">
-        Extensions
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Extensions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Extensions" data-md-level="1">
         <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
@@ -2228,6 +2413,7 @@ el.style.visibility = &#39;hidden&#39;;
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -2238,8 +2424,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2250,8 +2438,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2262,6 +2452,7 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2282,10 +2473,14 @@ el.style.visibility = &#39;hidden&#39;;
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
       
-      <label class="md-nav__link" for="__nav_7">
-        Developers
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Developers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Developers" data-md-level="1">
         <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
@@ -2294,6 +2489,7 @@ el.style.visibility = &#39;hidden&#39;;
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -2304,8 +2500,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2316,8 +2514,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2328,8 +2528,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2340,6 +2542,7 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2360,10 +2563,14 @@ el.style.visibility = &#39;hidden&#39;;
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
       
-      <label class="md-nav__link" for="__nav_8">
-        Support
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          Support
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Support" data-md-level="1">
         <label class="md-nav__title" for="__nav_8">
           <span class="md-nav__icon md-icon"></span>
@@ -2372,6 +2579,7 @@ el.style.visibility = &#39;hidden&#39;;
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -2382,8 +2590,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2394,6 +2604,7 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2414,10 +2625,14 @@ el.style.visibility = &#39;hidden&#39;;
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
       
-      <label class="md-nav__link" for="__nav_9">
-        About
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          About
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="About" data-md-level="1">
         <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
@@ -2426,6 +2641,7 @@ el.style.visibility = &#39;hidden&#39;;
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -2436,8 +2652,10 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -2448,6 +2666,7 @@ el.style.visibility = &#39;hidden&#39;;
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -2467,6 +2686,7 @@ el.style.visibility = &#39;hidden&#39;;
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -3369,15 +3589,16 @@ el.style.visibility = &#39;hidden&#39;;
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/jspsych/jsPsych/edit/main/docs/reference/jspsych.md" title="Edit this page" class="md-content__button md-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
-                  </a>
-                
-                
-                <h1 id="jspsych">jsPsych<a class="headerlink" href="#jspsych" title="Permanent link">&para;</a></h1>
+  <a href="https://github.com/jspsych/jsPsych/edit/main/docs/reference/jspsych.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="jspsych">jsPsych<a class="headerlink" href="#jspsych" title="Permanent link">&para;</a></h1>
 <hr />
 <h2 id="initjspsych">initJsPsych<a class="headerlink" href="#initjspsych" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">jsPsych</span> <span class="o">=</span> <span class="nx">initJsPsych</span><span class="p">(</span><span class="nx">settings</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">jsPsych</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">initJsPsych</span><span class="p">(</span><span class="nx">settings</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
 <table>
@@ -3530,18 +3751,18 @@ el.style.visibility = &#39;hidden&#39;;
 <h3 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h3>
 <p>This function initializes jsPsych with the specified experiment settings.</p>
 <h3 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">jsPsych</span> <span class="o">=</span> <span class="nx">initJsPsych</span><span class="p">({</span>
-  <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">displayData</span><span class="p">();</span>
-  <span class="p">},</span> 
-  <span class="nx">show_progress_bar</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-  <span class="nx">default_iti</span><span class="o">:</span> <span class="mf">500</span>
-<span class="p">});</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">jsPsych</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">initJsPsych</span><span class="p">({</span><span class="w"></span>
+<span class="w">  </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">displayData</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="p">},</span><span class="w"> </span>
+<span class="w">  </span><span class="nx">show_progress_bar</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">default_iti</span><span class="o">:</span><span class="w"> </span><span class="mf">500</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
 </code></pre></div>
 <p>For more examples, see the HTML files in the <a href="https://github.com/jspsych/jsPsych/tree/main/examples">examples folder</a>.</p>
 <hr />
 <h2 id="jspsychaddnodetoendoftimeline">jsPsych.addNodeToEndOfTimeline<a class="headerlink" href="#jspsychaddnodetoendoftimeline" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">addNodeToEndOfTimeline</span><span class="p">(</span><span class="nx">node_parameters</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">addNodeToEndOfTimeline</span><span class="p">(</span><span class="nx">node_parameters</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_1">Parameters<a class="headerlink" href="#parameters_1" title="Permanent link">&para;</a></h3>
 <table>
@@ -3565,20 +3786,20 @@ el.style.visibility = &#39;hidden&#39;;
 <h3 id="description_1">Description<a class="headerlink" href="#description_1" title="Permanent link">&para;</a></h3>
 <p>Adds the timeline to the end of the experiment.</p>
 <h3 id="example_1">Example<a class="headerlink" href="#example_1" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;This is a new trial.&#39;</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;This is a new trial.&#39;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">new_timeline</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">trial</span><span class="p">]</span>
-<span class="p">}</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">new_timeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">trial</span><span class="p">]</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">addNodeToEndOfTimeline</span><span class="p">(</span><span class="nx">new_timeline</span><span class="p">)</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">addNodeToEndOfTimeline</span><span class="p">(</span><span class="nx">new_timeline</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychendcurrenttimeline">jsPsych.endCurrentTimeline<a class="headerlink" href="#jspsychendcurrenttimeline" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">endCurrentTimeline</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">endCurrentTimeline</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_2">Parameters<a class="headerlink" href="#parameters_2" title="Permanent link">&para;</a></h3>
 <p>None.</p>
@@ -3588,47 +3809,47 @@ el.style.visibility = &#39;hidden&#39;;
 <p>Ends the current timeline. If timelines are nested, then only the timeline that contains the current trial is ended.</p>
 <h3 id="example_2">Example<a class="headerlink" href="#example_2" title="Permanent link">&para;</a></h3>
 <h4 id="end-timeline-if-a-particular-key-is-pressed">End timeline if a particular key is pressed<a class="headerlink" href="#end-timeline-if-a-particular-key-is-pressed" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">jsPsych</span> <span class="o">=</span> <span class="nx">initJsPsych</span><span class="p">({</span>
-  <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">displayData</span><span class="p">();</span>
-  <span class="p">}</span>
-<span class="p">});</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">jsPsych</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">initJsPsych</span><span class="p">({</span><span class="w"></span>
+<span class="w">  </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">displayData</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">images</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="s2">&quot;img/1.gif&quot;</span><span class="p">,</span> <span class="s2">&quot;img/2.gif&quot;</span><span class="p">,</span> <span class="s2">&quot;img/3.gif&quot;</span><span class="p">,</span> <span class="s2">&quot;img/4.gif&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;img/5.gif&quot;</span><span class="p">,</span> <span class="s2">&quot;img/6.gif&quot;</span><span class="p">,</span> <span class="s2">&quot;img/7.gif&quot;</span><span class="p">,</span> <span class="s2">&quot;img/8.gif&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;img/9.gif&quot;</span><span class="p">,</span> <span class="s2">&quot;img/10.gif&quot;</span>
-<span class="p">];</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">images</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">  </span><span class="s2">&quot;img/1.gif&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;img/2.gif&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;img/3.gif&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;img/4.gif&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="s2">&quot;img/5.gif&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;img/6.gif&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;img/7.gif&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;img/8.gif&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="s2">&quot;img/9.gif&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;img/10.gif&quot;</span><span class="w"></span>
+<span class="p">];</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">trials</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mf">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">images</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">trials</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span>
-    <span class="nx">stimulus</span><span class="o">:</span> <span class="nx">images</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
-  <span class="p">});</span>
-<span class="p">}</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">trials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">var</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nx">images</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">trials</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="w"></span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="nx">images</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="w"></span>
+<span class="w">  </span><span class="p">});</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">block</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span>
-  <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">],</span> 
-  <span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;&lt;p&gt;Press &quot;y&quot; to Continue. Press &quot;n&quot; to end this node of the experiment.&lt;/p&gt;&#39;</span><span class="p">,</span>
-  <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">))</span> <span class="p">{</span>
-      <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">endCurrentTimeline</span><span class="p">();</span>
-    <span class="p">}</span>
-  <span class="p">},</span>
-  <span class="nx">timeline</span><span class="o">:</span> <span class="nx">trials</span>
-<span class="p">}</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;n&#39;</span><span class="p">],</span><span class="w"> </span>
+<span class="w">  </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;p&gt;Press &quot;y&quot; to Continue. Press &quot;n&quot; to end this node of the experiment.&lt;/p&gt;&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;n&#39;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">endCurrentTimeline</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">},</span><span class="w"></span>
+<span class="w">  </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="nx">trials</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">after_block</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;&lt;p&gt;The next node&lt;/p&gt;&#39;</span>
-<span class="p">}</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">after_block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;p&gt;The next node&lt;/p&gt;&#39;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">([</span><span class="nx">block</span><span class="p">,</span> <span class="nx">after_block</span><span class="p">]);</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">([</span><span class="nx">block</span><span class="p">,</span><span class="w"> </span><span class="nx">after_block</span><span class="p">]);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychendexperiment">jsPsych.endExperiment<a class="headerlink" href="#jspsychendexperiment" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">endExperiment</span><span class="p">(</span><span class="nx">end_message</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">endExperiment</span><span class="p">(</span><span class="nx">end_message</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_3">Parameters<a class="headerlink" href="#parameters_3" title="Permanent link">&para;</a></h3>
 <table>
@@ -3658,21 +3879,21 @@ el.style.visibility = &#39;hidden&#39;;
 <p>Ends the experiment, skipping all remaining trials. If the <code>on_finish</code> event handler for <code>jsPsych</code> returns a <code>Promise</code> then the <code>end_message</code> will not be displayed until the promise is resolved.</p>
 <h3 id="example_3">Example<a class="headerlink" href="#example_3" title="Permanent link">&para;</a></h3>
 <h4 id="end-the-experiment-if-a-particular-response-is-given">End the experiment if a particular response is given<a class="headerlink" href="#end-the-experiment-if-a-particular-response-is-given" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;image1.jpg&#39;</span><span class="p">,</span>
-  <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;n&#39;</span><span class="p">]</span>
-  <span class="nx">prompt</span><span class="o">:</span> <span class="s1">&#39;&lt;p&gt;Press &quot;y&quot; to Continue. Press &quot;n&quot; to end the experiment&lt;/p&gt;&#39;</span><span class="p">,</span>
-  <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span> <span class="s2">&quot;n&quot;</span><span class="p">)){</span>
-      <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">endExperiment</span><span class="p">(</span><span class="s1">&#39;The experiment was ended by pressing &quot;n&quot;.&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image1.jpg&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;n&#39;</span><span class="p">]</span><span class="w"></span>
+<span class="w">  </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;p&gt;Press &quot;y&quot; to Continue. Press &quot;n&quot; to end the experiment&lt;/p&gt;&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;n&quot;</span><span class="p">)){</span><span class="w"></span>
+<span class="w">      </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">endExperiment</span><span class="p">(</span><span class="s1">&#39;The experiment was ended by pressing &quot;n&quot;.&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychfinishtrial">jsPsych.finishTrial<a class="headerlink" href="#jspsychfinishtrial" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">finishTrial</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">finishTrial</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_4">Parameters<a class="headerlink" href="#parameters_4" title="Permanent link">&para;</a></h3>
 <table>
@@ -3704,12 +3925,12 @@ el.style.visibility = &#39;hidden&#39;;
 <li>The next trial, if one exists, is started.</li>
 </ul>
 <h3 id="example_4">Example<a class="headerlink" href="#example_4" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="c1">// this code would be in a plugin</span>
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">finishTrial</span><span class="p">({</span><span class="nx">correct_response</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+<div class="highlight"><pre><span></span><code><span class="c1">// this code would be in a plugin</span><span class="w"></span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">finishTrial</span><span class="p">({</span><span class="nx">correct_response</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">});</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychgetalltimelinevariables">jsPsych.getAllTimelineVariables<a class="headerlink" href="#jspsychgetalltimelinevariables" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getAllTimelineVariables</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getAllTimelineVariables</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_5">Parameters<a class="headerlink" href="#parameters_5" title="Permanent link">&para;</a></h3>
 <p>None.</p>
@@ -3719,18 +3940,18 @@ el.style.visibility = &#39;hidden&#39;;
 <p>This function can be used to get all the timeline variables at a particular moment in the experiment. Can be useful for annotating
 data, such as in the example below.</p>
 <h3 id="example_5">Example<a class="headerlink" href="#example_5" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;Just a demo&#39;</span><span class="p">,</span>
-  <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-    <span class="c1">// merge all timeline variables available at this trial into the data for this trial</span>
-    <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getAllTimelineVariables</span><span class="p">())</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Just a demo&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// merge all timeline variables available at this trial into the data for this trial</span><span class="w"></span>
+<span class="w">    </span><span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getAllTimelineVariables</span><span class="p">())</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychgetcurrenttimelinenodeid">jsPsych.getCurrentTimelineNodeID<a class="headerlink" href="#jspsychgetcurrenttimelinenodeid" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getCurrentTimelineNodeID</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getCurrentTimelineNodeID</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_6">Parameters<a class="headerlink" href="#parameters_6" title="Permanent link">&para;</a></h3>
 <p>None.</p>
@@ -3759,12 +3980,12 @@ data, such as in the example below.</p>
 <li><code>"0.2-1.3"</code> is the ID of the second TimelineNode, executing for the fourth time, on the timeline of the first top-level TimelineNode, executing for the third time.</li>
 </ul>
 <h3 id="example_6">Example<a class="headerlink" href="#example_6" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getCurrentTimelineNodeID</span><span class="p">();</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;The current TimelineNode ID is &#39;</span><span class="o">+</span><span class="nx">id</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getCurrentTimelineNodeID</span><span class="p">();</span><span class="w"></span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;The current TimelineNode ID is &#39;</span><span class="o">+</span><span class="nx">id</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychgetcurrenttrial">jsPsych.getCurrentTrial<a class="headerlink" href="#jspsychgetcurrenttrial" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getCurrentTrial</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getCurrentTrial</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_7">Parameters<a class="headerlink" href="#parameters_7" title="Permanent link">&para;</a></h3>
 <p>None.</p>
@@ -3773,12 +3994,12 @@ data, such as in the example below.</p>
 <h3 id="description_7">Description<a class="headerlink" href="#description_7" title="Permanent link">&para;</a></h3>
 <p>Get a description of the current trial</p>
 <h3 id="example_7">Example<a class="headerlink" href="#example_7" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getCurrentTrial</span><span class="p">();</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;The current trial is using the &#39;</span><span class="o">+</span><span class="nx">trial</span><span class="p">.</span><span class="nx">type</span><span class="o">+</span><span class="s1">&#39; plugin&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getCurrentTrial</span><span class="p">();</span><span class="w"></span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;The current trial is using the &#39;</span><span class="o">+</span><span class="nx">trial</span><span class="p">.</span><span class="nx">type</span><span class="o">+</span><span class="s1">&#39; plugin&#39;</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychgetdisplayelement">jsPsych.getDisplayElement<a class="headerlink" href="#jspsychgetdisplayelement" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getDisplayElement</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getDisplayElement</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_8">Parameters<a class="headerlink" href="#parameters_8" title="Permanent link">&para;</a></h3>
 <p>None.</p>
@@ -3787,13 +4008,13 @@ data, such as in the example below.</p>
 <h3 id="description_8">Description<a class="headerlink" href="#description_8" title="Permanent link">&para;</a></h3>
 <p>Get the DOM element that displays the experiment.</p>
 <h3 id="example_8">Example<a class="headerlink" href="#example_8" title="Permanent link">&para;</a></h3>
-<h2 id="var-el-jspsychgetdisplayelement-hide-the-jspsych-display-elstylevisibility-hidden"><div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getDisplayElement</span><span class="p">();</span>
+<h2 id="var-el-jspsychgetdisplayelement-hide-the-jspsych-display-elstylevisibility-hidden"><div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">el</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getDisplayElement</span><span class="p">();</span><span class="w"></span>
 
-<span class="c1">// hide the jsPsych display</span>
-<span class="nx">el</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s1">&#39;hidden&#39;</span><span class="p">;</span>
+<span class="c1">// hide the jsPsych display</span><span class="w"></span>
+<span class="nx">el</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">visibility</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;hidden&#39;</span><span class="p">;</span><span class="w"></span>
 </code></pre></div><a class="headerlink" href="#var-el-jspsychgetdisplayelement-hide-the-jspsych-display-elstylevisibility-hidden" title="Permanent link">&para;</a></h2>
 <h2 id="jspsychgetinitsettings">jsPsych.getInitSettings<a class="headerlink" href="#jspsychgetinitsettings" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getInitSettings</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getInitSettings</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_9">Parameters<a class="headerlink" href="#parameters_9" title="Permanent link">&para;</a></h3>
 <p>None</p>
@@ -3802,14 +4023,14 @@ data, such as in the example below.</p>
 <h3 id="description_9">Description<a class="headerlink" href="#description_9" title="Permanent link">&para;</a></h3>
 <p>Gets the object containing the settings for the current experiment.</p>
 <h3 id="example_9">Example<a class="headerlink" href="#example_9" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">settings</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getInitSettings</span><span class="p">();</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">settings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getInitSettings</span><span class="p">();</span><span class="w"></span>
 
-<span class="c1">// check the experiment structure</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">settings</span><span class="p">.</span><span class="nx">timeline</span><span class="p">));</span>
+<span class="c1">// check the experiment structure</span><span class="w"></span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">settings</span><span class="p">.</span><span class="nx">timeline</span><span class="p">));</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychgetprogress">jsPsych.getProgress<a class="headerlink" href="#jspsychgetprogress" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getProgress</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getProgress</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_10">Parameters<a class="headerlink" href="#parameters_10" title="Permanent link">&para;</a></h3>
 <p>None.</p>
@@ -3844,12 +4065,12 @@ data, such as in the example below.</p>
 <h3 id="description_10">Description<a class="headerlink" href="#description_10" title="Permanent link">&para;</a></h3>
 <p>This method returns information about the length of the experiment and the subject's current location in the experiment timeline.</p>
 <h3 id="example_10">Example<a class="headerlink" href="#example_10" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">progress</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getProgress</span><span class="p">();</span>
-<span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;You have completed approximately &#39;</span><span class="o">+</span><span class="nx">progress</span><span class="p">.</span><span class="nx">percent_complete</span><span class="o">+</span><span class="s1">&#39;% of the experiment&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">progress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getProgress</span><span class="p">();</span><span class="w"></span>
+<span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;You have completed approximately &#39;</span><span class="o">+</span><span class="nx">progress</span><span class="p">.</span><span class="nx">percent_complete</span><span class="o">+</span><span class="s1">&#39;% of the experiment&#39;</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychgetprogressbarcompleted">jsPsych.getProgressBarCompleted<a class="headerlink" href="#jspsychgetprogressbarcompleted" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getProgressBarCompleted</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getProgressBarCompleted</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_11">Parameters<a class="headerlink" href="#parameters_11" title="Permanent link">&para;</a></h3>
 <p>None.</p>
@@ -3858,11 +4079,11 @@ data, such as in the example below.</p>
 <h3 id="description_11">Description<a class="headerlink" href="#description_11" title="Permanent link">&para;</a></h3>
 <p>Used to get the current value of the progress bar. Works for automated and manual control.</p>
 <h3 id="example_11">Example<a class="headerlink" href="#example_11" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">progress_bar_amount</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getProgressBarCompleted</span><span class="p">();</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">progress_bar_amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getProgressBarCompleted</span><span class="p">();</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychgetstarttime">jsPsych.getStartTime<a class="headerlink" href="#jspsychgetstarttime" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getStartTime</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getStartTime</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_12">Parameters<a class="headerlink" href="#parameters_12" title="Permanent link">&para;</a></h3>
 <p>None.</p>
@@ -3871,11 +4092,11 @@ data, such as in the example below.</p>
 <h3 id="description_12">Description<a class="headerlink" href="#description_12" title="Permanent link">&para;</a></h3>
 <p>Get the time that the experiment began.</p>
 <h3 id="example_12">Example<a class="headerlink" href="#example_12" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">start_time</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getStartTime</span><span class="p">();</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">start_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getStartTime</span><span class="p">();</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychgettotaltime">jsPsych.getTotalTime<a class="headerlink" href="#jspsychgettotaltime" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getTotalTime</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getTotalTime</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_13">Parameters<a class="headerlink" href="#parameters_13" title="Permanent link">&para;</a></h3>
 <p>None.</p>
@@ -3884,12 +4105,12 @@ data, such as in the example below.</p>
 <h3 id="description_13">Description<a class="headerlink" href="#description_13" title="Permanent link">&para;</a></h3>
 <p>Gets the total time the subject has been in the experiment.</p>
 <h3 id="example_13">Example<a class="headerlink" href="#example_13" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">time</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getTotalTime</span><span class="p">();</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">time</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getTotalTime</span><span class="p">();</span><span class="w"></span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">time</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychpauseexperiment">jsPsych.pauseExperiment<a class="headerlink" href="#jspsychpauseexperiment" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pauseExperiment</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pauseExperiment</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_14">Parameters<a class="headerlink" href="#parameters_14" title="Permanent link">&para;</a></h3>
 <p>None.</p>
@@ -3898,21 +4119,21 @@ data, such as in the example below.</p>
 <h3 id="description_14">Description<a class="headerlink" href="#description_14" title="Permanent link">&para;</a></h3>
 <p>Pauses the experiment. The experiment will finish the current trial, but will not execute any additional trials until <code>jsPsych.resumeExperiment()</code> is called.</p>
 <h3 id="example_14">Example<a class="headerlink" href="#example_14" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;Press p to take a 30 second break. Otherwise, press c to continue immediately.&#39;</span><span class="p">,</span>
-  <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">],</span>
-  <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">))</span> <span class="p">{</span> 
-      <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pauseExperiment</span><span class="p">();</span>
-      <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">resumeExperiment</span><span class="p">,</span> <span class="mf">30000</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Press p to take a 30 second break. Otherwise, press c to continue immediately.&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">],</span><span class="w"></span>
+<span class="w">  </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;p&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">      </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pauseExperiment</span><span class="p">();</span><span class="w"></span>
+<span class="w">      </span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">resumeExperiment</span><span class="p">,</span><span class="w"> </span><span class="mf">30000</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychresumeexperiment">jsPsych.resumeExperiment<a class="headerlink" href="#jspsychresumeexperiment" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">resumeExperiment</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">resumeExperiment</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_15">Parameters<a class="headerlink" href="#parameters_15" title="Permanent link">&para;</a></h3>
 <p>None.</p>
@@ -3921,21 +4142,21 @@ data, such as in the example below.</p>
 <h3 id="description_15">Description<a class="headerlink" href="#description_15" title="Permanent link">&para;</a></h3>
 <p>Resumes the experiment after a call to <code>jsPsych.pauseExperiment()</code>. If the post trial delay (<code>post_trial_gap</code>) has not yet been reached, then the experiment will not continue until the delay is finished. For example, if <code>post_trial_gap</code> was 10,000ms and <code>jsPsych.resumeExperiment()</code> was called 6,000ms after the previous trial finished, then the experiment would not continue for another 4,000ms.</p>
 <h3 id="example_15">Example<a class="headerlink" href="#example_15" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="s1">&#39;Press p to take a 30 second break. Otherwise, press c to continue immediately.&#39;</span><span class="p">,</span>
-  <span class="nx">choices</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">],</span>
-  <span class="nx">on_finish</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">))</span> <span class="p">{</span> 
-      <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pauseExperiment</span><span class="p">();</span>
-      <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">resumeExperiment</span><span class="p">,</span> <span class="mf">30000</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Press p to take a 30 second break. Otherwise, press c to continue immediately.&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;p&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">],</span><span class="w"></span>
+<span class="w">  </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;p&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">      </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pauseExperiment</span><span class="p">();</span><span class="w"></span>
+<span class="w">      </span><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">resumeExperiment</span><span class="p">,</span><span class="w"> </span><span class="mf">30000</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychrun">jsPsych.run<a class="headerlink" href="#jspsychrun" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">timeline</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">timeline</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_16">Parameters<a class="headerlink" href="#parameters_16" title="Permanent link">&para;</a></h3>
 <table>
@@ -3959,13 +4180,13 @@ data, such as in the example below.</p>
 <h3 id="description_16">Description<a class="headerlink" href="#description_16" title="Permanent link">&para;</a></h3>
 <p>Start the jsPsych experiment with the specified timeline.</p>
 <h3 id="example_16">Example<a class="headerlink" href="#example_16" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">timeline</span> <span class="o">=</span> <span class="p">[</span><span class="nx">trial1</span><span class="p">,</span> <span class="nx">trial2</span><span class="p">,</span> <span class="nx">trial3</span><span class="p">];</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">timeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nx">trial1</span><span class="p">,</span><span class="w"> </span><span class="nx">trial2</span><span class="p">,</span><span class="w"> </span><span class="nx">trial3</span><span class="p">];</span><span class="w"></span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">timeline</span><span class="p">);</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">timeline</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychsetprogressbar">jsPsych.setProgressBar<a class="headerlink" href="#jspsychsetprogressbar" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">setProgressBar</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">setProgressBar</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_17">Parameters<a class="headerlink" href="#parameters_17" title="Permanent link">&para;</a></h3>
 <table>
@@ -3989,11 +4210,11 @@ data, such as in the example below.</p>
 <h3 id="description_17">Description<a class="headerlink" href="#description_17" title="Permanent link">&para;</a></h3>
 <p>Set the progress bar to a custom amount. Proportion must be between 0 and 1. Values larger than 1 are treated as 1.</p>
 <h3 id="example_17">Example<a class="headerlink" href="#example_17" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">setProgressBar</span><span class="p">(</span><span class="mf">0.85</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">setProgressBar</span><span class="p">(</span><span class="mf">0.85</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychtimelinevariable">jsPsych.timelineVariable<a class="headerlink" href="#jspsychtimelinevariable" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="nx">variable</span><span class="p">,</span> <span class="nx">call_immediate</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="nx">variable</span><span class="p">,</span><span class="w"> </span><span class="nx">call_immediate</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_18">Parameters<a class="headerlink" href="#parameters_18" title="Permanent link">&para;</a></h3>
 <table>
@@ -4023,60 +4244,60 @@ data, such as in the example below.</p>
 <p><a href="../../overview/timeline/#timeline-variables">Timeline variables</a> are a powerful technique for generating experiments with repetitive procedures but different parameter values. This function fetches the current value of a particular timeline variable. It must be used in conjunction with a timeline that has timeline variables. See the <a href="../../overview/timeline/#timeline-variables">timeline variable section</a> for details.</p>
 <h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
 <h4 id="standard-use-as-a-parameter-for-a-trial">Standard use as a parameter for a trial<a class="headerlink" href="#standard-use-as-a-parameter-for-a-trial" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">)</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">procedure</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">trial</span><span class="p">],</span>
-  <span class="nx">timeline_variables</span><span class="o">:</span> <span class="p">[</span>
-    <span class="p">{</span><span class="nx">image</span><span class="o">:</span> <span class="s1">&#39;face1.png&#39;</span><span class="p">},</span>
-    <span class="p">{</span><span class="nx">image</span><span class="o">:</span> <span class="s1">&#39;face2.png&#39;</span><span class="p">},</span>
-    <span class="p">{</span><span class="nx">image</span><span class="o">:</span> <span class="s1">&#39;face3.png&#39;</span><span class="p">},</span>
-    <span class="p">{</span><span class="nx">image</span><span class="o">:</span> <span class="s1">&#39;face4.png&#39;</span><span class="p">}</span>
-  <span class="p">]</span>
-<span class="p">}</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">trial</span><span class="p">],</span><span class="w"></span>
+<span class="w">  </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;face1.png&#39;</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;face2.png&#39;</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;face3.png&#39;</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;face4.png&#39;</span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">]</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h4 id="invoking-immediately-in-a-function">Invoking immediately in a function<a class="headerlink" href="#invoking-immediately-in-a-function" title="Permanent link">&para;</a></h4>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
-    <span class="k">return</span> <span class="s2">&quot;&lt;img style=&#39;width:100px; height:100px;&#39; src=&#39;&quot;</span><span class="o">+</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;&#39;&gt;&lt;/img&gt;&quot;</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="s2">&quot;&lt;img style=&#39;width:100px; height:100px;&#39; src=&#39;&quot;</span><span class="o">+</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;&#39;&gt;&lt;/img&gt;&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">procedure</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">trial</span><span class="p">],</span>
-  <span class="nx">timeline_variables</span><span class="o">:</span> <span class="p">[</span>
-    <span class="p">{</span><span class="nx">image</span><span class="o">:</span> <span class="s1">&#39;face1.png&#39;</span><span class="p">},</span>
-    <span class="p">{</span><span class="nx">image</span><span class="o">:</span> <span class="s1">&#39;face2.png&#39;</span><span class="p">},</span>
-    <span class="p">{</span><span class="nx">image</span><span class="o">:</span> <span class="s1">&#39;face3.png&#39;</span><span class="p">},</span>
-    <span class="p">{</span><span class="nx">image</span><span class="o">:</span> <span class="s1">&#39;face4.png&#39;</span><span class="p">}</span>
-  <span class="p">]</span>
-<span class="p">}</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">trial</span><span class="p">],</span><span class="w"></span>
+<span class="w">  </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;face1.png&#39;</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;face2.png&#39;</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;face3.png&#39;</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;face4.png&#39;</span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">]</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>Prior to jsPsych v6.3.0, the <code>call_immediate</code> parameter must be set to <code>true</code> when <code>jsPsych.timelineVariable</code> is called from within a function, such as a <a href="../overview/dynamic-parameters">dynamic parameter</a>:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
-    <span class="k">return</span> <span class="s2">&quot;&lt;img style=&#39;width:100px; height:100px;&#39; src=&#39;&quot;</span><span class="o">+</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;&#39;&gt;&lt;/img&gt;&quot;</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="s2">&quot;&lt;img style=&#39;width:100px; height:100px;&#39; src=&#39;&quot;</span><span class="o">+</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;&#39;&gt;&lt;/img&gt;&quot;</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="kd">var</span> <span class="nx">procedure</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">timeline</span><span class="o">:</span> <span class="p">[</span><span class="nx">trial</span><span class="p">],</span>
-  <span class="nx">timeline_variables</span><span class="o">:</span> <span class="p">[</span>
-    <span class="p">{</span><span class="nx">image</span><span class="o">:</span> <span class="s1">&#39;face1.png&#39;</span><span class="p">},</span>
-    <span class="p">{</span><span class="nx">image</span><span class="o">:</span> <span class="s1">&#39;face2.png&#39;</span><span class="p">},</span>
-    <span class="p">{</span><span class="nx">image</span><span class="o">:</span> <span class="s1">&#39;face3.png&#39;</span><span class="p">},</span>
-    <span class="p">{</span><span class="nx">image</span><span class="o">:</span> <span class="s1">&#39;face4.png&#39;</span><span class="p">}</span>
-  <span class="p">]</span>
-<span class="p">}</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">trial</span><span class="p">],</span><span class="w"></span>
+<span class="w">  </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;face1.png&#39;</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;face2.png&#39;</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;face3.png&#39;</span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;face4.png&#39;</span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">]</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <hr />
 <h2 id="jspsychversion">jsPsych.version<a class="headerlink" href="#jspsychversion" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">version</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">version</span><span class="p">()</span><span class="w"></span>
 </code></pre></div>
 <h3 id="parameters_19">Parameters<a class="headerlink" href="#parameters_19" title="Permanent link">&para;</a></h3>
 <p>None.</p>
@@ -4085,14 +4306,9 @@ data, such as in the example below.</p>
 <h3 id="description_19">Description<a class="headerlink" href="#description_19" title="Permanent link">&para;</a></h3>
 <p>Gets the version of jsPsych.</p>
 <h3 id="example_18">Example<a class="headerlink" href="#example_18" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">version</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">version</span><span class="p">();</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">version</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">version</span><span class="p">();</span><span class="w"></span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">version</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
-                
-              
-              
-                
-
 
               
             </article>
@@ -4101,15 +4317,14 @@ data, such as in the example below.</p>
         
       </main>
       
-        
-<footer class="md-footer">
+        <footer class="md-footer">
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
         <a href="../../overview/timing-accuracy/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Timing Accuracy" rel="prev">
           <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
           <div class="md-footer__title">
             <div class="md-ellipsis">
@@ -4133,7 +4348,7 @@ data, such as in the example below.</p>
             </div>
           </div>
           <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
           </div>
         </a>
       
@@ -4141,41 +4356,42 @@ data, such as in the example below.</p>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
-      <div class="md-footer-copyright">
-        
-          <div class="md-footer-copyright__highlight">
-            Copyright &copy; 2012-2021 Josh de Leeuw
-          </div>
-        
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-          Material for MkDocs
-        </a>
-        
-      </div>
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2012-2022 Josh de Leeuw
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
       
-  <div class="md-footer-social">
+        <div class="md-social">
+  
+    
     
       
       
-        
-        
-      
-      <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
-      </a>
+    
+    <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
     
       
       
-        
-        
-      
-      <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
-      </a>
     
-  </div>
-
+    <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+</div>
+      
     </div>
   </div>
 </footer>
@@ -4184,10 +4400,10 @@ data, such as in the example below.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.709b4209.min.js", "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.febc23d1.min.js"></script>
+      <script src="../../assets/javascripts/bundle.ed9748b7.min.js"></script>
       
     
   </body>

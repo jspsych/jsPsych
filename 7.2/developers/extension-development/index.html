@@ -8,11 +8,10 @@
       
       
       
-      
         <link rel="canonical" href="https://www.jspsych.org/7.2/developers/extension-development/">
       
       <link rel="icon" href="../../img/jspsych-favicon.png">
-      <meta name="generator" content="mkdocs-1.2.2, mkdocs-material-7.2.4">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
     
     
       
@@ -20,10 +19,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.f7f47774.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.e411adfe.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cc9b2e1e.min.css">
         
           
           
@@ -35,21 +34,20 @@
     
       
         
+        
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
-        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
-    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
-
   
 
 
   
-
   
 
 
@@ -70,7 +68,6 @@
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="orange">
   
     
-    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -87,7 +84,16 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      <div data-md-component="outdated" hidden>
+        <aside class="md-banner md-banner--warning">
+          
+        </aside>
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../.." title="jsPsych" class="md-header__button md-logo" aria-label="jsPsych" data-md-component="logo">
       
@@ -95,7 +101,7 @@
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -117,22 +123,21 @@
     
     
       <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
-      
-<div class="md-search" data-md-component="search" role="dialog">
+      <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
         <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
       
@@ -152,11 +157,10 @@
     
     
       <div class="md-header__source">
-        
-<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     jspsych/jspsych
@@ -165,11 +169,14 @@
       </div>
     
   </nav>
+  
 </header>
     
     <div class="md-container" data-md-component="container">
       
       
+        
+          
         
       
       <main class="md-main" data-md-component="main">
@@ -194,11 +201,10 @@
   </label>
   
     <div class="md-nav__source">
-      
-<a href="https://github.com/jspsych/jsPsych/" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     jspsych/jspsych
@@ -236,10 +242,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
       
-      <label class="md-nav__link" for="__nav_2">
-        Tutorials
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Tutorials
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
         <label class="md-nav__title" for="__nav_2">
           <span class="md-nav__icon md-icon"></span>
@@ -248,6 +258,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -258,8 +269,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -270,8 +283,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -282,6 +297,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -302,10 +318,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
       
-      <label class="md-nav__link" for="__nav_3">
-        Overview
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Overview
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Overview" data-md-level="1">
         <label class="md-nav__title" for="__nav_3">
           <span class="md-nav__icon md-icon"></span>
@@ -314,6 +334,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -324,8 +345,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -336,8 +359,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -348,8 +373,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -360,8 +387,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -372,8 +401,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -384,8 +415,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -396,8 +429,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -408,8 +443,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -420,8 +457,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -432,8 +471,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -444,8 +485,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -456,8 +499,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -468,8 +513,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -480,8 +527,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -492,8 +541,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -504,8 +555,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -516,8 +569,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -528,8 +583,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -540,8 +597,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -552,6 +611,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -572,10 +632,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
       
-      <label class="md-nav__link" for="__nav_4">
-        Reference
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Reference" data-md-level="1">
         <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
@@ -584,6 +648,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -594,8 +659,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -606,8 +673,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -618,8 +687,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -630,8 +701,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -642,6 +715,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -662,10 +736,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
       
-      <label class="md-nav__link" for="__nav_5">
-        Plugins
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Plugins
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Plugins" data-md-level="1">
         <label class="md-nav__title" for="__nav_5">
           <span class="md-nav__icon md-icon"></span>
@@ -674,6 +752,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -684,8 +763,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -696,8 +777,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -708,8 +791,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -720,8 +805,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -732,8 +819,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -744,8 +833,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -756,8 +847,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -768,8 +861,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -780,8 +875,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -792,8 +889,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -804,8 +903,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -816,8 +917,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -828,8 +931,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -840,8 +945,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -852,8 +959,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -864,8 +973,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -876,8 +987,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -888,8 +1001,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -900,8 +1015,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -912,8 +1029,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -924,8 +1043,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -936,8 +1057,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -948,8 +1071,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -960,8 +1085,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -972,8 +1099,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -984,8 +1113,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -996,8 +1127,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1008,8 +1141,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1020,8 +1155,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1032,8 +1169,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1044,8 +1183,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1056,8 +1197,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1068,8 +1211,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1080,8 +1225,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1092,8 +1239,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1104,8 +1253,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1116,8 +1267,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1128,8 +1281,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1140,8 +1295,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1152,8 +1309,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1164,8 +1323,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1176,8 +1337,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1188,8 +1351,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1200,8 +1365,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1212,8 +1379,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1224,8 +1393,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1236,8 +1407,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1248,8 +1421,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1260,8 +1435,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1272,8 +1449,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1284,6 +1463,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -1304,10 +1484,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
       
-      <label class="md-nav__link" for="__nav_6">
-        Extensions
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Extensions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Extensions" data-md-level="1">
         <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
@@ -1316,6 +1500,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -1326,8 +1511,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1338,8 +1525,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1350,6 +1539,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -1372,10 +1562,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" checked>
       
-      <label class="md-nav__link" for="__nav_7">
-        Developers
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Developers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Developers" data-md-level="1">
         <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
@@ -1384,6 +1578,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -1394,8 +1589,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1406,8 +1603,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1418,8 +1617,10 @@
     </li>
   
 
+            
           
             
+              
   
   
     
@@ -1443,6 +1644,7 @@
       </a>
       
         
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1552,6 +1754,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -1572,10 +1775,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
       
-      <label class="md-nav__link" for="__nav_8">
-        Support
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          Support
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Support" data-md-level="1">
         <label class="md-nav__title" for="__nav_8">
           <span class="md-nav__icon md-icon"></span>
@@ -1584,6 +1791,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -1594,8 +1802,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1606,6 +1816,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -1626,10 +1837,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
       
-      <label class="md-nav__link" for="__nav_9">
-        About
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          About
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="About" data-md-level="1">
         <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
@@ -1638,6 +1853,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -1648,8 +1864,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -1660,6 +1878,7 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -1679,6 +1898,7 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -1793,12 +2013,13 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/jspsych/jsPsych/edit/main/docs/developers/extension-development.md" title="Edit this page" class="md-content__button md-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
-                  </a>
-                
-                
-                <h1 id="extension-development">Extension development<a class="headerlink" href="#extension-development" title="Permanent link">&para;</a></h1>
+  <a href="https://github.com/jspsych/jsPsych/edit/main/docs/developers/extension-development.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="extension-development">Extension development<a class="headerlink" href="#extension-development" title="Permanent link">&para;</a></h1>
 <h2 id="requirements-for-an-extension">Requirements for an extension<a class="headerlink" href="#requirements-for-an-extension" title="Permanent link">&para;</a></h2>
 <p>As of version 7.0, extensions are <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes">JavaScript Classes</a>. An extension must implement:</p>
 <ul>
@@ -1814,128 +2035,123 @@
 <h2 id="extension-components">Extension components<a class="headerlink" href="#extension-components" title="Permanent link">&para;</a></h2>
 <h3 id="constructor">constructor()<a class="headerlink" href="#constructor" title="Permanent link">&para;</a></h3>
 <p>The extension's <code>constructor()</code> will be passed a reference to the instance of the <code>JsPsych</code> class that is running the experiment. The constructor should store this reference so that the plugin can access functionality from the core library and its modules.</p>
-<div class="highlight"><pre><span></span><code><span class="kr">class</span> <span class="nx">MyAwesomeExtension</span> <span class="p">{</span>
-  <span class="nx">constructor</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">){</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span> <span class="o">=</span> <span class="nx">jsPsych</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nx">MyAwesomeExtension</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="initialize">initialize()<a class="headerlink" href="#initialize" title="Permanent link">&para;</a></h3>
 <p>The <code>initialize()</code> function is called when an instance of jsPsych is first initialized, either through <code>initJsPsych()</code> or <code>new JsPsych()</code>. This is where setup code for the extension should be run. This event will happen once per experiment, unlike the other events which occur with each trial. The <code>params</code> object can include whatever parameters are necessary to configure the extension. The <code>params</code> object is passed from the call to <code>initJsPsych()</code> to <code>initialize()</code> method. <code>initialize()</code> must return a <code>Promise</code> that resolves when the extension is finished initializing. </p>
-<div class="highlight"><pre><span></span><code><span class="c1">//... experiment code ...//</span>
-<span class="kd">let</span> <span class="nx">jsPsych</span> <span class="o">=</span> <span class="nx">initJsPsych</span><span class="p">({</span>
-  <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span>
-    <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="nx">myAwesomeExtension</span><span class="p">,</span> <span class="nx">params</span><span class="o">:</span> <span class="p">{</span><span class="nx">demo</span><span class="o">:</span> <span class="s1">&#39;value&#39;</span><span class="p">}}</span>
-  <span class="p">]</span>
-<span class="p">});</span>
+<div class="highlight"><pre><span></span><code><span class="c1">//... experiment code ...//</span><span class="w"></span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">jsPsych</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">initJsPsych</span><span class="p">({</span><span class="w"></span>
+<span class="w">  </span><span class="nx">extensions</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">myAwesomeExtension</span><span class="p">,</span><span class="w"> </span><span class="nx">params</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">demo</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;value&#39;</span><span class="p">}}</span><span class="w"></span>
+<span class="w">  </span><span class="p">]</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
 
-<span class="c1">//... extension code ...//</span>
-<span class="kr">class</span> <span class="nx">MyAwesomeExtension</span> <span class="p">{</span>
+<span class="c1">//... extension code ...//</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">MyAwesomeExtension</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 
-  <span class="nx">initialize</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span>
-    <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)=&gt;{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">demo</span><span class="p">);</span> <span class="c1">// will output &#39;value&#39;</span>
+<span class="w">  </span><span class="nx">initialize</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span><span class="w"> </span><span class="nx">reject</span><span class="p">)=&gt;{</span><span class="w"></span>
+<span class="w">      </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">demo</span><span class="p">);</span><span class="w"> </span><span class="c1">// will output &#39;value&#39;</span><span class="w"></span>
 
-      <span class="nx">resolve</span><span class="p">();</span> <span class="c1">// finish initialzing</span>
-    <span class="p">})</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">      </span><span class="nx">resolve</span><span class="p">();</span><span class="w"> </span><span class="c1">// finish initialzing</span><span class="w"></span>
+<span class="w">    </span><span class="p">})</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="on_start">on_start()<a class="headerlink" href="#on_start" title="Permanent link">&para;</a></h3>
 <p><code>on_start()</code> is called at the start of the plugin execution, prior to calling <code>plugin.trial</code>. This is where trial-specific initialization can happen, such as creating empty containers to hold data or resetting internal state. The <code>params</code> object is passed from the declaration of the extension in the trial object. You can use <code>params</code> to customize the behavior of the extension for each trial.</p>
-<div class="highlight"><pre><span></span><code><span class="c1">//... experiment code ...//</span>
-<span class="kd">let</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">htmlKeyboardResponse</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;You&#39;re awesome!&quot;</span><span class="p">,</span>
-  <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span>
-    <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="nx">myAwesomeExtension</span><span class="p">,</span> <span class="nx">params</span><span class="o">:</span> <span class="p">{</span><span class="nx">demo</span><span class="o">:</span> <span class="s1">&#39;value&#39;</span><span class="p">}}</span>
-  <span class="p">]</span>
-<span class="p">});</span>
+<div class="highlight"><pre><span></span><code><span class="c1">//... experiment code ...//</span><span class="w"></span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">htmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;You&#39;re awesome!&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">extensions</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">myAwesomeExtension</span><span class="p">,</span><span class="w"> </span><span class="nx">params</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">demo</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;value&#39;</span><span class="p">}}</span><span class="w"></span>
+<span class="w">  </span><span class="p">]</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
 
-<span class="c1">//... extension code ...//</span>
-<span class="kr">class</span> <span class="nx">MyAwesomeExtension</span> <span class="p">{</span>
+<span class="c1">//... extension code ...//</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">MyAwesomeExtension</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 
-  <span class="nx">initialize</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span> <span class="p">...</span> <span class="p">}</span>
+<span class="w">  </span><span class="nx">initialize</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
 
-  <span class="nx">on_start</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">demo</span><span class="p">);</span> <span class="c1">// outputs &#39;value&#39; before the trial begins.</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">  </span><span class="nx">on_start</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">demo</span><span class="p">);</span><span class="w"> </span><span class="c1">// outputs &#39;value&#39; before the trial begins.</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="on_load">on_load()<a class="headerlink" href="#on_load" title="Permanent link">&para;</a></h3>
 <p><code>on_load()</code> is called after the <code>on_load</code> event for the plugin has completed, which is typically when the plugin has finished executing initial DOM-modifying code and has set up various event listeners. This is where the extension can begin actively interacting with the DOM and recording data. The <code>params</code> object is passed from the declaration of the extension in the trial object. You can use <code>params</code> to customize the behavior of the extension for each trial.</p>
-<div class="highlight"><pre><span></span><code><span class="c1">//... experiment code ...//</span>
-<span class="kd">let</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">htmlKeyboardResponse</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;You&#39;re awesome!&quot;</span><span class="p">,</span>
-  <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span>
-    <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="nx">myAwesomeExtension</span><span class="p">,</span> <span class="nx">params</span><span class="o">:</span> <span class="p">{</span><span class="nx">demo</span><span class="o">:</span> <span class="s1">&#39;value&#39;</span><span class="p">}}</span>
-  <span class="p">]</span>
-<span class="p">});</span>
+<div class="highlight"><pre><span></span><code><span class="c1">//... experiment code ...//</span><span class="w"></span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">htmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;You&#39;re awesome!&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">extensions</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">myAwesomeExtension</span><span class="p">,</span><span class="w"> </span><span class="nx">params</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">demo</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;value&#39;</span><span class="p">}}</span><span class="w"></span>
+<span class="w">  </span><span class="p">]</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
 
-<span class="c1">//... extension code ...//</span>
-<span class="kr">class</span> <span class="nx">MyAwesomeExtension</span> <span class="p">{</span>
+<span class="c1">//... extension code ...//</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">MyAwesomeExtension</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 
-  <span class="nx">initialize</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span> <span class="p">...</span> <span class="p">}</span>
+<span class="w">  </span><span class="nx">initialize</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
 
-  <span class="nx">on_start</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span> <span class="p">...</span> <span class="p">}</span>
+<span class="w">  </span><span class="nx">on_start</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
 
-  <span class="nx">on_load</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span>
-    <span class="c1">// replaces the contents of the display with &#39;value&#39;;</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getDisplayElement</span><span class="p">().</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">params</span><span class="p">.</span><span class="nx">demo</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">  </span><span class="nx">on_load</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// replaces the contents of the display with &#39;value&#39;;</span><span class="w"></span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getDisplayElement</span><span class="p">().</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">params</span><span class="p">.</span><span class="nx">demo</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="on_finish">on_finish()<a class="headerlink" href="#on_finish" title="Permanent link">&para;</a></h3>
 <p><code>on_finish()</code> is called after the plugin invokes <code>jsPsych.finishTrial()</code>. This can be used for any teardown at the end of the trial. This method should return an object of data to append to the plugin's data. Note that this event fires <em>before</em> the <code>on_finish</code> event for the plugin, so data added by the extension is accessible in any trial <code>on_finish</code> event handlers. The <code>params</code> object is passed from the declaration of the extension in the trial object. You can use <code>params</code> to customize the behavior of the extension for each trial.</p>
-<div class="highlight"><pre><span></span><code><span class="c1">//... experiment code ...//</span>
-<span class="kd">let</span> <span class="nx">trial</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="nx">htmlKeyboardResponse</span><span class="p">,</span>
-  <span class="nx">stimulus</span><span class="o">:</span> <span class="s2">&quot;You&#39;re awesome!&quot;</span><span class="p">,</span>
-  <span class="nx">extensions</span><span class="o">:</span> <span class="p">[</span>
-    <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="nx">myAwesomeExtension</span><span class="p">,</span> <span class="nx">params</span><span class="o">:</span> <span class="p">{</span><span class="nx">demo</span><span class="o">:</span> <span class="s1">&#39;value&#39;</span><span class="p">}}</span>
-  <span class="p">],</span>
-  <span class="nx">on_finish</span><span class="o">:</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">awesome</span><span class="p">);</span> <span class="c1">// will output &#39;value&#39;.</span>
-  <span class="p">}</span>
-<span class="p">});</span>
+<div class="highlight"><pre><span></span><code><span class="c1">//... experiment code ...//</span><span class="w"></span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">htmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;You&#39;re awesome!&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">extensions</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">myAwesomeExtension</span><span class="p">,</span><span class="w"> </span><span class="nx">params</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">demo</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;value&#39;</span><span class="p">}}</span><span class="w"></span>
+<span class="w">  </span><span class="p">],</span><span class="w"></span>
+<span class="w">  </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">awesome</span><span class="p">);</span><span class="w"> </span><span class="c1">// will output &#39;value&#39;.</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">});</span><span class="w"></span>
 
-<span class="c1">//... extension code ...//</span>
-<span class="kr">class</span> <span class="nx">MyAwesomeExtension</span> <span class="p">{</span>
+<span class="c1">//... extension code ...//</span><span class="w"></span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">MyAwesomeExtension</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 
-  <span class="nx">initialize</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span> <span class="p">...</span> <span class="p">}</span>
+<span class="w">  </span><span class="nx">initialize</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
 
-  <span class="nx">on_start</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span> <span class="p">...</span> <span class="p">}</span>
+<span class="w">  </span><span class="nx">on_start</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
 
-  <span class="nx">on_load</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span> <span class="p">...</span> <span class="p">}</span>
+<span class="w">  </span><span class="nx">on_load</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
 
-  <span class="nx">on_finish</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span>
-    <span class="k">return</span> <span class="p">{</span>
-      <span class="nx">awesome</span><span class="o">:</span> <span class="nx">params</span><span class="p">.</span><span class="nx">value</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<span class="w">  </span><span class="nx">on_finish</span><span class="p">(</span><span class="nx">params</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nx">awesome</span><span class="o">:</span><span class="w"> </span><span class="nx">params</span><span class="p">.</span><span class="nx">value</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="static-info">static .info<a class="headerlink" href="#static-info" title="Permanent link">&para;</a></h3>
 <p>The <code>info</code> property for the class must contain an object with a <code>name</code> property that has a unique name for the extension.</p>
-<div class="highlight"><pre><span></span><code><span class="kr">class</span> <span class="nx">MyAwesomeExtension</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nx">MyAwesomeExtension</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 
-<span class="p">}</span>
+<span class="p">}</span><span class="w"></span>
 
-<span class="nx">MyAwesomeExtension</span><span class="p">.</span><span class="nx">info</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;awesome&#39;</span>
-<span class="p">}</span>
+<span class="nx">MyAwesomeExtension</span><span class="p">.</span><span class="nx">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;awesome&#39;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <h3 id="optional-methods">Optional methods<a class="headerlink" href="#optional-methods" title="Permanent link">&para;</a></h3>
 <p>The extension can also include any additional methods that are necessary for interacting with it. See the <a href="../../extensions/webgazer/">webgazer extension</a> for an example.</p>
 <h2 id="advice-for-writing-extensions">Advice for writing extensions<a class="headerlink" href="#advice-for-writing-extensions" title="Permanent link">&para;</a></h2>
 <p>If you are developing an extension with the aim of including it in the main jsPsych repository we encourage you to follow the <a href="../contributing/#contributing-to-the-codebase">contribution guidelines</a>. </p>
 <p>In general, extensions should be able to work with any plugin. They should make very few assumptions about what the DOM will contain beyond the container elements generated by jsPsych. If you are making an extension targeted at one or a small number of specific plugins, consider modifying the plugin code instead.</p>
-                
-              
-              
-                
-
 
               
             </article>
@@ -1944,15 +2160,14 @@
         
       </main>
       
-        
-<footer class="md-footer">
+        <footer class="md-footer">
   
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
         <a href="../plugin-development/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Plugin Development" rel="prev">
           <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
           <div class="md-footer__title">
             <div class="md-ellipsis">
@@ -1976,7 +2191,7 @@
             </div>
           </div>
           <div class="md-footer__button md-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
           </div>
         </a>
       
@@ -1984,41 +2199,42 @@
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
-      <div class="md-footer-copyright">
-        
-          <div class="md-footer-copyright__highlight">
-            Copyright &copy; 2012-2021 Josh de Leeuw
-          </div>
-        
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-          Material for MkDocs
-        </a>
-        
-      </div>
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2012-2022 Josh de Leeuw
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
       
-  <div class="md-footer-social">
+        <div class="md-social">
+  
+    
     
       
       
-        
-        
-      
-      <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
-      </a>
+    
+    <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
     
       
       
-        
-        
-      
-      <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
-      </a>
     
-  </div>
-
+    <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+</div>
+      
     </div>
   </div>
 </footer>
@@ -2027,10 +2243,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.709b4209.min.js", "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.febc23d1.min.js"></script>
+      <script src="../../assets/javascripts/bundle.ed9748b7.min.js"></script>
       
     
   </body>
