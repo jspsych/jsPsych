@@ -1,6 +1,5 @@
 import { readFileSync } from "fs";
 import { sep as pathSeparator } from "path";
-import { StringDecoder } from "string_decoder";
 
 import glob from "glob";
 import gulp from "gulp";
