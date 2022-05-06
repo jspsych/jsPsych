@@ -134,7 +134,7 @@ export const updateUnpkgLinks = () => {
  * Only considers `.md` files in `docs/plugins` folder.
  * Gets the package name from the docs page title (i.e. following "# "), ignoring the string " plugin" in the title.
  */
-export const updatePluginVersion = () => {
+export const updatePluginVersions = () => {
   const packageVersions = new Map(getAllPackages().map(({ name, version }) => [name, version]));
 
   return src(["././docs/plugins/*.md"])
