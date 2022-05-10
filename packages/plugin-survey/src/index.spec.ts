@@ -225,5 +225,60 @@ describe("survey plugin", () => {
     await expectFinished();
   });
 
+  test("loads single-line text questions of various input types", async () => {
+    const inputTypes = [
+      "color",
+      "date",
+      // "datetime",
+      "datetime-local",
+      "email",
+      "month",
+      "number",
+      "password",
+      "range",
+      "tel",
+      "text",
+      "time",
+      "url",
+      "week",
+    ];
+
+    for (const inputType of inputTypes) {
+      const { displayElement, expectFinished, getData } = await startTimeline([
+        {
+          type: survey,
+          pages: [
+            [
+              {
+                type: "text",
+                prompt: "foo",
+                input_type: inputType,
+              },
+            ],
+          ],
+        },
+      ]);
+
+      const question = displayElement.querySelector('div[name="P0_Q0"]');
+      expect(question).not.toBeNull();
+      expect(question.querySelector("span").innerHTML).toBe("foo");
+
+      const textinput = displayElement.querySelectorAll("input");
+
+      expect(textinput[0]).not.toBeNull();
+      expect(textinput[0].type).toBe(inputType);
+      if (["text", "search", "tel", "url", "email", "password"].includes(inputType)) {
+        // size can be specified only for text input types
+        expect(textinput[0].size).toBe(40);
+      }
+
+      const finish_button = displayElement.querySelector("input.sv_complete_btn");
+      expect(finish_button).not.toBeNull();
+      clickTarget(finish_button);
+
+      await expectFinished();
+    }
+  });
+
   // survey options
 });
