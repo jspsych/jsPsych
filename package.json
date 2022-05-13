@@ -10,11 +10,11 @@
     "build": "turbo run build",
     "build:archive": "gulp createCoreDistArchive",
     "update-unpkg-links": "gulp updateUnpkgLinks",
-    "update-plugin-version": "gulp updatePluginVersions",
+    "update-plugin-versions": "gulp updatePluginVersions",
     "prepare": "node -e 'process.exit(!process.env.CI)' || (husky install && npm run build)",
     "tsc": "turbo tsc",
     "changeset": "changeset",
-    "changeset:version": "changeset version && npm install && npm run update-unpkg-links",
+    "changeset:version": "changeset version && npm install && npm run update-unpkg-links && npm run update-plugin-versions",
     "changeset:publish": "npm run build && changeset publish"
   },
   "engines": {
