@@ -2,4 +2,4 @@
 "@jspsych/plugin-survey": patch
 ---
 
-Export css files of plugin-survey
+Export css files in `package.json`
