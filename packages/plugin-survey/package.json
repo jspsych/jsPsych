@@ -9,7 +9,8 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./css/*": "./css/*"
+    "./css/survey.css": "./css/survey.css",
+    "./css/survey.scss": "./css/survey.scss"
   },
   "typings": "dist/index.d.ts",
   "unpkg": "dist/index.browser.min.js",
