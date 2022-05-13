@@ -27,6 +27,11 @@ This plugin uses an additional stylesheet called `survey.css`. You can load it v
 <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.1.1/css/survey.css">
 ```
 
+If you are using a bundler such as [webpack](https://webpack.js.org/), you can also import it in JavaScript as follows, depending on your bundler configuration:
+```javascript
+import '@jspsych/plugin-survey/css/survey.css'
+```
+
 ## Parameters
 
 In addition to the [parameters available in all plugins](../overview/plugins.md#parameters-available-in-all-plugins), this plugin accepts the following parameters. 
