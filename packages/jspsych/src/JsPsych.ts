@@ -242,7 +242,7 @@ export class JsPsych {
     this.data.write(data);
 
     // get back the data with all of the defaults in
-    const trial_data = this.data.get().filter({ trial_index: this.global_trial_index });
+    const trial_data = this.data.getLastTrialData();
 
     // for trial-level callbacks, we just want to pass in a reference to the values
     // of the DataCollection, for easy access and editing.
