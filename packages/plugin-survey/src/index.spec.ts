@@ -229,7 +229,6 @@ describe("survey plugin", () => {
     const inputTypes = [
       "color",
       "date",
-      // "datetime",
       "datetime-local",
       "email",
       "month",
@@ -253,6 +252,7 @@ describe("survey plugin", () => {
                 type: "text",
                 prompt: "foo",
                 input_type: inputType,
+                textbox_columns: 10,
               },
             ],
           ],
@@ -263,13 +263,14 @@ describe("survey plugin", () => {
       expect(question).not.toBeNull();
       expect(question.querySelector("span").innerHTML).toBe("foo");
 
-      const textinput = displayElement.querySelectorAll("input");
-
-      expect(textinput[0]).not.toBeNull();
-      expect(textinput[0].type).toBe(inputType);
-      if (["text", "search", "tel", "url", "email", "password"].includes(inputType)) {
+      const input = displayElement.querySelectorAll("input")[0];
+      expect(input).not.toBeNull();
+      expect(input.type).toEqual(inputType);
+      if (["email", "password", "tel", "url", "text"].includes(inputType)) {
         // size can be specified only for text input types
-        expect(textinput[0].size).toBe(40);
+        expect(input.size).toEqual(10);
+      } else {
+        expect(input.size).not.toEqual(10);
       }
 
       const finish_button = displayElement.querySelector("input.sv_complete_btn");

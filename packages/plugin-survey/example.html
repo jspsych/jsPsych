@@ -25,13 +25,13 @@
           {type: 'html', prompt: '<p>Here is some arbitrary text via an "html" question type.<br>Similar to preamble but can be inserted anywhere in the question set.</p><p>This trial uses automatic question numbering (continued across pages).</p>'},
           {type: 'text', prompt: 'This is a single-line text question. The correct answer is "hello".', required: true, correct_response: "hello"},
           {type: 'text', prompt: 'This is a multi-line text question.', placeholder: 'This is a placeholder.', textbox_rows: 10, textbox_columns: 40},
-          {type: 'text', prompt: 'This is a single-line text question that only numbers can be entered.', input_type: 'number'},
-          {type: 'text', prompt: 'This is a date question', input_type: 'date'},
+          {type: 'text', prompt: 'This is a single-line text question of input_type "number"', input_type: 'number'},
+          {type: 'text', prompt: 'This is a single-line text question of input_type "date"', input_type: 'date'},
         ],
         [
           {
-            type: 'likert', 
-            prompt: 'This is a likert question prompt.', 
+            type: 'likert',
+            prompt: 'This is a likert question prompt.',
             likert_scale_values: [
               {value: 1},
               {value: 2},
