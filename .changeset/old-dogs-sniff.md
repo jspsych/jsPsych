@@ -2,4 +2,4 @@
 "@jspsych/plugin-survey": minor
 ---
 
-Added input_type parameter
+Add `input_type` parameter for questions of type `text`
