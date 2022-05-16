@@ -30,7 +30,9 @@
     "lint-staged": "^12.3.5",
     "prettier": "^2.5.1",
     "prettier-plugin-import-sort": "^0.0.7",
-    "turbo": "^1.1.10"
+    "turbo": "^1.1.10",
+    "jest": "*",
+    "ts-jest": "*"
   },
   "prettier": {
     "printWidth": 100
