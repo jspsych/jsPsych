@@ -1,3 +1,4 @@
+import { DEFAULT_EXTENSIONS as babelDefaultExtensions } from "@babel/core";
 import { babel } from "@rollup/plugin-babel";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
@@ -81,6 +82,8 @@ const makeConfig = ({
         babel({
           babelHelpers: "bundled",
           extends: "@jspsych/config/babel",
+          // https://github.com/ezolenko/rollup-plugin-typescript2#rollupplugin-babel
+          extensions: [...babelDefaultExtensions, ".ts"],
         })
       ),
       output: [
