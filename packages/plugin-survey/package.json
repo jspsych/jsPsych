@@ -25,7 +25,7 @@
     "test:watch": "npm test -- --watch",
     "tsc": "tsc",
     "build:js": "rollup --config",
-    "build:styles": "sass --load-path ../../node_modules css/survey.scss css/survey.css",
+    "build:styles": "sass --load-path ./node_modules --load-path ../../node_modules css/survey.scss css/survey.css",
     "build": "run-p build:js build:styles",
     "build:watch": "run-p \"build:js -- --watch\" \"build:styles -- --watch\""
   },
@@ -50,6 +50,7 @@
     "sass": "^1.43.5"
   },
   "dependencies": {
-    "survey-knockout": "^1.8.78"
+    "knockout": "3.5.1",
+    "survey-knockout": "1.8.78"
   }
 }
