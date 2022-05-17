@@ -736,7 +736,6 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
       case "ranking":
         question = new QuestionRanking(name);
-        question.fallbackToSortableJS = true;
         break;
     }
 
@@ -755,6 +754,12 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     question.colCount = params.columns;
     if (params.correct_response !== null) {
       question.correctAnswer = params.correct_response;
+    }
+
+    if (question instanceof QuestionRanking) {
+      // Hack to initialize `question.dragDropRankingChoices` which is only done by the
+      // `endLoadingFromJson()` method
+      question.endLoadingFromJson();
     }
 
     return question;

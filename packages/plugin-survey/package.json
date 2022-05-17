@@ -51,6 +51,6 @@
   },
   "dependencies": {
     "knockout": "3.5.1",
-    "survey-knockout": "1.8.78"
+    "survey-knockout": "1.9.30"
   }
 }

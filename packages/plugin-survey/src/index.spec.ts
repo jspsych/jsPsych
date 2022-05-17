@@ -40,7 +40,7 @@ describe("survey plugin", () => {
     ]);
 
     // check that label displayed
-    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    const question = displayElement.querySelector('div[data-name="P0_Q0"]');
     expect(question).not.toBeNull();
     expect(question.querySelector("span").innerHTML).toBe("foo");
 
@@ -73,7 +73,7 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    const question = displayElement.querySelector('div[data-name="P0_Q0"]');
     expect(question).not.toBeNull();
     expect(question.querySelector("#prompt").innerHTML).toBe("foo");
 
@@ -113,7 +113,7 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    const question = displayElement.querySelector('div[data-name="P0_Q0"]');
     expect(question).not.toBeNull();
     expect(question.querySelector("span").innerHTML).toBe("foo");
 
@@ -146,7 +146,7 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    const question = displayElement.querySelector('div[data-name="P0_Q0"]');
     expect(question).not.toBeNull();
     expect(question.querySelector("span").innerHTML).toBe("foo");
 
@@ -177,7 +177,7 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    const question = displayElement.querySelector('div[data-name="P0_Q0"]');
     expect(question).not.toBeNull();
     expect(question.querySelector("span").innerHTML).toBe("foo");
 
@@ -209,7 +209,7 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    const question = displayElement.querySelector('div[data-name="P0_Q0"]');
     expect(question).not.toBeNull();
     expect(question.querySelector("span").innerHTML).toBe("foo");
 
@@ -259,7 +259,7 @@ describe("survey plugin", () => {
         },
       ]);
 
-      const question = displayElement.querySelector('div[name="P0_Q0"]');
+      const question = displayElement.querySelector('div[data-name="P0_Q0"]');
       expect(question).not.toBeNull();
       expect(question.querySelector("span").innerHTML).toBe("foo");
 
