@@ -178,6 +178,7 @@ placeholder | string | "" | Placeholder text in the text response field.
 textbox_rows | integer | 1 | The number of rows (height) for the response text box. 
 textbox_columns | integer | 40 | The number of columns (width) for the response text box. 
 validation | string | "" | A regular expression used to validate the response.
+input_type | string | "text" | Type for the HTML `<input>` element. The `input_type` parameter must be one of "color", "date", "datetime-local", "email", "month", "number", "password", "range", "tel", "text", "time", "url", "week". If the `textbox_rows` parameter is larger than 1, the `input_type` parameter will be ignored. The `textbox_columns` parameter only affects questions with `input_type` "email", "password", "tel", "url", or "text".
 
 ## Data Generated
 
