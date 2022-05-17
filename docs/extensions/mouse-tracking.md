@@ -30,14 +30,14 @@ Trial parameters can be set when adding the extension to a trial object.
 var trial = {
   type: jsPsych...,
   extensions: [
-    {type: jsPsychExtensionWebgazer, params: {...}}
+    {type: jsPsychExtensionMouseTracking, params: {...}}
   ]
 }
 ```
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-targets | array | [] | A list of elements on the page that you would like to record the coordinates of for comparison with the WebGazer data. Each entry in the array should be a valid [CSS selector string](https://www.w3schools.com/cssref/css_selectors.asp) that identifies the element. The selector string should be valid for exactly one element on the page. If the selector is valid for more than one element then only the first matching element will be recorded.
+targets | array | [] | A list of elements on the page that you would like to record the coordinates of for comparison with the mouse tracking data. Each entry in the array should be a valid [CSS selector string](https://www.w3schools.com/cssref/css_selectors.asp) that identifies the element. The selector string should be valid for exactly one element on the page. If the selector is valid for more than one element then only the first matching element will be recorded.
 events | array | ['mousemove'] | A list of events to track. Can include 'mousemove', 'mousedown', and 'mouseup'. 
 
 ## Data Generated
