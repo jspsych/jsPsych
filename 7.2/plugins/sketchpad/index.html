@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.jspsych.org/7.2/plugins/sketchpad/">
       
       <link rel="icon" href="../../img/jspsych-favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.13">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.15">
     
     
       
@@ -19,7 +19,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.e411adfe.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.c382b1dc.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.cc9b2e1e.min.css">
@@ -1666,6 +1666,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../developers/documentation/" class="md-nav__link">
+        Building the Documentation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../developers/contributing/" class="md-nav__link">
         Contributing to jsPsych
       </a>
@@ -1912,7 +1926,7 @@
 
 
 <h1 id="sketchpad">sketchpad<a class="headerlink" href="#sketchpad" title="Permanent link">&para;</a></h1>
-<p>Current version: 1.0.1. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-sketchpad/CHANGELOG.md">See version history</a>.</p>
+<p>Current version: 1.0.2. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-sketchpad/CHANGELOG.md">See version history</a>.</p>
 <p>This plugin creates an interactive canvas that the participant can draw on using their mouse or touchscreen.
 It can be used for sketching tasks, like asking the participant to draw a particular object.
 It can also be used for some image segmentation or annotation tasks by setting the <code>background_image</code> parameter to render an image on the canvas.</p>
@@ -2145,7 +2159,7 @@ You can do this by putting data saving code inside the <a href="../../overview/e
 <p>This plugin does not yet support <a href="../../overview/simulation/">simulation mode</a>.</p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-sketchpad@1.0.1&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-sketchpad@1.0.2&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-sketchpad.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
@@ -2156,7 +2170,9 @@ You can do this by putting data saving code inside the <a href="../../overview/e
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="nx">sketchpad</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;@jspsych/plugin-sketchpad&#39;</span><span class="p">;</span><span class="w"></span>
 </code></pre></div></p>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
-<details class="example" open="open"><summary>Basic sketchpad with a prompt</summary><div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Code</label><label for="__tabbed_1_2">Demo</label></div>
+<details class="example" open="open">
+<summary>Basic sketchpad with a prompt</summary>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Code</label><label for="__tabbed_1_2">Demo</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -2178,7 +2194,9 @@ You can do this by putting data saving code inside the <a href="../../overview/e
 </div>
 <p><a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-sketchpad-demo1.html">Open demo in new tab</a></p>
 </details>
-<details class="example" open="open"><summary>Image segmentation with different colors</summary><div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Code</label><label for="__tabbed_2_2">Demo</label></div>
+<details class="example" open="open">
+<summary>Image segmentation with different colors</summary>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Code</label><label for="__tabbed_2_2">Demo</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -2202,7 +2220,9 @@ You can do this by putting data saving code inside the <a href="../../overview/e
 </div>
 <p><a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-sketchpad-demo2.html">Open demo in new tab</a></p>
 </details>
-<details class="example" open="open"><summary>Draw an image in a time limit, then display the image and ask for a label.</summary><div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Code</label><label for="__tabbed_3_2">Demo</label></div>
+<details class="example" open="open">
+<summary>Draw an image in a time limit, then display the image and ask for a label.</summary>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Code</label><label for="__tabbed_3_2">Demo</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">draw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -2328,7 +2348,7 @@ You can do this by putting data saving code inside the <a href="../../overview/e
     <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.ed9748b7.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a6c66575.min.js"></script>
       
     
   </body>
