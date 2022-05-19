@@ -1,9 +1,8 @@
 [tool.poetry]
 name = "jspsych"
-version = "7.2.2"
-description = "A JavaScript library for creating behavioral experiments in a web browser"
-authors = ["Josh de Leeuw <josh.deleeuw@gmail.com>"]
-license = "MIT"
+version = "0"
+description = ""
+authors = []
 
 [tool.poetry.dependencies]
 python = "^3.8"
