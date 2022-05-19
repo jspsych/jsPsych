@@ -129,6 +129,7 @@ nav:
   - 'webgazer': 'extensions/webgazer.md'
 - Developers:
   - 'Configuration': 'developers/configuration.md'
+  - 'Building the Documentation': 'developers/documentation.md'
   - 'Contributing to jsPsych': 'developers/contributing.md'
   - 'Plugin Development': 'developers/plugin-development.md'
   - 'Extension Development': 'developers/extension-development.md'
