@@ -12,13 +12,9 @@ To build a local copy of the docs, you will need to install `mkdocs`, `mkdocs-ma
 
 Run the command `poetry install` in the root directory of jsPsych to install `mkdocs`, `mkdocs-material`, and their dependencies.
 
-## Launch a poetry shell
-
-Poetry installs dependencies in a virtual environment. Run `poetry shell` to open a new shell configured to use the virtual environment that poetry generated.
-
 ## Building a local copy of the docs
 
-Run `mike deploy [version] -u` to build a new version of the documentation or to override an existing version. For example, if you are testing an edit to version `7.2` of the documentation, run `mike deploy 7.2 -u`.
+Run `poetry run mike deploy [version] -u` to build a new version of the documentation or to override an existing version. For example, if you are testing an edit to version `7.2` of the documentation, run `poetry mike deploy 7.2 -u`.
 
 This will build the documentation and commit it directly to the `gh-pages` branch.
 
@@ -26,4 +22,4 @@ We use [`mike`](https://github.com/jimporter/mike) instead of `mkdocs` for the b
 
 ## Viewing the local docs
 
-Run `mike serve` to launch a local webserver. The docs will be viewable at `http://localhost:8000`.
+Run `poetry run mike serve` to launch a local webserver. The docs will be viewable at `http://localhost:8000`.
