@@ -1645,13 +1645,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#launch-a-poetry-shell" class="md-nav__link">
-    Launch a poetry shell
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#building-a-local-copy-of-the-docs" class="md-nav__link">
     Building a local copy of the docs
   </a>
@@ -1887,13 +1880,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#launch-a-poetry-shell" class="md-nav__link">
-    Launch a poetry shell
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#building-a-local-copy-of-the-docs" class="md-nav__link">
     Building a local copy of the docs
   </a>
@@ -1932,14 +1918,12 @@
 <p><a href="https://python-poetry.org/">Poetry</a> is a package manager for python. Follow the install instructions on the <code>poetry</code> website to get it running.</p>
 <h2 id="install-dev-dependencies">Install dev dependencies<a class="headerlink" href="#install-dev-dependencies" title="Permanent link">&para;</a></h2>
 <p>Run the command <code>poetry install</code> in the root directory of jsPsych to install <code>mkdocs</code>, <code>mkdocs-material</code>, and their dependencies.</p>
-<h2 id="launch-a-poetry-shell">Launch a poetry shell<a class="headerlink" href="#launch-a-poetry-shell" title="Permanent link">&para;</a></h2>
-<p>Poetry installs dependencies in a virtual environment. Run <code>poetry shell</code> to open a new shell configured to use the virtual environment that poetry generated.</p>
 <h2 id="building-a-local-copy-of-the-docs">Building a local copy of the docs<a class="headerlink" href="#building-a-local-copy-of-the-docs" title="Permanent link">&para;</a></h2>
-<p>Run <code>mike deploy [version] -u</code> to build a new version of the documentation or to override an existing version. For example, if you are testing an edit to version <code>7.2</code> of the documentation, run <code>mike deploy 7.2 -u</code>.</p>
+<p>Run <code>poetry run mike deploy [version] -u</code> to build a new version of the documentation or to override an existing version. For example, if you are testing an edit to version <code>7.2</code> of the documentation, run <code>poetry mike deploy 7.2 -u</code>.</p>
 <p>This will build the documentation and commit it directly to the <code>gh-pages</code> branch.</p>
 <p>We use <a href="https://github.com/jimporter/mike"><code>mike</code></a> instead of <code>mkdocs</code> for the build step to support versioning of the documentation. <code>mike</code> runs the <code>mkdocs</code> command under the hood.</p>
 <h2 id="viewing-the-local-docs">Viewing the local docs<a class="headerlink" href="#viewing-the-local-docs" title="Permanent link">&para;</a></h2>
-<p>Run <code>mike serve</code> to launch a local webserver. The docs will be viewable at <code>http://localhost:8000</code>.</p>
+<p>Run <code>poetry run mike serve</code> to launch a local webserver. The docs will be viewable at <code>http://localhost:8000</code>.</p>
 
               
             </article>
