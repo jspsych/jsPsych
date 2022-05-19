@@ -1,5 +1,13 @@
 # jspsych
 
+## 7.2.2
+
+### Patch Changes
+
+- [#2628](https://github.com/jspsych/jsPsych/pull/2628) [`661a64f8`](https://github.com/jspsych/jsPsych/commit/661a64f8b0a27881f40dac0a28c2db00fe055125) Thanks [@vijaymarupudi](https://github.com/vijaymarupudi)! - Use a more efficient method to access the most recent trial's data at the end of each trial.
+
+* [#2632](https://github.com/jspsych/jsPsych/pull/2632) [`a17f423f`](https://github.com/jspsych/jsPsych/commit/a17f423f18df24c73baeb06d4079f9f2f9211386) Thanks [@bjoluc](https://github.com/bjoluc)! - Improve browser compatibility when loading via `unpkg.com`, i.e. when using the `dist/index.browser.min.js` build artifact.
+
 ## 7.2.1
 
 ### Patch Changes

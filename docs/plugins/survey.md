@@ -1,6 +1,6 @@
 # survey
 
-Current version: 0.1.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md).
+Current version: 0.2.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md).
 
 The survey plugin displays one or more questions of different types, on one or more pages that the participant can navigate. This plugin is built on top of the [SurveyJS](https://surveyjs.io/) library.
 
@@ -24,7 +24,7 @@ There is also an [`"html"`](#html) type for adding arbitrary HTML-formatted cont
 This plugin uses an additional stylesheet called `survey.css`. You can load it via: 
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.1.1/css/survey.css">
+<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.2.0/css/survey.css">
 ```
 
 If you are using a bundler such as [webpack](https://webpack.js.org/), you can also import it in JavaScript as follows, depending on your bundler configuration:
@@ -198,7 +198,7 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-survey@0.1.1"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey@0.2.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

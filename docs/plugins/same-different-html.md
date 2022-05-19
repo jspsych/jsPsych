@@ -1,6 +1,6 @@
 # same-different-html
 
-Current version: 1.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-same-different-html/CHANGELOG.md).
+Current version: 1.1.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-same-different-html/CHANGELOG.md).
 
 The same-different-html plugin displays two stimuli sequentially. Stimuli are HTML objects. The subject responds using the keyboard, and indicates whether the stimuli were the same or different. Same does not necessarily mean identical; a category judgment could be made, for example.
 
@@ -44,7 +44,7 @@ Additionally, if `first_stim_duration` is  null, then the following data is also
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-same-different-html@1.1.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-same-different-html@1.1.1"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

@@ -13,8 +13,8 @@ To use a plugin, you'll need to load the plugin's JavaScript file in your experi
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.2.1" type="text/javascript"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0" type="text/javascript"></script>
+  <script src="https://unpkg.com/jspsych@7.2.2" type="text/javascript"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.1" type="text/javascript"></script>
 </head>
 ```
 

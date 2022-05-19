@@ -1,5 +1,11 @@
 # @jspsych/plugin-video-slider-response
 
+## 1.1.1
+
+### Patch Changes
+
+- [#2632](https://github.com/jspsych/jsPsych/pull/2632) [`a17f423f`](https://github.com/jspsych/jsPsych/commit/a17f423f18df24c73baeb06d4079f9f2f9211386) Thanks [@bjoluc](https://github.com/bjoluc)! - Improve browser compatibility when loading via `unpkg.com`, i.e. when using the `dist/index.browser.min.js` build artifact.
+
 ## 1.1.0
 
 ### Minor Changes
