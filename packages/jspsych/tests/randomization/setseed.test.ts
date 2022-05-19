@@ -85,9 +85,6 @@ describe("setSeed generates predictable randomization", () => {
 
     const data_run_2 = getData2().readOnly();
 
-    console.log(data_run_1.values());
-    console.log(data_run_2.values());
-
     expect(data_run_1.select("i").values).toEqual(data_run_2.select("i").values);
   });
 });
