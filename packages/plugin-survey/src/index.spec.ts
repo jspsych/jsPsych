@@ -226,6 +226,8 @@ describe("survey plugin", () => {
   });
 
   test("loads single-line text questions of various input types", async () => {
+    jest.setTimeout(10000); // default timeout of 5s is too short for this test
+
     const inputTypes = [
       "color",
       "date",
