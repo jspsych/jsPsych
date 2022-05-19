@@ -1,5 +1,17 @@
 # @jspsych/config
 
+## 1.3.0
+
+### Minor Changes
+
+- [`3463e977`](https://github.com/jspsych/jsPsych/commit/3463e9778f3c2787b9c75c0f9bd7d19cc79798b3) Thanks [@becky-gilbert](https://github.com/becky-gilbert)! - Add the updatePluginVersions gulp task. This task looks at each of the docs/plugins markdown files, finds the page title and "Current version" string, adds the current version number (from the package.json file), and uses the package name as the page title.
+
+### Patch Changes
+
+- [#2631](https://github.com/jspsych/jsPsych/pull/2631) [`e77371e9`](https://github.com/jspsych/jsPsych/commit/e77371e94b3496361138d681c16840829f4c5cd2) Thanks [@bjoluc](https://github.com/bjoluc)! - Update dependencies, including Jest v27 to v28. The changelogs have been carefully checked and no breaking changes are to be expected in packages using `@jspsych/config`. Check out the [Jest 28 blog post](https://jestjs.io/blog/2022/04/25/jest-28) for a summary of the changes in Jest.
+
+* [#2632](https://github.com/jspsych/jsPsych/pull/2632) [`a17f423f`](https://github.com/jspsych/jsPsych/commit/a17f423f18df24c73baeb06d4079f9f2f9211386) Thanks [@bjoluc](https://github.com/bjoluc)! - Apply Babel Rollup plugin to `.ts` files in the `index.browser.min.js` build. It was erroneously ignoring transpiled `.ts` files before.
+
 ## 1.2.0
 
 ### Minor Changes
