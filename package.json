@@ -15,7 +15,9 @@
     "tsc": "turbo tsc",
     "changeset": "changeset",
     "changeset:version": "changeset version && npm install && npm run update-unpkg-links && npm run update-plugin-versions",
-    "changeset:publish": "npm run build && changeset publish"
+    "changeset:publish": "npm run build && changeset publish",
+    "docs:deploy": "poetry install && poetry run mike deploy -u",
+    "docs:serve": "poetry install && poetry run mike serve"
   },
   "engines": {
     "node": ">=14.0.0",
