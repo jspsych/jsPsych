@@ -3,6 +3,7 @@ import { babel } from "@rollup/plugin-babel";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import resolve from "@rollup/plugin-node-resolve";
+import replace from "@rollup/plugin-replace";
 import { defineConfig } from "rollup";
 import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
@@ -78,14 +79,24 @@ const makeConfig = ({
     // Babel build
     config.push({
       ...commonConfig,
-      plugins: commonConfig.plugins.concat(
+      plugins: [
+        // Import `regenerator-runtime` if requested:
+        replace({
+          values: {
+            "// __rollup-babel-import-regenerator-runtime__":
+              'import "regenerator-runtime/runtime.js";',
+          },
+          delimiters: ["", ""],
+          preventAssignment: true,
+        }),
+        ...commonConfig.plugins,
         babel({
           babelHelpers: "bundled",
           extends: "@jspsych/config/babel",
           // https://github.com/ezolenko/rollup-plugin-typescript2#rollupplugin-babel
           extensions: [...babelDefaultExtensions, ".ts"],
-        })
-      ),
+        }),
+      ],
       output: [
         {
           // Minified production build file
