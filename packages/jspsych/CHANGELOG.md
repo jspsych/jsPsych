@@ -1,5 +1,11 @@
 # jspsych
 
+## 7.2.3
+
+### Patch Changes
+
+- [#2643](https://github.com/jspsych/jsPsych/pull/2643) [`dc005661`](https://github.com/jspsych/jsPsych/commit/dc005661420dcc5c8aec62651687fc9aeac5fb65) Thanks [@bjoluc](https://github.com/bjoluc)! - Include previously undefined `regeneratorRuntime` in the Babel build of the `jspsych` package
+
 ## 7.2.2
 
 ### Patch Changes
