@@ -33,6 +33,7 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     this.run_trial(display_element, trial).then((id) => {
+      display_element.innerHTML = "";
       this.jsPsych.finishTrial({
         device_id: id,
       });
@@ -50,13 +51,13 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
       this.updateDeviceList(display_element);
     };
 
-    const mic_id = await this.waitForSelection(display_element);
+    const camera_id = await this.waitForSelection(display_element);
 
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: mic_id } });
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: camera_id } });
 
     this.jsPsych.pluginAPI.initializeCameraRecorder(stream);
 
-    return mic_id;
+    return camera_id;
   }
 
   private async askForPermission() {
