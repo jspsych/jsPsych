@@ -334,4 +334,15 @@ export class MediaAPI {
   getMicrophoneRecorder(): MediaRecorder {
     return this.microphone_recorder;
   }
+
+  private camera_recorder: MediaRecorder = null;
+
+  initializeCameraRecorder(stream: MediaStream) {
+    const recorder = new MediaRecorder(stream);
+    this.camera_recorder = recorder;
+  }
+
+  getCameraRecorder(): MediaRecorder {
+    return this.camera_recorder;
+  }
 }
