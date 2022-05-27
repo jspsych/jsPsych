@@ -34,7 +34,7 @@
   },
   "homepage": "https://www.jspsych.org/latest/plugins/initialize-camera",
   "peerDependencies": {
-    "jspsych": ">=7.3.0"
+    "jspsych": ">=7.2.0"
   },
   "devDependencies": {
     "@jspsych/config": "^1.3.0",
