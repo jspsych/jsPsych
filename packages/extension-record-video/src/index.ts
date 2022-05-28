@@ -22,7 +22,9 @@ class RecordVideoExtension implements JsPsychExtension {
       return;
     }
 
-    this.recorder.ondataavailable = this.handleOnDataAvailable;
+    this.recorder.ondataavailable = (event) => {
+      this.handleOnDataAvailable(event);
+    };
   };
 
   on_load = () => {
@@ -32,7 +34,7 @@ class RecordVideoExtension implements JsPsychExtension {
   on_finish = () => {
     this.recorder.stop();
 
-    this.recorder.ondataavailable = null;
+    //this.recorder.ondataavailable = null;
 
     return {
       record_video_data: new Blob(this.recordedChunks),
@@ -41,6 +43,7 @@ class RecordVideoExtension implements JsPsychExtension {
 
   private handleOnDataAvailable(event) {
     if (event.data.size > 0) {
+      console.log("chunks added");
       this.recordedChunks.push(event.data);
     }
   }
