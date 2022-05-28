@@ -10,6 +10,7 @@ class RecordVideoExtension implements JsPsychExtension {
   private recordedChunks = [];
   private recorder = null;
 
+  // todo: add option to stream data to server with timeslice?
   initialize = async () => {};
 
   on_start = (): void => {
