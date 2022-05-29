@@ -28,7 +28,7 @@ class RecordVideoExtension implements JsPsychExtension {
   };
 
   on_load = () => {
-    this.recorder.start();
+    this.recorder.start(10);
   };
 
   on_finish = () => {
@@ -37,7 +37,7 @@ class RecordVideoExtension implements JsPsychExtension {
     //this.recorder.ondataavailable = null;
 
     return {
-      record_video_data: new Blob(this.recordedChunks),
+      record_video_data: new Blob(this.recordedChunks, { type: 'video/webm;codecs="vp9"' }),
     };
   };
 
