@@ -9,6 +9,8 @@ class RecordVideoExtension implements JsPsychExtension {
 
   private recordedChunks = [];
   private recorder = null;
+  private currentTrialData = null;
+  private trialComplete = false;
 
   // todo: add option to stream data to server with timeslice?
   initialize = async () => {};
@@ -16,6 +18,8 @@ class RecordVideoExtension implements JsPsychExtension {
   on_start = (): void => {
     this.recorder = this.jsPsych.pluginAPI.getCameraRecorder();
     this.recordedChunks = [];
+    this.trialComplete = false;
+    this.currentTrialData = null;
 
     if (!this.recorder) {
       console.log("Camera not initialized. Do you need to run the initialize-camera plugin?");
@@ -32,20 +36,32 @@ class RecordVideoExtension implements JsPsychExtension {
   };
 
   on_finish = () => {
+    this.trialComplete = true;
     this.recorder.stop();
 
     //this.recorder.ondataavailable = null;
 
-    return {
-      record_video_data: new Blob(this.recordedChunks, { type: 'video/webm;codecs="vp9"' }),
-    };
+    const data = { record_video_data: null };
+
+    this.currentTrialData = data;
+
+    return data;
   };
 
   private handleOnDataAvailable(event) {
     if (event.data.size > 0) {
       console.log("chunks added");
       this.recordedChunks.push(event.data);
+      if (this.trialComplete) {
+        this.updateData();
+      }
     }
+  }
+
+  private updateData() {
+    this.currentTrialData.record_video_data = new Blob(this.recordedChunks, {
+      type: 'video/webm;codecs="vp9"',
+    });
   }
 }
 
