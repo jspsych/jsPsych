@@ -335,11 +335,17 @@ export class MediaAPI {
     return this.microphone_recorder;
   }
 
+  private camera_stream: MediaStream = null;
   private camera_recorder: MediaRecorder = null;
 
   initializeCameraRecorder(stream: MediaStream) {
+    this.camera_stream = stream;
     const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs="vp9"' });
     this.camera_recorder = recorder;
+  }
+
+  getCameraStream(): MediaStream {
+    return this.camera_stream;
   }
 
   getCameraRecorder(): MediaRecorder {
