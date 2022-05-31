@@ -13,6 +13,14 @@ const info = <const>{
       type: ParameterType.STRING,
       default: "Use this camera",
     },
+    width: {
+      type: ParameterType.INT,
+      default: null,
+    },
+    height: {
+      type: ParameterType.INT,
+      default: null,
+    },
   },
 };
 
@@ -53,7 +61,16 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
 
     const camera_id = await this.waitForSelection(display_element);
 
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: camera_id } });
+    const constraints: any = { video: { deviceId: camera_id } };
+
+    if (trial.width) {
+      constraints.video.width = trial.width;
+    }
+    if (trial.height) {
+      constraints.video.height = trial.height;
+    }
+
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
     this.jsPsych.pluginAPI.initializeCameraRecorder(stream);
 
