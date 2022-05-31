@@ -1,0 +1,58 @@
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+
+const info = <const>{
+  name: "initialize-camera",
+  parameters: {
+    /** Label to show on continue button */
+    button_label: {
+      type: ParameterType.STRING,
+      default: "Continue",
+    },
+  },
+};
+
+type Info = typeof info;
+
+/**
+ * **mirror-camera**
+ *
+ * jsPsych plugin for showing a live stream from a camera
+ *
+ * @author Josh de Leeuw
+ * @see {@link https://www.jspsych.org/plugins/jspsych-mirror-camera/ mirror-camera plugin documentation on jspsych.org}
+ */
+class MirrorCameraPlugin implements JsPsychPlugin<Info> {
+  static info = info;
+
+  private stream: MediaStream;
+  private start_time: number;
+
+  constructor(private jsPsych: JsPsych) {}
+
+  trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    this.stream = this.jsPsych.pluginAPI.getCameraStream();
+
+    display_element.innerHTML = `
+      <video autoplay playsinline id="jspsych-mirror-camera-video" style=""></video>
+      <p><button class="jspsych-btn" id="btn-continue">${trial.button_label}</button></p>
+    `;
+
+    (display_element.querySelector("#jspsych-mirror-camera-video") as HTMLVideoElement).srcObject =
+      this.stream;
+
+    display_element.querySelector("#btn-continue").addEventListener("click", () => {
+      this.finish(display_element);
+    });
+
+    this.start_time = performance.now();
+  }
+
+  finish(display_element: HTMLElement) {
+    display_element.innerHTML = "";
+    this.jsPsych.finishTrial({
+      rt: performance.now() - this.start_time,
+    });
+  }
+}
+
+export default MirrorCameraPlugin;
