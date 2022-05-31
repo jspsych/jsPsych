@@ -8,6 +8,16 @@ const info = <const>{
       type: ParameterType.STRING,
       default: "Continue",
     },
+    /** Height of the video element */
+    height: {
+      type: ParameterType.INT,
+      default: null,
+    },
+    /** Width of the video element */
+    width: {
+      type: ParameterType.INT,
+      default: null,
+    },
   },
 };
 
@@ -33,7 +43,9 @@ class MirrorCameraPlugin implements JsPsychPlugin<Info> {
     this.stream = this.jsPsych.pluginAPI.getCameraStream();
 
     display_element.innerHTML = `
-      <video autoplay playsinline id="jspsych-mirror-camera-video" style=""></video>
+      <video autoplay playsinline id="jspsych-mirror-camera-video" width="${
+        trial.width ? trial.width : "auto"
+      }" height="${trial.height ? trial.height : "auto"}"></video>
       <p><button class="jspsych-btn" id="btn-continue">${trial.button_label}</button></p>
     `;
 
