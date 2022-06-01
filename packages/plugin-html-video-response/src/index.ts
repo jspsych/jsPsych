@@ -208,7 +208,7 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
     this.recorder.removeEventListener("start", this.start_event_handler);
     this.recorder.removeEventListener("stop", this.stop_event_handler);
 
-    // kill any remaining setTimeout handlers
+    // clear any remaining setTimeout handlers
     this.jsPsych.pluginAPI.clearAllTimeouts();
 
     // gather the data to store for the trial
