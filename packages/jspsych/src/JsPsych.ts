@@ -272,53 +272,71 @@ export class JsPsych {
         }
       }
     }
+
     // handle extension callbacks
-    if (Array.isArray(current_trial.extensions)) {
-      for (const extension of current_trial.extensions) {
-        const ext_data_values = this.extensions[extension.type.info.name].on_finish(
-          extension.params
-        );
-        Object.assign(trial_data_values, ext_data_values);
+
+    const extensionCallbackResults = ((current_trial.extensions ?? []) as any[]).map((extension) =>
+      this.extensions[extension.type.info.name].on_finish(extension.params)
+    );
+
+    const onExtensionCallbacksFinished = () => {
+      // about to execute lots of callbacks, so switch context.
+      this.internal.call_immediate = true;
+
+      // handle callback at plugin level
+      if (typeof current_trial.on_finish === "function") {
+        current_trial.on_finish(trial_data_values);
       }
-    }
 
-    // about to execute lots of callbacks, so switch context.
-    this.internal.call_immediate = true;
+      // handle callback at whole-experiment level
+      this.opts.on_trial_finish(trial_data_values);
 
-    // handle callback at plugin level
-    if (typeof current_trial.on_finish === "function") {
-      current_trial.on_finish(trial_data_values);
-    }
+      // after the above callbacks are complete, then the data should be finalized
+      // for this trial. call the on_data_update handler, passing in the same
+      // data object that just went through the trial's finish handlers.
+      this.opts.on_data_update(trial_data_values);
 
-    // handle callback at whole-experiment level
-    this.opts.on_trial_finish(trial_data_values);
+      // done with callbacks
+      this.internal.call_immediate = false;
 
-    // after the above callbacks are complete, then the data should be finalized
-    // for this trial. call the on_data_update handler, passing in the same
-    // data object that just went through the trial's finish handlers.
-    this.opts.on_data_update(trial_data_values);
-
-    // done with callbacks
-    this.internal.call_immediate = false;
-
-    // wait for iti
-    if (this.simulation_mode === "data-only") {
-      this.nextTrial();
-    } else if (
-      typeof current_trial.post_trial_gap === null ||
-      typeof current_trial.post_trial_gap === "undefined"
-    ) {
-      if (this.opts.default_iti > 0) {
-        setTimeout(this.nextTrial, this.opts.default_iti);
-      } else {
+      // wait for iti
+      if (this.simulation_mode === "data-only") {
         this.nextTrial();
+      } else if (
+        typeof current_trial.post_trial_gap === null ||
+        typeof current_trial.post_trial_gap === "undefined"
+      ) {
+        if (this.opts.default_iti > 0) {
+          setTimeout(this.nextTrial, this.opts.default_iti);
+        } else {
+          this.nextTrial();
+        }
+      } else {
+        if (current_trial.post_trial_gap > 0) {
+          setTimeout(this.nextTrial, current_trial.post_trial_gap);
+        } else {
+          this.nextTrial();
+        }
       }
+    };
+
+    // Strictly using Promise.resolve to turn all values into promises would be cleaner here, but it
+    // would require user test code to make the event loop tick after every simulated key press even
+    // if there are no async `on_finish` methods. Hence, in order to avoid a breaking change, we
+    // only rely on the event loop if at least one `on_finish` method returns a promise.
+    if (extensionCallbackResults.some((result) => typeof result.then === "function")) {
+      Promise.all(
+        extensionCallbackResults.map((result) =>
+          Promise.resolve(result).then((ext_data_values) => {
+            Object.assign(trial_data_values, ext_data_values);
+          })
+        )
+      ).then(onExtensionCallbacksFinished);
     } else {
-      if (current_trial.post_trial_gap > 0) {
-        setTimeout(this.nextTrial, current_trial.post_trial_gap);
-      } else {
-        this.nextTrial();
+      for (const values of extensionCallbackResults) {
+        Object.assign(trial_data_values, values);
       }
+      onExtensionCallbacksFinished();
     }
   }
 

@@ -1,17 +1,21 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import { pressKey } from "@jspsych/test-utils";
 
-import { initJsPsych } from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
 import testExtension from "./test-extension";
 
 jest.useFakeTimers();
 
 describe("jsPsych.extensions", () => {
-  test("initialize is called at start of experiment", async () => {
-    const jsPsych = initJsPsych({
+  let jsPsych: JsPsych;
+
+  beforeEach(() => {
+    jsPsych = initJsPsych({
       extensions: [{ type: testExtension }],
     });
+  });
 
+  test("initialize is called at start of experiment", async () => {
     expect(typeof jsPsych.extensions.test.initialize).toBe("function");
 
     const initFunc = jest.spyOn(jsPsych.extensions.test, "initialize");
@@ -58,10 +62,6 @@ describe("jsPsych.extensions", () => {
   });
 
   test("on_start is called before trial", async () => {
-    const jsPsych = initJsPsych({
-      extensions: [{ type: testExtension }],
-    });
-
     const onStartFunc = jest.spyOn(jsPsych.extensions.test, "on_start");
 
     const trial = {
@@ -78,10 +78,6 @@ describe("jsPsych.extensions", () => {
   });
 
   test("on_start gets params", async () => {
-    const jsPsych = initJsPsych({
-      extensions: [{ type: testExtension }],
-    });
-
     const onStartFunc = jest.spyOn(jsPsych.extensions.test, "on_start");
 
     const trial = {
@@ -98,10 +94,6 @@ describe("jsPsych.extensions", () => {
   });
 
   test("on_load is called after load", async () => {
-    const jsPsych = initJsPsych({
-      extensions: [{ type: testExtension }],
-    });
-
     const onLoadFunc = jest.spyOn(jsPsych.extensions.test, "on_load");
 
     const trial = {
@@ -121,10 +113,6 @@ describe("jsPsych.extensions", () => {
   });
 
   test("on_load gets params", async () => {
-    const jsPsych = initJsPsych({
-      extensions: [{ type: testExtension }],
-    });
-
     const onLoadFunc = jest.spyOn(jsPsych.extensions.test, "on_load");
 
     const trial = {
@@ -142,10 +130,6 @@ describe("jsPsych.extensions", () => {
   });
 
   test("on_finish called after trial", async () => {
-    const jsPsych = initJsPsych({
-      extensions: [{ type: testExtension }],
-    });
-
     const onFinishFunc = jest.spyOn(jsPsych.extensions.test, "on_finish");
 
     const trial = {
@@ -164,10 +148,6 @@ describe("jsPsych.extensions", () => {
   });
 
   test("on_finish gets params", async () => {
-    const jsPsych = initJsPsych({
-      extensions: [{ type: testExtension }],
-    });
-
     const onFinishFunc = jest.spyOn(jsPsych.extensions.test, "on_finish");
 
     const trial = {
@@ -185,10 +165,12 @@ describe("jsPsych.extensions", () => {
     expect(onFinishFunc).toHaveBeenCalledWith({ foo: 1 });
   });
 
-  test("on_finish adds trial data", async () => {
-    const jsPsych = initJsPsych({
-      extensions: [{ type: testExtension }],
-    });
+  test.each`
+    name                 | onFinishReturnValue
+    ${"on_finish"}       | ${{ extension_data: true }}
+    ${"async on_finish"} | ${Promise.resolve({ extension_data: true })}
+  `("$name adds trial data", async ({ onFinishReturnValue }) => {
+    jest.spyOn(jsPsych.extensions.test, "on_finish").mockReturnValueOnce(onFinishReturnValue);
 
     const trial = {
       type: htmlKeyboardResponse,
@@ -205,10 +187,6 @@ describe("jsPsych.extensions", () => {
   });
 
   test("on_finish data is available in trial on_finish", async () => {
-    const jsPsych = initJsPsych({
-      extensions: [{ type: testExtension }],
-    });
-
     const trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
