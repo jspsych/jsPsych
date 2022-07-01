@@ -282,12 +282,7 @@ describe("preload plugin", () => {
       expect(spy.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
 
-    // this test appeared to be working before, but it wasn't.
-    // the call to timelineVariable was returning undefined,
-    // which produces the correct behavior because the test doesn't depend
-    // on that value. now that timelineVariable throw an error when the
-    // variable is undefined, this test (properly, imo) fails.
-    test.skip("trials parameter works with timeline variables when stim is statically defined in trial object", async () => {
+    test("trials parameter works with timeline variables when stim is statically defined in trial object", async () => {
       const spy = spyOnPreload("Images");
 
       await startTimeline(
