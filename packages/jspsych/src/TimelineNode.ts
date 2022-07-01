@@ -359,7 +359,7 @@ export class TimelineNode {
     if (typeof this.timeline_parameters == "undefined") {
       const val = this.findTimelineVariable(variable_name);
       if (typeof val === "undefined") {
-        throw new Error("Timeline variable " + variable_name + " not found.");
+        console.warn("Timeline variable " + variable_name + " not found.");
       }
       return val;
     } else {
@@ -377,7 +377,7 @@ export class TimelineNode {
       // now find the variable
       const val = this.timeline_parameters.timeline[loc].timelineVariable(variable_name);
       if (typeof val === "undefined") {
-        throw new Error("Timeline variable " + variable_name + " not found.");
+        console.warn("Timeline variable " + variable_name + " not found.");
       }
       return val;
     }
