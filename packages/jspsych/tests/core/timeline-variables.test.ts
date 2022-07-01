@@ -474,7 +474,8 @@ describe("jsPsych.getAllTimelineVariables()", () => {
   });
 });
 
-test("timelineVariable() throws an error when variable doesn't exist", async () => {
+// using console.warn instead of error for now. plan is to enable this test with version 8.
+test.skip("timelineVariable() throws an error when variable doesn't exist", async () => {
   const jsPsych = initJsPsych();
   await startTimeline(
     [
