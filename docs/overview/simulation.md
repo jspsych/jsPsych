@@ -1,7 +1,7 @@
 # Simulation Modes
 *Added in 7.1*
 
-Simulation mode allows you run your experiment automatically and generate artificial data. 
+Simulation mode allows you run your experiment automatically and generate artificial data. For more information about the simulation mode, see the published paper in [*Behaviour Research Methods*](https://link.springer.com/article/10.3758/s13428-022-01899-0).
 
 ## Getting Started
 
