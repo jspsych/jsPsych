@@ -3,6 +3,11 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "initialize-camera",
   parameters: {
+    /** HTML to render below the video */
+    prompt: {
+      type: ParameterType.HTML_STRING,
+      default: null,
+    },
     /** Label to show on continue button */
     button_label: {
       type: ParameterType.STRING,
@@ -46,6 +51,7 @@ class MirrorCameraPlugin implements JsPsychPlugin<Info> {
       <video autoplay playsinline id="jspsych-mirror-camera-video" width="${
         trial.width ? trial.width : "auto"
       }" height="${trial.height ? trial.height : "auto"}"></video>
+      ${trial.prompt ? `<div id="jspsych-mirror-camera-prompt">${trial.prompt}</div>` : ""}
       <p><button class="jspsych-btn" id="btn-continue">${trial.button_label}</button></p>
     `;
 
