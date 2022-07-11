@@ -357,7 +357,11 @@ export class TimelineNode {
   // recursive downward search for active trial to extract timeline variable
   timelineVariable(variable_name: string) {
     if (typeof this.timeline_parameters == "undefined") {
-      return this.findTimelineVariable(variable_name);
+      const val = this.findTimelineVariable(variable_name);
+      if (typeof val === "undefined") {
+        console.warn("Timeline variable " + variable_name + " not found.");
+      }
+      return val;
     } else {
       // if progress.current_location is -1, then the timeline variable is being evaluated
       // in a function that runs prior to the trial starting, so we should treat that trial
@@ -371,7 +375,11 @@ export class TimelineNode {
         loc = loc - 1;
       }
       // now find the variable
-      return this.timeline_parameters.timeline[loc].timelineVariable(variable_name);
+      const val = this.timeline_parameters.timeline[loc].timelineVariable(variable_name);
+      if (typeof val === "undefined") {
+        console.warn("Timeline variable " + variable_name + " not found.");
+      }
+      return val;
     }
   }
 
