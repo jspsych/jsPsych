@@ -19,5 +19,5 @@ export interface JsPsychExtension {
    * Called at the end of the trial.
    * @returns Data to append to the trial's data object.
    */
-  on_finish(params?: Record<string, any>): Record<string, any>;
+  on_finish(params?: Record<string, any>): Record<string, any> | Promise<Record<string, any>>;
 }
