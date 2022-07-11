@@ -473,3 +473,60 @@ describe("jsPsych.getAllTimelineVariables()", () => {
     expect(b).toBe(2);
   });
 });
+
+// using console.warn instead of error for now. plan is to enable this test with version 8.
+test.skip("timelineVariable() throws an error when variable doesn't exist", async () => {
+  const jsPsych = initJsPsych();
+  await startTimeline(
+    [
+      {
+        timeline: [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "foo",
+            on_start: () => {
+              expect(() => jsPsych.timelineVariable("c")).toThrowError();
+            },
+          },
+        ],
+        timeline_variables: [
+          { a: 1, b: 2 },
+          { a: 2, b: 3 },
+        ],
+      },
+    ],
+    jsPsych
+  );
+
+  pressKey("a");
+  pressKey("a");
+});
+
+test("timelineVariable() can fetch a variable called 'data'", async () => {
+  const jsPsych = initJsPsych();
+  const { expectFinished } = await startTimeline(
+    [
+      {
+        timeline: [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "foo",
+            on_start: () => {
+              expect(() => jsPsych.timelineVariable("data")).not.toThrowError();
+            },
+          },
+        ],
+        timeline_variables: [
+          { data: { a: 1 }, b: 2 },
+          { data: { a: 2 }, b: 3 },
+        ],
+      },
+    ],
+    jsPsych
+  );
+
+  pressKey("a");
+  pressKey("a");
+
+  await expectFinished();
+});

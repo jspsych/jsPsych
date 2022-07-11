@@ -671,22 +671,20 @@ export class JsPsych {
 
   private evaluateTimelineVariables(trial) {
     for (const key of Object.keys(trial)) {
-      if (key === "type") {
-        // skip the `type` parameter as it contains a plugin
-        //continue;
-      }
-      // timeline variables on the root level
       if (
         typeof trial[key] === "object" &&
         trial[key] !== null &&
         typeof trial[key].timelineVariablePlaceholder !== "undefined"
       ) {
-        /*trial[key].toString().replace(/\s/g, "") ==
-          "function(){returntimeline.timelineVariable(varname);}"
-      )*/ trial[key] = trial[key].timelineVariableFunction();
+        trial[key] = trial[key].timelineVariableFunction();
       }
       // timeline variables that are nested in objects
-      if (typeof trial[key] === "object" && trial[key] !== null) {
+      if (
+        typeof trial[key] === "object" &&
+        trial[key] !== null &&
+        key !== "timeline" &&
+        key !== "timeline_variables"
+      ) {
         this.evaluateTimelineVariables(trial[key]);
       }
     }
@@ -736,9 +734,11 @@ export class JsPsych {
     else if (typeof obj === "object") {
       if (info === null || !info.nested) {
         for (const key of Object.keys(obj)) {
-          if (key === "type") {
+          if (key === "type" || key === "timeline" || key === "timeline_variables") {
             // Ignore the object's `type` field because it contains a plugin and we do not want to
-            // call plugin functions
+            // call plugin functions. Also ignore `timeline` and `timeline_variables` because they
+            // are used in the `trials` parameter of the preload plugin and we don't want to actually
+            // evaluate those in that context.
             continue;
           }
           obj[key] = this.replaceFunctionsWithValues(obj[key], null);
