@@ -314,6 +314,35 @@ describe("preload plugin", () => {
       expect(spy).toHaveBeenCalledTimes(1);
       expect(spy.mock.calls[0][0]).toStrictEqual(["img/foo.png"]);
     });
+
+    test("timeline variables in trials parameter are *not* evaluated", async () => {
+      const spy = jest.spyOn(console, "warn");
+
+      const trial = {
+        type: preloadPlugin,
+        trials: [
+          {
+            timeline: [
+              {
+                type: imageKeyboardResponse,
+                stimulus: "img/foo.png",
+                render_on_canvas: false,
+                data: jsPsych.timelineVariable("data"),
+              },
+            ],
+            timeline_variables: [
+              { data: { trial: 1 } },
+              { data: { trial: 2 } },
+              { data: { trial: 3 } },
+            ],
+          },
+        ],
+      };
+
+      await startTimeline([trial], jsPsych);
+
+      expect(spy).toHaveBeenCalledTimes(0);
+    });
   });
 
   describe("calls to pluginAPI preload functions", () => {
