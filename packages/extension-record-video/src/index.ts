@@ -8,9 +8,10 @@ class RecordVideoExtension implements JsPsychExtension {
   constructor(private jsPsych: JsPsych) {}
 
   private recordedChunks = [];
-  private recorder = null;
+  private recorder: MediaRecorder = null;
   private currentTrialData = null;
   private trialComplete = false;
+  private onUpdateCallback: () => void = null;
 
   // todo: add option to stream data to server with timeslice?
   initialize = async () => {};
@@ -26,26 +27,26 @@ class RecordVideoExtension implements JsPsychExtension {
       return;
     }
 
-    this.recorder.ondataavailable = (event) => {
-      this.handleOnDataAvailable(event);
-    };
+    this.recorder.addEventListener("dataavailable", this.handleOnDataAvailable);
   };
 
   on_load = () => {
     this.recorder.start(10);
   };
 
-  on_finish = () => {
-    this.trialComplete = true;
-    this.recorder.stop();
+  on_finish = (): Promise<any> => {
+    return new Promise((resolve) => {
+      this.trialComplete = true;
+      this.recorder.stop();
 
-    //this.recorder.ondataavailable = null;
-
-    const data = { record_video_data: null };
-
-    this.currentTrialData = data;
-
-    return data;
+      if (!this.currentTrialData.record_video_data) {
+        this.onUpdateCallback = () => {
+          resolve(this.currentTrialData);
+        };
+      } else {
+        resolve(this.currentTrialData);
+      }
+    });
   };
 
   private handleOnDataAvailable(event) {
@@ -62,6 +63,9 @@ class RecordVideoExtension implements JsPsychExtension {
     this.currentTrialData.record_video_data = new Blob(this.recordedChunks, {
       type: 'video/webm;codecs="vp9"',
     });
+    if (this.onUpdateCallback) {
+      this.onUpdateCallback();
+    }
   }
 }
 
