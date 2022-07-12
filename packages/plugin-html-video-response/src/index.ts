@@ -119,7 +119,7 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     this.stop_event_handler = () => {
-      const data = new Blob(this.recorded_data_chunks, { type: 'video/webm;codecs="vp9"' });
+      const data = new Blob(this.recorded_data_chunks, { type: 'video/webm;codecs="vp8"' });
       this.video_url = URL.createObjectURL(data);
       const reader = new FileReader();
       reader.addEventListener("load", () => {
