@@ -1,7 +1,7 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
-  name: "initialize-camera",
+  name: "mirror-camera",
   parameters: {
     /** HTML to render below the video */
     prompt: {
