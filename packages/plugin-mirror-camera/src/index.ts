@@ -23,6 +23,11 @@ const info = <const>{
       type: ParameterType.INT,
       default: null,
     },
+    /** Whether to flip the camera */
+    mirror_camera: {
+      type: ParameterType.BOOL,
+      default: true,
+    },
   },
 };
 
@@ -50,7 +55,9 @@ class MirrorCameraPlugin implements JsPsychPlugin<Info> {
     display_element.innerHTML = `
       <video autoplay playsinline id="jspsych-mirror-camera-video" width="${
         trial.width ? trial.width : "auto"
-      }" height="${trial.height ? trial.height : "auto"}"></video>
+      }" height="${trial.height ? trial.height : "auto"}" ${
+      trial.mirror_camera ? 'style="transform: rotateY(180deg);"' : ""
+    }></video>
       ${trial.prompt ? `<div id="jspsych-mirror-camera-prompt">${trial.prompt}</div>` : ""}
       <p><button class="jspsych-btn" id="btn-continue">${trial.button_label}</button></p>
     `;
