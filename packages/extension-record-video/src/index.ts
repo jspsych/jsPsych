@@ -26,7 +26,9 @@ class RecordVideoExtension implements JsPsychExtension {
     this.currentTrialData = {};
 
     if (!this.recorder) {
-      console.log("Camera not initialized. Do you need to run the initialize-camera plugin?");
+      console.warn(
+        "The record-video extension is trying to start but the camera is not initialized. Do you need to run the initialize-camera plugin?"
+      );
       return;
     }
 
@@ -63,12 +65,18 @@ class RecordVideoExtension implements JsPsychExtension {
   }
 
   private updateData() {
-    this.currentTrialData.record_video_data = new Blob(this.recordedChunks, {
+    const data = new Blob(this.recordedChunks, {
       type: this.recorder.mimeType,
     });
-    if (this.onUpdateCallback) {
-      this.onUpdateCallback();
-    }
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      const base64 = (reader.result as string).split(",")[1];
+      this.currentTrialData.record_video_data = base64;
+      if (this.onUpdateCallback) {
+        this.onUpdateCallback();
+      }
+    });
+    reader.readAsDataURL(data);
   }
 }
 
