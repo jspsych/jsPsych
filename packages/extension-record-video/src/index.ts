@@ -1,3 +1,4 @@
+import autoBind from "auto-bind";
 import { JsPsych, JsPsychExtension, JsPsychExtensionInfo } from "jspsych";
 
 class RecordVideoExtension implements JsPsychExtension {
@@ -5,7 +6,9 @@ class RecordVideoExtension implements JsPsychExtension {
     name: "record-video",
   };
 
-  constructor(private jsPsych: JsPsych) {}
+  constructor(private jsPsych: JsPsych) {
+    autoBind(this);
+  }
 
   private recordedChunks = [];
   private recorder: MediaRecorder = null;
@@ -20,7 +23,7 @@ class RecordVideoExtension implements JsPsychExtension {
     this.recorder = this.jsPsych.pluginAPI.getCameraRecorder();
     this.recordedChunks = [];
     this.trialComplete = false;
-    this.currentTrialData = null;
+    this.currentTrialData = {};
 
     if (!this.recorder) {
       console.log("Camera not initialized. Do you need to run the initialize-camera plugin?");
@@ -31,7 +34,7 @@ class RecordVideoExtension implements JsPsychExtension {
   };
 
   on_load = () => {
-    this.recorder.start(10);
+    this.recorder.start();
   };
 
   on_finish = (): Promise<any> => {
