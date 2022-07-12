@@ -64,7 +64,7 @@ class RecordVideoExtension implements JsPsychExtension {
 
   private updateData() {
     this.currentTrialData.record_video_data = new Blob(this.recordedChunks, {
-      type: 'video/webm;codecs="vp8"',
+      type: this.recorder.mimeType,
     });
     if (this.onUpdateCallback) {
       this.onUpdateCallback();
