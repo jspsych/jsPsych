@@ -3,27 +3,32 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "initialize-camera",
   parameters: {
+    /** Message to display with the selection box */
     device_select_message: {
       type: ParameterType.HTML_STRING,
       default: `<p>Please select the camera you would like to use.</p>`,
     },
-    /**  */
+    /** Label to use for the button that confirms selection */
     button_label: {
       type: ParameterType.STRING,
       default: "Use this camera",
     },
+    /** Set to `true` to include audio in the recording */
     include_audio: {
       type: ParameterType.BOOL,
       default: false,
     },
+    /** Desired width of the camera stream */
     width: {
       type: ParameterType.INT,
       default: null,
     },
+    /** Desired height of the camera stream */
     height: {
       type: ParameterType.INT,
       default: null,
     },
+    /** MIME type of the recording. Set as a full string, e.g., 'video/webm; codecs="vp8, vorbis"'. */
     mime_type: {
       type: ParameterType.STRING,
       default: null,
@@ -36,7 +41,7 @@ type Info = typeof info;
 /**
  * **initialize-camera**
  *
- * jsPsych plugin for getting permission to initialize a camera
+ * jsPsych plugin for getting permission to initialize a camera and setting properties of the recording.
  *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/plugins/jspsych-initialize-camera/ initialize-camera plugin documentation on jspsych.org}
