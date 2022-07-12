@@ -3,15 +3,18 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "initialize-camera",
   parameters: {
-    /** Function to call */
     device_select_message: {
       type: ParameterType.HTML_STRING,
       default: `<p>Please select the camera you would like to use.</p>`,
     },
-    /** Is the function call asynchronous? */
+    /**  */
     button_label: {
       type: ParameterType.STRING,
       default: "Use this camera",
+    },
+    include_audio: {
+      type: ParameterType.BOOL,
+      default: false,
     },
     width: {
       type: ParameterType.INT,
@@ -19,6 +22,10 @@ const info = <const>{
     },
     height: {
       type: ParameterType.INT,
+      default: null,
+    },
+    mime_type: {
+      type: ParameterType.STRING,
       default: null,
     },
   },
@@ -49,7 +56,7 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
   }
 
   private async run_trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    await this.askForPermission();
+    await this.askForPermission(trial);
 
     this.showCameraSelection(display_element, trial);
 
@@ -69,16 +76,27 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
     if (trial.height) {
       constraints.video.height = trial.height;
     }
+    if (trial.include_audio) {
+      constraints.audio = true;
+    }
 
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
-    this.jsPsych.pluginAPI.initializeCameraRecorder(stream);
+    const recorder_options: MediaRecorderOptions = {};
+    if (trial.mime_type) {
+      recorder_options.mimeType = trial.mime_type;
+    }
+
+    this.jsPsych.pluginAPI.initializeCameraRecorder(stream, recorder_options);
 
     return camera_id;
   }
 
-  private async askForPermission() {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: true });
+  private async askForPermission(trial: TrialType<Info>) {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: trial.include_audio,
+      video: true,
+    });
     return stream;
   }
 
@@ -102,14 +120,14 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
 
   private updateDeviceList(display_element) {
     navigator.mediaDevices.enumerateDevices().then((devices) => {
-      const mics = devices.filter(
+      const cams = devices.filter(
         (d) =>
           d.kind === "videoinput" && d.deviceId !== "default" && d.deviceId !== "communications"
       );
 
       // remove entries with duplicate groupID
-      const unique_cameras = mics.filter(
-        (mic, index, arr) => arr.findIndex((v) => v.groupId == mic.groupId) == index
+      const unique_cameras = cams.filter(
+        (cam, index, arr) => arr.findIndex((v) => v.groupId == cam.groupId) == index
       );
 
       // reset the list by clearing all current options

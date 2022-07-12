@@ -338,9 +338,9 @@ export class MediaAPI {
   private camera_stream: MediaStream = null;
   private camera_recorder: MediaRecorder = null;
 
-  initializeCameraRecorder(stream: MediaStream) {
+  initializeCameraRecorder(stream: MediaStream, opts?: MediaRecorderOptions) {
     this.camera_stream = stream;
-    const recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs="vp9"' });
+    const recorder = new MediaRecorder(stream, opts);
     this.camera_recorder = recorder;
   }
 
