@@ -36,10 +36,10 @@ recording_duration | numeric | 2000 | The maximum length of the recording, in mi
 stimulus_duration | numeric | null | How long to display the stimulus in milliseconds. The visibility CSS property of the stimulus will be set to `hidden` after this time has elapsed. If this is null, then the stimulus will remain visible until the trial ends.
 show_done_button | bool | true | Whether to show a button on the screen that the participant can click to finish the recording.
 done_button_label | string | 'Continue' | The label for the done button.
-allow_playback | bool | false | Whether to allow the participant to listen to their recording and decide whether to rerecord or not. If `true`, then the participant will be shown an interface to play their recorded audio and click one of two buttons to either accept the recording or rerecord. If rerecord is selected, then stimulus will be shown again, as if the trial is starting again from the beginning.
+allow_playback | bool | false | Whether to allow the participant to listen to their recording and decide whether to rerecord or not. If `true`, then the participant will be shown an interface to play their recorded video and click one of two buttons to either accept the recording or rerecord. If rerecord is selected, then stimulus will be shown again, as if the trial is starting again from the beginning.
 record_again_button_label | string | 'Record again' | The label for the record again button enabled when `allow_playback: true`.
 accept_button_label | string | 'Continue' | The label for the accept button enabled when `allow_playback: true`.
-save_audio_url | bool | false | If `true`, then an [Object URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL) will be generated and stored for the recorded audio. Only set this to `true` if you plan to reuse the recorded audio later in the experiment, as it is a potentially memory-intensive feature.
+save_video_url | bool | false | If `true`, then an [Object URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL) will be generated and stored for the recorded video. Only set this to `true` if you plan to reuse the recorded video later in the experiment, as it is a potentially memory-intensive feature.
 
 
 ## Data Generated
@@ -82,91 +82,83 @@ import htmlVideoResponse from '@jspsych/plugin-html-video-response';
 
 ## Examples
 
-???+ example "Simple spoken response to a stimulus"
+???+ example "Simple recorded response to a stimulus"
     === "Code"
         ```javascript
+        var init_camera = {
+            type: jsPsychInitializeCamera
+        }
+
         var trial = {
-            type: jsPsychHtmlvideoResponse,
+            type: jsPsychHtmlVideoResponse,
             stimulus: `
-            <p style="font-size:48px; color:red;">GREEN</p>
-            <p>Speak the color of the ink.</p>`,
-            recording_duration: 3500
+            <p style="font-size:48px; color:red;"> <-- </p>
+            <p>Turn your head in the direction of the arrow</p>`,
+            recording_duration: 3500,
+            show_done_button: false,
         };
         ```
 
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="../../demos/jspsych-html-audio-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-html-video-response-demo1.html" width="90%;" height="600px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-html-audio-response-demo1.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-html-video-response-demo1.html">Open demo in new tab</a>
 
-???+ example "Allow playback and rerecording; save data to server immediately"
+???+ example "Allow playback and rerecording"
     === "Code"
         ```javascript
+        var init_camera = {
+            type: jsPsychInitializeCamera
+        }
+
         var trial = {
-            type: jsPsychHtmlAudioResponse,
-            stimulus: `
-                <p>Please sing the first few seconds of a song and click the button when you are done.</p>
-            `,
-            recording_duration: 15000,
-            allow_playback: true,
-            on_finish: function(data){
-                fetch('/save-my-data.php', { audio_base64: data.response })
-                    .then((audio_id){
-                        data.response = audio_id;
-                    });
-            }
+            type: jsPsychHtmlVideoResponse,
+            stimulus: `<p>Make a sad face</p>`,
+            recording_duration: 3500,
+            show_done_button: false,
+            allow_playback: true
         };
         ```
 
-        This example assumes that there is a script on your experiment server that accepts the data called `save-my-data.php`. It also assumes that the script will generate a response with an ID for the stored audio file (`audio_id`). In the example, we replace the very long base64 representation of the audio file with the generated ID, which could be just a handful of characters. This would let you link files to responses in data analysis, without having to store long audio files in memory during the experiment.
-
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="../../demos/jspsych-html-audio-response-demo2.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-html-video-response-demo2.html" width="90%;" height="600px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-html-audio-response-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-html-video-response-demo2.html">Open demo in new tab</a>
 
-???+ example "Use recorded audio as a subsequent stimulus"
+???+ example "Use recorded video as a subsequent stimulus"
     === "Code"
         ```javascript
-        var instruction = {
-            type: jsPsychHtmlButtonResponse,
-            stimulus: `
-                <img src='img/10.gif' style="width:100px; padding: 20px;"></img>
-                <p>Make up a name for this shape. When you have one in mind, click the button and then say the name aloud.</p>
-            `,
-            choices: ['I am ready.']
+        var init_camera = {
+            type: jsPsychInitializeCamera
         }
 
         var record = {
-            type: jsPsychHtmlAudioResponse,
-            stimulus: `
-                <img src='img/10.gif' style="width:100px; padding: 20px;"></img>
-                <p>Recording...</p>
-            `,
+            type: jsPsychHtmlVideoResponse,
+            stimulus: `<p>Make a sad face.</p>`,
             recording_duration: 1500,
-            save_audio_url: true
+            show_done_button: false,
+            save_video_url: true
         };
 
-        var playback = {
-            type: jsPsychAudioButtonResponse,
-            stimulus: ()=>{
-                return jsPsych.data.get().last(1).values()[0].audio_url;
+        var classify = {
+            type: jsPsychVideoButtonResponse,
+            stimulus: () => {
+            return [jsPsych.data.get().last(1).values()[0].video_url];
             },
-            prompt: '<p>Click the object the matches the spoken name.</p>',
-            choices: ['img/9.gif','img/10.gif','img/11.gif','img/12.gif'],
-            button_html: '<img src="%choice%" style="width:100px; padding: 20px;"></img>'
+            choices: ["Happy", "Sad", "Angry", "Surprised"],
+            prompt: "<p>What emotion is this?</p>",
         }
         ```
 
     === "Demo"
         <div style="text-align:center;">
-            <iframe src="../../demos/jspsych-html-audio-response-demo3.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+            <iframe src="../../demos/jspsych-html-video-response-demo3.html" width="90%;" height="600px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-html-audio-response-demo3.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-html-video-response-demo3.html">Open demo in new tab</a>
 
 
