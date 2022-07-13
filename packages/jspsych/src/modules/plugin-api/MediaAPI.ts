@@ -13,7 +13,10 @@ export class MediaAPI {
 
   // video //
   private video_buffers = {};
-  getVideoBuffer(videoID) {
+  getVideoBuffer(videoID: string) {
+    if (videoID.startsWith("blob:")) {
+      this.video_buffers[videoID] = videoID;
+    }
     return this.video_buffers[videoID];
   }
 
