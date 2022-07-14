@@ -498,7 +498,7 @@ The seed value will be returned from the function call, allowing you to save it 
 #### Use a random 32-bit seed and save to data
 
 ```javascript
-const seed = jsPsych.setSeed();
+const seed = jsPsych.randomization.setSeed();
 jsPsych.data.addProperties({
 	rng_seed: seed
 });
@@ -507,7 +507,7 @@ jsPsych.data.addProperties({
 #### Use your own seed
 
 ```javascript
-jsPsych.setSeed("jspsych");
+jsPsych.randomization.setSeed("jspsych");
 ```
 
 ---
