@@ -88,7 +88,7 @@ describe("sampling", () => {
     expect(result1).not.toEqual(result2);
   });
 
-  test.only("fixed repetitions method produces random order", async () => {
+  test("fixed repetitions method produces random order", async () => {
     const jsPsych = initJsPsych();
     const seed = jsPsych.randomization.setSeed("jspsych");
 
