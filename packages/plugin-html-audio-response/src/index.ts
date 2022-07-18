@@ -18,26 +18,32 @@ const info = <const>{
       type: ParameterType.INT,
       default: 2000,
     },
+    /** Whether or not to show a button to end the recording. If false, the recording_duration must be set. */
     show_done_button: {
       type: ParameterType.BOOL,
       default: true,
     },
+    /** Label for the done (stop recording) button. Only used if show_done_button is true. */
     done_button_label: {
       type: ParameterType.STRING,
       default: "Continue",
     },
+    /** Label for the record again button (only used if allow_playback is true). */
     record_again_button_label: {
       type: ParameterType.STRING,
       default: "Record again",
     },
+    /** Label for the button to accept the audio recording (only used if allow_playback is true). */
     accept_button_label: {
       type: ParameterType.STRING,
       default: "Continue",
     },
+    /** Whether or not to allow the participant to playback the recording and either accept or re-record. */
     allow_playback: {
       type: ParameterType.BOOL,
       default: false,
     },
+    /** Whether or not to save the video URL to the trial data. */
     save_audio_url: {
       type: ParameterType.BOOL,
       default: false,
