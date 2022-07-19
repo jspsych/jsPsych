@@ -1,7 +1,12 @@
 # Simulation Modes
 *Added in 7.1*
 
-Simulation mode allows you run your experiment automatically and generate artificial data. For more information about the simulation mode, see the published paper in [*Behaviour Research Methods*](https://link.springer.com/article/10.3758/s13428-022-01899-0).
+Simulation mode allows you run your experiment automatically and generate artificial data. 
+
+!!! info
+    For a detailed description of the motivation behind simulation mode and a discussion of different use cases of simulation mode, see [de Leeuw, J.R., Gilbert, R.A., Petrov, N.B., & Luchterhandt, B. (2022). Simulation behavior to help researchers build experiments. *Behavior Research Methods*, https://doi.org/10.3758/s13428-022-01899-0](https://doi.org/10.3758/s13428-022-01899-0).
+
+    A pre-print version is [available on PsyArXiv](https://psyarxiv.com/mq345).
 
 ## Getting Started
 
