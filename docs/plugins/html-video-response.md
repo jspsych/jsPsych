@@ -17,13 +17,13 @@ If you need to record a lot of video, either many trials worth or just a few tri
 See below for an example of how to do this.
 
 This plugin also provides the option to store the recorded video files as [Object URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL) via `save_video_url: true`. 
-This will generate a URL that is storing a copy of the recorded video, which can be used for subsequent playback. 
+This will generate a URL that stores a copy of the recorded video, which can be used for subsequent playback during the experiment. 
 See below for an example where the recorded video is used as the stimulus in a subsequent trial.
 This feature is turned off by default because it uses a relatively large amount of memory compared to most jsPsych features.
 If you are running an experiment where you need this feature and you are recording lots of video clips, you may want to manually revoke the URLs when you no longer need them using [`URL.revokeObjectURL(objectURL)`](https://developer.mozilla.org/en-US/docs/Web/API/URL/revokeObjectURL).
 
 !!! warning
-    When recording from a camera your experiment will need to be running over `https://` protocol. If you try to run the experiment locally using the `file://` protocol or over `http://` protocol you will not be able to access the microphone because of [potential security problems](https://blog.mozilla.org/webrtc/camera-microphone-require-https-in-firefox-68/).
+    When recording from a camera your experiment will need to be running over `https://` protocol. If you try to run the experiment locally using the `file://` protocol or over `http://` protocol you will not be able to access the camera because of [potential security problems](https://blog.mozilla.org/webrtc/camera-microphone-require-https-in-firefox-68/).
 
 ## Parameters
 
@@ -147,7 +147,7 @@ import htmlVideoResponse from '@jspsych/plugin-html-video-response';
         var classify = {
             type: jsPsychVideoButtonResponse,
             stimulus: () => {
-            return [jsPsych.data.get().last(1).values()[0].video_url];
+                return [jsPsych.data.get().last(1).values()[0].video_url];
             },
             choices: ["Happy", "Sad", "Angry", "Surprised"],
             prompt: "<p>What emotion is this?</p>",
