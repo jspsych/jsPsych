@@ -7,7 +7,7 @@ This plugin shows a live feed of the participant's camera. It can be useful in e
 You must initialize the camera using the [initialize-camera plugin](initialize-camera.md) prior to running this plugin.
 
 !!! warning
-    When recording from a camera your experiment will need to be running over `https://` protocol. If you try to run the experiment locally using the `file://` protocol or over `http://` protocol you will not be able to access the microphone because of [potential security problems](https://blog.mozilla.org/webrtc/camera-microphone-require-https-in-firefox-68/).
+    When recording from a camera your experiment will need to be running over `https://` protocol. If you try to run the experiment locally using the `file://` protocol or over `http://` protocol you will not be able to access the camera because of [potential security problems](https://blog.mozilla.org/webrtc/camera-microphone-require-https-in-firefox-68/).
 
 ## Parameters
 
@@ -19,7 +19,7 @@ prompt | html string | null | HTML-formatted content to display below the camera
 width | int | null | The width of the video playback element. If left `null` then it will match the size of the recording.
 height | int | null | The height of the video playback element. If left `null` then it will match the size of the recording.
 button_label | string | "Continue" | The label of the button to advance to the next trial.
-mirror_camera | bool | true | Whether to mirror the video image).
+mirror_camera | bool | true | Whether to mirror the video image.
 
 
 ## Data Generated
