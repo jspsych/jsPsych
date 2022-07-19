@@ -21,7 +21,7 @@ initJsPsych({
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-
+*None*
 
 ### Trial Parameters
 
@@ -38,7 +38,7 @@ var trial = {
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-
+*None*
 
 ## Data Generated
 
