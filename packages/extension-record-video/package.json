@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/extension-record-video",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "jsPsych extension for recording video",
   "type": "module",
   "main": "dist/index.cjs",
