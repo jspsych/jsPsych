@@ -1,0 +1,2430 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://www.jspsych.org/7.3/developers/plugin-development/">
+      
+      <link rel="icon" href="../../img/jspsych-favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.15">
+    
+    
+      
+        <title>Plugin Development - jsPsych</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.c382b1dc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#4cae4f">
+        
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="orange">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#plugin-development" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-component="outdated" hidden>
+        <aside class="md-banner md-banner--warning">
+          
+        </aside>
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="jsPsych" class="md-header__button md-logo" aria-label="jsPsych" data-md-component="logo">
+      
+  <img src="../../img/jspsych-logo-no-text-mono.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            jsPsych
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Plugin Development
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="jsPsych" class="md-nav__button md-logo" aria-label="jsPsych" data-md-component="logo">
+      
+  <img src="../../img/jspsych-logo-no-text-mono.svg" alt="logo">
+
+    </a>
+    jsPsych
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    jspsych/jspsych
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Tutorials
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Tutorials
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/hello-world/" class="md-nav__link">
+        The Basics: Hello World
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/rt-task/" class="md-nav__link">
+        Demo Experiment: Simple Reaction Time Task
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/video-tutorials/" class="md-nav__link">
+        Video Tutorials
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          Overview
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Overview" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Overview
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/timeline/" class="md-nav__link">
+        Creating an Experiment: The Timeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/plugins/" class="md-nav__link">
+        Plugins
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/extensions/" class="md-nav__link">
+        Extensions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/dynamic-parameters/" class="md-nav__link">
+        Dynamic Parameters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/style/" class="md-nav__link">
+        Controlling Visual Appearance
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/data/" class="md-nav__link">
+        Data Storage, Aggregation, and Manipulation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/simulation/" class="md-nav__link">
+        Simulation Modes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/running-experiments/" class="md-nav__link">
+        Running Experiments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/experiment-options/" class="md-nav__link">
+        Experiment Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/events/" class="md-nav__link">
+        Events
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/record-browser-interactions/" class="md-nav__link">
+        Record Browser Interactions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/media-preloading/" class="md-nav__link">
+        Media Preloading
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/fullscreen/" class="md-nav__link">
+        Fullscreen Experiments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/eye-tracking/" class="md-nav__link">
+        Eye Tracking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/exclude-browser/" class="md-nav__link">
+        Exclude Participants Based on Browser Features
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/progress-bar/" class="md-nav__link">
+        Automatic Progress Bar
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/prolific/" class="md-nav__link">
+        Integrating with Prolific
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/mturk/" class="md-nav__link">
+        Integrating with Mechanical Turk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/browser-device-support/" class="md-nav__link">
+        Browser and Device Support
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../overview/timing-accuracy/" class="md-nav__link">
+        Timing Accuracy
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Reference" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/jspsych/" class="md-nav__link">
+        jsPsych
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/jspsych-data/" class="md-nav__link">
+        jsPsych.data
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/jspsych-randomization/" class="md-nav__link">
+        jsPsych.randomization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/jspsych-turk/" class="md-nav__link">
+        jsPsych.turk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/jspsych-pluginAPI/" class="md-nav__link">
+        jsPsych.pluginAPI
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Plugins
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Plugins" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Plugins
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/list-of-plugins/" class="md-nav__link">
+        List of Plugins
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/animation/" class="md-nav__link">
+        animation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/audio-button-response/" class="md-nav__link">
+        audio-button-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/audio-keyboard-response/" class="md-nav__link">
+        audio-keyboard-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/audio-slider-response/" class="md-nav__link">
+        audio-slider-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/browser-check/" class="md-nav__link">
+        browser-check
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/call-function/" class="md-nav__link">
+        call-function
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/canvas-button-response/" class="md-nav__link">
+        canvas-button-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/canvas-keyboard-response/" class="md-nav__link">
+        canvas-keyboard-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/canvas-slider-response/" class="md-nav__link">
+        canvas-slider-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/categorize-animation/" class="md-nav__link">
+        categorize-animation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/categorize-html/" class="md-nav__link">
+        categorize-html
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/categorize-image/" class="md-nav__link">
+        categorize-image
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/cloze/" class="md-nav__link">
+        cloze
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/external-html/" class="md-nav__link">
+        external-html
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/free-sort/" class="md-nav__link">
+        free-sort
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/fullscreen/" class="md-nav__link">
+        fullscreen
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/html-audio-response/" class="md-nav__link">
+        html-audio-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/html-button-response/" class="md-nav__link">
+        html-button-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/html-keyboard-response/" class="md-nav__link">
+        html-keyboard-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/html-slider-response/" class="md-nav__link">
+        html-slider-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/html-video-response/" class="md-nav__link">
+        html-video-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/iat-html/" class="md-nav__link">
+        iat-html
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/iat-image/" class="md-nav__link">
+        iat-image
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/image-button-response/" class="md-nav__link">
+        image-button-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/image-keyboard-response/" class="md-nav__link">
+        image-keyboard-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/image-slider-response/" class="md-nav__link">
+        image-slider-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/initialize-camera/" class="md-nav__link">
+        initialize-camera
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/initialize-microphone/" class="md-nav__link">
+        initialize-microphone
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/instructions/" class="md-nav__link">
+        instructions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/maxdiff/" class="md-nav__link">
+        maxdiff
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/mirror-camera/" class="md-nav__link">
+        mirror-camera
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/preload/" class="md-nav__link">
+        preload
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/reconstruction/" class="md-nav__link">
+        reconstruction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/resize/" class="md-nav__link">
+        resize
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/same-different-html/" class="md-nav__link">
+        same-different-html
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/same-different-image/" class="md-nav__link">
+        same-different-image
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/serial-reaction-time/" class="md-nav__link">
+        serial-reaction-time
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/serial-reaction-time-mouse/" class="md-nav__link">
+        serial-reaction-time-mouse
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/sketchpad/" class="md-nav__link">
+        sketchpad
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/survey/" class="md-nav__link">
+        survey
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/survey-html-form/" class="md-nav__link">
+        survey-html-form
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/survey-likert/" class="md-nav__link">
+        survey-likert
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/survey-multi-choice/" class="md-nav__link">
+        survey-multi-choice
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/survey-multi-select/" class="md-nav__link">
+        survey-multi-select
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/survey-text/" class="md-nav__link">
+        survey-text
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/video-button-response/" class="md-nav__link">
+        video-button-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/video-keyboard-response/" class="md-nav__link">
+        video-keyboard-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/video-slider-response/" class="md-nav__link">
+        video-slider-response
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/virtual-chinrest/" class="md-nav__link">
+        virtual-chinrest
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/visual-search-circle/" class="md-nav__link">
+        visual-search-circle
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/webgazer-calibrate/" class="md-nav__link">
+        webgazer-calibrate
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/webgazer-init-camera/" class="md-nav__link">
+        webgazer-init-camera
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plugins/webgazer-validate/" class="md-nav__link">
+        webgazer-validate
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Extensions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Extensions" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Extensions
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/list-of-extensions/" class="md-nav__link">
+        List of Extensions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/mouse-tracking/" class="md-nav__link">
+        mouse-tracking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/record-video/" class="md-nav__link">
+        record-video
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extensions/webgazer/" class="md-nav__link">
+        webgazer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Developers
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Developers" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Developers
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        Configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../documentation/" class="md-nav__link">
+        Building the Documentation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        Contributing to jsPsych
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Plugin Development
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Plugin Development
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#requirements-for-a-plugin" class="md-nav__link">
+    Requirements for a plugin
+  </a>
+  
+    <nav class="md-nav" aria-label="Requirements for a plugin">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#templates" class="md-nav__link">
+    Templates
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugin-components" class="md-nav__link">
+    Plugin components
+  </a>
+  
+    <nav class="md-nav" aria-label="Plugin components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constructor" class="md-nav__link">
+    constructor()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trial" class="md-nav__link">
+    trial()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-info" class="md-nav__link">
+    static info
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugin-functionality" class="md-nav__link">
+    Plugin functionality
+  </a>
+  
+    <nav class="md-nav" aria-label="Plugin functionality">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#changing-the-content-of-the-display" class="md-nav__link">
+    Changing the content of the display
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#waiting-for-specified-durations" class="md-nav__link">
+    Waiting for specified durations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responding-to-keyboard-events" class="md-nav__link">
+    Responding to keyboard events
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#asynchronous-loading" class="md-nav__link">
+    Asynchronous loading
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#save-data" class="md-nav__link">
+    Save data
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simulation-mode" class="md-nav__link">
+    Simulation mode
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advice-for-writing-plugins" class="md-nav__link">
+    Advice for writing plugins
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extension-development/" class="md-nav__link">
+        Extension Development
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          Support
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Support" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Support
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../support/support/" class="md-nav__link">
+        Getting Help
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../support/migration-v7/" class="md-nav__link">
+        Migrating from 6.x to 7.x
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9">
+          About
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="About" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          About
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/about/" class="md-nav__link">
+        About jsPsych
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#requirements-for-a-plugin" class="md-nav__link">
+    Requirements for a plugin
+  </a>
+  
+    <nav class="md-nav" aria-label="Requirements for a plugin">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#templates" class="md-nav__link">
+    Templates
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugin-components" class="md-nav__link">
+    Plugin components
+  </a>
+  
+    <nav class="md-nav" aria-label="Plugin components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constructor" class="md-nav__link">
+    constructor()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trial" class="md-nav__link">
+    trial()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-info" class="md-nav__link">
+    static info
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugin-functionality" class="md-nav__link">
+    Plugin functionality
+  </a>
+  
+    <nav class="md-nav" aria-label="Plugin functionality">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#changing-the-content-of-the-display" class="md-nav__link">
+    Changing the content of the display
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#waiting-for-specified-durations" class="md-nav__link">
+    Waiting for specified durations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#responding-to-keyboard-events" class="md-nav__link">
+    Responding to keyboard events
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#asynchronous-loading" class="md-nav__link">
+    Asynchronous loading
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#save-data" class="md-nav__link">
+    Save data
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#simulation-mode" class="md-nav__link">
+    Simulation mode
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advice-for-writing-plugins" class="md-nav__link">
+    Advice for writing plugins
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/jspsych/jsPsych/edit/main/docs/developers/plugin-development.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="plugin-development">Plugin development<a class="headerlink" href="#plugin-development" title="Permanent link">&para;</a></h1>
+<h2 id="requirements-for-a-plugin">Requirements for a plugin<a class="headerlink" href="#requirements-for-a-plugin" title="Permanent link">&para;</a></h2>
+<p>As of version 7.0, plugins are <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes">JavaScript Classes</a>. A plugin must implement:</p>
+<ul>
+<li><a href="#constructor">A <code>constructor()</code></a> that accepts an instance of jsPsych.</li>
+<li><a href="#trial">A <code>trial()</code> method</a> that accepts an <code>HTMLElement</code> as its first argument and an <code>object</code> of trial parameters as its second argument. There is an optional third argument to <a href="#asynchronous-loading">handle the <code>on_load</code> event</a> in certain cirumstances. The <code>trial()</code> method should invoke <code>jsPsych.finishTrial()</code> to <a href="#save-data">end the trial and save data</a> at the appropriate moment.</li>
+<li><a href="#static-info">A static <code>info</code> property</a> on the class that contains an object describing the plugin's parameters.</li>
+</ul>
+<h3 id="templates">Templates<a class="headerlink" href="#templates" title="Permanent link">&para;</a></h3>
+<p>Plugins can be written in either plain JavaScript or in TypeScript. Template files for both <a href="https://github.com/jspsych/jspsych-contrib/blob/main/packages/plugin-template/index.js">JavaScript</a> and <a href="https://github.com/jspsych/jspsych-contrib/blob/main/packages/plugin-template-ts/src/index.ts">TypeScript</a> are available in the <a href="https://github.com/jspsych/jspsych-contrib/">jspsych-contrib repository</a>.</p>
+<h2 id="plugin-components">Plugin components<a class="headerlink" href="#plugin-components" title="Permanent link">&para;</a></h2>
+<h3 id="constructor">constructor()<a class="headerlink" href="#constructor" title="Permanent link">&para;</a></h3>
+<p>The plugin's <code>constructor()</code> will be passed a reference to the instance of the <code>JsPsych</code> class that is running the experiment. The constructor should store this reference so that the plugin can access functionality from the core library and its modules.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">constructor</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">){</span><span class="w"></span>
+<span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h3 id="trial">trial()<a class="headerlink" href="#trial" title="Permanent link">&para;</a></h3>
+<p>The plugin's <code>trial()</code> method is responsible for running a single trial. When the jsPsych timeline reaches a trial using the plugin it will invoke the <code>trial()</code> method for the plugin.</p>
+<p>There are three parameters that are passed into the trial method. </p>
+<ul>
+<li><code>display_element</code> is the DOM element where jsPsych content is being rendered. This parameter will be an <code>HTMLElement</code>, and you can use it to modify the portion of the document that jsPsych controls.</li>
+<li><code>trial</code> is an object containing all of the parameters specified in the corresponding <a href="../overview/timeline">TimelineNode</a>. </li>
+<li><code>on_load</code> is an optional parameter that contains a callback function to invoke when <code>trial()</code> has completed its initial loading. See <a href="#asynchronous-loading">handling the on_load event</a>.</li>
+</ul>
+<p>The only requirement for the <code>trial</code> method is that it calls <code>jsPsych.finishTrial()</code> when it is done. This is how jsPsych knows to advance to the next trial in the experiment (or end the experiment if it is the last trial). The plugin can do whatever it needs to do before that point.</p>
+<h3 id="static-info">static info<a class="headerlink" href="#static-info" title="Permanent link">&para;</a></h3>
+<p>The plugin's <code>info</code> property is an object with a <code>name</code> and <code>parameters</code> property. </p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;my-awesome-plugin&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">parameters</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<p>The <code>parameters</code> property is an object containing all of the parameters for the plugin. Each parameter has a <code>type</code> and <code>default</code> property.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;my-awesome-plugin&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">parameters</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jspsych</span><span class="p">.</span><span class="nx">ParameterType</span><span class="p">.</span><span class="nx">IMAGE</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="kc">undefined</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nx">image_duration</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jspsych</span><span class="p">.</span><span class="nx">ParameterType</span><span class="p">.</span><span class="nx">INT</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="mf">500</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<p>If the <code>default</code> value is <code>undefined</code> then a user must specify a value for this parameter when creating a trial using the plugin on the timeline. If they do not, then an error will be generated and shown in the console. If a <code>default</code> value is specified in <code>info</code> then that value will be used by the plugin unless the user overrides it by specifying that property.</p>
+<p>jsPsych allows most <a href="../../overview/dynamic-parameters/">plugin parameters to be dynamic</a>, which means that the parameter value can be a function that will be evaluated right before the trial starts. However, if you want your plugin to have a parameter that is a function that <em>shouldn't</em> be evaluated before the trial starts, then you should make sure that the parameter type is <code>'FUNCTION'</code>. This tells jsPsych not to evaluate the function as it normally does for dynamic parameters. See the <code>canvas-*</code> plugins for examples.</p>
+<p>The <code>info</code> object should be a <code>static</code> member of the class, as shown below.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;my-awesome-plugin&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">parameters</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="nx">image</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jspsych</span><span class="p">.</span><span class="nx">ParameterType</span><span class="p">.</span><span class="nx">IMAGE</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="kc">undefined</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="nx">image_duration</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jspsych</span><span class="p">.</span><span class="nx">ParameterType</span><span class="p">.</span><span class="nx">INT</span><span class="p">,</span><span class="w"></span>
+<span class="w">      </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="mf">500</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kd">class</span><span class="w"> </span><span class="nx">MyAwesomePlugin</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kr">constructor</span><span class="p">(...)</span><span class="w"></span>
+
+<span class="w">  </span><span class="nx">trial</span><span class="p">(...)</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="nx">MyAwesomePlugin</span><span class="p">.</span><span class="nx">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">info</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h2 id="plugin-functionality">Plugin functionality<a class="headerlink" href="#plugin-functionality" title="Permanent link">&para;</a></h2>
+<p>Inside the <code>.trial()</code> method you can do pretty much anything that you want, including modifying the DOM, setting up event listeners, and making asynchronous requests. In this section we'll highlight a few common things that you might want to do as examples.</p>
+<h3 id="changing-the-content-of-the-display">Changing the content of the display<a class="headerlink" href="#changing-the-content-of-the-display" title="Permanent link">&para;</a></h3>
+<p>There are a few ways to change the content of the display. The <code>display_element</code> parameter of the trial method contains the <code>HTMLElement</code> for displaying jsPsych content, so you can use various JavaScript methods for interaction with the display element. A common one is to change the <code>innerHTML</code>. Here's an example of using <code>innerHTML</code> to display an image specified in the <code>trial</code> parameters.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">trial</span><span class="p">(</span><span class="nx">display_element</span><span class="p">,</span><span class="w"> </span><span class="nx">trial</span><span class="p">){</span><span class="w"></span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">html_content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`&lt;img src=&quot;</span><span class="si">${</span><span class="nx">trial</span><span class="p">.</span><span class="nx">image</span><span class="si">}</span><span class="sb">&quot;&gt;&lt;/img&gt;`</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="nx">display_element</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">html_content</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<p>jsPsych doesn't clear the display before or after each trial, so it is usually appropriate to use <code>innerHTML</code> to clear the display at the end of a trial.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">display_element</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<h3 id="waiting-for-specified-durations">Waiting for specified durations<a class="headerlink" href="#waiting-for-specified-durations" title="Permanent link">&para;</a></h3>
+<p>If you need to delay code execution for a fixed amount of time, we recommend using jsPsych's wrapper of the <code>setTimeout()</code> function, <code>jsPsych.pluginAPI.setTimeout()</code>. In <code>7.0</code> the only advantage of using this method is that it registers the timeout handler so that it can be easily cleared at the end of the trial using <code>jsPsych.pluginAPI.clearAllTimeouts()</code>. In future versions we may replace the implementation of <code>jsPsych.pluginAPI.setTimeout()</code> with improved timing functionality based on <code>requestAnimationFrame</code>. </p>
+<div class="highlight"><pre><span></span><code><span class="nx">trial</span><span class="p">(</span><span class="nx">display_element</span><span class="p">,</span><span class="w"> </span><span class="nx">trial</span><span class="p">){</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// show image</span><span class="w"></span>
+<span class="w">  </span><span class="nx">display_element</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`&lt;img src=&quot;</span><span class="si">${</span><span class="nx">trial</span><span class="p">.</span><span class="nx">image</span><span class="si">}</span><span class="sb">&quot;&gt;&lt;/img&gt;`</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// hide image after trial.image_duration milliseconds</span><span class="w"></span>
+<span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(()=&gt;{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">display_element</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">},</span><span class="w"> </span><span class="nx">trial</span><span class="p">.</span><span class="nx">image_duration</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h3 id="responding-to-keyboard-events">Responding to keyboard events<a class="headerlink" href="#responding-to-keyboard-events" title="Permanent link">&para;</a></h3>
+<p>While the plugin framework allows you to set up any events that you would like to, including normal handling of <code>keyup</code> or <code>keydown</code> events, the <code>jsPsych.pluginAPI</code> module contains the <a href="../../reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse"><code>getKeyboardResponse</code> function</a>, which implements some additional helpful functionality for key responses in an experiment.</p>
+<p>Here's a basic example. See the <a href="../../reference/jspsych-pluginAPI/#jspsychpluginapigetkeyboardresponse"><code>getKeyboardResponse</code> docs</a> for additional examples.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">trial</span><span class="p">(</span><span class="nx">display_element</span><span class="p">,</span><span class="w"> </span><span class="nx">trial</span><span class="p">){</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// show image</span><span class="w"></span>
+<span class="w">  </span><span class="nx">display_element</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`&lt;img src=&quot;</span><span class="si">${</span><span class="nx">trial</span><span class="p">.</span><span class="nx">image</span><span class="si">}</span><span class="sb">&quot;&gt;&lt;/img&gt;`</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">after_key_response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">info</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// hide the image</span><span class="w"></span>
+<span class="w">    </span><span class="nx">display_element</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// record the response time as data</span><span class="w"></span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="nx">rt</span><span class="o">:</span><span class="w"> </span><span class="nx">info</span><span class="p">.</span><span class="nx">rt</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">// end the trial</span><span class="w"></span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">finishTrial</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1">// set up a keyboard event to respond only to the spacebar</span><span class="w"></span>
+<span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getKeyboardResponse</span><span class="p">({</span><span class="w"></span>
+<span class="w">    </span><span class="nx">callback_function</span><span class="o">:</span><span class="w"> </span><span class="nx">after_key_response</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">valid_responses</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39; &#39;</span><span class="p">],</span><span class="w"></span>
+<span class="w">    </span><span class="nx">persist</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
+<span class="w">  </span><span class="p">});</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h3 id="asynchronous-loading">Asynchronous loading<a class="headerlink" href="#asynchronous-loading" title="Permanent link">&para;</a></h3>
+<p>One of the <a href="../overview/events">trial events</a> is <code>on_load</code>, which is normally triggered automatically when the <code>.trial()</code> method returns. In most cases, this return happens after the plugin has done its initial setup of the DOM (e.g., rendering an image, setting up event listeners and timers, etc.). However, in some cases a plugin may implement an asynchronous operation that needs to complete before the initial loading of the plugin is considered done. An example of this is the <code>audio-keyboard-response</code> plugin, in which the check to see if the audio file is loaded is asynchronous and the <code>.trial()</code> method returns before the audio file has been initialized and the display updated. </p>
+<p>If you would like to manually trigger the <code>on_load</code> event for a plugin, the <code>.trial()</code> method accepts an optional third parameter that is a callback function to invoke when loading is complete. </p>
+<p>In order to tell jsPsych to <em>not</em> invoke the regular callback when the <code>.trial()</code> method returns, you need to explicitly return a <code>Promise</code>. As of version <code>7.0</code> this Promise only serves as a flag to tell jsPsych that the <code>on_load</code> event should not be triggered. In future versions we may make the <code>Promise</code> functional so that the <code>trial</code> operation can be an <code>async</code> function.</p>
+<p>Here's a sketch of how the <code>on_load</code> event can be utilized in a plugin. Note that this example is only a sketch and leaves out all the stuff that happens between loading and finishing the trial. See the source for the <code>audio-keyboard-response</code> plugin for a complete exampe.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">trial</span><span class="p">(</span><span class="nx">display_element</span><span class="p">,</span><span class="w"> </span><span class="nx">trial</span><span class="p">,</span><span class="w"> </span><span class="nx">on_load</span><span class="p">){</span><span class="w"></span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">trial_complete</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="nx">do_something_asynchronous</span><span class="p">().</span><span class="nx">then</span><span class="p">(()=&gt;{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">on_load</span><span class="p">();</span><span class="w"></span>
+<span class="w">  </span><span class="p">});</span><span class="w"></span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">end_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">finishTrial</span><span class="p">({...})</span><span class="w"></span>
+<span class="w">    </span><span class="nx">trial_complete</span><span class="p">();</span><span class="w"> </span><span class="c1">// not strictly necessary, but doesn&#39;t hurt.</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nb">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">)=&gt;{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">trial_complete</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">resolve</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">})</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h3 id="save-data">Save data<a class="headerlink" href="#save-data" title="Permanent link">&para;</a></h3>
+<p>To write data to <a href="../../reference/jspsych-data/#datacollection">jsPsych's data collection</a> pass an object of data as the parameter to <code>jsPsych.finishTrial()</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">constructor</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">){</span><span class="w"></span>
+<span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="nx">trial</span><span class="p">(</span><span class="nx">display_element</span><span class="p">,</span><span class="w"> </span><span class="nx">trial</span><span class="p">){</span><span class="w"></span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nx">correct</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="nx">rt</span><span class="o">:</span><span class="w"> </span><span class="mf">350</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">finishTrial</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<p>The data recorded will be that <code>correct</code> is <code>true</code> and that <code>rt</code> is <code>350</code>. <a href="../../overview/plugins/#data-collected-by-all-plugins">Additional data for the trial</a> will also be collected automatically.</p>
+<h2 id="simulation-mode">Simulation mode<a class="headerlink" href="#simulation-mode" title="Permanent link">&para;</a></h2>
+<p>Plugins can optionally support <a href="../../overview/simulation/">simulation modes</a>.</p>
+<p>To add simulation support, a plugin needs a <code>simulate()</code> function that accepts four arguments</p>
+<p><code>simulate(trial, simulation_mode, simulation_options, load_callback)</code></p>
+<ul>
+<li><code>trial</code>: This is the same as the <code>trial</code> parameter passed to the plugin's <code>trial()</code> method. It contains an object of the parameters for the trial.</li>
+<li><code>simulation_mode</code>: A string, either <code>"data-only"</code> or <code>"visual"</code>. This specifies which simulation mode is being requested. Plugins can optionally support <code>"visual"</code> mode. If <code>"visual"</code> mode is not supported, the plugin should default to <code>"data-only"</code> mode when <code>"visual"</code> mode is requested.</li>
+<li><code>simulation_options</code>: An object of simulation-specific options.</li>
+<li><code>load_callback</code>: A function handle to invoke when the simulation is ready to trigger the <code>on_load</code> event for the trial. It is important to invoke this at the correct time during the simulation so that any <code>on_load</code> events in the experiment execute as expected.</li>
+</ul>
+<p>Typically the flow for supporting simulation mode involves:</p>
+<ol>
+<li>Generating artificial data that is consistent with the <code>trial</code> parameters.</li>
+<li>Merging that data with any data specified by the user in <code>simulation_options</code>.</li>
+<li>Verifying that the final data object is still consistent with the <code>trial</code> parameters. For example, checking that RTs are not longer than the duration of the trial.</li>
+<li>In <code>data-only</code> mode, call <code>jsPsych.finishTrial()</code> with the artificial data.</li>
+<li>In <code>visual</code> mode, invoke the <code>trial()</code> method of the plugin and then use the artificial data to trigger the appropriate events. There are a variety of methods in the <a href="../../reference/jspsych-pluginAPI/">Plugin API module</a> to assist with things like simulating key presses and mouse clicks.</li>
+</ol>
+<p>We plan to add a longer guide about simulation development in the future. For now, we recommend browsing the source code of plugins that support simulation mode to see how the flow described above is implemented.</p>
+<h2 id="advice-for-writing-plugins">Advice for writing plugins<a class="headerlink" href="#advice-for-writing-plugins" title="Permanent link">&para;</a></h2>
+<p>If you are developing a plugin with the aim of including it in the main jsPsych repository we encourage you to follow the <a href="../contributing/#contributing-to-the-codebase">contribution guidelines</a>. </p>
+<p>We also recommend that you make your plugin <em>as general as possible</em>. Consider using parameters to give the user of the plugin as many options for customization as possible. For example, if you have any text that displays in the plugin including things like button labels, implement the text as a parameter. This allows users running experiments in other languages to replace text values as needed.</p>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../contributing/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Contributing to jsPsych" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Contributing to jsPsych
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../extension-development/" class="md-footer__link md-footer__link--next" aria-label="Next: Extension Development" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Extension Development
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2012-2022 Josh de Leeuw
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a6c66575.min.js"></script>
+      
+    
+  </body>
+</html>
