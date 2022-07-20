@@ -1,6 +1,6 @@
 # initialize-camera
 
-Current version: 0.0.1 [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-initialize-camera/CHANGELOG.md).
+Current version: 1.0.0 [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-initialize-camera/CHANGELOG.md).
 
 This plugin asks the participant to grant permission to access a camera.
 If multiple cameras are connected to the participant's device, then it allows the participant to pick which device to use. 

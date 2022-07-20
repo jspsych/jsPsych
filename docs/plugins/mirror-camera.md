@@ -1,6 +1,6 @@
 # mirror-camera
 
-Current version: 0.0.1 [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-mirror-camera/CHANGELOG.md).
+Current version: 1.0.0 [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-mirror-camera/CHANGELOG.md).
 
 This plugin shows a live feed of the participant's camera. It can be useful in experiments that need to record video in order to give the participant a chance to see what is in the view of the camera.
 
