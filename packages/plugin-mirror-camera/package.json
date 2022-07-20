@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-mirror-camera",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "jsPsych plugin for showing a live feed of the user's camera",
   "type": "module",
   "main": "dist/index.cjs",

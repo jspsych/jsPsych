@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-html-video-response",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "jsPsych plugin for displaying a stimulus and recording a video response through a camera",
   "type": "module",
   "main": "dist/index.cjs",
