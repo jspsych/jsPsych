@@ -114,7 +114,7 @@ var n = 3;
 var data = jsPsych.data.get().first(n);
 ```
 
-Counting the number of trials in a data collection:
+Counting the number of correct trials in a data collection:
 ```js
 var count = jsPsych.data.get().filter({correct: true}).count();
 ```
