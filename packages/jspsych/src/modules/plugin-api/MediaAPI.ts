@@ -176,24 +176,24 @@ export class MediaAPI {
       return;
     }
 
-    for (var i = 0; i < images.length; i++) {
-      var img = new Image();
-
-      img.onload = function () {
+    for (let i = 0; i < images.length; i++) {
+      const img = new Image();
+      const src = images[i];
+      img.onload = () => {
         n_loaded++;
-        callback_load(img.src);
+        callback_load(src);
         if (n_loaded === images.length) {
           callback_complete();
         }
       };
 
-      img.onerror = function (e) {
-        callback_error({ source: img.src, error: e });
+      img.onerror = (e) => {
+        callback_error({ source: src, error: e });
       };
 
-      img.src = images[i];
+      img.src = src;
 
-      this.img_cache[images[i]] = img;
+      this.img_cache[src] = img;
       this.preload_requests.push(img);
     }
   }
