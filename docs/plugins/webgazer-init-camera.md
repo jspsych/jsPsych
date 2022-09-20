@@ -1,6 +1,6 @@
 # webgazer-init-camera
 
-Current version: 1.0.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-webgazer-init-camera/CHANGELOG.md).
+Current version: 1.0.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-webgazer-init-camera/CHANGELOG.md).
 
 This plugin initializes the camera and helps the participant center their face in the camera view for using the the [WebGazer extension](../extensions/webgazer.md). For a narrative description of eye tracking with jsPsych, see the [eye tracking overview](../overview/eye-tracking.md). 
 
@@ -30,7 +30,7 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.1"></script>
+<script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.2"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-survey-multi-choice",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "a jspsych plugin for multiple choice survey questions",
   "type": "module",
   "main": "dist/index.cjs",
@@ -38,6 +38,6 @@
   },
   "devDependencies": {
     "@jspsych/config": "^1.3.0",
-    "@jspsych/test-utils": "^1.1.0"
+    "@jspsych/test-utils": "^1.1.2"
   }
 }

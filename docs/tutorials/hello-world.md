@@ -112,7 +112,7 @@ For this demo we want to show some text on the screen. This is exactly what the 
   <head>
     <title>My experiment</title>
     <script src="https://unpkg.com/jspsych@7.3.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
     <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
@@ -130,7 +130,7 @@ Once the plugin is loaded we can create a trial using the plugin. To declare a t
   <head>
     <title>My experiment</title>
     <script src="https://unpkg.com/jspsych@7.3.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
     <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
@@ -155,7 +155,7 @@ Now that we have the trial defined we need to tell jsPsych to run an experiment 
   <head>
     <title>My experiment</title>
     <script src="https://unpkg.com/jspsych@7.3.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
     <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
