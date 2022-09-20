@@ -1,5 +1,11 @@
 # @jspsych/plugin-same-different-image
 
+## 1.1.2
+
+### Patch Changes
+
+- [#2781](https://github.com/jspsych/jsPsych/pull/2781) [`12956b3c`](https://github.com/jspsych/jsPsych/commit/12956b3cc130676a81e4a4536d68800a4d34e8a8) Thanks [@jadeddelta](https://github.com/jadeddelta)! - added readme for visibility on npmjs.com
+
 ## 1.1.1
 
 ### Patch Changes

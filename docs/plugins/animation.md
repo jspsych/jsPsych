@@ -1,6 +1,6 @@
 # animation
 
-Current version: 1.1.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-animation/CHANGELOG.md).
+Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-animation/CHANGELOG.md).
 
 This plugin displays a sequence of images at a fixed frame rate. The sequence can be looped a specified number of times. The subject is free to respond at any point during the animation, and the time of the response is recorded.
 
@@ -32,7 +32,7 @@ response | array | An array, where each element is an object representing a resp
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-animation@1.1.1"></script>
+<script src="https://unpkg.com/@jspsych/plugin-animation@1.1.2"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
