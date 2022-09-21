@@ -2,6 +2,7 @@ import { flushPromises } from "@jspsych/test-utils";
 import { JsPsych, initJsPsych } from "jspsych";
 import { mocked } from "ts-jest/utils";
 
+import { mockDomRelatedJsPsychMethods } from "../../tests/test-utils";
 import TestPlugin from "../../tests/TestPlugin";
 import { ParameterInfos, ParameterType } from "../modules/plugins";
 import { Timeline } from "./Timeline";
@@ -39,6 +40,8 @@ describe("Trial", () => {
 
   beforeEach(() => {
     jsPsych = initJsPsych();
+    mockDomRelatedJsPsychMethods(jsPsych);
+
     TestPluginMock.mockReset();
     TestPluginMock.prototype.trial.mockImplementation(() => {
       jsPsych.finishTrial({ my: "result" });
@@ -59,6 +62,35 @@ describe("Trial", () => {
       await trial.run();
 
       expect(trial.pluginInstance).toBeInstanceOf(TestPlugin);
+    });
+
+    it("focuses the display element via `jsPsych.focusDisplayContainerElement()`", async () => {
+      const trial = createTrial({ type: TestPlugin });
+
+      expect(jsPsych.focusDisplayContainerElement).toHaveBeenCalledTimes(0);
+      await trial.run();
+      expect(jsPsych.focusDisplayContainerElement).toHaveBeenCalledTimes(1);
+    });
+
+    it("respects the `css_classes` trial parameter", async () => {
+      await createTrial({ type: TestPlugin }).run();
+      expect(jsPsych.addCssClasses).toHaveBeenCalledTimes(0);
+      expect(jsPsych.removeCssClasses).toHaveBeenCalledTimes(0);
+
+      await createTrial({ type: TestPlugin, css_classes: "class1" }).run();
+      expect(jsPsych.addCssClasses).toHaveBeenCalledTimes(1);
+      expect(jsPsych.addCssClasses).toHaveBeenCalledWith(["class1"]);
+      expect(jsPsych.removeCssClasses).toHaveBeenCalledTimes(1);
+      expect(jsPsych.removeCssClasses).toHaveBeenCalledWith(["class1"]);
+
+      mocked(jsPsych.addCssClasses).mockClear();
+      mocked(jsPsych.removeCssClasses).mockClear();
+
+      await createTrial({ type: TestPlugin, css_classes: ["class1", "class2"] }).run();
+      expect(jsPsych.addCssClasses).toHaveBeenCalledTimes(1);
+      expect(jsPsych.addCssClasses).toHaveBeenCalledWith(["class1", "class2"]);
+      expect(jsPsych.removeCssClasses).toHaveBeenCalledTimes(1);
+      expect(jsPsych.removeCssClasses).toHaveBeenCalledWith(["class1", "class2"]);
     });
 
     it("invokes the `on_start` callback", async () => {

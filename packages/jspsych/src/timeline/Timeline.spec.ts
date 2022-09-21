@@ -2,6 +2,7 @@ import { flushPromises } from "@jspsych/test-utils";
 import { JsPsych, initJsPsych } from "jspsych";
 import { mocked } from "ts-jest/utils";
 
+import { mockDomRelatedJsPsychMethods } from "../../tests/test-utils";
 import TestPlugin from "../../tests/TestPlugin";
 import {
   repeat,
@@ -43,6 +44,8 @@ describe("Timeline", () => {
 
   beforeEach(() => {
     jsPsych = initJsPsych();
+    mockDomRelatedJsPsychMethods(jsPsych);
+
     TestPluginMock.mockReset();
     TestPluginMock.prototype.trial.mockImplementation(() => {
       jsPsych.finishTrial({ my: "result" });

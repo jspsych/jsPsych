@@ -187,8 +187,29 @@ export class JsPsych {
     return this.DOM_target;
   }
 
+  /**
+   * Adds the provided css classes to the display element
+   */
+  addCssClasses(classes: string[]) {
+    this.getDisplayElement().classList.add(...classes);
+  }
+
+  /**
+   * Removes the provided css classes from the display element
+   */
+  removeCssClasses(classes: string[]) {
+    this.getDisplayElement().classList.remove(...classes);
+  }
+
   getDisplayContainerElement() {
     return this.DOM_container;
+  }
+
+  focusDisplayContainerElement() {
+    // apply the focus to the element containing the experiment.
+    this.getDisplayContainerElement().focus();
+    // reset the scroll on the DOM target
+    this.getDisplayElement().scrollTop = 0;
   }
 
   endExperiment(end_message = "", data = {}) {

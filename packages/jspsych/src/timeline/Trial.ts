@@ -1,4 +1,4 @@
-import { JsPsych, JsPsychPlugin, ParameterType, PluginInfo, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, PluginInfo } from "jspsych";
 import { ParameterInfos } from "src/modules/plugins";
 
 import { deepCopy } from "../modules/utils";
@@ -13,6 +13,7 @@ export class Trial extends BaseTimelineNode {
 
   private result: TrialResult;
   private readonly pluginInfo: PluginInfo;
+  private cssClasses?: string[];
 
   constructor(
     jsPsych: JsPsych,
@@ -29,7 +30,7 @@ export class Trial extends BaseTimelineNode {
     this.status = TimelineNodeStatus.RUNNING;
     this.processParameters();
 
-    this.focusContainerElement();
+    this.jsPsych.focusDisplayContainerElement();
     this.addCssClasses();
 
     this.onStart();
@@ -67,7 +68,7 @@ export class Trial extends BaseTimelineNode {
     });
 
     const trialReturnValue = this.pluginInstance.trial(
-      this.jsPsych.getDisplayElement() ?? document.createElement("div"), // TODO Remove this hack once getDisplayElement() returns something
+      this.jsPsych.getDisplayElement(),
       this.trialObject,
       this.onLoad
     );
@@ -90,50 +91,48 @@ export class Trial extends BaseTimelineNode {
     return result;
   }
 
-  private focusContainerElement() {
-    //   // apply the focus to the element containing the experiment.
-    //   this.DOM_container.focus();
-    //   // reset the scroll on the DOM target
-    //   this.DOM_target.scrollTop = 0;
-  }
-
+  /**
+   * Add the CSS classes from the trial's `css_classes` parameter to the display element.
+   */
   private addCssClasses() {
-    //   // add CSS classes to the DOM_target if they exist in trial.css_classes
-    //   if (typeof trial.css_classes !== "undefined") {
-    //     if (!Array.isArray(trial.css_classes) && typeof trial.css_classes === "string") {
-    //       trial.css_classes = [trial.css_classes];
-    //     }
-    //     if (Array.isArray(trial.css_classes)) {
-    //       this.DOM_target.classList.add(...trial.css_classes);
-    //     }
-    //   }
+    const classes = this.getParameterValue("css_classes");
+    if (classes) {
+      if (Array.isArray(classes)) {
+        this.cssClasses = classes;
+      } else if (typeof classes === "string") {
+        this.cssClasses = [classes];
+      }
+      this.jsPsych.addCssClasses(this.cssClasses);
+    }
   }
 
+  /**
+   * Remove the CSS classes added by `addCssClasses` (if any).
+   */
   private removeCssClasses() {
-    //   // remove any CSS classes that were added to the DOM via css_classes parameter
-    //   if (
-    //     typeof this.current_trial.css_classes !== "undefined" &&
-    //     Array.isArray(this.current_trial.css_classes)
-    //   ) {
-    //     this.DOM_target.classList.remove(...this.current_trial.css_classes);
-    //   }
+    if (this.cssClasses) {
+      this.jsPsych.removeCssClasses(this.cssClasses);
+    }
   }
 
   private onStart() {
-    if (this.description.on_start) {
-      this.description.on_start(this.trialObject);
+    const callback = this.getParameterValue("on_start", { evaluateFunctions: false });
+    if (callback) {
+      callback(this.trialObject);
     }
   }
 
   private onLoad = () => {
-    if (this.description.on_load) {
-      this.description.on_load();
+    const callback = this.getParameterValue("on_load", { evaluateFunctions: false });
+    if (callback) {
+      callback();
     }
   };
 
   private onFinish() {
-    if (this.description.on_finish) {
-      this.description.on_finish(this.getResult());
+    const callback = this.getParameterValue("on_finish", { evaluateFunctions: false });
+    if (callback) {
+      callback(this.getResult());
     }
   }
 

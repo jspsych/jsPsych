@@ -17,7 +17,7 @@ export interface TrialDescription extends Record<string, any> {
   post_trial_gap?: number;
 
   /** https://www.jspsych.org/latest/overview/style/#using-the-css_classes-trial-parameter */
-  css_classes?: string;
+  css_classes?: string | string[];
 
   /** https://www.jspsych.org/latest/overview/simulation/#controlling-simulation-mode-with-simulation_options */
   simulation_options?: any;

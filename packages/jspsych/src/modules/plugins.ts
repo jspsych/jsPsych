@@ -1,3 +1,4 @@
+import { TrialDescription } from "src/timeline";
 import { SetRequired } from "type-fest";
 
 /**
@@ -152,6 +153,6 @@ export interface JsPsychPlugin<I extends PluginInfo> {
 }
 
 export type TrialType<I extends PluginInfo> = InferredParameters<I["parameters"]> &
-  UniversalPluginParameters;
+  TrialDescription;
 
 export type PluginParameters<I extends PluginInfo> = InferredParameters<I["parameters"]>;
