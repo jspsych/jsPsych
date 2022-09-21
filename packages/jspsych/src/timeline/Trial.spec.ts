@@ -233,16 +233,36 @@ describe("Trial", () => {
               requiredChild: { type: ParameterType.STRING },
             },
           },
+          requiredComplexNestedArray: {
+            type: ParameterType.COMPLEX,
+            array: true,
+            nested: {
+              child: { type: ParameterType.STRING, default: "I'm nested." },
+              requiredChild: { type: ParameterType.STRING },
+            },
+          },
         });
       });
 
       it("resolves missing parameter values from parent timeline and sets default values", async () => {
-        mocked(timeline).getParameterValue.mockImplementation((parameterName) =>
-          parameterName === "requiredString" ? "foo" : undefined
-        );
+        mocked(timeline).getParameterValue.mockImplementation((parameterName) => {
+          if (parameterName === "requiredString") {
+            return "foo";
+          }
+          if (parameterName === "requiredComplexNestedArray[0].requiredChild") {
+            return "foo";
+          }
+          return undefined;
+        });
         const trial = createTrial({
           type: TestPlugin,
           requiredComplexNested: { requiredChild: "bar" },
+          requiredComplexNestedArray: [
+            // This empty object is allowed because `requiredComplexNestedArray[0]` is (simulated to
+            // be) set as a parameter to the mocked parent timeline:
+            {},
+            { requiredChild: "bar" },
+          ],
         });
 
         await trial.run();
@@ -258,33 +278,34 @@ describe("Trial", () => {
             function: functionDefaultValue,
             complex: {},
             requiredComplexNested: { child: "I'm nested.", requiredChild: "bar" },
+            requiredComplexNestedArray: [
+              { child: "I'm nested.", requiredChild: "foo" },
+              { child: "I'm nested.", requiredChild: "bar" },
+            ],
           },
           expect.anything()
         );
       });
 
-      it("errors on missing required parameters", async () => {
-        await expect(
-          createTrial({
-            type: TestPlugin,
-            requiredComplexNested: { requiredChild: "bar" },
-          }).run()
-        ).rejects.toEqual(expect.any(Error));
+      it("errors when an `array` parameter is not an array", async () => {
+        setTestPluginParameters({
+          stringArray: { type: ParameterType.STRING, array: true },
+        });
 
-        await expect(
-          createTrial({
-            type: TestPlugin,
-            requiredString: "foo",
-          }).run()
-        ).rejects.toEqual(expect.any(Error));
+        // This should work:
+        await createTrial({ type: TestPlugin, stringArray: [] }).run();
 
+        // This shouldn't:
         await expect(
-          createTrial({
-            type: TestPlugin,
-            requiredString: "foo",
-            requiredComplexNested: {},
-          }).run()
-        ).rejects.toEqual(expect.any(Error));
+          createTrial({ type: TestPlugin, stringArray: {} }).run()
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          '"A non-array value (`[object Object]`) was provided for the array parameter \\"stringArray\\" in the \\"test\\" plugin. Please make sure that \\"stringArray\\" is an array."'
+        );
+        await expect(
+          createTrial({ type: TestPlugin, stringArray: 1 }).run()
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          '"A non-array value (`1`) was provided for the array parameter \\"stringArray\\" in the \\"test\\" plugin. Please make sure that \\"stringArray\\" is an array."'
+        );
       });
 
       it("evaluates parameter functions", async () => {
@@ -294,6 +315,7 @@ describe("Trial", () => {
           function: functionParameter,
           requiredString: () => "foo",
           requiredComplexNested: { requiredChild: () => "bar" },
+          requiredComplexNestedArray: [{ requiredChild: () => "bar" }],
         });
 
         await trial.run();
@@ -304,6 +326,7 @@ describe("Trial", () => {
             function: functionParameter,
             requiredString: "foo",
             requiredComplexNested: expect.objectContaining({ requiredChild: "bar" }),
+            requiredComplexNestedArray: [expect.objectContaining({ requiredChild: "bar" })],
           }),
           expect.anything()
         );
@@ -318,6 +341,7 @@ describe("Trial", () => {
           type: TestPlugin,
           requiredString: new TimelineVariable("x"),
           requiredComplexNested: { requiredChild: () => new TimelineVariable("x") },
+          requiredComplexNestedArray: [{ requiredChild: () => new TimelineVariable("x") }],
         });
 
         await trial.run();
@@ -328,9 +352,78 @@ describe("Trial", () => {
           expect.objectContaining({
             requiredString: "foo",
             requiredComplexNested: expect.objectContaining({ requiredChild: "foo" }),
+            requiredComplexNestedArray: [expect.objectContaining({ requiredChild: "foo" })],
           }),
           expect.anything()
         );
+      });
+
+      describe("with missing required parameters", () => {
+        it("errors on missing simple parameters", async () => {
+          setTestPluginParameters({ requiredString: { type: ParameterType.STRING } });
+
+          // This should work:
+          await createTrial({ type: TestPlugin, requiredString: "foo" }).run();
+
+          // This shouldn't:
+          await expect(createTrial({ type: TestPlugin }).run()).rejects.toThrow(
+            '"requiredString" parameter'
+          );
+        });
+
+        it("errors on missing parameters nested in `COMPLEX` parameters", async () => {
+          setTestPluginParameters({
+            requiredComplexNested: {
+              type: ParameterType.COMPLEX,
+              nested: { requiredChild: { type: ParameterType.STRING } },
+            },
+          });
+
+          // This should work:
+          await createTrial({
+            type: TestPlugin,
+            requiredComplexNested: { requiredChild: "bar" },
+          }).run();
+
+          // This shouldn't:
+          await expect(createTrial({ type: TestPlugin }).run()).rejects.toThrow(
+            '"requiredComplexNested" parameter'
+          );
+          await expect(
+            createTrial({ type: TestPlugin, requiredComplexNested: {} }).run()
+          ).rejects.toThrowError('"requiredComplexNested.requiredChild" parameter');
+        });
+
+        it("errors on missing parameters nested in `COMPLEX` array parameters", async () => {
+          setTestPluginParameters({
+            requiredComplexNestedArray: {
+              type: ParameterType.COMPLEX,
+              array: true,
+              nested: { requiredChild: { type: ParameterType.STRING } },
+            },
+          });
+
+          // This should work:
+          await createTrial({ type: TestPlugin, requiredComplexNestedArray: [] }).run();
+          await createTrial({
+            type: TestPlugin,
+            requiredComplexNestedArray: [{ requiredChild: "bar" }],
+          }).run();
+
+          // This shouldn't:
+          await expect(createTrial({ type: TestPlugin }).run()).rejects.toThrow(
+            '"requiredComplexNestedArray" parameter'
+          );
+          await expect(
+            createTrial({ type: TestPlugin, requiredComplexNestedArray: [{}] }).run()
+          ).rejects.toThrow('"requiredComplexNestedArray[0].requiredChild" parameter');
+          await expect(
+            createTrial({
+              type: TestPlugin,
+              requiredComplexNestedArray: [{ requiredChild: "bar" }, {}],
+            }).run()
+          ).rejects.toThrow('"requiredComplexNestedArray[1].requiredChild" parameter');
+        });
       });
     });
 
@@ -352,8 +445,8 @@ describe("Trial", () => {
 
       await runPromise1;
 
-      // @ts-expect-error function parameters and timeline variables are not yet included in the
-      // trial type
+      // @ts-expect-error TODO function parameters and timeline variables are not yet included in
+      // the trial type
       const trial2 = createTrial({ type: TestPlugin, post_trial_gap: () => 200 });
 
       const runPromise2 = trial2.run();

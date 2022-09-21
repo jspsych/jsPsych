@@ -272,8 +272,10 @@ describe("Timeline", () => {
         expect(sampleFunction).toHaveBeenCalledTimes(1);
         expect(xValues).toEqual([0]);
 
-        // @ts-expect-error non-existing type
-        await expect(createTimeline({ type: "invalid" }).run()).rejects.toEqual(expect.any(Error));
+        await expect(
+          // @ts-expect-error non-existing type
+          createTimeline({ type: "invalid" }).run()
+        ).rejects.toThrow('Invalid type "invalid" in timeline sample parameters.');
       });
     });
   });

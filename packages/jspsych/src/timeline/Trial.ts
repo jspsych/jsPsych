@@ -178,8 +178,27 @@ export class Trial extends BaseTimelineNode {
           }
         }
 
+        if (parameterConfig.array && !Array.isArray(parameterValue)) {
+          throw new Error(
+            `A non-array value (\`${parameterValue}\`) was provided for the array parameter "${parameterPath}" in the "${this.pluginInfo.name}" plugin. Please make sure that "${parameterPath}" is an array.`
+          );
+        }
+
         if (parameterConfig.type === ParameterType.COMPLEX && parameterConfig.nested) {
-          assignParameterValues(parameterValue, parameterConfig.nested, parameterPath + ".");
+          // Assign parameter values according to the `nested` schema
+          if (parameterConfig.array) {
+            // ...for each nested array element
+            for (const [arrayIndex, arrayElement] of parameterValue.entries()) {
+              assignParameterValues(
+                arrayElement,
+                parameterConfig.nested,
+                `${parameterPath}[${arrayIndex}].`
+              );
+            }
+          } else {
+            // ...for the nested object
+            assignParameterValues(parameterValue, parameterConfig.nested, parameterPath + ".");
+          }
         }
 
         parameterObject[parameterName] = parameterValue;
