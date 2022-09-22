@@ -3,7 +3,7 @@
   <head>
     <script src="../packages/jspsych/dist/index.browser.js"></script>
     <script src="../packages/plugin-cloze/dist/index.browser.js"></script>
-    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
   </head>
   <body></body>
   <script>
@@ -22,6 +22,14 @@
       text: 'The %% is the largest terrestrial mammal. It lives in both %% and %%.'
     });
 
+    // another example with checking if all the blanks are filled in
+    timeline.push({
+      type: jsPsychCloze,
+      text: 'The %% is the largest terrestrial mammal. It lives in both %% and %%.',
+      check_blanks: true,
+      mistake_fn: function () { alert("You have not filled in all the blanks!"); }
+    });
+
     // more elaborate example (with check against correct solution, custom error handling and modified button text)
     timeline.push({
       type: jsPsychCloze,
@@ -32,6 +40,5 @@
     });
 
     jsPsych.run(timeline);
-
   </script>
 </html>
