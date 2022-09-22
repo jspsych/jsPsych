@@ -13,6 +13,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | text          | string   | *undefined*        | The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. % correct solution %). |
 | button_text   | string   | OK                 | Text of the button participants have to press for finishing the cloze test. |
 | check_answers | boolean  | false              | Boolean value indicating if the answers given by participants should be compared against a correct solution given in the text (between % signs) after the button was clicked. If ```true```, answers are checked and in case of differences, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. If ```false```, no checks are performed and the trial automatically ends when clicking the button. |
+| check_blanks  | boolean  | false              | Boolean value indicating if the answers given by participants should be checked for completion after the button was clicked. If ```true```, answers are checked and in case there are some missing, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. If ```false```, no checks are performed and the trial automatically ends when clicking the button. |
 | mistake_fn    | function | ```function(){}``` | Function called if ```check_answers``` is set to ```true``` and there is a difference between the participants answers and the correct solution provided in the text. |
 
 ## Data Generated
@@ -63,6 +64,23 @@ import cloze from '@jspsych/plugin-cloze';
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-cloze-demo1.html">Open demo in new tab</a>
 
+???+ example "Cloze example using default settings with completion checking and custom error handling"
+    === "Code"
+        ```javascript
+            var cloze_trial = {
+                type: jsPsychCloze,
+                text: 'Science notebooks have a %%-colored front cover. Math notebooks have a %%-colored front cover.',
+                check_blanks: true,
+                mistake_fn: function() { alert('Please fill in all blanks.'); }
+            };
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../../demos/jspsych-cloze-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-cloze-demo3.html">Open demo in new tab</a>
+
 
 ???+ example "More elaborate example (with check against correct solution, custom error handling and modified button text)"
     === "Code"
@@ -72,7 +90,7 @@ import cloze from '@jspsych/plugin-cloze';
                 text: 'A rectangle has % 4 % corners and a triangle has % 3 %.',
                 check_answers: true,
                 button_text: 'Next',
-                mistake_fn: function(){alert("Wrong answer. Please check again.")}
+                mistake_fn: function (){ alert("Wrong answer. Please check again.") }
             };
         ```
     === "Demo"
