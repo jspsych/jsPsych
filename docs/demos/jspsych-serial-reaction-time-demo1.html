@@ -6,7 +6,7 @@
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.1"></script>
     <script src="https://unpkg.com/@jspsych/plugin-serial-reaction-time@1.1.1"></script>
     <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" />
-    <link rel="stylesheet" href="docs-demo.css" type="text/css">
+    <link rel="stylesheet" href="docs-demo.css" type="text/css" />
   </head>
   <body></body>
   <script>
@@ -52,8 +52,8 @@
       target: [0,3]
     }
 
-    const timeline = [instructions, trial_1, trial_2, trial_3, trial_4],
-    
+    const timeline = [instructions, trial_1, trial_2, trial_3, trial_4];
+
     if (typeof jsPsych !== "undefined") {
       jsPsych.run(generateDocsDemoTimeline(timeline));
     } else {
