@@ -89,7 +89,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
           }
         }
         if (trial.check_blanks) {
-          if (answers[i].trim() === "") {
+          if (answers[i] === "") {
             answers_filled = false;
           } 
         }
@@ -105,16 +105,6 @@ class ClozePlugin implements JsPsychPlugin<Info> {
         display_element.innerHTML = "";
         this.jsPsych.finishTrial(trial_data);
       }
-      // if (!trial.check_answers || (trial.check_answers && answers_correct)) {
-      //   var trial_data = {
-      //     response: answers,
-      //   };
-
-      //   display_element.innerHTML = "";
-      //   this.jsPsych.finishTrial(trial_data);
-      // } else {
-      //   trial.mistake_fn();
-      // }
     };
 
     display_element.innerHTML +=
