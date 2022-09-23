@@ -1,6 +1,6 @@
 # cloze
 
-Current version: 1.1.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-cloze/CHANGELOG.md).
+Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-cloze/CHANGELOG.md).
 
 This plugin displays a text with certain words removed. Participants are asked to replace the missing items. Responses are recorded when clicking a button. Responses can be evaluated and a function is called in case of either differences or incomplete answers, making it possible to inform participants about mistakes before proceeding.
 
@@ -29,7 +29,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-cloze@1.1.1"></script>
+<script src="https://unpkg.com/@jspsych/plugin-cloze@1.1.2"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
