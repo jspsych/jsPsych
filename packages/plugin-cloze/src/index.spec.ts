@@ -78,7 +78,7 @@ describe("cloze", () => {
       {
         type: cloze,
         text: "This is a %cloze% text.",
-        check_blanks: true,
+        allow_blanks: false,
       },
     ]);
 
@@ -106,7 +106,7 @@ describe("cloze", () => {
       {
         type: cloze,
         text: "This is a %cloze% text.",
-        check_answers: true,
+        allow_blanks: false,
       },
     ]);
 
@@ -139,7 +139,7 @@ describe("cloze", () => {
       {
         type: cloze,
         text: "This is a %cloze% text.",
-        check_blanks: true,
+        allow_blanks: false,
         mistake_fn: mistakeFn,
       },
     ]);

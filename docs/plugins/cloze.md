@@ -2,7 +2,7 @@
 
 Current version: 1.1.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-cloze/CHANGELOG.md).
 
-This plugin displays a text with certain words removed. Participants are asked to replace the missing items. Responses are recorded when clicking a button. Optionally, responses are evaluated and a function is called in case of differences, making it possible to inform participants about mistakes.
+This plugin displays a text with certain words removed. Participants are asked to replace the missing items. Responses are recorded when clicking a button. Responses can be evaluated and a function is called in case of either differences or incomplete answers, making it possible to inform participants about mistakes before proceeding.
 
 ## Parameters
 
@@ -13,8 +13,8 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | text          | string   | *undefined*        | The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. % correct solution %). |
 | button_text   | string   | OK                 | Text of the button participants have to press for finishing the cloze test. |
 | check_answers | boolean  | false              | Boolean value indicating if the answers given by participants should be compared against a correct solution given in the text (between % signs) after the button was clicked. If ```true```, answers are checked and in case of differences, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. If ```false```, no checks are performed and the trial automatically ends when clicking the button. |
-| check_blanks  | boolean  | false              | Boolean value indicating if the answers given by participants should be checked for completion after the button was clicked. If ```true```, answers are checked and in case there are some missing, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. If ```false```, no checks are performed and the trial automatically ends when clicking the button. |
-| mistake_fn    | function | ```function(){}``` | Function called if ```check_answers``` is set to ```true``` and there is a difference between the participants answers and the correct solution provided in the text. |
+| allow_blanks  | boolean  | true               | Boolean value indicating if the answers given by participants should be checked for completion after the button was clicked. If ```true```, answers are not checked for completion and blank answers are allowed. The trial will then automatically finish upon the clicking the button. If ```false```, answers are checked for completion, and in case there are some fields with missing answers, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. |
+| mistake_fn    | function | ```function(){}``` | Function called if ```check_answers``` is set to ```true``` or ```allow_blanks``` is set to false and there is a difference between the participants answers and the correct solution provided in the text, or if there is at least one field with a blank answer respectively. |
 
 ## Data Generated
 
@@ -70,7 +70,7 @@ import cloze from '@jspsych/plugin-cloze';
             var cloze_trial = {
                 type: jsPsychCloze,
                 text: 'Science notebooks have a %%-colored front cover. Math notebooks have a %%-colored front cover.',
-                check_blanks: true,
+                allow_blanks: false,
                 mistake_fn: function() { alert('Please fill in all blanks.'); }
             };
         ```

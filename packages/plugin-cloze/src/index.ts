@@ -21,17 +21,17 @@ const info = <const>{
       pretty_name: "Check answers",
       default: false,
     },
-    /** Boolean value indicating if the answers given by participants should be checked for completeness after the button is clicked in order to move on. */
-    check_blanks: {
+    /** Boolean value indicating if the answers given by participants  */
+    allow_blanks: {
       type: ParameterType.BOOL,
       pretty_name: "Check blanks",
-      default: false,
+      default: true,
     },
-    /** Function called if either the check_answers or check_blanks is set to TRUE and there is a discrepancy between the set answers and the answers provide or if all blanks aren't filled out, respectively. */
+    /** Function called if either the check_answers is set to TRUE or the allow_blanks is set to FALSE and there is a discrepancy between the set answers and the answers provide or if all blanks aren't filled out, respectively. */
     mistake_fn: {
       type: ParameterType.FUNCTION,
       pretty_name: "Mistake function",
-      default: () => {},
+      default: () => { },
     },
   },
 };
@@ -49,7 +49,7 @@ type Info = typeof info;
 class ClozePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {}
+  constructor(private jsPsych: JsPsych) { }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var html = '<div class="cloze">';
@@ -88,14 +88,14 @@ class ClozePlugin implements JsPsychPlugin<Info> {
             field.style.color = "black";
           }
         }
-        if (trial.check_blanks) {
+        if (!trial.allow_blanks) {
           if (answers[i] === "") {
             answers_filled = false;
-          } 
+          }
         }
       }
 
-      if ((trial.check_answers && !answers_correct)||(trial.check_blanks && !answers_filled)) {
+      if ((trial.check_answers && !answers_correct) || (!trial.allow_blanks && !answers_filled)) {
         trial.mistake_fn();
       } else {
         var trial_data = {
