@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-virtual-chinrest",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "virtual chinrest plugin for jsPsych",
   "type": "module",
   "main": "dist/index.cjs",
@@ -38,6 +38,6 @@
   },
   "devDependencies": {
     "@jspsych/config": "^1.3.0",
-    "@jspsych/test-utils": "^1.0.0"
+    "@jspsych/test-utils": "^1.1.2"
   }
 }

@@ -1,6 +1,6 @@
 # categorize-animation
 
-Current version: 1.1.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-categorize-animation/CHANGELOG.md).
+Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-categorize-animation/CHANGELOG.md).
 
 The categorize animation plugin shows a sequence of images at a specified frame rate. The participant responds by pressing a key. Feedback indicating the correctness of the response is given.
 
@@ -39,7 +39,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-categorize-animation@1.1.1"></script>
+<script src="https://unpkg.com/@jspsych/plugin-categorize-animation@1.1.2"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

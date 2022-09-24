@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/test-utils",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Test utility functions for jsPsych-related test cases",
   "type": "module",
   "main": "dist/index.cjs",

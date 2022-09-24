@@ -1,6 +1,6 @@
 # audio-slider-response
 
-Current version: 1.1.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-slider-response/CHANGELOG.md).
+Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-slider-response/CHANGELOG.md).
 
 This plugin plays an audio file and allows the participant to respond by dragging a slider.
 
@@ -52,7 +52,7 @@ This may change in a future version as we improve the simulation modes.
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-audio-slider-response@1.1.1"></script>
+<script src="https://unpkg.com/@jspsych/plugin-audio-slider-response@1.1.2"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
