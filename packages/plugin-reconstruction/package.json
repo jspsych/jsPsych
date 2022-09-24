@@ -1,7 +1,7 @@
 {
   "name": "@jspsych/plugin-reconstruction",
   "version": "1.1.1",
-  "description": "a jspsych plugin for a reconstruction task where the subject recreates a stimulus from memory",
+  "description": "a jspsych plugin for a reconstruction task where the participant recreates a stimulus from memory",
   "type": "module",
   "main": "dist/index.cjs",
   "exports": {

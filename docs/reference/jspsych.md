@@ -17,14 +17,14 @@ The settings object can contain several parameters. None of the parameters are r
 
 | Parameter                  | Type     | Description                              |
 | -------------------------- | -------- | ---------------------------------------- |
-| display_element            | string   | The ID of an HTML element to display the experiment in. If left blank, jsPsych will use the `<body>` element to display content. All keyboard event listeners are bound to this element. In order for a keyboard event to be detected, this element must have focus (be the last thing that the subject clicked on). |
+| display_element            | string   | The ID of an HTML element to display the experiment in. If left blank, jsPsych will use the `<body>` element to display content. All keyboard event listeners are bound to this element. In order for a keyboard event to be detected, this element must have focus (be the last thing that the participant clicked on). |
 | on_finish                  | function | Function to execute when the experiment ends. |
 | on_trial_start             | function | Function to execute when a new trial begins. |
 | on_trial_finish            | function | Function to execute when a trial ends.   |
 | on_data_update             | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data (via a call to `jsPsych.finishTrial`, so this function runs every time a plugin stores new data. |
 | on_interaction_data_update | function | Function to execute every time a new interaction event occurs. Interaction events include clicking on a different window (blur), returning to the experiment window (focus), entering full screen mode (fullscreenenter), and exiting full screen mode (fullscreenexit). |
 | on_close                   | function | Function to execute when the user leaves the page. Can be used, for example, to save data before the page is closed. |
-| exclusions                 | object   | Specifies restrictions on the browser the subject can use to complete the experiment. See list of options below. *This feature is deprecated as of v7.1 and will be removed in v8.0. The [browser-check plugin](../plugins/browser-check.md) is an improved way to handle exclusions.* |
+| exclusions                 | object   | Specifies restrictions on the browser the participant can use to complete the experiment. See list of options below. *This feature is deprecated as of v7.1 and will be removed in v8.0. The [browser-check plugin](../plugins/browser-check.md) is an improved way to handle exclusions.* |
 | show_progress_bar          | boolean  | If `true`, then [a progress bar](../overview/progress-bar.md) is shown at the top of the page. Default is `false`. |
 | message_progress_bar       | string   | Message to display next to the progress bar. The default is 'Completion Progress'. |
 | auto_update_progress_bar   | boolean  | If true, then the progress bar at the top of the page will automatically update as every top-level timeline or trial is completed. |
@@ -40,7 +40,7 @@ Possible values for the exclusions parameter above.
 
 | Parameter  | Type    | Description                              |
 | ---------- | ------- | ---------------------------------------- |
-| min_width  | numeric | The minimum width of the browser window. If the width is below this value, a message will be displayed to the subject asking them to maximize their browser window. The experiment will sit on this page until the browser window is large enough. |
+| min_width  | numeric | The minimum width of the browser window. If the width is below this value, a message will be displayed to the participant asking them to maximize their browser window. The experiment will sit on this page until the browser window is large enough. |
 | min_height | numeric | Same as above, but with height.          |
 | audio      | boolean | Set to true to require support for the WebAudio API (used by plugins that play audio files). |
 
@@ -429,7 +429,7 @@ Returns an object with the following properties:
 
 ### Description
 
-This method returns information about the length of the experiment and the subject's current location in the experiment timeline.
+This method returns information about the length of the experiment and the participant's current location in the experiment timeline.
 
 ### Example
 
@@ -508,7 +508,7 @@ Returns a numeric value indicating the number of milliseconds since `jsPsych.run
 
 ### Description
 
-Gets the total time the subject has been in the experiment.
+Gets the total time the participant has been in the experiment.
 
 ### Example
 

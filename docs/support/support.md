@@ -1,6 +1,6 @@
 # Support
 
-For questions about jsPsych the preferred method of support is [GitHub Discussions](https://github.com/jspsych/jsPsych/discussions). Questions are most likely to be answered when they include a reproducible example of the problem. If you can make your code available online and link to the experiment, that will make the question easier to answer. Please consider searching through the archive of Q&A before posting a new question.
+For questions about jsPsych, the preferred method of support is [GitHub Discussions](https://github.com/jspsych/jsPsych/discussions). Questions are most likely to be answered when they include a reproducible example of the problem. If you can make your code available online and link to the experiment, that will make the question easier to answer. Please consider searching through the archive of Q&As before posting a new question.
 
 If you have identified a problem with jsPsych, such as a bug in the code or an error in the documentation, please [open a new issue](https://github.com/jspsych/jsPsych/issues/new) on GitHub. 
 

@@ -2,7 +2,7 @@
 
 Current version: 1.1.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-visual-search-circle/CHANGELOG.md).
 
-This plugin presents a customizable visual-search task modelled after [Wang, Cavanagh, & Green (1994)](http://dx.doi.org/10.3758/BF03206946). The subject indicates whether or not a target is present among a set of distractors. The stimuli are displayed in a circle, evenly-spaced, equidistant from a fixation point. Here is an example using normal and backward Ns:
+This plugin presents a customizable visual-search task modelled after [Wang, Cavanagh, & Green (1994)](http://dx.doi.org/10.3758/BF03206946). The participant indicates whether or not a target is present among a set of distractors. The stimuli are displayed in a circle, evenly-spaced, equidistant from a fixation point. Here is an example using normal and backward Ns:
 
 ![Sample Visual Search Stimulus](../img/visual_search_example.jpg)
 
@@ -21,7 +21,7 @@ The `target_present` and `fixation_image` parameters must always be specified. O
 | ------------------ | --------------- | ------------- | ---------------------------------------- |
 | target             | string          | null          | Path to image file that is the search target. This parameter must specified when the stimuli set is defined using the `target`, `foil` and `set_size` parameters, but should NOT be specified when using the `stimuli` parameter. |
 | foil               | string          | null          | Path to image file that is the foil/distractor. This image will be repeated for all distractors up to the `set_size` value. This parameter must specified when the stimuli set is defined using the `target`, `foil` and `set_size` parameters, but should NOT be specified when using the `stimuli` parameter. |
-| set_size           | numeric         | null          | How many items should be displayed, including the target when `target_present` is `true`? The foil image will be repeated up to this value when `target_present` is `false`, or up to `set_size - 1` when `target_present` is `true`. This parameter must specified when using the `target`, `foil` and `set_size` parameters to define the stimuli set, but should NOT be specified when using the `stimuli` parameter.  |
+| set_size           | numeric         | null          | How many items should be displayed, including the target when `target_present` is `true`. The foil image will be repeated up to this value when `target_present` is `false`, or up to `set_size - 1` when `target_present` is `true`. This parameter must specified when using the `target`, `foil` and `set_size` parameters to define the stimuli set, but should NOT be specified when using the `stimuli` parameter.  |
 | stimuli            | array of images | null          | Array containing all of the image files to be displayed. This parameter must be specified when NOT using the `target`, `foil`, and `set_size` parameters to define the stimuli set. |
 | target_present     | boolean         | *undefined*   | Is the target present? This parameter must always be specified. When using the `target`, `foil` and `set_size` parameters, `false` means that the foil image will be repeated up to the set_size, and `true` means that the target will be presented along with the foil image repeated up to set_size - 1. When using the `stimuli` parameter, this parameter is only used to determine the response accuracy. |
 | fixation_image     | string          | *undefined*   | Path to image file that is a fixation target. This parameter must always be specified. |
@@ -30,7 +30,7 @@ The `target_present` and `fixation_image` parameters must always be specified. O
 | circle_diameter    | numeric         | 250           | The diameter of the search array circle in pixels. |
 | target_present_key | string          | 'j'           | The key to press if the target is present in the search array. |
 | target_absent_key  | string          | 'f'           | The key to press if the target is not present in the search array. |
-| trial_duration     | numeric         | null          | The maximum amount of time the subject is allowed to search before the trial will continue. A value of null will allow the subject to search indefinitely. |
+| trial_duration     | numeric         | null          | The maximum amount of time the participant is allowed to search before the trial will continue. A value of null will allow the participant to search indefinitely. |
 | fixation_duration  | numeric         | 1000          | How long to show the fixation image for before the search array (in milliseconds). |
 
 ## Data Generated
@@ -39,9 +39,9 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
 | Name           | Type        | Value                                    |
 | -------------- | ----------- | ---------------------------------------- |
-| correct        | boolean     | True if the subject gave the correct response. |
-| response       | string      | Indicates which key the subject pressed. |
-| rt             | numeric     | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response. |
+| correct        | boolean     | True if the participant gave the correct response. |
+| response       | string      | Indicates which key the participant pressed. |
+| rt             | numeric     | The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. |
 | set_size       | numeric     | The number of items in the search array  |
 | target_present | boolean     | True if the target is present in the search array |
 | locations      | array       | Array where each element is the pixel value of the center of an image in the search array. If the target is present, then the first element will represent the location of the target. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |

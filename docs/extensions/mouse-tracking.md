@@ -1,7 +1,7 @@
 # mouse-tracking
 
 This extension supports mouse tracking. 
-Specifically, it can record the `x` `y` coordinates and time of [mousemove events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event), [mousedown events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mousedown_event), and [mouseup events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mouseup_event).
+Specifically, it can record the `x` and `y` coordinates, along with the time of [mousemove events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event), [mousedown events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mousedown_event), and [mouseup events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mouseup_event).
 It also allows recording of the [bounding rectangle](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) of elements on the screen to support the calculation of mouse events relative to different elements.
 
 ## Parameters

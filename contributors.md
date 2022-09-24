@@ -22,6 +22,7 @@ The following people have contributed to the development of jsPsych by writing c
 * Rui Han - https://github.com/hrcn
 * Andy Heusser - https://github.com/andrewheusser
 * Angus Hughes - https://github.com/awhug
+* jadeddelta - https://github.com/jadeddelta
 * Gustavo Juantorena - https://github.com/GEJ1
 * Chris Jungerius - https://github.com/cjungerius
 * George Kachergis - https://github.com/kachergis

@@ -39,12 +39,12 @@ Several experiment-wide events can trigger functions. This is documented in more
 * `on_trial_start`: Called at the beginning of every trial.
 * `on_trial_finish`: Called at the end of every trial.
 * `on_data_update`: Called whenever new data is added to the jsPsych data object.
-* `on_interaction_data_update`: Called whenever new interaction data (e.g., the subject enters or exits fullscreen mode) is added.
-* `on_close`: Called right before the page closes, such as when a subject closes the experiment early.
+* `on_interaction_data_update`: Called whenever new interaction data (e.g., the participant enters or exits fullscreen mode) is added.
+* `on_close`: Called right before the page closes, such as when a participant closes the experiment early.
 
 ## Specify exclusion criteria
 
-Exclusion criteria can be specified based on features of the user's web browser, such as the display size and whether certain features are reported. See the page on [excluding subjects based on browser features](exclude-browser.md).
+Exclusion criteria can be specified based on features of the user's web browser, such as the display size and whether certain features are reported. See the page on [excluding participants based on browser features](exclude-browser.md).
 
 ## Display a progress bar
 
