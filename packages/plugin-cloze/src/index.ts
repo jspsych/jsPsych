@@ -21,13 +21,13 @@ const info = <const>{
       pretty_name: "Check answers",
       default: false,
     },
-    /** Boolean value indicating if the answers given by participants  */
+    /** Boolean value indicating if the participant may leave answers blank. */
     allow_blanks: {
       type: ParameterType.BOOL,
-      pretty_name: "Check blanks",
+      pretty_name: "Allow blanks",
       default: true,
     },
-    /** Function called if either the check_answers is set to TRUE or the allow_blanks is set to FALSE and there is a discrepancy between the set answers and the answers provide or if all blanks aren't filled out, respectively. */
+    /** Function called if either the check_answers is set to TRUE or the allow_blanks is set to FALSE and there is a discrepancy between the set answers and the answers provide or if all input fields aren't filled out, respectively. */
     mistake_fn: {
       type: ParameterType.FUNCTION,
       pretty_name: "Mistake function",
