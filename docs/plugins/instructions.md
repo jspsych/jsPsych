@@ -2,7 +2,7 @@
 
 Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-instructions/CHANGELOG.md).
 
-This plugin is for showing instructions to the subject. It allows subjects to navigate through multiple pages of instructions at their own pace, recording how long the subject spends on each page. Navigation can be done using the mouse or keyboard. Subjects can be allowed to navigate forwards and backwards through pages, if desired.
+This plugin is for showing instructions to the participant. It allows participants to navigate through multiple pages of instructions at their own pace, recording how long the participant spends on each page. Navigation can be done using the mouse or keyboard. participants can be allowed to navigate forwards and backwards through pages, if desired.
 
 ## Parameters	
 
@@ -11,11 +11,11 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | Parameter             | Type    | Default Value | Description                              |
 | --------------------- | ------- | ------------- | ---------------------------------------- |
 | pages                 | array   | *undefined*   | Each element of the array is the content for a single page. Each page should be an HTML-formatted string. |
-| key_forward           | string  | 'ArrowRight'  | This is the key that the subject can press in order to advance to the next page. This key should be specified as a string (e.g., `'a'`, `'ArrowLeft'`, `' '`, `'Enter'`). |
-| key_backward          | string  | 'ArrowLeft'   | This is the key that the subject can press to return to the previous page. This key should be specified as a string (e.g., `'a'`, `'ArrowLeft'`, `' '`, `'Enter'`). |
-| allow_backward        | boolean | true          | If true, the subject can return to previous pages of the instructions. If false, they may only advace to the next page. |
-| allow_keys            | boolean | true          | If `true`, the subject can use keyboard keys to navigate the pages. If `false`, they may not. |
-| show_clickable_nav    | boolean | false         | If true, then a `Previous` and `Next` button will be displayed beneath the instructions. Subjects can click the buttons to navigate. |
+| key_forward           | string  | 'ArrowRight'  | This is the key that the participant can press in order to advance to the next page. This key should be specified as a string (e.g., `'a'`, `'ArrowLeft'`, `' '`, `'Enter'`). |
+| key_backward          | string  | 'ArrowLeft'   | This is the key that the participant can press to return to the previous page. This key should be specified as a string (e.g., `'a'`, `'ArrowLeft'`, `' '`, `'Enter'`). |
+| allow_backward        | boolean | true          | If true, the participant can return to previous pages of the instructions. If false, they may only advace to the next page. |
+| allow_keys            | boolean | true          | If `true`, the participant can use keyboard keys to navigate the pages. If `false`, they may not. |
+| show_clickable_nav    | boolean | false         | If true, then a `Previous` and `Next` button will be displayed beneath the instructions. participants can click the buttons to navigate. |
 | button_label_previous | string  | 'Previous'    | The text that appears on the button to go backwards. |
 | button_label_next     | string  | 'Next'        | The text that appears on the button to go forwards. |
 | show_page_number      | boolean | false         | If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons. |
@@ -27,8 +27,8 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
 | Name         | Type        | Value                                    |
 | ------------ | ----------- | ---------------------------------------- |
-| view_history | array       | An array containing the order of pages the subject viewed (including when the subject returned to previous pages) and the time spent viewing each page. Each object in the array represents a single page view, and contains keys called `page_index` (the page number, starting with 0) and `viewing_time` (duration of the page view). This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
-| rt           | numeric     | The response time in milliseconds for the subject to view all of the pages. |
+| view_history | array       | An array containing the order of pages the participant viewed (including when the participant returned to previous pages) and the time spent viewing each page. Each object in the array represents a single page view, and contains keys called `page_index` (the page number, starting with 0) and `viewing_time` (duration of the page view). This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
+| rt           | numeric     | The response time in milliseconds for the participant to view all of the pages. |
 
 ## Install
 

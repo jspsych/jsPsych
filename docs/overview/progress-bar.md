@@ -1,6 +1,6 @@
 # Automatic Progress Bar
 
-jsPsych can show a progress bar at the top of the experiment page indicating the subject's overall completion progress. The progress bar is rendered outside the jsPsych display element, and it requires the `jspsych.css` file to be loaded on the page. As of version 6.0, the progress bar looks like this:
+jsPsych can show a progress bar at the top of the experiment page indicating the participant's overall completion progress. The progress bar is rendered outside the jsPsych display element, and it requires the `jspsych.css` file to be loaded on the page. As of version 6.0, the progress bar looks like this:
 
 ![Progressbar Screenshot](../img/progress_bar.png)
 
@@ -12,7 +12,7 @@ var jsPsych = initJsPsych({
 });
 ```
 
-The progress bar updates after every node on the top-level timeline updates. This avoids distracting updates in the middle of trials that are composed of multiple plugins, or confusing updates due to looping or conditional structures that may or may not execute depending on the actions of the subject. This also allows some flexibility for the programmer; by nesting timelines in a deliberate manner, the timing of progress bar updates can be controlled.
+The progress bar updates after every node on the top-level timeline updates. This avoids distracting updates in the middle of trials that are composed of multiple plugins, or confusing updates due to looping or conditional structures that may or may not execute depending on the actions of the participant. This also allows some flexibility for the programmer; by nesting timelines in a deliberate manner, the timing of progress bar updates can be controlled.
 
 ## Manual Control
 

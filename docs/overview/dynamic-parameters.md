@@ -1,12 +1,12 @@
 # Dynamic parameters
 
-Most trial parameters can also be specified as functions. In a typical declaration of a jsPsych trial, parameters are known at the start of the experiment. This makes it impossible to alter the content of the trial based on the outcome of previous trials. However, **when functions are used as the parameter value, the function is evaluated right before the trial starts, and the return value of the function is used as the parameter value for that trial**. This enables dynamic updating of the parameter based on data that a subject has generated or any other information that you do not know in advance.
+Most trial parameters can also be specified as functions. In a typical declaration of a jsPsych trial, parameters are known at the start of the experiment. This makes it impossible to alter the content of the trial based on the outcome of previous trials. However, **when functions are used as the parameter value, the function is evaluated right before the trial starts, and the return value of the function is used as the parameter value for that trial**. This enables dynamic updating of the parameter based on data that a participant has generated or any other information that you do not know in advance.
 
 ## Examples
 
 ### Providing Feedback
 
-Here is a sketch of how this functionality could be used to display feedback to a subject in the Flanker Task.
+Here is a sketch of how this functionality could be used to display feedback to a participant in the Flanker Task.
 
 ```javascript
 

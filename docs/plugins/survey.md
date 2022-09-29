@@ -187,7 +187,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Name | Type | Value
 -----|------|------
 response | object | An object containing the response to each question. The object will have a separate key (variable) for each question, with the first question on the first page being recorded in `P0_Q0`, the second question on the first page in `P0_Q1`, and so on. If the `name` parameter is defined for the question, then the response object will use the value of `name` as the key for each question. The response type will depend on the question type. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. Note that, if any questions use the `other` option (`add_other_option: true`), then the response value will be the `other_option_text` (e.g. "Other") and any text written in the textbox will be saved as "(question name)-Comment". |
-rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response(s) are submitted. |
+rt | numeric | The response time in milliseconds for the participant to make a response. The time is measured from when the questions first appear on the screen until the participant's response(s) are submitted. |
 
 ## Simulation Mode
 

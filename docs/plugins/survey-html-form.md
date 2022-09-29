@@ -2,7 +2,7 @@
 
 Current version: 1.0.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-html-form/CHANGELOG.md).
 
-The survey-html-form plugin displays a set of `<inputs>` from a HTML string. The type of input can be freely chosen, for a list of possible input types see the [MDN page on inputs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input). The subject provides answers to the input fields.
+The survey-html-form plugin displays a set of `<inputs>` from a HTML string. The type of input can be freely chosen, for a list of possible input types see the [MDN page on inputs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input). The participant provides answers to the input fields.
 
 ## Parameters
 
@@ -23,8 +23,8 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
 Name | Type | Value
 -----|------|------
-response | object | An object containing the response for each input. The object will have a separate key (variable) for the response to each input, with each variable being named after its corresponding input element. Each response is a string containing whatever the subject answered for this particular input. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
-rt | numeric | The response time in milliseconds for the subject to make a response. |
+response | object | An object containing the response for each input. The object will have a separate key (variable) for the response to each input, with each variable being named after its corresponding input element. Each response is a string containing whatever the participant answered for this particular input. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
+rt | numeric | The response time in milliseconds for the participant to make a response. |
 
 ## Simulation Mode
 

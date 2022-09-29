@@ -2,9 +2,9 @@
 
 Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-reconstruction/CHANGELOG.md).
 
-This plugin allows a subject to interact with a stimulus by modifying a parameter of the stimulus and observing the change in the stimulus in real-time.
+This plugin allows a participant to interact with a stimulus by modifying a parameter of the stimulus and observing the change in the stimulus in real-time.
 
-The stimulus must be defined through a function that returns an HTML-formatted string. The function should take a single value, which is the parameter that can be modified by the subject. The value can only range from 0 to 1. See the example at the bottom of the page for a sample function.
+The stimulus must be defined through a function that returns an HTML-formatted string. The function should take a single value, which is the parameter that can be modified by the participant. The value can only range from 0 to 1. See the example at the bottom of the page for a sample function.
 
 ## Parameters
 

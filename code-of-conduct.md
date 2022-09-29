@@ -33,7 +33,7 @@ Although we strive to make jsPsych as open and collaborative as possible, it’s
 Such leadership occasionally requires decisions that are in the best interest of the project but may not be understood by or beneficial to everyone. These decisions are important because they keep the project on track, and enable it to move forward faster than if we required complete consensus. Any major decisions taken by the project leader should be mindful of the challenges they may present for others. We expect the project leader to communicate major decisions/changes early on, and to provide their reasoning.
 
 ### Contributions
-We invite anyone to contribute to any aspect of the project. You can find more information about contributing here: https://www.jspsych.org/developers/contributing.md/
+We invite anyone to contribute to any aspect of the project. You can find more information about contributing here: https://www.jspsych.org/latest/developers/contributing/
 
 Because changes to the jsPsych library can have a huge potential for impact on all users, any proposed changes to the library have to be considered very carefully. For this reason, it is always a good idea to check with the project leader about whether your proposed contribution would likely be merged into the jsPsych library. Keep in mind that, even if your work isn’t suitable for merging into the jsPsych library, you can still use it in your own projects and share it publicly with others, e.g. via a separate GitHub repository.
 
