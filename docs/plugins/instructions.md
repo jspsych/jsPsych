@@ -15,7 +15,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | key_backward          | string  | 'ArrowLeft'   | This is the key that the participant can press to return to the previous page. This key should be specified as a string (e.g., `'a'`, `'ArrowLeft'`, `' '`, `'Enter'`). |
 | allow_backward        | boolean | true          | If true, the participant can return to previous pages of the instructions. If false, they may only advace to the next page. |
 | allow_keys            | boolean | true          | If `true`, the participant can use keyboard keys to navigate the pages. If `false`, they may not. |
-| show_clickable_nav    | boolean | false         | If true, then a `Previous` and `Next` button will be displayed beneath the instructions. participants can click the buttons to navigate. |
+| show_clickable_nav    | boolean | false         | If true, then a `Previous` and `Next` button will be displayed beneath the instructions. Participants can click the buttons to navigate. |
 | button_label_previous | string  | 'Previous'    | The text that appears on the button to go backwards. |
 | button_label_next     | string  | 'Next'        | The text that appears on the button to go forwards. |
 | show_page_number      | boolean | false         | If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons. |

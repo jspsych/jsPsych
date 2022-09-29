@@ -22,7 +22,7 @@ Plugin | Description
 [categorize&#8209;image](categorize-image.md) | The participant responds to an image using the keyboard and can be given feedback about the correctness of their response.
 [cloze](cloze) | Plugin for displaying a cloze test and checking participants answers against a correct solution.
 [external&#8209;html](external-html.md) | Displays an external HTML page (such as a consent form) and lets the participant respond by clicking a button or pressing a key. Plugin can validate their response, which is useful for making sure that a participant has granted consent before starting the experiment.
-[free&#8209;sort](free-sort.md) | Displays a set of images on the screen in random locations. participants can click and drag the images to move them around the screen. Records all the moves made by the participant, so the sequence of moves can be recovered from the data.
+[free&#8209;sort](free-sort.md) | Displays a set of images on the screen in random locations. Participants can click and drag the images to move them around the screen. Records all the moves made by the participant, so the sequence of moves can be recovered from the data.
 [fullscreen](fullscreen.md) | Toggles the experiment in and out of fullscreen mode.
 [html&#8209;audio&#8209;response](html-audio-response.md) | Display an HTML-formatted stimulus and records an audio response via a microphone.
 [html&#8209;button&#8209;response](html-button-response.md) | Display an HTML-formatted stimulus and allow the participant to respond by choosing a button to click. The button can be customized extensively, e.g., using images in place of standard buttons.
