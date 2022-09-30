@@ -38,6 +38,7 @@ export class Timeline extends BaseTimelineNode {
   }
 
   private activeChild?: TimelineNode;
+  private shouldAbort = false;
 
   public async run() {
     this.status = TimelineNodeStatus.RUNNING;
@@ -58,6 +59,10 @@ export class Timeline extends BaseTimelineNode {
               if (this.status === TimelineNodeStatus.PAUSED) {
                 await this.resumePromise.get();
               }
+              if (this.shouldAbort) {
+                this.status = TimelineNodeStatus.ABORTED;
+                return;
+              }
             }
           }
         } while (description.loop_function && description.loop_function(this.getResults()));
@@ -68,14 +73,36 @@ export class Timeline extends BaseTimelineNode {
   }
 
   pause() {
+    if (this.activeChild instanceof Timeline) {
+      this.activeChild.pause();
+    }
     this.status = TimelineNodeStatus.PAUSED;
   }
 
   private resumePromise = new PromiseWrapper();
   resume() {
     if (this.status == TimelineNodeStatus.PAUSED) {
+      if (this.activeChild instanceof Timeline) {
+        this.activeChild.resume();
+      }
       this.status = TimelineNodeStatus.RUNNING;
       this.resumePromise.resolve();
+    }
+  }
+
+  /**
+   * If the timeline is running or paused, aborts the timeline after the current trial has completed
+   */
+  abort() {
+    if (this.status === TimelineNodeStatus.RUNNING || this.status === TimelineNodeStatus.PAUSED) {
+      if (this.activeChild instanceof Timeline) {
+        this.activeChild.abort();
+      }
+
+      this.shouldAbort = true;
+      if (this.status === TimelineNodeStatus.PAUSED) {
+        this.resume();
+      }
     }
   }
 

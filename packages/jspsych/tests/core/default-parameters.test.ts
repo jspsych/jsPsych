@@ -6,14 +6,7 @@ describe("nested defaults", () => {
     const { displayElement } = await startTimeline([
       {
         type: surveyText,
-        questions: [
-          {
-            prompt: "Question 1.",
-          },
-          {
-            prompt: "Question 2.",
-          },
-        ],
+        questions: [{ prompt: "Question 1." }, { prompt: "Question 2." }],
       },
     ]);
 
@@ -29,14 +22,7 @@ describe("nested defaults", () => {
     const { displayElement } = await startTimeline([
       {
         type: surveyText,
-        questions: [
-          {
-            prompt: "Question 1.",
-          },
-          {
-            prompt: "Question 2.",
-          },
-        ],
+        questions: [{ prompt: "Question 1." }, { prompt: "Question 2." }],
       },
     ]);
 

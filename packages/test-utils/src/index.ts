@@ -8,15 +8,17 @@ export function dispatchEvent(event: Event) {
 
 export function keyDown(key: string) {
   dispatchEvent(new KeyboardEvent("keydown", { key }));
+  return flushPromises();
 }
 
 export function keyUp(key: string) {
   dispatchEvent(new KeyboardEvent("keyup", { key }));
+  return flushPromises();
 }
 
-export function pressKey(key: string) {
-  keyDown(key);
-  keyUp(key);
+export async function pressKey(key: string) {
+  await keyDown(key);
+  await keyUp(key);
 }
 
 export function mouseDownMouseUpTarget(target: Element) {

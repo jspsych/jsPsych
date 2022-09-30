@@ -67,10 +67,19 @@ describe("Timeline", () => {
     });
 
     describe("with `pause()` and `resume()` calls`", () => {
-      it("pauses, resumes, and updates the results of getStatus()", async () => {
+      beforeEach(() => {
         TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+      });
 
-        const timeline = new Timeline(jsPsych, exampleTimeline);
+      // TODO what about the status of nested timelines?
+      it("pauses, resumes, and updates the results of getStatus()", async () => {
+        const timeline = new Timeline(jsPsych, {
+          timeline: [
+            { type: TestPlugin },
+            { type: TestPlugin },
+            { timeline: [{ type: TestPlugin }, { type: TestPlugin }] },
+          ],
+        });
         const runPromise = timeline.run();
 
         expect(timeline.getStatus()).toBe(TimelineNodeStatus.RUNNING);
@@ -96,7 +105,19 @@ describe("Timeline", () => {
         expect(timeline.getStatus()).toBe(TimelineNodeStatus.RUNNING);
         expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.RUNNING);
 
+        // The child timeline is running. Let's pause the parent timeline to check whether the child
+        // gets paused too
+        timeline.pause();
+        expect(timeline.getStatus()).toBe(TimelineNodeStatus.PAUSED);
+        expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.PAUSED);
+
         await proceedWithTrial();
+        timeline.resume();
+        await flushPromises();
+        expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.RUNNING);
+
+        await proceedWithTrial();
+
         expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.COMPLETED);
         expect(timeline.getStatus()).toBe(TimelineNodeStatus.COMPLETED);
 
@@ -105,8 +126,6 @@ describe("Timeline", () => {
 
       // https://www.jspsych.org/7.1/reference/jspsych/#description_15
       it("doesn't affect `post_trial_gap`", async () => {
-        TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
-
         const timeline = new Timeline(jsPsych, [{ type: TestPlugin, post_trial_gap: 200 }]);
         const runPromise = timeline.run();
         const child = timeline.children[0];
@@ -126,6 +145,69 @@ describe("Timeline", () => {
         expect(timeline.getStatus()).toBe(TimelineNodeStatus.COMPLETED);
 
         await runPromise;
+      });
+    });
+
+    describe("abort()", () => {
+      beforeEach(() => {
+        TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+      });
+
+      describe("aborts the timeline after the current trial ends, updating the result of getStatus()", () => {
+        test("when the timeline is running", async () => {
+          const timeline = new Timeline(jsPsych, exampleTimeline);
+          const runPromise = timeline.run();
+
+          expect(timeline.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+          timeline.abort();
+          expect(timeline.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+          await proceedWithTrial();
+          expect(timeline.getStatus()).toBe(TimelineNodeStatus.ABORTED);
+          await runPromise;
+        });
+
+        test("when the timeline is paused", async () => {
+          const timeline = new Timeline(jsPsych, exampleTimeline);
+          timeline.run();
+
+          timeline.pause();
+          await proceedWithTrial();
+          expect(timeline.getStatus()).toBe(TimelineNodeStatus.PAUSED);
+          timeline.abort();
+          await flushPromises();
+          expect(timeline.getStatus()).toBe(TimelineNodeStatus.ABORTED);
+        });
+      });
+
+      it("aborts child timelines too", async () => {
+        const timeline = new Timeline(jsPsych, {
+          timeline: [{ timeline: [{ type: TestPlugin }, { type: TestPlugin }] }],
+        });
+        const runPromise = timeline.run();
+
+        expect(timeline.children[0].getStatus()).toBe(TimelineNodeStatus.RUNNING);
+        timeline.abort();
+        await proceedWithTrial();
+        expect(timeline.children[0].getStatus()).toBe(TimelineNodeStatus.ABORTED);
+        expect(timeline.getStatus()).toBe(TimelineNodeStatus.ABORTED);
+        await runPromise;
+      });
+
+      it("doesn't affect the timeline when it is neither running nor paused", async () => {
+        const timeline = new Timeline(jsPsych, [{ type: TestPlugin }]);
+
+        expect(timeline.getStatus()).toBe(TimelineNodeStatus.PENDING);
+        timeline.abort();
+        expect(timeline.getStatus()).toBe(TimelineNodeStatus.PENDING);
+
+        // Complete the timeline
+        const runPromise = timeline.run();
+        await proceedWithTrial();
+        await runPromise;
+
+        expect(timeline.getStatus()).toBe(TimelineNodeStatus.COMPLETED);
+        timeline.abort();
+        expect(timeline.getStatus()).toBe(TimelineNodeStatus.COMPLETED);
       });
     });
 
@@ -341,15 +423,19 @@ describe("Timeline", () => {
         on_timeline_finish: jest.fn(),
       });
 
-      expect(timeline.getParameterValue("timeline")).toBeUndefined();
-      expect(timeline.getParameterValue("timeline_variables")).toBeUndefined();
-      expect(timeline.getParameterValue("repetitions")).toBeUndefined();
-      expect(timeline.getParameterValue("loop_function")).toBeUndefined();
-      expect(timeline.getParameterValue("conditional_function")).toBeUndefined();
-      expect(timeline.getParameterValue("randomize_order")).toBeUndefined();
-      expect(timeline.getParameterValue("sample")).toBeUndefined();
-      expect(timeline.getParameterValue("on_timeline_start")).toBeUndefined();
-      expect(timeline.getParameterValue("on_timeline_finish")).toBeUndefined();
+      for (const parameter of [
+        "timeline",
+        "timeline_variables",
+        "repetitions",
+        "loop_function",
+        "conditional_function",
+        "randomize_order",
+        "sample",
+        "on_timeline_start",
+        "on_timeline_finish",
+      ]) {
+        expect(timeline.getParameterValue(parameter)).toBeUndefined();
+      }
     });
 
     it("returns the local parameter value, if it exists", async () => {

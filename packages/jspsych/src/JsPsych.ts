@@ -126,6 +126,8 @@ export class JsPsych {
     }
   }
 
+  private endMessage?: string;
+
   /**
    * Starts an experiment using the provided timeline and returns a promise that is resolved when
    * the experiment is finished.
@@ -152,6 +154,11 @@ export class JsPsych {
     document.documentElement.setAttribute("jspsych", "present");
 
     await this.timeline.run();
+    await Promise.resolve(this.opts.on_finish(this.data.get()));
+
+    if (this.endMessage) {
+      this.getDisplayElement().innerHTML = this.endMessage;
+    }
   }
 
   async simulate(
@@ -212,9 +219,10 @@ export class JsPsych {
     this.getDisplayElement().scrollTop = 0;
   }
 
-  endExperiment(end_message = "", data = {}) {
-    // this.timeline.end_message = end_message;
-    // this.timeline.end();
+  // TODO Should this be called `abortExperiment()`?
+  endExperiment(endMessage?: string, data = {}) {
+    this.endMessage = endMessage;
+    this.timeline.abort();
     this.pluginAPI.cancelAllKeyboardResponses();
     this.pluginAPI.clearAllTimeouts();
     this.finishTrial(data);

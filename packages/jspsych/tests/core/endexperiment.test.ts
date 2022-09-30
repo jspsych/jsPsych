@@ -23,7 +23,7 @@ test("works on basic timeline", async () => {
   );
 
   expect(getHTML()).toMatch("trial 1");
-  pressKey("a");
+  await pressKey("a");
   expect(getHTML()).toMatch("the end");
   await expectFinished();
 });
@@ -43,7 +43,7 @@ test("works with looping timeline (#541)", async () => {
   );
 
   expect(getHTML()).toMatch("trial 1");
-  pressKey("a");
+  await pressKey("a");
   expect(getHTML()).toMatch("the end");
   await expectFinished();
 });
