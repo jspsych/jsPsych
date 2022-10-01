@@ -4,7 +4,7 @@ jsPsych is a JavaScript framework for creating behavioral experiments that run i
 
 ## Plugin Description
 
-The cloze plugin displays a text with certain words omitted. Participants are asked to replace the missing words, and are recorded upon clicking a button. Optionally, the responses can be evaluated and a function can be called in the case of differences, making it possible to provide feedback to the participant.
+The cloze plugin displays a text with certain words omitted. Participants are asked to replace the missing words, and are recorded upon clicking a button. Responses can be evaluated and a function is called in case of either differences or incomplete answers, making it possible to inform participants about mistakes before proceeding.
 
 ## Examples
 
