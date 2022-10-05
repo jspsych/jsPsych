@@ -1,5 +1,11 @@
 # @jspsych/config
 
+## 1.3.2
+
+### Patch Changes
+
+- [`e3e9d903`](https://github.com/jspsych/jsPsych/commit/e3e9d903462663b694633cdf873accefda453961) Thanks [@bjoluc](https://github.com/bjoluc)! - Prevent rollup from relying on node internals in browser builds
+
 ## 1.3.1
 
 ### Patch Changes
