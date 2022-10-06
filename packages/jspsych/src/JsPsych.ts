@@ -6,8 +6,15 @@ import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import * as randomization from "./modules/randomization";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
-import { TimelineArray, TimelineDescription, TimelineVariable, TrialResult } from "./timeline";
+import {
+  GlobalTimelineNodeCallbacks,
+  TimelineArray,
+  TimelineDescription,
+  TimelineVariable,
+  TrialResult,
+} from "./timeline";
 import { Timeline } from "./timeline/Timeline";
+import { Trial } from "./timeline/Trial";
 import { PromiseWrapper } from "./timeline/util";
 
 export class JsPsych {
@@ -29,25 +36,21 @@ export class JsPsych {
   /**
    * options
    */
-  private opts: any = {};
+  private options: any = {};
 
   /**
    * experiment timeline
    */
-  private timeline: Timeline;
-
-  // flow control
-  private global_trial_index = 0;
-  private current_trial: any = {};
+  private timeline?: Timeline;
 
   // target DOM element
-  private DOM_container: HTMLElement;
-  private DOM_target: HTMLElement;
+  private domContainer: HTMLElement;
+  private domTarget: HTMLElement;
 
   /**
    * time that the experiment began
    */
-  private exp_start_time;
+  private experimentStartTime: Date;
 
   /**
    * is the page retrieved directly via file:// protocol (true) or hosted on a server (false)?
@@ -64,15 +67,41 @@ export class JsPsych {
    */
   private simulation_options;
 
-  internal = {
-    /**
-     * this flag is used to determine whether we are in a scope where
-     * jsPsych.timelineVariable() should be executed immediately or
-     * whether it should return a function to access the variable later.
-     *
-     **/
-    call_immediate: false,
-  };
+  private timelineNodeCallbacks = new (class implements GlobalTimelineNodeCallbacks {
+    constructor(private jsPsych: JsPsych) {
+      autoBind(this);
+    }
+
+    onTrialStart(trial: Trial) {
+      this.jsPsych.options.on_trial_start(trial.trialObject);
+
+      // apply the focus to the element containing the experiment.
+      this.jsPsych.getDisplayContainerElement().focus();
+      // reset the scroll on the DOM target
+      this.jsPsych.getDisplayElement().scrollTop = 0;
+
+      // Add the CSS classes from the trial's `css_classes` parameter to the display element.
+      const cssClasses = trial.getParameterValue("css_classes");
+      if (cssClasses) {
+        this.jsPsych.addCssClasses(cssClasses);
+      }
+    }
+
+    onTrialLoaded(trial: Trial) {}
+
+    onTrialFinished(trial: Trial) {
+      const result = trial.getResult();
+      this.jsPsych.options.on_trial_finish(result);
+      this.jsPsych.data.write(result);
+      this.jsPsych.options.on_data_update(result);
+
+      // Remove any CSS classes added by the `onTrialStart` callback.
+      const cssClasses = trial.getParameterValue("css_classes");
+      if (cssClasses) {
+        this.jsPsych.removeCssClasses(cssClasses);
+      }
+    }
+  })(this);
 
   constructor(options?) {
     // override default options if user specifies an option
@@ -97,7 +126,7 @@ export class JsPsych {
       extensions: [],
       ...options,
     };
-    this.opts = options;
+    this.options = options;
 
     autoBind(this); // so we can pass JsPsych methods as callbacks and `this` remains the JsPsych instance
 
@@ -146,15 +175,17 @@ export class JsPsych {
     }
 
     // create experiment timeline
-    this.timeline = new Timeline(this, timeline);
+    this.timeline = new Timeline(this, this.timelineNodeCallbacks, timeline);
 
     await this.prepareDom();
-    await this.loadExtensions(this.opts.extensions);
+    await this.loadExtensions(this.options.extensions);
 
     document.documentElement.setAttribute("jspsych", "present");
 
+    this.experimentStartTime = new Date();
+
     await this.timeline.run();
-    await Promise.resolve(this.opts.on_finish(this.data.get()));
+    await Promise.resolve(this.options.on_finish(this.data.get()));
 
     if (this.endMessage) {
       this.getDisplayElement().innerHTML = this.endMessage;
@@ -174,49 +205,44 @@ export class JsPsych {
   getProgress() {
     return {
       total_trials: this.timeline?.getNaiveTrialCount(),
-      current_trial_global: this.global_trial_index,
+      current_trial_global: 0, // TODO This used to be `this.global_trial_index` – is a global trial index still needed / does it make sense and, if so, how should it be maintained?
       percent_complete: this.timeline?.getProgress() * 100,
     };
   }
 
   getStartTime() {
-    return this.exp_start_time;
+    return this.experimentStartTime; // TODO This seems inconsistent, given that `getTotalTime()` returns a number, not a `Date`
   }
 
   getTotalTime() {
-    if (typeof this.exp_start_time === "undefined") {
+    if (!this.experimentStartTime) {
       return 0;
     }
-    return new Date().getTime() - this.exp_start_time.getTime();
+    return new Date().getTime() - this.experimentStartTime.getTime();
   }
 
   getDisplayElement() {
-    return this.DOM_target;
+    return this.domTarget;
   }
 
   /**
    * Adds the provided css classes to the display element
    */
-  addCssClasses(classes: string[]) {
-    this.getDisplayElement().classList.add(...classes);
+  protected addCssClasses(classes: string | string[]) {
+    this.getDisplayElement().classList.add(...(typeof classes === "string" ? [classes] : classes));
   }
 
   /**
    * Removes the provided css classes from the display element
    */
-  removeCssClasses(classes: string[]) {
-    this.getDisplayElement().classList.remove(...classes);
+  protected removeCssClasses(classes: string | string[]) {
+    this.getDisplayElement().classList.remove(
+      ...(typeof classes === "string" ? [classes] : classes)
+    );
   }
 
   getDisplayContainerElement() {
-    return this.DOM_container;
-  }
-
-  focusDisplayContainerElement() {
-    // apply the focus to the element containing the experiment.
-    this.getDisplayContainerElement().focus();
-    // reset the scroll on the DOM target
-    this.getDisplayElement().scrollTop = 0;
+    return this.domContainer;
   }
 
   // TODO Should this be called `abortExperiment()`?
@@ -228,20 +254,21 @@ export class JsPsych {
     this.finishTrial(data);
   }
 
+  // TODO Is there a legit use case for this "global" function that cannot be achieved with callback functions in trial/timeline descriptions?
   endCurrentTimeline() {
     // this.timeline.endActiveNode();
   }
 
   getCurrentTrial() {
-    return this.current_trial;
+    return this.timeline?.getCurrentTrial().description;
   }
 
   getInitSettings() {
-    return this.opts;
+    return this.options;
   }
 
   timelineVariable(varname: string) {
-    if (this.internal.call_immediate) {
+    if (false) {
       return undefined;
     } else {
       return new TimelineVariable(varname);
@@ -249,16 +276,16 @@ export class JsPsych {
   }
 
   pauseExperiment() {
-    this.timeline.pause();
+    this.timeline?.pause();
   }
 
   resumeExperiment() {
-    this.timeline.resume();
+    this.timeline?.resume();
   }
 
   private loadFail(message) {
     message = message || "<p>The experiment failed to load.</p>";
-    this.DOM_target.innerHTML = message;
+    this.domTarget.innerHTML = message;
   }
 
   getSafeModeStatus() {
@@ -277,7 +304,7 @@ export class JsPsych {
       });
     }
 
-    const options = this.opts;
+    const options = this.options;
 
     // set DOM element where jsPsych will render content
     // if undefined, then jsPsych will use the <body> tag and the entire page
@@ -310,12 +337,12 @@ export class JsPsych {
 
     options.display_element.innerHTML =
       '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
-    this.DOM_container = options.display_element;
-    this.DOM_target = document.querySelector("#jspsych-content");
+    this.domContainer = options.display_element;
+    this.domTarget = document.querySelector("#jspsych-content");
 
     // set experiment_width if not null
     if (options.experiment_width !== null) {
-      this.DOM_target.style.width = options.experiment_width + "px";
+      this.domTarget.style.width = options.experiment_width + "px";
     }
 
     // add tabIndex attribute to scope event listeners
@@ -325,7 +352,7 @@ export class JsPsych {
     if (options.display_element.className.indexOf("jspsych-display-element") === -1) {
       options.display_element.className += " jspsych-display-element";
     }
-    this.DOM_target.className += "jspsych-content";
+    this.domTarget.className += "jspsych-content";
 
     // create listeners for user browser interaction
     this.data.createInteractionListeners();

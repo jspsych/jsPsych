@@ -1,6 +1,8 @@
 import { Class } from "type-fest";
 
 import { JsPsychPlugin } from "../modules/plugins";
+import { Timeline } from "./Timeline";
+import { Trial } from "./Trial";
 
 export function isPromise(value: any): value is Promise<any> {
   return value && typeof value["then"] === "function";
@@ -42,7 +44,7 @@ export type SampleOptions =
   | { type: "alternate-groups"; groups: number[][]; randomize_group_order?: boolean }
   | { type: "custom"; fn: (ids: number[]) => number[] };
 
-export type TimelineArray = Array<TimelineDescription | TrialDescription>;
+export type TimelineArray = Array<TimelineDescription | TrialDescription | TimelineArray>;
 
 export interface TimelineDescription extends Record<string, any> {
   timeline: TimelineArray;
@@ -95,9 +97,9 @@ export function isTrialDescription(
 }
 
 export function isTimelineDescription(
-  description: TrialDescription | TimelineDescription
-): description is TimelineDescription {
-  return Boolean((description as TimelineDescription).timeline);
+  description: TrialDescription | TimelineDescription | TimelineArray
+): description is TimelineDescription | TimelineArray {
+  return Boolean((description as TimelineDescription).timeline) || Array.isArray(description);
 }
 
 export enum TimelineNodeStatus {
@@ -106,6 +108,29 @@ export enum TimelineNodeStatus {
   PAUSED,
   COMPLETED,
   ABORTED,
+}
+
+/**
+ * Callbacks that get invoked by `TimelineNode`s. The callbacks are provided by the `JsPsych` class
+ * itself to avoid numerous `JsPsych` instance method calls from within timeline nodes, and to keep
+ * the public `JsPsych` API slim. This approach helps to decouple the `JsPsych` and timeline node
+ * classes and thus simplifies unit testing.
+ */
+export interface GlobalTimelineNodeCallbacks {
+  /**
+   * Called at the start of a trial, prior to invoking the plugin's trial method.
+   */
+  onTrialStart: (trial: Trial) => void;
+
+  /**
+   * Called during a trial, after the plugin has made initial changes to the DOM.
+   */
+  onTrialLoaded: (trial: Trial) => void;
+
+  /**
+   * Called after a trial has finished.
+   */
+  onTrialFinished: (trial: Trial) => void;
 }
 
 export type GetParameterValueOptions = { evaluateFunctions?: boolean; recursive?: boolean };
@@ -126,7 +151,7 @@ export interface TimelineNode {
 
   /**
    * Retrieves a parameter value from the description of this timeline node, recursively falling
-   * back to the description of each parent timeline node if `recursive` is not set to `false`. If
+   * back to the description of each parent timeline node unless `recursive` is set to `false`. If
    * the parameter...
    *
    * * is a timeline variable, evaluates the variable and returns the result.

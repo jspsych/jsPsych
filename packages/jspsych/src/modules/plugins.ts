@@ -1,5 +1,6 @@
-import { TrialDescription } from "src/timeline";
 import { SetRequired } from "type-fest";
+
+import { TrialDescription } from "../timeline";
 
 /**
  * Parameter types for plugins

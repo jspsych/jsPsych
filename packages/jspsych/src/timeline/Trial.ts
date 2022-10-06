@@ -5,7 +5,14 @@ import { deepCopy } from "../modules/utils";
 import { BaseTimelineNode } from "./BaseTimelineNode";
 import { Timeline } from "./Timeline";
 import { delay } from "./util";
-import { TimelineNodeStatus, TimelineVariable, TrialDescription, TrialResult, isPromise } from ".";
+import {
+  GlobalTimelineNodeCallbacks,
+  TimelineNodeStatus,
+  TimelineVariable,
+  TrialDescription,
+  TrialResult,
+  isPromise,
+} from ".";
 
 export class Trial extends BaseTimelineNode {
   public pluginInstance: JsPsychPlugin<any>;
@@ -17,11 +24,12 @@ export class Trial extends BaseTimelineNode {
 
   constructor(
     jsPsych: JsPsych,
+    globalCallbacks: GlobalTimelineNodeCallbacks,
     public readonly description: TrialDescription,
     protected readonly parent: Timeline,
     public readonly index: number
   ) {
-    super(jsPsych);
+    super(jsPsych, globalCallbacks);
     this.trialObject = deepCopy(description);
     this.pluginInfo = this.description.type["info"];
   }
@@ -30,21 +38,18 @@ export class Trial extends BaseTimelineNode {
     this.status = TimelineNodeStatus.RUNNING;
     this.processParameters();
 
-    this.jsPsych.focusDisplayContainerElement();
-    this.addCssClasses();
-
     this.onStart();
 
     this.pluginInstance = new this.description.type(this.jsPsych);
 
     const result = await this.executeTrial();
 
-    this.result = this.jsPsych.data.write({
+    this.result = {
       ...this.trialObject.data,
       ...result,
       trial_type: this.pluginInfo.name,
       trial_index: this.index,
-    });
+    };
 
     this.onFinish();
 
@@ -54,7 +59,6 @@ export class Trial extends BaseTimelineNode {
       await delay(gap);
     }
 
-    this.removeCssClasses();
     this.status = TimelineNodeStatus.COMPLETED;
   }
 
@@ -92,48 +96,31 @@ export class Trial extends BaseTimelineNode {
   }
 
   /**
-   * Add the CSS classes from the trial's `css_classes` parameter to the display element.
+   * Runs a callback function retrieved from a parameter value and returns its result.
+   *
+   * @param parameterName The name of the parameter to retrieve the callback function from.
+   * @param callbackParameters The parameters (if any) to be passed to the callback function
    */
-  private addCssClasses() {
-    const classes = this.getParameterValue("css_classes");
-    if (classes) {
-      if (Array.isArray(classes)) {
-        this.cssClasses = classes;
-      } else if (typeof classes === "string") {
-        this.cssClasses = [classes];
-      }
-      this.jsPsych.addCssClasses(this.cssClasses);
-    }
-  }
-
-  /**
-   * Remove the CSS classes added by `addCssClasses` (if any).
-   */
-  private removeCssClasses() {
-    if (this.cssClasses) {
-      this.jsPsych.removeCssClasses(this.cssClasses);
+  private runParameterCallback(parameterName: string, ...callbackParameters: unknown[]) {
+    const callback = this.getParameterValue(parameterName, { evaluateFunctions: false });
+    if (callback) {
+      return callback(...callbackParameters);
     }
   }
 
   private onStart() {
-    const callback = this.getParameterValue("on_start", { evaluateFunctions: false });
-    if (callback) {
-      callback(this.trialObject);
-    }
+    this.globalCallbacks.onTrialStart(this);
+    this.runParameterCallback("on_start", this.trialObject);
   }
 
   private onLoad = () => {
-    const callback = this.getParameterValue("on_load", { evaluateFunctions: false });
-    if (callback) {
-      callback();
-    }
+    this.globalCallbacks.onTrialLoaded(this);
+    this.runParameterCallback("on_load");
   };
 
   private onFinish() {
-    const callback = this.getParameterValue("on_finish", { evaluateFunctions: false });
-    if (callback) {
-      callback(this.getResult());
-    }
+    this.runParameterCallback("on_finish", this.getResult());
+    this.globalCallbacks.onTrialFinished(this);
   }
 
   public evaluateTimelineVariable(variable: TimelineVariable) {

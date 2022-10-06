@@ -2,7 +2,7 @@ import { flushPromises } from "@jspsych/test-utils";
 import { JsPsych, initJsPsych } from "jspsych";
 import { mocked } from "ts-jest/utils";
 
-import { mockDomRelatedJsPsychMethods } from "../../tests/test-utils";
+import { GlobalCallbacks, mockDomRelatedJsPsychMethods } from "../../tests/test-utils";
 import TestPlugin from "../../tests/TestPlugin";
 import {
   repeat,
@@ -14,7 +14,13 @@ import {
 import { Timeline } from "./Timeline";
 import { Trial } from "./Trial";
 import { PromiseWrapper } from "./util";
-import { SampleOptions, TimelineDescription, TimelineNodeStatus, TimelineVariable } from ".";
+import {
+  SampleOptions,
+  TimelineArray,
+  TimelineDescription,
+  TimelineNodeStatus,
+  TimelineVariable,
+} from ".";
 
 jest.useFakeTimers();
 
@@ -26,8 +32,13 @@ const exampleTimeline: TimelineDescription = {
   timeline: [{ type: TestPlugin }, { type: TestPlugin }, { timeline: [{ type: TestPlugin }] }],
 };
 
+const globalCallbacks = new GlobalCallbacks();
+
 describe("Timeline", () => {
   let jsPsych: JsPsych;
+
+  const createTimeline = (description: TimelineDescription | TimelineArray, parent?: Timeline) =>
+    new Timeline(jsPsych, globalCallbacks, description, parent);
 
   /**
    * Allows to run
@@ -44,6 +55,7 @@ describe("Timeline", () => {
 
   beforeEach(() => {
     jsPsych = initJsPsych();
+    globalCallbacks.reset();
     mockDomRelatedJsPsychMethods(jsPsych);
 
     TestPluginMock.mockReset();
@@ -55,7 +67,7 @@ describe("Timeline", () => {
 
   describe("run()", () => {
     it("instantiates proper child nodes", async () => {
-      const timeline = new Timeline(jsPsych, exampleTimeline);
+      const timeline = createTimeline(exampleTimeline);
 
       await timeline.run();
 
@@ -71,9 +83,8 @@ describe("Timeline", () => {
         TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
       });
 
-      // TODO what about the status of nested timelines?
       it("pauses, resumes, and updates the results of getStatus()", async () => {
-        const timeline = new Timeline(jsPsych, {
+        const timeline = createTimeline({
           timeline: [
             { type: TestPlugin },
             { type: TestPlugin },
@@ -126,7 +137,7 @@ describe("Timeline", () => {
 
       // https://www.jspsych.org/7.1/reference/jspsych/#description_15
       it("doesn't affect `post_trial_gap`", async () => {
-        const timeline = new Timeline(jsPsych, [{ type: TestPlugin, post_trial_gap: 200 }]);
+        const timeline = createTimeline([{ type: TestPlugin, post_trial_gap: 200 }]);
         const runPromise = timeline.run();
         const child = timeline.children[0];
 
@@ -155,7 +166,7 @@ describe("Timeline", () => {
 
       describe("aborts the timeline after the current trial ends, updating the result of getStatus()", () => {
         test("when the timeline is running", async () => {
-          const timeline = new Timeline(jsPsych, exampleTimeline);
+          const timeline = createTimeline(exampleTimeline);
           const runPromise = timeline.run();
 
           expect(timeline.getStatus()).toBe(TimelineNodeStatus.RUNNING);
@@ -167,7 +178,7 @@ describe("Timeline", () => {
         });
 
         test("when the timeline is paused", async () => {
-          const timeline = new Timeline(jsPsych, exampleTimeline);
+          const timeline = createTimeline(exampleTimeline);
           timeline.run();
 
           timeline.pause();
@@ -180,7 +191,7 @@ describe("Timeline", () => {
       });
 
       it("aborts child timelines too", async () => {
-        const timeline = new Timeline(jsPsych, {
+        const timeline = createTimeline({
           timeline: [{ timeline: [{ type: TestPlugin }, { type: TestPlugin }] }],
         });
         const runPromise = timeline.run();
@@ -194,7 +205,7 @@ describe("Timeline", () => {
       });
 
       it("doesn't affect the timeline when it is neither running nor paused", async () => {
-        const timeline = new Timeline(jsPsych, [{ type: TestPlugin }]);
+        const timeline = createTimeline([{ type: TestPlugin }]);
 
         expect(timeline.getStatus()).toBe(TimelineNodeStatus.PENDING);
         timeline.abort();
@@ -212,7 +223,7 @@ describe("Timeline", () => {
     });
 
     it("repeats a timeline according to `repetitions`", async () => {
-      const timeline = new Timeline(jsPsych, { ...exampleTimeline, repetitions: 2 });
+      const timeline = createTimeline({ ...exampleTimeline, repetitions: 2 });
 
       await timeline.run();
 
@@ -224,7 +235,7 @@ describe("Timeline", () => {
       loopFunction.mockReturnValue(false);
       loopFunction.mockReturnValueOnce(true);
 
-      const timeline = new Timeline(jsPsych, { ...exampleTimeline, loop_function: loopFunction });
+      const timeline = createTimeline({ ...exampleTimeline, loop_function: loopFunction });
 
       await timeline.run();
       expect(loopFunction).toHaveBeenCalledTimes(2);
@@ -247,7 +258,7 @@ describe("Timeline", () => {
       loopFunction.mockReturnValueOnce(false);
       loopFunction.mockReturnValueOnce(true);
 
-      const timeline = new Timeline(jsPsych, {
+      const timeline = createTimeline({
         ...exampleTimeline,
         repetitions: 2,
         loop_function: loopFunction,
@@ -259,7 +270,7 @@ describe("Timeline", () => {
     });
 
     it("skips execution if `conditional_function` returns `false`", async () => {
-      const timeline = new Timeline(jsPsych, {
+      const timeline = createTimeline({
         ...exampleTimeline,
         conditional_function: jest.fn(() => false),
       });
@@ -269,13 +280,63 @@ describe("Timeline", () => {
     });
 
     it("executes regularly if `conditional_function` returns `true`", async () => {
-      const timeline = new Timeline(jsPsych, {
+      const timeline = createTimeline({
         ...exampleTimeline,
         conditional_function: jest.fn(() => true),
       });
 
       await timeline.run();
       expect(timeline.children.length).toBe(3);
+    });
+
+    describe("`on_timeline_start` and `on_timeline_finished` callbacks are invoked", () => {
+      const onTimelineStart = jest.fn();
+      const onTimelineFinish = jest.fn();
+
+      beforeEach(() => {
+        TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+      });
+
+      afterEach(() => {
+        onTimelineStart.mockReset();
+        onTimelineFinish.mockReset();
+      });
+
+      test("at the beginning and at the end of a timeline, respectively", async () => {
+        const timeline = createTimeline({
+          timeline: [{ type: TestPlugin }],
+          on_timeline_start: onTimelineStart,
+          on_timeline_finish: onTimelineFinish,
+        });
+        timeline.run();
+        expect(onTimelineStart).toHaveBeenCalledTimes(1);
+        expect(onTimelineFinish).toHaveBeenCalledTimes(0);
+
+        await proceedWithTrial();
+        expect(onTimelineStart).toHaveBeenCalledTimes(1);
+        expect(onTimelineFinish).toHaveBeenCalledTimes(1);
+      });
+
+      test("in every repetition", async () => {
+        const timeline = createTimeline({
+          timeline: [{ type: TestPlugin }],
+          on_timeline_start: onTimelineStart,
+          on_timeline_finish: onTimelineFinish,
+          repetitions: 2,
+        });
+
+        timeline.run();
+        expect(onTimelineStart).toHaveBeenCalledTimes(1);
+        expect(onTimelineFinish).toHaveBeenCalledTimes(0);
+
+        await proceedWithTrial();
+        expect(onTimelineFinish).toHaveBeenCalledTimes(1);
+        expect(onTimelineStart).toHaveBeenCalledTimes(2);
+
+        await proceedWithTrial();
+        expect(onTimelineStart).toHaveBeenCalledTimes(2);
+        expect(onTimelineFinish).toHaveBeenCalledTimes(2);
+      });
     });
 
     describe("with timeline variables", () => {
@@ -286,7 +347,7 @@ describe("Timeline", () => {
           jsPsych.finishTrial();
         });
 
-        const timeline = new Timeline(jsPsych, {
+        const timeline = createTimeline({
           timeline: [{ type: TestPlugin }],
           timeline_variables: [{ x: 0 }, { x: 1 }, { x: 2 }, { x: 3 }],
         });
@@ -299,9 +360,9 @@ describe("Timeline", () => {
       it("respects the `randomize_order` and `sample` options", async () => {
         let xValues: number[];
 
-        const createTimeline = (sample: SampleOptions, randomize_order?: boolean) => {
+        const createSampleTimeline = (sample: SampleOptions, randomize_order?: boolean) => {
           xValues = [];
-          const timeline = new Timeline(jsPsych, {
+          const timeline = createTimeline({
             timeline: [{ type: TestPlugin }],
             timeline_variables: [{ x: 0 }, { x: 1 }],
             sample,
@@ -316,31 +377,31 @@ describe("Timeline", () => {
 
         // `randomize_order`
         mocked(shuffle).mockReturnValue([1, 0]);
-        await createTimeline(undefined, true).run();
+        await createSampleTimeline(undefined, true).run();
         expect(shuffle).toHaveBeenCalledWith([0, 1]);
         expect(xValues).toEqual([1, 0]);
 
         // with-replacement
         mocked(sampleWithReplacement).mockReturnValue([0, 0]);
-        await createTimeline({ type: "with-replacement", size: 2, weights: [1, 1] }).run();
+        await createSampleTimeline({ type: "with-replacement", size: 2, weights: [1, 1] }).run();
         expect(sampleWithReplacement).toHaveBeenCalledWith([0, 1], 2, [1, 1]);
         expect(xValues).toEqual([0, 0]);
 
         // without-replacement
         mocked(sampleWithoutReplacement).mockReturnValue([1, 0]);
-        await createTimeline({ type: "without-replacement", size: 2 }).run();
+        await createSampleTimeline({ type: "without-replacement", size: 2 }).run();
         expect(sampleWithoutReplacement).toHaveBeenCalledWith([0, 1], 2);
         expect(xValues).toEqual([1, 0]);
 
         // fixed-repetitions
         mocked(repeat).mockReturnValue([0, 0, 1, 1]);
-        await createTimeline({ type: "fixed-repetitions", size: 2 }).run();
+        await createSampleTimeline({ type: "fixed-repetitions", size: 2 }).run();
         expect(repeat).toHaveBeenCalledWith([0, 1], 2);
         expect(xValues).toEqual([0, 0, 1, 1]);
 
         // alternate-groups
         mocked(shuffleAlternateGroups).mockReturnValue([1, 0]);
-        await createTimeline({
+        await createSampleTimeline({
           type: "alternate-groups",
           groups: [[0], [1]],
           randomize_group_order: true,
@@ -350,13 +411,13 @@ describe("Timeline", () => {
 
         // custom function
         const sampleFunction = jest.fn(() => [0]);
-        await createTimeline({ type: "custom", fn: sampleFunction }).run();
+        await createSampleTimeline({ type: "custom", fn: sampleFunction }).run();
         expect(sampleFunction).toHaveBeenCalledTimes(1);
         expect(xValues).toEqual([0]);
 
         await expect(
           // @ts-expect-error non-existing type
-          createTimeline({ type: "invalid" }).run()
+          createSampleTimeline({ type: "invalid" }).run()
         ).rejects.toThrow('Invalid type "invalid" in timeline sample parameters.');
       });
     });
@@ -365,7 +426,7 @@ describe("Timeline", () => {
   describe("evaluateTimelineVariable()", () => {
     describe("if a local timeline variable exists", () => {
       it("returns the local timeline variable", async () => {
-        const timeline = new Timeline(jsPsych, {
+        const timeline = createTimeline({
           timeline: [{ type: TestPlugin }],
           timeline_variables: [{ x: 0 }],
         });
@@ -377,7 +438,7 @@ describe("Timeline", () => {
 
     describe("if a timeline variable is not defined locally", () => {
       it("recursively falls back to parent timeline variables", async () => {
-        const timeline = new Timeline(jsPsych, {
+        const timeline = createTimeline({
           timeline: [{ timeline: [{ type: TestPlugin }], timeline_variables: [{ x: undefined }] }],
           timeline_variables: [{ x: 0, y: 0 }],
         });
@@ -392,7 +453,7 @@ describe("Timeline", () => {
       });
 
       it("returns `undefined` if there are no parents or none of them has a value for the variable", async () => {
-        const timeline = new Timeline(jsPsych, {
+        const timeline = createTimeline({
           timeline: [{ timeline: [{ type: TestPlugin }] }],
         });
 
@@ -411,7 +472,7 @@ describe("Timeline", () => {
     // Note: This includes test cases for the implementation provided by `BaseTimelineNode`.
 
     it("ignores builtin timeline parameters", async () => {
-      const timeline = new Timeline(jsPsych, {
+      const timeline = createTimeline({
         timeline: [],
         timeline_variables: [],
         repetitions: 1,
@@ -439,20 +500,19 @@ describe("Timeline", () => {
     });
 
     it("returns the local parameter value, if it exists", async () => {
-      const timeline = new Timeline(jsPsych, { timeline: [], my_parameter: "test" });
+      const timeline = createTimeline({ timeline: [], my_parameter: "test" });
 
       expect(timeline.getParameterValue("my_parameter")).toBe("test");
       expect(timeline.getParameterValue("other_parameter")).toBeUndefined();
     });
 
     it("falls back to parent parameter values if `recursive` is not `false`", async () => {
-      const parentTimeline = new Timeline(jsPsych, {
+      const parentTimeline = createTimeline({
         timeline: [],
         first_parameter: "test",
         second_parameter: "test",
       });
-      const childTimeline = new Timeline(
-        jsPsych,
+      const childTimeline = createTimeline(
         { timeline: [], first_parameter: undefined },
         parentTimeline
       );
@@ -467,7 +527,7 @@ describe("Timeline", () => {
     });
 
     it("evaluates timeline variables", async () => {
-      const timeline = new Timeline(jsPsych, {
+      const timeline = createTimeline({
         timeline: [{ timeline: [], child_parameter: new TimelineVariable("x") }],
         timeline_variables: [{ x: 0 }],
         parent_parameter: new TimelineVariable("x"),
@@ -480,7 +540,7 @@ describe("Timeline", () => {
     });
 
     it("evaluates functions unless `evaluateFunctions` is set to `false`", async () => {
-      const timeline = new Timeline(jsPsych, {
+      const timeline = createTimeline({
         timeline: [],
         function_parameter: jest.fn(() => "result"),
       });
@@ -495,7 +555,7 @@ describe("Timeline", () => {
     });
 
     it("considers nested properties if `parameterName` contains dots", async () => {
-      const timeline = new Timeline(jsPsych, {
+      const timeline = createTimeline({
         timeline: [],
         object: {
           childString: "foo",
@@ -513,7 +573,7 @@ describe("Timeline", () => {
 
   describe("getResults()", () => {
     it("recursively returns all results", async () => {
-      const timeline = new Timeline(jsPsych, exampleTimeline);
+      const timeline = createTimeline(exampleTimeline);
       await timeline.run();
       expect(timeline.getResults()).toEqual(
         Array(3).fill(expect.objectContaining({ my: "result" }))
@@ -521,7 +581,7 @@ describe("Timeline", () => {
     });
 
     it("does not include `undefined` results", async () => {
-      const timeline = new Timeline(jsPsych, exampleTimeline);
+      const timeline = createTimeline(exampleTimeline);
       await timeline.run();
 
       jest.spyOn(timeline.children[0] as Trial, "getResult").mockReturnValue(undefined);
@@ -535,7 +595,7 @@ describe("Timeline", () => {
     it("always returns the current progress of a simple timeline", async () => {
       TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
 
-      const timeline = new Timeline(jsPsych, Array(4).fill({ type: TestPlugin }));
+      const timeline = createTimeline(Array(4).fill({ type: TestPlugin }));
       expect(timeline.getProgress()).toBe(0);
 
       const runPromise = timeline.run();
@@ -560,7 +620,7 @@ describe("Timeline", () => {
 
   describe("getNaiveTrialCount()", () => {
     it("correctly estimates the length of a timeline (including nested timelines)", async () => {
-      const timeline = new Timeline(jsPsych, {
+      const timeline = createTimeline({
         timeline: [
           { type: TestPlugin },
           { timeline: [{ type: TestPlugin }], repetitions: 2, timeline_variables: [] },
@@ -575,9 +635,23 @@ describe("Timeline", () => {
     });
   });
 
-  describe("getActiveNode()", () => {
-    it("", async () => {
-      // TODO
+  describe("getCurrentTrial()", () => {
+    it("returns the currently active Trial node or `undefined` when no trial is active", async () => {
+      TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+      const timeline = createTimeline([{ type: TestPlugin }, { timeline: [{ type: TestPlugin }] }]);
+
+      expect(timeline.getCurrentTrial()).toBeUndefined();
+
+      timeline.run();
+      expect(timeline.getCurrentTrial()).toBeInstanceOf(Trial);
+      expect(timeline.getCurrentTrial().index).toEqual(0);
+
+      await proceedWithTrial();
+      expect(timeline.getCurrentTrial()).toBeInstanceOf(Trial);
+      expect(timeline.getCurrentTrial().index).toEqual(1);
+
+      await proceedWithTrial();
+      expect(timeline.getCurrentTrial()).toBeUndefined();
     });
   });
 });

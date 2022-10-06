@@ -1,4 +1,5 @@
-import { JsPsych } from "src";
+import { JsPsych } from "../src";
+import { GlobalTimelineNodeCallbacks } from "../src/timeline";
 
 export function mockDomRelatedJsPsychMethods(jsPsychInstance: JsPsych) {
   const displayElement = document.createElement("div");
@@ -7,8 +8,21 @@ export function mockDomRelatedJsPsychMethods(jsPsychInstance: JsPsych) {
   jest
     .spyOn(jsPsychInstance, "getDisplayContainerElement")
     .mockImplementation(() => displayContainerElement);
+}
 
-  jest.spyOn(jsPsychInstance, "focusDisplayContainerElement").mockImplementation(() => {});
-  jest.spyOn(jsPsychInstance, "addCssClasses").mockImplementation(() => {});
-  jest.spyOn(jsPsychInstance, "removeCssClasses").mockImplementation(() => {});
+/**
+ * A class to instantiate mocked `GlobalTimelineNodeCallbacks` objects that have additional
+ * testing-related functions.
+ */
+export class GlobalCallbacks implements GlobalTimelineNodeCallbacks {
+  onTrialStart = jest.fn();
+  onTrialLoaded = jest.fn();
+  onTrialFinished = jest.fn();
+
+  // Test utility functions
+  reset() {
+    this.onTrialStart.mockReset();
+    this.onTrialLoaded.mockReset();
+    this.onTrialFinished.mockReset();
+  }
 }

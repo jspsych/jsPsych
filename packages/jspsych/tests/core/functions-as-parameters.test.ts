@@ -16,7 +16,6 @@ describe("standard use of function as parameter", () => {
     ]);
 
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
   });
 
   test("parameters can be protected from early evaluation using ParameterType.FUNCTION", async () => {
@@ -47,7 +46,7 @@ describe("data as function", () => {
       },
     ]);
 
-    pressKey("a");
+    await pressKey("a");
     expect(getData().values()[0].x).toBe(1);
   });
 
@@ -62,7 +61,7 @@ describe("data as function", () => {
       },
     ]);
 
-    pressKey("a");
+    await pressKey("a");
     expect(getData().values()[0].x).toBe(1);
   });
 });

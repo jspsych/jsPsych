@@ -1,3 +1,5 @@
+import { GlobalTimelineNodeCallbacks } from "src/timeline";
+
 import { JsPsych } from "../../JsPsych";
 import { DataCollection } from "./DataCollection";
 import { getQueryString } from "./utils";
@@ -32,14 +34,10 @@ export class JsPsychData {
     return this.interactionData;
   }
 
-  write(data_object) {
-    const newObject = {
-      ...data_object,
-      time_elapsed: this.jsPsych.getTotalTime(),
-      ...this.dataProperties,
-    };
-    this.allData.push(newObject);
-    return newObject;
+  write(dataObject) {
+    (dataObject.time_elapsed = this.jsPsych.getTotalTime()),
+      Object.assign(dataObject, this.dataProperties),
+      this.allData.push(dataObject);
   }
 
   addProperties(properties) {

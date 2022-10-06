@@ -2,7 +2,7 @@ import { flushPromises } from "@jspsych/test-utils";
 import { JsPsych, initJsPsych } from "jspsych";
 import { mocked } from "ts-jest/utils";
 
-import { mockDomRelatedJsPsychMethods } from "../../tests/test-utils";
+import { GlobalCallbacks, mockDomRelatedJsPsychMethods } from "../../tests/test-utils";
 import TestPlugin from "../../tests/TestPlugin";
 import { ParameterInfos, ParameterType } from "../modules/plugins";
 import { Timeline } from "./Timeline";
@@ -20,6 +20,8 @@ const setTestPluginParameters = (parameters: ParameterInfos) => {
   // @ts-expect-error info is declared as readonly
   TestPlugin.info.parameters = parameters;
 };
+
+const globalCallbacks = new GlobalCallbacks();
 
 describe("Trial", () => {
   let jsPsych: JsPsych;
@@ -40,6 +42,7 @@ describe("Trial", () => {
 
   beforeEach(() => {
     jsPsych = initJsPsych();
+    globalCallbacks.reset();
     mockDomRelatedJsPsychMethods(jsPsych);
 
     TestPluginMock.mockReset();
@@ -49,51 +52,22 @@ describe("Trial", () => {
     setTestPluginParameters({});
     trialPromise.reset();
 
-    timeline = new Timeline(jsPsych, { timeline: [] });
+    timeline = new Timeline(jsPsych, globalCallbacks, { timeline: [] });
   });
 
   const createTrial = (description: TrialDescription) =>
-    new Trial(jsPsych, description, timeline, 0);
+    new Trial(jsPsych, globalCallbacks, description, timeline, 0);
 
   describe("run()", () => {
     it("instantiates the corresponding plugin", async () => {
-      const trial = new Trial(jsPsych, { type: TestPlugin }, timeline, 0);
+      const trial = createTrial({ type: TestPlugin });
 
       await trial.run();
 
       expect(trial.pluginInstance).toBeInstanceOf(TestPlugin);
     });
 
-    it("focuses the display element via `jsPsych.focusDisplayContainerElement()`", async () => {
-      const trial = createTrial({ type: TestPlugin });
-
-      expect(jsPsych.focusDisplayContainerElement).toHaveBeenCalledTimes(0);
-      await trial.run();
-      expect(jsPsych.focusDisplayContainerElement).toHaveBeenCalledTimes(1);
-    });
-
-    it("respects the `css_classes` trial parameter", async () => {
-      await createTrial({ type: TestPlugin }).run();
-      expect(jsPsych.addCssClasses).toHaveBeenCalledTimes(0);
-      expect(jsPsych.removeCssClasses).toHaveBeenCalledTimes(0);
-
-      await createTrial({ type: TestPlugin, css_classes: "class1" }).run();
-      expect(jsPsych.addCssClasses).toHaveBeenCalledTimes(1);
-      expect(jsPsych.addCssClasses).toHaveBeenCalledWith(["class1"]);
-      expect(jsPsych.removeCssClasses).toHaveBeenCalledTimes(1);
-      expect(jsPsych.removeCssClasses).toHaveBeenCalledWith(["class1"]);
-
-      mocked(jsPsych.addCssClasses).mockClear();
-      mocked(jsPsych.removeCssClasses).mockClear();
-
-      await createTrial({ type: TestPlugin, css_classes: ["class1", "class2"] }).run();
-      expect(jsPsych.addCssClasses).toHaveBeenCalledTimes(1);
-      expect(jsPsych.addCssClasses).toHaveBeenCalledWith(["class1", "class2"]);
-      expect(jsPsych.removeCssClasses).toHaveBeenCalledTimes(1);
-      expect(jsPsych.removeCssClasses).toHaveBeenCalledWith(["class1", "class2"]);
-    });
-
-    it("invokes the `on_start` callback", async () => {
+    it("invokes the local `on_start` and the global `onTrialStart` callback", async () => {
       const onStartCallback = jest.fn();
       const description = { type: TestPlugin, on_start: onStartCallback };
       const trial = createTrial(description);
@@ -101,6 +75,8 @@ describe("Trial", () => {
 
       expect(onStartCallback).toHaveBeenCalledTimes(1);
       expect(onStartCallback).toHaveBeenCalledWith(description);
+      expect(globalCallbacks.onTrialStart).toHaveBeenCalledTimes(1);
+      expect(globalCallbacks.onTrialStart).toHaveBeenCalledWith(trial);
     });
 
     it("properly invokes the plugin's `trial` method", async () => {
@@ -174,12 +150,13 @@ describe("Trial", () => {
     });
 
     describe("if `trial` returns no promise", () => {
-      it("invokes the `on_load` callback", async () => {
+      it("invokes the local `on_load` and the global `onTrialLoaded` callback", async () => {
         const onLoadCallback = jest.fn();
         const trial = createTrial({ type: TestPlugin, on_load: onLoadCallback });
         await trial.run();
 
         expect(onLoadCallback).toHaveBeenCalledTimes(1);
+        expect(globalCallbacks.onTrialLoaded).toHaveBeenCalledTimes(1);
       });
 
       it("picks up the result data from the `finishTrial()` function", async () => {
@@ -190,7 +167,7 @@ describe("Trial", () => {
       });
     });
 
-    it("invokes the `on_finish` callback with the result data", async () => {
+    it("invokes the local `on_finish` callback with the result data", async () => {
       const onFinishCallback = jest.fn();
       const trial = createTrial({ type: TestPlugin, on_finish: onFinishCallback });
       await trial.run();
@@ -199,21 +176,25 @@ describe("Trial", () => {
       expect(onFinishCallback).toHaveBeenCalledWith(expect.objectContaining({ my: "result" }));
     });
 
+    it("invokes the global `onTrialFinished` callback", async () => {
+      const trial = createTrial({ type: TestPlugin });
+      await trial.run();
+
+      expect(globalCallbacks.onTrialFinished).toHaveBeenCalledTimes(1);
+      expect(globalCallbacks.onTrialFinished).toHaveBeenCalledWith(trial);
+    });
+
     it("includes result data from the `data` property", async () => {
       const trial = createTrial({ type: TestPlugin, data: { custom: "value" } });
       await trial.run();
       expect(trial.getResult()).toEqual(expect.objectContaining({ my: "result", custom: "value" }));
     });
 
-    it("includes a set of common result properties", async () => {
+    it("includes a set of trial-specific result properties", async () => {
       const trial = createTrial({ type: TestPlugin });
       await trial.run();
       expect(trial.getResult()).toEqual(
-        expect.objectContaining({
-          trial_type: "test",
-          trial_index: 0,
-          time_elapsed: expect.any(Number),
-        })
+        expect.objectContaining({ trial_type: "test", trial_index: 0 })
       );
     });
 
@@ -469,10 +450,10 @@ describe("Trial", () => {
 
   describe("evaluateTimelineVariable()", () => {
     it("defers to the parent node", () => {
-      const timeline = new Timeline(jsPsych, { timeline: [] });
+      const timeline = new Timeline(jsPsych, globalCallbacks, { timeline: [] });
       mocked(timeline).evaluateTimelineVariable.mockReturnValue(1);
 
-      const trial = new Trial(jsPsych, { type: TestPlugin }, timeline, 0);
+      const trial = new Trial(jsPsych, globalCallbacks, { type: TestPlugin }, timeline, 0);
 
       const variable = new TimelineVariable("x");
       expect(trial.evaluateTimelineVariable(variable)).toBe(1);

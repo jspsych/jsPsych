@@ -5,6 +5,7 @@ import { JsPsych } from "../JsPsych";
 import { Timeline } from "./Timeline";
 import {
   GetParameterValueOptions,
+  GlobalTimelineNodeCallbacks,
   TimelineDescription,
   TimelineNode,
   TimelineNodeStatus,
@@ -23,7 +24,10 @@ export abstract class BaseTimelineNode implements TimelineNode {
 
   protected status = TimelineNodeStatus.PENDING;
 
-  constructor(protected readonly jsPsych: JsPsych) {}
+  constructor(
+    protected readonly jsPsych: JsPsych,
+    protected readonly globalCallbacks: GlobalTimelineNodeCallbacks
+  ) {}
 
   getStatus() {
     return this.status;

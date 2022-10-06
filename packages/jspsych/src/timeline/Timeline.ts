@@ -11,6 +11,7 @@ import { Trial } from "./Trial";
 import { PromiseWrapper } from "./util";
 import {
   GetParameterValueOptions,
+  GlobalTimelineNodeCallbacks,
   TimelineArray,
   TimelineDescription,
   TimelineNode,
@@ -28,11 +29,12 @@ export class Timeline extends BaseTimelineNode {
 
   constructor(
     jsPsych: JsPsych,
+    globalCallbacks: GlobalTimelineNodeCallbacks,
     description: TimelineDescription | TimelineArray,
     protected readonly parent?: Timeline,
     public readonly index = 0
   ) {
-    super(jsPsych);
+    super(jsPsych, globalCallbacks);
     this.description = Array.isArray(description) ? { timeline: description } : description;
     this.nextChildNodeIndex = index;
   }
@@ -47,6 +49,8 @@ export class Timeline extends BaseTimelineNode {
     if (!description.conditional_function || description.conditional_function()) {
       for (let repetition = 0; repetition < (this.description.repetitions ?? 1); repetition++) {
         do {
+          this.onStart();
+
           for (const timelineVariableIndex of this.generateTimelineVariableOrder()) {
             this.setCurrentTimelineVariablesByIndex(timelineVariableIndex);
 
@@ -65,11 +69,25 @@ export class Timeline extends BaseTimelineNode {
               }
             }
           }
+
+          this.onFinish();
         } while (description.loop_function && description.loop_function(this.getResults()));
       }
     }
 
     this.status = TimelineNodeStatus.COMPLETED;
+  }
+
+  private onStart() {
+    if (this.description.on_timeline_start) {
+      this.description.on_timeline_start();
+    }
+  }
+
+  private onFinish() {
+    if (this.description.on_timeline_finish) {
+      this.description.on_timeline_finish();
+    }
   }
 
   pause() {
@@ -111,8 +129,8 @@ export class Timeline extends BaseTimelineNode {
     const newChildNodes = this.description.timeline.map((childDescription) => {
       const childNodeIndex = this.nextChildNodeIndex++;
       return isTimelineDescription(childDescription)
-        ? new Timeline(this.jsPsych, childDescription, this, childNodeIndex)
-        : new Trial(this.jsPsych, childDescription, this, childNodeIndex);
+        ? new Timeline(this.jsPsych, this.globalCallbacks, childDescription, this, childNodeIndex)
+        : new Trial(this.jsPsych, this.globalCallbacks, childDescription, this, childNodeIndex);
     });
     this.children.push(...newChildNodes);
     return newChildNodes;
@@ -270,13 +288,19 @@ export class Timeline extends BaseTimelineNode {
   }
 
   /**
-   * Returns the currently active TimelineNode or `undefined`, if the timeline is not running.
-   *
-   * Note: This is a Trial object most of the time, but it may also be a Timeline object when a
-   * timeline is running but hasn't yet instantiated its children (e.g. during timeline callback
-   * functions).
+   * Returns the currently active Trial node or `undefined`, if the timeline is neither running nor
+   * paused.
    */
-  public getActiveNode(): TimelineNode {
-    return this;
+  public getCurrentTrial(): TimelineNode | undefined {
+    if ([TimelineNodeStatus.COMPLETED, TimelineNodeStatus.ABORTED].includes(this.getStatus())) {
+      return undefined;
+    }
+    if (this.activeChild instanceof Timeline) {
+      return this.activeChild.getCurrentTrial();
+    }
+    if (this.activeChild instanceof Trial) {
+      return this.activeChild;
+    }
+    return undefined;
   }
 }
