@@ -21,7 +21,7 @@ var trial = {
     target_direction: 'left'
   },
   on_finish: function(data){
-    // Score the response as correct or incorrect.
+    // Score the keyboard response as correct or incorrect.
     if(jsPsych.pluginAPI.compareKeys(data.response, "f")){
       data.correct = true;
     } else {
@@ -49,6 +49,20 @@ var feedback = {
 timeline.push(trial, feedback);
 
 ```
+
+!!! note 
+    When scoring a participant's response, the `jsPsych.pluginAPI.compareKeys` function is only needed to compare _keyboard_ responses. For other kinds of response types, such as button presses, you can compare the participant's response and correct response values directly, e.g.
+    ```js
+    if (data.response == 0)){
+      data.correct = true;
+    } else {
+      data.correct = false; 
+    }
+    ```
+    Or:
+    ```js
+    data.correct = data.response === data.correct_response;
+    ```
 
 ### Randomizing a parameter value
 
