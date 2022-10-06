@@ -13,7 +13,7 @@ const makeConfig = ({
   outputOptions = {},
   globalOptions = {},
   iifeOutputOptions = {},
-  nodeOnly = false,
+  isNodeOnlyBuild = false,
 }) => {
   const source = "src/index";
   const destination = "dist/index";
@@ -26,7 +26,7 @@ const makeConfig = ({
   const commonConfig = defineConfig({
     input: `${source}.ts`,
     plugins: [
-      resolve(),
+      resolve({ preferBuiltins: isNodeOnlyBuild }),
       typescript({
         typescript: ts,
         tsconfigDefaults: {
@@ -62,7 +62,7 @@ const makeConfig = ({
     },
   ];
 
-  if (!nodeOnly) {
+  if (!isNodeOnlyBuild) {
     output.push({
       // Build file to be used for tinkering in modern browsers
       file: `${destination}.browser.js`,
@@ -75,7 +75,7 @@ const makeConfig = ({
   // Non-babel builds
   const config = defineConfig([{ ...commonConfig, output }]);
 
-  if (!nodeOnly) {
+  if (!isNodeOnlyBuild) {
     // Babel build
     config.push({
       ...commonConfig,

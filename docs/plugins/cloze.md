@@ -1,8 +1,8 @@
 # cloze
 
-Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-cloze/CHANGELOG.md).
+Current version: 1.2.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-cloze/CHANGELOG.md).
 
-This plugin displays a text with certain words removed. Participants are asked to replace the missing items. Responses are recorded when clicking a button. Optionally, responses are evaluated and a function is called in case of differences, making it possible to inform participants about mistakes.
+This plugin displays a text with certain words omitted. Participants are asked to replace the missing items. Responses are recorded when clicking a button. Responses can be evaluated and a function is called in case of either differences or incomplete answers, making it possible to inform participants about mistakes before proceeding.
 
 ## Parameters
 
@@ -13,7 +13,8 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | text          | string   | *undefined*        | The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. % correct solution %). |
 | button_text   | string   | OK                 | Text of the button participants have to press for finishing the cloze test. |
 | check_answers | boolean  | false              | Boolean value indicating if the answers given by participants should be compared against a correct solution given in the text (between % signs) after the button was clicked. If ```true```, answers are checked and in case of differences, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. If ```false```, no checks are performed and the trial automatically ends when clicking the button. |
-| mistake_fn    | function | ```function(){}``` | Function called if ```check_answers``` is set to ```true``` and there is a difference between the participants answers and the correct solution provided in the text. |
+| allow_blanks  | boolean  | true               | Boolean value indicating if the answers given by participants should be checked for completion after the button was clicked. If ```true```, answers are not checked for completion and blank answers are allowed. The trial will then automatically finish upon the clicking the button. If ```false```, answers are checked for completion, and in case there are some fields with missing answers, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. |
+| mistake_fn    | function | ```function(){}``` | Function called if ```check_answers``` is set to ```true``` or ```allow_blanks``` is set to false and there is a difference between the participants answers and the correct solution provided in the text, or if there is at least one field with a blank answer respectively. |
 
 ## Data Generated
 
@@ -28,7 +29,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-cloze@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-cloze@1.2.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
@@ -63,6 +64,23 @@ import cloze from '@jspsych/plugin-cloze';
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-cloze-demo1.html">Open demo in new tab</a>
 
+???+ example "Cloze example using default settings with completion checking and custom error handling"
+    === "Code"
+        ```javascript
+            var cloze_trial = {
+                type: jsPsychCloze,
+                text: 'Science notebooks have a %%-colored front cover. Math notebooks have a %%-colored front cover.',
+                allow_blanks: false,
+                mistake_fn: function() { alert('Please fill in all blanks.'); }
+            };
+        ```
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../../demos/jspsych-cloze-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-cloze-demo3.html">Open demo in new tab</a>
+
 
 ???+ example "More elaborate example (with check against correct solution, custom error handling and modified button text)"
     === "Code"
@@ -72,7 +90,7 @@ import cloze from '@jspsych/plugin-cloze';
                 text: 'A rectangle has % 4 % corners and a triangle has % 3 %.',
                 check_answers: true,
                 button_text: 'Next',
-                mistake_fn: function(){alert("Wrong answer. Please check again.")}
+                mistake_fn: function (){ alert("Wrong answer. Please check again.") }
             };
         ```
     === "Demo"

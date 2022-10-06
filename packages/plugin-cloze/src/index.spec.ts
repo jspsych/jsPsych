@@ -73,6 +73,20 @@ describe("cloze", () => {
     await expectFinished();
   });
 
+  test("ends trial on button click when all answers are checked for completion and are complete", async () => {
+    const { expectFinished } = await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text.",
+        allow_blanks: false,
+      },
+    ]);
+
+    getInputElementById("input0").value = "filler";
+    clickTarget(document.querySelector("#finish_cloze_button"));
+    await expectFinished();
+  });
+
   test("does not end trial on button click when answers are checked and not correct", async () => {
     const { expectRunning } = await startTimeline([
       {
@@ -87,6 +101,20 @@ describe("cloze", () => {
     await expectRunning();
   });
 
+  test("does not end trial on button click when answers are checked for completion and some are missing", async () => {
+    const { expectRunning } = await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text.",
+        allow_blanks: false,
+      },
+    ]);
+
+    getInputElementById("input0").value = "";
+    clickTarget(document.querySelector("#finish_cloze_button"));
+    await expectRunning();
+  });
+
   test("does not call mistake function on button click when answers are checked and correct", async () => {
     const mistakeFn = jest.fn();
 
@@ -95,6 +123,23 @@ describe("cloze", () => {
         type: cloze,
         text: "This is a %cloze% text.",
         check_answers: true,
+        mistake_fn: mistakeFn,
+      },
+    ]);
+
+    getInputElementById("input0").value = "cloze";
+    clickTarget(document.querySelector("#finish_cloze_button"));
+    expect(mistakeFn).not.toHaveBeenCalled();
+  });
+
+  test("does not call mistake function on button click when answers are checked for completion and are complete", async () => {
+    const mistakeFn = jest.fn();
+
+    await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text.",
+        allow_blanks: false,
         mistake_fn: mistakeFn,
       },
     ]);
@@ -117,6 +162,23 @@ describe("cloze", () => {
     ]);
 
     getInputElementById("input0").value = "some wrong answer";
+    clickTarget(document.querySelector("#finish_cloze_button"));
+    expect(mistakeFn).toHaveBeenCalled();
+  });
+
+  test("calls mistake function on button click when answers are checked for completion and are not complete", async () => {
+    const mistakeFn = jest.fn();
+
+    await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text.",
+        check_answers: true,
+        mistake_fn: mistakeFn,
+      },
+    ]);
+
+    getInputElementById("input0").value = "";
     clickTarget(document.querySelector("#finish_cloze_button"));
     expect(mistakeFn).toHaveBeenCalled();
   });

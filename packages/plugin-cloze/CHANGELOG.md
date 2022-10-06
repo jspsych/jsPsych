@@ -1,5 +1,11 @@
 # @jspsych/plugin-cloze
 
+## 1.2.0
+
+### Minor Changes
+
+- [#2784](https://github.com/jspsych/jsPsych/pull/2784) [`2f1a8674`](https://github.com/jspsych/jsPsych/commit/2f1a86749426740b2368633b14f59445d882000d) Thanks [@jadeddelta](https://github.com/jadeddelta)! - added `allow_blanks` as a field, allowing for completion checking of answers
+
 ## 1.1.2
 
 ### Patch Changes
