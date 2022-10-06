@@ -409,3 +409,63 @@ import survey from '@jspsych/plugin-survey';
         </div>
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo4.html">Open demo in new tab</a>
+
+    ???+ example "Adding data to trial"
+    When adding any data to a Survey trial, you should add it via the `data` parameter at the whole-trial level (not inside the question objects), even if it only relates to one question out of multiple questions/pages contained wihtin the trial.
+    === "Code"
+
+        ```javascript
+        const question_info = [
+          {
+            'fruit': 'apples',
+            'Q1_prompt': 'Do you like apples?', 
+            'Q1_type': 'regular'
+          },
+          {
+            'fruit': 'bananas',
+            'Q1_prompt': 'Do you NOT like bananas?', 
+            'Q1_type': 'reverse'
+          },
+        ];
+
+        const survey = {
+          type: jsPsychSurvey,
+          pages: [
+            [
+              {
+                type: 'multi-choice',
+                prompt: jsPsych.timelineVariable('Q1_prompt'),
+                options: ['Yes', 'No'],
+                name: 'Q1'
+              },
+              {
+                type: 'text',
+                prompt: function() {
+                  return `What's your favorite thing about ${jsPsych.timelineVariable('fruit')}?`;
+                },
+                name: 'Q2'
+              }
+            ]
+          ],
+          // Add data at the whole-trial level here
+          data: {
+            'Q1_prompt': jsPsych.timelineVariable('Q1_prompt'),
+            'Q1_type': jsPsych.timelineVariable('Q1_type'),
+            'fruit': jsPsych.timelineVariable('fruit')                                                        
+          },
+          button_label_finish: 'Continue'                
+        };
+
+        const survey_procedure = {
+          timeline: [survey],
+          timeline_variables: question_info,
+          randomize_order: true
+        };
+        ```
+
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../../demos/jspsych-survey-demo5.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo5.html">Open demo in new tab</a>
