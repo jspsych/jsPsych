@@ -2109,7 +2109,7 @@ Despite this simple task, the tutorial covers many of the key features of jsPsyc
 <h2 id="part-1-creating-a-blank-experiment">Part 1: Creating a blank experiment<a class="headerlink" href="#part-1-creating-a-blank-experiment" title="Permanent link">&para;</a></h2>
 <p>Start by setting up a new HTML file with jsPsych, the html-keyboard-response plugin, and the jspsych.css file loaded. If you are unsure how to do this, follow the <a href="../hello-world/">Hello World tutorial</a>. You should have an HTML document that looks like this:</p>
 <div class="admonition info">
-<p class="admonition-title">Info</p>
+<p class="admonition-title">Info: Loading methods</p>
 <p>This tutorial assumes that you are using the <a href="../hello-world/#option-1-using-cdn-hosted-scripts">CDN-based method of loading jsPsych</a>. 
 If you are using another method then everything is the same except for how jsPsych is loaded.</p>
 </div>
@@ -2622,7 +2622,7 @@ The only difference is which image is displayed. Timeline variables allow us to 
 <span class="p">};</span><span class="w"></span>
 </code></pre></div>
 <div class="admonition info">
-<p class="admonition-title">Info</p>
+<p class="admonition-title">Info: Randomizing timeline variables</p>
 <p>In a timeline variables procedure, when <code>randomize_order</code> is <code>true</code> and <code>repetitions</code> is greater than 1, the  trial order will be re-randomized on each repetition through the <code>timeline_variables</code> array. This means that there will be some constraints on the randomization of all trials in the procedure. </p>
 <p>For example, if a <code>timeline_variables</code> array contains one trial per stimulus, then the same stimulus could occur twice in a row (since it could be at the end of one repetition and the start of the next one), but it could not be repeated more than twice in a row, regardless of the number of repetitions.</p>
 <p>If you don't want to constrain the randomization in this way, you could use the <code>sample</code> parameter with the <code>fixed-repetitions</code> option: this will combine all the repeitions of your <code>timeline_variables</code> array into one larger array, and then randomize the whole thing. You can read more about the randomization, repetition, and sampling options for timeline variables in the <a href="../../overview/timeline/">Timeline documentation</a>).</p>
@@ -3101,7 +3101,7 @@ The only difference is which image is displayed. Timeline variables allow us to 
 </code></pre></div>
 <p>The <code>data.response</code> value is a string representation of the key the participant pressed. We can compare this with the <code>data.correct_response</code> value, and assign this computed value to a new property <code>data.correct</code>.</p>
 <div class="admonition info">
-<p class="admonition-title">Info</p>
+<p class="admonition-title">Info: The <code>compareKeys</code> function</p>
 <p>Here we are comparing the values of <code>data.response</code> and <code>data.correct_response</code> using a jsPsych function called <a href="../../reference/jspsych-pluginAPI/#jspsychpluginapicomparekeys">jsPsych.pluginAPI.compareKeys</a>. We're using this function because it allows us to compare keys in either a <em>case sensitive</em> or <em>case insensitive</em> way, depending on the <a href="../../overview/experiment-options/">experiment settings</a>. The participant's key response will be recorded in a case-sensitive way in the data (e.g. 'f' or 'F'), but in most cases, we don't care if their response corresponds to an upper or lower case letter (which is why the <code>case_sensitive</code> experiment setting is <code>false</code> by default). Using the <code>jsPsych.pluginAPI.commpareKeys</code> function here means that the response will be scored correctly, even if the participant holds down Shift or has Caps Lock on. This function is only relevant for keyboard responses; for other kinds of responses, such as button presses, you can simply compare the response and correct response values directly, e.g.
 <div class="highlight"><pre><span></span><code><span class="nx">data</span><span class="p">.</span><span class="nx">correct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">data</span><span class="p">.</span><span class="nx">correct_response</span><span class="p">;</span><span class="w"></span>
 </code></pre></div></p>
@@ -3218,9 +3218,9 @@ The only difference is which image is displayed. Timeline variables allow us to 
 <p>jsPsych provides a limited set of analysis functions to allow you to calculate things like mean response times for a selected set of trials. In this part, we'll use these functions to add a final trial to the experiment that tells the participant their accuracy and their mean response time for correct responses.</p>
 <p>We'll use the <code>html-keyboard-response</code> plugin. Because the text that we want to display changes based on the participant's performance in the experiment, we need to use a function for the <code>stimulus</code> parameter and return the desired text.</p>
 <div class="admonition info">
-<p class="admonition-title">Info</p>
-</div>
+<p class="admonition-title">Info: Dynamic parameters</p>
 <p>Using a function as the value of a 'normal' parameter (i.e. a parameter that isn't usually a function) provides lots of flexibility in jsPsych experiments, because it allows you to dynamically change the parameter's value based on the participant's earlier responses, and any other information that you don't know before the experiment has started. For more information and examples, see the <a href="../../overview/dynamic-parameters/">dynamic parameter documentation page</a>.</p>
+</div>
 <p>Here's what the code looks like, and a description follows below.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">debrief_block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
