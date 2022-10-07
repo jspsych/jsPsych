@@ -16,7 +16,7 @@ Despite this simple task, the tutorial covers many of the key features of jsPsyc
 
 Start by setting up a new HTML file with jsPsych, the html-keyboard-response plugin, and the jspsych.css file loaded. If you are unsure how to do this, follow the [Hello World tutorial](hello-world.md). You should have an HTML document that looks like this:
 
-!!! info
+??? info "Info: Loading jsPsych"
     This tutorial assumes that you are using the [CDN-based method of loading jsPsych](hello-world.md#option-1-using-cdn-hosted-scripts). 
     If you are using another method then everything is the same except for how jsPsych is loaded.
 
@@ -611,10 +611,12 @@ var test_procedure = {
 };
 ```
 
-!!! info
+??? info "Info: Randomizing timeline variables"
     In a timeline variables procedure, when `randomize_order` is `true` and `repetitions` is greater than 1, the  trial order will be re-randomized on each repetition through the `timeline_variables` array. This means that there will be some constraints on the randomization of all trials in the procedure. 
-    For example, if a `timeline_variables` array contains one trial per stimulus, then the same stimulus could occur twice in a row (since it could be at the end of one repetition and the start of the next one), but it could not be repeated more than twice in a row, regardless of the number of repetitions.
-    If you don't want to constrain the randomization in this way, you could use the `sample` parameter with the `fixed-repetitions` option: this will combine all the repeitions of your `timeline_variables` array into one larger array, and then randomize the whole thing. You can read more about the randomization, repetition, and sampling options for timeline variables in the [Timeline documentation](../overview/timeline.md)).
+
+    For example, if a `timeline_variables` array contains one trial per stimulus, then the same stimulus could occur twice in a row (since it could be at the end of one repetition and the start of the next one), but it could not be repeated more than twice in a row, regardless of the number of `repetitions`.
+
+    If you want to repeat your `timeline_variables` array but randomize across all trials, you could use the `sample` parameter with the `fixed-repetitions` option: this will combine all the repeitions of your `timeline_variables` array into one larger array, and then randomize the whole thing. You can read more about the randomization, repetition, and sampling options for timeline variables in the [Timeline Variables documentation](../overview/timeline.md#timeline-variables).
 
 
 ??? example "The complete code so far"
@@ -1128,8 +1130,10 @@ var test = {
 
 The `data.response` value is a string representation of the key the participant pressed. We can compare this with the `data.correct_response` value, and assign this computed value to a new property `data.correct`.
 
-!!! info
-    Here we are comparing the values of `data.response` and `data.correct_response` using a jsPsych function called [jsPsych.pluginAPI.compareKeys](../reference/jspsych-pluginAPI.md#jspsychpluginapicomparekeys). We're using this function because it allows us to compare keys in either a _case sensitive_ or _case insensitive_ way, depending on the [experiment settings](../overview/experiment-options.md). The participant's key response will be recorded in a case-sensitive way in the data (e.g. 'f' or 'F'), but in most cases, we don't care if their response corresponds to an upper or lower case letter (which is why the `case_sensitive` experiment setting is `false` by default). Using the `jsPsych.pluginAPI.commpareKeys` function here means that the response will be scored correctly, even if the participant holds down Shift or has Caps Lock on. This function is only relevant for keyboard responses; for other kinds of responses, such as button presses, you can simply compare the response and correct response values directly, e.g.
+??? info "Info: The `compareKeys` function"
+    Here we are comparing the values of `data.response` and `data.correct_response` using a jsPsych function called [jsPsych.pluginAPI.compareKeys](../reference/jspsych-pluginAPI.md#comparekeys). We're using this function because it allows us to compare keys in either a _case sensitive_ or _case insensitive_ way, depending on the `case_sensitive_responses` parameter in the [experiment settings](../overview/experiment-options.md#choose-whether-you-want-keyboard-choicesresponses-to-be-case-sensitive). The participant's key response will be recorded in a case-sensitive way in the data (e.g. 'f' or 'F'), but in most cases, we don't care if their response corresponds to an upper or lower case letter (which is why the `case_sensitive_responses` experiment setting is `false` by default). Using the `jsPsych.pluginAPI.commpareKeys` function here means that the response will be scored correctly, even if the participant holds down Shift or has Caps Lock on. 
+    
+    This function is only relevant for keyboard responses; for other kinds of responses, such as button presses, you can simply compare the response and correct response values directly, e.g.
     ```js
     data.correct = data.response === data.correct_response;
     ```
@@ -1250,8 +1254,8 @@ jsPsych provides a limited set of analysis functions to allow you to calculate t
 
 We'll use the `html-keyboard-response` plugin. Because the text that we want to display changes based on the participant's performance in the experiment, we need to use a function for the `stimulus` parameter and return the desired text.
 
-!!! info
-  Using a function as the value of a 'normal' parameter (i.e. a parameter that isn't usually a function) provides lots of flexibility in jsPsych experiments, because it allows you to dynamically change the parameter's value based on the participant's earlier responses, and any other information that you don't know before the experiment has started. For more information and examples, see the [dynamic parameter documentation page](../overview/dynamic-parameters.md).
+??? info "Info: Dynamic parameters"
+    Using a function as the value of a 'normal' parameter (i.e. a parameter that isn't usually a function) provides lots of flexibility in jsPsych experiments, because it allows you to dynamically change the parameter's value based on the participant's earlier responses, and any other information that you don't know before the experiment has started. For more information and examples, see the [dynamic parameter documentation page](../overview/dynamic-parameters.md).
 
 Here's what the code looks like, and a description follows below.
 
