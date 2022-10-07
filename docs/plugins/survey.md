@@ -410,7 +410,7 @@ import survey from '@jspsych/plugin-survey';
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo4.html">Open demo in new tab</a>
 
-    ???+ example "Adding data to trial"
+???+ example "Adding data to trial"
     When adding any data to a Survey trial, you should add it via the `data` parameter at the whole-trial level (not inside the question objects), even if it only relates to one question out of multiple questions/pages contained wihtin the trial.
     === "Code"
 
