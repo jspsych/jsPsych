@@ -2034,7 +2034,7 @@
 
 
 <h1 id="external-html">external-html<a class="headerlink" href="#external-html" title="Permanent link">&para;</a></h1>
-<p>Current version: 1.1.1. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-external-html/CHANGELOG.md">See version history</a>.</p>
+<p>Current version: 1.1.2. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-external-html/CHANGELOG.md">See version history</a>.</p>
 <p>The HTML plugin displays an external HTML document (often a consent form). Either a keyboard response or a button press can be used to continue to the next trial. It allows the experimenter to check if conditions are met (such as indicating informed consent) before continuing.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. Parameters with a default value of <em>undefined</em> must be specified. Other parameters can be left unspecified if the default value is acceptable.</p>
@@ -2058,7 +2058,7 @@
 <td>cont_key</td>
 <td>string</td>
 <td>null</td>
-<td>The key character the subject can use to advance to the next trial. If left as null, then the subject will not be able to advance trials using the keyboard.</td>
+<td>The key character the participant can use to advance to the next trial. If left as null, then the participant will not be able to advance trials using the keyboard.</td>
 </tr>
 <tr>
 <td>cont_btn</td>
@@ -2070,7 +2070,7 @@
 <td>check_fn</td>
 <td>function</td>
 <td><code>function(){ return true; }</code></td>
-<td>This function is called with the jsPsych <code>display_element</code> as the only argument when the subject attempts to advance the trial. The trial will only advance if the function return <code>true</code>. This can be used to verify that the subject has correctly filled out a form before continuing, for example.</td>
+<td>This function is called with the jsPsych <code>display_element</code> as the only argument when the participant attempts to advance the trial. The trial will only advance if the function return <code>true</code>. This can be used to verify that the participant has correctly filled out a form before continuing, for example.</td>
 </tr>
 <tr>
 <td>force_refresh</td>
@@ -2105,7 +2105,7 @@
 <tr>
 <td>rt</td>
 <td>numeric</td>
-<td>The response time in milliseconds for the subject to finish the trial.</td>
+<td>The response time in milliseconds for the participant to finish the trial.</td>
 </tr>
 </tbody>
 </table>
@@ -2113,7 +2113,7 @@
 <p>In <code>visual</code> simulation mode, the plugin cannot interact with any form elements on the screen other than the <code>cont_btn</code> specified in the trial parameters. If your <code>check_fn</code> requires other user interaction, for example, clicking a checkbox, then you'll need to disable simulation for the trial and complete the interaction manually.</p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-external-html@1.1.1&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-external-html@1.1.2&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-external-html.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
@@ -2144,7 +2144,7 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Code</label><label for="__tabbed_1_2">Demo</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="c1">// sample function that might be used to check if a subject has given</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="c1">// sample function that might be used to check if a participant has given</span><span class="w"></span>
 <span class="c1">// consent to participate.</span><span class="w"></span>
 <span class="kd">var</span><span class="w"> </span><span class="nx">check_consent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">elem</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;consent_checkbox&#39;</span><span class="p">).</span><span class="nx">checked</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>

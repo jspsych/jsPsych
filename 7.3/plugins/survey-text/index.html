@@ -1968,8 +1968,8 @@
 
 
 <h1 id="survey-text">survey-text<a class="headerlink" href="#survey-text" title="Permanent link">&para;</a></h1>
-<p>Current version: 1.1.1. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-text/CHANGELOG.md">See version history</a>.</p>
-<p>The survey-text plugin displays a set of questions with free response text fields. The subject types in answers.</p>
+<p>Current version: 1.1.2. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-text/CHANGELOG.md">See version history</a>.</p>
+<p>The survey-text plugin displays a set of questions with free response text fields. The participant types in answers.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. Parameters with a default value of <em>undefined</em> must be specified. Other parameters can be left unspecified if the default value is acceptable.</p>
 <table>
@@ -1986,7 +1986,7 @@
 <td>questions</td>
 <td>array</td>
 <td><em>undefined</em></td>
-<td>An array of objects, each object represents a question that appears on the screen. Each object contains a prompt, placeholder, required, rows, and columns parameter that will be applied to the question. See examples below for further clarification. <code>prompt</code>: Type string, default value of <em>undefined</em>. The string is the prompt for the subject to respond to. Each question gets its own response field. <code>placeholder</code>: Type string, default value of <code>""</code>. The string will create placeholder text in the text field. <code>required</code>: Boolean; if <code>true</code> then the user must enter a response to submit. <code>rows</code>: Type integer, default value of 1. The number of rows for the response text box. <code>columns</code>: Type integer, default value of 40. The number of columns for the response text box. <code>name</code>: Name of the question. Used for storing data. If left undefined then default names (<code>Q0</code>, <code>Q1</code>, <code>...</code>) will be used for the questions.</td>
+<td>An array of objects, each object represents a question that appears on the screen. Each object contains a prompt, placeholder, required, rows, and columns parameter that will be applied to the question. See examples below for further clarification. <code>prompt</code>: Type string, default value of <em>undefined</em>. The string is the prompt for the participant to respond to. Each question gets its own response field. <code>placeholder</code>: Type string, default value of <code>""</code>. The string will create placeholder text in the text field. <code>required</code>: Boolean; if <code>true</code> then the user must enter a response to submit. <code>rows</code>: Type integer, default value of 1. The number of rows for the response text box. <code>columns</code>: Type integer, default value of 40. The number of columns for the response text box. <code>name</code>: Name of the question. Used for storing data. If left undefined then default names (<code>Q0</code>, <code>Q1</code>, <code>...</code>) will be used for the questions.</td>
 </tr>
 <tr>
 <td>randomize_question_order</td>
@@ -2033,7 +2033,7 @@
 <tr>
 <td>rt</td>
 <td>numeric</td>
-<td>The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response(s) were submitted.</td>
+<td>The response time in milliseconds for the participant to make a response. The time is measured from when the questions first appear on the screen until the participant's response(s) were submitted.</td>
 </tr>
 <tr>
 <td>question_order</td>
@@ -2044,7 +2044,7 @@
 </table>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey-text@1.1.1&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey-text@1.1.2&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-survey-text.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>

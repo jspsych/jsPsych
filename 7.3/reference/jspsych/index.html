@@ -3700,7 +3700,7 @@ el.style.visibility = &#39;hidden&#39;;
 <tr>
 <td>display_element</td>
 <td>string</td>
-<td>The ID of an HTML element to display the experiment in. If left blank, jsPsych will use the <code>&lt;body&gt;</code> element to display content. All keyboard event listeners are bound to this element. In order for a keyboard event to be detected, this element must have focus (be the last thing that the subject clicked on).</td>
+<td>The ID of an HTML element to display the experiment in. If left blank, jsPsych will use the <code>&lt;body&gt;</code> element to display content. All keyboard event listeners are bound to this element. In order for a keyboard event to be detected, this element must have focus (be the last thing that the participant clicked on).</td>
 </tr>
 <tr>
 <td>on_finish</td>
@@ -3735,7 +3735,7 @@ el.style.visibility = &#39;hidden&#39;;
 <tr>
 <td>exclusions</td>
 <td>object</td>
-<td>Specifies restrictions on the browser the subject can use to complete the experiment. See list of options below. <em>This feature is deprecated as of v7.1 and will be removed in v8.0. The <a href="../../plugins/browser-check/">browser-check plugin</a> is an improved way to handle exclusions.</em></td>
+<td>Specifies restrictions on the browser the participant can use to complete the experiment. See list of options below. <em>This feature is deprecated as of v7.1 and will be removed in v8.0. The <a href="../../plugins/browser-check/">browser-check plugin</a> is an improved way to handle exclusions.</em></td>
 </tr>
 <tr>
 <td>show_progress_bar</td>
@@ -3802,7 +3802,7 @@ el.style.visibility = &#39;hidden&#39;;
 <tr>
 <td>min_width</td>
 <td>numeric</td>
-<td>The minimum width of the browser window. If the width is below this value, a message will be displayed to the subject asking them to maximize their browser window. The experiment will sit on this page until the browser window is large enough.</td>
+<td>The minimum width of the browser window. If the width is below this value, a message will be displayed to the participant asking them to maximize their browser window. The experiment will sit on this page until the browser window is large enough.</td>
 </tr>
 <tr>
 <td>min_height</td>
@@ -4133,7 +4133,7 @@ data, such as in the example below.</p>
 </tbody>
 </table>
 <h3 id="description_10">Description<a class="headerlink" href="#description_10" title="Permanent link">&para;</a></h3>
-<p>This method returns information about the length of the experiment and the subject's current location in the experiment timeline.</p>
+<p>This method returns information about the length of the experiment and the participant's current location in the experiment timeline.</p>
 <h3 id="example_10">Example<a class="headerlink" href="#example_10" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">progress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getProgress</span><span class="p">();</span><span class="w"></span>
 <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;You have completed approximately &#39;</span><span class="o">+</span><span class="nx">progress</span><span class="p">.</span><span class="nx">percent_complete</span><span class="o">+</span><span class="s1">&#39;% of the experiment&#39;</span><span class="p">);</span><span class="w"></span>
@@ -4173,7 +4173,7 @@ data, such as in the example below.</p>
 <h3 id="return-value_13">Return value<a class="headerlink" href="#return-value_13" title="Permanent link">&para;</a></h3>
 <p>Returns a numeric value indicating the number of milliseconds since <code>jsPsych.run</code> was called.</p>
 <h3 id="description_13">Description<a class="headerlink" href="#description_13" title="Permanent link">&para;</a></h3>
-<p>Gets the total time the subject has been in the experiment.</p>
+<p>Gets the total time the participant has been in the experiment.</p>
 <h3 id="example_13">Example<a class="headerlink" href="#example_13" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">getTotalTime</span><span class="p">();</span><span class="w"></span>
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">time</span><span class="p">);</span><span class="w"></span>

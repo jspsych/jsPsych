@@ -1968,8 +1968,8 @@
 
 
 <h1 id="animation">animation<a class="headerlink" href="#animation" title="Permanent link">&para;</a></h1>
-<p>Current version: 1.1.1. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-animation/CHANGELOG.md">See version history</a>.</p>
-<p>This plugin displays a sequence of images at a fixed frame rate. The sequence can be looped a specified number of times. The subject is free to respond at any point during the animation, and the time of the response is recorded.</p>
+<p>Current version: 1.1.2. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-animation/CHANGELOG.md">See version history</a>.</p>
+<p>This plugin displays a sequence of images at a fixed frame rate. The sequence can be looped a specified number of times. The participant is free to respond at any point during the animation, and the time of the response is recorded.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. Parameters with a default value of <em>undefined</em> must be specified. Other parameters can be left unspecified if the default value is acceptable.</p>
 <table>
@@ -1992,13 +1992,13 @@
 <td>frame_time</td>
 <td>numeric</td>
 <td>250</td>
-<td>How long to display each image (in milliseconds).</td>
+<td>How long to display each image in milliseconds.</td>
 </tr>
 <tr>
 <td>frame_isi</td>
 <td>numeric</td>
 <td>0</td>
-<td>If greater than 0, then a gap will be shown between each image in the sequence. This parameter specifies the length of the gap.</td>
+<td>If greater than 0, then a gap will be shown between each image in the sequence. This parameter specifies the length of the gap in milliseconds.</td>
 </tr>
 <tr>
 <td>sequence_reps</td>
@@ -2010,13 +2010,13 @@
 <td>choices</td>
 <td>array of strings</td>
 <td><code>"ALL_KEYS"</code></td>
-<td>This array contains the key(s) that the subject is allowed to press in order to respond to the stimulus. Keys should be specified as characters (e.g., <code>'a'</code>, <code>'q'</code>, <code>' '</code>, <code>'Enter'</code>, <code>'ArrowDown'</code>) - see <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values">this page</a> and <a href="https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/">this page (event.key column)</a> for more examples. Any key presses that are not listed in the array will be ignored. The default value of <code>"ALL_KEYS"</code> means that all keys will be accepted as valid responses. Specifying <code>"NO_KEYS"</code> will mean that no responses are allowed.</td>
+<td>This array contains the key(s) that the participant is allowed to press in order to respond to the stimulus. Keys should be specified as characters (e.g., <code>'a'</code>, <code>'q'</code>, <code>' '</code>, <code>'Enter'</code>, <code>'ArrowDown'</code>) - see <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values">this page</a> and <a href="https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/">this page (event.key column)</a> for more examples. Any key presses that are not listed in the array will be ignored. The default value of <code>"ALL_KEYS"</code> means that all keys will be accepted as valid responses. Specifying <code>"NO_KEYS"</code> will mean that no responses are allowed.</td>
 </tr>
 <tr>
 <td>prompt</td>
 <td>string</td>
 <td>null</td>
-<td>This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key(s) to press).</td>
+<td>This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key(s) to press).</td>
 </tr>
 <tr>
 <td>render_on_canvas</td>
@@ -2045,13 +2045,13 @@
 <tr>
 <td>response</td>
 <td>array</td>
-<td>An array, where each element is an object representing a response given by the subject. Each object has a <code>stimulus</code> property, indicating which image was displayed when the key was pressed, an <code>rt</code> property, indicating the time of the key press relative to the start of the animation, and a <code>key_press</code> property, indicating which key was pressed. The array will be encoded in JSON format when data is saved using either the <code>.json()</code> or <code>.csv()</code> functions.</td>
+<td>An array, where each element is an object representing a response given by the participant. Each object has a <code>stimulus</code> property, indicating which image was displayed when the key was pressed, an <code>rt</code> property, indicating the time of the key press relative to the start of the animation, and a <code>key_press</code> property, indicating which key was pressed. The array will be encoded in JSON format when data is saved using either the <code>.json()</code> or <code>.csv()</code> functions.</td>
 </tr>
 </tbody>
 </table>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-animation@1.1.1&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-animation@1.1.2&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-animation.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>

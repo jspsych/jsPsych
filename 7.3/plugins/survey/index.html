@@ -2174,7 +2174,7 @@
 
 
 <h1 id="survey">survey<a class="headerlink" href="#survey" title="Permanent link">&para;</a></h1>
-<p>Current version: 0.2.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md">See version history</a>.</p>
+<p>Current version: 0.2.1. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md">See version history</a>.</p>
 <p>The survey plugin displays one or more questions of different types, on one or more pages that the participant can navigate. This plugin is built on top of the <a href="https://surveyjs.io/">SurveyJS</a> library.</p>
 <p>The supported question types are: </p>
 <ul>
@@ -2193,7 +2193,7 @@
 </div>
 <h2 id="css">CSS<a class="headerlink" href="#css" title="Permanent link">&para;</a></h2>
 <p>This plugin uses an additional stylesheet called <code>survey.css</code>. You can load it via: </p>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/@jspsych/plugin-survey@0.2.0/css/survey.css&quot;</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/@jspsych/plugin-survey@0.2.1/css/survey.css&quot;</span><span class="p">&gt;</span>
 </code></pre></div>
 <p>If you are using a bundler such as <a href="https://webpack.js.org/">webpack</a>, you can also import it in JavaScript as follows, depending on your bundler configuration:
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="s1">&#39;@jspsych/plugin-survey/css/survey.css&#39;</span><span class="w"></span>
@@ -2621,7 +2621,7 @@ Other parameters can be left unspecified if the default value is acceptable.</p>
 <tr>
 <td>rt</td>
 <td>numeric</td>
-<td>The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response(s) are submitted.</td>
+<td>The response time in milliseconds for the participant to make a response. The time is measured from when the questions first appear on the screen until the participant's response(s) are submitted.</td>
 </tr>
 </tbody>
 </table>
@@ -2629,7 +2629,7 @@ Other parameters can be left unspecified if the default value is acceptable.</p>
 <p>This plugin does not yet support <a href="../../overview/simulation/">simulation mode</a>.</p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey@0.2.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey@0.2.1&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-survey.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
@@ -2737,7 +2737,7 @@ Other parameters can be left unspecified if the default value is acceptable.</p>
 </div>
 </div>
 </div>
-<p><a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-demo2.html">Open demo in new tab</a></p>
+<p><a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo2.html">Open demo in new tab</a></p>
 </details>
 <details class="example" open="open">
 <summary>Single and multiple item Likert-style scales</summary>
@@ -2843,6 +2843,69 @@ Other parameters can be left unspecified if the default value is acceptable.</p>
 </div>
 </div>
 <p><a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo4.html">Open demo in new tab</a></p>
+<details class="example" open="open">
+<summary>Adding data to trial</summary>
+</details>
+<p>When adding any data to a Survey trial, you should add it via the <code>data</code> parameter at the whole-trial level (not inside the question objects), even if it only relates to one question out of multiple questions/pages contained wihtin the trial.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Code</label><label for="__tabbed_5_2">Demo</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">question_info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">  </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="s1">&#39;fruit&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;apples&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s1">&#39;Q1_prompt&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Do you like apples?&#39;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="s1">&#39;Q1_type&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;regular&#39;</span><span class="w"></span>
+<span class="w">  </span><span class="p">},</span><span class="w"></span>
+<span class="w">  </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="s1">&#39;fruit&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;bananas&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s1">&#39;Q1_prompt&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Do you NOT like bananas?&#39;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="s1">&#39;Q1_type&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;reverse&#39;</span><span class="w"></span>
+<span class="w">  </span><span class="p">},</span><span class="w"></span>
+<span class="p">];</span><span class="w"></span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">survey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychSurvey</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">pages</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;multi-choice&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;Q1_prompt&#39;</span><span class="p">),</span><span class="w"></span>
+<span class="w">        </span><span class="nx">options</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;Yes&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;No&#39;</span><span class="p">],</span><span class="w"></span>
+<span class="w">        </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Q1&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;text&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">          </span><span class="k">return</span><span class="w"> </span><span class="sb">`What&#39;s your favorite thing about </span><span class="si">${</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;fruit&#39;</span><span class="p">)</span><span class="si">}</span><span class="sb">?`</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="p">},</span><span class="w"></span>
+<span class="w">        </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Q2&#39;</span><span class="w"></span>
+<span class="w">      </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">]</span><span class="w"></span>
+<span class="w">  </span><span class="p">],</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// Add data at the whole-trial level here</span><span class="w"></span>
+<span class="w">  </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="s1">&#39;Q1_prompt&#39;</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;Q1_prompt&#39;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="s1">&#39;Q1_type&#39;</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;Q1_type&#39;</span><span class="p">),</span><span class="w"></span>
+<span class="w">    </span><span class="s1">&#39;fruit&#39;</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;fruit&#39;</span><span class="p">)</span><span class="w">                                                        </span>
+<span class="w">  </span><span class="p">},</span><span class="w"></span>
+<span class="w">  </span><span class="nx">button_label_finish</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Continue&#39;</span><span class="w">                </span>
+<span class="p">};</span><span class="w"></span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">survey_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">survey</span><span class="p">],</span><span class="w"></span>
+<span class="w">  </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="nx">question_info</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nx">randomize_order</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p><div style="text-align:center;">
+  <iframe src="../../demos/jspsych-survey-demo5.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+</div></p>
+</div>
+</div>
+</div>
+<p><a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo5.html">Open demo in new tab</a></p>
 </details>
 
               

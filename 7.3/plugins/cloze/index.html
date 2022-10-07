@@ -1968,8 +1968,8 @@
 
 
 <h1 id="cloze">cloze<a class="headerlink" href="#cloze" title="Permanent link">&para;</a></h1>
-<p>Current version: 1.1.1. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-cloze/CHANGELOG.md">See version history</a>.</p>
-<p>This plugin displays a text with certain words removed. Participants are asked to replace the missing items. Responses are recorded when clicking a button. Optionally, responses are evaluated and a function is called in case of differences, making it possible to inform participants about mistakes.</p>
+<p>Current version: 1.2.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-cloze/CHANGELOG.md">See version history</a>.</p>
+<p>This plugin displays a text with certain words omitted. Participants are asked to replace the missing items. Responses are recorded when clicking a button. Responses can be evaluated and a function is called in case of either differences or incomplete answers, making it possible to inform participants about mistakes before proceeding.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. Parameters with a default value of <em>undefined</em> must be specified. Other parameters can be left unspecified if the default value is acceptable.</p>
 <table>
@@ -2001,10 +2001,16 @@
 <td>Boolean value indicating if the answers given by participants should be compared against a correct solution given in the text (between % signs) after the button was clicked. If <code>true</code>, answers are checked and in case of differences, the <code>mistake_fn</code> is called. In this case, the trial does not automatically finish. If <code>false</code>, no checks are performed and the trial automatically ends when clicking the button.</td>
 </tr>
 <tr>
+<td>allow_blanks</td>
+<td>boolean</td>
+<td>true</td>
+<td>Boolean value indicating if the answers given by participants should be checked for completion after the button was clicked. If <code>true</code>, answers are not checked for completion and blank answers are allowed. The trial will then automatically finish upon the clicking the button. If <code>false</code>, answers are checked for completion, and in case there are some fields with missing answers, the <code>mistake_fn</code> is called. In this case, the trial does not automatically finish.</td>
+</tr>
+<tr>
 <td>mistake_fn</td>
 <td>function</td>
 <td><code>function(){}</code></td>
-<td>Function called if <code>check_answers</code> is set to <code>true</code> and there is a difference between the participants answers and the correct solution provided in the text.</td>
+<td>Function called if <code>check_answers</code> is set to <code>true</code> or <code>allow_blanks</code> is set to false and there is a difference between the participants answers and the correct solution provided in the text, or if there is at least one field with a blank answer respectively.</td>
 </tr>
 </tbody>
 </table>
@@ -2028,7 +2034,7 @@
 </table>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-cloze@1.1.1&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-cloze@1.2.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-cloze.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
@@ -2060,8 +2066,30 @@
 <p><a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-cloze-demo1.html">Open demo in new tab</a></p>
 </details>
 <details class="example" open="open">
-<summary>More elaborate example (with check against correct solution, custom error handling and modified button text)</summary>
+<summary>Cloze example using default settings with completion checking and custom error handling</summary>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Code</label><label for="__tabbed_2_2">Demo</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">cloze_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychCloze</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Science notebooks have a %%-colored front cover. Math notebooks have a %%-colored front cover.&#39;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">allow_blanks</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nx">mistake_fn</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Please fill in all blanks.&#39;</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">};</span><span class="w"></span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p><div style="text-align:center;">
+    <iframe src="../../demos/jspsych-cloze-demo3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+</div></p>
+</div>
+</div>
+</div>
+<p><a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-cloze-demo3.html">Open demo in new tab</a></p>
+</details>
+<details class="example" open="open">
+<summary>More elaborate example (with check against correct solution, custom error handling and modified button text)</summary>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Code</label><label for="__tabbed_3_2">Demo</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">cloze_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -2069,7 +2097,7 @@
 <span class="w">        </span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;A rectangle has % 4 % corners and a triangle has % 3 %.&#39;</span><span class="p">,</span><span class="w"></span>
 <span class="w">        </span><span class="nx">check_answers</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
 <span class="w">        </span><span class="nx">button_text</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Next&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nx">mistake_fn</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span><span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Wrong answer. Please check again.&quot;</span><span class="p">)}</span><span class="w"></span>
+<span class="w">        </span><span class="nx">mistake_fn</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(){</span><span class="w"> </span><span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Wrong answer. Please check again.&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
 <span class="w">    </span><span class="p">};</span><span class="w"></span>
 </code></pre></div>
 </div>

@@ -1968,8 +1968,8 @@
 
 
 <h1 id="canvas-slider-response">canvas-slider-response<a class="headerlink" href="#canvas-slider-response" title="Permanent link">&para;</a></h1>
-<p>Current version: 1.1.1. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-canvas-slider-response/CHANGELOG.md">See version history</a>.</p>
-<p>This plugin can be used to draw a stimulus on a <a href="https://www.w3schools.com/html/html5_canvas.asp">HTML canvas element</a> and collect a response within a range of values, which is made by dragging a slider. The canvas stimulus can be useful for displaying dynamic, parametrically-defined graphics, and for controlling the positioning of multiple graphical elements (shapes, text, images). The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the subject has failed to respond within a fixed length of time.</p>
+<p>Current version: 1.1.2. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-canvas-slider-response/CHANGELOG.md">See version history</a>.</p>
+<p>This plugin can be used to draw a stimulus on a <a href="https://www.w3schools.com/html/html5_canvas.asp">HTML canvas element</a> and collect a response within a range of values, which is made by dragging a slider. The canvas stimulus can be useful for displaying dynamic, parametrically-defined graphics, and for controlling the positioning of multiple graphical elements (shapes, text, images). The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the participant has failed to respond within a fixed length of time.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. Parameters with a default value of <em>undefined</em> must be specified. Other parameters can be left unspecified if the default value is acceptable.</p>
 <table>
@@ -2040,13 +2040,13 @@
 <td>require_movement</td>
 <td>boolean</td>
 <td>false</td>
-<td>If true, the subject must click the slider before clicking the continue button.</td>
+<td>If true, the participant must click the slider before clicking the continue button.</td>
 </tr>
 <tr>
 <td>prompt</td>
 <td>string</td>
 <td>null</td>
-<td>This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., what question to answer).</td>
+<td>This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., what question to answer).</td>
 </tr>
 <tr>
 <td>stimulus_duration</td>
@@ -2058,13 +2058,13 @@
 <td>trial_duration</td>
 <td>numeric</td>
 <td>null</td>
-<td>How long to wait for the subject to make a response before ending the trial in milliseconds. If the subject fails to make a response before this timer is reached, the subject's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely.</td>
+<td>How long to wait for the participant to make a response before ending the trial in milliseconds. If the participant fails to make a response before this timer is reached, the participant's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely.</td>
 </tr>
 <tr>
 <td>response_ends_trial</td>
 <td>boolean</td>
 <td>true</td>
-<td>If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the <code>trial_duration</code> parameter). If false, then the trial will continue until the value for <code>trial_duration</code> is reached. You can use this parameter to force the subject to view a stimulus for a fixed amount of time, even if they respond before the time is complete.</td>
+<td>If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the <code>trial_duration</code> parameter). If false, then the trial will continue until the value for <code>trial_duration</code> is reached. You can use this parameter to force the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete.</td>
 </tr>
 </tbody>
 </table>
@@ -2087,14 +2087,14 @@
 <tr>
 <td>rt</td>
 <td>numeric</td>
-<td>The time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.</td>
+<td>The time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response.</td>
 </tr>
 </tbody>
 </table>
 <p>Note: the canvas stimulus is <em>not</em> included in the trial data because it is a function. Any stimulus information that should be saved in the trial data can be added via the <code>data</code> parameter.</p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-canvas-slider-response@1.1.1&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-canvas-slider-response@1.1.2&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-canvas-slider-response.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>

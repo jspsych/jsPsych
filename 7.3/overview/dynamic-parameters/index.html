@@ -2008,10 +2008,10 @@
 
 
 <h1 id="dynamic-parameters">Dynamic parameters<a class="headerlink" href="#dynamic-parameters" title="Permanent link">&para;</a></h1>
-<p>Most trial parameters can also be specified as functions. In a typical declaration of a jsPsych trial, parameters are known at the start of the experiment. This makes it impossible to alter the content of the trial based on the outcome of previous trials. However, <strong>when functions are used as the parameter value, the function is evaluated right before the trial starts, and the return value of the function is used as the parameter value for that trial</strong>. This enables dynamic updating of the parameter based on data that a subject has generated or any other information that you do not know in advance.</p>
+<p>Most trial parameters can also be specified as functions. In a typical declaration of a jsPsych trial, parameters are known at the start of the experiment. This makes it impossible to alter the content of the trial based on the outcome of previous trials. However, <strong>when functions are used as the parameter value, the function is evaluated right before the trial starts, and the return value of the function is used as the parameter value for that trial</strong>. This enables dynamic updating of the parameter based on data that a participant has generated or any other information that you do not know in advance.</p>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <h3 id="providing-feedback">Providing Feedback<a class="headerlink" href="#providing-feedback" title="Permanent link">&para;</a></h3>
-<p>Here is a sketch of how this functionality could be used to display feedback to a subject in the Flanker Task.</p>
+<p>Here is a sketch of how this functionality could be used to display feedback to a participant in the Flanker Task.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">timeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span><span class="w"></span>
 
 <span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -2023,7 +2023,7 @@
 <span class="w">    </span><span class="nx">target_direction</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;left&#39;</span><span class="w"></span>
 <span class="w">  </span><span class="p">},</span><span class="w"></span>
 <span class="w">  </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// Score the response as correct or incorrect.</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Score the keyboard response as correct or incorrect.</span><span class="w"></span>
 <span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;f&quot;</span><span class="p">)){</span><span class="w"></span>
 <span class="w">      </span><span class="nx">data</span><span class="p">.</span><span class="nx">correct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -2050,6 +2050,19 @@
 
 <span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">trial</span><span class="p">,</span><span class="w"> </span><span class="nx">feedback</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When scoring a participant's response, the <code>jsPsych.pluginAPI.compareKeys</code> function is only needed to compare <em>keyboard</em> responses. For other kinds of response types, such as button presses, you can compare the participant's response and correct response values directly, e.g.
+<div class="highlight"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">0</span><span class="p">)){</span><span class="w"></span>
+<span class="w">  </span><span class="nx">data</span><span class="p">.</span><span class="nx">correct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nx">data</span><span class="p">.</span><span class="nx">correct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w"> </span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+Or:
+<div class="highlight"><pre><span></span><code><span class="nx">data</span><span class="p">.</span><span class="nx">correct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="nx">data</span><span class="p">.</span><span class="nx">correct_response</span><span class="p">;</span><span class="w"></span>
+</code></pre></div></p>
+</div>
 <h3 id="randomizing-a-parameter-value">Randomizing a parameter value<a class="headerlink" href="#randomizing-a-parameter-value" title="Permanent link">&para;</a></h3>
 <p>Here's an example of using a dynamic parameter to randomize the inter-trial interval (ITI) duration. This time, the dynamic parameter is created using a named function instead of an anonymous function.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">random_duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>

@@ -1982,11 +1982,11 @@
 
 
 <h1 id="audio-slider-response">audio-slider-response<a class="headerlink" href="#audio-slider-response" title="Permanent link">&para;</a></h1>
-<p>Current version: 1.1.1. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-slider-response/CHANGELOG.md">See version history</a>.</p>
-<p>This plugin plays an audio file and allows the subject to respond by dragging a slider.</p>
+<p>Current version: 1.1.2. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-slider-response/CHANGELOG.md">See version history</a>.</p>
+<p>This plugin plays an audio file and allows the participant to respond by dragging a slider.</p>
 <p>If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. </p>
 <p>Audio files can be automatically preloaded by jsPsych using the <a href="../preload/"><code>preload</code> plugin</a>. However, if you are using timeline variables or another dynamic method to specify the audio stimulus, then you will need to <a href="../../overview/media-preloading/#manual-preloading">manually preload</a> the audio.</p>
-<p>The trial can end when the subject responds, or if the subject has failed to respond within a fixed length of time. You can also prevent the slider response from being made before the audio has finished playing.</p>
+<p>The trial can end when the participant responds, or if the participant has failed to respond within a fixed length of time. You can also prevent the slider response from being made before the audio has finished playing.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. Parameters with a default value of <em>undefined</em> must be specified. Other parameters can be left unspecified if the default value is acceptable.</p>
 <table>
@@ -2051,25 +2051,25 @@
 <td>require_movement</td>
 <td>boolean</td>
 <td>false</td>
-<td>If true, the subject must move the slider before clicking the continue button.</td>
+<td>If true, the participant must move the slider before clicking the continue button.</td>
 </tr>
 <tr>
 <td>prompt</td>
 <td>string</td>
 <td>null</td>
-<td>This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).</td>
+<td>This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).</td>
 </tr>
 <tr>
 <td>trial_duration</td>
 <td>numeric</td>
 <td>null</td>
-<td>How long to wait for the subject to make a response before ending the trial in milliseconds. If the subject fails to make a response before this timer is reached, the subject's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely.</td>
+<td>How long to wait for the participant to make a response before ending the trial in milliseconds. If the participant fails to make a response before this timer is reached, the participant's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely.</td>
 </tr>
 <tr>
 <td>response_ends_trial</td>
 <td>boolean</td>
 <td>true</td>
-<td>If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the <code>trial_duration</code> parameter). If false, then the trial will continue until the value for <code>trial_duration</code> is reached. You can set this parameter to <code>false</code> to force the subject to listen to the stimulus for a fixed amount of time, even if they respond before the time is complete.</td>
+<td>If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the <code>trial_duration</code> parameter). If false, then the trial will continue until the value for <code>trial_duration</code> is reached. You can set this parameter to <code>false</code> to force the participant to listen to the stimulus for a fixed amount of time, even if they respond before the time is complete.</td>
 </tr>
 <tr>
 <td>response_allowed_while_playing</td>
@@ -2098,7 +2098,7 @@
 <tr>
 <td>rt</td>
 <td>numeric</td>
-<td>The time in milliseconds for the subject to make a response. The time is measured from when the stimulus first began playing until the subject's response.</td>
+<td>The time in milliseconds for the participant to make a response. The time is measured from when the stimulus first began playing until the participant's response.</td>
 </tr>
 <tr>
 <td>stimulus</td>
@@ -2118,7 +2118,7 @@ This is because the audio file is not loaded in <code>data-only</code> mode and 
 This may change in a future version as we improve the simulation modes.</p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-audio-slider-response@1.1.1&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-audio-slider-response@1.1.2&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-audio-slider-response.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
@@ -2152,7 +2152,7 @@ This may change in a future version as we improve the simulation modes.</p>
 <p><a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-audio-slider-response-demo-1.html">Open demo in new tab</a></p>
 </details>
 <details class="example" open="open">
-<summary>No response allowed until audio finishes; subject must interact with slider to continue</summary>
+<summary>No response allowed until audio finishes; participant must interact with slider to continue</summary>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Code</label><label for="__tabbed_2_2">Demo</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

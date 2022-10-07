@@ -1982,8 +1982,8 @@
 
 
 <h1 id="survey-html-form">survey-html-form<a class="headerlink" href="#survey-html-form" title="Permanent link">&para;</a></h1>
-<p>Current version: 1.0.1. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-html-form/CHANGELOG.md">See version history</a>.</p>
-<p>The survey-html-form plugin displays a set of <code>&lt;inputs&gt;</code> from a HTML string. The type of input can be freely chosen, for a list of possible input types see the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input">MDN page on inputs</a>. The subject provides answers to the input fields.</p>
+<p>Current version: 1.0.2. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-html-form/CHANGELOG.md">See version history</a>.</p>
+<p>The survey-html-form plugin displays a set of <code>&lt;inputs&gt;</code> from a HTML string. The type of input can be freely chosen, for a list of possible input types see the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input">MDN page on inputs</a>. The participant provides answers to the input fields.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. Parameters with a default value of <em>undefined</em> must be specified. Other parameters can be left unspecified if the default value is acceptable.</p>
 <table>
@@ -2048,12 +2048,12 @@
 <tr>
 <td>response</td>
 <td>object</td>
-<td>An object containing the response for each input. The object will have a separate key (variable) for the response to each input, with each variable being named after its corresponding input element. Each response is a string containing whatever the subject answered for this particular input. This will be encoded as a JSON string when data is saved using the <code>.json()</code> or <code>.csv()</code> functions.</td>
+<td>An object containing the response for each input. The object will have a separate key (variable) for the response to each input, with each variable being named after its corresponding input element. Each response is a string containing whatever the participant answered for this particular input. This will be encoded as a JSON string when data is saved using the <code>.json()</code> or <code>.csv()</code> functions.</td>
 </tr>
 <tr>
 <td>rt</td>
 <td>numeric</td>
-<td>The response time in milliseconds for the subject to make a response.</td>
+<td>The response time in milliseconds for the participant to make a response.</td>
 </tr>
 </tbody>
 </table>
@@ -2061,7 +2061,7 @@
 <p>This plugin does not yet support <a href="../../overview/simulation/">simulation mode</a>.</p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey-html-form@1.0.1&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey-html-form@1.0.2&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-survey-html-form.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span><span class="w"></span>
