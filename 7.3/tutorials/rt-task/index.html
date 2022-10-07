@@ -2623,9 +2623,9 @@ The only difference is which image is displayed. Timeline variables allow us to 
 </code></pre></div>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
-<p>In a timeline variables procedure, when <code>randomize_order</code> is <code>true</code> and <code>repetitions</code> is greater than 1, the  trial order will be re-randomized on each repetition through the <code>timeline_variables</code> array. This means that there will be some constraints on the randomization of all trials in the procedure. 
-For example, if a <code>timeline_variables</code> array contains one trial per stimulus, then the same stimulus could occur twice in a row (since it could be at the end of one repetition and the start of the next one), but it could not be repeated more than twice in a row, regardless of the number of repetitions.
-If you don't want to constrain the randomization in this way, you could use the <code>sample</code> parameter with the <code>fixed-repetitions</code> option: this will combine all the repeitions of your <code>timeline_variables</code> array into one larger array, and then randomize the whole thing. You can read more about the randomization, repetition, and sampling options for timeline variables in the <a href="../../overview/timeline/">Timeline documentation</a>).</p>
+<p>In a timeline variables procedure, when <code>randomize_order</code> is <code>true</code> and <code>repetitions</code> is greater than 1, the  trial order will be re-randomized on each repetition through the <code>timeline_variables</code> array. This means that there will be some constraints on the randomization of all trials in the procedure. </p>
+<p>For example, if a <code>timeline_variables</code> array contains one trial per stimulus, then the same stimulus could occur twice in a row (since it could be at the end of one repetition and the start of the next one), but it could not be repeated more than twice in a row, regardless of the number of repetitions.</p>
+<p>If you don't want to constrain the randomization in this way, you could use the <code>sample</code> parameter with the <code>fixed-repetitions</code> option: this will combine all the repeitions of your <code>timeline_variables</code> array into one larger array, and then randomize the whole thing. You can read more about the randomization, repetition, and sampling options for timeline variables in the <a href="../../overview/timeline/">Timeline documentation</a>).</p>
 </div>
 <details class="example">
 <summary>The complete code so far</summary>
