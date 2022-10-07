@@ -1714,6 +1714,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#updating-the-public-docs-site" class="md-nav__link">
+    Updating the public docs site
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1949,6 +1956,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#updating-the-public-docs-site" class="md-nav__link">
+    Updating the public docs site
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1975,11 +1989,15 @@
 <h2 id="install-dev-dependencies">Install dev dependencies<a class="headerlink" href="#install-dev-dependencies" title="Permanent link">&para;</a></h2>
 <p>Run the command <code>poetry install</code> in the root directory of jsPsych to install <code>mkdocs</code>, <code>mkdocs-material</code>, and their dependencies.</p>
 <h2 id="building-a-local-copy-of-the-docs">Building a local copy of the docs<a class="headerlink" href="#building-a-local-copy-of-the-docs" title="Permanent link">&para;</a></h2>
-<p>Run <code>poetry run mike deploy [version] -u</code> to build a new version of the documentation or to override an existing version. For example, if you are testing an edit to version <code>7.2</code> of the documentation, run <code>poetry mike deploy 7.2 -u</code>.</p>
+<p>Run <code>poetry run mike deploy [version] -u</code> to build a new version of the documentation or to override an existing version. For example, if you are testing an edit to version <code>7.2</code> of the documentation, run <code>poetry run mike deploy 7.2 -u</code>.</p>
+<p>You can also use jsPsych's custom npm command: <code>npm run docs:deploy [version]</code>, e.g. <code>npm run docs:deploy 7.2</code>.</p>
 <p>This will build the documentation and commit it directly to the <code>gh-pages</code> branch.</p>
 <p>We use <a href="https://github.com/jimporter/mike"><code>mike</code></a> instead of <code>mkdocs</code> for the build step to support versioning of the documentation. <code>mike</code> runs the <code>mkdocs</code> command under the hood.</p>
 <h2 id="viewing-the-local-docs">Viewing the local docs<a class="headerlink" href="#viewing-the-local-docs" title="Permanent link">&para;</a></h2>
-<p>Run <code>poetry run mike serve</code> to launch a local webserver. The docs will be viewable at <code>http://localhost:8000</code>.</p>
+<p>To launch a local webserver, run <code>poetry run mike serve</code>, or use jsPsych's custom npm command: <code>npm run docs:serve</code>. </p>
+<p>The docs will be viewable at <code>http://localhost:8000</code>.</p>
+<h2 id="updating-the-public-docs-site">Updating the public docs site<a class="headerlink" href="#updating-the-public-docs-site" title="Permanent link">&para;</a></h2>
+<p>For the core maintainers: after the documentation has been built locally (and therefore committed to your local <code>gh-pages</code> branch), you can update the live documentation site by switching to your <code>gh-pages</code> branch and pushing to the remote branch.</p>
 
               
             </article>
