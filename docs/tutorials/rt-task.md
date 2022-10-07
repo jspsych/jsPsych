@@ -610,6 +610,13 @@ var test_procedure = {
   repetitions: 5
 };
 ```
+
+!!! info
+    In a timeline variables procedure, when `randomize_order` is `true` and `repetitions` is greater than 1, the  trial order will be re-randomized on each repetition through the `timeline_variables` array. This means that there will be some constraints on the randomization of all trials in the procedure. 
+    For example, if a `timeline_variables` array contains one trial per stimulus, then the same stimulus could occur twice in a row (since it could be at the end of one repetition and the start of the next one), but it could not be repeated more than twice in a row, regardless of the number of repetitions.
+    If don't want to constrain the randomization in this way, you could use the `sample` parameter with the `fixed-repetitions` option: this will combine all the repeitions of your `timeline_variables` array into one larger array, and then randomize the whole thing. You can read more about the randomization, repetition, and sampling options for timeline variables in the [Timeline documentation](../overview/timeline.md)).
+
+
 ??? example "The complete code so far"
 
     ```html
@@ -1122,10 +1129,10 @@ var test = {
 The `data.response` value is a string representation of the key the participant pressed. We can compare this with the `data.correct_response` value, and assign this computed value to a new property `data.correct`.
 
 !!! info
-  Here we are comparing the values of `data.response` and `data.correct_response` using a jsPsych function called [jsPsych.pluginAPI.compareKeys](../reference/jspsych-pluginAPI.md#jspsychpluginapicomparekeys). We're using this function because it allows us to compare keys in either a _case sensitive_ or _case insensitive_ way, depending on the [experiment settings](../overview/experiment-options.md). The participant's key response will be recorded in a case-sensitive way in the data (e.g. 'f' or 'F'), but in most cases, we don't care if their response corresponds to an upper or lower case letter (which is why the `case_sensitive` experiment setting is `false` by default). Using the `jsPsych.pluginAPI.commpareKeys` function here means that the response will be scored correctly, even if the participant holds down Shift or has Caps Lock on. This function is only relevant for keyboard responses; for other kinds of responses, such as button presses, you can simply compare the response and correct response values directly, e.g.
-  ```js
-  data.correct = data.response === data.correct_response;
-  ```
+    Here we are comparing the values of `data.response` and `data.correct_response` using a jsPsych function called [jsPsych.pluginAPI.compareKeys](../reference/jspsych-pluginAPI.md#jspsychpluginapicomparekeys). We're using this function because it allows us to compare keys in either a _case sensitive_ or _case insensitive_ way, depending on the [experiment settings](../overview/experiment-options.md). The participant's key response will be recorded in a case-sensitive way in the data (e.g. 'f' or 'F'), but in most cases, we don't care if their response corresponds to an upper or lower case letter (which is why the `case_sensitive` experiment setting is `false` by default). Using the `jsPsych.pluginAPI.commpareKeys` function here means that the response will be scored correctly, even if the participant holds down Shift or has Caps Lock on. This function is only relevant for keyboard responses; for other kinds of responses, such as button presses, you can simply compare the response and correct response values directly, e.g.
+    ```js
+    data.correct = data.response === data.correct_response;
+    ```
 
 ??? example "The complete code so far"
 
