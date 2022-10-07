@@ -14,7 +14,9 @@ Run the command `poetry install` in the root directory of jsPsych to install `mk
 
 ## Building a local copy of the docs
 
-Run `poetry run mike deploy [version] -u` to build a new version of the documentation or to override an existing version. For example, if you are testing an edit to version `7.2` of the documentation, run `poetry mike deploy 7.2 -u`.
+Run `poetry run mike deploy [version] -u` to build a new version of the documentation or to override an existing version. For example, if you are testing an edit to version `7.2` of the documentation, run `poetry run mike deploy 7.2 -u`.
+
+You can also use jsPsych's custom npm command: `npm run docs:deploy [version]`, e.g. `npm run docs:deploy 7.2`.
 
 This will build the documentation and commit it directly to the `gh-pages` branch.
 
@@ -22,4 +24,12 @@ We use [`mike`](https://github.com/jimporter/mike) instead of `mkdocs` for the b
 
 ## Viewing the local docs
 
-Run `poetry run mike serve` to launch a local webserver. The docs will be viewable at `http://localhost:8000`.
+To launch a local webserver, run `poetry run mike serve`, or use jsPsych's custom npm command: `npm run docs:serve`. 
+
+The docs will be viewable at `http://localhost:8000`.
+
+## Updating the public docs site
+
+!!! warning "For core maintainers only" 
+
+After the documentation has been built locally (and therefore committed to your local `gh-pages` branch), you can update the live documentation site by switching to your `gh-pages` branch and pushing to the remote `gh-pages` branch.
