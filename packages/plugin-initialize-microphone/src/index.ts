@@ -3,15 +3,20 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "initialize-microphone",
   parameters: {
-    /** Function to call */
+    /** The message that prompts the participant to select a microphone. */
     device_select_message: {
       type: ParameterType.HTML_STRING,
       default: `<p>Please select the microphone you would like to use.</p>`,
     },
-    /** Is the function call asynchronous? */
+    /** Label of the button that confirms selection of the microphone. */
     button_label: {
       type: ParameterType.STRING,
       default: "Use this microphone",
+    },
+    /** The message to display when permission to access the microphone is rejected. */
+    rejection_message: {
+      type: ParameterType.HTML_STRING,
+      default: `<p>You must allow access to a microphone in order to participate in the experiment.</p>`,
     },
   },
 };
@@ -40,7 +45,12 @@ class InitializeMicrophonePlugin implements JsPsychPlugin<Info> {
   }
 
   private async run_trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    await this.askForPermission();
+    try {
+      await this.askForPermission();
+    } catch(e) {
+      this.rejectPermission(trial);  
+      return;
+    }
 
     this.showMicrophoneSelection(display_element, trial);
 
@@ -105,6 +115,12 @@ class InitializeMicrophonePlugin implements JsPsychPlugin<Info> {
         display_element.querySelector("#which-mic").appendChild(el);
       });
     });
+  }
+
+  private rejectPermission(trial: TrialType<Info>) {
+    this.jsPsych.getDisplayElement().innerHTML = "";
+
+    this.jsPsych.endExperiment(trial.rejection_message, {});
   }
 }
 

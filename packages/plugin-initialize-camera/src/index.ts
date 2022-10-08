@@ -33,6 +33,11 @@ const info = <const>{
       type: ParameterType.STRING,
       default: null,
     },
+    /** The message to display when permission to access the camera is rejected. */
+    rejection_message: {
+      type: ParameterType.HTML_STRING,
+      default: `<p>You must allow access to a camera in order to participate in the experiment.</p>`,
+    },
   },
 };
 
@@ -61,7 +66,15 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
   }
 
   private async run_trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    await this.askForPermission(trial);
+    try {
+      console.log("test1")
+      await this.askForPermission(trial);
+    } catch (e) {
+      console.log("test")
+      // TODO: does not properly display rejection message
+      this.rejectPermission(trial);
+      return;
+    }
 
     this.showCameraSelection(display_element, trial);
 
@@ -146,6 +159,12 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
         display_element.querySelector("#which-camera").appendChild(el);
       });
     });
+  }
+
+  private rejectPermission(trial: TrialType<Info>) {
+    this.jsPsych.getDisplayElement().innerHTML = "";
+
+    this.jsPsych.endExperiment(trial.rejection_message, {});
   }
 }
 

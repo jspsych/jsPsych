@@ -73,10 +73,14 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
   private data_available_handler;
   private recorded_data_chunks = [];
 
-  constructor(private jsPsych: JsPsych) {}
+  constructor(private jsPsych: JsPsych) { }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     this.recorder = this.jsPsych.pluginAPI.getCameraRecorder();
+
+    if (this.recorder === null) {
+     throw new Error("Error in html-video-response plugin. A camera has not been found, have you ran the initialize-camera plugin?");
+    }
 
     this.setupRecordingEvents(display_element, trial);
 
