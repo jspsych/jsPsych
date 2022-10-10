@@ -39,7 +39,7 @@ export class Timeline extends BaseTimelineNode {
     this.nextChildNodeIndex = index;
   }
 
-  private activeChild?: TimelineNode;
+  private currentChild?: TimelineNode;
   private shouldAbort = false;
 
   public async run() {
@@ -70,7 +70,7 @@ export class Timeline extends BaseTimelineNode {
             const newChildren = this.instantiateChildNodes();
 
             for (const childNode of newChildren) {
-              this.activeChild = childNode;
+              this.currentChild = childNode;
               await childNode.run();
               // @ts-expect-error TS thinks `this.status` must be `RUNNING` now, but it might have
               // changed while `await`ing
@@ -105,8 +105,8 @@ export class Timeline extends BaseTimelineNode {
   }
 
   pause() {
-    if (this.activeChild instanceof Timeline) {
-      this.activeChild.pause();
+    if (this.currentChild instanceof Timeline) {
+      this.currentChild.pause();
     }
     this.status = TimelineNodeStatus.PAUSED;
   }
@@ -114,8 +114,8 @@ export class Timeline extends BaseTimelineNode {
   private resumePromise = new PromiseWrapper();
   resume() {
     if (this.status == TimelineNodeStatus.PAUSED) {
-      if (this.activeChild instanceof Timeline) {
-        this.activeChild.resume();
+      if (this.currentChild instanceof Timeline) {
+        this.currentChild.resume();
       }
       this.status = TimelineNodeStatus.RUNNING;
       this.resumePromise.resolve();
@@ -127,8 +127,8 @@ export class Timeline extends BaseTimelineNode {
    */
   abort() {
     if (this.status === TimelineNodeStatus.RUNNING || this.status === TimelineNodeStatus.PAUSED) {
-      if (this.activeChild instanceof Timeline) {
-        this.activeChild.abort();
+      if (this.currentChild instanceof Timeline) {
+        this.currentChild.abort();
       }
 
       this.shouldAbort = true;
@@ -268,7 +268,7 @@ export class Timeline extends BaseTimelineNode {
       return 1;
     }
 
-    return this.children.indexOf(this.activeChild) / this.children.length;
+    return this.children.indexOf(this.currentChild) / this.children.length;
   }
 
   /**
@@ -319,14 +319,14 @@ export class Timeline extends BaseTimelineNode {
    */
   public getActiveNode(): TimelineNode {
     if (this.isActive()) {
-      if (!this.activeChild) {
+      if (!this.currentChild) {
         return this;
       }
-      if (this.activeChild instanceof Timeline) {
-        return this.activeChild.getActiveNode();
+      if (this.currentChild instanceof Timeline) {
+        return this.currentChild.getActiveNode();
       }
-      if (this.activeChild instanceof Trial) {
-        return this.activeChild;
+      if (this.currentChild instanceof Trial) {
+        return this.currentChild;
       }
     }
     return undefined;
