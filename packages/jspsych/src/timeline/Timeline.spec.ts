@@ -567,7 +567,7 @@ describe("Timeline", () => {
         childTimeline.getParameterValue("second_parameter", { recursive: false })
       ).toBeUndefined();
 
-      expect(childTimeline.getParameterValue("first_parameter")).toEqual("test");
+      expect(childTimeline.getParameterValue("first_parameter")).toBeUndefined();
       expect(childTimeline.getParameterValue("other_parameter")).toBeUndefined();
     });
 

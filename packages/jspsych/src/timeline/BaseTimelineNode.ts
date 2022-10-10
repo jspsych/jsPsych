@@ -1,4 +1,5 @@
 import get from "lodash.get";
+import has from "lodash.has";
 
 import { JsPsych } from "../JsPsych";
 import { Timeline } from "./Timeline";
@@ -39,8 +40,10 @@ export abstract class BaseTimelineNode implements TimelineNode {
       recursive = true,
     } = options;
 
-    let result = get(parameterObject, parameterPath);
-    if (typeof result === "undefined" && recursive && this.parent) {
+    let result: any;
+    if (has(parameterObject, parameterPath)) {
+      result = get(parameterObject, parameterPath);
+    } else if (recursive && this.parent) {
       result = this.parent.getParameterValue(parameterPath, options);
     }
 
