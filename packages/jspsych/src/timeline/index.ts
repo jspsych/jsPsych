@@ -133,7 +133,23 @@ export interface GlobalTimelineNodeCallbacks {
   onTrialFinished: (trial: Trial) => void;
 }
 
-export type GetParameterValueOptions = { evaluateFunctions?: boolean; recursive?: boolean };
+export type GetParameterValueOptions = {
+  /**
+   * The object that holds the parameters of the timeline node. Defaults to `this.description`.
+   */
+  parameterObject?: Record<string, any>;
+
+  /**
+   * If true, and the retrieved parameter value is a function, invoke the function and return its
+   * return value (defaults to `true`)
+   */
+  evaluateFunctions?: boolean;
+
+  /**
+   * Whether to fall back to parent timeline node parameters (defaults to `true`)
+   */
+  recursive?: boolean;
+};
 
 export interface TimelineNode {
   readonly description: TimelineDescription | TrialDescription;
@@ -150,18 +166,20 @@ export interface TimelineNode {
   evaluateTimelineVariable(variable: TimelineVariable): any;
 
   /**
-   * Retrieves a parameter value from the description of this timeline node, recursively falling
-   * back to the description of each parent timeline node unless `recursive` is set to `false`. If
-   * the parameter...
+   * Retrieves a parameter value from the description of this timeline node (or the
+   * `parameterObject` provided via `options`), recursively falling back to the description of each
+   * parent timeline node unless `recursive` is set to `false`. If the parameter...
    *
    * * is a timeline variable, evaluates the variable and returns the result.
    * * is not specified, returns `undefined`.
    * * is a function and `evaluateFunctions` is not set to `false`, invokes the function and returns
    *   its return value
    *
-   * `parameterName` may include dots to signal nested object properties.
+   * @param parameterPath The path of the respective parameter in the `parameterObject`. If the path
+   * is an array, nested object properties or array items will be looked up.
+   * @param options See {@link GetParameterValueOptions}
    */
-  getParameterValue(parameterName: string, options?: GetParameterValueOptions): any;
+  getParameterValue(parameterPath: string | string[], options?: GetParameterValueOptions): any;
 }
 
 export type TrialResult = Record<string, any>;

@@ -517,12 +517,12 @@ describe("Timeline", () => {
         parentTimeline
       );
 
-      expect(childTimeline.getParameterValue("second_parameter")).toBe("test");
+      expect(childTimeline.getParameterValue("second_parameter")).toEqual("test");
       expect(
         childTimeline.getParameterValue("second_parameter", { recursive: false })
       ).toBeUndefined();
 
-      expect(childTimeline.getParameterValue("first_parameter")).toBeUndefined();
+      expect(childTimeline.getParameterValue("first_parameter")).toEqual("test");
       expect(childTimeline.getParameterValue("other_parameter")).toBeUndefined();
     });
 

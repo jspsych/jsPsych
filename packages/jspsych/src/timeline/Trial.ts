@@ -1,11 +1,14 @@
 import { JsPsych, JsPsychPlugin, ParameterType, PluginInfo } from "jspsych";
+import get from "lodash.get";
+import set from "lodash.set";
 import { ParameterInfos } from "src/modules/plugins";
 
 import { deepCopy } from "../modules/utils";
 import { BaseTimelineNode } from "./BaseTimelineNode";
 import { Timeline } from "./Timeline";
-import { delay } from "./util";
+import { delay, parameterPathArrayToString } from "./util";
 import {
+  GetParameterValueOptions,
   GlobalTimelineNodeCallbacks,
   TimelineNodeStatus,
   TimelineVariable,
@@ -45,7 +48,7 @@ export class Trial extends BaseTimelineNode {
     const result = await this.executeTrial();
 
     this.result = {
-      ...this.trialObject.data,
+      ...this.getDataParameter(),
       ...result,
       trial_type: this.pluginInfo.name,
       trial_index: this.index,
@@ -124,7 +127,7 @@ export class Trial extends BaseTimelineNode {
   }
 
   public evaluateTimelineVariable(variable: TimelineVariable) {
-    // Timeline variable values are specified at the timeline level, not at the trial level, so
+    // Timeline variable values are specified at the timeline level, not at the trial level, hence
     // deferring to the parent timeline here
     return this.parent?.evaluateTimelineVariable(variable);
   }
@@ -134,6 +137,35 @@ export class Trial extends BaseTimelineNode {
    */
   public getResult() {
     return this.result;
+  }
+
+  private parameterValueCache: Record<string, any> = {};
+  getParameterValue(
+    parameterPath: string | string[],
+    options?: GetParameterValueOptions & {
+      /**
+       * Whether or not the requested parameter is of `ParameterType.COMPLEX` (defaults to `false`).
+       * If `true`, the result of the parameter lookup will be cached by the `Trial` node for
+       * successive lookups of nested properties or array elements.
+       **/
+      isComplexParameter?: boolean;
+    }
+  ) {
+    let parameterObject: Record<string, any> | undefined;
+    if (Array.isArray(parameterPath) && parameterPath.length > 1) {
+      // Lookup of a nested parameter: Let's query the cache for the parent parameter
+      const parentParameterPath = parameterPath.slice(0, parameterPath.length - 1);
+      if (get(this.parameterValueCache, parentParameterPath)) {
+        // Parent parameter found in cache, let's use the cache for the child parameter lookup
+        parameterObject = this.parameterValueCache;
+      }
+    }
+
+    const result = super.getParameterValue(parameterPath, { parameterObject, ...options });
+    if (options?.isComplexParameter) {
+      set(this.parameterValueCache, parameterPath, result);
+    }
+    return result;
   }
 
   /**
@@ -146,19 +178,22 @@ export class Trial extends BaseTimelineNode {
     const assignParameterValues = (
       parameterObject: Record<string, any>,
       parameterInfos: ParameterInfos,
-      path = ""
+      parentParameterPath: string[] = []
     ) => {
       for (const [parameterName, parameterConfig] of Object.entries(parameterInfos)) {
-        const parameterPath = path + parameterName;
+        const parameterPath = [...parentParameterPath, parameterName];
 
         let parameterValue = this.getParameterValue(parameterPath, {
           evaluateFunctions: parameterConfig.type !== ParameterType.FUNCTION,
+          isComplexParameter: parameterConfig.type === ParameterType.COMPLEX,
         });
 
         if (typeof parameterValue === "undefined") {
           if (typeof parameterConfig.default === "undefined") {
             throw new Error(
-              `You must specify a value for the "${parameterPath}" parameter in the "${this.pluginInfo.name}" plugin.`
+              `You must specify a value for the "${parameterPathArrayToString(
+                parameterPath
+              )}" parameter in the "${this.pluginInfo.name}" plugin.`
             );
           } else {
             parameterValue = parameterConfig.default;
@@ -166,8 +201,9 @@ export class Trial extends BaseTimelineNode {
         }
 
         if (parameterConfig.array && !Array.isArray(parameterValue)) {
+          const parameterPathString = parameterPathArrayToString(parameterPath);
           throw new Error(
-            `A non-array value (\`${parameterValue}\`) was provided for the array parameter "${parameterPath}" in the "${this.pluginInfo.name}" plugin. Please make sure that "${parameterPath}" is an array.`
+            `A non-array value (\`${parameterValue}\`) was provided for the array parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin. Please make sure that "${parameterPathString}" is an array.`
           );
         }
 
@@ -175,16 +211,16 @@ export class Trial extends BaseTimelineNode {
           // Assign parameter values according to the `nested` schema
           if (parameterConfig.array) {
             // ...for each nested array element
-            for (const [arrayIndex, arrayElement] of parameterValue.entries()) {
-              assignParameterValues(
-                arrayElement,
-                parameterConfig.nested,
-                `${parameterPath}[${arrayIndex}].`
-              );
+            for (const arrayIndex of parameterValue.keys()) {
+              const arrayElementPath = [...parameterPath, arrayIndex.toString()];
+              const arrayElementValue = this.getParameterValue(arrayElementPath, {
+                isComplexParameter: true,
+              });
+              assignParameterValues(arrayElementValue, parameterConfig.nested, arrayElementPath);
             }
           } else {
             // ...for the nested object
-            assignParameterValues(parameterValue, parameterConfig.nested, parameterPath + ".");
+            assignParameterValues(parameterValue, parameterConfig.nested, parameterPath);
           }
         }
 
@@ -193,5 +229,23 @@ export class Trial extends BaseTimelineNode {
     };
 
     assignParameterValues(this.trialObject, this.pluginInfo.parameters);
+  }
+
+  /**
+   * Retrieves and evaluates the `data` parameter. It is different from other parameters in that
+   * it's properties may be functions that have to be evaluated.
+   */
+  private getDataParameter() {
+    const data = this.getParameterValue("data");
+
+    if (typeof data === "object") {
+      return Object.fromEntries(
+        Object.entries(data).map(([key, value]) =>
+          typeof value === "function" ? [key, value()] : [key, value]
+        )
+      );
+    }
+
+    return data;
   }
 }

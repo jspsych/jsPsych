@@ -205,11 +205,15 @@ export class Timeline extends BaseTimelineNode {
     }
   }
 
-  public getParameterValue(parameterName: string, options?: GetParameterValueOptions) {
-    if (timelineDescriptionKeys.includes(parameterName)) {
+  public getParameterValue(parameterPath: string | string[], options?: GetParameterValueOptions) {
+    if (
+      timelineDescriptionKeys.includes(
+        typeof parameterPath === "string" ? parameterPath : parameterPath[0]
+      )
+    ) {
       return;
     }
-    return super.getParameterValue(parameterName, options);
+    return super.getParameterValue(parameterPath, options);
   }
 
   /**

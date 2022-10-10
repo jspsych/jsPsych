@@ -27,3 +27,19 @@ export class PromiseWrapper<ResolveType = void> {
 export function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+/**
+ * Returns the string representation of a `path` array like accepted by lodash's `get` and `set`
+ * functions.
+ */
+export function parameterPathArrayToString([firstPathElement, ...remainingPathElements]: string[]) {
+  let pathString = firstPathElement;
+
+  for (const pathElement of remainingPathElements) {
+    pathString += Number.isNaN(Number.parseInt(pathElement))
+      ? `.${pathElement}`
+      : `[${pathElement}]`;
+  }
+
+  return pathString;
+}

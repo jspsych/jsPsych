@@ -165,26 +165,21 @@ describe("nested parameters as functions", () => {
       constructor(private jsPsych: JsPsych) {}
 
       trial(display_element: HTMLElement, trial: TrialType<typeof info>) {
-        this.jsPsych.finishTrial({
-          not_protected: trial.foo[0].not_protected,
-          protected: trial.foo[0].protected,
-        });
+        this.jsPsych.finishTrial(trial.foo);
       }
     }
 
     const { getData } = await startTimeline([
       {
         type: FunctionTestPlugin,
-        foo: [
-          {
-            not_protected: () => {
-              return "x";
-            },
-            protected: () => {
-              return "y";
-            },
+        foo: {
+          not_protected: () => {
+            return "x";
           },
-        ],
+          protected: () => {
+            return "y";
+          },
+        },
       },
     ]);
 

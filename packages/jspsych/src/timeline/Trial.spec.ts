@@ -7,7 +7,7 @@ import TestPlugin from "../../tests/TestPlugin";
 import { ParameterInfos, ParameterType } from "../modules/plugins";
 import { Timeline } from "./Timeline";
 import { Trial } from "./Trial";
-import { PromiseWrapper } from "./util";
+import { PromiseWrapper, parameterPathArrayToString } from "./util";
 import { TimelineNodeStatus, TimelineVariable, TrialDescription } from ".";
 
 jest.useFakeTimers();
@@ -190,6 +190,18 @@ describe("Trial", () => {
       expect(trial.getResult()).toEqual(expect.objectContaining({ my: "result", custom: "value" }));
     });
 
+    it("works when the `data` property is a function", async () => {
+      const trial = createTrial({ type: TestPlugin, data: () => ({ custom: "value" }) });
+      await trial.run();
+      expect(trial.getResult()).toEqual(expect.objectContaining({ my: "result", custom: "value" }));
+    });
+
+    it("evaluates functions nested in the `data` property", async () => {
+      const trial = createTrial({ type: TestPlugin, data: { custom: () => "value" } });
+      await trial.run();
+      expect(trial.getResult()).toEqual(expect.objectContaining({ my: "result", custom: "value" }));
+    });
+
     it("includes a set of trial-specific result properties", async () => {
       const trial = createTrial({ type: TestPlugin });
       await trial.run();
@@ -226,11 +238,15 @@ describe("Trial", () => {
       });
 
       it("resolves missing parameter values from parent timeline and sets default values", async () => {
-        mocked(timeline).getParameterValue.mockImplementation((parameterName) => {
-          if (parameterName === "requiredString") {
+        mocked(timeline).getParameterValue.mockImplementation((parameterPath) => {
+          if (Array.isArray(parameterPath)) {
+            parameterPath = parameterPathArrayToString(parameterPath);
+          }
+
+          if (parameterPath === "requiredString") {
             return "foo";
           }
-          if (parameterName === "requiredComplexNestedArray[0].requiredChild") {
+          if (parameterPath === "requiredComplexNestedArray[0].requiredChild") {
             return "foo";
           }
           return undefined;
@@ -295,8 +311,10 @@ describe("Trial", () => {
           type: TestPlugin,
           function: functionParameter,
           requiredString: () => "foo",
-          requiredComplexNested: { requiredChild: () => "bar" },
-          requiredComplexNestedArray: [{ requiredChild: () => "bar" }],
+          requiredComplexNested: () => ({
+            requiredChild: () => "bar",
+          }),
+          requiredComplexNestedArray: () => [() => ({ requiredChild: () => "bar" })],
         });
 
         await trial.run();
