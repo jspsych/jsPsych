@@ -488,7 +488,7 @@ describe("Trial", () => {
       const trial = new Trial(jsPsych, globalCallbacks, { type: TestPlugin }, timeline, 0);
 
       const variable = new TimelineVariable("x");
-      expect(trial.evaluateTimelineVariable(variable)).toBe(1);
+      expect(trial.evaluateTimelineVariable(variable)).toEqual(1);
       expect(timeline.evaluateTimelineVariable).toHaveBeenCalledWith(variable);
     });
   });

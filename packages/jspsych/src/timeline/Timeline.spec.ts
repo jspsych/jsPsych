@@ -228,7 +228,7 @@ describe("Timeline", () => {
 
       await timeline.run();
 
-      expect(timeline.children.length).toBe(6);
+      expect(timeline.children.length).toEqual(6);
     });
 
     it("repeats a timeline according to `loop_function`", async () => {
@@ -249,7 +249,7 @@ describe("Timeline", () => {
         Array(6).fill(expect.objectContaining({ my: "result" }))
       );
 
-      expect(timeline.children.length).toBe(6);
+      expect(timeline.children.length).toEqual(6);
     });
 
     it("repeats a timeline according to `repetitions` and `loop_function`", async () => {
@@ -267,7 +267,7 @@ describe("Timeline", () => {
 
       await timeline.run();
       expect(loopFunction).toHaveBeenCalledTimes(4);
-      expect(timeline.children.length).toBe(12);
+      expect(timeline.children.length).toEqual(12);
     });
 
     it("skips execution if `conditional_function` returns `false`", async () => {
@@ -277,7 +277,7 @@ describe("Timeline", () => {
       });
 
       await timeline.run();
-      expect(timeline.children.length).toBe(0);
+      expect(timeline.children.length).toEqual(0);
     });
 
     it("executes regularly if `conditional_function` returns `true`", async () => {
@@ -287,7 +287,7 @@ describe("Timeline", () => {
       });
 
       await timeline.run();
-      expect(timeline.children.length).toBe(3);
+      expect(timeline.children.length).toEqual(3);
     });
 
     describe("`on_timeline_start` and `on_timeline_finished` callbacks are invoked", () => {
@@ -354,7 +354,7 @@ describe("Timeline", () => {
         });
 
         await timeline.run();
-        expect(timeline.children.length).toBe(4);
+        expect(timeline.children.length).toEqual(4);
         expect(xValues).toEqual([0, 1, 2, 3]);
       });
 
@@ -477,7 +477,7 @@ describe("Timeline", () => {
         });
 
         await timeline.run();
-        expect(timeline.evaluateTimelineVariable(new TimelineVariable("x"))).toBe(0);
+        expect(timeline.evaluateTimelineVariable(new TimelineVariable("x"))).toEqual(0);
       });
     });
 
@@ -489,12 +489,12 @@ describe("Timeline", () => {
         });
 
         await timeline.run();
-        expect(timeline.evaluateTimelineVariable(new TimelineVariable("x"))).toBe(0);
-        expect(timeline.evaluateTimelineVariable(new TimelineVariable("y"))).toBe(0);
+        expect(timeline.evaluateTimelineVariable(new TimelineVariable("x"))).toEqual(0);
+        expect(timeline.evaluateTimelineVariable(new TimelineVariable("y"))).toEqual(0);
 
         const childTimeline = timeline.children[0] as Timeline;
         expect(childTimeline.evaluateTimelineVariable(new TimelineVariable("x"))).toBeUndefined();
-        expect(childTimeline.evaluateTimelineVariable(new TimelineVariable("y"))).toBe(0);
+        expect(childTimeline.evaluateTimelineVariable(new TimelineVariable("y"))).toEqual(0);
       });
 
       it("returns `undefined` if there are no parents or none of them has a value for the variable", async () => {
@@ -547,7 +547,7 @@ describe("Timeline", () => {
     it("returns the local parameter value, if it exists", async () => {
       const timeline = createTimeline({ timeline: [], my_parameter: "test" });
 
-      expect(timeline.getParameterValue("my_parameter")).toBe("test");
+      expect(timeline.getParameterValue("my_parameter")).toEqual("test");
       expect(timeline.getParameterValue("other_parameter")).toBeUndefined();
     });
 
@@ -580,8 +580,8 @@ describe("Timeline", () => {
 
       await timeline.run();
 
-      expect(timeline.children[0].getParameterValue("child_parameter")).toBe(0);
-      expect(timeline.children[0].getParameterValue("parent_parameter")).toBe(0);
+      expect(timeline.children[0].getParameterValue("child_parameter")).toEqual(0);
+      expect(timeline.children[0].getParameterValue("parent_parameter")).toEqual(0);
     });
 
     it("evaluates functions unless `evaluateFunctions` is set to `false`", async () => {
@@ -590,13 +590,13 @@ describe("Timeline", () => {
         function_parameter: jest.fn(() => "result"),
       });
 
-      expect(timeline.getParameterValue("function_parameter")).toBe("result");
-      expect(timeline.getParameterValue("function_parameter", { evaluateFunctions: true })).toBe(
+      expect(timeline.getParameterValue("function_parameter")).toEqual("result");
+      expect(timeline.getParameterValue("function_parameter", { evaluateFunctions: true })).toEqual(
         "result"
       );
       expect(
         typeof timeline.getParameterValue("function_parameter", { evaluateFunctions: false })
-      ).toBe("function");
+      ).toEqual("function");
     });
 
     it("considers nested properties if `parameterName` contains dots", async () => {
@@ -610,9 +610,9 @@ describe("Timeline", () => {
         },
       });
 
-      expect(timeline.getParameterValue("object.childString")).toBe("foo");
+      expect(timeline.getParameterValue("object.childString")).toEqual("foo");
       expect(timeline.getParameterValue("object.childObject")).toEqual({ childString: "bar" });
-      expect(timeline.getParameterValue("object.childObject.childString")).toBe("bar");
+      expect(timeline.getParameterValue("object.childObject.childString")).toEqual("bar");
     });
   });
 
@@ -641,25 +641,25 @@ describe("Timeline", () => {
       TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
 
       const timeline = createTimeline(Array(4).fill({ type: TestPlugin }));
-      expect(timeline.getProgress()).toBe(0);
+      expect(timeline.getProgress()).toEqual(0);
 
       const runPromise = timeline.run();
-      expect(timeline.getProgress()).toBe(0);
+      expect(timeline.getProgress()).toEqual(0);
 
       await proceedWithTrial();
-      expect(timeline.getProgress()).toBe(0.25);
+      expect(timeline.getProgress()).toEqual(0.25);
 
       await proceedWithTrial();
-      expect(timeline.getProgress()).toBe(0.5);
+      expect(timeline.getProgress()).toEqual(0.5);
 
       await proceedWithTrial();
-      expect(timeline.getProgress()).toBe(0.75);
+      expect(timeline.getProgress()).toEqual(0.75);
 
       await proceedWithTrial();
-      expect(timeline.getProgress()).toBe(1);
+      expect(timeline.getProgress()).toEqual(1);
 
       await runPromise;
-      expect(timeline.getProgress()).toBe(1);
+      expect(timeline.getProgress()).toEqual(1);
     });
   });
 
@@ -676,7 +676,7 @@ describe("Timeline", () => {
       });
 
       const estimate = (1 + 1 * 2 + 1 * 5) * 3 * 2;
-      expect(timeline.getNaiveTrialCount()).toBe(estimate);
+      expect(timeline.getNaiveTrialCount()).toEqual(estimate);
     });
   });
 
@@ -708,14 +708,14 @@ describe("Timeline", () => {
       // Avoiding direct .toBe(timeline) here to circumvent circular reference errors caused by Jest
       // trying to stringify `Timeline` objects
       expect(outerTimelineActiveNode).toBeInstanceOf(Timeline);
-      expect(outerTimelineActiveNode.index).toBe(0);
+      expect(outerTimelineActiveNode.index).toEqual(0);
       expect(timeline.getActiveNode()).toBeInstanceOf(Trial);
       expect(timeline.getActiveNode().index).toEqual(0);
 
       await proceedWithTrial();
 
       expect(innerTimelineActiveNode).toBeInstanceOf(Timeline);
-      expect(innerTimelineActiveNode.index).toBe(1);
+      expect(innerTimelineActiveNode.index).toEqual(1);
       expect(timeline.getActiveNode()).toBeInstanceOf(Trial);
       expect(timeline.getActiveNode().index).toEqual(1);
 
