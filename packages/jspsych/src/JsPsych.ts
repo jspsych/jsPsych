@@ -260,19 +260,25 @@ export class JsPsych {
   }
 
   getCurrentTrial() {
-    return this.timeline?.getCurrentTrial().description;
+    const activeNode = this.timeline?.getActiveNode();
+    if (activeNode instanceof Trial) {
+      return activeNode.description;
+    }
+    return undefined;
   }
 
   getInitSettings() {
     return this.options;
   }
 
-  timelineVariable(varname: string) {
-    if (false) {
-      return undefined;
-    } else {
-      return new TimelineVariable(varname);
-    }
+  timelineVariable(variableName: string) {
+    return new TimelineVariable(variableName);
+  }
+
+  evaluateTimelineVariable(variableName: string) {
+    return this.timeline
+      ?.getActiveNode()
+      ?.evaluateTimelineVariable(new TimelineVariable(variableName));
   }
 
   pauseExperiment() {

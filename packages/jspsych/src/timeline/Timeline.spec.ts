@@ -18,6 +18,7 @@ import {
   SampleOptions,
   TimelineArray,
   TimelineDescription,
+  TimelineNode,
   TimelineNodeStatus,
   TimelineVariable,
 } from ".";
@@ -420,6 +421,50 @@ describe("Timeline", () => {
           createSampleTimeline({ type: "invalid" }).run()
         ).rejects.toThrow('Invalid type "invalid" in timeline sample parameters.');
       });
+
+      it("samples on each loop iteration (be it via `repetitions` or `loop_function`)", async () => {
+        const sampleFunction = jest.fn(() => [0]);
+
+        await createTimeline({
+          timeline: [{ type: TestPlugin }],
+          timeline_variables: [{ x: 0 }],
+          sample: { type: "custom", fn: sampleFunction },
+          repetitions: 2,
+          loop_function: jest.fn().mockReturnValue(false).mockReturnValueOnce(true),
+        }).run();
+
+        // 2 repetitions + 1 loop in the first repitition = 3 sample function calls
+        expect(sampleFunction).toHaveBeenCalledTimes(3);
+      });
+
+      it("makes variables available to callbacks", async () => {
+        const variableResults: Record<string, any> = {};
+        const makeCallback = (resultName: string, callbackReturnValue?: any) => () => {
+          variableResults[resultName] = timeline.evaluateTimelineVariable(
+            new TimelineVariable("x")
+          );
+          return callbackReturnValue;
+        };
+
+        const timeline = createTimeline({
+          timeline: [{ type: TestPlugin }],
+          timeline_variables: [{ x: 0 }],
+          on_timeline_start: jest.fn().mockImplementation(makeCallback("on_timeline_start")),
+          on_timeline_finish: jest.fn().mockImplementation(makeCallback("on_timeline_finish")),
+          conditional_function: jest
+            .fn()
+            .mockImplementation(makeCallback("conditional_function", true)),
+          loop_function: jest.fn().mockImplementation(makeCallback("loop_function", false)),
+        });
+
+        await timeline.run();
+        expect(variableResults).toEqual({
+          on_timeline_start: 0,
+          on_timeline_finish: 0,
+          conditional_function: 0,
+          loop_function: 0,
+        });
+      });
     });
   });
 
@@ -635,23 +680,47 @@ describe("Timeline", () => {
     });
   });
 
-  describe("getCurrentTrial()", () => {
-    it("returns the currently active Trial node or `undefined` when no trial is active", async () => {
+  describe("getActiveNode()", () => {
+    it("returns the currently active `TimelineNode` or `undefined` when no node is active", async () => {
       TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
-      const timeline = createTimeline([{ type: TestPlugin }, { timeline: [{ type: TestPlugin }] }]);
 
-      expect(timeline.getCurrentTrial()).toBeUndefined();
+      let outerTimelineActiveNode: TimelineNode;
+      let innerTimelineActiveNode: TimelineNode;
+
+      const timeline = createTimeline({
+        timeline: [
+          { type: TestPlugin },
+          {
+            timeline: [{ type: TestPlugin }],
+            on_timeline_start: () => {
+              innerTimelineActiveNode = timeline.getActiveNode();
+            },
+          },
+        ],
+        on_timeline_start: () => {
+          outerTimelineActiveNode = timeline.getActiveNode();
+        },
+      });
+
+      expect(timeline.getActiveNode()).toBeUndefined();
 
       timeline.run();
-      expect(timeline.getCurrentTrial()).toBeInstanceOf(Trial);
-      expect(timeline.getCurrentTrial().index).toEqual(0);
+      // Avoiding direct .toBe(timeline) here to circumvent circular reference errors caused by Jest
+      // trying to stringify `Timeline` objects
+      expect(outerTimelineActiveNode).toBeInstanceOf(Timeline);
+      expect(outerTimelineActiveNode.index).toBe(0);
+      expect(timeline.getActiveNode()).toBeInstanceOf(Trial);
+      expect(timeline.getActiveNode().index).toEqual(0);
 
       await proceedWithTrial();
-      expect(timeline.getCurrentTrial()).toBeInstanceOf(Trial);
-      expect(timeline.getCurrentTrial().index).toEqual(1);
+
+      expect(innerTimelineActiveNode).toBeInstanceOf(Timeline);
+      expect(innerTimelineActiveNode.index).toBe(1);
+      expect(timeline.getActiveNode()).toBeInstanceOf(Trial);
+      expect(timeline.getActiveNode().index).toEqual(1);
 
       await proceedWithTrial();
-      expect(timeline.getCurrentTrial()).toBeUndefined();
+      expect(timeline.getActiveNode()).toBeUndefined();
     });
   });
 });

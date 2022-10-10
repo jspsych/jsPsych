@@ -196,10 +196,17 @@ describe("Trial", () => {
       expect(trial.getResult()).toEqual(expect.objectContaining({ my: "result", custom: "value" }));
     });
 
-    it("evaluates functions nested in the `data` property", async () => {
-      const trial = createTrial({ type: TestPlugin, data: { custom: () => "value" } });
+    it("evaluates functions and timeline variables nested in the `data` property", async () => {
+      mocked(timeline).evaluateTimelineVariable.mockReturnValue(1);
+
+      const trial = createTrial({
+        type: TestPlugin,
+        data: { custom: () => "value", variable: new TimelineVariable("x") },
+      });
       await trial.run();
-      expect(trial.getResult()).toEqual(expect.objectContaining({ my: "result", custom: "value" }));
+      expect(trial.getResult()).toEqual(
+        expect.objectContaining({ my: "result", custom: "value", variable: 1 })
+      );
     });
 
     it("includes a set of trial-specific result properties", async () => {
@@ -332,12 +339,21 @@ describe("Trial", () => {
       });
 
       it("evaluates timeline variables, including those returned from parameter functions", async () => {
-        mocked(timeline).evaluateTimelineVariable.mockImplementation((variable: TimelineVariable) =>
-          variable.name === "x" ? "foo" : undefined
+        mocked(timeline).evaluateTimelineVariable.mockImplementation(
+          (variable: TimelineVariable) => {
+            switch (variable.name) {
+              case "t":
+                return TestPlugin;
+              case "x":
+                return "foo";
+              default:
+                return undefined;
+            }
+          }
         );
 
         const trial = createTrial({
-          type: TestPlugin,
+          type: new TimelineVariable("t"),
           requiredString: new TimelineVariable("x"),
           requiredComplexNested: { requiredChild: () => new TimelineVariable("x") },
           requiredComplexNestedArray: [{ requiredChild: () => new TimelineVariable("x") }],
@@ -444,8 +460,6 @@ describe("Trial", () => {
 
       await runPromise1;
 
-      // @ts-expect-error TODO function parameters and timeline variables are not yet included in
-      // the trial type
       const trial2 = createTrial({ type: TestPlugin, post_trial_gap: () => 200 });
 
       const runPromise2 = trial2.run();

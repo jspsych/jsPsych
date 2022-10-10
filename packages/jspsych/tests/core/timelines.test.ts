@@ -109,7 +109,7 @@ describe("loop function", () => {
                 },
               ],
               loop_function: () => {
-                if (jsPsych.timelineVariable("word") == "b" && counter < 2) {
+                if (jsPsych.evaluateTimelineVariable("word") === "b" && counter < 2) {
                   counter++;
                   return true;
                 } else {
@@ -350,7 +350,7 @@ describe("conditional function", () => {
                 },
               ],
               conditional_function: () => {
-                if (jsPsych.timelineVariable("word") == "b") {
+                if (jsPsych.evaluateTimelineVariable("word") === "b") {
                   return false;
                 } else {
                   return true;
@@ -484,27 +484,28 @@ describe("nested timelines", () => {
   });
 });
 
-describe("add node to end of timeline", () => {
-  test("adds node to end of timeline", async () => {
-    const jsPsych = initJsPsych();
-    const { getHTML } = await startTimeline(
-      [
-        {
-          type: htmlKeyboardResponse,
-          stimulus: "foo",
-          on_start: () => {
-            jsPsych.addNodeToEndOfTimeline({
-              timeline: [{ type: htmlKeyboardResponse, stimulus: "bar" }],
-            });
-          },
-        },
-      ],
-      jsPsych
-    );
+// TODO Should we have such a function?
+// describe("add node to end of timeline", () => {
+//   test("adds node to end of timeline", async () => {
+//     const jsPsych = initJsPsych();
+//     const { getHTML } = await startTimeline(
+//       [
+//         {
+//           type: htmlKeyboardResponse,
+//           stimulus: "foo",
+//           on_start: () => {
+//             jsPsych.addNodeToEndOfTimeline({
+//               timeline: [{ type: htmlKeyboardResponse, stimulus: "bar" }],
+//             });
+//           },
+//         },
+//       ],
+//       jsPsych
+//     );
 
-    expect(getHTML()).toMatch("foo");
-    pressKey("a");
-    expect(getHTML()).toMatch("bar");
-    pressKey("a");
-  });
-});
+//     expect(getHTML()).toMatch("foo");
+//     pressKey("a");
+//     expect(getHTML()).toMatch("bar");
+//     pressKey("a");
+//   });
+// });

@@ -2,6 +2,7 @@ import { JsPsych, JsPsychPlugin, ParameterType, PluginInfo } from "jspsych";
 import get from "lodash.get";
 import set from "lodash.set";
 import { ParameterInfos } from "src/modules/plugins";
+import { Class } from "type-fest";
 
 import { deepCopy } from "../modules/utils";
 import { BaseTimelineNode } from "./BaseTimelineNode";
@@ -18,6 +19,7 @@ import {
 } from ".";
 
 export class Trial extends BaseTimelineNode {
+  public pluginClass: Class<JsPsychPlugin<any>>;
   public pluginInstance: JsPsychPlugin<any>;
   public readonly trialObject: TrialDescription;
 
@@ -34,7 +36,8 @@ export class Trial extends BaseTimelineNode {
   ) {
     super(jsPsych, globalCallbacks);
     this.trialObject = deepCopy(description);
-    this.pluginInfo = this.description.type["info"];
+    this.pluginClass = this.getParameterValue("type", { evaluateFunctions: false });
+    this.pluginInfo = this.pluginClass["info"];
   }
 
   public async run() {
@@ -43,7 +46,7 @@ export class Trial extends BaseTimelineNode {
 
     this.onStart();
 
-    this.pluginInstance = new this.description.type(this.jsPsych);
+    this.pluginInstance = new this.pluginClass(this.jsPsych);
 
     const result = await this.executeTrial();
 
@@ -236,13 +239,11 @@ export class Trial extends BaseTimelineNode {
    * it's properties may be functions that have to be evaluated.
    */
   private getDataParameter() {
-    const data = this.getParameterValue("data");
+    const data = this.getParameterValue("data", { isComplexParameter: true });
 
     if (typeof data === "object") {
       return Object.fromEntries(
-        Object.entries(data).map(([key, value]) =>
-          typeof value === "function" ? [key, value()] : [key, value]
-        )
+        Object.keys(data).map((key) => [key, this.getParameterValue(["data", key])])
       );
     }
 

@@ -46,12 +46,25 @@ export class Timeline extends BaseTimelineNode {
     this.status = TimelineNodeStatus.RUNNING;
     const description = this.description;
 
+    // Generate timeline variable order so the first set of timeline variables is already available
+    // to the `on_timeline_start` and `conditional_function` callbacks
+    let timelineVariableOrder = this.generateTimelineVariableOrder();
+    this.setCurrentTimelineVariablesByIndex(timelineVariableOrder[0]);
+    let isInitialTimelineVariableOrder = true; // So we don't regenerate the order in the first iteration
+
     if (!description.conditional_function || description.conditional_function()) {
       for (let repetition = 0; repetition < (this.description.repetitions ?? 1); repetition++) {
         do {
           this.onStart();
 
-          for (const timelineVariableIndex of this.generateTimelineVariableOrder()) {
+          // Generate new timeline variable order in each iteration except for the first one
+          if (isInitialTimelineVariableOrder) {
+            isInitialTimelineVariableOrder = false;
+          } else {
+            timelineVariableOrder = this.generateTimelineVariableOrder();
+          }
+
+          for (const timelineVariableIndex of timelineVariableOrder) {
             this.setCurrentTimelineVariablesByIndex(timelineVariableIndex);
 
             const newChildren = this.instantiateChildNodes();
@@ -59,7 +72,8 @@ export class Timeline extends BaseTimelineNode {
             for (const childNode of newChildren) {
               this.activeChild = childNode;
               await childNode.run();
-              // @ts-expect-error TS thinks `this.status` must be `RUNNING` now, but it might have changed while `await`ing
+              // @ts-expect-error TS thinks `this.status` must be `RUNNING` now, but it might have
+              // changed while `await`ing
               if (this.status === TimelineNodeStatus.PAUSED) {
                 await this.resumePromise.get();
               }
@@ -197,7 +211,7 @@ export class Timeline extends BaseTimelineNode {
   }
 
   public evaluateTimelineVariable(variable: TimelineVariable) {
-    if (this.currentTimelineVariables.hasOwnProperty(variable.name)) {
+    if (this.currentTimelineVariables?.hasOwnProperty(variable.name)) {
       return this.currentTimelineVariables[variable.name];
     }
     if (this.parent) {
@@ -292,18 +306,28 @@ export class Timeline extends BaseTimelineNode {
   }
 
   /**
-   * Returns the currently active Trial node or `undefined`, if the timeline is neither running nor
-   * paused.
+   * Returns `true` when `getStatus()` returns either `RUNNING` or `PAUSED`, and `false` otherwise.
    */
-  public getCurrentTrial(): TimelineNode | undefined {
-    if ([TimelineNodeStatus.COMPLETED, TimelineNodeStatus.ABORTED].includes(this.getStatus())) {
-      return undefined;
-    }
-    if (this.activeChild instanceof Timeline) {
-      return this.activeChild.getCurrentTrial();
-    }
-    if (this.activeChild instanceof Trial) {
-      return this.activeChild;
+  public isActive() {
+    return [TimelineNodeStatus.RUNNING, TimelineNodeStatus.PAUSED].includes(this.getStatus());
+  }
+
+  /**
+   * Returns the currently active TimelineNode or `undefined`, if the timeline is not running. This
+   * is a Trial object most of the time, but it may also be a Timeline object when a timeline is
+   * running but hasn't yet instantiated its children (e.g. during timeline callback functions).
+   */
+  public getActiveNode(): TimelineNode {
+    if (this.isActive()) {
+      if (!this.activeChild) {
+        return this;
+      }
+      if (this.activeChild instanceof Timeline) {
+        return this.activeChild.getActiveNode();
+      }
+      if (this.activeChild instanceof Trial) {
+        return this.activeChild;
+      }
     }
     return undefined;
   }

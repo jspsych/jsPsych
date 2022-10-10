@@ -1,7 +1,6 @@
 import { Class } from "type-fest";
 
 import { JsPsychPlugin } from "../modules/plugins";
-import { Timeline } from "./Timeline";
 import { Trial } from "./Trial";
 
 export function isPromise(value: any): value is Promise<any> {
@@ -12,17 +11,19 @@ export class TimelineVariable {
   constructor(public readonly name: string) {}
 }
 
+export type Parameter<T> = T | (() => T) | TimelineVariable;
+
 export interface TrialDescription extends Record<string, any> {
-  type: Class<JsPsychPlugin<any>>;
+  type: Parameter<Class<JsPsychPlugin<any>>>;
 
   /** https://www.jspsych.org/latest/overview/plugins/#the-post_trial_gap-iti-parameter */
-  post_trial_gap?: number;
+  post_trial_gap?: Parameter<number>;
 
   /** https://www.jspsych.org/latest/overview/style/#using-the-css_classes-trial-parameter */
-  css_classes?: string | string[];
+  css_classes?: Parameter<string | string[]>;
 
   /** https://www.jspsych.org/latest/overview/simulation/#controlling-simulation-mode-with-simulation_options */
-  simulation_options?: any;
+  simulation_options?: Parameter<any>;
 
   // Events
 
