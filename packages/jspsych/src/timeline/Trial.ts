@@ -139,6 +139,10 @@ export class Trial extends BaseTimelineNode {
     return this.result;
   }
 
+  public getResults() {
+    return this.result ? [this.result] : [];
+  }
+
   private parameterValueCache: Record<string, any> = {};
   getParameterValue(
     parameterPath: string | string[],

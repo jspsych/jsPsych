@@ -450,6 +450,22 @@ describe("Trial", () => {
     });
   });
 
+  describe("getResult[s]()", () => {
+    it("returns the result once it is available", async () => {
+      TestPlugin.setManualFinishTrialMode();
+      const trial = createTrial({ type: TestPlugin });
+      trial.run();
+
+      expect(trial.getResult()).toBeUndefined();
+      expect(trial.getResults()).toEqual([]);
+
+      await TestPlugin.finishTrial();
+
+      expect(trial.getResult()).toEqual(expect.objectContaining({ my: "result" }));
+      expect(trial.getResults()).toEqual([expect.objectContaining({ my: "result" })]);
+    });
+  });
+
   describe("evaluateTimelineVariable()", () => {
     it("defers to the parent node", () => {
       const timeline = new Timeline(dependencies, { timeline: [] });

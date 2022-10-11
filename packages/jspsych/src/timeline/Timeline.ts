@@ -1,3 +1,4 @@
+import { DataCollection } from "../modules/data/DataCollection";
 import {
   repeat,
   sampleWithReplacement,
@@ -17,6 +18,7 @@ import {
   TimelineNodeStatus,
   TimelineVariable,
   TrialDescription,
+  TrialResult,
   isTimelineDescription,
   isTrialDescription,
   timelineDescriptionKeys,
@@ -42,20 +44,25 @@ export class Timeline extends BaseTimelineNode {
 
   public async run() {
     this.status = TimelineNodeStatus.RUNNING;
-    const description = this.description;
 
-    // Generate timeline variable order so the first set of timeline variables is already available
-    // to the `on_timeline_start` and `conditional_function` callbacks
+    const { conditional_function, loop_function, repetitions = 1 } = this.description;
+
+    // Generate initial timeline variable order so the first set of timeline variables is already
+    // available to the `on_timeline_start` and `conditional_function` callbacks
     let timelineVariableOrder = this.generateTimelineVariableOrder();
     this.setCurrentTimelineVariablesByIndex(timelineVariableOrder[0]);
     let isInitialTimelineVariableOrder = true; // So we don't regenerate the order in the first iteration
 
-    if (!description.conditional_function || description.conditional_function()) {
-      for (let repetition = 0; repetition < (this.description.repetitions ?? 1); repetition++) {
+    let currentLoopIterationResults: TrialResult[];
+
+    if (!conditional_function || conditional_function()) {
+      for (let repetition = 0; repetition < repetitions; repetition++) {
         do {
+          currentLoopIterationResults = [];
           this.onStart();
 
-          // Generate new timeline variable order in each iteration except for the first one
+          // Generate a new timeline variable order in each iteration except for the first one where
+          // it has been done before
           if (isInitialTimelineVariableOrder) {
             isInitialTimelineVariableOrder = false;
           } else {
@@ -65,9 +72,7 @@ export class Timeline extends BaseTimelineNode {
           for (const timelineVariableIndex of timelineVariableOrder) {
             this.setCurrentTimelineVariablesByIndex(timelineVariableIndex);
 
-            const newChildren = this.instantiateChildNodes();
-
-            for (const childNode of newChildren) {
+            for (const childNode of this.instantiateChildNodes()) {
               this.currentChild = childNode;
               await childNode.run();
               // @ts-expect-error TS thinks `this.status` must be `RUNNING` now, but it might have
@@ -79,11 +84,13 @@ export class Timeline extends BaseTimelineNode {
                 this.status = TimelineNodeStatus.ABORTED;
                 return;
               }
+
+              currentLoopIterationResults.push(...this.currentChild.getResults());
             }
           }
 
           this.onFinish();
-        } while (description.loop_function && description.loop_function(this.getResults()));
+        } while (loop_function && loop_function(new DataCollection(currentLoopIterationResults)));
       }
     }
 
@@ -228,11 +235,8 @@ export class Timeline extends BaseTimelineNode {
     return super.getParameterValue(parameterPath, options);
   }
 
-  /**
-   * Returns a flat array containing the results of all nested trials that have results so far
-   */
   public getResults() {
-    const results = [];
+    const results: TrialResult[] = [];
     for (const child of this.children) {
       if (child instanceof Trial) {
         const childResult = child.getResult();
@@ -245,6 +249,24 @@ export class Timeline extends BaseTimelineNode {
     }
 
     return results;
+  }
+
+  /**
+   * Returns the latest result that any nested trial has produced so far
+   */
+  public getLastResult() {
+    let result: TrialResult | undefined;
+    for (const child of this.children.slice().reverse()) {
+      if (child instanceof Timeline) {
+        result = child.getLastResult();
+      } else if (child instanceof Trial) {
+        result = child.getResult();
+      }
+      if (result) {
+        return result;
+      }
+    }
+    return undefined;
   }
 
   /**

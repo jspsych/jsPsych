@@ -10,6 +10,7 @@ import {
   TimelineNodeStatus,
   TimelineVariable,
   TrialDescription,
+  TrialResult,
 } from ".";
 
 export abstract class BaseTimelineNode implements TimelineNode {
@@ -19,6 +20,7 @@ export abstract class BaseTimelineNode implements TimelineNode {
   protected abstract readonly parent?: Timeline;
 
   abstract run(): Promise<void>;
+  abstract getResults(): TrialResult[];
   abstract evaluateTimelineVariable(variable: TimelineVariable): any;
 
   protected status = TimelineNodeStatus.PENDING;

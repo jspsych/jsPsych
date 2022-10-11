@@ -183,6 +183,11 @@ export interface TimelineNode {
   getStatus(): TimelineNodeStatus;
 
   /**
+   * Returns a flat array of all currently available results of this node
+   */
+  getResults(): TrialResult[];
+
+  /**
    * Recursively evaluates the given timeline variable, starting at the current timeline node.
    * Returns the result, or `undefined` if the variable is neither specified in the timeline
    * description of this node, nor in the description of any parent node.

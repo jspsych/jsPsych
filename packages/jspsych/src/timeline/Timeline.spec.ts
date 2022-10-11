@@ -3,6 +3,7 @@ import { mocked } from "ts-jest/utils";
 
 import { MockTimelineNodeDependencies } from "../../tests/test-utils";
 import TestPlugin from "../../tests/TestPlugin";
+import { DataCollection } from "../modules/data/DataCollection";
 import {
   repeat,
   sampleWithReplacement,
@@ -214,14 +215,13 @@ describe("Timeline", () => {
 
       await timeline.run();
       expect(loopFunction).toHaveBeenCalledTimes(2);
-      expect(loopFunction).toHaveBeenNthCalledWith(
-        1,
-        Array(3).fill(expect.objectContaining({ my: "result" }))
-      );
-      expect(loopFunction).toHaveBeenNthCalledWith(
-        2,
-        Array(6).fill(expect.objectContaining({ my: "result" }))
-      );
+
+      for (const call of loopFunction.mock.calls) {
+        expect(call[0]).toBeInstanceOf(DataCollection);
+        expect((call[0] as DataCollection).values()).toEqual(
+          Array(3).fill(expect.objectContaining({ my: "result" }))
+        );
+      }
 
       expect(timeline.children.length).toEqual(6);
     });
@@ -605,6 +605,22 @@ describe("Timeline", () => {
       expect(timeline.getResults()).toEqual(
         Array(2).fill(expect.objectContaining({ my: "result" }))
       );
+    });
+  });
+
+  describe("getLastResult()", () => {
+    it("recursively retrieves the last result", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timeline = createTimeline(exampleTimeline);
+
+      timeline.run();
+      expect(timeline.getLastResult()).toBeUndefined();
+
+      for (let trialNumber = 1; trialNumber <= 3; trialNumber++) {
+        await TestPlugin.finishTrial({ result: trialNumber });
+        expect(timeline.getLastResult()).toEqual(expect.objectContaining({ result: trialNumber }));
+      }
     });
   });
 
