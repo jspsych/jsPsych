@@ -14,10 +14,22 @@ afterEach(() => {
 });
 
 describe("shuffle", () => {
-  test("should produce fixed order with mock RNG", () => {
+  beforeEach(() => {
     jest.spyOn(Math, "random").mockReturnValue(0.5);
+  });
+
+  it("should produce fixed order with mock RNG", () => {
     const arr = [1, 2, 3, 4, 5, 6];
     expect(shuffle(arr)).toEqual([1, 6, 2, 5, 3, 4]);
+  });
+
+  it("should not modify the original array and return a new array instance", () => {
+    const array = [1, 2, 3];
+    const shuffledArray = shuffle(array);
+
+    expect(array).toEqual([1, 2, 3]);
+    expect(shuffledArray).not.toBe(array);
+    expect(shuffledArray).toEqual([1, 3, 2]);
   });
 });
 
