@@ -1,8 +1,7 @@
 import { flushPromises } from "@jspsych/test-utils";
-import { JsPsych, initJsPsych } from "jspsych";
 import { mocked } from "ts-jest/utils";
 
-import { GlobalCallbacks, mockDomRelatedJsPsychMethods } from "../../tests/test-utils";
+import { MockTimelineNodeDependencies } from "../../tests/test-utils";
 import TestPlugin from "../../tests/TestPlugin";
 import { ParameterType } from "../modules/plugins";
 import { Timeline } from "./Timeline";
@@ -14,23 +13,20 @@ jest.useFakeTimers();
 
 jest.mock("./Timeline");
 
-const globalCallbacks = new GlobalCallbacks();
+const dependencies = new MockTimelineNodeDependencies();
 
 describe("Trial", () => {
-  let jsPsych: JsPsych;
   let timeline: Timeline;
 
   beforeEach(() => {
-    globalCallbacks.reset();
+    dependencies.reset();
     TestPlugin.reset();
 
-    jsPsych = initJsPsych();
-    mockDomRelatedJsPsychMethods(jsPsych);
-    timeline = new Timeline(jsPsych, globalCallbacks, { timeline: [] });
+    timeline = new Timeline(dependencies, { timeline: [] });
   });
 
   const createTrial = (description: TrialDescription) =>
-    new Trial(jsPsych, globalCallbacks, description, timeline, 0);
+    new Trial(dependencies, description, timeline, 0);
 
   describe("run()", () => {
     it("instantiates the corresponding plugin", async () => {
@@ -49,8 +45,8 @@ describe("Trial", () => {
 
       expect(onStartCallback).toHaveBeenCalledTimes(1);
       expect(onStartCallback).toHaveBeenCalledWith(description);
-      expect(globalCallbacks.onTrialStart).toHaveBeenCalledTimes(1);
-      expect(globalCallbacks.onTrialStart).toHaveBeenCalledWith(trial);
+      expect(dependencies.onTrialStart).toHaveBeenCalledTimes(1);
+      expect(dependencies.onTrialStart).toHaveBeenCalledWith(trial);
     });
 
     it("properly invokes the plugin's `trial` method", async () => {
@@ -107,7 +103,7 @@ describe("Trial", () => {
           .spyOn(TestPlugin.prototype, "trial")
           .mockImplementation(async (display_element, trial, on_load) => {
             on_load();
-            jsPsych.finishTrial({ finishTrial: "result" });
+            dependencies.finishTrialPromise.resolve({ finishTrial: "result" });
             return { my: "result" };
           });
 
@@ -120,7 +116,7 @@ describe("Trial", () => {
     describe("if `trial` returns no promise", () => {
       beforeAll(() => {
         TestPlugin.prototype.trial.mockImplementation(() => {
-          jsPsych.finishTrial({ my: "result" });
+          dependencies.finishTrialPromise.resolve({ my: "result" });
         });
       });
 
@@ -130,7 +126,7 @@ describe("Trial", () => {
         await trial.run();
 
         expect(onLoadCallback).toHaveBeenCalledTimes(1);
-        expect(globalCallbacks.onTrialLoaded).toHaveBeenCalledTimes(1);
+        expect(dependencies.onTrialLoaded).toHaveBeenCalledTimes(1);
       });
 
       it("picks up the result data from the `finishTrial()` function", async () => {
@@ -154,8 +150,8 @@ describe("Trial", () => {
       const trial = createTrial({ type: TestPlugin });
       await trial.run();
 
-      expect(globalCallbacks.onTrialFinished).toHaveBeenCalledTimes(1);
-      expect(globalCallbacks.onTrialFinished).toHaveBeenCalledWith(trial);
+      expect(dependencies.onTrialFinished).toHaveBeenCalledTimes(1);
+      expect(dependencies.onTrialFinished).toHaveBeenCalledWith(trial);
     });
 
     it("includes result data from the `data` property", async () => {
@@ -417,7 +413,7 @@ describe("Trial", () => {
     });
 
     it("respects `default_iti` and `post_trial_gap``", async () => {
-      jest.spyOn(jsPsych, "getInitSettings").mockReturnValue({ default_iti: 100 });
+      dependencies.defaultIti = 100;
       TestPlugin.setManualFinishTrialMode();
 
       const trial1 = createTrial({ type: TestPlugin });
@@ -456,10 +452,10 @@ describe("Trial", () => {
 
   describe("evaluateTimelineVariable()", () => {
     it("defers to the parent node", () => {
-      const timeline = new Timeline(jsPsych, globalCallbacks, { timeline: [] });
+      const timeline = new Timeline(dependencies, { timeline: [] });
       mocked(timeline).evaluateTimelineVariable.mockReturnValue(1);
 
-      const trial = new Trial(jsPsych, globalCallbacks, { type: TestPlugin }, timeline, 0);
+      const trial = new Trial(dependencies, { type: TestPlugin }, timeline, 0);
 
       const variable = new TimelineVariable("x");
       expect(trial.evaluateTimelineVariable(variable)).toEqual(1);

@@ -1,13 +1,12 @@
 import get from "lodash.get";
 import has from "lodash.has";
 
-import { JsPsych } from "../JsPsych";
 import { Timeline } from "./Timeline";
 import {
   GetParameterValueOptions,
-  GlobalTimelineNodeCallbacks,
   TimelineDescription,
   TimelineNode,
+  TimelineNodeDependencies,
   TimelineNodeStatus,
   TimelineVariable,
   TrialDescription,
@@ -24,10 +23,7 @@ export abstract class BaseTimelineNode implements TimelineNode {
 
   protected status = TimelineNodeStatus.PENDING;
 
-  constructor(
-    protected readonly jsPsych: JsPsych,
-    protected readonly globalCallbacks: GlobalTimelineNodeCallbacks
-  ) {}
+  constructor(protected readonly dependencies: TimelineNodeDependencies) {}
 
   getStatus() {
     return this.status;

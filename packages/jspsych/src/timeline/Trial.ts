@@ -1,16 +1,16 @@
-import { JsPsych, JsPsychPlugin, ParameterType, PluginInfo } from "jspsych";
 import get from "lodash.get";
 import set from "lodash.set";
 import { ParameterInfos } from "src/modules/plugins";
 import { Class } from "type-fest";
 
+import { JsPsychPlugin, ParameterType, PluginInfo } from "../";
 import { deepCopy } from "../modules/utils";
 import { BaseTimelineNode } from "./BaseTimelineNode";
 import { Timeline } from "./Timeline";
 import { delay, parameterPathArrayToString } from "./util";
 import {
   GetParameterValueOptions,
-  GlobalTimelineNodeCallbacks,
+  TimelineNodeDependencies,
   TimelineNodeStatus,
   TimelineVariable,
   TrialDescription,
@@ -25,16 +25,14 @@ export class Trial extends BaseTimelineNode {
 
   private result: TrialResult;
   private readonly pluginInfo: PluginInfo;
-  private cssClasses?: string[];
 
   constructor(
-    jsPsych: JsPsych,
-    globalCallbacks: GlobalTimelineNodeCallbacks,
+    dependencies: TimelineNodeDependencies,
     public readonly description: TrialDescription,
     protected readonly parent: Timeline,
     public readonly index: number
   ) {
-    super(jsPsych, globalCallbacks);
+    super(dependencies);
     this.trialObject = deepCopy(description);
     this.pluginClass = this.getParameterValue("type", { evaluateFunctions: false });
     this.pluginInfo = this.pluginClass["info"];
@@ -46,7 +44,7 @@ export class Trial extends BaseTimelineNode {
 
     this.onStart();
 
-    this.pluginInstance = new this.pluginClass(this.jsPsych);
+    this.pluginInstance = this.dependencies.instantiatePlugin(this.pluginClass);
 
     const result = await this.executeTrial();
 
@@ -59,8 +57,7 @@ export class Trial extends BaseTimelineNode {
 
     this.onFinish();
 
-    const gap =
-      this.getParameterValue("post_trial_gap") ?? this.jsPsych.getInitSettings().default_iti;
+    const gap = this.getParameterValue("post_trial_gap") ?? this.dependencies.defaultIti;
     if (gap !== 0) {
       await delay(gap);
     }
@@ -69,7 +66,7 @@ export class Trial extends BaseTimelineNode {
   }
 
   private async executeTrial() {
-    let trialPromise = this.jsPsych.finishTrialPromise.get();
+    const trialPromise = this.dependencies.finishTrialPromise.get();
 
     /** Used as a way to figure out if `finishTrial()` has ben called without awaiting `trialPromise` */
     let hasTrialPromiseBeenResolved = false;
@@ -78,13 +75,13 @@ export class Trial extends BaseTimelineNode {
     });
 
     const trialReturnValue = this.pluginInstance.trial(
-      this.jsPsych.getDisplayElement(),
+      this.dependencies.displayElement,
       this.trialObject,
       this.onLoad
     );
 
     // Wait until the trial has completed and grab result data
-    let result: TrialResult;
+    let result: TrialResult | void;
     if (isPromise(trialReturnValue)) {
       result = await Promise.race([trialReturnValue, trialPromise]);
 
@@ -115,18 +112,18 @@ export class Trial extends BaseTimelineNode {
   }
 
   private onStart() {
-    this.globalCallbacks.onTrialStart(this);
+    this.dependencies.onTrialStart(this);
     this.runParameterCallback("on_start", this.trialObject);
   }
 
   private onLoad = () => {
-    this.globalCallbacks.onTrialLoaded(this);
+    this.dependencies.onTrialLoaded(this);
     this.runParameterCallback("on_load");
   };
 
   private onFinish() {
     this.runParameterCallback("on_finish", this.getResult());
-    this.globalCallbacks.onTrialFinished(this);
+    this.dependencies.onTrialFinished(this);
   }
 
   public evaluateTimelineVariable(variable: TimelineVariable) {

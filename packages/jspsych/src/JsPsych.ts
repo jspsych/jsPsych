@@ -1,15 +1,17 @@
 import autoBind from "auto-bind";
+import { Class } from "type-fest";
 
 import { version } from "../package.json";
 import { JsPsychData } from "./modules/data";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
+import { JsPsychPlugin, PluginInfo } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
 import {
-  GlobalTimelineNodeCallbacks,
   TimelineArray,
   TimelineDescription,
+  TimelineNodeDependencies,
   TimelineVariable,
   TrialResult,
 } from "./timeline";
@@ -67,7 +69,7 @@ export class JsPsych {
    */
   private simulation_options;
 
-  private timelineNodeCallbacks = new (class implements GlobalTimelineNodeCallbacks {
+  private timelineDependencies = new (class implements TimelineNodeDependencies {
     constructor(private jsPsych: JsPsych) {
       autoBind(this);
     }
@@ -101,6 +103,16 @@ export class JsPsych {
         this.jsPsych.removeCssClasses(cssClasses);
       }
     }
+
+    instantiatePlugin<Info extends PluginInfo>(pluginClass: Class<JsPsychPlugin<Info>>) {
+      return new pluginClass(this.jsPsych);
+    }
+
+    defaultIti = this.jsPsych.options.default_iti;
+
+    displayElement = this.jsPsych.getDisplayElement();
+
+    finishTrialPromise = this.jsPsych.finishTrialPromise;
   })(this);
 
   constructor(options?) {
@@ -175,7 +187,7 @@ export class JsPsych {
     }
 
     // create experiment timeline
-    this.timeline = new Timeline(this, this.timelineNodeCallbacks, timeline);
+    this.timeline = new Timeline(this.timelineDependencies, timeline);
 
     await this.prepareDom();
     await this.loadExtensions(this.options.extensions);
@@ -416,7 +428,7 @@ export class JsPsych {
 
   // New stuff as replacements for old methods:
 
-  finishTrialPromise = new PromiseWrapper<TrialResult>();
+  private finishTrialPromise = new PromiseWrapper<TrialResult | void>();
   finishTrial(data?: TrialResult) {
     this.finishTrialPromise.resolve(data);
   }

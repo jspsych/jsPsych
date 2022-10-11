@@ -1,8 +1,7 @@
 import { flushPromises } from "@jspsych/test-utils";
-import { JsPsych, initJsPsych } from "jspsych";
 import { mocked } from "ts-jest/utils";
 
-import { GlobalCallbacks, mockDomRelatedJsPsychMethods } from "../../tests/test-utils";
+import { MockTimelineNodeDependencies } from "../../tests/test-utils";
 import TestPlugin from "../../tests/TestPlugin";
 import {
   repeat,
@@ -30,19 +29,15 @@ const exampleTimeline: TimelineDescription = {
   timeline: [{ type: TestPlugin }, { type: TestPlugin }, { timeline: [{ type: TestPlugin }] }],
 };
 
-const globalCallbacks = new GlobalCallbacks();
+const dependencies = new MockTimelineNodeDependencies();
 
 describe("Timeline", () => {
-  let jsPsych: JsPsych;
-
   const createTimeline = (description: TimelineDescription | TimelineArray, parent?: Timeline) =>
-    new Timeline(jsPsych, globalCallbacks, description, parent);
+    new Timeline(dependencies, description, parent);
 
   beforeEach(() => {
-    globalCallbacks.reset();
+    dependencies.reset();
     TestPlugin.reset();
-    jsPsych = initJsPsych();
-    mockDomRelatedJsPsychMethods(jsPsych);
   });
 
   describe("run()", () => {

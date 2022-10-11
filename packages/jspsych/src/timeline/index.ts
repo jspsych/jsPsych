@@ -1,7 +1,8 @@
 import { Class } from "type-fest";
 
-import { JsPsychPlugin } from "../modules/plugins";
+import { JsPsychPlugin, PluginInfo } from "../modules/plugins";
 import { Trial } from "./Trial";
+import { PromiseWrapper } from "./util";
 
 export function isPromise(value: any): value is Promise<any> {
   return value && typeof value["then"] === "function";
@@ -112,12 +113,11 @@ export enum TimelineNodeStatus {
 }
 
 /**
- * Callbacks that get invoked by `TimelineNode`s. The callbacks are provided by the `JsPsych` class
- * itself to avoid numerous `JsPsych` instance method calls from within timeline nodes, and to keep
- * the public `JsPsych` API slim. This approach helps to decouple the `JsPsych` and timeline node
- * classes and thus simplifies unit testing.
+ * Functions and options needed by `TimelineNode`s, provided by the `JsPsych` instance. This
+ * approach allows to keep the public `JsPsych` API slim and decouples the `JsPsych` and timeline
+ * node classes, simplifying unit testing.
  */
-export interface GlobalTimelineNodeCallbacks {
+export interface TimelineNodeDependencies {
   /**
    * Called at the start of a trial, prior to invoking the plugin's trial method.
    */
@@ -132,6 +132,29 @@ export interface GlobalTimelineNodeCallbacks {
    * Called after a trial has finished.
    */
   onTrialFinished: (trial: Trial) => void;
+
+  /**
+   * Given a plugin class, creates a new instance of it and returns it.
+   */
+  instantiatePlugin: <Info extends PluginInfo>(
+    pluginClass: Class<JsPsychPlugin<Info>>
+  ) => JsPsychPlugin<Info>;
+
+  /**
+   * The default inter-trial interval as provided to `initJsPsych`
+   */
+  defaultIti: number;
+
+  /**
+   * JsPsych's display element which is provided to plugins
+   */
+  displayElement: HTMLElement;
+
+  /**
+   * A `PromiseWrapper` whose promise is resolved with result data whenever `jsPsych.finishTrial()`
+   * is called.
+   */
+  finishTrialPromise: PromiseWrapper<TrialResult | void>;
 }
 
 export type GetParameterValueOptions = {

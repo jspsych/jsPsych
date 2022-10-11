@@ -1,5 +1,6 @@
 import { flushPromises } from "@jspsych/test-utils";
 import { JsPsych, JsPsychPlugin, TrialType } from "jspsych";
+import { TrialResult } from "src/timeline";
 
 import { ParameterInfos } from "../src/modules/plugins";
 import { PromiseWrapper } from "../src/timeline/util";
@@ -69,7 +70,7 @@ class TestPlugin implements JsPsychPlugin<typeof testPluginInfo> {
 
   // For convenience, `trial` is set to a `jest.fn` below using `TestPlugin.prototype` and
   // `defaultTrialImplementation`
-  trial: jest.Mock<Promise<Record<string, any> | void> | void>;
+  trial: jest.Mock<Promise<TrialResult | void> | void>;
 
   defaultTrialImplementation(
     display_element: HTMLElement,

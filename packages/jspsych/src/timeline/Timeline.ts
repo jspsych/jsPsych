@@ -1,4 +1,3 @@
-import { JsPsych } from "../JsPsych";
 import {
   repeat,
   sampleWithReplacement,
@@ -11,10 +10,10 @@ import { Trial } from "./Trial";
 import { PromiseWrapper } from "./util";
 import {
   GetParameterValueOptions,
-  GlobalTimelineNodeCallbacks,
   TimelineArray,
   TimelineDescription,
   TimelineNode,
+  TimelineNodeDependencies,
   TimelineNodeStatus,
   TimelineVariable,
   TrialDescription,
@@ -28,13 +27,12 @@ export class Timeline extends BaseTimelineNode {
   public readonly description: TimelineDescription;
 
   constructor(
-    jsPsych: JsPsych,
-    globalCallbacks: GlobalTimelineNodeCallbacks,
+    dependencies: TimelineNodeDependencies,
     description: TimelineDescription | TimelineArray,
     protected readonly parent?: Timeline,
     public readonly index = 0
   ) {
-    super(jsPsych, globalCallbacks);
+    super(dependencies);
     this.description = Array.isArray(description) ? { timeline: description } : description;
     this.nextChildNodeIndex = index;
   }
@@ -143,8 +141,8 @@ export class Timeline extends BaseTimelineNode {
     const newChildNodes = this.description.timeline.map((childDescription) => {
       const childNodeIndex = this.nextChildNodeIndex++;
       return isTimelineDescription(childDescription)
-        ? new Timeline(this.jsPsych, this.globalCallbacks, childDescription, this, childNodeIndex)
-        : new Trial(this.jsPsych, this.globalCallbacks, childDescription, this, childNodeIndex);
+        ? new Timeline(this.dependencies, childDescription, this, childNodeIndex)
+        : new Trial(this.dependencies, childDescription, this, childNodeIndex);
     });
     this.children.push(...newChildNodes);
     return newChildNodes;

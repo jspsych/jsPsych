@@ -1,5 +1,3 @@
-import { GlobalTimelineNodeCallbacks } from "src/timeline";
-
 import { JsPsych } from "../../JsPsych";
 import { DataCollection } from "./DataCollection";
 import { getQueryString } from "./utils";

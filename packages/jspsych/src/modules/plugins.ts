@@ -1,6 +1,6 @@
 import { SetRequired } from "type-fest";
 
-import { TrialDescription } from "../timeline";
+import { TrialDescription, TrialResult } from "../timeline";
 
 /**
  * Parameter types for plugins
@@ -136,8 +136,6 @@ export const universalPluginParameters = <const>{
 
 export type UniversalPluginParameters = InferredParameters<typeof universalPluginParameters>;
 
-type test = undefined extends null ? "a" : "b";
-
 export interface PluginInfo {
   name: string;
   parameters: ParameterInfos;
@@ -148,7 +146,7 @@ export interface JsPsychPlugin<I extends PluginInfo> {
     display_element: HTMLElement,
     trial: TrialType<I>,
     on_load?: () => void
-  ): void | Promise<any>;
+  ): void | Promise<TrialResult | void>;
 }
 
 export type TrialType<I extends PluginInfo> = InferredParameters<I["parameters"]> &
