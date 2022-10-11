@@ -413,7 +413,7 @@ describe("Trial", () => {
     });
 
     it("respects `default_iti` and `post_trial_gap``", async () => {
-      dependencies.defaultIti = 100;
+      dependencies.getDefaultIti.mockReturnValue(100);
       TestPlugin.setManualFinishTrialMode();
 
       const trial1 = createTrial({ type: TestPlugin });

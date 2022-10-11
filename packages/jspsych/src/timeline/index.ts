@@ -141,14 +141,14 @@ export interface TimelineNodeDependencies {
   ) => JsPsychPlugin<Info>;
 
   /**
-   * The default inter-trial interval as provided to `initJsPsych`
+   * Return JsPsych's display element so it can be provided to plugins
    */
-  defaultIti: number;
+  getDisplayElement: () => HTMLElement;
 
   /**
-   * JsPsych's display element which is provided to plugins
+   * Return the default inter-trial interval as provided to `initJsPsych()`
    */
-  displayElement: HTMLElement;
+  getDefaultIti: () => number;
 
   /**
    * A `PromiseWrapper` whose promise is resolved with result data whenever `jsPsych.finishTrial()`

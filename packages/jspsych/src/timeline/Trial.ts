@@ -57,7 +57,7 @@ export class Trial extends BaseTimelineNode {
 
     this.onFinish();
 
-    const gap = this.getParameterValue("post_trial_gap") ?? this.dependencies.defaultIti;
+    const gap = this.getParameterValue("post_trial_gap") ?? this.dependencies.getDefaultIti();
     if (gap !== 0) {
       await delay(gap);
     }
@@ -75,7 +75,7 @@ export class Trial extends BaseTimelineNode {
     });
 
     const trialReturnValue = this.pluginInstance.trial(
-      this.dependencies.displayElement,
+      this.dependencies.getDisplayElement(),
       this.trialObject,
       this.onLoad
     );

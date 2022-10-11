@@ -15,12 +15,10 @@ export class MockTimelineNodeDependencies implements TimelineNodeDependencies {
   onTrialLoaded = jest.fn();
   onTrialFinished = jest.fn();
 
-  instantiatePlugin = jest.fn(
-    (pluginClass: Class<JsPsychPlugin<any>>) => new pluginClass(this.jsPsych)
-  );
+  instantiatePlugin: jest.Mock<JsPsychPlugin<any>>;
+  getDisplayElement: jest.Mock<HTMLElement>;
+  getDefaultIti: jest.Mock<number>;
 
-  defaultIti: number;
-  displayElement: HTMLDivElement;
   finishTrialPromise: PromiseWrapper<TrialResult>;
   jsPsych: JsPsych; // So we have something for plugins in `instantiatePlugin`
 
@@ -28,19 +26,27 @@ export class MockTimelineNodeDependencies implements TimelineNodeDependencies {
     this.initializeProperties();
   }
 
+  private displayElement: HTMLDivElement;
+
   private initializeProperties() {
-    this.defaultIti = 0;
-    this.displayElement = document.createElement("div");
+    this.instantiatePlugin = jest.fn(
+      (pluginClass: Class<JsPsychPlugin<any>>) => new pluginClass(this.jsPsych)
+    );
+    this.getDisplayElement = jest.fn(() => this.displayElement);
+    this.getDefaultIti = jest.fn(() => 0);
+
     this.finishTrialPromise = new PromiseWrapper<TrialResult>();
     this.jsPsych = new JsPsych();
+
+    this.displayElement = document.createElement("div");
   }
 
   // Test utility functions
   reset() {
+    this.initializeProperties();
+
     this.onTrialStart.mockReset();
     this.onTrialLoaded.mockReset();
     this.onTrialFinished.mockReset();
-    this.instantiatePlugin.mockClear();
-    this.initializeProperties();
   }
 }

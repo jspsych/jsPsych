@@ -69,52 +69,6 @@ export class JsPsych {
    */
   private simulation_options;
 
-  private timelineDependencies = new (class implements TimelineNodeDependencies {
-    constructor(private jsPsych: JsPsych) {
-      autoBind(this);
-    }
-
-    onTrialStart(trial: Trial) {
-      this.jsPsych.options.on_trial_start(trial.trialObject);
-
-      // apply the focus to the element containing the experiment.
-      this.jsPsych.getDisplayContainerElement().focus();
-      // reset the scroll on the DOM target
-      this.jsPsych.getDisplayElement().scrollTop = 0;
-
-      // Add the CSS classes from the trial's `css_classes` parameter to the display element.
-      const cssClasses = trial.getParameterValue("css_classes");
-      if (cssClasses) {
-        this.jsPsych.addCssClasses(cssClasses);
-      }
-    }
-
-    onTrialLoaded(trial: Trial) {}
-
-    onTrialFinished(trial: Trial) {
-      const result = trial.getResult();
-      this.jsPsych.options.on_trial_finish(result);
-      this.jsPsych.data.write(result);
-      this.jsPsych.options.on_data_update(result);
-
-      // Remove any CSS classes added by the `onTrialStart` callback.
-      const cssClasses = trial.getParameterValue("css_classes");
-      if (cssClasses) {
-        this.jsPsych.removeCssClasses(cssClasses);
-      }
-    }
-
-    instantiatePlugin<Info extends PluginInfo>(pluginClass: Class<JsPsychPlugin<Info>>) {
-      return new pluginClass(this.jsPsych);
-    }
-
-    defaultIti = this.jsPsych.options.default_iti;
-
-    displayElement = this.jsPsych.getDisplayElement();
-
-    finishTrialPromise = this.jsPsych.finishTrialPromise;
-  })(this);
-
   constructor(options?) {
     // override default options if user specifies an option
     options = {
@@ -432,4 +386,54 @@ export class JsPsych {
   finishTrial(data?: TrialResult) {
     this.finishTrialPromise.resolve(data);
   }
+
+  private timelineDependencies = new (class implements TimelineNodeDependencies {
+    constructor(private jsPsych: JsPsych) {
+      autoBind(this);
+    }
+
+    onTrialStart(trial: Trial) {
+      this.jsPsych.options.on_trial_start(trial.trialObject);
+
+      // apply the focus to the element containing the experiment.
+      this.jsPsych.getDisplayContainerElement().focus();
+      // reset the scroll on the DOM target
+      this.jsPsych.getDisplayElement().scrollTop = 0;
+
+      // Add the CSS classes from the trial's `css_classes` parameter to the display element.
+      const cssClasses = trial.getParameterValue("css_classes");
+      if (cssClasses) {
+        this.jsPsych.addCssClasses(cssClasses);
+      }
+    }
+
+    onTrialLoaded(trial: Trial) {}
+
+    onTrialFinished(trial: Trial) {
+      const result = trial.getResult();
+      this.jsPsych.options.on_trial_finish(result);
+      this.jsPsych.data.write(result);
+      this.jsPsych.options.on_data_update(result);
+
+      // Remove any CSS classes added by the `onTrialStart` callback.
+      const cssClasses = trial.getParameterValue("css_classes");
+      if (cssClasses) {
+        this.jsPsych.removeCssClasses(cssClasses);
+      }
+    }
+
+    instantiatePlugin<Info extends PluginInfo>(pluginClass: Class<JsPsychPlugin<Info>>) {
+      return new pluginClass(this.jsPsych);
+    }
+
+    getDisplayElement() {
+      return this.jsPsych.getDisplayElement();
+    }
+
+    getDefaultIti() {
+      return this.jsPsych.options.default_iti;
+    }
+
+    finishTrialPromise = this.jsPsych.finishTrialPromise;
+  })(this);
 }
