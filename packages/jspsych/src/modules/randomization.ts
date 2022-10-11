@@ -120,6 +120,7 @@ export function shuffleNoRepeats(arr: Array<any>, equalityTest: (a: any, b: any)
   }
 
   const random_shuffle = shuffle(arr);
+
   for (let i = 0; i < random_shuffle.length - 1; i++) {
     if (equalityTest(random_shuffle[i], random_shuffle[i + 1])) {
       // neighbors are equal, pick a new random neighbor to swap (not the first or last element, to avoid edge cases)
@@ -128,7 +129,8 @@ export function shuffleNoRepeats(arr: Array<any>, equalityTest: (a: any, b: any)
       while (
         equalityTest(random_shuffle[i + 1], random_shuffle[random_pick]) ||
         equalityTest(random_shuffle[i + 1], random_shuffle[random_pick + 1]) ||
-        equalityTest(random_shuffle[i + 1], random_shuffle[random_pick - 1])
+        equalityTest(random_shuffle[i + 1], random_shuffle[random_pick - 1]) ||
+        equalityTest(random_shuffle[i], random_shuffle[random_pick])
       ) {
         random_pick = Math.floor(Math.random() * (random_shuffle.length - 2)) + 1;
       }
