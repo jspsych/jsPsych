@@ -252,24 +252,6 @@ export class Timeline extends BaseTimelineNode {
   }
 
   /**
-   * Returns the latest result that any nested trial has produced so far
-   */
-  public getLastResult() {
-    let result: TrialResult | undefined;
-    for (const child of this.children.slice().reverse()) {
-      if (child instanceof Timeline) {
-        result = child.getLastResult();
-      } else if (child instanceof Trial) {
-        result = child.getResult();
-      }
-      if (result) {
-        return result;
-      }
-    }
-    return undefined;
-  }
-
-  /**
    * Returns the naive progress of the timeline (as a fraction), i.e. only considering the current
    * position within the description's `timeline` array. This certainly breaks for anything beyond
    * basic timelines (timeline variables, repetitions, loop functions, conditional functions, ...)!

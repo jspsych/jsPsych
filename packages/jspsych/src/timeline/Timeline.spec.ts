@@ -608,22 +608,6 @@ describe("Timeline", () => {
     });
   });
 
-  describe("getLastResult()", () => {
-    it("recursively retrieves the last result", async () => {
-      TestPlugin.setManualFinishTrialMode();
-
-      const timeline = createTimeline(exampleTimeline);
-
-      timeline.run();
-      expect(timeline.getLastResult()).toBeUndefined();
-
-      for (let trialNumber = 1; trialNumber <= 3; trialNumber++) {
-        await TestPlugin.finishTrial({ result: trialNumber });
-        expect(timeline.getLastResult()).toEqual(expect.objectContaining({ result: trialNumber }));
-      }
-    });
-  });
-
   describe("getProgress()", () => {
     it("always returns the current progress of a simple timeline", async () => {
       TestPlugin.setManualFinishTrialMode();
