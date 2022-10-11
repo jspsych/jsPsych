@@ -53,9 +53,7 @@ export type ParameterInfo = (
   default?: any;
 };
 
-export interface ParameterInfos {
-  [key: string]: ParameterInfo;
-}
+export type ParameterInfos = Record<string, ParameterInfo>;
 
 type InferredParameter<I extends ParameterInfo> = I["array"] extends true
   ? Array<ParameterTypeMap[I["type"]]>

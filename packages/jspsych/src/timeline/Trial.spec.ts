@@ -4,22 +4,15 @@ import { mocked } from "ts-jest/utils";
 
 import { GlobalCallbacks, mockDomRelatedJsPsychMethods } from "../../tests/test-utils";
 import TestPlugin from "../../tests/TestPlugin";
-import { ParameterInfos, ParameterType } from "../modules/plugins";
+import { ParameterType } from "../modules/plugins";
 import { Timeline } from "./Timeline";
 import { Trial } from "./Trial";
-import { PromiseWrapper, parameterPathArrayToString } from "./util";
+import { parameterPathArrayToString } from "./util";
 import { TimelineNodeStatus, TimelineVariable, TrialDescription } from ".";
 
 jest.useFakeTimers();
 
-jest.mock("../../tests/TestPlugin");
 jest.mock("./Timeline");
-const TestPluginMock = mocked(TestPlugin, true);
-
-const setTestPluginParameters = (parameters: ParameterInfos) => {
-  // @ts-expect-error info is declared as readonly
-  TestPlugin.info.parameters = parameters;
-};
 
 const globalCallbacks = new GlobalCallbacks();
 
@@ -27,31 +20,12 @@ describe("Trial", () => {
   let jsPsych: JsPsych;
   let timeline: Timeline;
 
-  /**
-   * Allows to run
-   * ```js
-   * TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
-   * ```
-   * and move through trials via `proceedWithTrial()`
-   */
-  const trialPromise = new PromiseWrapper();
-  const proceedWithTrial = () => {
-    trialPromise.resolve();
-    return flushPromises();
-  };
-
   beforeEach(() => {
-    jsPsych = initJsPsych();
     globalCallbacks.reset();
+    TestPlugin.reset();
+
+    jsPsych = initJsPsych();
     mockDomRelatedJsPsychMethods(jsPsych);
-
-    TestPluginMock.mockReset();
-    TestPluginMock.prototype.trial.mockImplementation(() => {
-      jsPsych.finishTrial({ my: "result" });
-    });
-    setTestPluginParameters({});
-    trialPromise.reset();
-
     timeline = new Timeline(jsPsych, globalCallbacks, { timeline: [] });
   });
 
@@ -80,11 +54,13 @@ describe("Trial", () => {
     });
 
     it("properly invokes the plugin's `trial` method", async () => {
+      const trialMethodSpy = jest.spyOn(TestPlugin.prototype, "trial");
       const trial = createTrial({ type: TestPlugin });
+
       await trial.run();
 
-      expect(trial.pluginInstance.trial).toHaveBeenCalledTimes(1);
-      expect(trial.pluginInstance.trial).toHaveBeenCalledWith(
+      expect(trialMethodSpy).toHaveBeenCalledTimes(1);
+      expect(trialMethodSpy).toHaveBeenCalledWith(
         expect.any(HTMLElement),
         { type: TestPlugin },
         expect.any(Function)
@@ -112,44 +88,42 @@ describe("Trial", () => {
     });
 
     describe("if `trial` returns a promise", () => {
-      beforeEach(() => {
-        TestPluginMock.prototype.trial.mockImplementation(
-          async (display_element, trial, on_load) => {
-            on_load();
-            return { promised: "result" };
-          }
-        );
-      });
-
-      it("doesn't invoke the `on_load` callback ", async () => {
+      it("doesn't automatically invoke the `on_load` callback", async () => {
         const onLoadCallback = jest.fn();
         const trial = createTrial({ type: TestPlugin, on_load: onLoadCallback });
 
         await trial.run();
 
+        // TestPlugin invokes the callback for us in the `trial` method
         expect(onLoadCallback).toHaveBeenCalledTimes(1);
       });
 
       it("picks up the result data from the promise or the `finishTrial()` function (where the latter one takes precedence)", async () => {
         const trial1 = createTrial({ type: TestPlugin });
         await trial1.run();
-        expect(trial1.getResult()).toEqual(expect.objectContaining({ promised: "result" }));
+        expect(trial1.getResult()).toEqual(expect.objectContaining({ my: "result" }));
 
-        TestPluginMock.prototype.trial.mockImplementation(
-          async (display_element, trial, on_load) => {
+        jest
+          .spyOn(TestPlugin.prototype, "trial")
+          .mockImplementation(async (display_element, trial, on_load) => {
             on_load();
-            jsPsych.finishTrial({ my: "result" });
-            return { promised: "result" };
-          }
-        );
+            jsPsych.finishTrial({ finishTrial: "result" });
+            return { my: "result" };
+          });
 
         const trial2 = createTrial({ type: TestPlugin });
         await trial2.run();
-        expect(trial2.getResult()).toEqual(expect.objectContaining({ my: "result" }));
+        expect(trial2.getResult()).toEqual(expect.objectContaining({ finishTrial: "result" }));
       });
     });
 
     describe("if `trial` returns no promise", () => {
+      beforeAll(() => {
+        TestPlugin.prototype.trial.mockImplementation(() => {
+          jsPsych.finishTrial({ my: "result" });
+        });
+      });
+
       it("invokes the local `on_load` and the global `onTrialLoaded` callback", async () => {
         const onLoadCallback = jest.fn();
         const trial = createTrial({ type: TestPlugin, on_load: onLoadCallback });
@@ -220,7 +194,7 @@ describe("Trial", () => {
     describe("with a plugin parameter specification", () => {
       const functionDefaultValue = () => {};
       beforeEach(() => {
-        setTestPluginParameters({
+        TestPlugin.setParameterInfos({
           string: { type: ParameterType.STRING, default: null },
           requiredString: { type: ParameterType.STRING },
           stringArray: { type: ParameterType.STRING, default: [], array: true },
@@ -292,7 +266,7 @@ describe("Trial", () => {
       });
 
       it("errors when an `array` parameter is not an array", async () => {
-        setTestPluginParameters({
+        TestPlugin.setParameterInfos({
           stringArray: { type: ParameterType.STRING, array: true },
         });
 
@@ -375,7 +349,7 @@ describe("Trial", () => {
 
       describe("with missing required parameters", () => {
         it("errors on missing simple parameters", async () => {
-          setTestPluginParameters({ requiredString: { type: ParameterType.STRING } });
+          TestPlugin.setParameterInfos({ requiredString: { type: ParameterType.STRING } });
 
           // This should work:
           await createTrial({ type: TestPlugin, requiredString: "foo" }).run();
@@ -387,7 +361,7 @@ describe("Trial", () => {
         });
 
         it("errors on missing parameters nested in `COMPLEX` parameters", async () => {
-          setTestPluginParameters({
+          TestPlugin.setParameterInfos({
             requiredComplexNested: {
               type: ParameterType.COMPLEX,
               nested: { requiredChild: { type: ParameterType.STRING } },
@@ -410,7 +384,7 @@ describe("Trial", () => {
         });
 
         it("errors on missing parameters nested in `COMPLEX` array parameters", async () => {
-          setTestPluginParameters({
+          TestPlugin.setParameterInfos({
             requiredComplexNestedArray: {
               type: ParameterType.COMPLEX,
               array: true,
@@ -444,14 +418,14 @@ describe("Trial", () => {
 
     it("respects `default_iti` and `post_trial_gap``", async () => {
       jest.spyOn(jsPsych, "getInitSettings").mockReturnValue({ default_iti: 100 });
-      TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+      TestPlugin.setManualFinishTrialMode();
 
       const trial1 = createTrial({ type: TestPlugin });
 
       const runPromise1 = trial1.run();
       expect(trial1.getStatus()).toBe(TimelineNodeStatus.RUNNING);
 
-      await proceedWithTrial();
+      await TestPlugin.finishTrial();
       expect(trial1.getStatus()).toBe(TimelineNodeStatus.RUNNING);
 
       jest.advanceTimersByTime(100);
@@ -465,7 +439,7 @@ describe("Trial", () => {
       const runPromise2 = trial2.run();
       expect(trial2.getStatus()).toBe(TimelineNodeStatus.RUNNING);
 
-      await proceedWithTrial();
+      await TestPlugin.finishTrial();
       expect(trial2.getStatus()).toBe(TimelineNodeStatus.RUNNING);
 
       jest.advanceTimersByTime(100);

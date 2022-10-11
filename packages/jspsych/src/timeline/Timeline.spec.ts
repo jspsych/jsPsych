@@ -13,7 +13,6 @@ import {
 } from "../modules/randomization";
 import { Timeline } from "./Timeline";
 import { Trial } from "./Trial";
-import { PromiseWrapper } from "./util";
 import {
   SampleOptions,
   TimelineArray,
@@ -25,9 +24,7 @@ import {
 
 jest.useFakeTimers();
 
-jest.mock("../../tests/TestPlugin");
 jest.mock("../modules/randomization");
-const TestPluginMock = mocked(TestPlugin, true);
 
 const exampleTimeline: TimelineDescription = {
   timeline: [{ type: TestPlugin }, { type: TestPlugin }, { timeline: [{ type: TestPlugin }] }],
@@ -41,29 +38,11 @@ describe("Timeline", () => {
   const createTimeline = (description: TimelineDescription | TimelineArray, parent?: Timeline) =>
     new Timeline(jsPsych, globalCallbacks, description, parent);
 
-  /**
-   * Allows to run
-   * ```js
-   * TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
-   * ```
-   * and move through trials via `proceedWithTrial()`
-   */
-  const trialPromise = new PromiseWrapper();
-  const proceedWithTrial = () => {
-    trialPromise.resolve();
-    return flushPromises();
-  };
-
   beforeEach(() => {
-    jsPsych = initJsPsych();
     globalCallbacks.reset();
+    TestPlugin.reset();
+    jsPsych = initJsPsych();
     mockDomRelatedJsPsychMethods(jsPsych);
-
-    TestPluginMock.mockReset();
-    TestPluginMock.prototype.trial.mockImplementation(() => {
-      jsPsych.finishTrial({ my: "result" });
-    });
-    trialPromise.reset();
   });
 
   describe("run()", () => {
@@ -81,7 +60,7 @@ describe("Timeline", () => {
 
     describe("with `pause()` and `resume()` calls`", () => {
       beforeEach(() => {
-        TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+        TestPlugin.setManualFinishTrialMode();
       });
 
       it("pauses, resumes, and updates the results of getStatus()", async () => {
@@ -96,19 +75,19 @@ describe("Timeline", () => {
 
         expect(timeline.getStatus()).toBe(TimelineNodeStatus.RUNNING);
         expect(timeline.children[0].getStatus()).toBe(TimelineNodeStatus.RUNNING);
-        await proceedWithTrial();
+        await TestPlugin.finishTrial();
 
         expect(timeline.children[0].getStatus()).toBe(TimelineNodeStatus.COMPLETED);
         expect(timeline.children[1].getStatus()).toBe(TimelineNodeStatus.RUNNING);
         timeline.pause();
         expect(timeline.getStatus()).toBe(TimelineNodeStatus.PAUSED);
 
-        await proceedWithTrial();
+        await TestPlugin.finishTrial();
         expect(timeline.children[1].getStatus()).toBe(TimelineNodeStatus.COMPLETED);
         expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.PENDING);
 
         // Resolving the next trial promise shouldn't continue the experiment since no trial should be running.
-        await proceedWithTrial();
+        await TestPlugin.finishTrial();
 
         expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.PENDING);
 
@@ -123,12 +102,12 @@ describe("Timeline", () => {
         expect(timeline.getStatus()).toBe(TimelineNodeStatus.PAUSED);
         expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.PAUSED);
 
-        await proceedWithTrial();
+        await TestPlugin.finishTrial();
         timeline.resume();
         await flushPromises();
         expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.RUNNING);
 
-        await proceedWithTrial();
+        await TestPlugin.finishTrial();
 
         expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.COMPLETED);
         expect(timeline.getStatus()).toBe(TimelineNodeStatus.COMPLETED);
@@ -143,7 +122,7 @@ describe("Timeline", () => {
         const child = timeline.children[0];
 
         expect(child.getStatus()).toBe(TimelineNodeStatus.RUNNING);
-        await proceedWithTrial();
+        await TestPlugin.finishTrial();
         expect(child.getStatus()).toBe(TimelineNodeStatus.RUNNING);
 
         timeline.pause();
@@ -162,7 +141,7 @@ describe("Timeline", () => {
 
     describe("abort()", () => {
       beforeEach(() => {
-        TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+        TestPlugin.setManualFinishTrialMode();
       });
 
       describe("aborts the timeline after the current trial ends, updating the result of getStatus()", () => {
@@ -173,7 +152,7 @@ describe("Timeline", () => {
           expect(timeline.getStatus()).toBe(TimelineNodeStatus.RUNNING);
           timeline.abort();
           expect(timeline.getStatus()).toBe(TimelineNodeStatus.RUNNING);
-          await proceedWithTrial();
+          await TestPlugin.finishTrial();
           expect(timeline.getStatus()).toBe(TimelineNodeStatus.ABORTED);
           await runPromise;
         });
@@ -183,7 +162,7 @@ describe("Timeline", () => {
           timeline.run();
 
           timeline.pause();
-          await proceedWithTrial();
+          await TestPlugin.finishTrial();
           expect(timeline.getStatus()).toBe(TimelineNodeStatus.PAUSED);
           timeline.abort();
           await flushPromises();
@@ -199,7 +178,7 @@ describe("Timeline", () => {
 
         expect(timeline.children[0].getStatus()).toBe(TimelineNodeStatus.RUNNING);
         timeline.abort();
-        await proceedWithTrial();
+        await TestPlugin.finishTrial();
         expect(timeline.children[0].getStatus()).toBe(TimelineNodeStatus.ABORTED);
         expect(timeline.getStatus()).toBe(TimelineNodeStatus.ABORTED);
         await runPromise;
@@ -214,7 +193,7 @@ describe("Timeline", () => {
 
         // Complete the timeline
         const runPromise = timeline.run();
-        await proceedWithTrial();
+        await TestPlugin.finishTrial();
         await runPromise;
 
         expect(timeline.getStatus()).toBe(TimelineNodeStatus.COMPLETED);
@@ -295,7 +274,7 @@ describe("Timeline", () => {
       const onTimelineFinish = jest.fn();
 
       beforeEach(() => {
-        TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+        TestPlugin.setManualFinishTrialMode();
       });
 
       afterEach(() => {
@@ -313,7 +292,7 @@ describe("Timeline", () => {
         expect(onTimelineStart).toHaveBeenCalledTimes(1);
         expect(onTimelineFinish).toHaveBeenCalledTimes(0);
 
-        await proceedWithTrial();
+        await TestPlugin.finishTrial();
         expect(onTimelineStart).toHaveBeenCalledTimes(1);
         expect(onTimelineFinish).toHaveBeenCalledTimes(1);
       });
@@ -330,11 +309,11 @@ describe("Timeline", () => {
         expect(onTimelineStart).toHaveBeenCalledTimes(1);
         expect(onTimelineFinish).toHaveBeenCalledTimes(0);
 
-        await proceedWithTrial();
+        await TestPlugin.finishTrial();
         expect(onTimelineFinish).toHaveBeenCalledTimes(1);
         expect(onTimelineStart).toHaveBeenCalledTimes(2);
 
-        await proceedWithTrial();
+        await TestPlugin.finishTrial();
         expect(onTimelineStart).toHaveBeenCalledTimes(2);
         expect(onTimelineFinish).toHaveBeenCalledTimes(2);
       });
@@ -343,9 +322,8 @@ describe("Timeline", () => {
     describe("with timeline variables", () => {
       it("repeats all trials for each set of variables", async () => {
         const xValues = [];
-        TestPluginMock.prototype.trial.mockImplementation(() => {
+        TestPlugin.prototype.trial.mockImplementation(async () => {
           xValues.push(timeline.evaluateTimelineVariable(new TimelineVariable("x")));
-          jsPsych.finishTrial();
         });
 
         const timeline = createTimeline({
@@ -369,9 +347,8 @@ describe("Timeline", () => {
             sample,
             randomize_order,
           });
-          TestPluginMock.prototype.trial.mockImplementation(() => {
+          TestPlugin.prototype.trial.mockImplementation(async () => {
             xValues.push(timeline.evaluateTimelineVariable(new TimelineVariable("x")));
-            jsPsych.finishTrial();
           });
           return timeline;
         };
@@ -638,7 +615,7 @@ describe("Timeline", () => {
 
   describe("getProgress()", () => {
     it("always returns the current progress of a simple timeline", async () => {
-      TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+      TestPlugin.setManualFinishTrialMode();
 
       const timeline = createTimeline(Array(4).fill({ type: TestPlugin }));
       expect(timeline.getProgress()).toEqual(0);
@@ -646,16 +623,16 @@ describe("Timeline", () => {
       const runPromise = timeline.run();
       expect(timeline.getProgress()).toEqual(0);
 
-      await proceedWithTrial();
+      await TestPlugin.finishTrial();
       expect(timeline.getProgress()).toEqual(0.25);
 
-      await proceedWithTrial();
+      await TestPlugin.finishTrial();
       expect(timeline.getProgress()).toEqual(0.5);
 
-      await proceedWithTrial();
+      await TestPlugin.finishTrial();
       expect(timeline.getProgress()).toEqual(0.75);
 
-      await proceedWithTrial();
+      await TestPlugin.finishTrial();
       expect(timeline.getProgress()).toEqual(1);
 
       await runPromise;
@@ -682,7 +659,7 @@ describe("Timeline", () => {
 
   describe("getActiveNode()", () => {
     it("returns the currently active `TimelineNode` or `undefined` when no node is active", async () => {
-      TestPluginMock.prototype.trial.mockImplementation(() => trialPromise.get());
+      TestPlugin.setManualFinishTrialMode();
 
       let outerTimelineActiveNode: TimelineNode;
       let innerTimelineActiveNode: TimelineNode;
@@ -712,14 +689,14 @@ describe("Timeline", () => {
       expect(timeline.getActiveNode()).toBeInstanceOf(Trial);
       expect(timeline.getActiveNode().index).toEqual(0);
 
-      await proceedWithTrial();
+      await TestPlugin.finishTrial();
 
       expect(innerTimelineActiveNode).toBeInstanceOf(Timeline);
       expect(innerTimelineActiveNode.index).toEqual(1);
       expect(timeline.getActiveNode()).toBeInstanceOf(Trial);
       expect(timeline.getActiveNode().index).toEqual(1);
 
-      await proceedWithTrial();
+      await TestPlugin.finishTrial();
       expect(timeline.getActiveNode()).toBeUndefined();
     });
   });
