@@ -13,7 +13,7 @@ describe("automatic progress bar", () => {
     ]);
 
     expect(document.querySelector("#jspsych-progressbar-container")).toBe(null);
-    pressKey("a");
+    await pressKey("a");
   });
 
   test("progress bar displays when show_progress_bar is true", async () => {
@@ -43,13 +43,13 @@ describe("automatic progress bar", () => {
     const progressbarElement = document.querySelector<HTMLElement>("#jspsych-progressbar-inner");
 
     expect(progressbarElement.style.width).toBe("");
-    pressKey("a");
+    await pressKey("a");
     expect(progressbarElement.style.width).toBe("25%");
-    pressKey("a");
+    await pressKey("a");
     expect(progressbarElement.style.width).toBe("50%");
-    pressKey("a");
+    await pressKey("a");
     expect(progressbarElement.style.width).toBe("75%");
-    pressKey("a");
+    await pressKey("a");
     expect(progressbarElement.style.width).toBe("100%");
   });
 
@@ -68,7 +68,7 @@ describe("automatic progress bar", () => {
 
     for (let i = 0; i < 4; i++) {
       expect(progressbarElement.style.width).toBe("");
-      pressKey("a");
+      await pressKey("a");
     }
     expect(progressbarElement.style.width).toBe("");
   });
@@ -84,14 +84,14 @@ describe("automatic progress bar", () => {
         type: htmlKeyboardResponse,
         stimulus: "foo",
         on_finish: () => {
-          jsPsych.setProgressBar(0.2);
+          jsPsych.progressBar.progress = 0.2;
         },
       },
       {
         type: htmlKeyboardResponse,
         stimulus: "foo",
         on_finish: () => {
-          jsPsych.setProgressBar(0.8);
+          jsPsych.progressBar.progress = 0.8;
         },
       },
     ];
@@ -101,12 +101,12 @@ describe("automatic progress bar", () => {
     const progressbarElement = document.querySelector<HTMLElement>("#jspsych-progressbar-inner");
 
     expect(progressbarElement.style.width).toBe("");
-    pressKey("a");
-    expect(jsPsych.getProgressBarCompleted()).toBe(0.2);
+    await pressKey("a");
+    expect(jsPsych.progressBar.progress).toBe(0.2);
     expect(progressbarElement.style.width).toBe("20%");
-    pressKey("a");
+    await pressKey("a");
     expect(progressbarElement.style.width).toBe("80%");
-    expect(jsPsych.getProgressBarCompleted()).toBe(0.8);
+    expect(jsPsych.progressBar.progress).toBe(0.8);
   });
 
   test("getProgressBarCompleted() -- automatic updates", async () => {
@@ -119,13 +119,13 @@ describe("automatic progress bar", () => {
       show_progress_bar: true,
     });
 
-    pressKey("a");
-    expect(jsPsych.getProgressBarCompleted()).toBe(0.25);
-    pressKey("a");
-    expect(jsPsych.getProgressBarCompleted()).toBe(0.5);
-    pressKey("a");
-    expect(jsPsych.getProgressBarCompleted()).toBe(0.75);
-    pressKey("a");
-    expect(jsPsych.getProgressBarCompleted()).toBe(1);
+    await pressKey("a");
+    expect(jsPsych.progressBar.progress).toBe(0.25);
+    await pressKey("a");
+    expect(jsPsych.progressBar.progress).toBe(0.5);
+    await pressKey("a");
+    expect(jsPsych.progressBar.progress).toBe(0.75);
+    await pressKey("a");
+    expect(jsPsych.progressBar.progress).toBe(1);
   });
 });

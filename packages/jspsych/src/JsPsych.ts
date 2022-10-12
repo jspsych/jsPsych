@@ -8,6 +8,7 @@ import { JsPsychPlugin, PluginInfo } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
+import { ProgressBar } from "./ProgressBar";
 import {
   TimelineArray,
   TimelineDescription,
@@ -167,6 +168,8 @@ export class JsPsych {
     this.simulation_options = simulation_options;
     await this.run(timeline);
   }
+
+  public progressBar?: ProgressBar;
 
   getProgress() {
     return {
@@ -331,6 +334,15 @@ export class JsPsych {
 
     // add event for closing window
     window.addEventListener("beforeunload", options.on_close);
+
+    if (this.options.show_progress_bar) {
+      const progressBarContainer = document.createElement("div");
+      progressBarContainer.id = "jspsych-progressbar-container";
+
+      this.progressBar = new ProgressBar(progressBarContainer, this.options.message_progress_bar);
+
+      this.getDisplayElement().insertAdjacentElement("afterbegin", progressBarContainer);
+    }
   }
 
   private async loadExtensions(extensions) {
@@ -346,38 +358,6 @@ export class JsPsych {
     } catch (error_message) {
       throw new Error(error_message);
     }
-  }
-
-  private drawProgressBar(msg) {
-    document
-      .querySelector(".jspsych-display-element")
-      .insertAdjacentHTML(
-        "afterbegin",
-        '<div id="jspsych-progressbar-container">' +
-          "<span>" +
-          msg +
-          "</span>" +
-          '<div id="jspsych-progressbar-outer">' +
-          '<div id="jspsych-progressbar-inner"></div>' +
-          "</div></div>"
-      );
-  }
-
-  private updateProgressBar() {
-    this.setProgressBar(this.getProgress().percent_complete / 100);
-  }
-
-  private progress_bar_amount = 0;
-
-  setProgressBar(proportion_complete) {
-    proportion_complete = Math.max(Math.min(1, proportion_complete), 0);
-    document.querySelector<HTMLElement>("#jspsych-progressbar-inner").style.width =
-      proportion_complete * 100 + "%";
-    this.progress_bar_amount = proportion_complete;
-  }
-
-  getProgressBarCompleted() {
-    return this.progress_bar_amount;
   }
 
   // New stuff as replacements for old methods:
