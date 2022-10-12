@@ -17,7 +17,7 @@ describe("minimum_valid_rt parameter", () => {
     ]);
 
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("bar");
   });
 
@@ -37,12 +37,12 @@ describe("minimum_valid_rt parameter", () => {
     );
 
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("foo");
 
     jest.advanceTimersByTime(100);
 
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("bar");
   });
 });
