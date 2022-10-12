@@ -1,5 +1,13 @@
 # jspsych
 
+## 7.3.1
+
+### Patch Changes
+
+- [#2754](https://github.com/jspsych/jsPsych/pull/2754) [`6bf9ea97`](https://github.com/jspsych/jsPsych/commit/6bf9ea973e7a0309dd1f5ea06043a27ea2f991bf) Thanks [@javidalpe](https://github.com/javidalpe)! - Fix preload plugin onerror callback so that it returns proper src information when there are 404 errors.
+
+* [#2811](https://github.com/jspsych/jsPsych/pull/2811) [`28136787`](https://github.com/jspsych/jsPsych/commit/28136787ecdefc4c4620393576b5179b734454f1) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Fixed a bug in `randomization.shuffleNoRepeats()` where having an `equalityFunction` that used a logical OR could result in some neighboring elements still evaluating to `true` via `equalityFunction`.
+
 ## 7.3.0
 
 ### Minor Changes
