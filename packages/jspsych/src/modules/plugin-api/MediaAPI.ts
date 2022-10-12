@@ -102,15 +102,15 @@ export class MediaAPI {
           }
         );
       };
-      request.onerror = function (e) {
+      request.onerror = (e) => {
         let err: ProgressEvent | string = e;
-        if (this.status == 404) {
+        if (request.status == 404) {
           err = "404";
         }
         callback_error({ source: source, error: err });
       };
-      request.onloadend = function (e) {
-        if (this.status == 404) {
+      request.onloadend = (e) => {
+        if (request.status == 404) {
           callback_error({ source: source, error: "404" });
         }
       };
@@ -176,24 +176,24 @@ export class MediaAPI {
       return;
     }
 
-    for (var i = 0; i < images.length; i++) {
-      var img = new Image();
-
-      img.onload = function () {
+    for (let i = 0; i < images.length; i++) {
+      const img = new Image();
+      const src = images[i];
+      img.onload = () => {
         n_loaded++;
-        callback_load(img.src);
+        callback_load(src);
         if (n_loaded === images.length) {
           callback_complete();
         }
       };
 
-      img.onerror = function (e) {
-        callback_error({ source: img.src, error: e });
+      img.onerror = (e) => {
+        callback_error({ source: src, error: e });
       };
 
-      img.src = images[i];
+      img.src = src;
 
-      this.img_cache[images[i]] = img;
+      this.img_cache[src] = img;
       this.preload_requests.push(img);
     }
   }
@@ -221,9 +221,9 @@ export class MediaAPI {
       const request = new XMLHttpRequest();
       request.open("GET", video, true);
       request.responseType = "blob";
-      request.onload = function () {
-        if (this.status === 200 || this.status === 0) {
-          const videoBlob = this.response;
+      request.onload =  () => {
+        if (request.status === 200 || request.status === 0) {
+          const videoBlob = request.response;
           video_buffers[video] = URL.createObjectURL(videoBlob); // IE10+
           n_loaded++;
           callback_load(video);
@@ -232,15 +232,15 @@ export class MediaAPI {
           }
         }
       };
-      request.onerror = function (e) {
+      request.onerror =  (e) => {
         let err: ProgressEvent | string = e;
-        if (this.status == 404) {
+        if (request.status == 404) {
           err = "404";
         }
         callback_error({ source: video, error: err });
       };
-      request.onloadend = function (e) {
-        if (this.status == 404) {
+      request.onloadend =  (e) => {
+        if (request.status == 404) {
           callback_error({ source: video, error: "404" });
         }
       };
