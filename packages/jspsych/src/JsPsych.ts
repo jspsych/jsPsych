@@ -175,7 +175,7 @@ export class JsPsych {
     return {
       total_trials: this.timeline?.getNaiveTrialCount(),
       current_trial_global: 0, // TODO This used to be `this.global_trial_index` – is a global trial index still needed / does it make sense and, if so, how should it be maintained?
-      percent_complete: this.timeline?.getProgress() * 100,
+      percent_complete: this.timeline?.getNaiveProgress() * 100,
     };
   }
 
@@ -229,7 +229,7 @@ export class JsPsych {
   }
 
   getCurrentTrial() {
-    const activeNode = this.timeline?.getActiveNode();
+    const activeNode = this.timeline?.getLatestNode();
     if (activeNode instanceof Trial) {
       return activeNode.description;
     }
@@ -246,7 +246,7 @@ export class JsPsych {
 
   evaluateTimelineVariable(variableName: string) {
     return this.timeline
-      ?.getActiveNode()
+      ?.getLatestNode()
       ?.evaluateTimelineVariable(new TimelineVariable(variableName));
   }
 
@@ -341,7 +341,7 @@ export class JsPsych {
 
       this.progressBar = new ProgressBar(progressBarContainer, this.options.message_progress_bar);
 
-      this.getDisplayElement().insertAdjacentElement("afterbegin", progressBarContainer);
+      this.getDisplayContainerElement().insertAdjacentElement("afterbegin", progressBarContainer);
     }
   }
 
@@ -399,6 +399,10 @@ export class JsPsych {
       const cssClasses = trial.getParameterValue("css_classes");
       if (cssClasses) {
         this.jsPsych.removeCssClasses(cssClasses);
+      }
+
+      if (this.jsPsych.progressBar && this.jsPsych.options.auto_update_progress_bar) {
+        this.jsPsych.progressBar.progress = this.jsPsych.timeline.getNaiveProgress();
       }
     }
 

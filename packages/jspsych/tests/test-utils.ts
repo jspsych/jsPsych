@@ -50,3 +50,16 @@ export class MockTimelineNodeDependencies implements TimelineNodeDependencies {
     this.onTrialFinished.mockReset();
   }
 }
+
+/**
+ * Returns utilities for capturing the result of a provided `snapshotFunction` with a callback
+ * function and store its result in a `snapshots` object, keyed by an arbitrary name.
+ */
+export function createSnapshotUtils<SnapshotValueType>(snapshotFunction: () => SnapshotValueType) {
+  const snapshots: Record<string, SnapshotValueType> = {};
+  const createSnapshotCallback = (snapshotName: string) => () => {
+    snapshots[snapshotName] = snapshotFunction();
+  };
+
+  return { snapshots, createSnapshotCallback };
+}

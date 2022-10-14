@@ -1,7 +1,7 @@
 import { flushPromises } from "@jspsych/test-utils";
 import { mocked } from "ts-jest/utils";
 
-import { MockTimelineNodeDependencies } from "../../tests/test-utils";
+import { MockTimelineNodeDependencies, createSnapshotUtils } from "../../tests/test-utils";
 import TestPlugin from "../../tests/TestPlugin";
 import { DataCollection } from "../modules/data/DataCollection";
 import {
@@ -608,30 +608,68 @@ describe("Timeline", () => {
     });
   });
 
-  describe("getProgress()", () => {
-    it("always returns the current progress of a simple timeline", async () => {
+  describe("getNaiveProgress()", () => {
+    it("returns the progress of a timeline at any time", async () => {
       TestPlugin.setManualFinishTrialMode();
+      const { snapshots, createSnapshotCallback } = createSnapshotUtils(() =>
+        timeline.getNaiveProgress()
+      );
 
-      const timeline = createTimeline(Array(4).fill({ type: TestPlugin }));
-      expect(timeline.getProgress()).toEqual(0);
+      const timeline = createTimeline({
+        on_timeline_start: createSnapshotCallback("mainTimelineStart"),
+        on_timeline_finish: createSnapshotCallback("mainTimelineFinish"),
+        timeline: [
+          {
+            type: TestPlugin,
+            on_start: createSnapshotCallback("trial1Start"),
+            on_finish: createSnapshotCallback("trial1Finish"),
+          },
+          {
+            on_timeline_start: createSnapshotCallback("nestedTimelineStart"),
+            on_timeline_finish: createSnapshotCallback("nestedTimelineFinish"),
+            timeline: [{ type: TestPlugin }, { type: TestPlugin }],
+            repetitions: 2,
+          },
+        ],
+      });
+      expect(timeline.getNaiveProgress()).toEqual(0);
 
       const runPromise = timeline.run();
-      expect(timeline.getProgress()).toEqual(0);
+      expect(timeline.getNaiveProgress()).toEqual(0);
+      expect(snapshots.mainTimelineStart).toEqual(0);
+      expect(snapshots.trial1Start).toEqual(0);
 
       await TestPlugin.finishTrial();
-      expect(timeline.getProgress()).toEqual(0.25);
+      expect(timeline.getNaiveProgress()).toEqual(0.2);
+      expect(snapshots.trial1Finish).toEqual(0.2);
+      expect(snapshots.nestedTimelineStart).toEqual(0.2);
 
       await TestPlugin.finishTrial();
-      expect(timeline.getProgress()).toEqual(0.5);
+      expect(timeline.getNaiveProgress()).toEqual(0.4);
 
       await TestPlugin.finishTrial();
-      expect(timeline.getProgress()).toEqual(0.75);
+      expect(timeline.getNaiveProgress()).toEqual(0.6);
 
       await TestPlugin.finishTrial();
-      expect(timeline.getProgress()).toEqual(1);
+      expect(timeline.getNaiveProgress()).toEqual(0.8);
+
+      await TestPlugin.finishTrial();
+      expect(timeline.getNaiveProgress()).toEqual(1);
+      expect(snapshots.nestedTimelineFinish).toEqual(1);
+      expect(snapshots.mainTimelineFinish).toEqual(1);
 
       await runPromise;
-      expect(timeline.getProgress()).toEqual(1);
+      expect(timeline.getNaiveProgress()).toEqual(1);
+    });
+
+    it("does not return values above 1", async () => {
+      const timeline = createTimeline({
+        timeline: [{ type: TestPlugin }],
+        loop_function: jest.fn().mockReturnValue(false).mockReturnValueOnce(true),
+      });
+
+      await timeline.run();
+      expect(timeline.getNaiveProgress()).toEqual(1);
     });
   });
 
@@ -652,47 +690,51 @@ describe("Timeline", () => {
     });
   });
 
-  describe("getActiveNode()", () => {
-    it("returns the currently active `TimelineNode` or `undefined` when no node is active", async () => {
+  describe("getLatestNode()", () => {
+    it("returns the latest `TimelineNode` or `undefined` when no node is active", async () => {
       TestPlugin.setManualFinishTrialMode();
-
-      let outerTimelineActiveNode: TimelineNode;
-      let innerTimelineActiveNode: TimelineNode;
+      const { snapshots, createSnapshotCallback } = createSnapshotUtils(() =>
+        timeline.getLatestNode()
+      );
 
       const timeline = createTimeline({
         timeline: [
           { type: TestPlugin },
           {
             timeline: [{ type: TestPlugin }],
-            on_timeline_start: () => {
-              innerTimelineActiveNode = timeline.getActiveNode();
-            },
+            on_timeline_start: createSnapshotCallback("innerTimelineStart"),
+            on_timeline_finish: createSnapshotCallback("innerTimelineFinish"),
           },
         ],
-        on_timeline_start: () => {
-          outerTimelineActiveNode = timeline.getActiveNode();
-        },
+        on_timeline_start: createSnapshotCallback("outerTimelineStart"),
+        on_timeline_finish: createSnapshotCallback("outerTimelineFinish"),
       });
 
-      expect(timeline.getActiveNode()).toBeUndefined();
+      // Avoiding direct .toBe(timeline) in this test case to circumvent circular reference errors
+      // caused by Jest trying to stringify `Timeline` objects
+      expect(timeline.getLatestNode()).toBeInstanceOf(Timeline);
+      expect(timeline.getLatestNode().index).toEqual(0);
 
       timeline.run();
-      // Avoiding direct .toBe(timeline) here to circumvent circular reference errors caused by Jest
-      // trying to stringify `Timeline` objects
-      expect(outerTimelineActiveNode).toBeInstanceOf(Timeline);
-      expect(outerTimelineActiveNode.index).toEqual(0);
-      expect(timeline.getActiveNode()).toBeInstanceOf(Trial);
-      expect(timeline.getActiveNode().index).toEqual(0);
+
+      expect(snapshots.outerTimelineStart).toBeInstanceOf(Timeline);
+      expect(snapshots.outerTimelineStart.index).toEqual(0);
+      expect(timeline.getLatestNode()).toBeInstanceOf(Trial);
+      expect(timeline.getLatestNode().index).toEqual(0);
 
       await TestPlugin.finishTrial();
-
-      expect(innerTimelineActiveNode).toBeInstanceOf(Timeline);
-      expect(innerTimelineActiveNode.index).toEqual(1);
-      expect(timeline.getActiveNode()).toBeInstanceOf(Trial);
-      expect(timeline.getActiveNode().index).toEqual(1);
+      expect(snapshots.innerTimelineStart).toBeInstanceOf(Timeline);
+      expect(snapshots.innerTimelineStart.index).toEqual(1);
+      expect(timeline.getLatestNode()).toBeInstanceOf(Trial);
+      expect(timeline.getLatestNode().index).toEqual(1);
 
       await TestPlugin.finishTrial();
-      expect(timeline.getActiveNode()).toBeUndefined();
+      expect(snapshots.innerTimelineFinish).toBeInstanceOf(Trial);
+      expect(snapshots.innerTimelineFinish.index).toEqual(1);
+      expect(snapshots.outerTimelineFinish).toBeInstanceOf(Trial);
+      expect(snapshots.outerTimelineFinish.index).toEqual(1);
+      expect(timeline.getLatestNode()).toBeInstanceOf(Trial);
+      expect(timeline.getLatestNode().index).toEqual(1);
     });
   });
 });

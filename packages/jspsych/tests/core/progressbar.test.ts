@@ -12,7 +12,7 @@ describe("automatic progress bar", () => {
       },
     ]);
 
-    expect(document.querySelector("#jspsych-progressbar-container")).toBe(null);
+    expect(document.querySelector("#jspsych-progressbar-container")).toBeNull();
     await pressKey("a");
   });
 
@@ -28,7 +28,7 @@ describe("automatic progress bar", () => {
     );
 
     expect(document.querySelector("#jspsych-progressbar-container").innerHTML).toMatch(
-      '<span>Completion Progress</span><div id="jspsych-progressbar-outer"><div id="jspsych-progressbar-inner"></div></div>'
+      '<span>Completion Progress</span><div id="jspsych-progressbar-outer"><div id="jspsych-progressbar-inner" style="width: 0%;"></div></div>'
     );
   });
 
@@ -42,15 +42,15 @@ describe("automatic progress bar", () => {
 
     const progressbarElement = document.querySelector<HTMLElement>("#jspsych-progressbar-inner");
 
-    expect(progressbarElement.style.width).toBe("");
+    expect(progressbarElement.style.width).toEqual("0%");
     await pressKey("a");
-    expect(progressbarElement.style.width).toBe("25%");
+    expect(progressbarElement.style.width).toEqual("25%");
     await pressKey("a");
-    expect(progressbarElement.style.width).toBe("50%");
+    expect(progressbarElement.style.width).toEqual("50%");
     await pressKey("a");
-    expect(progressbarElement.style.width).toBe("75%");
+    expect(progressbarElement.style.width).toEqual("75%");
     await pressKey("a");
-    expect(progressbarElement.style.width).toBe("100%");
+    expect(progressbarElement.style.width).toEqual("100%");
   });
 
   test("progress bar does not automatically update when auto_update_progress_bar is false", async () => {
@@ -67,13 +67,13 @@ describe("automatic progress bar", () => {
     const progressbarElement = document.querySelector<HTMLElement>("#jspsych-progressbar-inner");
 
     for (let i = 0; i < 4; i++) {
-      expect(progressbarElement.style.width).toBe("");
+      expect(progressbarElement.style.width).toEqual("0%");
       await pressKey("a");
     }
-    expect(progressbarElement.style.width).toBe("");
+    expect(progressbarElement.style.width).toEqual("0%");
   });
 
-  test("setProgressBar() manually", async () => {
+  test("set `progressBar.progress` manually", async () => {
     const jsPsych = initJsPsych({
       show_progress_bar: true,
       auto_update_progress_bar: false,
@@ -100,16 +100,16 @@ describe("automatic progress bar", () => {
 
     const progressbarElement = document.querySelector<HTMLElement>("#jspsych-progressbar-inner");
 
-    expect(progressbarElement.style.width).toBe("");
+    expect(progressbarElement.style.width).toEqual("0%");
     await pressKey("a");
-    expect(jsPsych.progressBar.progress).toBe(0.2);
-    expect(progressbarElement.style.width).toBe("20%");
+    expect(jsPsych.progressBar.progress).toEqual(0.2);
+    expect(progressbarElement.style.width).toEqual("20%");
     await pressKey("a");
-    expect(progressbarElement.style.width).toBe("80%");
-    expect(jsPsych.progressBar.progress).toBe(0.8);
+    expect(progressbarElement.style.width).toEqual("80%");
+    expect(jsPsych.progressBar.progress).toEqual(0.8);
   });
 
-  test("getProgressBarCompleted() -- automatic updates", async () => {
+  test("`progressBar.progress` -- automatic updates", async () => {
     const trial = {
       type: htmlKeyboardResponse,
       stimulus: "foo",
@@ -120,12 +120,12 @@ describe("automatic progress bar", () => {
     });
 
     await pressKey("a");
-    expect(jsPsych.progressBar.progress).toBe(0.25);
+    expect(jsPsych.progressBar.progress).toEqual(0.25);
     await pressKey("a");
-    expect(jsPsych.progressBar.progress).toBe(0.5);
+    expect(jsPsych.progressBar.progress).toEqual(0.5);
     await pressKey("a");
-    expect(jsPsych.progressBar.progress).toBe(0.75);
+    expect(jsPsych.progressBar.progress).toEqual(0.75);
     await pressKey("a");
-    expect(jsPsych.progressBar.progress).toBe(1);
+    expect(jsPsych.progressBar.progress).toEqual(1);
   });
 });

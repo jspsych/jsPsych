@@ -55,14 +55,14 @@ export class Trial extends BaseTimelineNode {
       trial_index: this.index,
     };
 
-    this.onFinish();
-
     const gap = this.getParameterValue("post_trial_gap") ?? this.dependencies.getDefaultIti();
     if (gap !== 0) {
       await delay(gap);
     }
 
     this.status = TimelineNodeStatus.COMPLETED;
+
+    this.onFinish();
   }
 
   private async executeTrial() {

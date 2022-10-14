@@ -252,25 +252,25 @@ export class Timeline extends BaseTimelineNode {
   }
 
   /**
-   * Returns the naive progress of the timeline (as a fraction), i.e. only considering the current
-   * position within the description's `timeline` array. This certainly breaks for anything beyond
-   * basic timelines (timeline variables, repetitions, loop functions, conditional functions, ...)!
-   * See https://www.jspsych.org/latest/overview/progress-bar/#automatic-progress-bar for the
-   * motivation.
+   * Returns the naive progress of the timeline (as a fraction), without considering conditional or
+   * loop functions.
    */
-  public getProgress() {
+  public getNaiveProgress() {
     if (this.status === TimelineNodeStatus.PENDING) {
       return 0;
     }
 
-    if (
-      [TimelineNodeStatus.COMPLETED, TimelineNodeStatus.ABORTED].includes(this.status) ||
-      this.children.length === 0
-    ) {
+    const activeNode = this.getLatestNode();
+    if (!activeNode) {
       return 1;
     }
 
-    return this.children.indexOf(this.currentChild) / this.children.length;
+    let completedTrials = activeNode.index;
+    if (activeNode.getStatus() === TimelineNodeStatus.COMPLETED) {
+      completedTrials++;
+    }
+
+    return Math.min(completedTrials / this.getNaiveTrialCount(), 1);
   }
 
   /**
@@ -308,29 +308,16 @@ export class Timeline extends BaseTimelineNode {
   }
 
   /**
-   * Returns `true` when `getStatus()` returns either `RUNNING` or `PAUSED`, and `false` otherwise.
+   * Returns the most recent (child) TimelineNode. This is a Trial object most of the time, but it
+   * may also be a Timeline object when a timeline hasn't yet instantiated its children (e.g. during
+   * initial timeline callback functions).
    */
-  public isActive() {
-    return [TimelineNodeStatus.RUNNING, TimelineNodeStatus.PAUSED].includes(this.getStatus());
-  }
-
-  /**
-   * Returns the currently active TimelineNode or `undefined`, if the timeline is not running. This
-   * is a Trial object most of the time, but it may also be a Timeline object when a timeline is
-   * running but hasn't yet instantiated its children (e.g. during timeline callback functions).
-   */
-  public getActiveNode(): TimelineNode {
-    if (this.isActive()) {
-      if (!this.currentChild) {
-        return this;
-      }
-      if (this.currentChild instanceof Timeline) {
-        return this.currentChild.getActiveNode();
-      }
-      if (this.currentChild instanceof Trial) {
-        return this.currentChild;
-      }
+  public getLatestNode(): TimelineNode {
+    if (!this.currentChild) {
+      return this;
     }
-    return undefined;
+    return this.currentChild instanceof Timeline
+      ? this.currentChild.getLatestNode()
+      : this.currentChild;
   }
 }
