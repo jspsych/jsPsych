@@ -59,6 +59,24 @@ const info = <const>{
       pretty_name: "Require movement",
       default: false,
     },
+    /** If true, allows the participant to use the keyboard to adjust or pan the slider, and to use the enter key to submit a response. */
+    enable_keys: {
+      type: ParameterType.BOOL,
+      pretty_name: "Enable keys",
+      default: false,
+    },
+    /** The keys that the participant can use to adjust the slider by one step. */
+    keys_adjust: {
+      type: ParameterType.KEYS,
+      pretty_name: "Keys adjust",
+      default: ['ArrowLeft', 'ArrowRight'],
+    },
+    /** The keys that the participant can use to pan the slider. Each key's corresponding value is evenly spaced from one another, with the first value and last value being at `min` and `max` respectively. */
+    keys_panning: {
+      type: ParameterType.KEYS,
+      pretty_name: "Keys panning",
+      default: ['1', '2', '3', '4', '5'],
+    },
     /** Any content here will be displayed below the slider. */
     prompt: {
       type: ParameterType.HTML_STRING,
@@ -99,11 +117,16 @@ type Info = typeof info;
 class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {}
+  constructor(private jsPsych: JsPsych) { }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    // half of the thumb width value from jspsych.css, used to adjust the label positions
+    /** Half of the thumb width value from jspsych.css, used to adjust the label positions */
     var half_thumb_width = 7.5;
+
+    var response = {
+      rt: null,
+      response: null,
+    };
 
     var html = '<div id="jspsych-html-slider-response-wrapper" style="margin: 100px 0px;">';
     html += '<div id="jspsych-html-slider-response-stimulus">' + trial.stimulus + "</div>";
@@ -163,10 +186,26 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     display_element.innerHTML = html;
 
-    var response = {
-      rt: null,
-      response: null,
-    };
+    if (trial.enable_keys) {
+      let input = display_element.querySelector<HTMLInputElement>("#jspsych-html-slider-response-response");
+
+      const changeValue = (e: KeyboardEvent) => {
+        switch (e.key) {
+          case trial.keys_adjust[0]:
+            input.stepDown();
+            return;
+          case trial.keys_adjust[1]:
+            input.stepUp();
+            return;
+        }
+        if (trial.keys_panning.includes(e.key)) {
+          const panConst = (trial.max - trial.min) / (trial.keys_panning.length - 1);
+          input.value = String(trial.min + panConst * trial.keys_panning.indexOf(e.key));
+        }
+      }
+
+      display_element.addEventListener("keydown", changeValue);
+    }
 
     if (trial.require_movement) {
       const enable_button = () => {
@@ -174,6 +213,13 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
           "#jspsych-html-slider-response-next"
         ).disabled = false;
       };
+
+      const key_enable_button = (e: KeyboardEvent) => {
+        console.log(e.key);
+        if (trial.keys_adjust.includes(e.key) || trial.keys_panning.includes(e.key)) {
+          enable_button();
+        }
+      }
 
       display_element
         .querySelector("#jspsych-html-slider-response-response")
@@ -186,6 +232,12 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
       display_element
         .querySelector("#jspsych-html-slider-response-response")
         .addEventListener("change", enable_button);
+
+      // prevent unnecessary events from being formed
+      if (trial.enable_keys) {
+        display_element
+          .addEventListener("keydown", key_enable_button);
+      }
     }
 
     const end_trial = () => {
@@ -205,24 +257,26 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
       this.jsPsych.finishTrial(trialdata);
     };
 
+    const gatherData = () => {
+      // measure response time
+      var endTime = performance.now();
+      response.rt = Math.round(endTime - startTime);
+      response.response = display_element.querySelector<HTMLInputElement>(
+        "#jspsych-html-slider-response-response"
+      ).valueAsNumber;
+
+      if (trial.response_ends_trial) {
+        end_trial();
+      } else {
+        display_element.querySelector<HTMLButtonElement>(
+          "#jspsych-html-slider-response-next"
+        ).disabled = true;
+      }
+    }
+
     display_element
       .querySelector("#jspsych-html-slider-response-next")
-      .addEventListener("click", () => {
-        // measure response time
-        var endTime = performance.now();
-        response.rt = Math.round(endTime - startTime);
-        response.response = display_element.querySelector<HTMLInputElement>(
-          "#jspsych-html-slider-response-response"
-        ).valueAsNumber;
-
-        if (trial.response_ends_trial) {
-          end_trial();
-        } else {
-          display_element.querySelector<HTMLButtonElement>(
-            "#jspsych-html-slider-response-next"
-          ).disabled = true;
-        }
-      });
+      .addEventListener("click", gatherData);
 
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
