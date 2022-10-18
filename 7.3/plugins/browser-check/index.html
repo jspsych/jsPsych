@@ -2198,7 +2198,9 @@ See the examples below for more guidance.</p>
 <span class="w">  </span><span class="nx">inclusion_function</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;chrome&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;firefox&#39;</span><span class="p">].</span><span class="nx">includes</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">browser</span><span class="p">);</span><span class="w"></span>
 <span class="w">  </span><span class="p">},</span><span class="w"></span>
-<span class="w">  </span><span class="nx">exclusion_message</span><span class="o">:</span><span class="w"> </span><span class="sb">`&lt;p&gt;You must use Chrome or Firefox to complete this experiment.&lt;/p&gt;`</span><span class="w"></span>
+<span class="w">  </span><span class="nx">exclusion_message</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="sb">`&lt;p&gt;You must use Chrome or Firefox to complete this experiment.&lt;/p&gt;`</span><span class="w"></span>
+<span class="w">  </span><span class="p">},</span><span class="w"></span>
 <span class="p">};</span><span class="w"></span>
 </code></pre></div>
 </div>
