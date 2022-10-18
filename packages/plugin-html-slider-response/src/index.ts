@@ -59,13 +59,13 @@ const info = <const>{
       pretty_name: "Require movement",
       default: false,
     },
-    /** If true, allows the participant to use the keyboard to adjust or pan the slider, and to use the enter key to submit a response. */
+    /** If true, allows the participant to use the keyboard to adjust or pan the slider. */
     enable_keys: {
       type: ParameterType.BOOL,
       pretty_name: "Enable keys",
       default: false,
     },
-    /** The keys that the participant can use to adjust the slider by one step. */
+    /** The keys that the participant can use to adjust the slider by the step value. */
     keys_adjust: {
       type: ParameterType.KEYS,
       pretty_name: "Keys adjust",

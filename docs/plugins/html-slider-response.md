@@ -2,7 +2,7 @@
 
 Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-slider-response/CHANGELOG.md).
 
-This plugin displays HTML content and allows the participant to respond by dragging a slider.
+This plugin displays HTML content and allows the participant to respond by dragging or using a keyboard to pan through a slider.
 
 ## Parameters
 
@@ -19,6 +19,9 @@ slider_start | integer | 50 | Sets the starting value of the slider
 step | integer | 1 | Sets the step of the slider. This is the smallest amount by which the slider can change.
 slider_width | integer | null | Set the width of the slider in pixels. If left null, then the width will be equal to the widest element in the display.
 require_movement | boolean | false | If true, the participant must move the slider before clicking the continue button.
+enable_keys | boolean | false | If true, the participant can use the keyboard to adjust or pan the slider.
+keys_adjust | array of strings | ['ArrowLeft', 'ArrowDown'] | The keys that will adjust the slider by the step value.
+keys_panning | array of strings | ['1', '2', '3', '4', '5'] | The keys that will pan through the slider, each value that can be panned to is spaced equidistantly.
 prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).
 stimulus_duration | numeric | null | How long to display the stimulus in milliseconds. The visibility CSS property of the stimulus will be set to `hidden` after this time has elapsed. If this is null, then the stimulus will remain visible until the trial ends.
 trial_duration | numeric | null | How long to wait for the participant to make a response before ending the trial in milliseconds. If the participant fails to make a response before this timer is reached, the participant's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely.
