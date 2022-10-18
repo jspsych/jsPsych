@@ -186,24 +186,28 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     display_element.innerHTML = html;
 
-    const changeValue = (e: KeyboardEvent) => {
+    const changeValue = (info) => {
       let input = display_element.querySelector<HTMLInputElement>("#jspsych-html-slider-response-response");
-      switch (e.key) {
-        case trial.keys_adjust[0]:
-          input.stepDown();
-          return;
-        case trial.keys_adjust[1]:
-          input.stepUp();
-          return;
+      if (this.jsPsych.pluginAPI.compareKeys(info.key, trial.keys_adjust[0])) {
+        input.stepDown();
       }
-      if (trial.keys_panning.includes(e.key)) {
+      if (this.jsPsych.pluginAPI.compareKeys(info.key, trial.keys_adjust[1])) {
+        input.stepUp();
+      }
+      if (trial.keys_panning.includes(info.key)) {
         const panConst = (trial.max - trial.min) / (trial.keys_panning.length - 1);
-        input.value = String(trial.min + panConst * trial.keys_panning.indexOf(e.key));
+        input.value = String(trial.min + panConst * trial.keys_panning.indexOf(info.key));
+        return;
       }
     }
 
     if (trial.enable_keys) {
-      document.body.addEventListener("keydown", changeValue);
+      var listener = this.jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: changeValue,
+        valid_responses: "ALL_KEYS",
+        rt_method: "performance",
+        persist: true,
+      });
     }
 
     const enable_button = () => {
@@ -212,12 +216,6 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
       ).disabled = false;
     };
 
-    const key_enable_button = (e: KeyboardEvent) => {
-      if (trial.keys_adjust.includes(e.key) || trial.keys_panning.includes(e.key)) {
-        enable_button();
-      }
-    }
-
     if (trial.require_movement) {
       ['mousedown', 'touchstart', 'change'].forEach((type) => {
         display_element.addEventListener(type, enable_button);
@@ -225,7 +223,19 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
 
       // prevent unnecessary events from being formed
       if (trial.enable_keys) {
-        document.body.addEventListener("keydown", key_enable_button);
+        const key_enable_button = (info) => {
+          if (trial.keys_adjust.includes(info.key) || trial.keys_panning.includes(info.key)) {
+            enable_button();
+            this.jsPsych.pluginAPI.cancelKeyboardResponse(listener);
+          }
+        }
+
+        var listener = this.jsPsych.pluginAPI.getKeyboardResponse({
+          callback_function: key_enable_button,
+          valid_responses: "ALL_KEYS",
+          rt_method: "performance",
+          persist: true,
+        });
       }
     }
 
@@ -240,10 +250,8 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
         response: response.response,
       };
 
-      if (trial.enable_keys) {
-        document.body.removeEventListener("keydown", changeValue);
-        document.body.removeEventListener("keydown", key_enable_button);
-      }
+      this.jsPsych.pluginAPI.cancelAllKeyboardResponses();
+
       display_element.innerHTML = "";
 
       // next trial
