@@ -54,7 +54,7 @@ type Info = typeof info;
 class InitializeCameraPlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {}
+  constructor(private jsPsych: JsPsych) { }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     this.run_trial(display_element, trial).then((id) => {
@@ -67,10 +67,8 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
 
   private async run_trial(display_element: HTMLElement, trial: TrialType<Info>) {
     try {
-      console.log("test1")
       await this.askForPermission(trial);
     } catch (e) {
-      console.log("test")
       // TODO: does not properly display rejection message
       this.rejectPermission(trial);
       return;
