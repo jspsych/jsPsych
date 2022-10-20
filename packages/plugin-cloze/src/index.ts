@@ -3,7 +3,7 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "cloze",
   parameters: {
-    /** The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. %solution%). */
+    /** The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. %solution%). For multiple answers, type them with a slash (i.e. %1/2/3%). */
     text: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Cloze text",
@@ -89,7 +89,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
         );
 
         if (trial.check_answers) {
-          if (answers[i] !== solutions[i]) {
+          if (!solutions[i].includes(answers[i])) {
             field.style.color = "red";
             answers_correct = false;
           } else {
@@ -125,12 +125,12 @@ class ClozePlugin implements JsPsychPlugin<Info> {
   }
 
   private getSolutions(text: string, case_sensitive: boolean) {
-    const solutions = [];
+    const solutions: String[][] = [];
     const elements = text.split("%");
 
     for (let i = 1; i < elements.length; i += 2) {
       solutions.push(
-        case_sensitive ? elements[i].trim() : elements[i].toLowerCase().trim()
+        case_sensitive ? elements[i].trim().split("/") : elements[i].toLowerCase().trim().split("/")
       );
     }
 
@@ -156,7 +156,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
     const solutions = this.getSolutions(trial.text, trial.case_sensitivity);
     const responses = [];
     for (const word of solutions) {
-      if (word == "") {
+      if (word.includes("")) {
         responses.push(this.jsPsych.randomization.randomWords({ exactly: 1 }));
       } else {
         responses.push(word);
