@@ -27,6 +27,12 @@ const info = <const>{
       pretty_name: "Allow blanks",
       default: true,
     },
+    /** Boolean value indicating if the solutions checker must be case sensitive. */
+    case_sensitivity: {
+      type: ParameterType.BOOL,
+      pretty_name: "Case sensitivity",
+      default: true,
+    },
     /** Function called if either the check_answers is set to TRUE or the allow_blanks is set to FALSE and there is a discrepancy between the set answers and the answers provide or if all input fields aren't filled out, respectively. */
     mistake_fn: {
       type: ParameterType.FUNCTION,
@@ -55,7 +61,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
     var html = '<div class="cloze">';
     // odd elements are text, even elements are the blanks
     var elements = trial.text.split("%");
-    const solutions = this.getSolutions(trial.text);
+    const solutions = this.getSolutions(trial.text, trial.case_sensitivity);
 
     let solution_counter = 0;
     for (var i = 0; i < elements.length; i++) {
@@ -78,7 +84,9 @@ class ClozePlugin implements JsPsychPlugin<Info> {
 
       for (var i = 0; i < solutions.length; i++) {
         var field = document.getElementById("input" + i) as HTMLInputElement;
-        answers.push(field.value.trim());
+        answers.push(
+          trial.case_sensitivity ? field.value.trim() : field.value.toLowerCase().trim()
+        );
 
         if (trial.check_answers) {
           if (answers[i] !== solutions[i]) {
@@ -112,15 +120,18 @@ class ClozePlugin implements JsPsychPlugin<Info> {
       trial.button_text +
       "</button>";
     display_element.querySelector("#finish_cloze_button").addEventListener("click", check);
+
+    (display_element.querySelector("#input0") as HTMLElement).focus();
   }
 
-  private getSolutions(text: string) {
+  private getSolutions(text: string, case_sensitive: boolean) {
     const solutions = [];
     const elements = text.split("%");
-    for (let i = 0; i < elements.length; i++) {
-      if (i % 2 == 1) {
-        solutions.push(elements[i].trim());
-      }
+
+    for (let i = 1; i < elements.length; i += 2) {
+      solutions.push(
+        case_sensitive ? elements[i].trim() : elements[i].toLowerCase().trim()
+      );
     }
 
     return solutions;
@@ -142,7 +153,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
   }
 
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
-    const solutions = this.getSolutions(trial.text);
+    const solutions = this.getSolutions(trial.text, trial.case_sensitivity);
     const responses = [];
     for (const word of solutions) {
       if (word == "") {

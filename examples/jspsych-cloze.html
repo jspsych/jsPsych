@@ -22,6 +22,14 @@
       text: 'The %% is the largest terrestrial mammal. It lives in both %% and %%.'
     });
 
+    // an example that allows the user to input a solution that doesn't require case sensitivity
+    timeline.push({
+      type: jsPsychCloze,
+      text: 'The %CASE% is closed.',
+      check_answers: true,
+      case_sensitivity: false,
+    })
+
     // another example with checking if all the blanks are filled in
     timeline.push({
       type: jsPsychCloze,
