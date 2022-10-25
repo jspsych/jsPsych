@@ -155,11 +155,13 @@ class ClozePlugin implements JsPsychPlugin<Info> {
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
     const solutions = this.getSolutions(trial.text, trial.case_sensitivity);
     const responses = [];
-    for (const word of solutions) {
-      if (word.includes("")) {
+    for (const wordList of solutions) {
+      if (wordList.includes("")) {
         responses.push(this.jsPsych.randomization.randomWords({ exactly: 1 }));
       } else {
-        responses.push(word);
+        for (const word of wordList) {
+          responses.push(word);
+        }
       }
     }
 
