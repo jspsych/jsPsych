@@ -13,6 +13,7 @@ jest.mock("../src/JsPsych");
 export class MockTimelineNodeDependencies implements TimelineNodeDependencies {
   onTrialStart = jest.fn();
   onTrialLoaded = jest.fn();
+  onTrialResultAvailable = jest.fn();
   onTrialFinished = jest.fn();
 
   instantiatePlugin: jest.Mock<JsPsychPlugin<any>>;
@@ -45,9 +46,14 @@ export class MockTimelineNodeDependencies implements TimelineNodeDependencies {
   reset() {
     this.initializeProperties();
 
-    this.onTrialStart.mockReset();
-    this.onTrialLoaded.mockReset();
-    this.onTrialFinished.mockReset();
+    for (const mock of [
+      this.onTrialStart,
+      this.onTrialLoaded,
+      this.onTrialResultAvailable,
+      this.onTrialFinished,
+    ]) {
+      mock.mockReset();
+    }
   }
 }
 

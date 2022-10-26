@@ -14,14 +14,15 @@ import {
 } from ".";
 
 export abstract class BaseTimelineNode implements TimelineNode {
-  abstract readonly description: TimelineDescription | TrialDescription;
-  abstract readonly index: number;
+  public abstract readonly description: TimelineDescription | TrialDescription;
+  public index?: number;
 
-  protected abstract readonly parent?: Timeline;
+  public abstract readonly parent?: Timeline;
 
   abstract run(): Promise<void>;
   abstract getResults(): TrialResult[];
   abstract evaluateTimelineVariable(variable: TimelineVariable): any;
+  abstract getLatestNode(): TimelineNode;
 
   protected status = TimelineNodeStatus.PENDING;
 

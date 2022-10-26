@@ -31,18 +31,22 @@ export class Timeline extends BaseTimelineNode {
   constructor(
     dependencies: TimelineNodeDependencies,
     description: TimelineDescription | TimelineArray,
-    protected readonly parent?: Timeline,
-    public readonly index = 0
+    public readonly parent?: Timeline
   ) {
     super(dependencies);
     this.description = Array.isArray(description) ? { timeline: description } : description;
-    this.nextChildNodeIndex = index;
   }
 
   private currentChild?: TimelineNode;
   private shouldAbort = false;
 
   public async run() {
+    if (typeof this.index === "undefined") {
+      // We're the first timeline node to run. Otherwise, another node would have set our index
+      // right before running us.
+      this.index = 0;
+    }
+
     this.status = TimelineNodeStatus.RUNNING;
 
     const { conditional_function, loop_function, repetitions = 1 } = this.description;
@@ -73,7 +77,12 @@ export class Timeline extends BaseTimelineNode {
             this.setCurrentTimelineVariablesByIndex(timelineVariableIndex);
 
             for (const childNode of this.instantiateChildNodes()) {
+              const previousChild = this.currentChild;
               this.currentChild = childNode;
+              childNode.index = previousChild
+                ? previousChild.getLatestNode().index + 1
+                : this.index;
+
               await childNode.run();
               // @ts-expect-error TS thinks `this.status` must be `RUNNING` now, but it might have
               // changed while `await`ing
@@ -143,13 +152,11 @@ export class Timeline extends BaseTimelineNode {
     }
   }
 
-  private nextChildNodeIndex: number;
   private instantiateChildNodes() {
     const newChildNodes = this.description.timeline.map((childDescription) => {
-      const childNodeIndex = this.nextChildNodeIndex++;
       return isTimelineDescription(childDescription)
-        ? new Timeline(this.dependencies, childDescription, this, childNodeIndex)
-        : new Trial(this.dependencies, childDescription, this, childNodeIndex);
+        ? new Timeline(this.dependencies, childDescription, this)
+        : new Trial(this.dependencies, childDescription, this);
     });
     this.children.push(...newChildNodes);
     return newChildNodes;
@@ -307,17 +314,7 @@ export class Timeline extends BaseTimelineNode {
     return getTrialCount(this.description);
   }
 
-  /**
-   * Returns the most recent (child) TimelineNode. This is a Trial object most of the time, but it
-   * may also be a Timeline object when a timeline hasn't yet instantiated its children (e.g. during
-   * initial timeline callback functions).
-   */
-  public getLatestNode(): TimelineNode {
-    if (!this.currentChild) {
-      return this;
-    }
-    return this.currentChild instanceof Timeline
-      ? this.currentChild.getLatestNode()
-      : this.currentChild;
+  public getLatestNode() {
+    return this.currentChild?.getLatestNode() ?? this;
   }
 }

@@ -10,6 +10,7 @@ import { Timeline } from "./Timeline";
 import { delay, parameterPathArrayToString } from "./util";
 import {
   GetParameterValueOptions,
+  TimelineNode,
   TimelineNodeDependencies,
   TimelineNodeStatus,
   TimelineVariable,
@@ -19,9 +20,10 @@ import {
 } from ".";
 
 export class Trial extends BaseTimelineNode {
-  public pluginClass: Class<JsPsychPlugin<any>>;
+  public readonly pluginClass: Class<JsPsychPlugin<any>>;
   public pluginInstance: JsPsychPlugin<any>;
   public readonly trialObject: TrialDescription;
+  public index?: number;
 
   private result: TrialResult;
   private readonly pluginInfo: PluginInfo;
@@ -29,8 +31,7 @@ export class Trial extends BaseTimelineNode {
   constructor(
     dependencies: TimelineNodeDependencies,
     public readonly description: TrialDescription,
-    protected readonly parent: Timeline,
-    public readonly index: number
+    public readonly parent: Timeline
   ) {
     super(dependencies);
     this.trialObject = deepCopy(description);
@@ -47,7 +48,6 @@ export class Trial extends BaseTimelineNode {
     this.pluginInstance = this.dependencies.instantiatePlugin(this.pluginClass);
 
     const result = await this.executeTrial();
-
     this.result = {
       ...this.getDataParameter(),
       ...result,
@@ -55,14 +55,16 @@ export class Trial extends BaseTimelineNode {
       trial_index: this.index,
     };
 
-    const gap = this.getParameterValue("post_trial_gap") ?? this.dependencies.getDefaultIti();
-    if (gap !== 0) {
-      await delay(gap);
-    }
+    this.dependencies.onTrialResultAvailable(this);
 
     this.status = TimelineNodeStatus.COMPLETED;
 
     this.onFinish();
+
+    const gap = this.getParameterValue("post_trial_gap") ?? this.dependencies.getDefaultIti();
+    if (gap !== 0) {
+      await delay(gap);
+    }
   }
 
   private async executeTrial() {
@@ -249,5 +251,9 @@ export class Trial extends BaseTimelineNode {
     }
 
     return data;
+  }
+
+  public getLatestNode() {
+    return this;
   }
 }

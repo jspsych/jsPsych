@@ -17,7 +17,6 @@ import {
   SampleOptions,
   TimelineArray,
   TimelineDescription,
-  TimelineNode,
   TimelineNodeStatus,
   TimelineVariable,
 } from ".";
@@ -43,15 +42,21 @@ describe("Timeline", () => {
 
   describe("run()", () => {
     it("instantiates proper child nodes", async () => {
-      const timeline = createTimeline(exampleTimeline);
+      const timeline = createTimeline([
+        { type: TestPlugin },
+        { timeline: [{ type: TestPlugin }, { type: TestPlugin }] },
+        { timeline: [{ type: TestPlugin }] },
+      ]);
 
       await timeline.run();
 
       const children = timeline.children;
-      expect(children).toEqual([expect.any(Trial), expect.any(Trial), expect.any(Timeline)]);
+      expect(children).toEqual([expect.any(Trial), expect.any(Timeline), expect.any(Timeline)]);
+      expect((children[1] as Timeline).children).toEqual([expect.any(Trial), expect.any(Trial)]);
       expect((children[2] as Timeline).children).toEqual([expect.any(Trial)]);
 
-      expect(children.map((child) => child.index)).toEqual([0, 1, 2]);
+      expect(children.map((child) => child.index)).toEqual([0, 1, 3]);
+      expect((children[1] as Timeline).children.map((child) => child.index)).toEqual([1, 2]);
     });
 
     describe("with `pause()` and `resume()` calls`", () => {
@@ -111,27 +116,28 @@ describe("Timeline", () => {
         await runPromise;
       });
 
-      // https://www.jspsych.org/7.1/reference/jspsych/#description_15
+      // https://www.jspsych.org/7.1/reference/jspsych/#jspsychresumeexperiment
       it("doesn't affect `post_trial_gap`", async () => {
         const timeline = createTimeline([{ type: TestPlugin, post_trial_gap: 200 }]);
         const runPromise = timeline.run();
-        const child = timeline.children[0];
+        let hasTimelineCompleted = false;
+        runPromise.then(() => {
+          hasTimelineCompleted = true;
+        });
 
-        expect(child.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+        expect(hasTimelineCompleted).toBe(false);
         await TestPlugin.finishTrial();
-        expect(child.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+        expect(hasTimelineCompleted).toBe(false);
 
         timeline.pause();
         jest.advanceTimersByTime(100);
         timeline.resume();
         await flushPromises();
-        expect(timeline.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+        expect(hasTimelineCompleted).toBe(false);
 
         jest.advanceTimersByTime(100);
         await flushPromises();
-        expect(timeline.getStatus()).toBe(TimelineNodeStatus.COMPLETED);
-
-        await runPromise;
+        expect(hasTimelineCompleted).toBe(true);
       });
     });
 
@@ -713,7 +719,7 @@ describe("Timeline", () => {
       // Avoiding direct .toBe(timeline) in this test case to circumvent circular reference errors
       // caused by Jest trying to stringify `Timeline` objects
       expect(timeline.getLatestNode()).toBeInstanceOf(Timeline);
-      expect(timeline.getLatestNode().index).toEqual(0);
+      expect(timeline.getLatestNode().index).toBeUndefined();
 
       timeline.run();
 

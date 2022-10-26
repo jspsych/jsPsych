@@ -129,12 +129,17 @@ export interface TimelineNodeDependencies {
   onTrialLoaded: (trial: Trial) => void;
 
   /**
+   * Called when a trial's result data is available, before invoking `onTrialFinished()`.
+   */
+  onTrialResultAvailable: (trial: Trial) => void;
+
+  /**
    * Called after a trial has finished.
    */
   onTrialFinished: (trial: Trial) => void;
 
   /**
-   * Given a plugin class, creates a new instance of it and returns it.
+   * Given a plugin class, create a new instance of it and return it.
    */
   instantiatePlugin: <Info extends PluginInfo>(
     pluginClass: Class<JsPsychPlugin<Info>>
@@ -177,7 +182,12 @@ export type GetParameterValueOptions = {
 
 export interface TimelineNode {
   readonly description: TimelineDescription | TrialDescription;
-  readonly index: number;
+
+  /**
+   * The globally unique trial index of this node. It is set when the node is run. Timeline nodes
+   * have the same trial index as their first trial.
+   */
+  index?: number;
 
   run(): Promise<void>;
   getStatus(): TimelineNodeStatus;
@@ -209,6 +219,14 @@ export interface TimelineNode {
    * @param options See {@link GetParameterValueOptions}
    */
   getParameterValue(parameterPath: string | string[], options?: GetParameterValueOptions): any;
+
+  /**
+   * Returns the most recent (child) TimelineNode. For trial nodes, this is always the trial node
+   * itself since trial nodes do not have child nodes. For timeline nodes, the return value is a
+   * Trial object most of the time, but it may also be a Timeline object when a timeline hasn't yet
+   * instantiated its children (e.g. during initial timeline callback functions).
+   */
+  getLatestNode: () => TimelineNode;
 }
 
 export type TrialResult = Record<string, any>;

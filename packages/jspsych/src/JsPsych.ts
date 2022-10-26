@@ -2,7 +2,7 @@ import autoBind from "auto-bind";
 import { Class } from "type-fest";
 
 import { version } from "../package.json";
-import { JsPsychData } from "./modules/data";
+import { JsPsychData, JsPsychDataDependencies } from "./modules/data";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin, PluginInfo } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
@@ -113,7 +113,7 @@ export class JsPsych {
     }
 
     // initialize modules
-    this.data = new JsPsychData(this);
+    this.data = new JsPsychData(this.dataDependencies);
     this.pluginAPI = createJointPluginAPIObject(this);
 
     // create instances of extensions
@@ -367,57 +367,65 @@ export class JsPsych {
     this.finishTrialPromise.resolve(data);
   }
 
-  private timelineDependencies = new (class implements TimelineNodeDependencies {
-    constructor(private jsPsych: JsPsych) {
-      autoBind(this);
-    }
-
-    onTrialStart(trial: Trial) {
-      this.jsPsych.options.on_trial_start(trial.trialObject);
+  private timelineDependencies: TimelineNodeDependencies = {
+    onTrialStart: (trial: Trial) => {
+      this.options.on_trial_start(trial.trialObject);
 
       // apply the focus to the element containing the experiment.
-      this.jsPsych.getDisplayContainerElement().focus();
+      this.getDisplayContainerElement().focus();
       // reset the scroll on the DOM target
-      this.jsPsych.getDisplayElement().scrollTop = 0;
+      this.getDisplayElement().scrollTop = 0;
 
       // Add the CSS classes from the trial's `css_classes` parameter to the display element.
       const cssClasses = trial.getParameterValue("css_classes");
       if (cssClasses) {
-        this.jsPsych.addCssClasses(cssClasses);
+        this.addCssClasses(cssClasses);
       }
-    }
+    },
 
-    onTrialLoaded(trial: Trial) {}
+    onTrialLoaded: (trial: Trial) => {},
 
-    onTrialFinished(trial: Trial) {
+    onTrialResultAvailable: (trial: Trial) => {
+      trial.getResult().time_elapsed = this.getTotalTime();
+      this.data.write(trial);
+    },
+
+    onTrialFinished: (trial: Trial) => {
       const result = trial.getResult();
-      this.jsPsych.options.on_trial_finish(result);
-      this.jsPsych.data.write(result);
-      this.jsPsych.options.on_data_update(result);
+      this.options.on_trial_finish(result);
+      this.options.on_data_update(result);
 
       // Remove any CSS classes added by the `onTrialStart` callback.
       const cssClasses = trial.getParameterValue("css_classes");
       if (cssClasses) {
-        this.jsPsych.removeCssClasses(cssClasses);
+        this.removeCssClasses(cssClasses);
       }
 
-      if (this.jsPsych.progressBar && this.jsPsych.options.auto_update_progress_bar) {
-        this.jsPsych.progressBar.progress = this.jsPsych.timeline.getNaiveProgress();
+      if (this.progressBar && this.options.auto_update_progress_bar) {
+        this.progressBar.progress = this.timeline.getNaiveProgress();
       }
-    }
+    },
 
-    instantiatePlugin<Info extends PluginInfo>(pluginClass: Class<JsPsychPlugin<Info>>) {
-      return new pluginClass(this.jsPsych);
-    }
+    instantiatePlugin: <Info extends PluginInfo>(pluginClass: Class<JsPsychPlugin<Info>>) =>
+      new pluginClass(this),
 
-    getDisplayElement() {
-      return this.jsPsych.getDisplayElement();
-    }
+    getDisplayElement: () => this.getDisplayElement(),
 
-    getDefaultIti() {
-      return this.jsPsych.options.default_iti;
-    }
+    getDefaultIti: () => this.getInitSettings().default_iti,
 
-    finishTrialPromise = this.jsPsych.finishTrialPromise;
-  })(this);
+    finishTrialPromise: this.finishTrialPromise,
+  };
+
+  private dataDependencies: JsPsychDataDependencies = {
+    getProgress: () => ({
+      time: this.getTotalTime(),
+      trial: this.timeline?.getLatestNode().index ?? 0,
+    }),
+
+    onInteractionRecordAdded: (record) => {
+      this.options.on_interaction_data_update(record);
+    },
+
+    getDisplayElement: () => this.getDisplayElement(),
+  };
 }

@@ -7,7 +7,7 @@ import { ParameterType } from "../modules/plugins";
 import { Timeline } from "./Timeline";
 import { Trial } from "./Trial";
 import { parameterPathArrayToString } from "./util";
-import { TimelineNodeStatus, TimelineVariable, TrialDescription } from ".";
+import { TimelineVariable, TrialDescription } from ".";
 
 jest.useFakeTimers();
 
@@ -23,10 +23,14 @@ describe("Trial", () => {
     TestPlugin.reset();
 
     timeline = new Timeline(dependencies, { timeline: [] });
+    timeline.index = 0;
   });
 
-  const createTrial = (description: TrialDescription) =>
-    new Trial(dependencies, description, timeline, 0);
+  const createTrial = (description: TrialDescription) => {
+    const trial = new Trial(dependencies, description, timeline);
+    trial.index = timeline.index;
+    return trial;
+  };
 
   describe("run()", () => {
     it("instantiates the corresponding plugin", async () => {
@@ -146,12 +150,25 @@ describe("Trial", () => {
       expect(onFinishCallback).toHaveBeenCalledWith(expect.objectContaining({ my: "result" }));
     });
 
-    it("invokes the global `onTrialFinished` callback", async () => {
+    it("invokes the global `onTrialResultAvailable` and `onTrialFinished` callbacks", async () => {
+      const invocations: string[] = [];
+      dependencies.onTrialResultAvailable.mockImplementationOnce(() => {
+        invocations.push("onTrialResultAvailable");
+      });
+      dependencies.onTrialFinished.mockImplementationOnce(() => {
+        invocations.push("onTrialFinished");
+      });
+
       const trial = createTrial({ type: TestPlugin });
       await trial.run();
 
+      expect(dependencies.onTrialResultAvailable).toHaveBeenCalledTimes(1);
+      expect(dependencies.onTrialResultAvailable).toHaveBeenCalledWith(trial);
+
       expect(dependencies.onTrialFinished).toHaveBeenCalledTimes(1);
       expect(dependencies.onTrialFinished).toHaveBeenCalledWith(trial);
+
+      expect(invocations).toEqual(["onTrialResultAvailable", "onTrialFinished"]);
     });
 
     it("includes result data from the `data` property", async () => {
@@ -419,34 +436,36 @@ describe("Trial", () => {
       const trial1 = createTrial({ type: TestPlugin });
 
       const runPromise1 = trial1.run();
-      expect(trial1.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+      let hasTrial1Completed = false;
+      runPromise1.then(() => {
+        hasTrial1Completed = true;
+      });
 
       await TestPlugin.finishTrial();
-      expect(trial1.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+      expect(hasTrial1Completed).toBe(false);
 
       jest.advanceTimersByTime(100);
       await flushPromises();
-      expect(trial1.getStatus()).toBe(TimelineNodeStatus.COMPLETED);
-
-      await runPromise1;
+      expect(hasTrial1Completed).toBe(true);
 
       const trial2 = createTrial({ type: TestPlugin, post_trial_gap: () => 200 });
 
       const runPromise2 = trial2.run();
-      expect(trial2.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+      let hasTrial2Completed = false;
+      runPromise2.then(() => {
+        hasTrial2Completed = true;
+      });
 
       await TestPlugin.finishTrial();
-      expect(trial2.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+      expect(hasTrial2Completed).toBe(false);
 
       jest.advanceTimersByTime(100);
       await flushPromises();
-      expect(trial2.getStatus()).toBe(TimelineNodeStatus.RUNNING);
+      expect(hasTrial2Completed).toBe(false);
 
       jest.advanceTimersByTime(100);
       await flushPromises();
-      expect(trial2.getStatus()).toBe(TimelineNodeStatus.COMPLETED);
-
-      await runPromise2;
+      expect(hasTrial2Completed).toBe(true);
     });
   });
 
@@ -468,10 +487,9 @@ describe("Trial", () => {
 
   describe("evaluateTimelineVariable()", () => {
     it("defers to the parent node", () => {
-      const timeline = new Timeline(dependencies, { timeline: [] });
       mocked(timeline).evaluateTimelineVariable.mockReturnValue(1);
 
-      const trial = new Trial(dependencies, { type: TestPlugin }, timeline, 0);
+      const trial = new Trial(dependencies, { type: TestPlugin }, timeline);
 
       const variable = new TimelineVariable("x");
       expect(trial.evaluateTimelineVariable(variable)).toEqual(1);
