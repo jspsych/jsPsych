@@ -1,5 +1,3 @@
-import get from "lodash.get";
-import set from "lodash.set";
 import { ParameterInfos } from "src/modules/plugins";
 import { Class } from "type-fest";
 
@@ -10,13 +8,13 @@ import { Timeline } from "./Timeline";
 import { delay, parameterPathArrayToString } from "./util";
 import {
   GetParameterValueOptions,
-  TimelineNode,
   TimelineNodeDependencies,
   TimelineNodeStatus,
   TimelineVariable,
   TrialDescription,
   TrialResult,
   isPromise,
+  timelineDescriptionKeys,
 } from ".";
 
 export class Trial extends BaseTimelineNode {
@@ -65,6 +63,8 @@ export class Trial extends BaseTimelineNode {
     if (gap !== 0) {
       await delay(gap);
     }
+
+    this.resetParameterValueCache();
   }
 
   private async executeTrial() {
@@ -134,6 +134,21 @@ export class Trial extends BaseTimelineNode {
     return this.parent?.evaluateTimelineVariable(variable);
   }
 
+  public getParameterValue(
+    parameterPath: string | string[],
+    options: GetParameterValueOptions = {}
+  ) {
+    // Disable recursion for timeline description keys
+    if (
+      timelineDescriptionKeys.includes(
+        typeof parameterPath === "string" ? parameterPath : parameterPath[0]
+      )
+    ) {
+      options.recursive = false;
+    }
+    return super.getParameterValue(parameterPath, options);
+  }
+
   /**
    * Returns the result object of this trial or `undefined` if the result is not yet known.
    */
@@ -143,35 +158,6 @@ export class Trial extends BaseTimelineNode {
 
   public getResults() {
     return this.result ? [this.result] : [];
-  }
-
-  private parameterValueCache: Record<string, any> = {};
-  getParameterValue(
-    parameterPath: string | string[],
-    options?: GetParameterValueOptions & {
-      /**
-       * Whether or not the requested parameter is of `ParameterType.COMPLEX` (defaults to `false`).
-       * If `true`, the result of the parameter lookup will be cached by the `Trial` node for
-       * successive lookups of nested properties or array elements.
-       **/
-      isComplexParameter?: boolean;
-    }
-  ) {
-    let parameterObject: Record<string, any> | undefined;
-    if (Array.isArray(parameterPath) && parameterPath.length > 1) {
-      // Lookup of a nested parameter: Let's query the cache for the parent parameter
-      const parentParameterPath = parameterPath.slice(0, parameterPath.length - 1);
-      if (get(this.parameterValueCache, parentParameterPath)) {
-        // Parent parameter found in cache, let's use the cache for the child parameter lookup
-        parameterObject = this.parameterValueCache;
-      }
-    }
-
-    const result = super.getParameterValue(parameterPath, { parameterObject, ...options });
-    if (options?.isComplexParameter) {
-      set(this.parameterValueCache, parameterPath, result);
-    }
-    return result;
   }
 
   /**
@@ -235,22 +221,6 @@ export class Trial extends BaseTimelineNode {
     };
 
     assignParameterValues(this.trialObject, this.pluginInfo.parameters);
-  }
-
-  /**
-   * Retrieves and evaluates the `data` parameter. It is different from other parameters in that
-   * it's properties may be functions that have to be evaluated.
-   */
-  private getDataParameter() {
-    const data = this.getParameterValue("data", { isComplexParameter: true });
-
-    if (typeof data === "object") {
-      return Object.fromEntries(
-        Object.keys(data).map((key) => [key, this.getParameterValue(["data", key])])
-      );
-    }
-
-    return data;
   }
 
   public getLatestNode() {

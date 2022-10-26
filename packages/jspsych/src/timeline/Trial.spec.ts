@@ -171,29 +171,10 @@ describe("Trial", () => {
       expect(invocations).toEqual(["onTrialResultAvailable", "onTrialFinished"]);
     });
 
-    it("includes result data from the `data` property", async () => {
+    it("includes result data from the `data` parameter", async () => {
       const trial = createTrial({ type: TestPlugin, data: { custom: "value" } });
       await trial.run();
       expect(trial.getResult()).toEqual(expect.objectContaining({ my: "result", custom: "value" }));
-    });
-
-    it("works when the `data` property is a function", async () => {
-      const trial = createTrial({ type: TestPlugin, data: () => ({ custom: "value" }) });
-      await trial.run();
-      expect(trial.getResult()).toEqual(expect.objectContaining({ my: "result", custom: "value" }));
-    });
-
-    it("evaluates functions and timeline variables nested in the `data` property", async () => {
-      mocked(timeline).evaluateTimelineVariable.mockReturnValue(1);
-
-      const trial = createTrial({
-        type: TestPlugin,
-        data: { custom: () => "value", variable: new TimelineVariable("x") },
-      });
-      await trial.run();
-      expect(trial.getResult()).toEqual(
-        expect.objectContaining({ my: "result", custom: "value", variable: 1 })
-      );
     });
 
     it("includes a set of trial-specific result properties", async () => {
@@ -494,6 +475,27 @@ describe("Trial", () => {
       const variable = new TimelineVariable("x");
       expect(trial.evaluateTimelineVariable(variable)).toEqual(1);
       expect(timeline.evaluateTimelineVariable).toHaveBeenCalledWith(variable);
+    });
+  });
+
+  describe("getParameterValue()", () => {
+    it("disables recursive lookups of timeline description keys", async () => {
+      const trial = createTrial({ type: TestPlugin });
+
+      for (const parameter of [
+        "timeline",
+        "timeline_variables",
+        "repetitions",
+        "loop_function",
+        "conditional_function",
+        "randomize_order",
+        "sample",
+        "on_timeline_start",
+        "on_timeline_finish",
+      ]) {
+        expect(trial.getParameterValue(parameter)).toBeUndefined();
+        expect(timeline.getParameterValue).not.toHaveBeenCalled();
+      }
     });
   });
 });

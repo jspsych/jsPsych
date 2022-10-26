@@ -494,34 +494,6 @@ describe("Timeline", () => {
   describe("getParameterValue()", () => {
     // Note: This includes test cases for the implementation provided by `BaseTimelineNode`.
 
-    it("ignores builtin timeline parameters", async () => {
-      const timeline = createTimeline({
-        timeline: [],
-        timeline_variables: [],
-        repetitions: 1,
-        loop_function: jest.fn(),
-        conditional_function: jest.fn(),
-        randomize_order: false,
-        sample: { type: "custom", fn: jest.fn() },
-        on_timeline_start: jest.fn(),
-        on_timeline_finish: jest.fn(),
-      });
-
-      for (const parameter of [
-        "timeline",
-        "timeline_variables",
-        "repetitions",
-        "loop_function",
-        "conditional_function",
-        "randomize_order",
-        "sample",
-        "on_timeline_start",
-        "on_timeline_finish",
-      ]) {
-        expect(timeline.getParameterValue(parameter)).toBeUndefined();
-      }
-    });
-
     it("returns the local parameter value, if it exists", async () => {
       const timeline = createTimeline({ timeline: [], my_parameter: "test" });
 
@@ -577,7 +549,7 @@ describe("Timeline", () => {
       ).toEqual("function");
     });
 
-    it("considers nested properties if `parameterName` contains dots", async () => {
+    it("considers nested properties if `parameterName` is an array", async () => {
       const timeline = createTimeline({
         timeline: [],
         object: {
@@ -588,9 +560,93 @@ describe("Timeline", () => {
         },
       });
 
-      expect(timeline.getParameterValue("object.childString")).toEqual("foo");
-      expect(timeline.getParameterValue("object.childObject")).toEqual({ childString: "bar" });
-      expect(timeline.getParameterValue("object.childObject.childString")).toEqual("bar");
+      expect(timeline.getParameterValue(["object", "childString"])).toEqual("foo");
+      expect(timeline.getParameterValue(["object", "childObject"])).toEqual({ childString: "bar" });
+      expect(timeline.getParameterValue(["object", "childObject", "childString"])).toEqual("bar");
+    });
+
+    it("caches results when `isComplexParameter` is set and uses these results for nested lookups", async () => {
+      const timeline = createTimeline({
+        timeline: [],
+        object: () => ({ child: "foo" }),
+      });
+
+      expect(timeline.getParameterValue("object", { isComplexParameter: true })).toEqual({
+        child: "foo",
+      });
+      expect(timeline.getParameterValue(["object", "child"])).toEqual("foo");
+    });
+
+    it("resets all result caches after every trial", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timeline = createTimeline({
+        timeline: [
+          {
+            timeline: [{ type: TestPlugin }, { type: TestPlugin }],
+            object1: jest.fn().mockReturnValueOnce({ child: "foo" }),
+          },
+        ],
+        object2: jest.fn().mockReturnValueOnce({ child: "foo" }),
+      });
+
+      timeline.run();
+      const childTimeline = timeline.children[0];
+
+      // First trial
+      for (const parameter of ["object1", "object2"]) {
+        expect(childTimeline.getParameterValue([parameter, "child"])).toBeUndefined();
+        expect(childTimeline.getParameterValue(parameter, { isComplexParameter: true })).toEqual({
+          child: "foo",
+        });
+        expect(childTimeline.getParameterValue([parameter, "child"])).toEqual("foo");
+      }
+
+      await TestPlugin.finishTrial();
+
+      // Second trial, caches should have been reset
+      for (const parameter of ["object1", "object2"]) {
+        expect(childTimeline.getParameterValue([parameter, "child"])).toBeUndefined();
+        expect(
+          childTimeline.getParameterValue(parameter, { isComplexParameter: true })
+        ).toBeUndefined();
+      }
+    });
+  });
+
+  describe("getDataParameter()", () => {
+    it("works when the `data` parameter is a function", async () => {
+      const timeline = createTimeline({ timeline: [], data: () => ({ custom: "value" }) });
+      expect(timeline.getDataParameter()).toEqual({ custom: "value" });
+    });
+
+    it("evaluates nested functions and timeline variables", async () => {
+      const timeline = createTimeline({
+        timeline: [],
+        timeline_variables: [{ x: 1 }],
+        data: {
+          custom: () => "value",
+          variable: new TimelineVariable("x"),
+        },
+      });
+
+      await timeline.run(); // required to properly evaluate timeline variables
+
+      expect(timeline.getDataParameter()).toEqual({ custom: "value", variable: 1 });
+    });
+
+    it("merges in all parent node `data` parameters", async () => {
+      const timeline = createTimeline({
+        timeline: [{ timeline: [], data: { custom: "value" } }],
+        data: { other: "value" },
+      });
+
+      await timeline.run();
+
+      expect((timeline.children[0] as Timeline).getDataParameter()).toEqual({
+        custom: "value",
+        other: "value",
+      });
     });
   });
 

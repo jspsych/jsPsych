@@ -48,8 +48,8 @@ class TestPlugin implements JsPsychPlugin<typeof testPluginInfo> {
   private static trialPromise = new PromiseWrapper<Record<string, any>>();
 
   /**
-   * Resolves the promise returned by `jsPsych.finishTrial()` with the provided `result` object or
-   * `{ my: "result" }` if no `result` object was provided.
+   * Resolves the promise returned by `trial()` with the provided `result` object or `{ my: "result"
+   * }` if no `result` object was provided.
    **/
   static async finishTrial(result?: Record<string, any>) {
     TestPlugin.trialPromise.resolve(result ?? TestPlugin.defaultTrialResult);

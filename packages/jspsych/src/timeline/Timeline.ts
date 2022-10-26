@@ -10,7 +10,6 @@ import { BaseTimelineNode } from "./BaseTimelineNode";
 import { Trial } from "./Trial";
 import { PromiseWrapper } from "./util";
 import {
-  GetParameterValueOptions,
   TimelineArray,
   TimelineDescription,
   TimelineNode,
@@ -21,7 +20,6 @@ import {
   TrialResult,
   isTimelineDescription,
   isTrialDescription,
-  timelineDescriptionKeys,
 } from ".";
 
 export class Timeline extends BaseTimelineNode {
@@ -229,17 +227,6 @@ export class Timeline extends BaseTimelineNode {
     if (this.parent) {
       return this.parent.evaluateTimelineVariable(variable);
     }
-  }
-
-  public getParameterValue(parameterPath: string | string[], options?: GetParameterValueOptions) {
-    if (
-      timelineDescriptionKeys.includes(
-        typeof parameterPath === "string" ? parameterPath : parameterPath[0]
-      )
-    ) {
-      return;
-    }
-    return super.getParameterValue(parameterPath, options);
   }
 
   public getResults() {
