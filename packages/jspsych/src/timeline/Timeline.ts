@@ -6,13 +6,12 @@ import {
   shuffle,
   shuffleAlternateGroups,
 } from "../modules/randomization";
-import { BaseTimelineNode } from "./BaseTimelineNode";
+import { TimelineNode } from "./TimelineNode";
 import { Trial } from "./Trial";
 import { PromiseWrapper } from "./util";
 import {
   TimelineArray,
   TimelineDescription,
-  TimelineNode,
   TimelineNodeDependencies,
   TimelineNodeStatus,
   TimelineVariable,
@@ -22,7 +21,7 @@ import {
   isTrialDescription,
 } from ".";
 
-export class Timeline extends BaseTimelineNode {
+export class Timeline extends TimelineNode {
   public readonly children: TimelineNode[] = [];
   public readonly description: TimelineDescription;
 

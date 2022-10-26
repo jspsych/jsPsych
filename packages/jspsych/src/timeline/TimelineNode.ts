@@ -2,11 +2,9 @@ import get from "lodash.get";
 import has from "lodash.has";
 import set from "lodash.set";
 
-import { Timeline } from "./Timeline";
+import type { Timeline } from "./Timeline";
 import {
-  GetParameterValueOptions,
   TimelineDescription,
-  TimelineNode,
   TimelineNodeDependencies,
   TimelineNodeStatus,
   TimelineVariable,
@@ -14,15 +12,57 @@ import {
   TrialResult,
 } from ".";
 
-export abstract class BaseTimelineNode implements TimelineNode {
+export type GetParameterValueOptions = {
+  /**
+   * If true, and the retrieved parameter value is a function, invoke the function and return its
+   * return value (defaults to `true`)
+   */
+  evaluateFunctions?: boolean;
+
+  /**
+   * Whether to fall back to parent timeline node parameters (defaults to `true`)
+   */
+  recursive?: boolean;
+
+  /**
+   * Whether or not the requested parameter is of `ParameterType.COMPLEX` (defaults to `false`). If
+   * `true`, the result of the parameter lookup will be cached by the timeline node for successive
+   * lookups of nested properties or array elements.
+   **/
+  isComplexParameter?: boolean;
+};
+
+export abstract class TimelineNode {
   public abstract readonly description: TimelineDescription | TrialDescription;
+
+  /**
+   * The globally unique trial index of this node. It is set when the node is run. Timeline nodes
+   * have the same trial index as their first trial.
+   */
   public index?: number;
 
   public abstract readonly parent?: Timeline;
 
   abstract run(): Promise<void>;
+
+  /**
+   * Returns a flat array of all currently available results of this node
+   */
   abstract getResults(): TrialResult[];
+
+  /**
+   * Recursively evaluates the given timeline variable, starting at the current timeline node.
+   * Returns the result, or `undefined` if the variable is neither specified in the timeline
+   * description of this node, nor in the description of any parent node.
+   */
   abstract evaluateTimelineVariable(variable: TimelineVariable): any;
+
+  /**
+   * Returns the most recent (child) TimelineNode. For trial nodes, this is always the trial node
+   * itself since trial nodes do not have child nodes. For timeline nodes, the return value is a
+   * Trial object most of the time, but it may also be a Timeline object when a timeline hasn't yet
+   * instantiated its children (e.g. during initial timeline callback functions).
+   */
   abstract getLatestNode(): TimelineNode;
 
   protected status = TimelineNodeStatus.PENDING;
@@ -44,7 +84,24 @@ export abstract class BaseTimelineNode implements TimelineNode {
     this.parent?.resetParameterValueCache();
   }
 
-  getParameterValue(parameterPath: string | string[], options: GetParameterValueOptions = {}) {
+  /**
+   * Retrieves a parameter value from the description of this timeline node, recursively falling
+   * back to the description of each parent timeline node unless `recursive` is set to `false`. If
+   * the parameter...
+   *
+   * * is a timeline variable, evaluates the variable and returns the result.
+   * * is not specified, returns `undefined`.
+   * * is a function and `evaluateFunctions` is not set to `false`, invokes the function and returns
+   *   its return value
+   *
+   * @param parameterPath The path of the respective parameter in the timeline node description. If
+   * the path is an array, nested object properties or array items will be looked up.
+   * @param options See {@link GetParameterValueOptions}
+   */
+  public getParameterValue(
+    parameterPath: string | string[],
+    options: GetParameterValueOptions = {}
+  ): any {
     const { evaluateFunctions = true, recursive = true } = options;
     let parameterObject: Record<string, any> = this.description;
 

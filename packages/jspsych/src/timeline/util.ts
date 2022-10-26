@@ -24,6 +24,10 @@ export class PromiseWrapper<ResolveType = void> {
   }
 }
 
+export function isPromise(value: any): value is Promise<any> {
+  return value && typeof value["then"] === "function";
+}
+
 export function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }

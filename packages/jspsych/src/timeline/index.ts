@@ -4,10 +4,6 @@ import { JsPsychPlugin, PluginInfo } from "../modules/plugins";
 import { Trial } from "./Trial";
 import { PromiseWrapper } from "./util";
 
-export function isPromise(value: any): value is Promise<any> {
-  return value && typeof value["then"] === "function";
-}
-
 export class TimelineVariable {
   constructor(public readonly name: string) {}
 }
@@ -160,75 +156,6 @@ export interface TimelineNodeDependencies {
    * is called.
    */
   finishTrialPromise: PromiseWrapper<TrialResult | void>;
-}
-
-export type GetParameterValueOptions = {
-  /**
-   * If true, and the retrieved parameter value is a function, invoke the function and return its
-   * return value (defaults to `true`)
-   */
-  evaluateFunctions?: boolean;
-
-  /**
-   * Whether to fall back to parent timeline node parameters (defaults to `true`)
-   */
-  recursive?: boolean;
-
-  /**
-   * Whether or not the requested parameter is of `ParameterType.COMPLEX` (defaults to `false`). If
-   * `true`, the result of the parameter lookup will be cached by the timeline node for successive
-   * lookups of nested properties or array elements.
-   **/
-  isComplexParameter?: boolean;
-};
-
-export interface TimelineNode {
-  readonly description: TimelineDescription | TrialDescription;
-
-  /**
-   * The globally unique trial index of this node. It is set when the node is run. Timeline nodes
-   * have the same trial index as their first trial.
-   */
-  index?: number;
-
-  run(): Promise<void>;
-  getStatus(): TimelineNodeStatus;
-
-  /**
-   * Returns a flat array of all currently available results of this node
-   */
-  getResults(): TrialResult[];
-
-  /**
-   * Recursively evaluates the given timeline variable, starting at the current timeline node.
-   * Returns the result, or `undefined` if the variable is neither specified in the timeline
-   * description of this node, nor in the description of any parent node.
-   */
-  evaluateTimelineVariable(variable: TimelineVariable): any;
-
-  /**
-   * Retrieves a parameter value from the description of this timeline node, recursively falling
-   * back to the description of each parent timeline node unless `recursive` is set to `false`. If
-   * the parameter...
-   *
-   * * is a timeline variable, evaluates the variable and returns the result.
-   * * is not specified, returns `undefined`.
-   * * is a function and `evaluateFunctions` is not set to `false`, invokes the function and returns
-   *   its return value
-   *
-   * @param parameterPath The path of the respective parameter in the timeline node description. If
-   * the path is an array, nested object properties or array items will be looked up.
-   * @param options See {@link GetParameterValueOptions}
-   */
-  getParameterValue(parameterPath: string | string[], options?: GetParameterValueOptions): any;
-
-  /**
-   * Returns the most recent (child) TimelineNode. For trial nodes, this is always the trial node
-   * itself since trial nodes do not have child nodes. For timeline nodes, the return value is a
-   * Trial object most of the time, but it may also be a Timeline object when a timeline hasn't yet
-   * instantiated its children (e.g. during initial timeline callback functions).
-   */
-  getLatestNode: () => TimelineNode;
 }
 
 export type TrialResult = Record<string, any>;

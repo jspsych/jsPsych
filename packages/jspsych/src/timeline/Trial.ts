@@ -3,21 +3,19 @@ import { Class } from "type-fest";
 
 import { JsPsychPlugin, ParameterType, PluginInfo } from "../";
 import { deepCopy } from "../modules/utils";
-import { BaseTimelineNode } from "./BaseTimelineNode";
 import { Timeline } from "./Timeline";
-import { delay, parameterPathArrayToString } from "./util";
+import { GetParameterValueOptions, TimelineNode } from "./TimelineNode";
+import { delay, isPromise, parameterPathArrayToString } from "./util";
 import {
-  GetParameterValueOptions,
   TimelineNodeDependencies,
   TimelineNodeStatus,
   TimelineVariable,
   TrialDescription,
   TrialResult,
-  isPromise,
   timelineDescriptionKeys,
 } from ".";
 
-export class Trial extends BaseTimelineNode {
+export class Trial extends TimelineNode {
   public readonly pluginClass: Class<JsPsychPlugin<any>>;
   public pluginInstance: JsPsychPlugin<any>;
   public readonly trialObject: TrialDescription;

@@ -565,16 +565,18 @@ describe("Timeline", () => {
       expect(timeline.getParameterValue(["object", "childObject", "childString"])).toEqual("bar");
     });
 
-    it("caches results when `isComplexParameter` is set and uses these results for nested lookups", async () => {
-      const timeline = createTimeline({
-        timeline: [],
-        object: () => ({ child: "foo" }),
-      });
+    describe("when `isComplexParameter` is set", () => {
+      it("caches results and uses them for nested lookups", async () => {
+        const timeline = createTimeline({
+          timeline: [],
+          object: () => ({ child: "foo" }),
+        });
 
-      expect(timeline.getParameterValue("object", { isComplexParameter: true })).toEqual({
-        child: "foo",
+        expect(timeline.getParameterValue("object", { isComplexParameter: true })).toEqual({
+          child: "foo",
+        });
+        expect(timeline.getParameterValue(["object", "child"])).toEqual("foo");
       });
-      expect(timeline.getParameterValue(["object", "child"])).toEqual("foo");
     });
 
     it("resets all result caches after every trial", async () => {
