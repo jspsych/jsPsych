@@ -16,6 +16,9 @@ export interface TrialDescription extends Record<string, any> {
   /** https://www.jspsych.org/latest/overview/plugins/#the-post_trial_gap-iti-parameter */
   post_trial_gap?: Parameter<number>;
 
+  /** https://www.jspsych.org/7.3/overview/plugins/#the-save_trial_parameters-parameter */
+  save_trial_parameters?: Parameter<Record<string, boolean>>;
+
   /** https://www.jspsych.org/latest/overview/style/#using-the-css_classes-trial-parameter */
   css_classes?: Parameter<string | string[]>;
 

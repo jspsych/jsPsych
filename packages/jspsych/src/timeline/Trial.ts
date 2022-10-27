@@ -43,13 +43,7 @@ export class Trial extends TimelineNode {
 
     this.pluginInstance = this.dependencies.instantiatePlugin(this.pluginClass);
 
-    const result = await this.executeTrial();
-    this.result = {
-      ...this.getDataParameter(),
-      ...result,
-      trial_type: this.pluginInfo.name,
-      trial_index: this.index,
-    };
+    this.result = this.processResult(await this.executeTrial());
 
     this.dependencies.onTrialResultAvailable(this);
 
@@ -96,6 +90,41 @@ export class Trial extends TimelineNode {
     }
 
     return result;
+  }
+
+  private processResult(result: TrialResult | void) {
+    if (!result) {
+      result = {};
+    }
+
+    for (const [parameterName, shouldParameterBeIncluded] of Object.entries(
+      this.getParameterValue("save_trial_parameters") ?? {}
+    )) {
+      if (this.pluginInfo.parameters[parameterName]) {
+        // @ts-ignore TODO Somehow, hasOwn is not known in tests (?)
+        if (shouldParameterBeIncluded && !Object.hasOwn(result, parameterName)) {
+          let parameterValue = this.trialObject[parameterName];
+          if (typeof parameterValue === "function") {
+            parameterValue = parameterValue.toString();
+          }
+          result[parameterName] = parameterValue;
+          // @ts-ignore TODO Somehow, hasOwn is not known in tests (?)
+        } else if (!shouldParameterBeIncluded && Object.hasOwn(result, parameterName)) {
+          delete result[parameterName];
+        }
+      } else {
+        console.warn(
+          `Non-existent parameter "${parameterName}" specified in save_trial_parameters.`
+        );
+      }
+    }
+
+    return {
+      ...this.getDataParameter(),
+      ...result,
+      trial_type: this.pluginInfo.name,
+      trial_index: this.index,
+    };
   }
 
   /**

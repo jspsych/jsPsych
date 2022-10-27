@@ -185,6 +185,66 @@ describe("Trial", () => {
       );
     });
 
+    it("respects the `save_trial_parameters` parameter", async () => {
+      const consoleSpy = jest.spyOn(console, "warn").mockImplementation();
+
+      TestPlugin.setParameterInfos({
+        stringParameter1: { type: ParameterType.STRING },
+        stringParameter2: { type: ParameterType.STRING },
+        stringParameter3: { type: ParameterType.STRING },
+        stringParameter4: { type: ParameterType.STRING },
+        complexArrayParameter: { type: ParameterType.COMPLEX, array: true },
+        functionParameter: { type: ParameterType.FUNCTION },
+      });
+      TestPlugin.setDefaultTrialResult({
+        result: "foo",
+        stringParameter2: "string",
+        stringParameter3: "string",
+      });
+      const trial = createTrial({
+        type: TestPlugin,
+        stringParameter1: "string",
+        stringParameter2: "string",
+        stringParameter3: "string",
+        stringParameter4: "string",
+        functionParameter: jest.fn(),
+        complexArrayParameter: [{ child: "foo" }, () => ({ child: "bar" })],
+
+        save_trial_parameters: {
+          stringParameter3: false,
+          stringParameter4: true,
+          functionParameter: true,
+          complexArrayParameter: true,
+          result: false, // Since `result` is not a parameter, this should be ignored
+        },
+      });
+      await trial.run();
+      const result = trial.getResult();
+
+      // By default, parameters should not be added:
+      expect(result).not.toHaveProperty("stringParameter1");
+
+      // If the plugin adds them, they should not be removed either:
+      expect(result).toHaveProperty("stringParameter2", "string");
+
+      // When explicitly set to false, parameters should be removed if the plugin adds them
+      expect(result).not.toHaveProperty("stringParameter3");
+
+      // When set to true, parameters should be added
+      expect(result).toHaveProperty("stringParameter4", "string");
+
+      // Function parameters should be stringified
+      expect(result).toHaveProperty("functionParameter", jest.fn().toString());
+
+      // Non-parameter data should be left untouched and a warning should be issued
+      expect(result).toHaveProperty("result", "foo");
+      expect(consoleSpy).toHaveBeenCalledTimes(1);
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Non-existent parameter "result" specified in save_trial_parameters.'
+      );
+      consoleSpy.mockRestore();
+    });
+
     describe("with a plugin parameter specification", () => {
       const functionDefaultValue = () => {};
       beforeEach(() => {

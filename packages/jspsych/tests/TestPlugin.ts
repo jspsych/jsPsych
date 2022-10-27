@@ -23,7 +23,7 @@ class TestPlugin implements JsPsychPlugin<typeof testPluginInfo> {
 
   private static defaultTrialResult: Record<string, any> = { my: "result" };
 
-  static setDefaultTrialResult(defaultTrialResult = { my: "result" }) {
+  static setDefaultTrialResult(defaultTrialResult: Record<string, any> = { my: "result" }) {
     TestPlugin.defaultTrialResult = defaultTrialResult;
   }
 
