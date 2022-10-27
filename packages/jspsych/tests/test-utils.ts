@@ -10,7 +10,7 @@ jest.mock("../src/JsPsych");
  * A class to instantiate mocked `TimelineNodeDependencies` objects that have additional
  * testing-related functions.
  */
-export class MockTimelineNodeDependencies implements TimelineNodeDependencies {
+export class TimelineNodeDependenciesMock implements TimelineNodeDependencies {
   onTrialStart = jest.fn();
   onTrialLoaded = jest.fn();
   onTrialResultAvailable = jest.fn();

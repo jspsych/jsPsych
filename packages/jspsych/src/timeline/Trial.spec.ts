@@ -1,7 +1,7 @@
 import { flushPromises } from "@jspsych/test-utils";
 import { mocked } from "ts-jest/utils";
 
-import { MockTimelineNodeDependencies } from "../../tests/test-utils";
+import { TimelineNodeDependenciesMock } from "../../tests/test-utils";
 import TestPlugin from "../../tests/TestPlugin";
 import { ParameterType } from "../modules/plugins";
 import { Timeline } from "./Timeline";
@@ -13,7 +13,7 @@ jest.useFakeTimers();
 
 jest.mock("./Timeline");
 
-const dependencies = new MockTimelineNodeDependencies();
+const dependencies = new TimelineNodeDependenciesMock();
 
 describe("Trial", () => {
   let timeline: Timeline;

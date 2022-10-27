@@ -1,7 +1,7 @@
 import { flushPromises } from "@jspsych/test-utils";
 import { mocked } from "ts-jest/utils";
 
-import { MockTimelineNodeDependencies, createSnapshotUtils } from "../../tests/test-utils";
+import { TimelineNodeDependenciesMock, createSnapshotUtils } from "../../tests/test-utils";
 import TestPlugin from "../../tests/TestPlugin";
 import { DataCollection } from "../modules/data/DataCollection";
 import {
@@ -29,7 +29,7 @@ const exampleTimeline: TimelineDescription = {
   timeline: [{ type: TestPlugin }, { type: TestPlugin }, { timeline: [{ type: TestPlugin }] }],
 };
 
-const dependencies = new MockTimelineNodeDependencies();
+const dependencies = new TimelineNodeDependenciesMock();
 
 describe("Timeline", () => {
   const createTimeline = (description: TimelineDescription | TimelineArray, parent?: Timeline) =>
