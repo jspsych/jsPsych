@@ -31,7 +31,7 @@ describe("standard use of function as parameter", () => {
     ]);
 
     expect(mock).not.toHaveBeenCalled();
-    clickTarget(document.querySelector("#finish_cloze_button"));
+    await clickTarget(document.querySelector("#finish_cloze_button"));
     expect(mock).toHaveBeenCalledTimes(1);
   });
 });
@@ -76,7 +76,7 @@ describe("nested parameters as functions", () => {
     ]);
 
     expect(displayElement.querySelectorAll("p.jspsych-survey-text").length).toBe(2);
-    clickTarget(document.querySelector("#jspsych-survey-text-next"));
+    await clickTarget(document.querySelector("#jspsych-survey-text-next"));
     await expectFinished();
   });
 
@@ -101,7 +101,7 @@ describe("nested parameters as functions", () => {
     expect(document.querySelector("#jspsych-survey-text-1 p.jspsych-survey-text").innerHTML).toBe(
       "bar"
     );
-    clickTarget(document.querySelector("#jspsych-survey-text-next"));
+    await clickTarget(document.querySelector("#jspsych-survey-text-next"));
     await expectFinished();
   });
 
@@ -132,7 +132,7 @@ describe("nested parameters as functions", () => {
     expect(document.querySelector("#jspsych-survey-multi-choice-0").innerHTML).toMatch("buzz");
     expect(document.querySelector("#jspsych-survey-multi-choice-1").innerHTML).toMatch("bar");
     expect(document.querySelector("#jspsych-survey-multi-choice-1").innerHTML).toMatch("one");
-    clickTarget(document.querySelector("#jspsych-survey-multi-choice-next"));
+    await clickTarget(document.querySelector("#jspsych-survey-multi-choice-next"));
     await expectFinished();
   });
 
@@ -173,12 +173,8 @@ describe("nested parameters as functions", () => {
       {
         type: FunctionTestPlugin,
         foo: {
-          not_protected: () => {
-            return "x";
-          },
-          protected: () => {
-            return "y";
-          },
+          not_protected: () => "x",
+          protected: () => "y",
         },
       },
     ]);
