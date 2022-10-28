@@ -1,14 +1,9 @@
 import { Class } from "type-fest";
 
 import { JsPsychExtension, JsPsychExtensionInfo } from "./modules/extensions";
-import { TrialResult } from "./timeline";
+import { TrialExtensionsConfiguration } from "./timeline";
 
 export type GlobalExtensionsConfiguration = Array<{
-  type: Class<JsPsychExtension>;
-  params?: Record<string, any>;
-}>;
-
-export type TrialExtensionsConfiguration = Array<{
   type: Class<JsPsychExtension>;
   params?: Record<string, any>;
 }>;
@@ -64,17 +59,14 @@ export class ExtensionManager {
   }
 
   public async onFinish(
-    trialExtensionsConfiguration: TrialExtensionsConfiguration = [],
-    trialResult: TrialResult
-  ) {
+    trialExtensionsConfiguration: TrialExtensionsConfiguration = []
+  ): Promise<Record<string, any>> {
     const results = await Promise.all(
       trialExtensionsConfiguration.map(({ type, params }) =>
         Promise.resolve(this.getExtensionInstanceByClass(type)?.on_finish(params))
       )
     );
 
-    for (const result of results) {
-      Object.assign(trialResult, result);
-    }
+    return Object.assign({}, ...results);
   }
 }

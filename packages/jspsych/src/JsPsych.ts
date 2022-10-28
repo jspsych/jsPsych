@@ -2,6 +2,7 @@ import autoBind from "auto-bind";
 import { Class } from "type-fest";
 
 import { version } from "../package.json";
+import { ExtensionManager, ExtensionManagerDependencies } from "./ExtensionManager";
 import { JsPsychData, JsPsychDataDependencies } from "./modules/data";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin, PluginInfo } from "./modules/plugins";
@@ -21,7 +22,6 @@ import { Trial } from "./timeline/Trial";
 import { PromiseWrapper } from "./timeline/util";
 
 export class JsPsych {
-  extensions = <any>{};
   turk = turk;
   randomization = randomization;
   utils = utils;
@@ -70,6 +70,8 @@ export class JsPsych {
    */
   private simulation_options;
 
+  private extensionManager: ExtensionManager;
+
   constructor(options?) {
     // override default options if user specifies an option
     options = {
@@ -116,10 +118,10 @@ export class JsPsych {
     this.data = new JsPsychData(this.dataDependencies);
     this.pluginAPI = createJointPluginAPIObject(this);
 
-    // create instances of extensions
-    for (const extension of options.extensions) {
-      this.extensions[extension.type.info.name] = new extension.type(this);
-    }
+    this.extensionManager = new ExtensionManager(
+      this.extensionManagerDependencies,
+      options.extensions
+    );
   }
 
   private endMessage?: string;
@@ -145,7 +147,7 @@ export class JsPsych {
     this.timeline = new Timeline(this.timelineDependencies, timeline);
 
     await this.prepareDom();
-    await this.loadExtensions(this.options.extensions);
+    await this.extensionManager.initializeExtensions();
 
     document.documentElement.setAttribute("jspsych", "present");
 
@@ -192,22 +194,6 @@ export class JsPsych {
 
   getDisplayElement() {
     return this.domTarget;
-  }
-
-  /**
-   * Adds the provided css classes to the display element
-   */
-  protected addCssClasses(classes: string | string[]) {
-    this.getDisplayElement().classList.add(...(typeof classes === "string" ? [classes] : classes));
-  }
-
-  /**
-   * Removes the provided css classes from the display element
-   */
-  protected removeCssClasses(classes: string | string[]) {
-    this.getDisplayElement().classList.remove(
-      ...(typeof classes === "string" ? [classes] : classes)
-    );
   }
 
   getDisplayContainerElement() {
@@ -269,6 +255,10 @@ export class JsPsych {
 
   getTimeline() {
     return this.timeline?.description;
+  }
+
+  get extensions() {
+    return this.extensionManager?.extensions ?? {};
   }
 
   private async prepareDom() {
@@ -345,23 +335,6 @@ export class JsPsych {
     }
   }
 
-  private async loadExtensions(extensions) {
-    // run the .initialize method of any extensions that are in use
-    // these should return a Promise to indicate when loading is complete
-
-    try {
-      await Promise.all(
-        extensions.map((extension) =>
-          this.extensions[extension.type.info.name].initialize(extension.params ?? {})
-        )
-      );
-    } catch (error_message) {
-      throw new Error(error_message);
-    }
-  }
-
-  // New stuff as replacements for old methods:
-
   private finishTrialPromise = new PromiseWrapper<TrialResult | void>();
   finishTrial(data?: TrialResult) {
     this.finishTrialPromise.resolve(data);
@@ -375,15 +348,7 @@ export class JsPsych {
       this.getDisplayContainerElement().focus();
       // reset the scroll on the DOM target
       this.getDisplayElement().scrollTop = 0;
-
-      // Add the CSS classes from the trial's `css_classes` parameter to the display element.
-      const cssClasses = trial.getParameterValue("css_classes");
-      if (cssClasses) {
-        this.addCssClasses(cssClasses);
-      }
     },
-
-    onTrialLoaded: (trial: Trial) => {},
 
     onTrialResultAvailable: (trial: Trial) => {
       trial.getResult().time_elapsed = this.getTotalTime();
@@ -395,12 +360,6 @@ export class JsPsych {
       this.options.on_trial_finish(result);
       this.options.on_data_update(result);
 
-      // Remove any CSS classes added by the `onTrialStart` callback.
-      const cssClasses = trial.getParameterValue("css_classes");
-      if (cssClasses) {
-        this.removeCssClasses(cssClasses);
-      }
-
       if (this.progressBar && this.options.auto_update_progress_bar) {
         this.progressBar.progress = this.timeline.getNaiveProgress();
       }
@@ -409,11 +368,24 @@ export class JsPsych {
     instantiatePlugin: <Info extends PluginInfo>(pluginClass: Class<JsPsychPlugin<Info>>) =>
       new pluginClass(this),
 
+    runOnStartExtensionCallbacks: (extensionsConfiguration) =>
+      this.extensionManager.onStart(extensionsConfiguration),
+
+    runOnLoadExtensionCallbacks: (extensionsConfiguration) =>
+      this.extensionManager.onLoad(extensionsConfiguration),
+
+    runOnFinishExtensionCallbacks: (extensionsConfiguration) =>
+      this.extensionManager.onFinish(extensionsConfiguration),
+
     getDisplayElement: () => this.getDisplayElement(),
 
     getDefaultIti: () => this.getInitSettings().default_iti,
 
     finishTrialPromise: this.finishTrialPromise,
+  };
+
+  private extensionManagerDependencies: ExtensionManagerDependencies = {
+    instantiateExtension: (extensionClass) => new extensionClass(this),
   };
 
   private dataDependencies: JsPsychDataDependencies = {

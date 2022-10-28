@@ -1,3 +1,4 @@
+import { JsPsychExtension } from "src/modules/extensions";
 import { Class } from "type-fest";
 
 import { JsPsychPlugin, PluginInfo } from "../modules/plugins";
@@ -9,6 +10,11 @@ export class TimelineVariable {
 }
 
 export type Parameter<T> = T | (() => T) | TimelineVariable;
+
+export type TrialExtensionsConfiguration = Array<{
+  type: Class<JsPsychExtension>;
+  params?: Record<string, any>;
+}>;
 
 export interface TrialDescription extends Record<string, any> {
   type: Parameter<Class<JsPsychPlugin<any>>>;
@@ -24,6 +30,9 @@ export interface TrialDescription extends Record<string, any> {
 
   /** https://www.jspsych.org/latest/overview/simulation/#controlling-simulation-mode-with-simulation_options */
   simulation_options?: Parameter<any>;
+
+  /** https://www.jspsych.org/7.3/overview/extensions/ */
+  extensions?: Parameter<TrialExtensionsConfiguration>;
 
   // Events
 
@@ -123,11 +132,6 @@ export interface TimelineNodeDependencies {
   onTrialStart: (trial: Trial) => void;
 
   /**
-   * Called during a trial, after the plugin has made initial changes to the DOM.
-   */
-  onTrialLoaded: (trial: Trial) => void;
-
-  /**
    * Called when a trial's result data is available, before invoking `onTrialFinished()`.
    */
   onTrialResultAvailable: (trial: Trial) => void;
@@ -136,6 +140,24 @@ export interface TimelineNodeDependencies {
    * Called after a trial has finished.
    */
   onTrialFinished: (trial: Trial) => void;
+
+  /**
+   * Invoke `on_start` extension callbacks according to `extensionsConfiguration`
+   */
+  runOnStartExtensionCallbacks(extensionsConfiguration: TrialExtensionsConfiguration): void;
+
+  /**
+   * Invoke `on_load` extension callbacks according to `extensionsConfiguration`
+   */
+  runOnLoadExtensionCallbacks(extensionsConfiguration: TrialExtensionsConfiguration): void;
+
+  /**
+   * Invoke `on_finish` extension callbacks according to `extensionsConfiguration` and return a
+   * joint extensions result object
+   */
+  runOnFinishExtensionCallbacks(
+    extensionsConfiguration: TrialExtensionsConfiguration
+  ): Promise<Record<string, any>>;
 
   /**
    * Given a plugin class, create a new instance of it and return it.

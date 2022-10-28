@@ -1,13 +1,12 @@
 import { mocked } from "ts-jest/utils";
 import { Class } from "type-fest";
 
-import TestExtension from "../tests/extensions/test-extension";
+import { TestExtension } from "../tests/extensions/test-extension";
 import { ExtensionManager, ExtensionManagerDependencies } from "./ExtensionManager";
 import { JsPsych } from "./JsPsych";
 import { JsPsychExtension } from "./modules/extensions";
 
-jest.mock("../tests/extensions/test-extension");
-jest.mock("./JsPsych");
+jest.mock("../src/JsPsych");
 
 export class ExtensionManagerDependenciesMock implements ExtensionManagerDependencies {
   instantiateExtension: jest.Mock<JsPsychExtension>;
@@ -92,20 +91,19 @@ describe("ExtensionManager", () => {
   });
 
   describe("onFinish()", () => {
-    it("calls `on_finish` on all extensions specified in the provided `extensions` parameter and adds the retrieved properties to the provided result object", async () => {
+    it("calls `on_finish` on all extensions specified in the provided `extensions` parameter and returns a joint extension results object", async () => {
       const manager = new ExtensionManager(dependencies, [{ type: TestExtension }]);
 
       const onFinishCallback = mocked(manager.extensions.test.on_finish);
       onFinishCallback.mockReturnValue({ extension: "result" });
-      const trialResult = { initial: "result" };
 
-      await manager.onFinish(undefined, trialResult);
+      let results = await manager.onFinish(undefined);
       expect(onFinishCallback).not.toHaveBeenCalled();
-      expect(trialResult).toEqual({ initial: "result" });
+      expect(results).toEqual({});
 
-      await manager.onFinish([{ type: TestExtension, params: { my: "option" } }], trialResult);
+      results = await manager.onFinish([{ type: TestExtension, params: { my: "option" } }]);
       expect(onFinishCallback).toHaveBeenCalledWith({ my: "option" });
-      expect(trialResult).toEqual({ initial: "result", extension: "result" });
+      expect(results).toEqual({ extension: "result" });
     });
   });
 });

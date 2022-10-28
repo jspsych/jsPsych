@@ -1,13 +1,19 @@
 import { flushPromises } from "@jspsych/test-utils";
 import { mocked } from "ts-jest/utils";
+import { ConditionalKeys } from "type-fest";
 
-import { TimelineNodeDependenciesMock } from "../../tests/test-utils";
+import { TimelineNodeDependenciesMock, createInvocationOrderUtils } from "../../tests/test-utils";
 import TestPlugin from "../../tests/TestPlugin";
 import { ParameterType } from "../modules/plugins";
 import { Timeline } from "./Timeline";
 import { Trial } from "./Trial";
 import { parameterPathArrayToString } from "./util";
-import { TimelineVariable, TrialDescription } from ".";
+import {
+  TimelineNodeDependencies,
+  TimelineVariable,
+  TrialDescription,
+  TrialExtensionsConfiguration,
+} from ".";
 
 jest.useFakeTimers();
 
@@ -124,13 +130,12 @@ describe("Trial", () => {
         });
       });
 
-      it("invokes the local `on_load` and the global `onTrialLoaded` callback", async () => {
+      it("invokes the local `on_load` callback", async () => {
         const onLoadCallback = jest.fn();
         const trial = createTrial({ type: TestPlugin, on_load: onLoadCallback });
         await trial.run();
 
         expect(onLoadCallback).toHaveBeenCalledTimes(1);
-        expect(dependencies.onTrialLoaded).toHaveBeenCalledTimes(1);
       });
 
       it("picks up the result data from the `finishTrial()` function", async () => {
@@ -507,6 +512,74 @@ describe("Trial", () => {
       jest.advanceTimersByTime(100);
       await flushPromises();
       expect(hasTrial2Completed).toBe(true);
+    });
+
+    it("invokes extension callbacks and includes extension results", async () => {
+      dependencies.runOnFinishExtensionCallbacks.mockResolvedValue({ extension: "result" });
+
+      const extensionsConfig: TrialExtensionsConfiguration = [
+        { type: jest.fn(), params: { my: "option" } },
+      ];
+
+      const trial = createTrial({
+        type: TestPlugin,
+        extensions: extensionsConfig,
+      });
+      await trial.run();
+
+      expect(dependencies.runOnStartExtensionCallbacks).toHaveBeenCalledTimes(1);
+      expect(dependencies.runOnStartExtensionCallbacks).toHaveBeenCalledWith(extensionsConfig);
+
+      expect(dependencies.runOnLoadExtensionCallbacks).toHaveBeenCalledTimes(1);
+      expect(dependencies.runOnLoadExtensionCallbacks).toHaveBeenCalledWith(extensionsConfig);
+
+      expect(dependencies.runOnFinishExtensionCallbacks).toHaveBeenCalledTimes(1);
+      expect(dependencies.runOnFinishExtensionCallbacks).toHaveBeenCalledWith(extensionsConfig);
+      expect(trial.getResult()).toEqual(expect.objectContaining({ extension: "result" }));
+    });
+
+    it("invokes all callbacks in a proper order", async () => {
+      const { createInvocationOrderCallback, invocations } = createInvocationOrderUtils();
+
+      const dependencyCallbacks: Array<ConditionalKeys<TimelineNodeDependenciesMock, jest.Mock>> = [
+        "onTrialStart",
+        "onTrialResultAvailable",
+        "onTrialFinished",
+        "runOnStartExtensionCallbacks",
+        "runOnLoadExtensionCallbacks",
+        "runOnFinishExtensionCallbacks",
+      ];
+
+      for (const callbackName of dependencyCallbacks) {
+        (dependencies[callbackName] as jest.Mock).mockImplementation(
+          createInvocationOrderCallback(callbackName)
+        );
+      }
+
+      const trial = createTrial({
+        type: TestPlugin,
+        extensions: [{ type: jest.fn(), params: { my: "option" } }],
+        on_start: createInvocationOrderCallback("on_start"),
+        on_load: createInvocationOrderCallback("on_load"),
+        on_finish: createInvocationOrderCallback("on_finish"),
+      });
+
+      await trial.run();
+
+      expect(invocations).toEqual([
+        "onTrialStart",
+        "on_start",
+        "runOnStartExtensionCallbacks",
+
+        "on_load",
+        "runOnLoadExtensionCallbacks",
+
+        "onTrialResultAvailable",
+
+        "runOnFinishExtensionCallbacks",
+        "on_finish",
+        "onTrialFinished",
+      ]);
     });
   });
 

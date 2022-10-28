@@ -12,9 +12,12 @@ jest.mock("../src/JsPsych");
  */
 export class TimelineNodeDependenciesMock implements TimelineNodeDependencies {
   onTrialStart = jest.fn();
-  onTrialLoaded = jest.fn();
   onTrialResultAvailable = jest.fn();
   onTrialFinished = jest.fn();
+
+  runOnStartExtensionCallbacks = jest.fn();
+  runOnLoadExtensionCallbacks = jest.fn();
+  runOnFinishExtensionCallbacks: jest.Mock<Promise<Record<string, any>>>;
 
   instantiatePlugin: jest.Mock<JsPsychPlugin<any>>;
   getDisplayElement: jest.Mock<HTMLElement>;
@@ -30,6 +33,7 @@ export class TimelineNodeDependenciesMock implements TimelineNodeDependencies {
   private displayElement: HTMLDivElement;
 
   private initializeProperties() {
+    this.runOnFinishExtensionCallbacks = jest.fn().mockResolvedValue({});
     this.instantiatePlugin = jest.fn(
       (pluginClass: Class<JsPsychPlugin<any>>) => new pluginClass(this.jsPsych)
     );
@@ -48,9 +52,10 @@ export class TimelineNodeDependenciesMock implements TimelineNodeDependencies {
 
     for (const mock of [
       this.onTrialStart,
-      this.onTrialLoaded,
       this.onTrialResultAvailable,
       this.onTrialFinished,
+      this.runOnStartExtensionCallbacks,
+      this.runOnLoadExtensionCallbacks,
     ]) {
       mock.mockReset();
     }
@@ -68,4 +73,16 @@ export function createSnapshotUtils<SnapshotValueType>(snapshotFunction: () => S
   };
 
   return { snapshots, createSnapshotCallback };
+}
+
+/**
+ * Returns utilities for saving the invocation order of callback functions.
+ */
+export function createInvocationOrderUtils() {
+  const invocations: string[] = [];
+  const createInvocationOrderCallback = (callbackName: string) => () => {
+    invocations.push(callbackName);
+  };
+
+  return { invocations, createInvocationOrderCallback };
 }

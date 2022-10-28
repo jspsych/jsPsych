@@ -40,6 +40,7 @@ export class Trial extends TimelineNode {
     this.processParameters();
 
     this.onStart();
+    this.addCssClasses();
 
     this.pluginInstance = this.dependencies.instantiatePlugin(this.pluginClass);
 
@@ -49,7 +50,8 @@ export class Trial extends TimelineNode {
 
     this.status = TimelineNodeStatus.COMPLETED;
 
-    this.onFinish();
+    await this.onFinish();
+    this.removeCssClasses();
 
     const gap = this.getParameterValue("post_trial_gap") ?? this.dependencies.getDefaultIti();
     if (gap !== 0) {
@@ -90,6 +92,33 @@ export class Trial extends TimelineNode {
     }
 
     return result;
+  }
+
+  // TODO there were `Trial` unit tests for css classes once => restore them!
+
+  /**
+   * Add the CSS classes from the `css_classes` parameter to the display element
+   */
+  private addCssClasses() {
+    const classes: string | string[] = this.getParameterValue("css_classes");
+    const classList = this.dependencies.getDisplayElement().classList;
+    if (typeof classes === "string") {
+      classList.add(classes);
+    } else if (Array.isArray(classes)) {
+      classList.add(...classes);
+    }
+  }
+
+  /**
+   * Removes the provided css classes from the display element
+   */
+  private removeCssClasses() {
+    const classes = this.getParameterValue("css_classes");
+    if (classes) {
+      this.dependencies
+        .getDisplayElement()
+        .classList.remove(...(typeof classes === "string" ? [classes] : classes));
+    }
   }
 
   private processResult(result: TrialResult | void) {
@@ -143,15 +172,22 @@ export class Trial extends TimelineNode {
   private onStart() {
     this.dependencies.onTrialStart(this);
     this.runParameterCallback("on_start", this.trialObject);
+    this.dependencies.runOnStartExtensionCallbacks(this.getParameterValue("extensions"));
   }
 
   private onLoad = () => {
-    this.dependencies.onTrialLoaded(this);
     this.runParameterCallback("on_load");
+    this.dependencies.runOnLoadExtensionCallbacks(this.getParameterValue("extensions"));
   };
 
-  private onFinish() {
+  private async onFinish() {
+    const extensionResults = await this.dependencies.runOnFinishExtensionCallbacks(
+      this.getParameterValue("extensions")
+    );
+    Object.assign(this.result, extensionResults);
+
     this.runParameterCallback("on_finish", this.getResult());
+
     this.dependencies.onTrialFinished(this);
   }
 
