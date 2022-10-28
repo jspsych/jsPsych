@@ -19,39 +19,39 @@ describe("#getKeyboardResponse", () => {
       callback_function: callback,
     });
 
-    keyDown("a");
+    await keyDown("a");
     expect(callback).toHaveBeenCalledTimes(1);
-    keyUp("a");
+    await keyUp("a");
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  test("should execute only valid keys", () => {
+  test("should execute only valid keys", async () => {
     new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
       callback_function: callback,
       valid_responses: ["a"],
     });
 
-    pressKey("b");
+    await pressKey("b");
     expect(callback).toHaveBeenCalledTimes(0);
-    pressKey("a");
+    await pressKey("a");
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  test('should not respond when "NO_KEYS" is used', () => {
+  test('should not respond when "NO_KEYS" is used', async () => {
     new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
       callback_function: callback,
       valid_responses: "NO_KEYS",
     });
 
-    pressKey("a");
+    await pressKey("a");
     expect(callback).toHaveBeenCalledTimes(0);
-    pressKey("a");
+    await pressKey("a");
     expect(callback).toHaveBeenCalledTimes(0);
   });
 
-  test("should not respond to held keys when allow_held_key is false", () => {
+  test("should not respond to held keys when allow_held_key is false", async () => {
     const api = new KeyboardListenerAPI(getRootElement);
-    keyDown("a");
+    await keyDown("a");
 
     api.getKeyboardResponse({
       callback_function: callback,
@@ -59,16 +59,16 @@ describe("#getKeyboardResponse", () => {
       allow_held_key: false,
     });
 
-    keyDown("a");
+    await keyDown("a");
     expect(callback).toHaveBeenCalledTimes(0);
-    keyUp("a");
-    pressKey("a");
+    await keyUp("a");
+    await pressKey("a");
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
-  test("should respond to held keys when allow_held_key is true", () => {
+  test("should respond to held keys when allow_held_key is true", async () => {
     const api = new KeyboardListenerAPI(getRootElement);
-    keyDown("a");
+    await keyDown("a");
 
     api.getKeyboardResponse({
       callback_function: callback,
@@ -76,9 +76,9 @@ describe("#getKeyboardResponse", () => {
       allow_held_key: true,
     });
 
-    keyDown("a");
+    await keyDown("a");
     expect(callback).toHaveBeenCalledTimes(1);
-    keyUp("a");
+    await keyUp("a");
   });
 
   describe("when case_sensitive_responses is false", () => {
@@ -88,43 +88,43 @@ describe("#getKeyboardResponse", () => {
       api = new KeyboardListenerAPI(getRootElement);
     });
 
-    test("should convert response key to lowercase before determining validity", () => {
+    test("should convert response key to lowercase before determining validity", async () => {
       // case_sensitive_responses is false by default
       api.getKeyboardResponse({
         callback_function: callback,
         valid_responses: ["a"],
       });
 
-      pressKey("A");
+      await pressKey("A");
       expect(callback).toHaveBeenCalledTimes(1);
     });
 
-    test("should not respond to held key when response/valid key case differs and allow_held_key is false", () => {
-      keyDown("A");
+    test("should not respond to held key when response/valid key case differs and allow_held_key is false", async () => {
+      await keyDown("A");
       api.getKeyboardResponse({
         callback_function: callback,
         valid_responses: ["a"],
         allow_held_key: false,
       });
 
-      keyDown("A");
-      expect(callback).toHaveBeenCalledTimes(0);
-      keyUp("A");
-      pressKey("A");
+      await keyDown("A");
+      expect(callback).not.toHaveBeenCalled();
+      await keyUp("A");
+      await pressKey("A");
       expect(callback).toHaveBeenCalledTimes(1);
     });
 
-    test("should respond to held keys when response/valid case differs and allow_held_key is true", () => {
-      keyDown("A");
+    test("should respond to held keys when response/valid case differs and allow_held_key is true", async () => {
+      await keyDown("A");
       api.getKeyboardResponse({
         callback_function: callback,
         valid_responses: ["a"],
         allow_held_key: true,
       });
 
-      keyDown("A");
+      await keyDown("A");
       expect(callback).toHaveBeenCalledTimes(1);
-      keyUp("A");
+      await keyUp("A");
     });
   });
 
@@ -135,18 +135,18 @@ describe("#getKeyboardResponse", () => {
       api = new KeyboardListenerAPI(getRootElement, true);
     });
 
-    test("should not convert response key to lowercase before determining validity", () => {
+    test("should not convert response key to lowercase before determining validity", async () => {
       api.getKeyboardResponse({
         callback_function: callback,
         valid_responses: ["a"],
       });
 
-      pressKey("A");
+      await pressKey("A");
       expect(callback).toHaveBeenCalledTimes(0);
     });
 
-    test("should not respond to a held key when response/valid case differs and allow_held_key is true", () => {
-      keyDown("A");
+    test("should not respond to a held key when response/valid case differs and allow_held_key is true", async () => {
+      await keyDown("A");
 
       api.getKeyboardResponse({
         callback_function: callback,
@@ -154,13 +154,13 @@ describe("#getKeyboardResponse", () => {
         allow_held_key: true,
       });
 
-      keyDown("A");
+      await keyDown("A");
       expect(callback).toHaveBeenCalledTimes(0);
-      keyUp("A");
+      await keyUp("A");
     });
 
-    test("should not respond to a held key when response/valid case differs and allow_held_key is false", () => {
-      keyDown("A");
+    test("should not respond to a held key when response/valid case differs and allow_held_key is false", async () => {
+      await keyDown("A");
 
       api.getKeyboardResponse({
         callback_function: callback,
@@ -168,13 +168,13 @@ describe("#getKeyboardResponse", () => {
         allow_held_key: false,
       });
 
-      keyDown("A");
+      await keyDown("A");
       expect(callback).toHaveBeenCalledTimes(0);
-      keyUp("A");
+      await keyUp("A");
     });
   });
 
-  test("handles two listeners on the same key correctly #2104/#2105", () => {
+  test("handles two listeners on the same key correctly #2104/#2105", async () => {
     const callback_1 = jest.fn();
     const callback_2 = jest.fn();
     const api = new KeyboardListenerAPI(getRootElement);
@@ -188,19 +188,19 @@ describe("#getKeyboardResponse", () => {
       persist: false,
     });
 
-    keyDown("a");
+    await keyDown("a");
 
     expect(callback_1).toHaveBeenCalledTimes(1);
     expect(callback_2).toHaveBeenCalledTimes(1);
 
-    keyUp("a");
+    await keyUp("a");
 
-    keyDown("a");
+    await keyDown("a");
 
     expect(callback_1).toHaveBeenCalledTimes(2);
     expect(callback_2).toHaveBeenCalledTimes(1);
 
-    keyUp("a");
+    await keyUp("a");
   });
 });
 
@@ -213,7 +213,7 @@ describe("#cancelKeyboardResponse", () => {
     const listener = api.getKeyboardResponse({ callback_function: callback });
     api.cancelKeyboardResponse(listener);
 
-    pressKey("q");
+    await pressKey("q");
     expect(callback).toHaveBeenCalledTimes(1);
   });
 });
@@ -227,7 +227,7 @@ describe("#cancelAllKeyboardResponses", () => {
     api.getKeyboardResponse({ callback_function: callback });
     api.cancelAllKeyboardResponses();
 
-    pressKey("q");
+    await pressKey("q");
     expect(callback).toHaveBeenCalledTimes(0);
   });
 });
