@@ -218,7 +218,6 @@ describe("cloze", () => {
 });
 
 describe("cloze simulation", () => {
-  //TODO: bro why is this not working (wraps this in array but not the next one)
   test("data-only mode works", async () => {
     const { getData, expectFinished } = await simulateTimeline([
       {

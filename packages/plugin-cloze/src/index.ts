@@ -159,9 +159,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
       if (wordList.includes("")) {
         responses.push(this.jsPsych.randomization.randomWords({ exactly: 1 }));
       } else {
-        for (const word of wordList) {
-          responses.push(word);
-        }
+        responses.push(wordList);
       }
     }
 
@@ -179,6 +177,8 @@ class ClozePlugin implements JsPsychPlugin<Info> {
   private simulate_data_only(trial: TrialType<Info>, simulation_options) {
     const data = this.create_simulation_data(trial, simulation_options);
 
+    data.response = data.response[0];
+
     this.jsPsych.finishTrial(data);
   }
 
@@ -193,7 +193,9 @@ class ClozePlugin implements JsPsychPlugin<Info> {
     const inputs = display_element.querySelectorAll('input[type="text"]');
     let rt = this.jsPsych.randomization.sampleExGaussian(750, 200, 0.01, true);
     for (let i = 0; i < data.response.length; i++) {
-      this.jsPsych.pluginAPI.fillTextInput(inputs[i] as HTMLInputElement, data.response[i], rt);
+      let res = data.response[i][Math.floor(Math.random() * data.response[i].length)];
+
+      this.jsPsych.pluginAPI.fillTextInput(inputs[i] as HTMLInputElement, res, rt);
       rt += this.jsPsych.randomization.sampleExGaussian(750, 200, 0.01, true);
     }
     this.jsPsych.pluginAPI.clickTarget(display_element.querySelector("#finish_cloze_button"), rt);
