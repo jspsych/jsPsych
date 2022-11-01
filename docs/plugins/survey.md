@@ -44,7 +44,7 @@ Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 pages | array | *undefined* | An array of arrays. Each inner array contains the content for a single page, which is made up of one or more question objects. 
 button_label_next | string |  'Continue' | Label of the button to move forward to the next page, or finish the survey.
-button_label_previous | string | 'Back' | Label of the button to move to a previous page in the survey.
+button_label_back | string | 'Back' | Label of the button to move to a previous page in the survey.
 button_label_finish | string | 'Finish' | Label of the button to submit responses.
 autocomplete | boolean | `false` | This determines whether or not all of the input elements on the page should allow autocomplete. Setting this to `true` will enable autocomplete or auto-fill for the form.
 show_question_numbers | string | "off" | One of: "on", "onPage", "off". If "on", questions will be labelled starting with "1." on the first page, and numbering will continue across pages. If "onPage", questions will be labelled starting with "1.", with separate numbering on each page. If "off", no numbers will be added before the question prompts. Note: HTML question types are ignored in automatic numbering.
