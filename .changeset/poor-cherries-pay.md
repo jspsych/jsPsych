@@ -1,5 +1,5 @@
 ---
-"@jspsych/plugin-initialize-camera": patch
+"@jspsych/plugin-initialize-camera": minor
 ---
 
-added error handling if permission to the camera is rejected
+added custom rejection message upon camera permission denial

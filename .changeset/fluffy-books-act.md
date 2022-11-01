@@ -1,6 +1,5 @@
 ---
-"@jspsych/plugin-html-audio-response": minor
-"@jspsych/plugin-html-video-response": minor
+"@jspsych/plugin-html-video-response": patch
 ---
 
-added handling and a custom rejection message if the media device does not have access permissions
+added error handling if a camera is not detected on trial start

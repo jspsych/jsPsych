@@ -1,5 +1,5 @@
 ---
-"@jspsych/plugin-initialize-microphone": patch
+"@jspsych/plugin-initialize-microphone": minor
 ---
 
-added error handling if permission to the microphone is rejected
+added custom rejection message upon microphone permission denial
