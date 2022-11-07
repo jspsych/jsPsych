@@ -1,6 +1,6 @@
-import { JsPsychExtension } from "src/modules/extensions";
 import { Class } from "type-fest";
 
+import { JsPsychExtension } from "../modules/extensions";
 import { JsPsychPlugin, PluginInfo } from "../modules/plugins";
 import { Trial } from "./Trial";
 import { PromiseWrapper } from "./util";

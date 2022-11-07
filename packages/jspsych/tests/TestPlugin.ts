@@ -1,8 +1,8 @@
 import { flushPromises } from "@jspsych/test-utils";
 import { JsPsych, JsPsychPlugin, TrialType } from "jspsych";
-import { SimulationMode, SimulationOptions, TrialResult } from "src/timeline";
 
 import { ParameterInfos } from "../src/modules/plugins";
+import { SimulationMode, SimulationOptions, TrialResult } from "../src/timeline";
 import { PromiseWrapper } from "../src/timeline/util";
 
 export const testPluginInfo = <const>{

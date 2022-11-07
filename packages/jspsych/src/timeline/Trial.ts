@@ -1,6 +1,6 @@
-import { ParameterInfos } from "src/modules/plugins";
 import { Class } from "type-fest";
 
+import { ParameterInfos } from "../modules/plugins";
 import { JsPsychPlugin, ParameterType, PluginInfo } from "../modules/plugins";
 import { deepCopy } from "../modules/utils";
 import { Timeline } from "./Timeline";

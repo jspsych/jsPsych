@@ -1,6 +1,5 @@
-import { TrialResult } from "src/timeline";
-import { Trial } from "src/timeline/Trial";
-
+import { TrialResult } from "../../timeline";
+import { Trial } from "../../timeline/Trial";
 import { DataCollection } from "./DataCollection";
 import { getQueryString } from "./utils";
 
