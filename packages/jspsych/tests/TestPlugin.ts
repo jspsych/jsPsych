@@ -1,6 +1,6 @@
 import { flushPromises } from "@jspsych/test-utils";
 import { JsPsych, JsPsychPlugin, TrialType } from "jspsych";
-import { TrialResult } from "src/timeline";
+import { SimulationMode, SimulationOptions, TrialResult } from "src/timeline";
 
 import { ParameterInfos } from "../src/modules/plugins";
 import { PromiseWrapper } from "../src/timeline/util";
@@ -61,6 +61,9 @@ class TestPlugin implements JsPsychPlugin<typeof testPluginInfo> {
     TestPlugin.prototype.trial
       .mockReset()
       .mockImplementation(TestPlugin.prototype.defaultTrialImplementation);
+    TestPlugin.prototype.simulate
+      .mockReset()
+      .mockImplementation(TestPlugin.prototype.defaultSimulateImplementation);
     this.resetPluginInfo();
     this.setDefaultTrialResult();
     this.setImmediateFinishTrialMode();
@@ -71,6 +74,7 @@ class TestPlugin implements JsPsychPlugin<typeof testPluginInfo> {
   // For convenience, `trial` is set to a `jest.fn` below using `TestPlugin.prototype` and
   // `defaultTrialImplementation`
   trial: jest.Mock<Promise<TrialResult | void> | void>;
+  simulate: jest.Mock<Promise<TrialResult | void> | void>;
 
   defaultTrialImplementation(
     display_element: HTMLElement,
@@ -84,15 +88,17 @@ class TestPlugin implements JsPsychPlugin<typeof testPluginInfo> {
     return TestPlugin.trialPromise.get();
   }
 
-  // simulate(
-  //   trial: TrialType<typeof testPluginInfo>,
-  //   simulation_mode,
-  //   simulation_options: any,
-  //   on_load: () => void
-  // ) {
-  // }
+  defaultSimulateImplementation(
+    trial: TrialType<typeof testPluginInfo>,
+    simulation_mode: SimulationMode,
+    simulation_options: SimulationOptions,
+    on_load?: () => void
+  ): void | Promise<void | TrialResult> {
+    return this.defaultTrialImplementation(document.createElement("div"), trial, on_load);
+  }
 }
 
 TestPlugin.prototype.trial = jest.fn(TestPlugin.prototype.defaultTrialImplementation);
+TestPlugin.prototype.simulate = jest.fn(TestPlugin.prototype.defaultTrialImplementation);
 
 export default TestPlugin;

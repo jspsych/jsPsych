@@ -4,6 +4,7 @@ import set from "lodash.set";
 
 import type { Timeline } from "./Timeline";
 import {
+  TimelineArray,
   TimelineDescription,
   TimelineNodeDependencies,
   TimelineNodeStatus,
@@ -30,10 +31,17 @@ export type GetParameterValueOptions = {
    * lookups of nested properties or array elements.
    **/
   isComplexParameter?: boolean;
+
+  /**
+   * A function that will be invoked with the original result before evaluating parameter functions
+   * and timeline variables. Whatever it returns will subsequently be used instead of the original
+   * result.
+   */
+  replaceResult?: (originalResult: any) => any;
 };
 
 export abstract class TimelineNode {
-  public abstract readonly description: TimelineDescription | TrialDescription;
+  public abstract readonly description: TimelineDescription | TrialDescription | TimelineArray;
 
   /**
    * The globally unique trial index of this node. It is set when the node is run. Timeline nodes
@@ -102,7 +110,7 @@ export abstract class TimelineNode {
     parameterPath: string | string[],
     options: GetParameterValueOptions = {}
   ): any {
-    const { evaluateFunctions = true, recursive = true } = options;
+    const { evaluateFunctions = true, recursive = true, replaceResult } = options;
     let parameterObject: Record<string, any> = this.description;
 
     if (Array.isArray(parameterPath) && parameterPath.length > 1) {
@@ -119,6 +127,10 @@ export abstract class TimelineNode {
       result = get(parameterObject, parameterPath);
     } else if (recursive && this.parent) {
       result = this.parent.getParameterValue(parameterPath, options);
+    }
+
+    if (typeof replaceResult === "function") {
+      result = replaceResult(result);
     }
 
     if (typeof result === "function" && evaluateFunctions) {
@@ -140,11 +152,11 @@ export abstract class TimelineNode {
    * it's properties may be functions that have to be evaluated, and parent nodes' data parameter
    * properties are merged into the result.
    */
-  public getDataParameter() {
+  public getDataParameter(): Record<string, any> | undefined {
     const data = this.getParameterValue("data", { isComplexParameter: true });
 
     if (typeof data !== "object") {
-      return data;
+      return undefined;
     }
 
     return {

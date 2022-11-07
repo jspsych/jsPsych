@@ -4,12 +4,12 @@ import { ConditionalKeys } from "type-fest";
 
 import { TimelineNodeDependenciesMock, createInvocationOrderUtils } from "../../tests/test-utils";
 import TestPlugin from "../../tests/TestPlugin";
-import { ParameterType } from "../modules/plugins";
+import { JsPsychPlugin, ParameterType } from "../modules/plugins";
 import { Timeline } from "./Timeline";
 import { Trial } from "./Trial";
 import { parameterPathArrayToString } from "./util";
 import {
-  TimelineNodeDependencies,
+  SimulationOptionsParameter,
   TimelineVariable,
   TrialDescription,
   TrialExtensionsConfiguration,
@@ -19,13 +19,12 @@ jest.useFakeTimers();
 
 jest.mock("./Timeline");
 
-const dependencies = new TimelineNodeDependenciesMock();
-
 describe("Trial", () => {
+  let dependencies: TimelineNodeDependenciesMock;
   let timeline: Timeline;
 
   beforeEach(() => {
-    dependencies.reset();
+    dependencies = new TimelineNodeDependenciesMock();
     TestPlugin.reset();
 
     timeline = new Timeline(dependencies, { timeline: [] });
@@ -60,13 +59,12 @@ describe("Trial", () => {
     });
 
     it("properly invokes the plugin's `trial` method", async () => {
-      const trialMethodSpy = jest.spyOn(TestPlugin.prototype, "trial");
       const trial = createTrial({ type: TestPlugin });
 
       await trial.run();
 
-      expect(trialMethodSpy).toHaveBeenCalledTimes(1);
-      expect(trialMethodSpy).toHaveBeenCalledWith(
+      expect(trial.pluginInstance.trial).toHaveBeenCalledTimes(1);
+      expect(trial.pluginInstance.trial).toHaveBeenCalledWith(
         expect.any(HTMLElement),
         { type: TestPlugin },
         expect.any(Function)
@@ -581,6 +579,54 @@ describe("Trial", () => {
         "onTrialFinished",
       ]);
     });
+
+    describe("in simulation mode", () => {
+      beforeEach(() => {
+        dependencies.getSimulationMode.mockReturnValue("data-only");
+      });
+
+      it("invokes the plugin's `simulate` method instead of `trial`", async () => {
+        const trial = createTrial({ type: TestPlugin });
+        await trial.run();
+
+        expect(trial.pluginInstance.trial).not.toHaveBeenCalled();
+
+        expect(trial.pluginInstance.simulate).toHaveBeenCalledTimes(1);
+        expect(trial.pluginInstance.simulate).toHaveBeenCalledWith(
+          { type: TestPlugin },
+          "data-only",
+          {},
+          expect.any(Function)
+        );
+      });
+
+      it("invokes the plugin's `trial` method if the plugin has no `simulate` method", async () => {
+        const trial = createTrial({
+          type: class implements JsPsychPlugin<any> {
+            static info = { name: "test", parameters: {} };
+            trial = jest.fn(async () => ({}));
+          },
+        });
+        await trial.run();
+
+        expect(trial.pluginInstance.trial).toHaveBeenCalled();
+      });
+
+      it("invokes the plugin's `trial` method if `simulate` is `false` in the trial's simulation options", async () => {
+        const trial = createTrial({ type: TestPlugin, simulation_options: { simulate: false } });
+        await trial.run();
+
+        expect(trial.pluginInstance.trial).toHaveBeenCalled();
+        expect(trial.pluginInstance.simulate).not.toHaveBeenCalled();
+      });
+
+      it("respects the `mode` parameter from the trial's simulation options", async () => {
+        const trial = createTrial({ type: TestPlugin, simulation_options: { mode: "visual" } });
+        await trial.run();
+
+        expect(mocked(trial.pluginInstance.simulate).mock.calls[0][1]).toBe("visual");
+      });
+    });
   });
 
   describe("getResult[s]()", () => {
@@ -629,6 +675,103 @@ describe("Trial", () => {
         expect(trial.getParameterValue(parameter)).toBeUndefined();
         expect(timeline.getParameterValue).not.toHaveBeenCalled();
       }
+    });
+  });
+
+  describe("getSimulationOptions()", () => {
+    const createSimulationTrial = (simulationOptions?: SimulationOptionsParameter | string) =>
+      createTrial({
+        type: TestPlugin,
+        simulation_options: simulationOptions,
+      });
+
+    describe("if no trial-level simulation options are set", () => {
+      it("falls back to parent timeline simulation options", async () => {
+        mocked(timeline.getParameterValue).mockImplementation((parameterPath) =>
+          parameterPath === "simulation_options" ? { data: { rt: 1 } } : undefined
+        );
+
+        expect(createTrial({ type: TestPlugin }).getSimulationOptions()).toEqual({
+          data: { rt: 1 },
+        });
+      });
+
+      it("falls back to global default simulation options ", async () => {
+        expect(createTrial({ type: TestPlugin }).getSimulationOptions()).toEqual({});
+
+        dependencies.getGlobalSimulationOptions.mockReturnValue({ default: { data: { rt: 1 } } });
+        expect(createTrial({ type: TestPlugin }).getSimulationOptions()).toEqual({
+          data: { rt: 1 },
+        });
+      });
+    });
+
+    describe("when trial-level simulation options are a string", () => {
+      beforeEach(() => {
+        dependencies.getGlobalSimulationOptions.mockReturnValue({
+          default: { data: { rt: 1 } },
+          custom: { data: { rt: 2 } },
+        });
+      });
+
+      it("looks up the corresponding global simulation options key", async () => {
+        expect(createSimulationTrial("custom").getSimulationOptions()).toEqual({ data: { rt: 2 } });
+      });
+
+      it("falls back to the global default simulation options ", async () => {
+        expect(createSimulationTrial("nonexistent").getSimulationOptions()).toEqual({
+          data: { rt: 1 },
+        });
+      });
+    });
+
+    describe("when `simulation_options` is a function that returns a string", () => {
+      it("looks up the corresponding global simulation options key", async () => {
+        mocked(dependencies.getGlobalSimulationOptions).mockReturnValue({
+          foo: { data: { rt: 1 } },
+        });
+
+        expect(
+          createTrial({ type: TestPlugin, simulation_options: () => "foo" }).getSimulationOptions()
+        ).toEqual({
+          data: { rt: 1 },
+        });
+      });
+    });
+
+    it("evaluates (global/nested) functions and timeline variables", async () => {
+      const timelineVariables = { x: "foo", y: { data: () => ({ rt: () => 0 }) } };
+      mocked(dependencies.getGlobalSimulationOptions).mockReturnValue({
+        foo: new TimelineVariable("y"),
+      });
+      mocked(timeline.evaluateTimelineVariable).mockImplementation(
+        (variable) => timelineVariables[variable.name]
+      );
+
+      expect(createSimulationTrial(() => new TimelineVariable("x")).getSimulationOptions()).toEqual(
+        { data: { rt: 0 } }
+      );
+
+      expect(
+        createSimulationTrial(() => ({
+          data: () => ({ rt: () => 1 }),
+          simulate: () => true,
+          mode: () => "visual",
+        })).getSimulationOptions()
+      ).toEqual({ data: { rt: 1 }, simulate: true, mode: "visual" });
+
+      expect(
+        createSimulationTrial(() => ({
+          data: () => ({ rt: () => 1 }),
+          simulate: () => true,
+          mode: () => "visual",
+        })).getSimulationOptions()
+      ).toEqual({ data: { rt: 1 }, simulate: true, mode: "visual" });
+
+      mocked(timeline.evaluateTimelineVariable).mockReturnValue({ data: { rt: 2 } });
+      expect(createSimulationTrial(new TimelineVariable("x")).getSimulationOptions()).toEqual({
+        data: { rt: 2 },
+      });
     });
   });
 });

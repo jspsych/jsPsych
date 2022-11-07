@@ -1,16 +1,16 @@
 import autoBind from "auto-bind";
-import { Class } from "type-fest";
 
 import { version } from "../package.json";
 import { ExtensionManager, ExtensionManagerDependencies } from "./ExtensionManager";
 import { JsPsychData, JsPsychDataDependencies } from "./modules/data";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
-import { JsPsychPlugin, PluginInfo } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
 import { ProgressBar } from "./ProgressBar";
 import {
+  SimulationMode,
+  SimulationOptionsParameter,
   TimelineArray,
   TimelineDescription,
   TimelineNodeDependencies,
@@ -61,14 +61,14 @@ export class JsPsych {
   private file_protocol = false;
 
   /**
-   * is the experiment running in `simulate()` mode
+   * The simulation mode if the experiment is being simulated
    */
-  private simulation_mode: "data-only" | "visual" = null;
+  private simulationMode?: SimulationMode;
 
   /**
-   * simulation options passed in via `simulate()`
+   * Simulation options passed in via `simulate()`
    */
-  private simulation_options;
+  private simulationOptions: Record<string, SimulationOptionsParameter>;
 
   private extensionManager: ExtensionManager;
 
@@ -166,8 +166,8 @@ export class JsPsych {
     simulation_mode: "data-only" | "visual" = "data-only",
     simulation_options = {}
   ) {
-    this.simulation_mode = simulation_mode;
-    this.simulation_options = simulation_options;
+    this.simulationMode = simulation_mode;
+    this.simulationOptions = simulation_options;
     await this.run(timeline);
   }
 
@@ -365,9 +365,6 @@ export class JsPsych {
       }
     },
 
-    instantiatePlugin: <Info extends PluginInfo>(pluginClass: Class<JsPsychPlugin<Info>>) =>
-      new pluginClass(this),
-
     runOnStartExtensionCallbacks: (extensionsConfiguration) =>
       this.extensionManager.onStart(extensionsConfiguration),
 
@@ -376,6 +373,12 @@ export class JsPsych {
 
     runOnFinishExtensionCallbacks: (extensionsConfiguration) =>
       this.extensionManager.onFinish(extensionsConfiguration),
+
+    getSimulationMode: () => this.simulationMode,
+
+    getGlobalSimulationOptions: () => this.simulationOptions,
+
+    instantiatePlugin: (pluginClass) => new pluginClass(this),
 
     getDisplayElement: () => this.getDisplayElement(),
 

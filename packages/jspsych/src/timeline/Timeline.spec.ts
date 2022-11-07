@@ -29,16 +29,16 @@ const exampleTimeline: TimelineDescription = {
   timeline: [{ type: TestPlugin }, { type: TestPlugin }, { timeline: [{ type: TestPlugin }] }],
 };
 
-const dependencies = new TimelineNodeDependenciesMock();
-
 describe("Timeline", () => {
-  const createTimeline = (description: TimelineDescription | TimelineArray, parent?: Timeline) =>
-    new Timeline(dependencies, description, parent);
+  let dependencies: TimelineNodeDependenciesMock;
 
   beforeEach(() => {
-    dependencies.reset();
+    dependencies = new TimelineNodeDependenciesMock();
     TestPlugin.reset();
   });
+
+  const createTimeline = (description: TimelineDescription | TimelineArray, parent?: Timeline) =>
+    new Timeline(dependencies, description, parent);
 
   describe("run()", () => {
     it("instantiates proper child nodes", async () => {
@@ -565,6 +565,23 @@ describe("Timeline", () => {
       expect(timeline.getParameterValue(["object", "childObject", "childString"])).toEqual("bar");
     });
 
+    it("respects the `replaceResult` function", async () => {
+      const timeline = createTimeline({ timeline: [], timeline_variables: [{ x: "value" }] });
+
+      expect(timeline.getParameterValue("key", { replaceResult: () => "value" })).toBe("value");
+      expect(timeline.getParameterValue("key", { replaceResult: () => () => "value" })).toBe(
+        "value"
+      );
+
+      await timeline.run();
+
+      expect(
+        timeline.getParameterValue("undefinedKey", {
+          replaceResult: () => new TimelineVariable("x"),
+        })
+      ).toBe("value");
+    });
+
     describe("when `isComplexParameter` is set", () => {
       it("caches results and uses them for nested lookups", async () => {
         const timeline = createTimeline({
@@ -572,10 +589,15 @@ describe("Timeline", () => {
           object: () => ({ child: "foo" }),
         });
 
-        expect(timeline.getParameterValue("object", { isComplexParameter: true })).toEqual({
-          child: "foo",
+        expect(
+          timeline.getParameterValue("object", {
+            isComplexParameter: true,
+            replaceResult: () => ({ child: "bar" }),
+          })
+        ).toEqual({
+          child: "bar",
         });
-        expect(timeline.getParameterValue(["object", "child"])).toEqual("foo");
+        expect(timeline.getParameterValue(["object", "child"])).toEqual("bar");
       });
     });
 

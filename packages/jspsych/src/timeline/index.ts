@@ -16,22 +16,36 @@ export type TrialExtensionsConfiguration = Array<{
   params?: Record<string, any>;
 }>;
 
+export type SimulationMode = "visual" | "data-only";
+
+export type SimulationOptions = {
+  data?: Record<string, any>;
+  mode?: SimulationMode;
+  simulate?: boolean;
+};
+
+export type SimulationOptionsParameter = Parameter<{
+  data?: Parameter<Record<string, Parameter<any>>>;
+  mode?: Parameter<SimulationMode>;
+  simulate?: Parameter<boolean>;
+}>;
+
 export interface TrialDescription extends Record<string, any> {
   type: Parameter<Class<JsPsychPlugin<any>>>;
 
   /** https://www.jspsych.org/latest/overview/plugins/#the-post_trial_gap-iti-parameter */
   post_trial_gap?: Parameter<number>;
 
-  /** https://www.jspsych.org/7.3/overview/plugins/#the-save_trial_parameters-parameter */
+  /** https://www.jspsych.org/latest/overview/plugins/#the-save_trial_parameters-parameter */
   save_trial_parameters?: Parameter<Record<string, boolean>>;
 
   /** https://www.jspsych.org/latest/overview/style/#using-the-css_classes-trial-parameter */
   css_classes?: Parameter<string | string[]>;
 
   /** https://www.jspsych.org/latest/overview/simulation/#controlling-simulation-mode-with-simulation_options */
-  simulation_options?: Parameter<any>;
+  simulation_options?: SimulationOptionsParameter | string;
 
-  /** https://www.jspsych.org/7.3/overview/extensions/ */
+  /** https://www.jspsych.org/latest/overview/extensions/ */
   extensions?: Parameter<TrialExtensionsConfiguration>;
 
   // Events
@@ -158,6 +172,17 @@ export interface TimelineNodeDependencies {
   runOnFinishExtensionCallbacks(
     extensionsConfiguration: TrialExtensionsConfiguration
   ): Promise<Record<string, any>>;
+
+  /**
+   * Returns the simulation mode or `undefined`, if the experiment is not running in simulation
+   * mode.
+   */
+  getSimulationMode(): SimulationMode | undefined;
+
+  /**
+   * Returns the global simulation options as passed to `jsPsych.simulate()`
+   */
+  getGlobalSimulationOptions(): Record<string, SimulationOptionsParameter>;
 
   /**
    * Given a plugin class, create a new instance of it and return it.

@@ -1,12 +1,13 @@
 import { ParameterInfos } from "src/modules/plugins";
 import { Class } from "type-fest";
 
-import { JsPsychPlugin, ParameterType, PluginInfo } from "../";
+import { JsPsychPlugin, ParameterType, PluginInfo } from "../modules/plugins";
 import { deepCopy } from "../modules/utils";
 import { Timeline } from "./Timeline";
 import { GetParameterValueOptions, TimelineNode } from "./TimelineNode";
 import { delay, isPromise, parameterPathArrayToString } from "./util";
 import {
+  SimulationOptions,
   TimelineNodeDependencies,
   TimelineNodeStatus,
   TimelineVariable,
@@ -18,7 +19,7 @@ import {
 export class Trial extends TimelineNode {
   public readonly pluginClass: Class<JsPsychPlugin<any>>;
   public pluginInstance: JsPsychPlugin<any>;
-  public readonly trialObject: TrialDescription;
+  public trialObject?: TrialDescription;
   public index?: number;
 
   private result: TrialResult;
@@ -30,6 +31,7 @@ export class Trial extends TimelineNode {
     public readonly parent: Timeline
   ) {
     super(dependencies);
+
     this.trialObject = deepCopy(description);
     this.pluginClass = this.getParameterValue("type", { evaluateFunctions: false });
     this.pluginInfo = this.pluginClass["info"];
@@ -70,11 +72,7 @@ export class Trial extends TimelineNode {
       hasTrialPromiseBeenResolved = true;
     });
 
-    const trialReturnValue = this.pluginInstance.trial(
-      this.dependencies.getDisplayElement(),
-      this.trialObject,
-      this.onLoad
-    );
+    const trialReturnValue = this.invokeTrialMethod();
 
     // Wait until the trial has completed and grab result data
     let result: TrialResult | void;
@@ -92,6 +90,29 @@ export class Trial extends TimelineNode {
     }
 
     return result;
+  }
+
+  private invokeTrialMethod(): void | Promise<void | TrialResult> {
+    const globalSimulationMode = this.dependencies.getSimulationMode();
+
+    if (globalSimulationMode && typeof this.pluginInstance.simulate === "function") {
+      const simulationOptions = this.getSimulationOptions();
+
+      if (simulationOptions.simulate !== false) {
+        return this.pluginInstance.simulate(
+          this.trialObject,
+          simulationOptions.mode ?? globalSimulationMode,
+          simulationOptions,
+          this.onLoad
+        );
+      }
+    }
+
+    return this.pluginInstance.trial(
+      this.dependencies.getDisplayElement(),
+      this.trialObject,
+      this.onLoad
+    );
   }
 
   // TODO there were `Trial` unit tests for css classes once => restore them!
@@ -213,6 +234,61 @@ export class Trial extends TimelineNode {
   }
 
   /**
+   * Retrieves and evaluates the `simulation_options` parameter, considering nested properties and
+   * global simulation options.
+   */
+  public getSimulationOptions() {
+    const simulationOptions: SimulationOptions = deepCopy(
+      this.getParameterValue("simulation_options", {
+        isComplexParameter: true,
+        replaceResult: (result) => {
+          if (typeof result === "undefined") {
+            return deepCopy(this.dependencies.getGlobalSimulationOptions().default);
+          }
+
+          // Evaluate parameter functions and timeline variables beforehand since they might return
+          // a string that we can use in the next step
+          if (typeof result === "function") {
+            result = result();
+          }
+          if (result instanceof TimelineVariable) {
+            result = this.evaluateTimelineVariable(result);
+          }
+
+          if (typeof result === "string") {
+            // Look up the global simulation options by their key
+            const globalSimulationOptions = this.dependencies.getGlobalSimulationOptions();
+            return globalSimulationOptions[result] ?? globalSimulationOptions["default"];
+          }
+
+          return result;
+        },
+      })
+    );
+
+    if (typeof simulationOptions === "undefined") {
+      return {};
+    }
+
+    simulationOptions.mode = this.getParameterValue(["simulation_options", "mode"]);
+    simulationOptions.simulate = this.getParameterValue(["simulation_options", "simulate"]);
+    simulationOptions.data = this.getParameterValue(["simulation_options", "data"], {
+      isComplexParameter: true,
+    });
+
+    if (typeof simulationOptions.data === "object") {
+      simulationOptions.data = Object.fromEntries(
+        Object.keys(simulationOptions.data).map((key) => [
+          key,
+          this.getParameterValue(["simulation_options", "data", key]),
+        ])
+      );
+    }
+
+    return simulationOptions;
+  }
+
+  /**
    * Returns the result object of this trial or `undefined` if the result is not yet known.
    */
   public getResult() {
@@ -283,7 +359,9 @@ export class Trial extends TimelineNode {
       }
     };
 
-    assignParameterValues(this.trialObject, this.pluginInfo.parameters);
+    const trialObject = deepCopy(this.description);
+    assignParameterValues(trialObject, this.pluginInfo.parameters);
+    this.trialObject = trialObject;
   }
 
   public getLatestNode() {

@@ -1,6 +1,6 @@
 import { SetRequired } from "type-fest";
 
-import { TrialDescription, TrialResult } from "../timeline";
+import { SimulationMode, SimulationOptions, TrialDescription, TrialResult } from "../timeline";
 
 /**
  * Parameter types for plugins
@@ -145,6 +145,13 @@ export interface JsPsychPlugin<I extends PluginInfo> {
   trial(
     display_element: HTMLElement,
     trial: TrialType<I>,
+    on_load?: () => void
+  ): void | Promise<TrialResult | void>;
+
+  simulate?(
+    trial: TrialType<I>,
+    simulation_mode: SimulationMode,
+    simulation_options: SimulationOptions,
     on_load?: () => void
   ): void | Promise<TrialResult | void>;
 }
