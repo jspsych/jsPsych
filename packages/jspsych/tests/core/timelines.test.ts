@@ -378,8 +378,7 @@ describe("conditional function", () => {
   });
 });
 
-// TODO Do we need `endCurrentTimeline`?
-describe.skip("endCurrentTimeline", () => {
+describe("endCurrentTimeline", () => {
   test("stops the current timeline, skipping to the end after the trial completes", async () => {
     const jsPsych = initJsPsych();
     const { getHTML } = await startTimeline(
@@ -390,7 +389,7 @@ describe.skip("endCurrentTimeline", () => {
               type: htmlKeyboardResponse,
               stimulus: "foo",
               on_finish: () => {
-                jsPsych.endCurrentTimeline();
+                jsPsych.abortCurrentTimeline();
               },
             },
             {
@@ -425,7 +424,7 @@ describe.skip("endCurrentTimeline", () => {
                   type: htmlKeyboardResponse,
                   stimulus: "foo",
                   on_finish: () => {
-                    jsPsych.endCurrentTimeline();
+                    jsPsych.abortCurrentTimeline();
                   },
                 },
                 {
@@ -485,29 +484,3 @@ describe("nested timelines", () => {
     await pressKey("a");
   });
 });
-
-// TODO Should we have such a function?
-// describe("add node to end of timeline", () => {
-//   test("adds node to end of timeline", async () => {
-//     const jsPsych = initJsPsych();
-//     const { getHTML } = await startTimeline(
-//       [
-//         {
-//           type: htmlKeyboardResponse,
-//           stimulus: "foo",
-//           on_start: () => {
-//             jsPsych.addNodeToEndOfTimeline({
-//               timeline: [{ type: htmlKeyboardResponse, stimulus: "bar" }],
-//             });
-//           },
-//         },
-//       ],
-//       jsPsych
-//     );
-
-//     expect(getHTML()).toMatch("foo");
-//     await pressKey("a");
-//     expect(getHTML()).toMatch("bar");
-//     await pressKey("a");
-//   });
-// });

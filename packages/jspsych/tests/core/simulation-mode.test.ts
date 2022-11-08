@@ -1,7 +1,7 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import { clickTarget, pressKey, simulateTimeline } from "@jspsych/test-utils";
 
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType, initJsPsych } from "../../src";
+import { JsPsych, ParameterType, initJsPsych } from "../../src";
 
 jest.useFakeTimers();
 
@@ -306,7 +306,7 @@ describe("data simulation mode", () => {
     expect(getData().values()[2].rt).toBe(200);
   });
 
-  test("endExperiment() works in simulation mode", async () => {
+  test("abortExperiment() works in simulation mode", async () => {
     const jsPsych = initJsPsych();
 
     const timeline = [
@@ -314,7 +314,7 @@ describe("data simulation mode", () => {
         type: htmlKeyboardResponse,
         stimulus: "foo",
         on_finish: () => {
-          jsPsych.endExperiment("done");
+          jsPsych.abortExperiment("done");
         },
       },
       {

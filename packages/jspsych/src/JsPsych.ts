@@ -176,7 +176,7 @@ export class JsPsych {
   getProgress() {
     return {
       total_trials: this.timeline?.getNaiveTrialCount(),
-      current_trial_global: 0, // TODO This used to be `this.global_trial_index` – is a global trial index still needed / does it make sense and, if so, how should it be maintained?
+      current_trial_global: this.timeline?.getLatestNode().index ?? 0,
       percent_complete: this.timeline?.getNaiveProgress() * 100,
     };
   }
@@ -200,8 +200,7 @@ export class JsPsych {
     return this.domContainer;
   }
 
-  // TODO Should this be called `abortExperiment()`?
-  endExperiment(endMessage?: string, data = {}) {
+  abortExperiment(endMessage?: string, data = {}) {
     this.endMessage = endMessage;
     this.timeline.abort();
     this.pluginAPI.cancelAllKeyboardResponses();
@@ -209,9 +208,14 @@ export class JsPsych {
     this.finishTrial(data);
   }
 
-  // TODO Is there a legit use case for this "global" function that cannot be achieved with callback functions in trial/timeline descriptions?
-  endCurrentTimeline() {
-    // this.timeline.endActiveNode();
+  abortCurrentTimeline() {
+    let currentTimeline = this.timeline?.getLatestNode();
+    if (currentTimeline instanceof Trial) {
+      currentTimeline = currentTimeline.parent;
+    }
+    if (currentTimeline instanceof Timeline) {
+      currentTimeline.abort();
+    }
   }
 
   getCurrentTrial() {
@@ -254,7 +258,7 @@ export class JsPsych {
   }
 
   getTimeline() {
-    return this.timeline?.description;
+    return this.timeline?.description.timeline;
   }
 
   get extensions() {

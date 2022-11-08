@@ -373,7 +373,7 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
 
     const trial_data = { ...Object.fromEntries(feature_data) };
 
-    this.jsPsych.endExperiment(this.t.exclusion_message(trial_data), trial_data);
+    this.jsPsych.abortExperiment(this.t.exclusion_message(trial_data), trial_data);
   }
 
   simulate(
@@ -429,7 +429,7 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
       if (trial.inclusion_function(data)) {
         this.jsPsych.finishTrial(data);
       } else {
-        this.jsPsych.endExperiment(trial.exclusion_message(data), data);
+        this.jsPsych.abortExperiment(trial.exclusion_message(data), data);
       }
     });
   }

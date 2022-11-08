@@ -10,3 +10,4 @@ A growing list of implemented 8.0 changes so we don't loose track
 - Drop `jsPsych.data.getDataByTimelineNode()` since nodes have no IDs anymore
 - Trial results do no longer have the `internal_node_id` property
 - `save_trial_parameters` can only be used to remove parameters that are specified in the plugin info
+- `endExperiment()` and `endCurrentTimeline()` => `abortExperiment()` and `abortCurrentTimeline()`
