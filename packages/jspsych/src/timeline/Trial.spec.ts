@@ -144,6 +144,24 @@ describe("Trial", () => {
       });
     });
 
+    it("respects the `css_classes` trial parameter", async () => {
+      const displayElement = dependencies.getDisplayElement();
+
+      let trial = createTrial({ type: TestPlugin, css_classes: "class1" });
+      expect(displayElement.classList.value).toEqual("");
+      trial.run();
+      expect(displayElement.classList.value).toEqual("class1");
+      await TestPlugin.finishTrial();
+      expect(displayElement.classList.value).toEqual("");
+
+      trial = createTrial({ type: TestPlugin, css_classes: ["class1", "class2"] });
+      expect(displayElement.classList.value).toEqual("");
+      trial.run();
+      expect(displayElement.classList.value).toEqual("class1 class2");
+      await TestPlugin.finishTrial();
+      expect(displayElement.classList.value).toEqual("");
+    });
+
     it("invokes the local `on_finish` callback with the result data", async () => {
       const onFinishCallback = jest.fn();
       const trial = createTrial({ type: TestPlugin, on_finish: onFinishCallback });

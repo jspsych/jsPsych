@@ -115,8 +115,6 @@ export class Trial extends TimelineNode {
     );
   }
 
-  // TODO there were `Trial` unit tests for css classes once => restore them!
-
   /**
    * Add the CSS classes from the `css_classes` parameter to the display element
    */
