@@ -162,8 +162,10 @@ export class Timeline extends TimelineNode {
 
   private currentTimelineVariables: Record<string, any>;
   private setCurrentTimelineVariablesByIndex(index: number | null) {
-    this.currentTimelineVariables =
-      index === null ? {} : this.description.timeline_variables[index];
+    this.currentTimelineVariables = {
+      ...this.parent?.getAllTimelineVariables(),
+      ...(index === null ? undefined : this.description.timeline_variables[index]),
+    };
   }
 
   /**
@@ -220,12 +222,16 @@ export class Timeline extends TimelineNode {
     return order;
   }
 
+  /**
+   * Returns the current values of all timeline variables, including those from parent timelines
+   */
+  public getAllTimelineVariables() {
+    return this.currentTimelineVariables;
+  }
+
   public evaluateTimelineVariable(variable: TimelineVariable) {
     if (this.currentTimelineVariables?.hasOwnProperty(variable.name)) {
       return this.currentTimelineVariables[variable.name];
-    }
-    if (this.parent) {
-      return this.parent.evaluateTimelineVariable(variable);
     }
     throw new Error(`Timeline variable ${variable.name} not found.`);
   }

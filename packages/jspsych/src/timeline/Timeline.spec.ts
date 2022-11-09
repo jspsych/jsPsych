@@ -418,6 +418,24 @@ describe("Timeline", () => {
     });
   });
 
+  describe("getAllTimelineVariables()", () => {
+    it("returns the current values of all timeline variables, including those from parent timelines", async () => {
+      const timeline = createTimeline({
+        timeline: [{ timeline: [{ type: TestPlugin }], timeline_variables: [{ y: 1, z: 1 }] }],
+        timeline_variables: [{ x: 0, y: 0 }],
+      });
+
+      await timeline.run();
+
+      expect(timeline.getAllTimelineVariables()).toEqual({ x: 0, y: 0 });
+      expect((timeline.children[0] as Timeline).getAllTimelineVariables()).toEqual({
+        x: 0,
+        y: 1,
+        z: 1,
+      });
+    });
+  });
+
   describe("evaluateTimelineVariable()", () => {
     describe("if a local timeline variable exists", () => {
       it("returns the local timeline variable", async () => {
@@ -432,7 +450,7 @@ describe("Timeline", () => {
     });
 
     describe("if a timeline variable is not defined locally", () => {
-      it("recursively falls back to parent timeline variables", async () => {
+      it("falls back to parent timeline variables", async () => {
         const timeline = createTimeline({
           timeline: [{ timeline: [{ type: TestPlugin }], timeline_variables: [{ x: undefined }] }],
           timeline_variables: [{ x: 0, y: 0 }],

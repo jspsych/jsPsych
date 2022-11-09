@@ -39,6 +39,13 @@ export interface TrialDescription extends Record<string, any> {
   /** https://www.jspsych.org/latest/overview/plugins/#the-save_trial_parameters-parameter */
   save_trial_parameters?: Parameter<Record<string, boolean>>;
 
+  /**
+   * Whether to include the values of timeline variables under a `timeline_variables` key. Can be
+   * `true` to save the values of all timeline variables, or an array of timeline variable names to
+   * only save specific timeline variables. Defaults to `false`.
+   */
+  save_timeline_variables?: Parameter<boolean | string[]>;
+
   /** https://www.jspsych.org/latest/overview/style/#using-the-css_classes-trial-parameter */
   css_classes?: Parameter<string | string[]>;
 

@@ -149,14 +149,12 @@ export class Trial extends TimelineNode {
       this.getParameterValue("save_trial_parameters") ?? {}
     )) {
       if (this.pluginInfo.parameters[parameterName]) {
-        // @ts-ignore TODO Somehow, hasOwn is not known in tests (?)
         if (shouldParameterBeIncluded && !Object.hasOwn(result, parameterName)) {
           let parameterValue = this.trialObject[parameterName];
           if (typeof parameterValue === "function") {
             parameterValue = parameterValue.toString();
           }
           result[parameterName] = parameterValue;
-          // @ts-ignore TODO Somehow, hasOwn is not known in tests (?)
         } else if (!shouldParameterBeIncluded && Object.hasOwn(result, parameterName)) {
           delete result[parameterName];
         }
@@ -167,12 +165,26 @@ export class Trial extends TimelineNode {
       }
     }
 
-    return {
+    result = {
       ...this.getDataParameter(),
       ...result,
       trial_type: this.pluginInfo.name,
       trial_index: this.index,
     };
+
+    // Add timeline variables to the result according to the `save_timeline_variables` parameter
+    const saveTimelineVariables = this.getParameterValue("save_timeline_variables");
+    if (saveTimelineVariables === true) {
+      result.timeline_variables = { ...this.parent.getAllTimelineVariables() };
+    } else if (Array.isArray(saveTimelineVariables)) {
+      result.timeline_variables = Object.fromEntries(
+        Object.entries(this.parent.getAllTimelineVariables()).filter(([key, _]) =>
+          saveTimelineVariables.includes(key)
+        )
+      );
+    }
+
+    return result;
   }
 
   /**

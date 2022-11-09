@@ -265,6 +265,22 @@ describe("Trial", () => {
       consoleSpy.mockRestore();
     });
 
+    it("respects the `save_timeline_variables` parameter", async () => {
+      jest.mocked(timeline.getAllTimelineVariables).mockReturnValue({ a: 1, b: 2, c: 3 });
+
+      let trial = createTrial({ type: TestPlugin });
+      await trial.run();
+      expect(trial.getResult().timeline_variables).toBeUndefined();
+
+      trial = createTrial({ type: TestPlugin, save_timeline_variables: true });
+      await trial.run();
+      expect(trial.getResult().timeline_variables).toEqual({ a: 1, b: 2, c: 3 });
+
+      trial = createTrial({ type: TestPlugin, save_timeline_variables: ["a", "d"] });
+      await trial.run();
+      expect(trial.getResult().timeline_variables).toEqual({ a: 1 });
+    });
+
     describe("with a plugin parameter specification", () => {
       const functionDefaultValue = () => {};
       beforeEach(() => {
