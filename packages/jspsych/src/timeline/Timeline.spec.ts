@@ -270,54 +270,27 @@ describe("Timeline", () => {
       expect(timeline.children.length).toEqual(3);
     });
 
-    describe("`on_timeline_start` and `on_timeline_finished` callbacks are invoked", () => {
+    it("invokes `on_timeline_start` and `on_timeline_finished` callbacks at the beginning and at the end of the timeline, respectively", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
       const onTimelineStart = jest.fn();
       const onTimelineFinish = jest.fn();
 
-      beforeEach(() => {
-        TestPlugin.setManualFinishTrialMode();
+      const timeline = createTimeline({
+        timeline: [{ type: TestPlugin }],
+        on_timeline_start: onTimelineStart,
+        on_timeline_finish: onTimelineFinish,
+        repetitions: 2,
       });
+      timeline.run();
+      expect(onTimelineStart).toHaveBeenCalledTimes(1);
+      expect(onTimelineFinish).toHaveBeenCalledTimes(0);
 
-      afterEach(() => {
-        onTimelineStart.mockReset();
-        onTimelineFinish.mockReset();
-      });
+      await TestPlugin.finishTrial();
+      await TestPlugin.finishTrial();
 
-      test("at the beginning and at the end of a timeline, respectively", async () => {
-        const timeline = createTimeline({
-          timeline: [{ type: TestPlugin }],
-          on_timeline_start: onTimelineStart,
-          on_timeline_finish: onTimelineFinish,
-        });
-        timeline.run();
-        expect(onTimelineStart).toHaveBeenCalledTimes(1);
-        expect(onTimelineFinish).toHaveBeenCalledTimes(0);
-
-        await TestPlugin.finishTrial();
-        expect(onTimelineStart).toHaveBeenCalledTimes(1);
-        expect(onTimelineFinish).toHaveBeenCalledTimes(1);
-      });
-
-      test("in every repetition", async () => {
-        const timeline = createTimeline({
-          timeline: [{ type: TestPlugin }],
-          on_timeline_start: onTimelineStart,
-          on_timeline_finish: onTimelineFinish,
-          repetitions: 2,
-        });
-
-        timeline.run();
-        expect(onTimelineStart).toHaveBeenCalledTimes(1);
-        expect(onTimelineFinish).toHaveBeenCalledTimes(0);
-
-        await TestPlugin.finishTrial();
-        expect(onTimelineFinish).toHaveBeenCalledTimes(1);
-        expect(onTimelineStart).toHaveBeenCalledTimes(2);
-
-        await TestPlugin.finishTrial();
-        expect(onTimelineStart).toHaveBeenCalledTimes(2);
-        expect(onTimelineFinish).toHaveBeenCalledTimes(2);
-      });
+      expect(onTimelineStart).toHaveBeenCalledTimes(1);
+      expect(onTimelineFinish).toHaveBeenCalledTimes(1);
     });
 
     describe("with timeline variables", () => {

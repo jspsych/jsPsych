@@ -57,10 +57,11 @@ export class Timeline extends TimelineNode {
     let currentLoopIterationResults: TrialResult[];
 
     if (!conditional_function || conditional_function()) {
+      this.onStart();
+
       for (let repetition = 0; repetition < repetitions; repetition++) {
         do {
           currentLoopIterationResults = [];
-          this.onStart();
 
           // Generate a new timeline variable order in each iteration except for the first one where
           // it has been done before
@@ -94,10 +95,10 @@ export class Timeline extends TimelineNode {
               currentLoopIterationResults.push(...this.currentChild.getResults());
             }
           }
-
-          this.onFinish();
         } while (loop_function && loop_function(new DataCollection(currentLoopIterationResults)));
       }
+
+      this.onFinish();
     }
 
     this.status = TimelineNodeStatus.COMPLETED;
