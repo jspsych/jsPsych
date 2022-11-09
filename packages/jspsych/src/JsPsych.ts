@@ -159,6 +159,8 @@ export class JsPsych {
     if (this.endMessage) {
       this.getDisplayElement().innerHTML = this.endMessage;
     }
+
+    this.data.removeInteractionListeners();
   }
 
   async simulate(

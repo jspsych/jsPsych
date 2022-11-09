@@ -85,15 +85,6 @@ export class JsPsychData {
     return new DataCollection(
       lastResult ? this.resultToTrialMap.get(lastResult).parent.getResults() : []
     );
-
-    // const node_id = lasttrial.select("internal_node_id").values[0];
-    // if (typeof node_id === "undefined") {
-    //   return new DataCollection();
-    // } else {
-    //   const parent_node_id = node_id.substr(0, node_id.lastIndexOf("-"));
-    //   const lastnodedata = this.getDataByTimelineNode(parent_node_id);
-    //   return lastnodedata;
-    // }
   }
 
   displayData(format = "json") {
@@ -127,19 +118,14 @@ export class JsPsychData {
     this.dependencies.onInteractionRecordAdded(record);
   }
 
-  createInteractionListeners() {
-    // blur event capture
-    window.addEventListener("blur", () => {
+  private interactionListeners = {
+    blur: () => {
       this.addInteractionRecord("blur");
-    });
-
-    // focus event capture
-    window.addEventListener("focus", () => {
+    },
+    focus: () => {
       this.addInteractionRecord("focus");
-    });
-
-    // fullscreen change capture
-    const onFullscreenChange = () => {
+    },
+    fullscreenchange: () => {
       this.addInteractionRecord(
         // @ts-expect-error
         document.isFullScreen ||
@@ -151,9 +137,27 @@ export class JsPsychData {
           ? "fullscreenenter"
           : "fullscreenexit"
       );
-    };
-    document.addEventListener("fullscreenchange", onFullscreenChange);
-    document.addEventListener("mozfullscreenchange", onFullscreenChange);
-    document.addEventListener("webkitfullscreenchange", onFullscreenChange);
+    },
+  };
+
+  createInteractionListeners() {
+    window.addEventListener("blur", this.interactionListeners.blur);
+    window.addEventListener("focus", this.interactionListeners.focus);
+
+    document.addEventListener("fullscreenchange", this.interactionListeners.fullscreenchange);
+    document.addEventListener("mozfullscreenchange", this.interactionListeners.fullscreenchange);
+    document.addEventListener("webkitfullscreenchange", this.interactionListeners.fullscreenchange);
+  }
+
+  removeInteractionListeners() {
+    window.removeEventListener("blur", this.interactionListeners.blur);
+    window.removeEventListener("focus", this.interactionListeners.focus);
+
+    document.removeEventListener("fullscreenchange", this.interactionListeners.fullscreenchange);
+    document.removeEventListener("mozfullscreenchange", this.interactionListeners.fullscreenchange);
+    document.removeEventListener(
+      "webkitfullscreenchange",
+      this.interactionListeners.fullscreenchange
+    );
   }
 }

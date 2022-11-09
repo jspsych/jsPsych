@@ -1,6 +1,6 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import htmlSliderResponse from "@jspsych/plugin-html-slider-response";
-import { pressKey, startTimeline } from "@jspsych/test-utils";
+import { flushPromises, pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { initJsPsych } from "../../src";
 
@@ -152,8 +152,7 @@ describe("on_data_update", () => {
     expect(key).toBe("a");
   });
 
-  // TODO figure out why this isn't working
-  test.skip("should contain data with null values", async () => {
+  test("should contain data with null values", async () => {
     const onDataUpdateFn = jest.fn();
 
     const jsPsych = initJsPsych({
@@ -175,7 +174,10 @@ describe("on_data_update", () => {
       jsPsych
     );
 
-    jest.advanceTimersByTime(20);
+    jest.advanceTimersByTime(10);
+    await flushPromises();
+    jest.advanceTimersByTime(10);
+    await flushPromises();
 
     expect(onDataUpdateFn).toHaveBeenNthCalledWith(1, expect.objectContaining({ response: null }));
     expect(onDataUpdateFn).toHaveBeenNthCalledWith(

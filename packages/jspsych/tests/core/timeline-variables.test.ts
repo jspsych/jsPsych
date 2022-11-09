@@ -1,5 +1,4 @@
 import callFunction from "@jspsych/plugin-call-function";
-import htmlButtonResponse from "@jspsych/plugin-html-button-response";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import { pressKey, startTimeline } from "@jspsych/test-utils";
 
@@ -90,8 +89,7 @@ describe("sampling", () => {
 });
 
 describe("timeline variables are correctly evaluated", () => {
-  // Something's wrong with the parameters of `htmlButtonResponse`
-  test.skip("when used as trial type parameter", async () => {
+  test("when used as trial type parameter", async () => {
     const jsPsych = initJsPsych();
 
     const { getHTML } = await startTimeline(
@@ -101,18 +99,16 @@ describe("timeline variables are correctly evaluated", () => {
             {
               type: jsPsych.timelineVariable("type"),
               stimulus: "hello",
-              choices: ["a", "b"],
             },
           ],
-          timeline_variables: [{ type: htmlKeyboardResponse }, { type: htmlButtonResponse }],
+          timeline_variables: [{ type: htmlKeyboardResponse }],
         },
       ],
       jsPsych
     );
 
-    expect(getHTML()).not.toMatch("button");
+    expect(getHTML()).toMatch("hello");
     await pressKey("a");
-    expect(getHTML()).toMatch("button");
   });
 
   test("when used with a plugin that has a FUNCTION parameter type", async () => {

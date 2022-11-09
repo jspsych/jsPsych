@@ -228,47 +228,6 @@ describe("conditional function", () => {
     await pressKey("a");
   });
 
-  // TODO What's the purpose of this? Is it documented anywhere?
-  test.skip("executes on every loop of the timeline", async () => {
-    let count = 0;
-    let conditional_count = 0;
-
-    await startTimeline([
-      {
-        timeline: [
-          {
-            type: htmlKeyboardResponse,
-            stimulus: "foo",
-          },
-        ],
-        loop_function: () => {
-          if (count < 1) {
-            count++;
-            return true;
-          } else {
-            return false;
-          }
-        },
-        conditional_function: () => {
-          conditional_count++;
-          return true;
-        },
-      },
-    ]);
-
-    expect(conditional_count).toBe(1);
-
-    // first trial
-    await pressKey("a");
-
-    expect(conditional_count).toBe(2);
-
-    // second trial
-    await pressKey("a");
-
-    expect(conditional_count).toBe(2);
-  });
-
   test("executes only once even when repetitions is > 1", async () => {
     let conditional_count = 0;
 
