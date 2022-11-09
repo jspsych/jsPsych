@@ -123,7 +123,9 @@ import browserCheck from '@jspsych/plugin-browser-check';
           inclusion_function: (data) => {
             return ['chrome', 'firefox'].includes(data.browser);
           },
-          exclusion_message: `<p>You must use Chrome or Firefox to complete this experiment.</p>`
+          exclusion_message: (data) => {
+            return `<p>You must use Chrome or Firefox to complete this experiment.</p>`
+          },
         };
         ``` 
 

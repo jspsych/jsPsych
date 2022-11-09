@@ -147,6 +147,29 @@ describe("shuffleNoRepeats", function () {
     }
     expect(repeats).toBe(0);
   });
+
+  test("should generate a random order with no repeats using objects", function () {
+    var equalityTest = (a, b) => a.color === b.color || a.word === b.word;
+    var toShuffle = [
+      { color: "red", word: "red" },
+      { color: "red", word: "blue" },
+      { color: "blue", word: "blue" },
+      { color: "blue", word: "red" },
+      { color: "green", word: "green" },
+      { color: "green", word: "yellow" },
+      { color: "yellow", word: "yellow" },
+      { color: "yellow", word: "green" },
+    ];
+    var repeated = repeat(toShuffle, 20);
+    var randomOrder = shuffleNoRepeats(repeated, equalityTest);
+    var repeats = 0;
+    for (var i = 1; i < randomOrder.length; i++) {
+      if (equalityTest(randomOrder[i], randomOrder[i - 1])) {
+        repeats++;
+      }
+    }
+    expect(repeats).toBe(0);
+  });
 });
 
 describe("randomInt", () => {
