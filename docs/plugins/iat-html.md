@@ -1,4 +1,6 @@
-# iat-html plugin
+# iat-html
+
+Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-iat-html/CHANGELOG.md).
 
 This plugin runs a single trial of the [implicit association test (IAT)](https://implicit.harvard.edu/implicit/iatdetails.html), using HTML content as the stimulus.
 
@@ -18,9 +20,9 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | left_category_label     | string           | ['left']                                 | An array that contains the words/labels associated with a certain stimulus. The labels are aligned to the left side of the page. |
 | right_category_label    | string           | ['right']                                | An array that contains the words/labels associated with a certain stimulus. The labels are aligned to the right side of the page. |
 | stim_key_association    | string           | *undefined*                              | Either 'left' or 'right'. This indicates whether the stimulus is associated with the key press and category on the left or right side of the page (`left_category_key` or `right_category_key`). |
-| key_to_move_forward     | array of strings | "ALL_KEYS"                         | This array contains the characters the subject is allowed to press to move on to the next trial if their key press was incorrect and feedback was displayed. Can also have 'other key' as an option which will only allow the user to select the right key to move forward. |
-| trial_duration          | numeric          | null                                     | How long to wait for the subject to make a response before ending the trial in milliseconds. If the subject fails to make a response before this timer is reached, the subject's response will be recorded as `null` for the trial and the trial will end. If the value of this parameter is `null`, then the trial will wait for a response indefinitely. |
-| response_ends_trial     | boolean          | true                                     | If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can use this parameter to force the subject to view a stimulus for a fixed amount of time, even if they respond before the time is complete. |
+| key_to_move_forward     | array of strings | "ALL_KEYS"                         | This array contains the characters the participant is allowed to press to move on to the next trial if their key press was incorrect and feedback was displayed. Can also have 'other key' as an option which will only allow the user to select the right key to move forward. |
+| trial_duration          | numeric          | null                                     | How long to wait for the participant to make a response before ending the trial in milliseconds. If the participant fails to make a response before this timer is reached, the participant's response will be recorded as `null` for the trial and the trial will end. If the value of this parameter is `null`, then the trial will wait for a response indefinitely. |
+| response_ends_trial     | boolean          | true                                     | If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can use this parameter to force the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete. |
 
 ## Data Generated
 
@@ -28,10 +30,33 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
 | Name      | Type    | Value                                    |
 | --------- | ------- | ---------------------------------------- |
-| stimulus  | string  | Either the path to the image file or the string containing the HTML-formatted content that the subject saw on this trial. |
-| response  | string  | Indicates which key the subject pressed. |
-| rt        | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response. |
+| stimulus  | string  | Either the path to the image file or the string containing the HTML-formatted content that the participant saw on this trial. |
+| response  | string  | Indicates which key the participant pressed. |
+| rt        | numeric | The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. |
 | correct   | boolean | Boolean indicating whether the user's key press was correct or incorrect for the given stimulus. |
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-iat-html@1.1.2"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-iat-html.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-iat-html
+```
+```js
+import iatHtml from '@jspsych/plugin-iat-html';
+```
 
 ## Examples
 

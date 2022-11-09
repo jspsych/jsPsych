@@ -1,6 +1,8 @@
 # html-slider-response
 
-This plugin displays HTML content and allows the subject to respond by dragging a slider.
+Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-slider-response/CHANGELOG.md).
+
+This plugin displays HTML content and allows the participant to respond by dragging a slider.
 
 ## Parameters
 
@@ -16,11 +18,11 @@ max | integer | 100 | Sets the maximum value of the slider.
 slider_start | integer | 50 | Sets the starting value of the slider
 step | integer | 1 | Sets the step of the slider. This is the smallest amount by which the slider can change.
 slider_width | integer | null | Set the width of the slider in pixels. If left null, then the width will be equal to the widest element in the display.
-require_movement | boolean | false | If true, the subject must move the slider before clicking the continue button.
-prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the subject is supposed to take (e.g., which key to press).
+require_movement | boolean | false | If true, the participant must move the slider before clicking the continue button.
+prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).
 stimulus_duration | numeric | null | How long to display the stimulus in milliseconds. The visibility CSS property of the stimulus will be set to `hidden` after this time has elapsed. If this is null, then the stimulus will remain visible until the trial ends.
-trial_duration | numeric | null | How long to wait for the subject to make a response before ending the trial in milliseconds. If the subject fails to make a response before this timer is reached, the subject's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely.
-response_ends_trial | boolean | true | If true, then the trial will end whenever the subject makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the subject to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
+trial_duration | numeric | null | How long to wait for the participant to make a response before ending the trial in milliseconds. If the participant fails to make a response before this timer is reached, the participant's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely.
+response_ends_trial | boolean | true | If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
 
 ## Data Generated
 
@@ -29,13 +31,36 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Name | Type | Value
 -----|------|------
 response | numeric | The numeric value of the slider.
-rt | numeric | The time in milliseconds for the subject to make a response. The time is measured from when the stimulus first appears on the screen until the subject's response.
+rt | numeric | The time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response.
 stimulus | string | The HTML content that was displayed on the screen.
 slider_start | numeric | The starting value of the slider.
 
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.2"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-html-slider-response.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-html-slider-response
+```
+```js
+import htmlSliderResponse from '@jspsych/plugin-html-slider-response';
+```
+
 ## Examples
 
-???+ example "Displaying question until subject move the slider"
+???+ example "Displaying question until participant moves the slider"
     === "Code"
 
         ```javascript

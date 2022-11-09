@@ -1,4 +1,6 @@
-# sketchpad plugin
+# sketchpad
+
+Current version: 1.0.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-sketchpad/CHANGELOG.md).
 
 This plugin creates an interactive canvas that the participant can draw on using their mouse or touchscreen.
 It can be used for sketching tasks, like asking the participant to draw a particular object.
@@ -45,7 +47,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | undo_button_label | string | `"Undo"` | The label for the button that enables an undo action. |
 | show_redo_button | bool | true | Whether to show the button that enables a redo action. Note that `show_undo_button` must be `true` for the redo button to show up. |
 | redo_button_label | string | `"Redo"` | The label for the button that enables a redo action. |
-| choices | array of keys | `"NO_KEYS"` | This array contains the key(s) that the subject is allowed to press in order to end the trial. Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) - see [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) and [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/) for more examples. Any key presses that are not listed in the array will be ignored. The default value of `"NO_KEYS"` means that no keys will be accepted as valid responses. Specifying `"ALL_KEYS"` will mean that all responses are allowed. |
+| choices | array of keys | `"NO_KEYS"` | This array contains the key(s) that the participant is allowed to press in order to end the trial. Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) - see [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) and [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/) for more examples. Any key presses that are not listed in the array will be ignored. The default value of `"NO_KEYS"` means that no keys will be accepted as valid responses. Specifying `"ALL_KEYS"` will mean that all responses are allowed. |
 | trial_duration | int | null | Length of time before the trial ends. If `null` the trial will continue indefinitely (until another way of ending the trial occurs). |
 | show_countdown_trial_duration | bool | false | Whether to show a timer that counts down until the end of the trial when `trial_duration` is not `null`. |
 | countdown_timer_html | string | `'<span id="sketchpad-timer"></span> remaining'` | The HTML to use for rendering the countdown timer. The element with `id="sketchpad-timer"` will have its content replaced by a countdown timer in the format `MM:SS`.
@@ -64,6 +66,29 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 ## Simulation Mode
 
 This plugin does not yet support [simulation mode](../overview/simulation.md).
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-sketchpad@1.0.3"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-sketchpad.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-sketchpad
+```
+```js
+import sketchpad from '@jspsych/plugin-sketchpad';
+```
 
 ## Examples
 

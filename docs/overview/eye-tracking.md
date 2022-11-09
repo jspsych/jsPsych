@@ -14,7 +14,7 @@ Instead, it can be found on the jsdelivr.net CDN at: "https://cdn.jsdelivr.net/g
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.1.2"></script>
+  <script src="https://unpkg.com/jspsych@7.3.0"></script>
   <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@7.1.2/examples/js/webgazer/webgazer.js"></script>
 </head>
 ```
@@ -33,9 +33,9 @@ The [webgazer extension](../extensions/webgazer.md) adds functionality to jsPsyc
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.1.2"></script>
+  <script src="https://unpkg.com/jspsych@7.3.0"></script>
   <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@7.1.2/examples/js/webgazer/webgazer.js"></script>
-  <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.0"></script>
+  <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.2"></script>
 </head>
 ```
 
@@ -167,19 +167,19 @@ If you have tips based on your own experience please consider sharing them on ou
     <!DOCTYPE html>
     <html>
       <head>
-        <script src="https://unpkg.com/jspsych@7.1.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.0"></script>
-        <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@7.1.2/examples/js/webgazer/webgazer.js"></script>
-        <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.0"></script>
+        <script src="https://unpkg.com/jspsych@7.3.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.2"></script>
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jsPsych@jspsych@7.1.2/examples/js/webgazer/webgazer.js"></script>
+        <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.2"></script>
         <link
           rel="stylesheet"
-          href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css"
+          href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css"
         />
         <style>
           .jspsych-btn {

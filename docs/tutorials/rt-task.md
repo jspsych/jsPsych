@@ -7,16 +7,16 @@ Despite this simple task, the tutorial covers many of the key features of jsPsyc
 * Using a plugin to create a standard trial.
 * Combining plugins together to create new kinds of trials.
 * Using timeline variables to maximize code reuse.
-* Preloading media
+* Preloading media.
 * Randomizing presentation order.
 * Manipulating, filtering, and aggregating data.
-* Using dynamic content to change the experiment parameters based on the subject's responses.
+* Using dynamic content to change the experiment parameters based on the participant's responses.
 
 ## Part 1: Creating a blank experiment
 
 Start by setting up a new HTML file with jsPsych, the html-keyboard-response plugin, and the jspsych.css file loaded. If you are unsure how to do this, follow the [Hello World tutorial](hello-world.md). You should have an HTML document that looks like this:
 
-!!! info
+??? info "Info: Loading jsPsych"
     This tutorial assumes that you are using the [CDN-based method of loading jsPsych](hello-world.md#option-1-using-cdn-hosted-scripts). 
     If you are using another method then everything is the same except for how jsPsych is loaded.
 
@@ -25,9 +25,9 @@ Start by setting up a new HTML file with jsPsych, the html-keyboard-response plu
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@7.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
-    <link href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@7.3.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+    <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
@@ -54,9 +54,9 @@ We'll add trials to this array as we create them.
 var timeline = [];
 ```
 
-Let's greet the subject with a simple welcome message using the [html-keyboard-response](../plugins/html-keyboard-response.md) plugin.
+Let's greet the participant with a simple welcome message using the [html-keyboard-response](../plugins/html-keyboard-response.md) plugin.
 
-First, we create a trial that uses the `html-keyboard-response` plugin and contains a simple string to show the subject. 
+First, we create a trial that uses the `html-keyboard-response` plugin and contains a simple string to show the participant. 
 As explained on the [plugins documentation page](../overview/plugins.md), the trial object must have a `type` parameter that tells jsPsych which plugin to use. 
 The value of `type` is similar to the plugin name, but starts with `jsPsych` and is written in camel case rather than with dashes. 
 So to use the `html-keyboard-response` plugin, we need to write `jsPsychHtmlKeyboardResponse` as the trial type.
@@ -87,9 +87,9 @@ After each step in the tutorial you can view the complete code up to that point 
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.1.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
-        <link href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.3.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+        <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -116,7 +116,7 @@ After each step in the tutorial you can view the complete code up to that point 
 
 ## Part 3: Show instructions
 
-We can use the same basic structure from part 2 to create a new `html-keyboard-response` trial that shows instructions to the subject. 
+We can use the same basic structure from part 2 to create a new `html-keyboard-response` trial that shows instructions to the participant. 
 The only difference in this trial is that we will use HTML formatting to control how the instructions display and we will add a two second gap after the trial using the `post_trial_gap` parameter.
 
 The trial definition looks like this:
@@ -145,7 +145,7 @@ var instructions = {
 !!! tip
     In JavaScript there are three different ways to define a `string`. You can use single quotes `'`, double quotes `"`, or backticks `` ` ``. Using backticks has two advantages over the other approaches, especially when you are creating long strings with HTML. You can extend the `string` across multiple lines and you can use [template strings](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) to easily incorporate variables.
 
-Notice that the HTML includes `<img>` tags to display the images that the subject will be responding to. 
+Notice that the HTML includes `<img>` tags to display the images that the participant will be responding to. 
 You'll need to download these image files. 
 Right-click on each image below and select *Save image as...*. 
 Put the images in a folder called `img` in the experiment folder you created in part 1.
@@ -166,9 +166,9 @@ timeline.push(instructions);
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.1.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
-        <link href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.3.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+        <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -223,16 +223,16 @@ We need to start by loading this plugin by adding a `<script>` tag to the docume
 ```html hl_lines="5"
 <head>
   <title>My experiment</title>
-  <script src="https://unpkg.com/jspsych@7.1.2"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
-  <link href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+  <script src="https://unpkg.com/jspsych@7.3.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+  <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
 </head>
 ```
 
 For now, we will just show each image once. 
 The path to the image file should be set as the `stimulus` parameter. 
-We will also set the option for which keys the subject is allowed to use to respond (`choices`) so that only the 'f' and 'j' keys are valid responses.
+We will also set the option for which keys the participant is allowed to use to respond (`choices`) so that only the 'f' and 'j' keys are valid responses.
 
 ```javascript
 var blue_trial = {
@@ -261,10 +261,10 @@ timeline.push(blue_trial, orange_trial);
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.1.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
-        <link href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.3.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+        <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -339,11 +339,11 @@ First we need to add the preload plugin to our `<head>` section.
 ```html hl_lines="6"
 <head>
   <title>My experiment</title>
-  <script src="https://unpkg.com/jspsych@7.1.2"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
-  <link href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+  <script src="https://unpkg.com/jspsych@7.3.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
+  <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
 </head>
 ```
 
@@ -370,11 +370,11 @@ timeline.push(preload);
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.1.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
-        <link href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.3.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
+        <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -503,11 +503,11 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.1.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
-        <link href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.3.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
+        <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -610,6 +610,15 @@ var test_procedure = {
   repetitions: 5
 };
 ```
+
+??? info "Info: Randomizing timeline variables"
+    In a timeline variables procedure, when `randomize_order` is `true` and `repetitions` is greater than 1, the  trial order will be re-randomized on each repetition through the `timeline_variables` array. This means that there will be some constraints on the randomization of all trials in the procedure. 
+
+    For example, if a `timeline_variables` array contains one trial per stimulus, then the same stimulus could occur twice in a row (since it could be at the end of one repetition and the start of the next one), but it could not be repeated more than twice in a row, regardless of the number of `repetitions`.
+
+    If you want to repeat your `timeline_variables` array but randomize across all trials, you could use the `sample` parameter with the `fixed-repetitions` option: this will combine all the repeitions of your `timeline_variables` array into one larger array, and then randomize the whole thing. You can read more about the randomization, repetition, and sampling options for timeline variables in the [Timeline Variables documentation](../overview/timeline.md#timeline-variables).
+
+
 ??? example "The complete code so far"
 
     ```html
@@ -617,11 +626,11 @@ var test_procedure = {
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.1.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
-        <link href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.3.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
+        <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -729,11 +738,11 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
     <html>
       <head>
         <title>My experiment</title>
-        <script src="jspsych-6.3.0/jspsych.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-html-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-image-keyboard-response.js"></script>
-        <script src="jspsych-6.3.0/plugins/jspsych-preload.js"></script>
-        <link href="jspsych-6.3.0/css/jspsych.css" rel="stylesheet" type="text/css">
+        <script src="https://unpkg.com/jspsych@7.3.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
+        <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -838,11 +847,11 @@ var jsPsych = initJsPsych({
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.1.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
-        <link href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.3.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
+        <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -995,11 +1004,11 @@ var fixation = {
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.1.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
-        <link href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.3.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
+        <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -1102,7 +1111,7 @@ But, we can also do this in jsPsych as the experiment runs to save time later an
 
 To do this, we'll use the `on_finish` event of the test trial. We can assign a function to `on_finish`, and that function will receive an object containing the data generated by the trial. This object can be manipulated inside the function, and any changes made to the object will be stored in jsPsych's internal representation of the data.
 
-For this example, we'll determine whether the subject responded correctly, and add a new `correct` property to the data object.
+For this example, we'll determine whether the participant responded correctly, and add a new `correct` property to the data object.
 
 ```javascript
 var test = {
@@ -1119,13 +1128,15 @@ var test = {
 };
 ```
 
-The `data.response` value is a string representation of the key the subject pressed. We can compare this with the `data.correct_response` value, and assign this computed value to a new property `data.correct`.
+The `data.response` value is a string representation of the key the participant pressed. We can compare this with the `data.correct_response` value, and assign this computed value to a new property `data.correct`.
 
-!!! info
-  Here we are comparing the values of `data.response` and `data.correct_response` using a jsPsych function called [jsPsych.pluginAPI.compareKeys](../reference/jspsych-pluginAPI.md#jspsychpluginapicomparekeys). We're using this function because it allows us to compare keys in either a _case sensitive_ or _case insensitive_ way, depending on the [experiment settings](../overview/experiment-options.md). The participant's key response will be recorded in a case-sensitive way in the data (e.g. 'f' or 'F'), but in most cases, we don't care if their response corresponds to an upper or lower case letter (which is why the `case_sensitive` experiment setting is `false` by default). Using the `jsPsych.pluginAPI.commpareKeys` function here means that the response will be scored correctly, even if the participant holds down Shift or has Caps Lock on. This function is only relevant for keyboard responses; for other kinds of responses, such as button presses, you can simply compare the response and correct response values directly, e.g.
-  ```js
-  data.correct = data.response === data.correct_response;
-  ```
+??? info "Info: The `compareKeys` function"
+    Here we are comparing the values of `data.response` and `data.correct_response` using a jsPsych function called [jsPsych.pluginAPI.compareKeys](../reference/jspsych-pluginAPI.md#comparekeys). We're using this function because it allows us to compare keys in either a _case sensitive_ or _case insensitive_ way, depending on the `case_sensitive_responses` parameter in the [experiment settings](../overview/experiment-options.md#choose-whether-you-want-keyboard-choicesresponses-to-be-case-sensitive). The participant's key response will be recorded in a case-sensitive way in the data (e.g. 'f' or 'F'), but in most cases, we don't care if their response corresponds to an upper or lower case letter (which is why the `case_sensitive_responses` experiment setting is `false` by default). Using the `jsPsych.pluginAPI.commpareKeys` function here means that the response will be scored correctly, even if the participant holds down Shift or has Caps Lock on. 
+    
+    This function is only relevant for keyboard responses; for other kinds of responses, such as button presses, you can simply compare the response and correct response values directly, e.g.
+    ```js
+    data.correct = data.response === data.correct_response;
+    ```
 
 ??? example "The complete code so far"
 
@@ -1134,11 +1145,11 @@ The `data.response` value is a string representation of the key the subject pres
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@7.1.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
-        <link href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <script src="https://unpkg.com/jspsych@7.3.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
+        <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -1239,12 +1250,12 @@ The `data.response` value is a string representation of the key the subject pres
 
 ## Part 13: Data aggregation
 
-jsPsych provides a limited set of analysis functions to allow you to calculate things like mean response times for a selected set of trials. In this part, we'll use these functions to add a final trial to the experiment that tells the subject their accuracy and their mean response time for correct responses.
+jsPsych provides a limited set of analysis functions to allow you to calculate things like mean response times for a selected set of trials. In this part, we'll use these functions to add a final trial to the experiment that tells the participant their accuracy and their mean response time for correct responses.
 
-We'll use the `html-keyboard-response` plugin. Because the text that we want to display changes based on the subject's performance in the experiment, we need to use a function for the `stimulus` parameter and return the desired text.
+We'll use the `html-keyboard-response` plugin. Because the text that we want to display changes based on the participant's performance in the experiment, we need to use a function for the `stimulus` parameter and return the desired text.
 
-!!! info
-  Using a function as the value of a 'normal' parameter (i.e. a parameter that isn't usually a function) provides lots of flexibility in jsPsych experiments, because it allows you to dynamically change the parameter's value based on the participant's earlier responses, and any other information that you don't know before the experiment has started. For more information and examples, see the [dynamic parameter documentation page](../overview/dynamic-parameters.md).
+??? info "Info: Dynamic parameters"
+    Using a function as the value of a 'normal' parameter (i.e. a parameter that isn't usually a function) provides lots of flexibility in jsPsych experiments, because it allows you to dynamically change the parameter's value based on the participant's earlier responses, and any other information that you don't know before the experiment has started. For more information and examples, see the [dynamic parameter documentation page](../overview/dynamic-parameters.md).
 
 Here's what the code looks like, and a description follows below.
 
@@ -1284,11 +1295,11 @@ This code is available in the `/examples` folder in the jsPsych release download
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@7.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.0"></script>
-    <link href="https://unpkg.com/jspsych@7.1.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@7.3.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
+    <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>

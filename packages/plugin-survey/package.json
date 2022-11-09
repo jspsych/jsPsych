@@ -1,12 +1,16 @@
 {
   "name": "@jspsych/plugin-survey",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "A jsPsych plugin for complex surveys",
   "type": "module",
   "main": "dist/index.cjs",
   "exports": {
-    "import": "./dist/index.js",
-    "require": "./dist/index.cjs"
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./css/survey.css": "./css/survey.css",
+    "./css/survey.scss": "./css/survey.scss"
   },
   "typings": "dist/index.d.ts",
   "unpkg": "dist/index.browser.min.js",
@@ -21,7 +25,7 @@
     "test:watch": "npm test -- --watch",
     "tsc": "tsc",
     "build:js": "rollup --config",
-    "build:styles": "sass --load-path ../../node_modules css/survey.scss css/survey.css",
+    "build:styles": "sass --load-path ./node_modules --load-path ../../node_modules css/survey.scss css/survey.css",
     "build": "run-p build:js build:styles",
     "build:watch": "run-p \"build:js -- --watch\" \"build:styles -- --watch\""
   },
@@ -40,12 +44,13 @@
     "jspsych": ">=7.0.0"
   },
   "devDependencies": {
-    "@jspsych/config": "^1.0.0",
-    "@jspsych/test-utils": "^1.0.0",
+    "@jspsych/config": "^1.3.0",
+    "@jspsych/test-utils": "^1.1.2",
     "npm-run-all": "^4.1.5",
     "sass": "^1.43.5"
   },
   "dependencies": {
-    "survey-knockout": "^1.8.78"
+    "knockout": "3.5.1",
+    "survey-knockout": "1.9.30"
   }
 }

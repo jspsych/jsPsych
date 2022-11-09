@@ -42,8 +42,7 @@ const info = <const>{
     item_path: {
       type: ParameterType.IMAGE,
       pretty_name: "Item path",
-      default: "img/card.png",
-      // TO DO: I think the background image should be optional, in which case we don't want to try to auto-preload this parameter?
+      default: null,
       preload: false,
     },
     /** The height of the item to be measured, in mm. */
@@ -147,6 +146,12 @@ declare global {
 class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
   static info = info;
 
+  private ball_size: number = 30;
+  private ball: HTMLElement = null;
+  private container: HTMLElement = null;
+  private reps_remaining = 0;
+  private ball_animation_frame_id = null;
+
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
@@ -160,6 +165,8 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
       );
       return;
     }
+
+    this.reps_remaining = trial.blindspot_reps;
 
     /** some additional parameter configuration */
     let trial_data = <any>{
@@ -183,7 +190,11 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
     /** create content for first screen, resizing card */
     let pagesize_content = `
         <div id="page-size">
-          <div id="item" style="border: none; height: ${start_div_height}px; width: ${start_div_width}px; margin: 5px auto; background-color: none; position: relative; background-image: url(${trial.item_path}); background-size: 100% auto; background-repeat: no-repeat;">
+          <div id="item" style="border: none; height: ${start_div_height}px; width: ${start_div_width}px; margin: 5px auto; background-color: #ddd; position: relative; ${
+      trial.item_path === null
+        ? ""
+        : `background-image: url(${trial.item_path}); background-size: 100% auto; background-repeat: no-repeat;`
+    }">
             <div id="jspsych-resize-handle" style="cursor: nwse-resize; background-color: none; width: ${adjust_size}px; height: ${adjust_size}px; border: 5px solid red; border-left: 0; border-top: 0; position: absolute; bottom: 0; right: 0;">
             </div>
           </div>
@@ -198,7 +209,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
     let blindspot_content = `
         <div id="blind-spot">
           ${trial.blindspot_prompt}
-          <div id="svgDiv" style="width:1000px;height:200px;"></div>
+          <div id="svgDiv" style="height:100px; position:relative;"></div>
           <button class="btn btn-primary" id="proceed" style="display:none;"> +
             ${trial.blindspot_done_prompt} +
           </button>
@@ -220,6 +231,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
     display_element.innerHTML = `<div id="content" style="width: 900px; margin: 0 auto;"></div>`;
 
     const start_time = performance.now();
+
     startResizePhase();
 
     function startResizePhase() {
@@ -271,7 +283,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
 
     function finishResizePhase() {
       // add item width info to data
-      const item_width_px = getScaledItemWidth();
+      const item_width_px = document.querySelector("#item").getBoundingClientRect().width;
       trial_data["item_width_px"] = Math.round(item_width_px);
       const px2mm = convertPixelsToMM(item_width_px);
       trial_data["px2mm"] = accurateRound(px2mm, 2);
@@ -290,9 +302,21 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
         slider_clck: false,
       };
       // add the content to the page
-      document.querySelector("#content").innerHTML = blindspot_content;
+      display_element.querySelector("#content").innerHTML = blindspot_content;
+      this.container = display_element.querySelector("#svgDiv");
+
       // draw the ball and fixation square
       drawBall();
+
+      resetAndWaitForBallStart();
+    };
+
+    const resetAndWaitForBallStart = () => {
+      const rectX = this.container.getBoundingClientRect().width - this.ball_size;
+      const ballX = rectX * 0.85; // define where the ball is
+
+      this.ball.style.left = `${ballX}px`;
+
       // wait for a spacebar to begin the animations
       this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: startBall,
@@ -304,20 +328,33 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
     };
 
     const startBall = () => {
-      const ball_position_listener = this.jsPsych.pluginAPI.getKeyboardResponse({
+      this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: recordPosition,
         valid_responses: [" "],
         rt_method: "performance",
         allow_held_key: false,
-        persist: true,
+        persist: false,
       });
-      animateBall();
+
+      this.ball_animation_frame_id = requestAnimationFrame(animateBall);
     };
 
     const finishBlindSpotPhase = () => {
-      window.ball.stop();
+      const angle = 13.5;
 
-      this.jsPsych.pluginAPI.cancelAllKeyboardResponses();
+      // calculate average ball position
+      const sum = blindspot_config_data["ball_pos"].reduce((a, b) => a + b, 0);
+      const ballPosLen = blindspot_config_data["ball_pos"].length;
+      blindspot_config_data["avg_ball_pos"] = accurateRound(sum / ballPosLen, 2);
+
+      // calculate distance between avg ball position and square
+      const ball_sqr_distance =
+        (blindspot_config_data["square_pos"] - blindspot_config_data["avg_ball_pos"]) /
+        trial_data["px2mm"];
+
+      // calculate viewing distance in mm
+      const viewDistance = ball_sqr_distance / Math.tan(deg_to_radians(angle));
+      trial_data["view_dist_mm"] = accurateRound(viewDistance, 2);
 
       if (trial.viewing_distance_report == "none") {
         endTrial();
@@ -400,68 +437,53 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
       this.jsPsych.finishTrial(trial_data);
     };
 
-    function getScaledItemWidth() {
-      return document.querySelector("#item").getBoundingClientRect().width;
-    }
+    const drawBall = () => {
+      this.container.innerHTML = `
+        <div id="virtual-chinrest-circle" style="position: absolute; background-color: #f00; width: ${this.ball_size}px; height: ${this.ball_size}px; border-radius:${this.ball_size}px;"></div>
+        <div id="virtual-chinrest-square" style="position: absolute; background-color: #000; width: ${this.ball_size}px; height: ${this.ball_size}px;"></div>
+      `;
 
-    function drawBall(pos = 180) {
-      // pos: define where the fixation square should be.
-      // @ts-expect-error
-      var mySVG = SVG("svgDiv");
-      const rectX = trial_data["px2mm"] * pos;
-      const ballX = rectX * 0.6; // define where the ball is
-      var ball = mySVG.circle(30).move(ballX, 50).fill("#f00");
-      window.ball = ball;
-      var square = mySVG.rect(30, 30).move(Math.min(rectX - 50, 950), 50); //square position
-      blindspot_config_data["square_pos"] = accurateRound(square.cx(), 2);
-      blindspot_config_data["rectX"] = rectX;
-      blindspot_config_data["ballX"] = ballX;
-    }
+      const ball: HTMLElement = this.container.querySelector("#virtual-chinrest-circle");
+      const square: HTMLElement = this.container.querySelector("#virtual-chinrest-square");
 
-    function animateBall() {
-      window.ball
-        .animate(7000)
-        .during((pos) => {
-          let moveX = -pos * blindspot_config_data["ballX"];
-          window.moveX = moveX;
-          let moveY = 0;
-          window.ball.attr({ transform: "translate(" + moveX + "," + moveY + ")" }); //jqueryToVanilla: el.getAttribute('');
-        })
-        .loop(true, false)
-        .after(() => {
-          animateBall();
-        });
-    }
+      const rectX = this.container.getBoundingClientRect().width - this.ball_size;
+      const ballX = rectX * 0.85; // define where the ball is
 
-    function recordPosition() {
-      // angle: define horizontal blind spot entry point position in degrees.
-      const angle = 13.5;
+      ball.style.left = `${ballX}px`;
+      square.style.left = `${rectX}px`;
 
-      blindspot_config_data["ball_pos"].push(accurateRound(window.ball.cx() + window.moveX, 2));
-      var sum = blindspot_config_data["ball_pos"].reduce((a, b) => a + b, 0);
-      var ballPosLen = blindspot_config_data["ball_pos"].length;
-      blindspot_config_data["avg_ball_pos"] = accurateRound(sum / ballPosLen, 2);
-      var ball_sqr_distance =
-        (blindspot_config_data["square_pos"] - blindspot_config_data["avg_ball_pos"]) /
-        trial_data["px2mm"];
-      var viewDistance = ball_sqr_distance / Math.tan(deg_to_radians(angle));
-      trial_data["view_dist_mm"] = accurateRound(viewDistance, 2);
+      this.ball = ball;
+
+      blindspot_config_data["square_pos"] = accurateRound(getElementCenter(square).x, 2);
+    };
+
+    const animateBall = () => {
+      const dx = -2;
+      const x = parseInt(this.ball.style.left);
+      this.ball.style.left = `${x + dx}px`;
+
+      this.ball_animation_frame_id = requestAnimationFrame(animateBall);
+    };
+
+    const recordPosition = () => {
+      cancelAnimationFrame(this.ball_animation_frame_id);
+
+      blindspot_config_data["ball_pos"].push(accurateRound(getElementCenter(this.ball).x, 2));
 
       //counter and stop
-      var counter = Number(document.querySelector("#click").textContent);
-      counter = counter - 1;
+      this.reps_remaining--;
+
       (document.querySelector("#click") as HTMLDivElement).textContent = Math.max(
-        counter,
+        this.reps_remaining,
         0
       ).toString();
-      if (counter <= 0) {
+
+      if (this.reps_remaining <= 0) {
         finishBlindSpotPhase();
-        return;
       } else {
-        window.ball.stop();
-        animateBall();
+        resetAndWaitForBallStart();
       }
-    }
+    };
 
     function convertPixelsToMM(item_width_px) {
       const px2mm = item_width_px / trial_data["item_width_mm"];
@@ -470,6 +492,14 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
 
     function accurateRound(value, decimals) {
       return Number(Math.round(Number(value + "e" + decimals)) + "e-" + decimals);
+    }
+
+    function getElementCenter(el: HTMLElement) {
+      const box = el.getBoundingClientRect();
+      return {
+        x: box.left + box.width / 2,
+        y: box.top + box.height / 2,
+      };
     }
 
     //helper function for radians

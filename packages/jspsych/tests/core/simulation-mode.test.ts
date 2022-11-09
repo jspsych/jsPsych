@@ -394,4 +394,24 @@ describe("data simulation mode", () => {
 
     await expectFinished();
   });
+
+  test("Simulation in data-only mode skips post_trial_gap", async () => {
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        post_trial_gap: 1000,
+      },
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+      },
+    ];
+
+    const { expectFinished, getData } = await simulateTimeline(timeline);
+
+    await expectFinished();
+
+    expect(getData().values().length).toBe(2);
+  });
 });

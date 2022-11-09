@@ -15,3 +15,6 @@ A growing list of implemented 8.0 changes so we don't loose track
 - `endExperiment()` and `endCurrentTimeline()` => `abortExperiment()` and `abortCurrentTimeline()`
 - Interaction listeners are now removed when the experiment ends.
 - `on_timeline_start` and `on_timeline_finish` are no longer invoked in every repetition of a timeline, but only at the beginning or end of a timeline, respectively.
+- `jsPsych.evaluateTimelineVariable()` now throws an error if the variable is not found
+
+- Drop `jsPsych.getAllTimelineVariables()` – a replacement is yet to be implemented

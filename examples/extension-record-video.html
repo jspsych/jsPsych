@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-initialize-camera/dist/index.browser.js"></script>
+    <script src="../packages/extension-record-video/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych({
+        extensions: [
+            {type: jsPsychExtensionRecordVideo}
+        ]
+    });
+
+    const initCamera = {
+      type: jsPsychInitializeCamera
+    }
+
+    const trials = [
+        {x:25, y:25},
+        {x:25, y:75},
+        {x:75, y:25},
+        {x:75, y:75}
+    ];
+
+    const trial = {
+        timeline: [{
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: ()=>{
+                let html = `<div style="width:100vw; height:100vh; position: relative;">
+                  <div style="width:15px; height:15px; border-radius:15px; background-color: #000; position:absolute; top: ${jsPsych.timelineVariable('y')}%; left: ${jsPsych.timelineVariable('x')}%;"></div>
+                  </div>`;
+              return html;
+            },
+            choices: "NO_KEYS",
+            trial_duration: 2000,
+            extensions: [{
+              type: jsPsychExtensionRecordVideo
+            }]
+        }],
+        timeline_variables: trials,
+        randomize_order: true
+    }
+
+
+    jsPsych.run([initCamera, trial]);
+  </script>
+</html>

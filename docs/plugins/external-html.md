@@ -1,4 +1,6 @@
-# external-html plugin
+# external-html
+
+Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-external-html/CHANGELOG.md).
 
 The HTML plugin displays an external HTML document (often a consent form). Either a keyboard response or a button press can be used to continue to the next trial. It allows the experimenter to check if conditions are met (such as indicating informed consent) before continuing.
 
@@ -9,9 +11,9 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | Parameter      | Type     | Default Value                | Description                              |
 | -------------- | -------- | ---------------------------- | ---------------------------------------- |
 | url            | string   | *undefined*                  | The URL of the page to display.          |
-| cont_key       | string   | null                         | The key character the subject can use to advance to the next trial. If left as null, then the subject will not be able to advance trials using the keyboard. |
+| cont_key       | string   | null                         | The key character the participant can use to advance to the next trial. If left as null, then the participant will not be able to advance trials using the keyboard. |
 | cont_btn       | string   | null                         | The ID of a clickable element on the page. When the element is clicked, the trial will advance. |
-| check_fn       | function | `function(){ return true; }` | This function is called with the jsPsych `display_element` as the only argument when the subject attempts to advance the trial. The trial will only advance if the function return `true`. This can be used to verify that the subject has correctly filled out a form before continuing, for example. |
+| check_fn       | function | `function(){ return true; }` | This function is called with the jsPsych `display_element` as the only argument when the participant attempts to advance the trial. The trial will only advance if the function return `true`. This can be used to verify that the participant has correctly filled out a form before continuing, for example. |
 | force_refresh  | boolean  | false                        | If `true`, then the plugin will avoid using the cached version of the HTML page to load if one exists. |
 | execute_script | boolean  | false                        | If `true`, then scripts on the remote page will be executed. |
 
@@ -22,11 +24,34 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | Name | Type    | Value                                    |
 | ---- | ------- | ---------------------------------------- |
 | url  | string  | The URL of the page.                     |
-| rt   | numeric | The response time in milliseconds for the subject to finish the trial. |
+| rt   | numeric | The response time in milliseconds for the participant to finish the trial. |
 
 ## Simulation Mode
 
 In `visual` simulation mode, the plugin cannot interact with any form elements on the screen other than the `cont_btn` specified in the trial parameters. If your `check_fn` requires other user interaction, for example, clicking a checkbox, then you'll need to disable simulation for the trial and complete the interaction manually.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-external-html@1.1.2"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-external-html.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-external-html
+```
+```js
+import externalHtml from '@jspsych/plugin-external-html';
+```
 
 ## Examples
 
@@ -51,7 +76,7 @@ In `visual` simulation mode, the plugin cannot interact with any form elements o
 ???+ example "jsPsych code to load above page."
     === "Code"
         ```javascript
-        // sample function that might be used to check if a subject has given
+        // sample function that might be used to check if a participant has given
         // consent to participate.
         var check_consent = function(elem) {
             if (document.getElementById('consent_checkbox').checked) {

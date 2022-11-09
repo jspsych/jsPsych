@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../packages/jspsych/dist/index.browser.js"></script>
+  <script src="../packages/plugin-initialize-camera/dist/index.browser.js"></script>
+  <script src="../packages/plugin-mirror-camera/dist/index.browser.js"></script>
+  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+  var jsPsych = initJsPsych();
+
+  const init_camera = {
+    type: jsPsychInitializeCamera,
+  }
+
+  const mirror_camera = {
+    type: jsPsychMirrorCamera,
+    width: 320,
+  }
+
+  jsPsych.run([init_camera, mirror_camera]);
+
+</script>
+</html>

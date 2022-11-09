@@ -1,4 +1,16 @@
 import rw from "random-words";
+import seedrandom from "seedrandom/lib/alea";
+
+/**
+ * Uses the `seedrandom` package to replace Math.random() with a seedable PRNG.
+ *
+ * @param seed An optional seed. If none is given, a random seed will be generated.
+ * @returns The seed value.
+ */
+export function setSeed(seed: string = Math.random().toString()) {
+  Math.random = seedrandom(seed);
+  return seed;
+}
 
 export function repeat(array, repetitions, unpack = false) {
   const arr_isArray = Array.isArray(array);

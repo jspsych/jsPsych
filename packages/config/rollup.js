@@ -1,7 +1,9 @@
+import { DEFAULT_EXTENSIONS as babelDefaultExtensions } from "@babel/core";
 import { babel } from "@rollup/plugin-babel";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import resolve from "@rollup/plugin-node-resolve";
+import replace from "@rollup/plugin-replace";
 import { defineConfig } from "rollup";
 import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
@@ -11,7 +13,7 @@ const makeConfig = ({
   outputOptions = {},
   globalOptions = {},
   iifeOutputOptions = {},
-  nodeOnly = false,
+  isNodeOnlyBuild = false,
 }) => {
   const source = "src/index";
   const destination = "dist/index";
@@ -24,7 +26,7 @@ const makeConfig = ({
   const commonConfig = defineConfig({
     input: `${source}.ts`,
     plugins: [
-      resolve(),
+      resolve({ preferBuiltins: isNodeOnlyBuild }),
       typescript({
         typescript: ts,
         tsconfigDefaults: {
@@ -60,7 +62,7 @@ const makeConfig = ({
     },
   ];
 
-  if (!nodeOnly) {
+  if (!isNodeOnlyBuild) {
     output.push({
       // Build file to be used for tinkering in modern browsers
       file: `${destination}.browser.js`,
@@ -73,16 +75,28 @@ const makeConfig = ({
   // Non-babel builds
   const config = defineConfig([{ ...commonConfig, output }]);
 
-  if (!nodeOnly) {
+  if (!isNodeOnlyBuild) {
     // Babel build
     config.push({
       ...commonConfig,
-      plugins: commonConfig.plugins.concat(
+      plugins: [
+        // Import `regenerator-runtime` if requested:
+        replace({
+          values: {
+            "// __rollup-babel-import-regenerator-runtime__":
+              'import "regenerator-runtime/runtime.js";',
+          },
+          delimiters: ["", ""],
+          preventAssignment: true,
+        }),
+        ...commonConfig.plugins,
         babel({
           babelHelpers: "bundled",
           extends: "@jspsych/config/babel",
-        })
-      ),
+          // https://github.com/ezolenko/rollup-plugin-typescript2#rollupplugin-babel
+          extensions: [...babelDefaultExtensions, ".ts"],
+        }),
+      ],
       output: [
         {
           // Minified production build file

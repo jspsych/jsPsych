@@ -21,7 +21,10 @@ export class MediaAPI {
 
   // video //
   private video_buffers = {};
-  getVideoBuffer(videoID) {
+  getVideoBuffer(videoID: string) {
+    if (videoID.startsWith("blob:")) {
+      this.video_buffers[videoID] = videoID;
+    }
     return this.video_buffers[videoID];
   }
 
@@ -335,5 +338,22 @@ export class MediaAPI {
 
   getMicrophoneRecorder(): MediaRecorder {
     return this.microphone_recorder;
+  }
+
+  private camera_stream: MediaStream = null;
+  private camera_recorder: MediaRecorder = null;
+
+  initializeCameraRecorder(stream: MediaStream, opts?: MediaRecorderOptions) {
+    this.camera_stream = stream;
+    const recorder = new MediaRecorder(stream, opts);
+    this.camera_recorder = recorder;
+  }
+
+  getCameraStream(): MediaStream {
+    return this.camera_stream;
+  }
+
+  getCameraRecorder(): MediaRecorder {
+    return this.camera_recorder;
   }
 }

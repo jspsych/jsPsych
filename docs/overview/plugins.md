@@ -5,7 +5,7 @@ Some plugins define very general events, like [displaying a set of instructions 
 Other plugins are more specific, like those that display particular kinds of stimuli (e.g., a [circular visual search array](../plugins/visual-search-circle/)), or run a specific version of particular kind of task (e.g., the [Implicit Association Test](../plugins/iat-image/)).
 Part of creating an experiment with jsPsych involves figuring out which plugins are needed to create the tasks you want your participants to perform.
 
-Plugins provide a structure for a particular trial or task, but often allow for significant customization and flexibility. For example, the [image-keyboard-response plugin](../plugins/image-keyboard-response/) defines a simple structure for showing an image and collecting a keyboard response. You can specify the what the stimulus is, what keys the subject is allowed to press, how long the stimulus should be on the screen, how long the subject has to respond, and so on. Many of these options have reasonable default values; even though the image plugin has many different parameters, you only *need* to specify the image stimulus in order to use it. Each plugin has its own documentation page, which describes what the plugin does, what options are available, and what kind of data it collects.
+Plugins provide a structure for a particular trial or task, but often allow for significant customization and flexibility. For example, the [image-keyboard-response plugin](../plugins/image-keyboard-response/) defines a simple structure for showing an image and collecting a keyboard response. You can specify the what the stimulus is, what keys the participant is allowed to press, how long the stimulus should be on the screen, how long the participant has to respond, and so on. Many of these options have reasonable default values; even though the image plugin has many different parameters, you only *need* to specify the image stimulus in order to use it. Each plugin has its own documentation page, which describes what the plugin does, what options are available, and what kind of data it collects.
 
 ## Using a plugin
 
@@ -13,8 +13,8 @@ To use a plugin, you'll need to load the plugin's JavaScript file in your experi
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.1.2" type="text/javascript"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.0" type="text/javascript"></script>
+  <script src="https://unpkg.com/jspsych@7.3.0" type="text/javascript"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2" type="text/javascript"></script>
 </head>
 ```
 
@@ -35,7 +35,7 @@ var image_trial = {
 }
 ```
 
-You can override any default parameter values by adding them into your trial object. Here's an exampe of overriding the default values for `trial_duration` and `post_trial_gap`:
+You can override any default parameter values by adding them into your trial object. Here's an example of overriding the default values for `trial_duration` and `post_trial_gap`:
 
 ```javascript
 var image_trial = {

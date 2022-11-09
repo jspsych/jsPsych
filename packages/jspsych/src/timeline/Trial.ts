@@ -56,7 +56,7 @@ export class Trial extends TimelineNode {
     this.removeCssClasses();
 
     const gap = this.getParameterValue("post_trial_gap") ?? this.dependencies.getDefaultIti();
-    if (gap !== 0) {
+    if (gap !== 0 && this.dependencies.getSimulationMode() !== "data-only") {
       await delay(gap);
     }
 

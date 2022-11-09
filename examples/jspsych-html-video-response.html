@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../packages/jspsych/dist/index.browser.js"></script>
+  <script src="../packages/plugin-initialize-camera/dist/index.browser.js"></script>
+  <script src="../packages/plugin-html-video-response/dist/index.browser.js"></script>
+  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+  var jsPsych = initJsPsych();
+
+  const init_camera = {
+    type: jsPsychInitializeCamera,
+    width: 320,
+    include_audio: true
+  }
+
+  const record = {
+    type: jsPsychHtmlVideoResponse,
+    stimulus: `<div style="width:100vw; height:100vh; position: relative;">
+      <div style="width:20px; height:20px; border-radius: 20px; background-color:red; position: absolute; top:10%; left:10%; transform: translate(-50%, -50%);"></div>
+      </div>`,
+    show_done_button: false,
+    recording_duration: 2000,
+    allow_playback: true
+  }
+
+  jsPsych.run([init_camera, record]);
+
+</script>
+</html>

@@ -1,6 +1,6 @@
 # Integrating with Mechanical Turk
 
-A common use of jsPsych is to build an online experiment and find subjects using [Mechanical Turk](http://www.mturk.com/). Once an experiment is available through a web server and data is being [saved on the server](data.md), connecting the experiment with Mechanical Turk takes only a few additional steps. jsPsych has some built-in functionality to assist with this process. 
+A common use of jsPsych is to build an online experiment and find participants using [Mechanical Turk](http://www.mturk.com/). Once an experiment is available through a web server and data is being [saved on the server](data.md), connecting the experiment with Mechanical Turk takes only a few additional steps. jsPsych has some built-in functionality to assist with this process. 
 
 ## The jsPsych.turk module
 
@@ -8,7 +8,7 @@ The [jsPsych.turk](../reference/jspsych-turk.md) module contains functions that 
 
 ## Creating an advertisement page
 
-When potential subjects view your experiment on Mechanical Turk, they will be able to see a single webpage before deciding whether or not to accept the HIT (start the experiment). This first page is often used as an advertisement for the experiment, similar to posting a flier in a department hallway. The important thing to remember about this page is that potential subjects will be able to interact with it even if they haven't accepted the HIT. Therefore, it can be useful to change the content of the page depending on whether the HIT has been accepted or not. This is relatively easy to do:
+When potential participants view your experiment on Mechanical Turk, they will be able to see a single webpage before deciding whether or not to accept the HIT (start the experiment). This first page is often used as an advertisement for the experiment, similar to posting a flier in a department hallway. The important thing to remember about this page is that potential participants will be able to interact with it even if they haven't accepted the HIT. Therefore, it can be useful to change the content of the page depending on whether the HIT has been accepted or not. This is relatively easy to do:
 
 ```html
 <div id="experiment_link">You must accept the HIT to begin the experiment</div>.
@@ -33,7 +33,7 @@ One important issue with advertisement pages is that they must be served using t
 
 ## Getting the worker ID
 
-Every account on Mechanical Turk is given a unique identification string. Recording this ID is a useful way to keep track of who is doing your experiment. In particular, while Turk has built in tools for preventing the same person from doing a HIT more than once, there may be cases where you don't want subjects to complete related experiments. If you store the worker ID of every person who starts an experiment in a database, then you can exclude people by running a query on the database to check for the ID. jsPsych can get the workerID, assignmentID, and hitID with the turkInfo method.
+Every account on Mechanical Turk is given a unique identification string. Recording this ID is a useful way to keep track of who is doing your experiment. In particular, while Turk has built in tools for preventing the same person from doing a HIT more than once, there may be cases where you don't want participants to complete related experiments. If you store the worker ID of every person who starts an experiment in a database, then you can exclude people by running a query on the database to check for the ID. jsPsych can get the workerID, assignmentID, and hitID with the turkInfo method.
 
 ```javascript
 var turkInfo = jsPsych.turk.turkInfo();
@@ -52,7 +52,7 @@ Recording the workerId at the start of the experiment is also a good way to trac
 
 ## Submitting results to Mechanical Turk
 
-If you are running a HIT on Mechanical Turk using the ExternalQuestion template, then you'll need to provide a way for subjects to indicate that they have completed the HIT. (If you are using another template, then the template will provide this code for you). jsPSych makes this a relatively easy task. A common strategy for external HITs is to display an HTML page on the Mechanical Turk website that links to your HIT. Subjects click the link, which opens the actual experiment content in a new browser window or tab, allowing the experiment to take up the whole browser window instead of just the iframe that displays content on Mechanical Turk.
+If you are running a HIT on Mechanical Turk using the ExternalQuestion template, then you'll need to provide a way for participants to indicate that they have completed the HIT. (If you are using another template, then the template will provide this code for you). jsPSych makes this a relatively easy task. A common strategy for external HITs is to display an HTML page on the Mechanical Turk website that links to your HIT. Participants click the link, which opens the actual experiment content in a new browser window or tab, allowing the experiment to take up the whole browser window instead of just the iframe that displays content on Mechanical Turk.
 
 On this page, you might include a submit button for workers to indicate that they have finished the experiment. The page would look something like this:
 
@@ -70,7 +70,7 @@ function sendData() {
 </script>
 ```
 
-When workers click the button, the contents of the `code` text field will be sent to Mechanical Turk, and you'll be able to view the subjects and the codes that they entered in the Mechanical Turk GUI. You can then approve or reject work using the Mechanical Turk website.
+When workers click the button, the contents of the `code` text field will be sent to Mechanical Turk, and you'll be able to view the participants and the codes that they entered in the Mechanical Turk GUI. You can then approve or reject work using the Mechanical Turk website.
 
 ## Limitations
 

@@ -89,7 +89,7 @@ The build chain will read the package (starting at its `src/index.ts` file) and 
 
 Automated code testing for jsPsych is implemented with [Jest](https://jestjs.io/). 
 
-To run the tests, install Node and npm. Run `npm install` in the root jsPsych directory. Then run `npm test`. You can also run `npm test` in the directory of the package that you would like to test. For example, if you are developing tests for the `html-keyboard-response` plugin you can run `npm test` in `/packages/plugin-html-keyboard-response`.
+To run the tests, install Node and npm. Run `npm install` in the root jsPsych directory. Then run `npm test`. You can also run `npm test` in the directory of the package that you would like to test. For example, if you are developing tests for the `html-keyboard-response` plugin you can run `npm test` in `/packages/plugin-html-keyboard-response`. If you want to run one file from the root directory, using the aforementioned example, you can run `npm test -- /packages/plugin-html-keyboard-response/src/index.spec.ts`.
 
 Tests for the core jsPsych library are located in `/packages/jspsych/tests`.
 

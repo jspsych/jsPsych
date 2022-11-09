@@ -180,7 +180,13 @@ describe("jsPsych.extensions", () => {
     expect(extension.on_finish).toHaveBeenCalledWith({ foo: 1 });
   });
 
-  test("on_finish adds trial data", async () => {
+  test.each`
+    name                 | onFinishReturnValue
+    ${"on_finish"}       | ${{ extension_data: true }}
+    ${"async on_finish"} | ${Promise.resolve({ extension_data: true })}
+  `("$name adds trial data", async ({ onFinishReturnValue }) => {
+    extension.on_finish.mockReturnValueOnce(onFinishReturnValue);
+
     await startTimeline(
       [
         {

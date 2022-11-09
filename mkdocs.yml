@@ -18,7 +18,7 @@ extra:
   analytics:
     provider: google
     property: 'UA-50563838-1'
-copyright: 'Copyright &copy; 2012-2021 Josh de Leeuw'
+copyright: 'Copyright &copy; 2012-2022 Josh de Leeuw'
 markdown_extensions:
   - admonition
   - codehilite:
@@ -26,7 +26,8 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.superfences
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.details
   - pymdownx.snippets
   - pymdownx.emoji:
@@ -34,6 +35,7 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
 repo_url: 'https://github.com/jspsych/jsPsych'
 repo_name: 'jspsych/jspsych'
+edit_uri: edit/main/docs
 site_url: 'https://www.jspsych.org/'
 docs_dir: docs
 nav:
@@ -91,14 +93,17 @@ nav:
   - 'html-button-response': 'plugins/html-button-response.md'
   - 'html-keyboard-response': 'plugins/html-keyboard-response.md'
   - 'html-slider-response': 'plugins/html-slider-response.md'
+  - 'html-video-response': 'plugins/html-video-response.md'
   - 'iat-html': 'plugins/iat-html.md'
   - 'iat-image': 'plugins/iat-image.md'
   - 'image-button-response': 'plugins/image-button-response.md'
   - 'image-keyboard-response': 'plugins/image-keyboard-response.md'
   - 'image-slider-response': 'plugins/image-slider-response.md'
+  - 'initialize-camera': 'plugins/initialize-camera.md'
   - 'initialize-microphone': 'plugins/initialize-microphone.md'
   - 'instructions': 'plugins/instructions.md'
   - 'maxdiff': 'plugins/maxdiff.md'
+  - 'mirror-camera': 'plugins/mirror-camera.md'
   - 'preload': 'plugins/preload.md'
   - 'reconstruction': 'plugins/reconstruction.md'
   - 'resize': 'plugins/resize.md'
@@ -124,9 +129,11 @@ nav:
 - Extensions:
   - 'List of Extensions': 'extensions/list-of-extensions.md'
   - 'mouse-tracking': 'extensions/mouse-tracking.md'
+  - 'record-video': 'extensions/record-video.md'
   - 'webgazer': 'extensions/webgazer.md'
 - Developers:
   - 'Configuration': 'developers/configuration.md'
+  - 'Building the Documentation': 'developers/documentation.md'
   - 'Contributing to jsPsych': 'developers/contributing.md'
   - 'Plugin Development': 'developers/plugin-development.md'
   - 'Extension Development': 'developers/extension-development.md'

@@ -227,6 +227,7 @@ export class Timeline extends TimelineNode {
     if (this.parent) {
       return this.parent.evaluateTimelineVariable(variable);
     }
+    throw new Error(`Timeline variable ${variable.name} not found.`);
   }
 
   public getResults() {

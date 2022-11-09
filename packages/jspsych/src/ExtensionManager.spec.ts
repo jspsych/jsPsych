@@ -1,4 +1,3 @@
-import { mocked } from "ts-jest/utils";
 import { Class } from "type-fest";
 
 import { TestExtension } from "../tests/extensions/test-extension";
@@ -66,7 +65,7 @@ describe("ExtensionManager", () => {
     it("calls `on_start` on all extensions specified in the provided `extensions` parameter", () => {
       const manager = new ExtensionManager(dependencies, [{ type: TestExtension }]);
 
-      const onStartCallback = mocked(manager.extensions.test.on_start);
+      const onStartCallback = jest.mocked(manager.extensions.test.on_start);
 
       manager.onStart();
       expect(onStartCallback).not.toHaveBeenCalled();
@@ -80,7 +79,7 @@ describe("ExtensionManager", () => {
     it("calls `on_load` on all extensions specified in the provided `extensions` parameter", () => {
       const manager = new ExtensionManager(dependencies, [{ type: TestExtension }]);
 
-      const onLoadCallback = mocked(manager.extensions.test.on_load);
+      const onLoadCallback = jest.mocked(manager.extensions.test.on_load);
 
       manager.onLoad();
       expect(onLoadCallback).not.toHaveBeenCalled();
@@ -94,7 +93,7 @@ describe("ExtensionManager", () => {
     it("calls `on_finish` on all extensions specified in the provided `extensions` parameter and returns a joint extension results object", async () => {
       const manager = new ExtensionManager(dependencies, [{ type: TestExtension }]);
 
-      const onFinishCallback = mocked(manager.extensions.test.on_finish);
+      const onFinishCallback = jest.mocked(manager.extensions.test.on_finish);
       onFinishCallback.mockReturnValue({ extension: "result" });
 
       let results = await manager.onFinish(undefined);

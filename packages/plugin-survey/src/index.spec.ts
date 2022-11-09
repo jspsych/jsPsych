@@ -40,7 +40,7 @@ describe("survey plugin", () => {
     ]);
 
     // check that label displayed
-    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    const question = displayElement.querySelector('div[data-name="P0_Q0"]');
     expect(question).not.toBeNull();
     expect(question.querySelector("span").innerHTML).toBe("foo");
 
@@ -73,7 +73,7 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    const question = displayElement.querySelector('div[data-name="P0_Q0"]');
     expect(question).not.toBeNull();
     expect(question.querySelector("#prompt").innerHTML).toBe("foo");
 
@@ -113,7 +113,7 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    const question = displayElement.querySelector('div[data-name="P0_Q0"]');
     expect(question).not.toBeNull();
     expect(question.querySelector("span").innerHTML).toBe("foo");
 
@@ -146,7 +146,7 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    const question = displayElement.querySelector('div[data-name="P0_Q0"]');
     expect(question).not.toBeNull();
     expect(question.querySelector("span").innerHTML).toBe("foo");
 
@@ -177,7 +177,7 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    const question = displayElement.querySelector('div[data-name="P0_Q0"]');
     expect(question).not.toBeNull();
     expect(question.querySelector("span").innerHTML).toBe("foo");
 
@@ -209,7 +209,7 @@ describe("survey plugin", () => {
       },
     ]);
 
-    const question = displayElement.querySelector('div[name="P0_Q0"]');
+    const question = displayElement.querySelector('div[data-name="P0_Q0"]');
     expect(question).not.toBeNull();
     expect(question.querySelector("span").innerHTML).toBe("foo");
 
@@ -223,6 +223,64 @@ describe("survey plugin", () => {
     clickTarget(finish_button);
 
     await expectFinished();
+  });
+
+  test("loads single-line text questions of various input types", async () => {
+    jest.setTimeout(40000); // default timeout of 5s is too short for this test
+
+    const inputTypes = [
+      "color",
+      "date",
+      "datetime-local",
+      "email",
+      "month",
+      "number",
+      "password",
+      "range",
+      "tel",
+      "text",
+      "time",
+      "url",
+      "week",
+    ];
+
+    for (const inputType of inputTypes) {
+      const { displayElement, expectFinished, getData } = await startTimeline([
+        {
+          type: survey,
+          pages: [
+            [
+              {
+                type: "text",
+                prompt: "foo",
+                input_type: inputType,
+                textbox_columns: 10,
+              },
+            ],
+          ],
+        },
+      ]);
+
+      const question = displayElement.querySelector('div[data-name="P0_Q0"]');
+      expect(question).not.toBeNull();
+      expect(question.querySelector("span").innerHTML).toBe("foo");
+
+      const input = displayElement.querySelectorAll("input")[0];
+      expect(input).not.toBeNull();
+      expect(input.type).toEqual(inputType);
+      if (["email", "password", "tel", "url", "text"].includes(inputType)) {
+        // size can be specified only for text input types
+        expect(input.size).toEqual(10);
+      } else {
+        expect(input.size).not.toEqual(10);
+      }
+
+      const finish_button = displayElement.querySelector("input.sv_complete_btn");
+      expect(finish_button).not.toBeNull();
+      clickTarget(finish_button);
+
+      await expectFinished();
+    }
   });
 
   // survey options

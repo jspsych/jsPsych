@@ -7,25 +7,34 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
-    "build": "npm run build -w jspsych && npm run build -ws",
+    "build": "turbo run build",
     "build:archive": "gulp createCoreDistArchive",
-    "prepare": "husky install && npm run build",
-    "tsc": "npm run tsc -ws",
+    "update-unpkg-links": "gulp updateUnpkgLinks",
+    "update-plugin-versions": "gulp updatePluginVersions",
+    "prepare": "node -e 'process.exit(!process.env.CI)' || (husky install && npm run build)",
+    "tsc": "turbo tsc",
     "changeset": "changeset",
-    "release": "changeset publish"
+    "changeset:version": "changeset version && npm install && npm run update-unpkg-links && npm run update-plugin-versions",
+    "changeset:publish": "npm run build && changeset publish",
+    "docs:deploy": "poetry install && poetry run mike deploy -u",
+    "docs:serve": "poetry install && poetry run mike serve"
   },
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=7.0.0"
   },
+  "packageManager": "npm@8.3.1",
   "devDependencies": {
-    "@changesets/changelog-github": "^0.4.1",
-    "@changesets/cli": "^2.17.0",
-    "husky": "^7.0.1",
+    "@changesets/changelog-github": "^0.4.4",
+    "@changesets/cli": "^2.22.0",
+    "husky": "^8.0.1",
     "import-sort-style-module": "^6.0.0",
-    "lint-staged": "^11.1.2",
-    "prettier": "^2.3.2",
-    "prettier-plugin-import-sort": "^0.0.7"
+    "lint-staged": "^12.4.1",
+    "prettier": "^2.6.2",
+    "prettier-plugin-import-sort": "^0.0.7",
+    "turbo": "^1.2.9",
+    "jest": "*",
+    "ts-jest": "*"
   },
   "prettier": {
     "printWidth": 100

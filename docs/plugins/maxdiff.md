@@ -1,4 +1,6 @@
-# maxdiff plugin
+# maxdiff
+
+Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-maxdiff/CHANGELOG.md).
 
 The maxdiff plugin displays a table with rows of alternatives to be selected for two mutually-exclusive categories, typically as 'most' or 'least' on a particular criteria (e.g. importance, preference, similarity). The participant responds by selecting one radio button corresponding to an alternative in both the left and right response columns. The same alternative cannot be endorsed on both the left and right response columns (e.g. 'most' and 'least') simultaneously.
 
@@ -22,10 +24,32 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
 Name | Type | Value
 -----|------|------
-rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the maxdiff table first appears on the screen until the subject's response.
+rt | numeric | The response time in milliseconds for the participant to make a response. The time is measured from when the maxdiff table first appears on the screen until the participant's response.
 labels | object | An object with two keys, `left` and `right`, containing the labels (strings) corresponding to the left and right response columns. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
 response | object | An object with two keys, `left` and `right`, containing the alternatives selected on the left and right columns. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. 
 
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-maxdiff@1.1.2"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-maxdiff.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-maxdiff
+```
+```js
+import maxdiff from '@jspsych/plugin-maxdiff';
+```
 
 ## Examples
 

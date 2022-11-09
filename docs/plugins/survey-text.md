@@ -1,6 +1,8 @@
-# survey-text plugin
+# survey-text
 
-The survey-text plugin displays a set of questions with free response text fields. The subject types in answers.
+Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-text/CHANGELOG.md).
+
+The survey-text plugin displays a set of questions with free response text fields. The participant types in answers.
 
 ## Parameters
 
@@ -8,7 +10,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-questions | array | *undefined* | An array of objects, each object represents a question that appears on the screen. Each object contains a prompt, placeholder, required, rows, and columns parameter that will be applied to the question. See examples below for further clarification. `prompt`: Type string, default value of *undefined*. The string is the prompt for the subject to respond to. Each question gets its own response field. `placeholder`: Type string, default value of `""`. The string will create placeholder text in the text field. `required`: Boolean; if `true` then the user must enter a response to submit. `rows`: Type integer, default value of 1. The number of rows for the response text box. `columns`: Type integer, default value of 40. The number of columns for the response text box. `name`: Name of the question. Used for storing data. If left undefined then default names (`Q0`, `Q1`, `...`) will be used for the questions.
+questions | array | *undefined* | An array of objects, each object represents a question that appears on the screen. Each object contains a prompt, placeholder, required, rows, and columns parameter that will be applied to the question. See examples below for further clarification. `prompt`: Type string, default value of *undefined*. The string is the prompt for the participant to respond to. Each question gets its own response field. `placeholder`: Type string, default value of `""`. The string will create placeholder text in the text field. `required`: Boolean; if `true` then the user must enter a response to submit. `rows`: Type integer, default value of 1. The number of rows for the response text box. `columns`: Type integer, default value of 40. The number of columns for the response text box. `name`: Name of the question. Used for storing data. If left undefined then default names (`Q0`, `Q1`, `...`) will be used for the questions.
 randomize_question_order | boolean | `false` | If true, the display order of `questions` is randomly determined at the start of the trial. In the data object, `Q0` will still refer to the first question in the array, regardless of where it was presented visually.
 preamble | string | empty string | HTML formatted string to display at the top of the page above all the questions.
 button_label | string |  'Continue' | The text that appears on the button to finish the trial.
@@ -21,8 +23,31 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Name | Type | Value
 -----|------|------
 response | object | An object containing the response for each question. The object will have a separate key (variable) for each question, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. For each question, the response is a string containing whatever text was in the response box when the responses were submitted. If the `name` parameter is defined for the question, then the response object will use the value of `name` as the key for each question. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
-rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response(s) were submitted. |
+rt | numeric | The response time in milliseconds for the participant to make a response. The time is measured from when the questions first appear on the screen until the participant's response(s) were submitted. |
 question_order | array | An array with the order of questions. For example `[2,0,1]` would indicate that the first question was `trial.questions[2]` (the third item in the `questions` parameter), the second question was `trial.questions[0]`, and the final question was `trial.questions[1]`. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.2"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-survey-text.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-survey-text
+```
+```js
+import surveyText from '@jspsych/plugin-survey-text';
+```
 
 ## Examples
 

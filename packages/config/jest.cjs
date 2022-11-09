@@ -1,6 +1,7 @@
 const ts = require("typescript");
-const { pathsToModuleNameMapper } = require("ts-jest/utils");
+const { pathsToModuleNameMapper } = require("ts-jest");
 
+/** @type { (dirname: string) => import('@jest/types').Config.InitialOptions } */
 module.exports.makePackageConfig = (dirname) => {
   const packageJson = require(dirname + "/package.json");
   const packageBaseName = packageJson.name.replace("@jspsych/", "");
@@ -14,15 +15,13 @@ module.exports.makePackageConfig = (dirname) => {
 
   return {
     preset: "ts-jest",
-    moduleNameMapper: pathsToModuleNameMapper(tsCompilerOptions.paths, {
-      prefix: "<rootDir>/",
-    }),
+    moduleNameMapper: pathsToModuleNameMapper(tsCompilerOptions.paths, { prefix: "<rootDir>/" }),
     testEnvironment: "jsdom",
     testEnvironmentOptions: {
       fetchExternalResources: true,
       pretendToBeVisual: true,
+      url: "http://localhost/",
     },
-    testURL: "http://localhost/",
     displayName: {
       name: packageBaseName,
       color: packageBaseName === "jspsych" ? "white" : "cyanBright",

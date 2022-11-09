@@ -1,5 +1,4 @@
 import { flushPromises } from "@jspsych/test-utils";
-import { mocked } from "ts-jest/utils";
 
 import { TimelineNodeDependenciesMock, createSnapshotUtils } from "../../tests/test-utils";
 import TestPlugin from "../../tests/TestPlugin";
@@ -328,31 +327,31 @@ describe("Timeline", () => {
         };
 
         // `randomize_order`
-        mocked(shuffle).mockReturnValue([1, 0]);
+        jest.mocked(shuffle).mockReturnValue([1, 0]);
         await createSampleTimeline(undefined, true).run();
         expect(shuffle).toHaveBeenCalledWith([0, 1]);
         expect(xValues).toEqual([1, 0]);
 
         // with-replacement
-        mocked(sampleWithReplacement).mockReturnValue([0, 0]);
+        jest.mocked(sampleWithReplacement).mockReturnValue([0, 0]);
         await createSampleTimeline({ type: "with-replacement", size: 2, weights: [1, 1] }).run();
         expect(sampleWithReplacement).toHaveBeenCalledWith([0, 1], 2, [1, 1]);
         expect(xValues).toEqual([0, 0]);
 
         // without-replacement
-        mocked(sampleWithoutReplacement).mockReturnValue([1, 0]);
+        jest.mocked(sampleWithoutReplacement).mockReturnValue([1, 0]);
         await createSampleTimeline({ type: "without-replacement", size: 2 }).run();
         expect(sampleWithoutReplacement).toHaveBeenCalledWith([0, 1], 2);
         expect(xValues).toEqual([1, 0]);
 
         // fixed-repetitions
-        mocked(repeat).mockReturnValue([0, 0, 1, 1]);
+        jest.mocked(repeat).mockReturnValue([0, 0, 1, 1]);
         await createSampleTimeline({ type: "fixed-repetitions", size: 2 }).run();
         expect(repeat).toHaveBeenCalledWith([0, 1], 2);
         expect(xValues).toEqual([0, 0, 1, 1]);
 
         // alternate-groups
-        mocked(shuffleAlternateGroups).mockReturnValue([1, 0]);
+        jest.mocked(shuffleAlternateGroups).mockReturnValue([1, 0]);
         await createSampleTimeline({
           type: "alternate-groups",
           groups: [[0], [1]],
@@ -448,7 +447,7 @@ describe("Timeline", () => {
         expect(childTimeline.evaluateTimelineVariable(new TimelineVariable("y"))).toEqual(0);
       });
 
-      it("returns `undefined` if there are no parents or none of them has a value for the variable", async () => {
+      it("throws an exception if there are no parents or none of them has a value for the variable", async () => {
         const timeline = createTimeline({
           timeline: [{ timeline: [{ type: TestPlugin }] }],
         });
@@ -456,10 +455,10 @@ describe("Timeline", () => {
         const variable = new TimelineVariable("x");
 
         await timeline.run();
-        expect(timeline.evaluateTimelineVariable(variable)).toBeUndefined();
-        expect(
+        expect(() => timeline.evaluateTimelineVariable(variable)).toThrowError("");
+        expect(() =>
           (timeline.children[0] as Timeline).evaluateTimelineVariable(variable)
-        ).toBeUndefined();
+        ).toThrowError("");
       });
     });
   });

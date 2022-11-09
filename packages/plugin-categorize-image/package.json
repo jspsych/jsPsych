@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-categorize-image",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "jspsych plugin for categorization trials with feedback",
   "type": "module",
   "main": "dist/index.cjs",
@@ -37,7 +37,7 @@
     "jspsych": ">=7.1.0"
   },
   "devDependencies": {
-    "@jspsych/config": "^1.1.0",
-    "@jspsych/test-utils": "^1.1.0"
+    "@jspsych/config": "^1.3.0",
+    "@jspsych/test-utils": "^1.1.2"
   }
 }

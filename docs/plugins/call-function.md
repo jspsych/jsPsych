@@ -1,5 +1,7 @@
 # call-function
 
+Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-call-function/CHANGELOG.md).
+
 This plugin executes a specified function. This allows the experimenter to run arbitrary code at any point during the experiment.
 
 The function cannot take any arguments. If arguments are needed, then an anonymous function should be used to wrap the function call (see examples below).
@@ -21,6 +23,29 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Name | Type | Value
 -----|------|------
 value | any | The return value of the called function.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-call-function@1.1.2"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-call-function.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-call-function
+```
+```js
+import callFunction from '@jspsych/plugin-call-function';
+```
 
 ## Examples
 

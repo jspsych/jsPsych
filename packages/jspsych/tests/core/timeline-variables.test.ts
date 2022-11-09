@@ -86,6 +86,46 @@ describe("sampling", () => {
 
     expect(result1).not.toEqual(result2);
   });
+
+  test("fixed repetitions method produces random order", async () => {
+    const jsPsych = initJsPsych();
+    const seed = jsPsych.randomization.setSeed("jspsych");
+
+    const { expectFinished } = await startTimeline(
+      [
+        {
+          timeline: [
+            {
+              type: htmlKeyboardResponse,
+              stimulus: jsPsych.timelineVariable("stimulus"),
+              data: {
+                s: jsPsych.timelineVariable("stimulus"),
+              },
+            },
+          ],
+          timeline_variables: [{ stimulus: "a" }, { stimulus: "b" }],
+          sample: {
+            type: "fixed-repetitions",
+            size: 5,
+          },
+        },
+      ],
+      jsPsych
+    );
+
+    for (let i = 0; i < 10; i++) {
+      await pressKey("a");
+    }
+
+    await expectFinished();
+
+    const order = jsPsych.data.get().select("s").values;
+    expect(order).not.toEqual(["a", "b", "a", "b", "a", "b", "a", "b", "a", "b"]);
+    const countA = order.filter((s) => s === "a").length;
+    const countB = order.filter((s) => s === "b").length;
+    expect(countA).toEqual(5);
+    expect(countB).toEqual(5);
+  });
 });
 
 describe("timeline variables are correctly evaluated", () => {
@@ -360,114 +400,61 @@ describe("timeline variables are correctly evaluated", () => {
   });
 });
 
-// TODO keep this function?
-// describe("jsPsych.getAllTimelineVariables()", () => {
-//   test("gets all timeline variables for a simple timeline", async () => {
-//     const jsPsych = initJsPsych();
-//     await startTimeline(
-//       [
-//         {
-//           timeline: [
-//             {
-//               type: htmlKeyboardResponse,
-//               stimulus: "foo",
-//               on_finish: (data) => {
-//                 var all_tvs = jsPsych.getAllTimelineVariables();
-//                 Object.assign(data, all_tvs);
-//               },
-//             },
-//           ],
-//           timeline_variables: [
-//             { a: 1, b: 2 },
-//             { a: 2, b: 3 },
-//           ],
-//         },
-//       ],
-//       jsPsych
-//     );
+// using console.warn instead of error for now. plan is to enable this test with version 8.
+test.skip("timelineVariable() throws an error when variable doesn't exist", async () => {
+  const jsPsych = initJsPsych();
+  const { expectFinished } = await startTimeline(
+    [
+      {
+        timeline: [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "foo",
+            on_start: () => {
+              expect(() => jsPsych.evaluateTimelineVariable("c")).toThrowError();
+            },
+          },
+        ],
+        timeline_variables: [
+          { a: 1, b: 2 },
+          { a: 2, b: 3 },
+        ],
+      },
+    ],
+    jsPsych
+  );
 
-//     pressKey("a");
-//     pressKey("a");
+  await pressKey("a");
+  await pressKey("a");
 
-//     expect(jsPsych.data.get().values()).toEqual([
-//       expect.objectContaining({ a: 1, b: 2 }),
-//       expect.objectContaining({ a: 2, b: 3 }),
-//     ]);
-//   });
+  await expectFinished();
+});
 
-//   test("gets all timeline variables for a nested timeline", async () => {
-//     const jsPsych = initJsPsych();
-//     await startTimeline(
-//       [
-//         {
-//           timeline: [
-//             {
-//               timeline: [
-//                 {
-//                   type: htmlKeyboardResponse,
-//                   stimulus: "foo",
-//                   on_finish: (data) => {
-//                     var all_tvs = jsPsych.getAllTimelineVariables();
-//                     Object.assign(data, all_tvs);
-//                   },
-//                 },
-//               ],
-//               timeline_variables: [
-//                 { a: 1, b: 2 },
-//                 { a: 2, b: 3 },
-//               ],
-//             },
-//           ],
-//           timeline_variables: [{ c: 1 }, { c: 2 }],
-//         },
-//       ],
-//       jsPsych
-//     );
+test("timelineVariable() can fetch a variable called 'data'", async () => {
+  const jsPsych = initJsPsych();
+  const { expectFinished } = await startTimeline(
+    [
+      {
+        timeline: [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "foo",
+            on_start: () => {
+              expect(() => jsPsych.evaluateTimelineVariable("data")).not.toThrowError();
+            },
+          },
+        ],
+        timeline_variables: [
+          { data: { a: 1 }, b: 2 },
+          { data: { a: 2 }, b: 3 },
+        ],
+      },
+    ],
+    jsPsych
+  );
 
-//     for (let i = 0; i < 4; i++) {
-//       pressKey("a");
-//     }
+  await pressKey("a");
+  await pressKey("a");
 
-//     expect(jsPsych.data.get().values()).toEqual([
-//       expect.objectContaining({ a: 1, b: 2, c: 1 }),
-//       expect.objectContaining({ a: 2, b: 3, c: 1 }),
-//       expect.objectContaining({ a: 1, b: 2, c: 2 }),
-//       expect.objectContaining({ a: 2, b: 3, c: 2 }),
-//     ]);
-//   });
-
-//   test("gets the right values in a conditional_function", async () => {
-//     let a: number, b: number;
-
-//     const jsPsych = initJsPsych();
-//     await startTimeline(
-//       [
-//         {
-//           timeline: [
-//             {
-//               type: htmlKeyboardResponse,
-//               stimulus: "foo",
-//             },
-//           ],
-//           timeline_variables: [
-//             { a: 1, b: 2 },
-//             { a: 2, b: 3 },
-//           ],
-//           conditional_function: () => {
-//             var all_tvs = jsPsych.getAllTimelineVariables();
-//             a = all_tvs.a;
-//             b = all_tvs.b;
-//             return true;
-//           },
-//         },
-//       ],
-//       jsPsych
-//     );
-
-//     pressKey("a");
-//     pressKey("a");
-
-//     expect(a).toBe(1);
-//     expect(b).toBe(2);
-//   });
-// });
+  await expectFinished();
+});

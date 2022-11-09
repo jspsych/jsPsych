@@ -1,8 +1,10 @@
-# reconstruction plugin
+# reconstruction
 
-This plugin allows a subject to interact with a stimulus by modifying a parameter of the stimulus and observing the change in the stimulus in real-time.
+Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-reconstruction/CHANGELOG.md).
 
-The stimulus must be defined through a function that returns an HTML-formatted string. The function should take a single value, which is the parameter that can be modified by the subject. The value can only range from 0 to 1. See the example at the bottom of the page for a sample function.
+This plugin allows a participant to interact with a stimulus by modifying a parameter of the stimulus and observing the change in the stimulus in real-time.
+
+The stimulus must be defined through a function that returns an HTML-formatted string. The function should take a single value, which is the parameter that can be modified by the participant. The value can only range from 0 to 1. See the example at the bottom of the page for a sample function.
 
 ## Parameters
 
@@ -26,6 +28,29 @@ Name | Type | Value
 start_value | numeric | The starting value of the stimulus parameter.
 final_value | numeric | The final value of the stimulus parameter.
 rt | numeric | The length of time, in milliseconds, that the trial lasted.
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-reconstruction@1.1.2"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-reconstruction.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-reconstruction
+```
+```js
+import reconstruction from '@jspsych/plugin-reconstruction';
+```
 
 ## Examples
 

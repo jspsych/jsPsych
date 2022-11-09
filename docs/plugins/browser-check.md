@@ -1,5 +1,7 @@
 # browser-check
 
+Current version: 1.0.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-browser-check/CHANGELOG.md).
+
 This plugin measures and records various features of the participant's browser and can end the experiment if defined inclusion criteria are not met.
 
 The plugin currently can record the following features:
@@ -73,6 +75,29 @@ In `visual` mode, if `allow_window_resize` is true and the browser's width and h
 
 As with all simulated plugins, you can override the default (actual) data with fake data using `simulation_options`. This allows you to test your exclusion criteria by simulating other configurations.
 
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-browser-check@1.0.2"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-browser-check.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-browser-check
+```
+```js
+import browserCheck from '@jspsych/plugin-browser-check';
+```
+
 ## Examples
 
 ???+ example "Recording all of the available features, no exclusions"
@@ -96,7 +121,7 @@ As with all simulated plugins, you can override the default (actual) data with f
         var trial = {
           type: jsPsychBrowserCheck,
           inclusion_function: (data) => {
-            return ['chrome', 'firefox'].contains(data.browser);
+            return ['chrome', 'firefox'].includes(data.browser);
           },
           exclusion_message: `<p>You must use Chrome or Firefox to complete this experiment.</p>`
         };

@@ -134,6 +134,14 @@ export class DataCollection {
     return new DataCollection(this.trials.filter(fn));
   }
 
+  filterColumns(columns: Array<string>) {
+    return new DataCollection(
+      this.trials.map((trial) =>
+        Object.fromEntries(columns.filter((key) => key in trial).map((key) => [key, trial[key]]))
+      )
+    );
+  }
+
   select(column) {
     const values = [];
     for (const trial of this.trials) {

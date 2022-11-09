@@ -3,6 +3,7 @@ import {
   randomID,
   randomInt,
   repeat,
+  setSeed,
   shuffle,
   shuffleAlternateGroups,
   shuffleNoRepeats,
@@ -12,11 +13,23 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-describe("#shuffle", () => {
-  test("should produce fixed order with mock RNG", () => {
+describe("shuffle", () => {
+  beforeEach(() => {
     jest.spyOn(Math, "random").mockReturnValue(0.5);
+  });
+
+  it("should produce fixed order with mock RNG", () => {
     const arr = [1, 2, 3, 4, 5, 6];
     expect(shuffle(arr)).toEqual([1, 6, 2, 5, 3, 4]);
+  });
+
+  it("should not modify the original array and return a new array instance", () => {
+    const array = [1, 2, 3];
+    const shuffledArray = shuffle(array);
+
+    expect(array).toEqual([1, 2, 3]);
+    expect(shuffledArray).not.toBe(array);
+    expect(shuffledArray).toEqual([1, 3, 2]);
   });
 });
 
@@ -31,7 +44,7 @@ describe("shuffleAlternateGroups", () => {
   });
 });
 
-describe("#randomID", () => {
+describe("randomID", () => {
   test("should produce ID based on mock RNG", () => {
     jest
       .spyOn(Math, "random")
@@ -163,5 +176,22 @@ describe("randomInt", () => {
     expect(() => {
       randomInt(1, 0);
     }).toThrowError();
+  });
+});
+
+describe("setSeed", () => {
+  test("Replaces Math.random() with seedable RNG", () => {
+    setSeed("jspsych");
+
+    const r1_1 = Math.random();
+    const r1_2 = Math.random();
+
+    setSeed("jspsych");
+
+    const r2_1 = Math.random();
+    const r2_2 = Math.random();
+
+    expect(r1_1).toEqual(r2_1);
+    expect(r1_2).toEqual(r2_2);
   });
 });

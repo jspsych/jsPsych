@@ -114,7 +114,7 @@ var n = 3;
 var data = jsPsych.data.get().first(n);
 ```
 
-Counting the number of trials in a data collection:
+Counting the number of trials with a correct response in a data collection:
 ```js
 var count = jsPsych.data.get().filter({correct: true}).count();
 ```
@@ -272,7 +272,7 @@ function saveData() {
 }
 ```
 
-It's important that the `XMLHttpRequest` is able to complete before the experiment is closed. If you invoke the `saveData()` function at the end of your experiment and the subject closes the window before all of the data has been transferred you will lose that data. To mitigate this risk, you can use the `call-function` plugin's `async` option to prevent the experiment from progressing until the request is complete.
+It's important that the `XMLHttpRequest` is able to complete before the experiment is closed. If you invoke the `saveData()` function at the end of your experiment and the participant closes the window before all of the data has been transferred you will lose that data. To mitigate this risk, you can use the `call-function` plugin's `async` option to prevent the experiment from progressing until the request is complete.
 
 ```javascript
 var trial = {

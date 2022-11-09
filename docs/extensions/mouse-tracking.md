@@ -1,7 +1,7 @@
 # mouse-tracking
 
 This extension supports mouse tracking. 
-Specifically, it can record the `x` `y` coordinates and time of [mousemove events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event), [mousedown events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mousedown_event), and [mouseup events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mouseup_event).
+Specifically, it can record the `x` and `y` coordinates, along with the time of [mousemove events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event), [mousedown events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mousedown_event), and [mouseup events](https://developer.mozilla.org/en-US/docs/Web/API/Element/mouseup_event).
 It also allows recording of the [bounding rectangle](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) of elements on the screen to support the calculation of mouse events relative to different elements.
 
 ## Parameters
@@ -30,14 +30,14 @@ Trial parameters can be set when adding the extension to a trial object.
 var trial = {
   type: jsPsych...,
   extensions: [
-    {type: jsPsychExtensionWebgazer, params: {...}}
+    {type: jsPsychExtensionMouseTracking, params: {...}}
   ]
 }
 ```
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-targets | array | [] | A list of elements on the page that you would like to record the coordinates of for comparison with the WebGazer data. Each entry in the array should be a valid [CSS selector string](https://www.w3schools.com/cssref/css_selectors.asp) that identifies the element. The selector string should be valid for exactly one element on the page. If the selector is valid for more than one element then only the first matching element will be recorded.
+targets | array | [] | A list of elements on the page that you would like to record the coordinates of for comparison with the mouse tracking data. Each entry in the array should be a valid [CSS selector string](https://www.w3schools.com/cssref/css_selectors.asp) that identifies the element. The selector string should be valid for exactly one element on the page. If the selector is valid for more than one element then only the first matching element will be recorded.
 events | array | ['mousemove'] | A list of events to track. Can include 'mousemove', 'mousedown', and 'mouseup'. 
 
 ## Data Generated

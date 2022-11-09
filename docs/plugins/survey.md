@@ -1,5 +1,7 @@
 # survey
 
+Current version: 0.2.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md).
+
 The survey plugin displays one or more questions of different types, on one or more pages that the participant can navigate. This plugin is built on top of the [SurveyJS](https://surveyjs.io/) library.
 
 The supported question types are: 
@@ -22,7 +24,12 @@ There is also an [`"html"`](#html) type for adding arbitrary HTML-formatted cont
 This plugin uses an additional stylesheet called `survey.css`. You can load it via: 
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.1.1/css/survey.css">
+<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.2.1/css/survey.css">
+```
+
+If you are using a bundler such as [webpack](https://webpack.js.org/), you can also import it in JavaScript as follows, depending on your bundler configuration:
+```javascript
+import '@jspsych/plugin-survey/css/survey.css'
 ```
 
 ## Parameters
@@ -171,6 +178,7 @@ placeholder | string | "" | Placeholder text in the text response field.
 textbox_rows | integer | 1 | The number of rows (height) for the response text box. 
 textbox_columns | integer | 40 | The number of columns (width) for the response text box. 
 validation | string | "" | A regular expression used to validate the response.
+input_type | string | "text" | Type for the HTML `<input>` element. The `input_type` parameter must be one of "color", "date", "datetime-local", "email", "month", "number", "password", "range", "tel", "text", "time", "url", "week". If the `textbox_rows` parameter is larger than 1, the `input_type` parameter will be ignored. The `textbox_columns` parameter only affects questions with `input_type` "email", "password", "tel", "url", or "text".
 
 ## Data Generated
 
@@ -179,11 +187,34 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Name | Type | Value
 -----|------|------
 response | object | An object containing the response to each question. The object will have a separate key (variable) for each question, with the first question on the first page being recorded in `P0_Q0`, the second question on the first page in `P0_Q1`, and so on. If the `name` parameter is defined for the question, then the response object will use the value of `name` as the key for each question. The response type will depend on the question type. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. Note that, if any questions use the `other` option (`add_other_option: true`), then the response value will be the `other_option_text` (e.g. "Other") and any text written in the textbox will be saved as "(question name)-Comment". |
-rt | numeric | The response time in milliseconds for the subject to make a response. The time is measured from when the questions first appear on the screen until the subject's response(s) are submitted. |
+rt | numeric | The response time in milliseconds for the participant to make a response. The time is measured from when the questions first appear on the screen until the participant's response(s) are submitted. |
 
 ## Simulation Mode
 
 This plugin does not yet support [simulation mode](../overview/simulation.md).
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-survey@0.2.1"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-survey.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-survey
+```
+```js
+import survey from '@jspsych/plugin-survey';
+```
 
 ## Examples
 
@@ -278,7 +309,7 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
           <iframe src="../../demos/jspsych-survey-demo2.html" width="90%;" height="500px;" frameBorder="0"></iframe>
         </div>
 
-    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-demo2.html">Open demo in new tab</a>
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo2.html">Open demo in new tab</a>
 
 ???+ example "Single and multiple item Likert-style scales"
     === "Code"
@@ -378,3 +409,63 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
         </div>
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo4.html">Open demo in new tab</a>
+
+???+ example "Adding data to trial"
+    When adding any data to a Survey trial, you should add it via the `data` parameter at the whole-trial level (not inside the question objects), even if it only relates to one question out of multiple questions/pages contained wihtin the trial.
+    === "Code"
+
+        ```javascript
+        const question_info = [
+          {
+            'fruit': 'apples',
+            'Q1_prompt': 'Do you like apples?', 
+            'Q1_type': 'regular'
+          },
+          {
+            'fruit': 'bananas',
+            'Q1_prompt': 'Do you NOT like bananas?', 
+            'Q1_type': 'reverse'
+          },
+        ];
+
+        const survey = {
+          type: jsPsychSurvey,
+          pages: [
+            [
+              {
+                type: 'multi-choice',
+                prompt: jsPsych.timelineVariable('Q1_prompt'),
+                options: ['Yes', 'No'],
+                name: 'Q1'
+              },
+              {
+                type: 'text',
+                prompt: function() {
+                  return `What's your favorite thing about ${jsPsych.timelineVariable('fruit')}?`;
+                },
+                name: 'Q2'
+              }
+            ]
+          ],
+          // Add data at the whole-trial level here
+          data: {
+            'Q1_prompt': jsPsych.timelineVariable('Q1_prompt'),
+            'Q1_type': jsPsych.timelineVariable('Q1_type'),
+            'fruit': jsPsych.timelineVariable('fruit')                                                        
+          },
+          button_label_finish: 'Continue'                
+        };
+
+        const survey_procedure = {
+          timeline: [survey],
+          timeline_variables: question_info,
+          randomize_order: true
+        };
+        ```
+
+    === "Demo"
+        <div style="text-align:center;">
+          <iframe src="../../demos/jspsych-survey-demo5.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo5.html">Open demo in new tab</a>

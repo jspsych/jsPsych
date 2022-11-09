@@ -1,3 +1,5 @@
+// __rollup-babel-import-regenerator-runtime__
+
 import { JsPsych } from "./JsPsych";
 import { MigrationError } from "./migration";
 

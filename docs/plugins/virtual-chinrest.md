@@ -1,5 +1,7 @@
 # virtual-chinrest
 
+Current version: 2.0.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-virtual-chinrest/CHANGELOG.md).
+
 This plugin provides a "virtual chinrest" that can measure the distance between the participant and the screen. It can also standardize the jsPsych page content to a known physical dimension (e.g., ensuring that a 200px wide stimulus is 2.2cm wide on the participant's monitor). This is based on the work of [Li, Joo, Yeatman, and Reinecke (2020)](https://doi.org/10.1038/s41598-019-57204-1), and the plugin code is a modified version of [their implementation](https://github.com/QishengLi/virtual_chinrest). We recommend citing their work in any paper that makes use of this plugin.
 
 !!! note "Citation"
@@ -11,14 +13,6 @@ The plugin works in two phases.
 
 **Phase 2**. To measure the participant's viewing distance from their screen we use a [blind spot](<https://en.wikipedia.org/wiki/Blind_spot_(vision)>) task. Participants are asked to focus on a black square on the screen with their right eye closed, while a red dot repeatedly sweeps from right to left. They press the spacebar on their keyboard whenever they perceive that the red dot has disappeared. This part allows the plugin to use the distance between the black square and the red dot when it disappears from eyesight to estimate how far the participant is from the monitor. This estimation assumes that the blind spot is located at 13.5° temporally.
 
-## Dependency
-
-This plugin requires the SVG.js library, available at [https://svgjs.com](https://svgjs.com/docs/3.0/) or via the CDN link below. You must include the library in the `<head>` section of your experiment page.
-
-```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.3/svg.min.js"></script>
-```
-
 ## Parameters
 
 Parameters can be left unspecified if the default value is acceptable.
@@ -29,7 +23,7 @@ Parameters can be left unspecified if the default value is acceptable.
 | pixels_per_unit               | numeric | 100                                                                                                                                                                                                                                                                                                                                                                                              | After the scaling factor is applied, this many pixels will equal one unit of measurement, where the units are indicated by `resize_units`. This is only used when resizing is done after the trial ends (i.e. the `resize_units` parameter is not "none").                                                                                                                                  |
 | adjustment_prompt             | HTML string  | "Click and drag the lower right corner of the image until it is the same size as a credit card held up to the screen. You can use any card that is the same size as a credit card, like a membership card or driver's license. If you do not have access to a real card you can use a ruler to measure the image width to 3.37 inches or 85.6 mm."                                               | This string can contain HTML markup. Any content here will be displayed **below the card stimulus** during the resizing phase.                                                                                                                       |
 | adjustment_button_prompt      | HTML string  | "Click here when the image is the correct size"                                                                                                                                                                                                                                                                                                                                                  | Content of the button displayed below the card stimulus during the resizing phase.                                                                                                                                                                   |
-| item_path                     | string  | "img/card.png"                                                                                                                                                                                                                                                                                                                                                                                   | Path of the item to be presented in the card stimulus during the resizing phase. _The default image is available in `/examples/img/card.png`_                                                                                                                                |
+| item_path                     | string  | null                                                                                                                                                                                                                                                                                                                                    | Path of the item to be presented in the card stimulus during the resizing phase. If `null` then no image is shown, and a solid color background is used instead. _An example image is available in `/examples/img/card.png`_                                                                                                                                |
 | item_height_mm                | numeric | 53.98                                                                                                                                                                                                                                                                                                                                                                                            | The known height of the physical item (e.g. credit card) to be measured, in mm.                                                                                                                                                                                     |
 | item_width_mm                 | numeric | 85.6                                                                                                                                                                                                                                                                                                                                                                                             | The known width of the physical item (e.g. credit card) to be measured, in mm.                                                                                                                                                                                      |
 | item_init_size                | numeric | 250                                                                                                                                                                                                                                                                                                                                                                                              | The initial size of the card stimulus, in pixels, along its largest dimension.                                                                                                                                                      |
@@ -64,6 +58,29 @@ _Note: The deg data are **only** returned if viewing distance is estimated with 
 ## Simulation Mode
 
 This plugin does not yet support [simulation mode](../overview/simulation.md).
+
+## Install
+
+Using the CDN-hosted JavaScript file:
+
+```js
+<script src="https://unpkg.com/@jspsych/plugin-virtual-chinrest@2.0.2"></script>
+```
+
+Using the JavaScript file downloaded from a GitHub release dist archive:
+
+```js
+<script src="jspsych/plugin-virtual-chinrest.js"></script>
+```
+
+Using NPM:
+
+```
+npm install @jspsych/plugin-virtual-chinrest
+```
+```js
+import virtualChinrest from '@jspsych/plugin-virtual-chinrest';
+```
 
 ## Example
 

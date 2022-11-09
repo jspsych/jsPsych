@@ -1,5 +1,4 @@
 import { flushPromises } from "@jspsych/test-utils";
-import { mocked } from "ts-jest/utils";
 import { ConditionalKeys } from "type-fest";
 
 import { TimelineNodeDependenciesMock, createInvocationOrderUtils } from "../../tests/test-utils";
@@ -294,7 +293,7 @@ describe("Trial", () => {
       });
 
       it("resolves missing parameter values from parent timeline and sets default values", async () => {
-        mocked(timeline).getParameterValue.mockImplementation((parameterPath) => {
+        jest.mocked(timeline).getParameterValue.mockImplementation((parameterPath) => {
           if (Array.isArray(parameterPath)) {
             parameterPath = parameterPathArrayToString(parameterPath);
           }
@@ -312,7 +311,7 @@ describe("Trial", () => {
           requiredComplexNested: { requiredChild: "bar" },
           requiredComplexNestedArray: [
             // This empty object is allowed because `requiredComplexNestedArray[0]` is (simulated to
-            // be) set as a parameter to the mocked parent timeline:
+            // be) set as a parameter to the jest. parent timeline:
             {},
             { requiredChild: "bar" },
           ],
@@ -388,8 +387,9 @@ describe("Trial", () => {
       });
 
       it("evaluates timeline variables, including those returned from parameter functions", async () => {
-        mocked(timeline).evaluateTimelineVariable.mockImplementation(
-          (variable: TimelineVariable) => {
+        jest
+          .mocked(timeline)
+          .evaluateTimelineVariable.mockImplementation((variable: TimelineVariable) => {
             switch (variable.name) {
               case "t":
                 return TestPlugin;
@@ -398,8 +398,7 @@ describe("Trial", () => {
               default:
                 return undefined;
             }
-          }
-        );
+          });
 
         const trial = createTrial({
           type: new TimelineVariable("t"),
@@ -497,9 +496,8 @@ describe("Trial", () => {
 
       const trial1 = createTrial({ type: TestPlugin });
 
-      const runPromise1 = trial1.run();
       let hasTrial1Completed = false;
-      runPromise1.then(() => {
+      trial1.run().then(() => {
         hasTrial1Completed = true;
       });
 
@@ -512,9 +510,8 @@ describe("Trial", () => {
 
       const trial2 = createTrial({ type: TestPlugin, post_trial_gap: () => 200 });
 
-      const runPromise2 = trial2.run();
       let hasTrial2Completed = false;
-      runPromise2.then(() => {
+      trial2.run().then(() => {
         hasTrial2Completed = true;
       });
 
@@ -528,6 +525,21 @@ describe("Trial", () => {
       jest.advanceTimersByTime(100);
       await flushPromises();
       expect(hasTrial2Completed).toBe(true);
+    });
+
+    it("skips inter-trial interval in data-only simulation mode", async () => {
+      dependencies.getSimulationMode.mockReturnValue("data-only");
+      TestPlugin.setManualFinishTrialMode();
+
+      const trial = createTrial({ type: TestPlugin, post_trial_gap: 100 });
+
+      let hasTrialCompleted = false;
+      trial.run().then(() => {
+        hasTrialCompleted = true;
+      });
+
+      await TestPlugin.finishTrial();
+      expect(hasTrialCompleted).toBe(true);
     });
 
     it("invokes extension callbacks and includes extension results", async () => {
@@ -642,7 +654,7 @@ describe("Trial", () => {
         const trial = createTrial({ type: TestPlugin, simulation_options: { mode: "visual" } });
         await trial.run();
 
-        expect(mocked(trial.pluginInstance.simulate).mock.calls[0][1]).toBe("visual");
+        expect(jest.mocked(trial.pluginInstance.simulate).mock.calls[0][1]).toBe("visual");
       });
     });
   });
@@ -665,7 +677,7 @@ describe("Trial", () => {
 
   describe("evaluateTimelineVariable()", () => {
     it("defers to the parent node", () => {
-      mocked(timeline).evaluateTimelineVariable.mockReturnValue(1);
+      jest.mocked(timeline).evaluateTimelineVariable.mockReturnValue(1);
 
       const trial = new Trial(dependencies, { type: TestPlugin }, timeline);
 
@@ -705,9 +717,11 @@ describe("Trial", () => {
 
     describe("if no trial-level simulation options are set", () => {
       it("falls back to parent timeline simulation options", async () => {
-        mocked(timeline.getParameterValue).mockImplementation((parameterPath) =>
-          parameterPath === "simulation_options" ? { data: { rt: 1 } } : undefined
-        );
+        jest
+          .mocked(timeline.getParameterValue)
+          .mockImplementation((parameterPath) =>
+            parameterPath === "simulation_options" ? { data: { rt: 1 } } : undefined
+          );
 
         expect(createTrial({ type: TestPlugin }).getSimulationOptions()).toEqual({
           data: { rt: 1 },
@@ -745,7 +759,7 @@ describe("Trial", () => {
 
     describe("when `simulation_options` is a function that returns a string", () => {
       it("looks up the corresponding global simulation options key", async () => {
-        mocked(dependencies.getGlobalSimulationOptions).mockReturnValue({
+        jest.mocked(dependencies.getGlobalSimulationOptions).mockReturnValue({
           foo: { data: { rt: 1 } },
         });
 
@@ -759,12 +773,12 @@ describe("Trial", () => {
 
     it("evaluates (global/nested) functions and timeline variables", async () => {
       const timelineVariables = { x: "foo", y: { data: () => ({ rt: () => 0 }) } };
-      mocked(dependencies.getGlobalSimulationOptions).mockReturnValue({
+      jest.mocked(dependencies.getGlobalSimulationOptions).mockReturnValue({
         foo: new TimelineVariable("y"),
       });
-      mocked(timeline.evaluateTimelineVariable).mockImplementation(
-        (variable) => timelineVariables[variable.name]
-      );
+      jest
+        .mocked(timeline.evaluateTimelineVariable)
+        .mockImplementation((variable) => timelineVariables[variable.name]);
 
       expect(createSimulationTrial(() => new TimelineVariable("x")).getSimulationOptions()).toEqual(
         { data: { rt: 0 } }
@@ -786,7 +800,7 @@ describe("Trial", () => {
         })).getSimulationOptions()
       ).toEqual({ data: { rt: 1 }, simulate: true, mode: "visual" });
 
-      mocked(timeline.evaluateTimelineVariable).mockReturnValue({ data: { rt: 2 } });
+      jest.mocked(timeline.evaluateTimelineVariable).mockReturnValue({ data: { rt: 2 } });
       expect(createSimulationTrial(new TimelineVariable("x")).getSimulationOptions()).toEqual({
         data: { rt: 2 },
       });

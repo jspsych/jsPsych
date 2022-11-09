@@ -2,9 +2,6 @@ name: build
 
 on: [push, pull_request]
 
-env:
-  HUSKY: 0
-
 jobs:
   test:
     name: Build, lint, and test on Node.js ${{ matrix.node }}
@@ -12,21 +9,34 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [14.x, 16.x]
+        node: [14, 16]
 
     steps:
       - uses: actions/checkout@v2
 
       - name: Setup Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
+          cache: npm
 
       - name: Install npm@v7
         run: npm install -g npm@7
 
-      - name: Install dependencies and build packages
+      - name: Install dependencies
         run: npm ci
+
+      # Running this after `npm ci` because `npm ci` removes `node_modules`: 
+      - name: Download Turborepo cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules/.cache/turbo
+          key: ${{ runner.os }}-node-${{ matrix.node }}-turbo-${{ hashFiles('node_modules/.cache/turbo') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node }}-turbo-
+
+      - name: Build packages
+        run: npm run build
 
       # TODO setup linting
       # - name: Lint
