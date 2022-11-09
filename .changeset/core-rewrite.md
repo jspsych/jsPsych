@@ -30,4 +30,5 @@ Rewrite jsPsych's core logic. The following breaking changes have been made:
 - `jsPsych.endExperiment()` and `jsPsych.endCurrentTimeline()` have been renamed to `jsPsych.abortExperiment()` and `jsPsych.abortCurrentTimeline()`, respectively.
 - `jsPsych.getAllTimelineVariables()` has been replaced by a trial-level `save_timeline_variables` parameter that can be used to include all or some timeline variables in a trial's result data.
 - Interaction listeners are now removed when the experiment ends.
+- JsPsych will now throw an error when a non-array value is used for a trial parameter marked as `array: true` in the plugin's info object.
 - JsPsych now internally relies on the JavaScript event loop. This means automated tests have to `await` utility functions like `pressKey()` to process the event loop.
