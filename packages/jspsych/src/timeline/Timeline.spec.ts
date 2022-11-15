@@ -786,31 +786,26 @@ describe("Timeline", () => {
         on_timeline_finish: createSnapshotCallback("outerTimelineFinish"),
       });
 
-      // Avoiding direct .toBe(timeline) in this test case to circumvent circular reference errors
-      // caused by Jest trying to stringify `Timeline` objects
-      expect(timeline.getLatestNode()).toBeInstanceOf(Timeline);
-      expect(timeline.getLatestNode().index).toBeUndefined();
+      expect(timeline.getLatestNode()).toBe(timeline);
 
       timeline.run();
 
-      expect(snapshots.outerTimelineStart).toBeInstanceOf(Timeline);
-      expect(snapshots.outerTimelineStart.index).toEqual(0);
+      expect(snapshots.outerTimelineStart).toBe(timeline);
       expect(timeline.getLatestNode()).toBeInstanceOf(Trial);
-      expect(timeline.getLatestNode().index).toEqual(0);
+      expect(timeline.getLatestNode()).toBe(timeline.children[0]);
 
       await TestPlugin.finishTrial();
       expect(snapshots.innerTimelineStart).toBeInstanceOf(Timeline);
-      expect(snapshots.innerTimelineStart.index).toEqual(1);
+      expect(snapshots.innerTimelineStart).toBe(timeline.children[1]);
+
+      const nestedTrial = (timeline.children[1] as Timeline).children[0];
       expect(timeline.getLatestNode()).toBeInstanceOf(Trial);
-      expect(timeline.getLatestNode().index).toEqual(1);
+      expect(timeline.getLatestNode()).toBe(nestedTrial);
 
       await TestPlugin.finishTrial();
-      expect(snapshots.innerTimelineFinish).toBeInstanceOf(Trial);
-      expect(snapshots.innerTimelineFinish.index).toEqual(1);
-      expect(snapshots.outerTimelineFinish).toBeInstanceOf(Trial);
-      expect(snapshots.outerTimelineFinish.index).toEqual(1);
-      expect(timeline.getLatestNode()).toBeInstanceOf(Trial);
-      expect(timeline.getLatestNode().index).toEqual(1);
+      expect(snapshots.innerTimelineFinish).toBe(nestedTrial);
+      expect(snapshots.outerTimelineFinish).toBe(nestedTrial);
+      expect(timeline.getLatestNode()).toBe(nestedTrial);
     });
   });
 });
