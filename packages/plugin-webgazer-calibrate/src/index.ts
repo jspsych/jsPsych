@@ -1,3 +1,4 @@
+import type WebGazerExtension from "@jspsych/extension-webgazer";
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
@@ -71,6 +72,8 @@ class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    const extension = this.jsPsych.extensions.webgazer as WebGazerExtension;
+
     var html = `
           <div id='webgazer-calibrate-container' style='position: relative; width:100vw; height:100vh'>
           </div>`;
@@ -94,9 +97,9 @@ class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
     };
 
     const calibrate = () => {
-      this.jsPsych.extensions["webgazer"].resume();
+      extension.resume();
       if (trial.calibration_mode == "click") {
-        this.jsPsych.extensions["webgazer"].startMouseCalibration();
+        extension.startMouseCalibration();
       }
       next_calibration_round();
     };
@@ -139,7 +142,7 @@ class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
 
         const watch_dot = () => {
           if (performance.now() > pt_start_cal) {
-            this.jsPsych.extensions["webgazer"].calibratePoint(x, y, "click");
+            extension.calibratePoint(x, y);
           }
           if (performance.now() < pt_finish) {
             requestAnimationFrame(watch_dot);
@@ -154,7 +157,7 @@ class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
 
     const calibration_done = () => {
       if (trial.calibration_mode == "click") {
-        this.jsPsych.extensions["webgazer"].stopMouseCalibration();
+        extension.stopMouseCalibration();
       }
       wg_container.innerHTML = "";
       end_trial();
@@ -162,9 +165,9 @@ class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
 
     // function to end trial when it is time
     const end_trial = () => {
-      this.jsPsych.extensions["webgazer"].pause();
-      this.jsPsych.extensions["webgazer"].hidePredictions();
-      this.jsPsych.extensions["webgazer"].hideVideo();
+      extension.pause();
+      extension.hidePredictions();
+      extension.hideVideo();
 
       // kill any remaining setTimeout handlers
       this.jsPsych.pluginAPI.clearAllTimeouts();

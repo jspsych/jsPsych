@@ -1,3 +1,4 @@
+import type WebGazerExtension from "@jspsych/extension-webgazer";
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
@@ -80,6 +81,8 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    const extension = this.jsPsych.extensions.webgazer as WebGazerExtension;
+
     var trial_data = <any>{};
     trial_data.raw_gaze = [];
     trial_data.percent_in_roi = [];
@@ -100,7 +103,7 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
 
     // function to end trial when it is time
     const end_trial = () => {
-      this.jsPsych.extensions.webgazer.stopSampleInterval();
+      extension.stopSampleInterval();
 
       // kill any remaining setTimeout handlers
       this.jsPsych.pluginAPI.clearAllTimeouts();
@@ -127,7 +130,7 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
 
       var pt_data = [];
 
-      var cancelGazeUpdate = this.jsPsych.extensions["webgazer"].onGazeUpdate((prediction) => {
+      var cancelGazeUpdate = extension.onGazeUpdate((prediction) => {
         if (performance.now() > pt_start_val) {
           pt_data.push({
             x: prediction.x,
@@ -169,9 +172,9 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
       }
       trial_data.validation_points = val_points;
       points_completed = -1;
-      //jsPsych.extensions['webgazer'].resume();
-      this.jsPsych.extensions.webgazer.startSampleInterval();
-      //jsPsych.extensions.webgazer.showPredictions();
+      //extension.resume();
+      extension.startSampleInterval();
+      //extension.showPredictions();
       next_validation_point();
     };
 
@@ -200,13 +203,13 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
         '<button id="cont" style="position:absolute; top: 50%; left:calc(50% - 50px); width: 100px;" class="jspsych-btn">Continue</btn>';
       wg_container.innerHTML = html;
       wg_container.querySelector("#cont").addEventListener("click", () => {
-        this.jsPsych.extensions.webgazer.pause();
+        extension.pause();
         end_trial();
       });
       // turn on webgazer's loop
-      this.jsPsych.extensions.webgazer.showPredictions();
-      this.jsPsych.extensions.webgazer.stopSampleInterval();
-      this.jsPsych.extensions.webgazer.resume();
+      extension.showPredictions();
+      extension.stopSampleInterval();
+      extension.resume();
     };
 
     const validation_done = () => {
