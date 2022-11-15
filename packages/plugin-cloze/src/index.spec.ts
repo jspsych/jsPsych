@@ -55,7 +55,7 @@ describe("cloze", () => {
       },
     ]);
 
-    clickTarget(document.querySelector("#finish_cloze_button"));
+    await clickTarget(document.querySelector("#finish_cloze_button"));
     await expectFinished();
   });
 
@@ -69,7 +69,7 @@ describe("cloze", () => {
     ]);
 
     getInputElementById("input0").value = "cloze";
-    clickTarget(document.querySelector("#finish_cloze_button"));
+    await clickTarget(document.querySelector("#finish_cloze_button"));
     await expectFinished();
   });
 
@@ -83,7 +83,7 @@ describe("cloze", () => {
     ]);
 
     getInputElementById("input0").value = "filler";
-    clickTarget(document.querySelector("#finish_cloze_button"));
+    await clickTarget(document.querySelector("#finish_cloze_button"));
     await expectFinished();
   });
 
@@ -97,7 +97,7 @@ describe("cloze", () => {
     ]);
 
     getInputElementById("input0").value = "some wrong answer";
-    clickTarget(document.querySelector("#finish_cloze_button"));
+    await clickTarget(document.querySelector("#finish_cloze_button"));
     await expectRunning();
   });
 
@@ -111,7 +111,7 @@ describe("cloze", () => {
     ]);
 
     getInputElementById("input0").value = "";
-    clickTarget(document.querySelector("#finish_cloze_button"));
+    await clickTarget(document.querySelector("#finish_cloze_button"));
     await expectRunning();
   });
 
@@ -128,7 +128,7 @@ describe("cloze", () => {
     ]);
 
     getInputElementById("input0").value = "cloze";
-    clickTarget(document.querySelector("#finish_cloze_button"));
+    await clickTarget(document.querySelector("#finish_cloze_button"));
     expect(mistakeFn).not.toHaveBeenCalled();
   });
 
@@ -145,7 +145,7 @@ describe("cloze", () => {
     ]);
 
     getInputElementById("input0").value = "cloze";
-    clickTarget(document.querySelector("#finish_cloze_button"));
+    await clickTarget(document.querySelector("#finish_cloze_button"));
     expect(mistakeFn).not.toHaveBeenCalled();
   });
 
@@ -162,7 +162,7 @@ describe("cloze", () => {
     ]);
 
     getInputElementById("input0").value = "some wrong answer";
-    clickTarget(document.querySelector("#finish_cloze_button"));
+    await clickTarget(document.querySelector("#finish_cloze_button"));
     expect(mistakeFn).toHaveBeenCalled();
   });
 
@@ -179,7 +179,7 @@ describe("cloze", () => {
     ]);
 
     getInputElementById("input0").value = "";
-    clickTarget(document.querySelector("#finish_cloze_button"));
+    await clickTarget(document.querySelector("#finish_cloze_button"));
     expect(mistakeFn).toHaveBeenCalled();
   });
 
@@ -193,7 +193,7 @@ describe("cloze", () => {
 
     getInputElementById("input0").value = "cloze1";
     getInputElementById("input1").value = "cloze2";
-    clickTarget(document.querySelector("#finish_cloze_button"));
+    await clickTarget(document.querySelector("#finish_cloze_button"));
 
     const data = getData().values()[0].response;
     expect(data.length).toBe(2);

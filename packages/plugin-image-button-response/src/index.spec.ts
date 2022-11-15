@@ -60,7 +60,7 @@ describe("image-button-response", () => {
       '<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"'
     );
 
-    clickTarget(document.querySelector("#jspsych-image-button-response-button-0"));
+    await clickTarget(document.querySelector("#jspsych-image-button-response-button-0"));
     await expectFinished();
   });
 
@@ -132,7 +132,7 @@ describe("image-button-response", () => {
       '<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"'
     );
 
-    clickTarget(document.querySelector("#jspsych-image-button-response-button-0"));
+    await clickTarget(document.querySelector("#jspsych-image-button-response-button-0"));
     await expectFinished();
   });
 

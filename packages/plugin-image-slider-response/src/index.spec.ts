@@ -19,7 +19,7 @@ describe("image-slider-response", () => {
     expect(getHTML()).toContain(
       '<div id="jspsych-image-slider-response-stimulus"><img src="../media/blue.png"'
     );
-    clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
+    await clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
     await expectFinished();
   });
 
@@ -37,7 +37,7 @@ describe("image-slider-response", () => {
     expect(getHTML()).toContain('<span style="text-align: center; font-size: 80%;">left</span>');
     expect(getHTML()).toContain('<span style="text-align: center; font-size: 80%;">right</span>');
 
-    clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
+    await clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
     await expectFinished();
   });
 
@@ -56,7 +56,7 @@ describe("image-slider-response", () => {
       '<button id="jspsych-image-slider-response-next" class="jspsych-btn">button</button>'
     );
 
-    clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
+    await clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
     await expectFinished();
   });
 
@@ -82,7 +82,7 @@ describe("image-slider-response", () => {
     expect(responseElement.max).toBe("10");
     expect(responseElement.step).toBe("2");
 
-    clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
+    await clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
     await expectFinished();
   });
 
@@ -100,7 +100,7 @@ describe("image-slider-response", () => {
 
     expect(getHTML()).toContain("<p>This is a prompt</p>");
 
-    clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
+    await clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
     await expectFinished();
   });
 
@@ -123,7 +123,7 @@ describe("image-slider-response", () => {
     jest.advanceTimersByTime(500);
     expect(stimulusElement.style.visibility).toContain("hidden");
 
-    clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
+    await clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
     await expectFinished();
   });
 
@@ -163,7 +163,7 @@ describe("image-slider-response", () => {
       '<div id="jspsych-image-slider-response-stimulus"><img src="../media/blue.png"'
     );
 
-    clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
+    await clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
     await expectFinished();
   });
 });

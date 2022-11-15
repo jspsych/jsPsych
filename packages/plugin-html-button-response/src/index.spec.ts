@@ -58,7 +58,7 @@ describe("html-button-response", () => {
       '<div id="jspsych-html-button-response-stimulus">this is html</div>'
     );
 
-    clickTarget(document.querySelector("#jspsych-html-button-response-button-0"));
+    await clickTarget(document.querySelector("#jspsych-html-button-response-button-0"));
 
     await expectFinished();
   });
@@ -130,7 +130,7 @@ describe("html-button-response", () => {
       '<div id="jspsych-html-button-response-stimulus">this is html</div>'
     );
 
-    clickTarget(document.querySelector("#jspsych-html-button-response-button-0"));
+    await clickTarget(document.querySelector("#jspsych-html-button-response-button-0"));
     await expectFinished();
   });
 
@@ -148,7 +148,7 @@ describe("html-button-response", () => {
       '<div id="jspsych-html-button-response-stimulus">this is html</div>'
     );
 
-    clickTarget(document.querySelector("#jspsych-html-button-response-button-0"));
+    await clickTarget(document.querySelector("#jspsych-html-button-response-button-0"));
     expect(document.querySelector("#jspsych-html-button-response-stimulus").className).toBe(
       " responded"
     );

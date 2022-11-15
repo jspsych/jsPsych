@@ -59,6 +59,13 @@ describe("ExtensionManager", () => {
       expect(manager.extensions.test.initialize).toHaveBeenCalledTimes(1);
       expect(manager.extensions.test.initialize).toHaveBeenCalledWith({ option: 1 });
     });
+
+    it("defaults `params` to an empty object", async () => {
+      const manager = new ExtensionManager(dependencies, [{ type: TestExtension }]);
+
+      await manager.initializeExtensions();
+      expect(manager.extensions.test.initialize).toHaveBeenCalledWith({});
+    });
   });
 
   describe("onStart()", () => {

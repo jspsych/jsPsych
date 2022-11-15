@@ -40,7 +40,7 @@ export class ExtensionManager {
 
   public async initializeExtensions() {
     await Promise.all(
-      this.extensionsConfiguration.map(({ type, params }) =>
+      this.extensionsConfiguration.map(({ type, params = {} }) =>
         this.getExtensionInstanceByClass(type).initialize(params)
       )
     );

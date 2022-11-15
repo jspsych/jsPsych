@@ -16,10 +16,10 @@ describe("instructions plugin", () => {
 
     expect(getHTML()).toContain("page 1");
 
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toContain("page 2");
 
-    pressKey("a");
+    await pressKey("a");
     await expectFinished();
   });
 
@@ -35,13 +35,13 @@ describe("instructions plugin", () => {
 
     expect(getHTML()).toContain("page 1");
 
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toContain("page 2");
 
-    pressKey("ArrowLeft");
+    await pressKey("ArrowLeft");
     expect(getHTML()).toContain("page 2");
 
-    pressKey("a");
+    await pressKey("a");
     await expectFinished();
   });
 
@@ -54,8 +54,8 @@ describe("instructions plugin", () => {
       },
     ]);
 
-    pressKey("a");
-    pressKey("a");
+    await pressKey("a");
+    await pressKey("a");
 
     await expectFinished();
 

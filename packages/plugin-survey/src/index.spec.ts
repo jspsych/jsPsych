@@ -52,7 +52,7 @@ describe("survey plugin", () => {
     const finish_button = displayElement.querySelector("input.sv_complete_btn");
     expect(finish_button).not.toBeNull();
 
-    clickTarget(finish_button);
+    await clickTarget(finish_button);
 
     await expectFinished();
   });
@@ -79,7 +79,7 @@ describe("survey plugin", () => {
 
     const finish_button = displayElement.querySelector("input.sv_complete_btn");
     expect(finish_button).not.toBeNull();
-    clickTarget(finish_button);
+    await clickTarget(finish_button);
 
     await expectFinished();
   });
@@ -124,7 +124,7 @@ describe("survey plugin", () => {
     const finish_button = displayElement.querySelector("input.sv_complete_btn");
     expect(finish_button).not.toBeNull();
 
-    clickTarget(finish_button);
+    await clickTarget(finish_button);
 
     await expectFinished();
   });
@@ -156,7 +156,7 @@ describe("survey plugin", () => {
 
     const finish_button = displayElement.querySelector("input.sv_complete_btn");
     expect(finish_button).not.toBeNull();
-    clickTarget(finish_button);
+    await clickTarget(finish_button);
 
     await expectFinished();
   });
@@ -188,7 +188,7 @@ describe("survey plugin", () => {
 
     const finish_button = displayElement.querySelector("input.sv_complete_btn");
     expect(finish_button).not.toBeNull();
-    clickTarget(finish_button);
+    await clickTarget(finish_button);
 
     await expectFinished();
   });
@@ -220,7 +220,7 @@ describe("survey plugin", () => {
 
     const finish_button = displayElement.querySelector("input.sv_complete_btn");
     expect(finish_button).not.toBeNull();
-    clickTarget(finish_button);
+    await clickTarget(finish_button);
 
     await expectFinished();
   });
@@ -277,7 +277,7 @@ describe("survey plugin", () => {
 
       const finish_button = displayElement.querySelector("input.sv_complete_btn");
       expect(finish_button).not.toBeNull();
-      clickTarget(finish_button);
+      await clickTarget(finish_button);
 
       await expectFinished();
     }

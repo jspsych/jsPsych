@@ -19,7 +19,7 @@ describe("survey-text plugin", () => {
     expect(selectInput("#input-0").size).toBe(40);
     expect(selectInput("#input-1").size).toBe(40);
 
-    clickTarget(document.querySelector("#jspsych-survey-text-next"));
+    await clickTarget(document.querySelector("#jspsych-survey-text-next"));
 
     await expectFinished();
   });
@@ -39,7 +39,7 @@ describe("survey-text plugin", () => {
     expect(selectInput("#input-0").size).toBe(50);
     expect(selectInput("#input-1").size).toBe(20);
 
-    clickTarget(document.querySelector("#jspsych-survey-text-next"));
+    await clickTarget(document.querySelector("#jspsych-survey-text-next"));
 
     await expectFinished();
   });
@@ -81,7 +81,7 @@ describe("survey-text plugin", () => {
     selectInput("#input-3").value = "a3";
     selectInput("#input-4").value = "a4";
 
-    clickTarget(document.querySelector("#jspsych-survey-text-next"));
+    await clickTarget(document.querySelector("#jspsych-survey-text-next"));
 
     await expectFinished();
 

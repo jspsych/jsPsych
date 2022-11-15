@@ -22,7 +22,7 @@ describe("survey-html-form plugin", () => {
       '#jspsych-survey-html-form input[name="second"]'
     )[0].value = TEST_VALUE;
 
-    clickTarget(document.querySelector("#jspsych-survey-html-form-next"));
+    await clickTarget(document.querySelector("#jspsych-survey-html-form-next"));
 
     await expectFinished();
 

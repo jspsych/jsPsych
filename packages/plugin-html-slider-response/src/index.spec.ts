@@ -137,7 +137,7 @@ describe("html-slider-response", () => {
       '<div id="jspsych-html-slider-response-stimulus">this is html</div>'
     );
 
-    clickTarget(document.querySelector("#jspsych-html-slider-response-next"));
+    await clickTarget(document.querySelector("#jspsych-html-slider-response-next"));
 
     await expectFinished();
   });

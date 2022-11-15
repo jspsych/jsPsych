@@ -19,7 +19,7 @@ describe("sketchpad", () => {
     expect(displayElement.querySelector("#sketchpad-undo")).not.toBeNull();
     expect(displayElement.querySelector("#sketchpad-redo")).not.toBeNull();
 
-    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await clickTarget(displayElement.querySelector("#sketchpad-end"));
     await expectFinished();
   });
 
@@ -36,7 +36,7 @@ describe("sketchpad", () => {
     expect(canvas.getAttribute("width")).toBe("800");
     expect(canvas.getAttribute("height")).toBe("300");
 
-    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await clickTarget(displayElement.querySelector("#sketchpad-end"));
     await expectFinished();
   });
 
@@ -54,7 +54,7 @@ describe("sketchpad", () => {
     expect(canvas.getAttribute("width")).toBe("300");
     expect(canvas.getAttribute("height")).toBe("300");
 
-    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await clickTarget(displayElement.querySelector("#sketchpad-end"));
     await expectFinished();
   });
 
@@ -75,7 +75,7 @@ describe("sketchpad", () => {
       display_content.indexOf("sketchpad-canvas")
     );
 
-    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await clickTarget(displayElement.querySelector("#sketchpad-end"));
     await expectFinished();
   });
 
@@ -100,7 +100,7 @@ describe("sketchpad", () => {
     );
     expect(display_content.indexOf("prompt")).toBeLessThan(display_content.indexOf("finish-btn"));
 
-    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await clickTarget(displayElement.querySelector("#sketchpad-end"));
     await expectFinished();
   });
 
@@ -127,7 +127,7 @@ describe("sketchpad", () => {
       display_content.indexOf("finish-btn")
     );
 
-    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await clickTarget(displayElement.querySelector("#sketchpad-end"));
     await expectFinished();
   });
 
@@ -145,7 +145,7 @@ describe("sketchpad", () => {
     expect(buttons[1].getAttribute("data-color")).toBe("green");
     expect(buttons[2].getAttribute("data-color")).toBe("#0000ff");
 
-    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await clickTarget(displayElement.querySelector("#sketchpad-end"));
     await expectFinished();
   });
 
@@ -161,7 +161,7 @@ describe("sketchpad", () => {
 
     expect(button.innerHTML).toBe("foo");
 
-    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await clickTarget(displayElement.querySelector("#sketchpad-end"));
     await expectFinished();
   });
 
@@ -177,7 +177,7 @@ describe("sketchpad", () => {
 
     expect(button.innerHTML).toBe("foo");
 
-    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await clickTarget(displayElement.querySelector("#sketchpad-end"));
     await expectFinished();
   });
 
@@ -193,7 +193,7 @@ describe("sketchpad", () => {
 
     expect(button.innerHTML).toBe("foo");
 
-    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await clickTarget(displayElement.querySelector("#sketchpad-end"));
     await expectFinished();
   });
 
@@ -209,7 +209,7 @@ describe("sketchpad", () => {
 
     expect(button.innerHTML).toBe("foo");
 
-    clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await clickTarget(displayElement.querySelector("#sketchpad-end"));
     await expectFinished();
   });
 });
