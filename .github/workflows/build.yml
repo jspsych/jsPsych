@@ -26,7 +26,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Running this after `npm ci` because `npm ci` removes `node_modules`: 
+      # Running this after `npm ci` because `npm ci` removes `node_modules`:
       - name: Download Turborepo cache
         uses: actions/cache@v2
         with:
@@ -43,7 +43,7 @@ jobs:
       #   run: npm run lint
 
       - name: Run tests
-        run: npm run test -- --ci --coverage --maxWorkers=2
+        run: npm run test -- --ci --coverage --maxWorkers=2 --reporters=default --reporters=github-actions
         env:
           NODE_OPTIONS: "--max-old-space-size=4096" # Increase heap size for jest
       # TODO setup codecov or coveralls
