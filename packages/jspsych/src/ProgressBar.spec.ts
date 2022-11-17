@@ -11,7 +11,7 @@ describe("ProgressBar", () => {
 
   it("sets up proper HTML markup when created", () => {
     expect(containerElement.innerHTML).toMatchInlineSnapshot(
-      '"<span>My message</span><div id=\\"jspsych-progressbar-outer\\"><div id=\\"jspsych-progressbar-inner\\" style=\\"width: 0%;\\"></div></div>"'
+      '"<span>My message</span><div id="jspsych-progressbar-outer"><div id="jspsych-progressbar-inner" style="width: 0%;"></div></div>"'
     );
   });
 

@@ -21,11 +21,7 @@ class TestPlugin implements JsPsychPlugin<typeof testPluginInfo> {
     TestPlugin.info = testPluginInfo;
   }
 
-  private static defaultTrialResult: Record<string, any> = { my: "result" };
-
-  static setDefaultTrialResult(defaultTrialResult: Record<string, any> = { my: "result" }) {
-    TestPlugin.defaultTrialResult = defaultTrialResult;
-  }
+  static defaultTrialResult: Record<string, any> = { my: "result" };
 
   private static finishTrialMode: "immediate" | "manual" = "immediate";
 
@@ -38,8 +34,8 @@ class TestPlugin implements JsPsychPlugin<typeof testPluginInfo> {
   }
 
   /**
-   * Makes the `trial` method of all instances of `TestPlugin` finish immediately and allows to manually finish the trial by
-   * invoking `TestPlugin.finishTrial()` instead.
+   * Makes the `trial` method of all instances of `TestPlugin` finish immediately and allows to
+   * manually finish the trial by invoking `TestPlugin.finishTrial()` instead.
    */
   static setImmediateFinishTrialMode() {
     TestPlugin.finishTrialMode = "immediate";
@@ -48,39 +44,19 @@ class TestPlugin implements JsPsychPlugin<typeof testPluginInfo> {
   private static trialPromise = new PromiseWrapper<Record<string, any>>();
 
   /**
-   * Resolves the promise returned by `trial()` with the provided `result` object or `{ my: "result"
-   * }` if no `result` object was provided.
+   * Resolves the promise returned by `trial()` with the provided `result` or
+   * `TestPlugin.defaultTrialResult` if no `result` object was passed.
    **/
   static async finishTrial(result?: Record<string, any>) {
     TestPlugin.trialPromise.resolve(result ?? TestPlugin.defaultTrialResult);
     await flushPromises();
   }
 
-  /** Resets all static properties including the `trial` function mock */
-  static reset() {
-    TestPlugin.prototype.trial
-      .mockReset()
-      .mockImplementation(TestPlugin.prototype.defaultTrialImplementation);
-    TestPlugin.prototype.simulate
-      .mockReset()
-      .mockImplementation(TestPlugin.prototype.defaultSimulateImplementation);
-    this.resetPluginInfo();
-    this.setDefaultTrialResult();
-    this.setImmediateFinishTrialMode();
-  }
-
-  constructor(private jsPsych: JsPsych) {}
-
-  // For convenience, `trial` is set to a `jest.fn` below using `TestPlugin.prototype` and
-  // `defaultTrialImplementation`
-  trial: jest.Mock<Promise<TrialResult | void> | void>;
-  simulate: jest.Mock<Promise<TrialResult | void> | void>;
-
-  defaultTrialImplementation(
+  static defaultTrialImplementation(
     display_element: HTMLElement,
     trial: TrialType<typeof testPluginInfo>,
     on_load: () => void
-  ) {
+  ): void | Promise<TrialResult | void> {
     on_load();
     if (TestPlugin.finishTrialMode === "immediate") {
       return Promise.resolve(TestPlugin.defaultTrialResult);
@@ -88,17 +64,32 @@ class TestPlugin implements JsPsychPlugin<typeof testPluginInfo> {
     return TestPlugin.trialPromise.get();
   }
 
-  defaultSimulateImplementation(
+  public static trial = TestPlugin.defaultTrialImplementation;
+
+  static defaultSimulateImplementation(
     trial: TrialType<typeof testPluginInfo>,
     simulation_mode: SimulationMode,
     simulation_options: SimulationOptions,
     on_load?: () => void
   ): void | Promise<void | TrialResult> {
-    return this.defaultTrialImplementation(document.createElement("div"), trial, on_load);
+    return TestPlugin.defaultTrialImplementation(document.createElement("div"), trial, on_load);
   }
-}
 
-TestPlugin.prototype.trial = jest.fn(TestPlugin.prototype.defaultTrialImplementation);
-TestPlugin.prototype.simulate = jest.fn(TestPlugin.prototype.defaultTrialImplementation);
+  public static simulate = TestPlugin.defaultSimulateImplementation;
+
+  /** Resets all static properties including function implementations */
+  static reset() {
+    TestPlugin.defaultTrialResult = { my: "result" };
+    TestPlugin.trial = TestPlugin.defaultTrialImplementation;
+    TestPlugin.simulate = TestPlugin.defaultSimulateImplementation;
+    TestPlugin.resetPluginInfo();
+    TestPlugin.setImmediateFinishTrialMode();
+  }
+
+  constructor(private jsPsych: JsPsych) {}
+
+  trial = jest.fn(TestPlugin.trial);
+  simulate = jest.fn(TestPlugin.simulate);
+}
 
 export default TestPlugin;

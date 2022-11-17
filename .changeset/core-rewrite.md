@@ -32,3 +32,4 @@ Rewrite jsPsych's core logic. The following breaking changes have been made:
 - Interaction listeners are now removed when the experiment ends.
 - JsPsych will now throw an error when a non-array value is used for a trial parameter marked as `array: true` in the plugin's info object.
 - JsPsych now internally relies on the JavaScript event loop. This means automated tests have to `await` utility functions like `pressKey()` to process the event loop.
+- The `jspsych` package no longer exports `universalPluginParameters` and the `UniversalPluginParameters` type.

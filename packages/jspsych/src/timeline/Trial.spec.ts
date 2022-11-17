@@ -106,13 +106,11 @@ describe("Trial", () => {
         await trial1.run();
         expect(trial1.getResult()).toEqual(expect.objectContaining({ my: "result" }));
 
-        jest
-          .spyOn(TestPlugin.prototype, "trial")
-          .mockImplementation(async (display_element, trial, on_load) => {
-            on_load();
-            dependencies.finishTrialPromise.resolve({ finishTrial: "result" });
-            return { my: "result" };
-          });
+        TestPlugin.trial = async (display_element, trial, on_load) => {
+          on_load();
+          dependencies.finishTrialPromise.resolve({ finishTrial: "result" });
+          return { my: "result" };
+        };
 
         const trial2 = createTrial({ type: TestPlugin });
         await trial2.run();
@@ -122,9 +120,9 @@ describe("Trial", () => {
 
     describe("if `trial` returns no promise", () => {
       beforeAll(() => {
-        TestPlugin.prototype.trial.mockImplementation(() => {
+        TestPlugin.trial = () => {
           dependencies.finishTrialPromise.resolve({ my: "result" });
-        });
+        };
       });
 
       it("invokes the local `on_load` callback", async () => {
@@ -216,11 +214,11 @@ describe("Trial", () => {
         complexArrayParameter: { type: ParameterType.COMPLEX, array: true },
         functionParameter: { type: ParameterType.FUNCTION },
       });
-      TestPlugin.setDefaultTrialResult({
+      TestPlugin.defaultTrialResult = {
         result: "foo",
         stringParameter2: "string",
         stringParameter3: "string",
-      });
+      };
       const trial = createTrial({
         type: TestPlugin,
         stringParameter1: "string",
@@ -367,12 +365,12 @@ describe("Trial", () => {
         await expect(
           createTrial({ type: TestPlugin, stringArray: {} }).run()
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          '"A non-array value (`[object Object]`) was provided for the array parameter \\"stringArray\\" in the \\"test\\" plugin. Please make sure that \\"stringArray\\" is an array."'
+          '"A non-array value (`[object Object]`) was provided for the array parameter "stringArray" in the "test" plugin. Please make sure that "stringArray" is an array."'
         );
         await expect(
           createTrial({ type: TestPlugin, stringArray: 1 }).run()
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          '"A non-array value (`1`) was provided for the array parameter \\"stringArray\\" in the \\"test\\" plugin. Please make sure that \\"stringArray\\" is an array."'
+          '"A non-array value (`1`) was provided for the array parameter "stringArray" in the "test" plugin. Please make sure that "stringArray" is an array."'
         );
       });
 

@@ -295,9 +295,9 @@ describe("Timeline", () => {
     describe("with timeline variables", () => {
       it("repeats all trials for each set of variables", async () => {
         const xValues = [];
-        TestPlugin.prototype.trial.mockImplementation(async () => {
+        TestPlugin.trial = async () => {
           xValues.push(timeline.evaluateTimelineVariable(new TimelineVariable("x")));
-        });
+        };
 
         const timeline = createTimeline({
           timeline: [{ type: TestPlugin }],
@@ -320,9 +320,9 @@ describe("Timeline", () => {
             sample,
             randomize_order,
           });
-          TestPlugin.prototype.trial.mockImplementation(async () => {
+          TestPlugin.trial = async () => {
             xValues.push(timeline.evaluateTimelineVariable(new TimelineVariable("x")));
-          });
+          };
           return timeline;
         };
 
