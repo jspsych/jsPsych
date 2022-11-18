@@ -21,7 +21,8 @@
     "./tsconfig.contrib.json": "./tsconfig.contrib.json"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18",
+    "npm": ">=8"
   },
   "repository": {
     "type": "git",
