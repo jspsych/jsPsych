@@ -1,6 +1,6 @@
-import get from "lodash.get";
-import has from "lodash.has";
-import set from "lodash.set";
+import get from "lodash/get.js";
+import has from "lodash/has.js";
+import set from "lodash/set.js";
 
 import type { Timeline } from "./Timeline";
 import {
