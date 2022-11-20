@@ -1,8 +1,5 @@
-import get from "lodash/get.js";
-import has from "lodash/has.js";
-import set from "lodash/set.js";
-
 import type { Timeline } from "./Timeline";
+import { ParameterObjectPathCache } from "./util";
 import {
   TimelineArray,
   TimelineDescription,
@@ -26,11 +23,10 @@ export type GetParameterValueOptions = {
   recursive?: boolean;
 
   /**
-   * Whether or not the requested parameter is of `ParameterType.COMPLEX` (defaults to `false`). If
-   * `true`, the result of the parameter lookup will be cached by the timeline node for successive
-   * lookups of nested properties or array elements.
-   **/
-  isComplexParameter?: boolean;
+   * Whether the timeline node should cache the parameter lookup result for successive lookups,
+   * including those of nested properties or array elements (defaults to `true`)
+   */
+  cacheResult?: boolean;
 
   /**
    * A function that will be invoked with the original result before evaluating parameter functions
@@ -81,14 +77,22 @@ export abstract class TimelineNode {
     return this.status;
   }
 
-  private parameterValueCache: Record<string, any> = {};
+  private parameterValueCache = new ParameterObjectPathCache();
+
+  /**
+   * Initializes the parameter value cache with `this.description`. To be called by subclass
+   * constructors after setting `this.description`.
+   */
+  protected initializeParameterValueCache() {
+    this.parameterValueCache.initialize(this.description);
+  }
 
   /**
    * Resets all cached parameter values in this timeline node and all of its parents. This is
    * necessary to re-evaluate function parameters and timeline variables at each new trial.
    */
   protected resetParameterValueCache() {
-    this.parameterValueCache = {};
+    this.parameterValueCache.reset();
     this.parent?.resetParameterValueCache();
   }
 
@@ -101,6 +105,7 @@ export abstract class TimelineNode {
    * * is not specified, returns `undefined`.
    * * is a function and `evaluateFunctions` is not set to `false`, invokes the function and returns
    *   its return value
+   * * has previously been looked up, return the cached result of the previous lookup
    *
    * @param parameterPath The path of the respective parameter in the timeline node description. If
    * the path is an array, nested object properties or array items will be looked up.
@@ -110,22 +115,19 @@ export abstract class TimelineNode {
     parameterPath: string | string[],
     options: GetParameterValueOptions = {}
   ): any {
-    const { evaluateFunctions = true, recursive = true, replaceResult } = options;
-    let parameterObject: Record<string, any> = this.description;
+    const {
+      evaluateFunctions = true,
+      recursive = true,
+      cacheResult = true,
+      replaceResult,
+    } = options;
 
-    if (Array.isArray(parameterPath) && parameterPath.length > 1) {
-      // Lookup of a nested parameter: Let's query the cache for the parent parameter
-      const parentParameterPath = parameterPath.slice(0, parameterPath.length - 1);
-      if (get(this.parameterValueCache, parentParameterPath)) {
-        // Parent parameter found in cache, let's use the cache for the child parameter lookup
-        parameterObject = this.parameterValueCache;
-      }
+    if (typeof parameterPath === "string") {
+      parameterPath = [parameterPath];
     }
 
-    let result: any;
-    if (has(parameterObject, parameterPath)) {
-      result = get(parameterObject, parameterPath);
-    } else if (recursive && this.parent) {
+    let { doesPathExist, value: result } = this.parameterValueCache.lookup(parameterPath);
+    if (!doesPathExist && recursive && this.parent) {
       result = this.parent.getParameterValue(parameterPath, options);
     }
 
@@ -140,10 +142,10 @@ export abstract class TimelineNode {
       result = this.evaluateTimelineVariable(result);
     }
 
-    // Cache the result if the parameter is complex
-    if (options?.isComplexParameter) {
-      set(this.parameterValueCache, parameterPath, result);
+    if (cacheResult) {
+      this.parameterValueCache.set(parameterPath, result);
     }
+
     return result;
   }
 
@@ -153,15 +155,13 @@ export abstract class TimelineNode {
    * properties are merged into the result.
    */
   public getDataParameter(): Record<string, any> | undefined {
-    const data = this.getParameterValue("data", { isComplexParameter: true });
-
-    if (typeof data !== "object") {
-      return undefined;
-    }
+    const data = this.getParameterValue("data", { recursive: false });
 
     return {
       ...Object.fromEntries(
-        Object.keys(data).map((key) => [key, this.getParameterValue(["data", key])])
+        typeof data === "object"
+          ? Object.keys(data).map((key) => [key, this.getParameterValue(["data", key])])
+          : []
       ),
       ...this.parent?.getDataParameter(),
     };

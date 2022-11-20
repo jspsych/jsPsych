@@ -42,7 +42,6 @@
   "homepage": "https://www.jspsych.org",
   "dependencies": {
     "auto-bind": "^4.0.0",
-    "lodash": "^4.17.21",
     "random-words": "^1.1.1",
     "seedrandom": "^3.0.5",
     "type-fest": "^2.9.0"
@@ -51,7 +50,6 @@
     "@fontsource/open-sans": "4.5.3",
     "@jspsych/config": "^1.3.1",
     "@types/dom-mediacapture-record": "^1.0.11",
-    "@types/lodash": "^4.14.189",
     "base64-inline-loader": "^2.0.1",
     "css-loader": "^6.6.0",
     "mini-css-extract-plugin": "^2.5.3",

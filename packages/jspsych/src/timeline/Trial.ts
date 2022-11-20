@@ -31,6 +31,7 @@ export class Trial extends TimelineNode {
     public readonly parent: Timeline
   ) {
     super(dependencies);
+    this.initializeParameterValueCache();
 
     this.trialObject = deepCopy(description);
     this.pluginClass = this.getParameterValue("type", { evaluateFunctions: false });
@@ -250,7 +251,6 @@ export class Trial extends TimelineNode {
   public getSimulationOptions() {
     const simulationOptions: SimulationOptions = deepCopy(
       this.getParameterValue("simulation_options", {
-        isComplexParameter: true,
         replaceResult: (result) => {
           if (typeof result === "undefined") {
             return deepCopy(this.dependencies.getGlobalSimulationOptions().default);
@@ -282,9 +282,7 @@ export class Trial extends TimelineNode {
 
     simulationOptions.mode = this.getParameterValue(["simulation_options", "mode"]);
     simulationOptions.simulate = this.getParameterValue(["simulation_options", "simulate"]);
-    simulationOptions.data = this.getParameterValue(["simulation_options", "data"], {
-      isComplexParameter: true,
-    });
+    simulationOptions.data = this.getParameterValue(["simulation_options", "data"]);
 
     if (typeof simulationOptions.data === "object") {
       simulationOptions.data = Object.fromEntries(
@@ -326,7 +324,6 @@ export class Trial extends TimelineNode {
 
         let parameterValue = this.getParameterValue(parameterPath, {
           evaluateFunctions: parameterConfig.type !== ParameterType.FUNCTION,
-          isComplexParameter: parameterConfig.type === ParameterType.COMPLEX,
         });
 
         if (typeof parameterValue === "undefined") {
@@ -352,13 +349,12 @@ export class Trial extends TimelineNode {
           // Assign parameter values according to the `nested` schema
           if (parameterConfig.array) {
             // ...for each nested array element
-            for (const arrayIndex of parameterValue.keys()) {
+            parameterValue = parameterValue.map((_, arrayIndex) => {
               const arrayElementPath = [...parameterPath, arrayIndex.toString()];
-              const arrayElementValue = this.getParameterValue(arrayElementPath, {
-                isComplexParameter: true,
-              });
+              const arrayElementValue = this.getParameterValue(arrayElementPath);
               assignParameterValues(arrayElementValue, parameterConfig.nested, arrayElementPath);
-            }
+              return arrayElementValue;
+            });
           } else {
             // ...for the nested object
             assignParameterValues(parameterValue, parameterConfig.nested, parameterPath);

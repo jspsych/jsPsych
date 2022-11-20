@@ -32,6 +32,7 @@ export class Timeline extends TimelineNode {
   ) {
     super(dependencies);
     this.description = Array.isArray(description) ? { timeline: description } : description;
+    this.initializeParameterValueCache();
   }
 
   private currentChild?: TimelineNode;

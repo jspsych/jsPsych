@@ -502,7 +502,9 @@ describe("Timeline", () => {
         parentTimeline
       );
 
-      expect(childTimeline.getParameterValue("second_parameter")).toEqual("test");
+      expect(childTimeline.getParameterValue("second_parameter", { cacheResult: false })).toEqual(
+        "test"
+      );
       expect(
         childTimeline.getParameterValue("second_parameter", { recursive: false })
       ).toBeUndefined();
@@ -530,10 +532,17 @@ describe("Timeline", () => {
         function_parameter: jest.fn(() => "result"),
       });
 
-      expect(timeline.getParameterValue("function_parameter")).toEqual("result");
-      expect(timeline.getParameterValue("function_parameter", { evaluateFunctions: true })).toEqual(
+      expect(timeline.getParameterValue("function_parameter", { cacheResult: false })).toEqual(
         "result"
       );
+
+      expect(
+        timeline.getParameterValue("function_parameter", {
+          evaluateFunctions: true,
+          cacheResult: false,
+        })
+      ).toEqual("result");
+
       expect(
         typeof timeline.getParameterValue("function_parameter", { evaluateFunctions: false })
       ).toEqual("function");
@@ -572,26 +581,28 @@ describe("Timeline", () => {
       ).toBe("value");
     });
 
-    describe("when `isComplexParameter` is set", () => {
-      it("caches results and uses them for nested lookups", async () => {
-        const timeline = createTimeline({
-          timeline: [],
-          object: () => ({ child: "foo" }),
-        });
+    it("caches results and uses them for nested lookups", async () => {
+      const timeline = createTimeline({ timeline: [], object: () => ({ child: "foo" }) });
 
-        expect(
-          timeline.getParameterValue("object", {
-            isComplexParameter: true,
-            replaceResult: () => ({ child: "bar" }),
-          })
-        ).toEqual({
-          child: "bar",
-        });
-        expect(timeline.getParameterValue(["object", "child"])).toEqual("bar");
-      });
+      expect(
+        timeline.getParameterValue("object", { replaceResult: () => ({ child: "bar" }) })
+      ).toEqual({ child: "bar" });
+      expect(timeline.getParameterValue(["object", "child"])).toEqual("bar");
     });
 
-    it("resets all result caches after every trial", async () => {
+    it("does not cache results when `cacheResult` is set to false", async () => {
+      const timeline = createTimeline({ timeline: [], object: { child: "foo" } });
+
+      expect(
+        timeline.getParameterValue("object", {
+          replaceResult: () => ({ child: "bar" }),
+          cacheResult: false,
+        })
+      ).toEqual({ child: "bar" });
+      expect(timeline.getParameterValue(["object", "child"])).toEqual("foo");
+    });
+
+    test("all result caches are reset after every trial", async () => {
       TestPlugin.setManualFinishTrialMode();
 
       const timeline = createTimeline({
@@ -609,10 +620,7 @@ describe("Timeline", () => {
 
       // First trial
       for (const parameter of ["object1", "object2"]) {
-        expect(childTimeline.getParameterValue([parameter, "child"])).toBeUndefined();
-        expect(childTimeline.getParameterValue(parameter, { isComplexParameter: true })).toEqual({
-          child: "foo",
-        });
+        expect(childTimeline.getParameterValue(parameter)).toEqual({ child: "foo" });
         expect(childTimeline.getParameterValue([parameter, "child"])).toEqual("foo");
       }
 
@@ -620,10 +628,8 @@ describe("Timeline", () => {
 
       // Second trial, caches should have been reset
       for (const parameter of ["object1", "object2"]) {
+        expect(childTimeline.getParameterValue(parameter)).toBeUndefined();
         expect(childTimeline.getParameterValue([parameter, "child"])).toBeUndefined();
-        expect(
-          childTimeline.getParameterValue(parameter, { isComplexParameter: true })
-        ).toBeUndefined();
       }
     });
   });

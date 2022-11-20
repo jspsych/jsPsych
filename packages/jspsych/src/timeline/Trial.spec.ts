@@ -734,7 +734,7 @@ describe("Trial", () => {
         jest
           .mocked(timeline.getParameterValue)
           .mockImplementation((parameterPath) =>
-            parameterPath === "simulation_options" ? { data: { rt: 1 } } : undefined
+            parameterPath.toString() === "simulation_options" ? { data: { rt: 1 } } : undefined
           );
 
         expect(createTrial({ type: TestPlugin }).getSimulationOptions()).toEqual({
