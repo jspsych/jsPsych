@@ -770,6 +770,65 @@ describe("Timeline", () => {
       const estimate = (1 + 1 * 2 + 1 * 5) * 3 * 2;
       expect(timeline.getNaiveTrialCount()).toEqual(estimate);
     });
+
+    describe("when the `sample` option is used", () => {
+      it("handles `with-replacement` sampling", async () => {
+        expect(
+          createTimeline({
+            timeline: [{ type: TestPlugin }],
+            timeline_variables: [{}, {}],
+            sample: { type: "with-replacement", size: 5 },
+          }).getNaiveTrialCount()
+        ).toEqual(5);
+      });
+
+      it("handles `without-replacement` sampling", async () => {
+        expect(
+          createTimeline({
+            timeline: [{ type: TestPlugin }],
+            timeline_variables: [{}, {}],
+            sample: { type: "without-replacement", size: 5 },
+          }).getNaiveTrialCount()
+        ).toEqual(5);
+      });
+
+      it("handles `fixed-repetitions` sampling", async () => {
+        expect(
+          createTimeline({
+            timeline: [{ type: TestPlugin }],
+            timeline_variables: [{}, {}],
+            sample: { type: "fixed-repetitions", size: 5 },
+          }).getNaiveTrialCount()
+        ).toEqual(10);
+      });
+
+      it("handles `alternate-groups` sampling", async () => {
+        expect(
+          createTimeline({
+            timeline: [{ type: TestPlugin }],
+            timeline_variables: [{}, {}, {}, {}],
+            sample: {
+              type: "alternate-groups",
+              groups: [
+                [0, 1],
+                [2, 3],
+              ],
+            },
+          }).getNaiveTrialCount()
+        ).toEqual(4);
+
+        expect(
+          createTimeline({
+            timeline: [{ type: TestPlugin }],
+            timeline_variables: [{}, {}, {}, {}],
+            sample: {
+              type: "alternate-groups",
+              groups: [[0, 1], [2]],
+            },
+          }).getNaiveTrialCount()
+        ).toEqual(3);
+      });
+    });
   });
 
   describe("getLatestNode()", () => {

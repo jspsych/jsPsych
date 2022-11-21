@@ -297,10 +297,29 @@ export class Timeline extends TimelineNode {
         return 1;
       }
       if (isTimelineDescription(description)) {
+        let conditionCount = description.timeline_variables?.length || 1;
+
+        switch (description.sample?.type) {
+          case "with-replacement":
+          case "without-replacement":
+            conditionCount = description.sample.size;
+            break;
+
+          case "fixed-repetitions":
+            conditionCount *= description.sample.size;
+            break;
+
+          case "alternate-groups":
+            conditionCount = description.sample.groups
+              .map((group) => group.length)
+              .reduce((a, b) => a + b, 0);
+            break;
+        }
+
         return (
           getTimelineArrayTrialCount(description.timeline) *
           (description.repetitions ?? 1) *
-          (description.timeline_variables?.length || 1)
+          conditionCount
         );
       }
       return 0;
