@@ -32,42 +32,29 @@ export class JsPsych {
     return version;
   }
 
-  //
-  // private variables
-  //
-
-  /**
-   * options
-   */
+  /** Options */
   private options: any = {};
 
-  /**
-   * experiment timeline
-   */
+  /** Experiment timeline */
   private timeline?: Timeline;
 
-  // target DOM element
-  private domContainer: HTMLElement;
-  private domTarget: HTMLElement;
+  /** Target DOM element */
+  private displayContainerElement: HTMLElement;
+  private displayElement: HTMLElement;
 
-  /**
-   * time that the experiment began
-   */
+  /** Time that the experiment began */
   private experimentStartTime: Date;
 
   /**
-   * is the page retrieved directly via file:// protocol (true) or hosted on a server (false)?
+   * Whether the page is retrieved directly via the `file://` protocol (true) or hosted on a web
+   * server (false)
    */
-  private file_protocol = false;
+  private isFileProtocolUsed = false;
 
-  /**
-   * The simulation mode if the experiment is being simulated
-   */
+  /** The simulation mode (if the experiment is being simulated) */
   private simulationMode?: SimulationMode;
 
-  /**
-   * Simulation options passed in via `simulate()`
-   */
+  /** Simulation options passed in via `simulate()` */
   private simulationOptions: Record<string, SimulationOptionsParameter>;
 
   private extensionManager: ExtensionManager;
@@ -99,13 +86,14 @@ export class JsPsych {
 
     autoBind(this); // so we can pass JsPsych methods as callbacks and `this` remains the JsPsych instance
 
-    // detect whether page is running in browser as a local file, and if so, disable web audio and video preloading to prevent CORS issues
+    // detect whether page is running in browser as a local file, and if so, disable web audio and
+    // video preloading to prevent CORS issues
     if (
       window.location.protocol == "file:" &&
       (options.override_safe_mode === false || typeof options.override_safe_mode === "undefined")
     ) {
       options.use_webaudio = false;
-      this.file_protocol = true;
+      this.isFileProtocolUsed = true;
       console.warn(
         "jsPsych detected that it is running via the file:// protocol and not on a web server. " +
           "To prevent issues with cross-origin requests, Web Audio and video preloading have been disabled. " +
@@ -134,7 +122,7 @@ export class JsPsych {
    */
   async run(timeline: TimelineDescription | TimelineArray) {
     if (typeof timeline === "undefined") {
-      console.error("No timeline declared in jsPsych.run. Cannot start experiment.");
+      console.error("No timeline declared in jsPsych.run(). Cannot start experiment.");
     }
 
     if (timeline.length === 0) {
@@ -195,11 +183,11 @@ export class JsPsych {
   }
 
   getDisplayElement() {
-    return this.domTarget;
+    return this.displayElement;
   }
 
   getDisplayContainerElement() {
-    return this.domContainer;
+    return this.displayContainerElement;
   }
 
   abortExperiment(endMessage?: string, data = {}) {
@@ -250,13 +238,8 @@ export class JsPsych {
     this.timeline?.resume();
   }
 
-  private loadFail(message) {
-    message = message || "<p>The experiment failed to load.</p>";
-    this.domTarget.innerHTML = message;
-  }
-
   getSafeModeStatus() {
-    return this.file_protocol;
+    return this.isFileProtocolUsed;
   }
 
   getTimeline() {
@@ -281,18 +264,19 @@ export class JsPsych {
     // if undefined, then jsPsych will use the <body> tag and the entire page
     if (typeof options.display_element === "undefined") {
       // check if there is a body element on the page
-      const body = document.querySelector("body");
-      if (body === null) {
-        document.documentElement.appendChild(document.createElement("body"));
+      let body = document.body;
+      if (!body) {
+        body = document.createElement("body");
+        document.documentElement.appendChild(body);
       }
-      // using the full page, so we need the HTML element to
-      // have 100% height, and body to be full width and height with
-      // no margin
+      // using the full page, so we need the HTML element to have 100% height, and body to be full
+      // width and height with no margin
       document.querySelector("html").style.height = "100%";
-      document.querySelector("body").style.margin = "0px";
-      document.querySelector("body").style.height = "100%";
-      document.querySelector("body").style.width = "100%";
-      options.display_element = document.querySelector("body");
+
+      body.style.margin = "0px";
+      body.style.height = "100%";
+      body.style.width = "100%";
+      options.display_element = body;
     } else {
       // make sure that the display element exists on the page
       const display =
@@ -306,24 +290,28 @@ export class JsPsych {
       }
     }
 
-    options.display_element.innerHTML =
-      '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
-    this.domContainer = options.display_element;
-    this.domTarget = document.querySelector("#jspsych-content");
+    const contentElement = document.createElement("div");
+    contentElement.id = "jspsych-content";
+
+    const contentWrapperElement = document.createElement("div");
+    contentWrapperElement.className = "jspsych-content-wrapper";
+    contentWrapperElement.appendChild(contentElement);
+
+    this.displayContainerElement = options.display_element;
+    this.displayContainerElement.appendChild(contentWrapperElement);
+    this.displayElement = contentElement;
 
     // set experiment_width if not null
     if (options.experiment_width !== null) {
-      this.domTarget.style.width = options.experiment_width + "px";
+      this.displayElement.style.width = options.experiment_width + "px";
     }
 
     // add tabIndex attribute to scope event listeners
     options.display_element.tabIndex = 0;
 
-    // add CSS class to DOM_target
-    if (options.display_element.className.indexOf("jspsych-display-element") === -1) {
-      options.display_element.className += " jspsych-display-element";
-    }
-    this.domTarget.className += "jspsych-content";
+    // Add CSS classes to container and display elements
+    this.displayContainerElement.classList.add("jspsych-display-element");
+    this.displayElement.classList.add("jspsych-content");
 
     // create listeners for user browser interaction
     this.data.createInteractionListeners();
