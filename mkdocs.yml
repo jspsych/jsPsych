@@ -42,6 +42,8 @@ plugins:
   - search
   - macros:
       modules: [docs]
+watch:
+  - packages
 nav:
 - Introduction: 'index.md'
 - Tutorials:
