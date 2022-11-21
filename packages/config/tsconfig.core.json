@@ -7,8 +7,7 @@
       "jspsych": ["../jspsych/src"],
       "@jspsych/*": ["../*/src"]
     },
-    // allow resolving json modules in tests (needed for transitive imports of jspsych in tests;
-    // the jspsych package itself uses https://stackoverflow.com/a/61426303 instead)
+    // allow resolving json modules in tests (needed for transitive imports of jspsych)
     "resolveJsonModule": true
   }
 }
