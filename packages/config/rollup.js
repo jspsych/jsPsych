@@ -2,7 +2,6 @@ import { readFileSync } from "fs";
 import path from "path";
 
 import commonjs from "@rollup/plugin-commonjs";
-import json from "@rollup/plugin-json";
 import resolve from "@rollup/plugin-node-resolve";
 import { defineConfig } from "rollup";
 import dts from "rollup-plugin-dts";
@@ -39,6 +38,16 @@ const makeConfig = ({
     ...outputOptions,
   };
 
+  /** @type{import("rollup-plugin-esbuild").Options} */
+  const esBuildPluginOptions = {
+    loaders: { ".json": "json" },
+  };
+
+  /** @type{import("@rollup/plugin-commonjs").RollupCommonJSOptions} */
+  const commonjsPluginOptions = {
+    extensions: [".js", ".json"],
+  };
+
   // Non-babel builds
   const config = defineConfig([
     // Type definitions (bundled as a single .d.ts file)
@@ -60,7 +69,11 @@ const makeConfig = ({
     {
       ...globalOptions,
       input,
-      plugins: [externals(), json(), esbuild({ target: "node14" }), commonjs()],
+      plugins: [
+        externals(),
+        esbuild({ ...esBuildPluginOptions, target: "node18" }),
+        commonjs(commonjsPluginOptions),
+      ],
       output: [
         { file: `${destination}.js`, format: "esm", ...outputOptions },
         { file: `${destination}.cjs`, format: "cjs", ...outputOptions },
@@ -84,9 +97,8 @@ const makeConfig = ({
       plugins: [
         externals({ deps: false }),
         resolve({ preferBuiltins: false }),
-        json(),
-        esbuild({ target: "esnext" }),
-        commonjs(),
+        esbuild({ ...esBuildPluginOptions, target: "esnext" }),
+        commonjs(commonjsPluginOptions),
       ],
       output: {
         file: `${destination}.browser.js`,
@@ -104,9 +116,8 @@ const makeConfig = ({
       plugins: [
         externals({ deps: false }),
         resolve({ preferBuiltins: false }),
-        json(),
-        esbuild({ target: "es2015", minify: true }),
-        commonjs(),
+        esbuild({ ...esBuildPluginOptions, target: "es2015", minify: true }),
+        commonjs(commonjsPluginOptions),
       ],
       output: {
         file: `${destination}.browser.min.js`,
