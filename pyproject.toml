@@ -6,6 +6,7 @@ authors = []
 
 [tool.poetry.dependencies]
 python = "^3.8"
+diskcache = "^5.4.0"
 
 [tool.poetry.dev-dependencies]
 mkdocs = "^1.3.0"

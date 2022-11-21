@@ -1,11 +1,14 @@
+from pathlib import Path
+
 from docs.__generator__.utils import (
+    cache,
     get_plugin_description,
     get_value_by_path,
     get_values_by_path,
     jsdoc_to_markdown,
 )
 
-parameter_type_mapping = {
+PARAMETER_TYPE_MAPPING = {
     "HTML_STRING": "HTML string",
     "KEYS": "array of strings",
     "BOOL": "boolean",
@@ -13,7 +16,8 @@ parameter_type_mapping = {
 }
 
 
-def generate_plugin_parameters_section(plugin_dir: str):
+@cache.memoize(expire=60 * 60 * 24 * 30)  # 1 month in seconds
+def generate_plugin_parameters_section(plugin_dir: Path, source_hash: str):
     description = get_plugin_description(plugin_dir)
 
     output = """
@@ -37,8 +41,8 @@ specified. Other parameters can be left unspecified if the default value is acce
         parameter_type = get_value_by_path(
             parameter, "$.type.declaration.children[?name = type].type.name"
         )
-        if parameter_type in parameter_type_mapping:
-            parameter_type = parameter_type_mapping[parameter_type]
+        if parameter_type in PARAMETER_TYPE_MAPPING:
+            parameter_type = PARAMETER_TYPE_MAPPING[parameter_type]
 
         is_array = get_value_by_path(
             parameter, "$.type.declaration.children[?name = array].type.value"

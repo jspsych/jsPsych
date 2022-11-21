@@ -1,14 +1,25 @@
 import json
+from logging import getLogger
 import subprocess
+from hashlib import md5
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Any, List
 
+from diskcache import Cache
 from jsonpath_ng.ext import parse
 
+cache = Cache(Path(__file__).parent)
+logger = getLogger("mkdocs")
 
-def get_plugin_description(plugin_dir: str):
-    package_path = f"packages/plugin-{plugin_dir}"
+
+def hash_file(path: Path):
+    with path.open() as file:
+        return md5(file.read().encode("utf8")).hexdigest()
+
+
+def get_plugin_description(plugin_dir: Path):
+    logger.info(f"Collecting parameter infos for {plugin_dir}...")
     with NamedTemporaryFile() as json_file:
 
         typedoc_command = (
@@ -16,12 +27,12 @@ def get_plugin_description(plugin_dir: str):
                 [
                     "node_modules/.bin/typedoc",
                     "--tsconfig",
-                    f"{package_path}/tsconfig.json",
+                    plugin_dir / "tsconfig.json",
                     "--json",
                     f"{json_file.name}",
                     "--sort",
                     "source-order",
-                    f"{package_path}/src/index.ts",
+                    plugin_dir / "src/index.ts",
                 ]
             ),
         )
@@ -35,9 +46,6 @@ def get_plugin_description(plugin_dir: str):
         )
 
         description = json.load(json_file)
-
-        # with Path("tmp.json").open("w") as file:
-        #     json.dump(description, file)
 
         return description
 
