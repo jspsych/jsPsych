@@ -13,6 +13,12 @@ Rewrite jsPsych's core logic. The following breaking changes have been made:
 
 - The functionality of `jsPsych.timelineVariable()` has been explicitly split into two functions, `jsPsych.timelineVariable()` and `jsPsych.evaluateTimelineVariable()`. Use `jsPsych.timelineVariable()` to create a timeline variable placeholder and `jsPsych.evaluateTimelineVariable()` to retrieve a given timeline variable's current value.
 - `jsPsych.evaluateTimelineVariable()` now throws an error if a variable is not found.
+- `jsPsych.getAllTimelineVariables()` has been replaced by a trial-level `save_timeline_variables` parameter that can be used to include all or some timeline variables in a trial's result data.
+
+**Parameter Handling**
+
+- JsPsych will now throw an error when a non-array value is used for a trial parameter marked as `array: true` in the plugin's info object.
+- Parameter functions and timeline variables are no longer automatically evaluated recursively throughout the whole trial object, but only for the parameters that a plugin specifies in its `info` object. Parameter functions and timeline variables in nested objects are only evaluated if the nested object's parameters are explicitly specified using the `nested` property in the parameter description.
 
 **Progress Bar**
 
@@ -28,8 +34,6 @@ Rewrite jsPsych's core logic. The following breaking changes have been made:
 **Miscellaneous Changes**
 
 - `jsPsych.endExperiment()` and `jsPsych.endCurrentTimeline()` have been renamed to `jsPsych.abortExperiment()` and `jsPsych.abortCurrentTimeline()`, respectively.
-- `jsPsych.getAllTimelineVariables()` has been replaced by a trial-level `save_timeline_variables` parameter that can be used to include all or some timeline variables in a trial's result data.
-- Interaction listeners are now removed when the experiment ends.
-- JsPsych will now throw an error when a non-array value is used for a trial parameter marked as `array: true` in the plugin's info object.
 - JsPsych now internally relies on the JavaScript event loop. This means automated tests have to `await` utility functions like `pressKey()` to process the event loop.
 - The `jspsych` package no longer exports `universalPluginParameters` and the `UniversalPluginParameters` type.
+- Interaction listeners are now removed when the experiment ends.
