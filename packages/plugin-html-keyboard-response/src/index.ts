@@ -11,40 +11,66 @@ const info = <const>{
       pretty_name: "Stimulus",
       default: undefined,
     },
+
     /**
-     * Array containing the key(s) the subject is allowed to press to respond to the stimulus.
+     * This array contains the key(s) that the participant is allowed to press in order to respond
+     * to the stimulus. Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`,
+     * `'Enter'`, `'ArrowDown'`) - see
+     * {@link https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values this page}
+     * and
+     * {@link https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/ this page}
+     * (event.key column) for more examples.
+     *
+     * Any key presses that are not listed in the array will be ignored. The default value of
+     * `"ALL_KEYS"` means that all keys will be accepted as valid responses. Specifying `"NO_KEYS"`
+     * will mean that no responses are allowed.
      */
     choices: {
       type: ParameterType.KEYS,
       pretty_name: "Choices",
       default: "ALL_KEYS",
     },
+
     /**
-     * Any content here will be displayed below the stimulus.
+     * This string can contain HTML markup. Any content here will be displayed below the stimulus.
+     * The intention is that it can be used to provide a reminder about the action the participant
+     * is supposed to take (e.g., which key to press).
      */
     prompt: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
+
     /**
-     * How long to show the stimulus.
+     * How long to display the stimulus in milliseconds. The visibility CSS property of the stimulus
+     * will be set to `hidden` after this time has elapsed. If this is null, then the stimulus will
+     * remain visible until the trial ends.
      */
     stimulus_duration: {
       type: ParameterType.INT,
       pretty_name: "Stimulus duration",
       default: null,
     },
+
     /**
-     * How long to show trial before it ends.
+     * How long to wait for the participant to make a response before ending the trial in
+     * milliseconds. If the participant fails to make a response before this timer is reached, the
+     * participant's response will be recorded as null for the trial and the trial will end. If the
+     * value of this parameter is null, then the trial will wait for a response indefinitely.
      */
     trial_duration: {
       type: ParameterType.INT,
       pretty_name: "Trial duration",
       default: null,
     },
+
     /**
-     * If true, trial will end when subject makes a response.
+     * If true, then the trial will end whenever the participant makes a response (assuming they
+     * make their response before the cutoff specified by the `trial_duration` parameter). If false,
+     * then the trial will continue until the value for `trial_duration` is reached. You can set
+     * this parameter to `false` to force the participant to view a stimulus for a fixed amount of
+     * time, even if they respond before the time is complete.
      */
     response_ends_trial: {
       type: ParameterType.BOOL,
