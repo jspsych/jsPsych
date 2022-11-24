@@ -86,7 +86,12 @@ export class Trial extends TimelineNode {
         result = await trialPromise;
       }
     } else {
-      this.onLoad();
+      // The `simulate` method always invokes `onLoad()`, so we don't call `onLoad()` in simulation
+      // mode
+      if (!this.dependencies.getSimulationMode()) {
+        this.onLoad();
+      }
+
       result = await trialPromise;
     }
 

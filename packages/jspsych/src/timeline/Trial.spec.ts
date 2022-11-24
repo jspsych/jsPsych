@@ -644,6 +644,17 @@ describe("Trial", () => {
         );
       });
 
+      it("doesn't invoke `on_load`, even when `simulate` doesn't return a promise", async () => {
+        TestPlugin.simulate = () => {
+          dependencies.finishTrialPromise.resolve({});
+        };
+
+        const onLoad = jest.fn();
+        await createTrial({ type: TestPlugin, on_load: onLoad }).run();
+
+        expect(onLoad).not.toHaveBeenCalled();
+      });
+
       it("invokes the plugin's `trial` method if the plugin has no `simulate` method", async () => {
         const trial = createTrial({
           type: class implements JsPsychPlugin<any> {
