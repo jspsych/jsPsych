@@ -325,7 +325,7 @@ describe("Trial", () => {
           requiredComplexNested: { requiredChild: "bar" },
           requiredComplexNestedArray: [
             // This empty object is allowed because `requiredComplexNestedArray[0]` is (simulated to
-            // be) set as a parameter to the jest. parent timeline:
+            // be) set as a parent timeline parameter:
             {},
             { requiredChild: "bar" },
           ],
