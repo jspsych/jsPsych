@@ -5,7 +5,8 @@ const info = <const>{
   name: "browser-check",
   parameters: {
     /**
-     * List of features to check and record in the data
+     * The list of browser features to record. The default value includes all of the available
+     * options.
      */
     features: {
       type: ParameterType.STRING,
@@ -24,51 +25,74 @@ const info = <const>{
         "microphone",
       ],
     },
+
     /**
-     * Any features listed here will be skipped, even if they appear in `features`. Useful for
-     * when you want to run most of the defaults.
+     * Any features listed here will be skipped, even if they appear in `features`. Use this when
+     * you want to run most of the defaults.
      */
     skip_features: {
       type: ParameterType.STRING,
       array: true,
       default: [],
     },
+
     /**
-     * The number of animation frames to sample when calculating vsync_rate.
+     * The number of frames to sample when measuring the display refresh rate (`"vsync_rate"`).
+     * Increasing the number will potenially improve the stability of the estimate at the cost of
+     * increasing the amount of time the plugin takes during this test. On most devices, 60 frames
+     * takes about 1 second to measure.
      */
     vsync_frame_count: {
       type: ParameterType.INT,
       default: 60,
     },
+
     /**
-     * If `true`, show a message when window size is too small to allow the user
-     * to adjust if their screen allows for it.
+     * Whether to allow the participant to resize the browser window if the window is smaller than
+     * `minimum_width` and/or `minimum_height`. If `false`, then the `minimum_width` and
+     * `minimum_height` parameters are ignored and you can validate the size in the
+     * `inclusion_function`.
      */
     allow_window_resize: {
       type: ParameterType.BOOL,
       default: true,
     },
+
     /**
-     * When `allow_window_resize` is `true`, this is the minimum width (px) that the window
-     * needs to be before the experiment will continue.
+     * If `allow_window_resize` is `true`, then this is the minimum width of the window (in pixels)
+     * that must be met before continuing.
      */
     minimum_width: {
       type: ParameterType.INT,
       default: 0,
     },
+
     /**
-     * When `allow_window_resize` is `true`, this is the minimum height (px) that the window
-     * needs to be before the experiment will continue.
+     * If `allow_window_resize` is `true`, then this is the minimum height of the window (in pixels)
+     * that must be met before continuing.
      */
     minimum_height: {
       type: ParameterType.INT,
       default: 0,
     },
+
     /**
-     * Message to display during interactive window resizing.
+     * The message that will be displayed during the interactive resize when `allow_window_resize`
+     * is `true` and the window is too small. If the message contains HTML elements with the special
+     * IDs `browser-check-min-width`, `browser-check-min-height`, `browser-check-actual-height`,
+     * and/or `browser-check-actual-width`, then the contents of those elements will be dynamically
+     * updated to reflect the `minimum_width`, `minimum_height` and measured width and height of the
+     * browser. The default message is: `<p>Your browser window is too small to complete this
+     * experiment. Please maximize the size of your browser window. If your browser window is
+     * already maximized, you will not be able to complete this experiment.</p><p>The minimum window
+     * width is <span id="browser-check-min-width"></span> px.</p><p>Your current window width is
+     * <span id="browser-check-actual-width"></span> px.</p><p>The minimum window height is <span
+     * id="browser-check-min-height"></span> px.</p><p>Your current window height is <span
+     * id="browser-check-actual-height"></span> px.</p>`.
      */
     window_resize_message: {
       type: ParameterType.HTML_STRING,
+      /** see description */
       default: `<p>Your browser window is too small to complete this experiment. Please maximize the size of your browser window. 
         If your browser window is already maximized, you will not be able to complete this experiment.</p>
         <p>The minimum window width is <span id="browser-check-min-width"></span> px.</p>
@@ -76,33 +100,50 @@ const info = <const>{
         <p>The minimum window height is <span id="browser-check-min-height"></span> px.</p>
         <p>Your current window height is <span id="browser-check-actual-height"></span> px.</p>`,
     },
+
     /**
      * During the interactive resize, a button with this text will be displayed below the
-     * `window_resize_message` for the participant to click if the window cannot meet the
-     * minimum size needed. When the button is clicked, the experiment will end and
-     * `exclusion_message` will be displayed.
+     * `window_resize_message` for the participant to click if the window cannot meet the minimum
+     * size needed. When the button is clicked, the experiment will end and `exclusion_message` will
+     * be displayed.
      */
     resize_fail_button_text: {
       type: ParameterType.STRING,
       default: "I cannot make the window any larger",
     },
+
     /**
-     * A function that evaluates to `true` if the browser meets all of the inclusion criteria
-     * for the experiment, and `false` otherwise. The first argument to the function will be
-     * an object containing key value pairs with the measured features of the browser. The
-     * keys will be the same as those listed in `features`.
+     * A function that evaluates to `true` if the browser meets all of the inclusion criteria for
+     * the experiment, and `false` otherwise. The first argument to the function will be an object
+     * containing key value pairs with the measured features of the browser. The keys will be the
+     * same as those listed in `features`. See example below.
      */
     inclusion_function: {
       type: ParameterType.FUNCTION,
+      /**
+       * ```
+       * () => true
+       * ```
+       */
       default: () => {
         return true;
       },
     },
+
     /**
-     * The message to display if `inclusion_function` returns `false`
+     * A function that returns the message to display if `inclusion_function` evaluates to `false`
+     * or if the participant clicks on the resize fail button during the interactive resize. In
+     * order to allow customization of the message, the first argument to the function will be an
+     * object containing key value pairs with the measured features of the browser. The keys will be
+     * the same as those listed in `features`. See example below.
      */
     exclusion_message: {
       type: ParameterType.FUNCTION,
+      /**
+       * ```
+       * () => `<p>Your browser does not meet the requirements to participate in this experiment.</p>`
+       * ```
+       */
       default: () => {
         return `<p>Your browser does not meet the requirements to participate in this experiment.</p>`;
       },
@@ -113,12 +154,42 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **browser-check**
+ * This plugin measures and records various features of the participant's browser and can end the
+ * experiment if defined inclusion criteria are not met.
  *
- * jsPsych plugin for checking features of the browser and validating against a set of inclusion criteria.
+ * The plugin currently can record the following features:
+ *
+ *   * The width and height of the browser window in pixels.
+ *   * The type of browser used (e.g., Chrome, Firefox, Edge, etc.) and the version number of the
+ *     browser.*
+ *   * Whether the participant is using a mobile device.*
+ *   * The operating system.*
+ *   * Support for the WebAudio API.
+ *   * Support for the Fullscreen API, e.g., through the [fullscreen
+ *     plugin](../plugins/fullscreen.md).
+ *   * The display refresh rate in frames per second.
+ *   * Whether the device has a webcam and microphone. Note that this only reveals whether a
+ *     webcam/microphone exists. The participant still needs to grant permission in order for the
+ *     experiment to use these devices.
+ *
+ * > **Warning**
+ * >
+ * > Features with an * are recorded by parsing the [user agent
+ * > string](https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent).
+ * > This method is accurate most of the time, but is not guaranteed to be correct. The plugin uses
+ * > the [detect-browser package](https://github.com/DamonOehlman/detect-browser) to perform user
+ * > agent parsing. You can find a list of supported browsers and OSes in the [source
+ * > file](https://github.com/DamonOehlman/detect-browser/blob/master/src/index.ts).
+ *
+ * The plugin begins by measuring the set of features requested. An inclusion function is evaluated
+ * to see if the paricipant passes the inclusion criteria. If they do, then the trial ends and the
+ * experiment continues. If they do not, then the experiment ends immediately. If a minimum width
+ * and/or minimum height is desired, the plugin will optionally display a message to participants
+ * whose browser windows are too small to give them an opportunity to make the window larger if
+ * possible. See the examples below for more guidance.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-browser-check/ browser-check plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/jspsych-browser-check/}
  */
 class BrowserCheckPlugin implements JsPsychPlugin<Info> {
   static info = info;

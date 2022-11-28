@@ -12,4 +12,4 @@ dist.zip
 packages/jspsych/README.md
 .turbo
 *.pyc
-cache.db
+docs/__generator__/cache

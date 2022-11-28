@@ -1,9 +1,7 @@
 # html-keyboard-response
 
-Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-keyboard-response/CHANGELOG.md).
-
-This plugin displays HTML content and records responses generated with the keyboard.The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the participant has failed to respond within a fixed length of time.
-
+{{ plugin_meta('html-keyboard-response') }}
+{{ plugin_description('html-keyboard-response') }}
 {{ plugin_parameters('html-keyboard-response') }}
 
 ## Data Generated
@@ -16,28 +14,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | rt        | numeric | The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. |
 | stimulus  | string  | The HTML content that was displayed on the screen. |
 
-## Install
-
-Using the CDN-hosted JavaScript file:
-
-```js
-<script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
-```
-
-Using the JavaScript file downloaded from a GitHub release dist archive:
-
-```js
-<script src="jspsych/plugin-html-keyboard-response.js"></script>
-```
-
-Using NPM:
-
-```
-npm install @jspsych/plugin-html-keyboard-response
-```
-```js
-import htmlKeyboardResponse from '@jspsych/plugin-html-keyboard-response';
-```
+{{ plugin_installation('html-keyboard-response') }}
 
 ## Examples
 

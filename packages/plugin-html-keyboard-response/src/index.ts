@@ -83,12 +83,12 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **html-keyboard-response**
- *
- * jsPsych plugin for displaying a stimulus and getting a keyboard response
+ * This plugin displays HTML content and records responses generated with the keyboard. The stimulus
+ * can be displayed until a response is given, or for a pre-determined amount of time. The trial can
+ * be ended automatically if the participant has failed to respond within a fixed length of time.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-html-keyboard-response/ html-keyboard-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/jspsych-html-keyboard-response/}
  */
 class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
