@@ -89,6 +89,18 @@ const info = <const>{
       pretty_name: "Fixation duration",
       default: 1000,
     },
+    /** Whether to use randomized locations on the circle for the items. If `false`, then the first item will always show at the location specified by `location_first_item`. */
+    randomize_item_locations: {
+      type: ParameterType.BOOL,
+      pretty_name: "Randomize item locations",
+      default: true,
+    },
+    /** If `randomize_item_locations` is `false`, the location of the first item on the circle, in degrees. */
+    location_first_item: {
+      type: ParameterType.INT,
+      pretty_name: "Location first item",
+      default: 0,
+    },
   },
 };
 
@@ -263,10 +275,11 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
 
     var display_locs = [];
     var random_offset = Math.floor(Math.random() * 360);
+    var offset = trial.randomize_item_locations ? random_offset : trial.location_first_item;
     for (var i = 0; i < n_locs; i++) {
       display_locs.push([
-        Math.floor(paper_size / 2 + this.cosd(random_offset + i * (360 / n_locs)) * radi - hstimw),
-        Math.floor(paper_size / 2 - this.sind(random_offset + i * (360 / n_locs)) * radi - hstimh),
+        Math.floor(paper_size / 2 + this.cosd(offset + i * (360 / n_locs)) * radi - hstimw),
+        Math.floor(paper_size / 2 - this.sind(offset + i * (360 / n_locs)) * radi - hstimh),
       ]);
     }
     return display_locs;

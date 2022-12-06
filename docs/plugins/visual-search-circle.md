@@ -32,6 +32,8 @@ The `target_present` and `fixation_image` parameters must always be specified. O
 | target_absent_key  | string          | 'f'           | The key to press if the target is not present in the search array. |
 | trial_duration     | numeric         | null          | The maximum amount of time the participant is allowed to search before the trial will continue. A value of null will allow the participant to search indefinitely. |
 | fixation_duration  | numeric         | 1000          | How long to show the fixation image for before the search array (in milliseconds). |
+| randomize_item_locations | bool      | true      | Whether to use randomized locations on the circle for the items. If `false`, then the first item will always show at the location specified by `location_first_item`.
+| location_first_item | numeric | 0 | If `randomize_item_locations` is `false`, the location of the first item on the circle, in degrees.
 
 ## Data Generated
 
