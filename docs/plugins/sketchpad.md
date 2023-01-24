@@ -24,15 +24,15 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | Parameter          | Type            | Default Value | Description                              |
 | ------------------ | --------------- | ------------- | ---------------------------------------- |
 | canvas_shape | `"rectangle"` or `"circle"` | `"rectangle"` | The shape of the canvas element. |
-| canvas_width | int | 500 | Width of the canvas in pixels when `canvas_shape` is `"rectangle"` |
-| canvas_height | int | 500 | Height of the canvas in pixels when `canvas_shape` is `"rectangle"` |
-| canvas_diameter | int | 500 | Diameter of the canvas in pixels when `canvas_shape` is `"circle"` |
-| canvas_border_width | int | 0 | Width of the canvas border |
-| canvas_border_color | string | `"#000"` | Color of the canvas border |
-| background_image | image path | `null` | Path to an image to render as the background of the canvas |
+| canvas_width | int | 500 | Width of the canvas in pixels when `canvas_shape` is a `"rectangle"`. |
+| canvas_height | int | 500 | Height of the canvas in pixels when `canvas_shape` is a `"rectangle"`. |
+| canvas_diameter | int | 500 | Diameter of the canvas in pixels when `canvas_shape` is a `"circle"`. |
+| canvas_border_width | int | 0 | Width of the canvas border. |
+| canvas_border_color | string | `"#000"` | Color of the canvas border. |
+| background_image | image path | `null` | Path to an image to render as the background of the canvas. |
 | background_color | string | `"#fff"` | Color of the canvas background. Note that a `background_image` will render on top of the color.
-| stroke_width | int | 2 | Width of the stroke on the canvas |
-| stroke_color | string | `"#000"` | Color of the stroke on the canvas |
+| stroke_width | int | 2 | Width of the stroke on the canvas. |
+| stroke_color | string | `"#000"` | Color of the stroke on the canvas. |
 | stroke_color_palette | array of strings | `[]` | Array of colors to render as a palette of choices for stroke color. Clicking on the corresponding color button will change the stroke color. |
 | prompt | string | null | HTML content to render on the screen.
 | prompt_location | `"abovecanvas"` or `"belowcanvas"` or `"belowbutton"` | `"abovecanvas"` | The location to render the prompt content. |
@@ -60,7 +60,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | -------------- | ----------- | ---------------------------------------- |
 | rt | int | The length of time from the start of the trial to the end of the trial.
 | response | string | If the trial was ended by clicking the finished button, then `"button"`. If the trial was ended by pressing a key, then the key that was pressed. If the trial timed out, then `null`. |
-| png | base64 data URL string | If `save_image` is true, then this will contain the base64 encoded data URL for the image, in png format. |
+| png | base64 data URL string | If `save_final_image` is true, then this will contain the base64 encoded data URL for the image, in png format. |
 | strokes | array of stroke objects | If `save_strokes` is true, then this will contain an array of stroke objects. Objects have an `action` property that is either `"start"`, `"move"`, or `"end"`. If `action` is `"start"` or `"move"` it will have an `x` and `y` property that report the coordinates of the action relative to the upper-left corner of the canvas. If `action` is `"start"` then the object will also have a `t` and `color` property, specifying the time of the action relative to the onset of the trial (ms) and the color of the stroke. If `action` is `"end"` then it will only have a `t` property. |
 
 ## Simulation Mode
