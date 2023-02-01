@@ -303,7 +303,7 @@ If a TimelineNode iterates multiple times (using the loop function, for example)
 * `"0.1"` is the ID of the first top-level TimelineNode during the second iteration
 * `"0.2"` is the ID of the first top-level TimelineNode during the third iteration, and so on...
 
-If TimelineNodes are nested in other TimelineNodes, then the hierarchical structure is shown with `"."`:
+If TimelineNodes are nested in other TimelineNodes, then the hierarchical structure is shown with `"-"`:
 
 * `"0.0-1.0"` is the ID of the second TimelineNode on the timeline of the first top-level TimelineNode.
 * `"0.0-2.0"` is the ID of the third TimelineNode on the timeline of the first top-level TimelineNode, and so on...
