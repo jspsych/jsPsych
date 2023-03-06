@@ -1,5 +1,11 @@
 # jspsych
 
+## 7.3.2
+
+### Patch Changes
+
+- [#2974](https://github.com/jspsych/jsPsych/pull/2974) [`13243618`](https://github.com/jspsych/jsPsych/commit/1324361835de41a176757c3d9d0038b740cb4c76) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - This fixes an issue when a plugin has a COMPLEX parameter and there is a default value specified at the root level of the parameter, rather than for each individual nested parameter (#2972).
+
 ## 7.3.1
 
 ### Patch Changes
