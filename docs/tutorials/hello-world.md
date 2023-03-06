@@ -413,7 +413,7 @@ Once the plugin is imported we can create a trial using the plugin.
 To declare a trial that uses the `html-keyboard-response` plugin, we create an object with the property `type` equal to `htmlKeyboardResponse`.
 We can specify the other parameters of the plugin in the same object.
 Here we use the `stimulus` parameter to include a message.
-You can see the full set of parameters for each plugin on its [documentation page](../plugins/html-keyboard-response).
+You can see the full set of parameters for each plugin on its [documentation page](../plugins/html-keyboard-response.md).
 
 ```js
 import {initJsPsych} from 'jspsych';
