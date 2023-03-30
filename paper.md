@@ -17,14 +17,14 @@ authors:
     orcid: 0000-0002-9225-2787
     affiliation: 4
 affiliations:
- - name: Vassar College, USA
-   index: 1
- - name: MRC Cognition and Brain Sciences Unit, University of Cambridge, UK
-   index: 2
-- name: Massachusetts Institute of Technology, USA
-  index: 3
-- name: Paderborn University, Germany
-  index: 4
+  - name: Vassar College, USA
+    index: 1
+  - name: MRC Cognition and Brain Sciences Unit, University of Cambridge, UK
+    index: 2
+  - name: Massachusetts Institute of Technology, USA
+    index: 3
+  - name: Paderborn University, Germany
+    index: 4
 date: 30 March 2023
 bibliography: paper.bib
 ---
