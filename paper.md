@@ -1,5 +1,5 @@
 ---
-title: 'jsPsych: Enabling an open-source collaborative ecosystem of behavioral experiments'
+title: 'jsPsych: Enabling an Open-Source Collaborative Ecosystem of Behavioral Experiments'
 tags:
   - JavaScript
   - psychology
