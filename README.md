@@ -59,4 +59,4 @@ The project is currently managed by the core team of Josh de Leeuw ([@jodeleeuw]
 
 jsPsych was created by [Josh de Leeuw](http://www.twitter.com/joshdeleeuw).
 
-We're also grateful for the generous support from a [Mozilla Open Source Support award](https://www.mozilla.org/en-US/moss/), which funded development of the library from 2020-2021.
+We're also grateful for the generous support from a [Mozilla Open Source Support award](https://www.mozilla.org/en-US/moss/), which funded development of the library from 2020-2022.
