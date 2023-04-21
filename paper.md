@@ -31,7 +31,7 @@ bibliography: paper.bib
 
 # Summary
 
-It is common practice to research human behavior using experiments that participants can complete online. Researchers use a variety of methodological approaches to conduct these studies. Some of this research can be done with survey instruments, for which there are many software options. However, much of the research in psychology and human behavior requires tasks that rely on precise measurement of stimulus presentation and response timing, specific kinds of randomization, procedures that adjust based on the responses that are given, and interactive content. jsPsych is a JavaScript library that allows researchers to build the types of experiments that historically could only be run in a lab setting, and run them on any device that has a web browser.
+It is common practice to research human behavior using experiments that participants can complete online. Researchers use a variety of methodological approaches to conduct these studies. Some of this research can be done with survey instruments, for which there are many software options. However, much of the research in psychology and human behavior requires tasks that rely on precise measurement of stimulus presentation and response timing, specific kinds of randomization, procedures that adjust based on the responses that are given, and interactive content. [jsPsych](https://www.jspsych.org) is a JavaScript library that allows researchers to build the types of experiments that historically could only be run in a lab setting, and run them on any device that has a web browser.
 
 jsPsych was initially released in 2012 and the early design is described in @de2015jspsych. This paper is focused on jsPsych version 7, which contains the most substantial set of changes that have been made to the library since its initial release. The software has been widely rewritten with the goals of supporting integration with modern web development tools and improving the developer experience for researchers who want to make contributions to the library. We hope this will make it easier for researchers to collaboratively develop jsPsych and tools that use jsPsych [e.g., @deleeuw2023datapipe; @hartshorne2019thousand; @sochat2016experiment; @luchterhandt2023jspsychbuilder; @provenza2021honeycomb] and encourage researchers with web development experience to contribute to the jsPsych ecosystem.
 
@@ -51,6 +51,6 @@ We have developed a system for jsPsych that makes it easy for researchers to mod
 
 # Acknowledgements
 
-jsPsych development from 2020-2022 was partially funded by a grant from the Mozilla Foundation. We would like to thank everyone in the jsPsych community who has helped improve this project through code contributions, feature suggestions, bug reports, documentation, and supporting other users on the discussion forum.
+jsPsych development from 2020-2022 was partially funded by a grant from the Mozilla Foundation. We would like to thank everyone in the jsPsych community who has helped improve this project through code contributions, feature suggestions, bug reports, documentation, and supporting other users on [the discussion forum](https://github.com/jspsych/jspsych/discussions).
 
 # References
