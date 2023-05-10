@@ -48,15 +48,15 @@ See the [contributing to jsPsych](https://www.jspsych.org/latest/developers/cont
 
 ## Citation
 
-Citations help us demonstrate that this library is used and valued, which allows us to continue working on it. If you use this library in academic work, please cite one of the papers that describes jsPsych.
+If you use this library in academic work, the preferred citation is:
 
-For jsPsych versions 6 and earlier, the preferred citation is:
+de Leeuw, J.R., Gilbert, R.A., & Luchterhandt, B. (2023). jsPsych: Enabling an open-source collaborative ecosystem of behavioral experiments. *Journal of Open Source Software*, 
+
+This replaces the earlier paper that described jsPsych:
 
 de Leeuw, J.R. (2015). jsPsych: A JavaScript library for creating behavioral experiments in a Web browser. *Behavior Research Methods*, _47_(1), 1-12. doi:[10.3758/s13428-014-0458-y](http://link.springer.com/article/10.3758%2Fs13428-014-0458-y)
 
-For jsPsych version 7, the preferred citation is:
-
-de Leeuw, J.R., Gilbert, R.A., & Luchterhandt, B. (2023). jsPsych: Enabling an open-source collaborative ecosystem of behavioral experiments. *Journal of Open Source Software*, 
+Citations help us demonstrate that this library is used and valued, which allows us to continue working on it.
 
 ## Contributors
 
