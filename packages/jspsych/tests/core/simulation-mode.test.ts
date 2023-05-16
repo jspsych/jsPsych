@@ -414,4 +414,36 @@ describe("data simulation mode", () => {
 
     expect(getData().values().length).toBe(2);
   });
+
+  test("Custom display_element in initJsPsych does not prevent simulation events #3008", async () => {
+    const target = document.createElement("div");
+    target.id = "target";
+    document.body.appendChild(target);
+
+    const jsPsych = initJsPsych({
+      display_element: target,
+    });
+
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+      },
+    ];
+
+    const { expectRunning, expectFinished, getHTML } = await simulateTimeline(
+      timeline,
+      "visual",
+      {},
+      jsPsych
+    );
+
+    await expectRunning();
+
+    expect(getHTML()).toContain("foo");
+
+    jest.runAllTimers();
+
+    await expectFinished();
+  });
 });
