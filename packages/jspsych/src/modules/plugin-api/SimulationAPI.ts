@@ -1,6 +1,8 @@
 export class SimulationAPI {
+  constructor(private getDisplayContainerElement: () => HTMLElement) {}
+
   dispatchEvent(event: Event) {
-    document.body.dispatchEvent(event);
+    this.getDisplayContainerElement().dispatchEvent(event);
   }
 
   /**
