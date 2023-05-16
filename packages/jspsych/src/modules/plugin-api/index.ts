@@ -20,7 +20,7 @@ export function createJointPluginAPIObject(jsPsych: JsPsych) {
       new TimeoutAPI(),
       new MediaAPI(settings.use_webaudio, jsPsych.webaudio_context),
       new HardwareAPI(),
-      new SimulationAPI(),
+      new SimulationAPI(jsPsych.getDisplayContainerElement),
     ].map((object) => autoBind(object))
   ) as KeyboardListenerAPI & TimeoutAPI & MediaAPI & HardwareAPI & SimulationAPI;
 }
