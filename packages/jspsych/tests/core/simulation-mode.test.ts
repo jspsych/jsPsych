@@ -446,4 +446,40 @@ describe("data simulation mode", () => {
 
     await expectFinished();
   });
+
+  test("Data parameters should be merged when setting trial-level simulation options, #2911", async () => {
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        trial_duration: 1000,
+        response_ends_trial: true,
+      },
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "bar",
+        trial_duration: 1000,
+        response_ends_trial: true,
+        simulation_options: {
+          data: {
+            response: "a",
+          },
+        },
+      },
+    ];
+
+    const { expectRunning, expectFinished, getData } = await simulateTimeline(timeline, "visual", {
+      default: { data: { rt: 200 } },
+    });
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    const data = getData().values();
+
+    expect(data[0].rt).toBe(200);
+    expect(data[1].rt).toBe(200);
+    expect(data[1].response).toBe("a");
+  });
 });
