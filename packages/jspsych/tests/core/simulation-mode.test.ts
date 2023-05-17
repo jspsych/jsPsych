@@ -596,7 +596,7 @@ describe("data simulation mode", () => {
 
     expect(on_load).toHaveBeenCalled();
 
-    jest.runAllTimers();
+    pressKey("a");
 
     await expectFinished();
   });
