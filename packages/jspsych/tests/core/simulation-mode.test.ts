@@ -575,4 +575,29 @@ describe("data simulation mode", () => {
 
     await expectFinished();
   });
+
+  test("`on_load` function should be called when in simulation mode and `simulate` is `false`, #2859", async () => {
+    const on_load = jest.fn();
+
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        simulation_options: {
+          simulate: false,
+        },
+        on_load,
+      },
+    ];
+
+    const { expectRunning, expectFinished } = await simulateTimeline(timeline, "visual");
+
+    await expectRunning();
+
+    expect(on_load).toHaveBeenCalled();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+  });
 });
