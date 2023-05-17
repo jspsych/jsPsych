@@ -528,4 +528,51 @@ describe("data simulation mode", () => {
 
     await expectFinished();
   });
+
+  test("Simulation timeouts are handled correctly when user interacts with simulation, #2862", async () => {
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        simulation_options: {
+          data: {
+            rt: 1000,
+          },
+        },
+      },
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "bar",
+        simulation_options: {
+          data: {
+            rt: 1000,
+          },
+        },
+      },
+    ];
+
+    const { expectRunning, expectFinished, getHTML } = await simulateTimeline(timeline, "visual");
+
+    await expectRunning();
+
+    expect(getHTML()).toContain("foo");
+
+    jest.advanceTimersByTime(500);
+
+    expect(getHTML()).toContain("foo");
+
+    pressKey("a"); // this is the user responding instead of letting the simulation handle it.
+
+    expect(getHTML()).toContain("bar");
+
+    jest.advanceTimersByTime(800);
+
+    // if the timeout from the first trial is blocked, this trial shouldn't finish yet.
+    expect(getHTML()).toContain("bar");
+
+    // this should be the end of the experiment
+    jest.advanceTimersByTime(201);
+
+    await expectFinished();
+  });
 });
