@@ -28,3 +28,34 @@ export function deepCopy(obj) {
     return obj;
   }
 }
+
+/**
+ * Merges two objects, recursively.
+ * @param obj1 Object to merge
+ * @param obj2 Object to merge
+ */
+export function deepMerge(obj1: any, obj2: any): any {
+  let merged = {};
+  for (const key in obj1) {
+    if (obj1.hasOwnProperty(key)) {
+      if (typeof obj1[key] === "object" && obj2.hasOwnProperty(key)) {
+        merged[key] = deepMerge(obj1[key], obj2[key]);
+      } else {
+        merged[key] = obj1[key];
+      }
+    }
+  }
+  for (const key in obj2) {
+    if (obj2.hasOwnProperty(key)) {
+      if (!merged.hasOwnProperty(key)) {
+        merged[key] = obj2[key];
+      } else if (typeof obj2[key] === "object") {
+        merged[key] = deepMerge(merged[key], obj2[key]);
+      } else {
+        merged[key] = obj2[key];
+      }
+    }
+  }
+
+  return merged;
+}
