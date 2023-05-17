@@ -25,6 +25,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Name | Type | Value
 -----|------|------
 success | boolean | true if the browser supports fullscreen mode (i.e., is not Safari)
+rt | number | Response time to click the button that launches fullscreen mode
 
 ## Simulation Mode
 

@@ -627,13 +627,14 @@ export class JsPsych {
     };
 
     let trial_complete;
+    let trial_sim_opts;
+    let trial_sim_opts_merged;
     if (!this.simulation_mode) {
       trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
     }
     if (this.simulation_mode) {
       // check if the trial supports simulation
       if (trial.type.simulate) {
-        let trial_sim_opts;
         if (!trial.simulation_options) {
           trial_sim_opts = this.simulation_options.default;
         }
@@ -656,16 +657,23 @@ export class JsPsych {
             trial_sim_opts = trial.simulation_options;
           }
         }
-        trial_sim_opts = this.utils.deepCopy(trial_sim_opts);
-        trial_sim_opts = this.replaceFunctionsWithValues(trial_sim_opts, null);
+        // merge in default options that aren't overriden by the trial's simulation_options
+        // including nested parameters in the simulation_options
+        trial_sim_opts_merged = this.utils.deepMerge(
+          this.simulation_options.default,
+          trial_sim_opts
+        );
 
-        if (trial_sim_opts?.simulate === false) {
+        trial_sim_opts_merged = this.utils.deepCopy(trial_sim_opts_merged);
+        trial_sim_opts_merged = this.replaceFunctionsWithValues(trial_sim_opts_merged, null);
+
+        if (trial_sim_opts_merged?.simulate === false) {
           trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
         } else {
           trial_complete = trial.type.simulate(
             trial,
-            trial_sim_opts?.mode || this.simulation_mode,
-            trial_sim_opts,
+            trial_sim_opts_merged?.mode || this.simulation_mode,
+            trial_sim_opts_merged,
             load_callback
           );
         }
@@ -678,8 +686,13 @@ export class JsPsych {
     // see if trial_complete is a Promise by looking for .then() function
     const is_promise = trial_complete && typeof trial_complete.then == "function";
 
-    // in simulation mode we let the simulate function call the load_callback always.
-    if (!is_promise && !this.simulation_mode) {
+    // in simulation mode we let the simulate function call the load_callback always,
+    // so we don't need to call it here. however, if we are in simulation mode but not simulating
+    // this particular trial we need to call it.
+    if (
+      !is_promise &&
+      (!this.simulation_mode || (this.simulation_mode && trial_sim_opts_merged?.simulate === false))
+    ) {
       load_callback();
     }
 
