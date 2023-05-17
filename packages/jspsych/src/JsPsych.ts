@@ -656,16 +656,23 @@ export class JsPsych {
             trial_sim_opts = trial.simulation_options;
           }
         }
-        trial_sim_opts = this.utils.deepCopy(trial_sim_opts);
-        trial_sim_opts = this.replaceFunctionsWithValues(trial_sim_opts, null);
+        // merge in default options that aren't overriden by the trial's simulation_options
+        // including nested parameters in the simulation_options
+        let trial_sim_opts_merged = this.utils.deepMerge(
+          this.simulation_options.default,
+          trial_sim_opts
+        );
 
-        if (trial_sim_opts?.simulate === false) {
+        trial_sim_opts_merged = this.utils.deepCopy(trial_sim_opts_merged);
+        trial_sim_opts_merged = this.replaceFunctionsWithValues(trial_sim_opts_merged, null);
+
+        if (trial_sim_opts_merged?.simulate === false) {
           trial_complete = trial.type.trial(this.DOM_target, trial, load_callback);
         } else {
           trial_complete = trial.type.simulate(
             trial,
-            trial_sim_opts?.mode || this.simulation_mode,
-            trial_sim_opts,
+            trial_sim_opts_merged?.mode || this.simulation_mode,
+            trial_sim_opts_merged,
             load_callback
           );
         }
