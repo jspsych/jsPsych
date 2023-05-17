@@ -487,6 +487,9 @@ describe("data simulation mode", () => {
     const simulation_options = {
       default: {
         simulate: false,
+        data: {
+          rt: 200,
+        },
       },
       long_response: {
         simulate: true,
@@ -527,6 +530,13 @@ describe("data simulation mode", () => {
     jest.runAllTimers();
 
     await expectFinished();
+
+    const data = getData().values()[1];
+
+    console.log(data);
+
+    expect(data.rt).toBeGreaterThan(0);
+    expect(data.response).toBeDefined();
   });
 
   test("Simulation timeouts are handled correctly when user interacts with simulation, #2862", async () => {
