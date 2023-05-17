@@ -482,4 +482,50 @@ describe("data simulation mode", () => {
     expect(data[1].rt).toBe(200);
     expect(data[1].response).toBe("a");
   });
+
+  test("Simulation mode set via string should work, #2912", async () => {
+    const simulation_options = {
+      default: {
+        simulate: false,
+      },
+      long_response: {
+        simulate: true,
+      },
+    };
+
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+      },
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "bar",
+        trial_duration: 1000,
+        simulation_options: "long_response",
+      },
+    ];
+
+    const { expectRunning, expectFinished, getData, getHTML } = await simulateTimeline(
+      timeline,
+      "visual",
+      simulation_options
+    );
+
+    await expectRunning();
+
+    expect(getHTML()).toContain("foo");
+
+    jest.runAllTimers();
+
+    expect(getHTML()).toContain("foo");
+
+    pressKey("a");
+
+    expect(getHTML()).toContain("bar");
+
+    jest.runAllTimers();
+
+    await expectFinished();
+  });
 });
