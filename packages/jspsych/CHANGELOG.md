@@ -1,5 +1,17 @@
 # jspsych
 
+## 7.3.3
+
+### Patch Changes
+
+- [#3039](https://github.com/jspsych/jsPsych/pull/3039) [`465527a8`](https://github.com/jspsych/jsPsych/commit/465527a849847a1728c983a582a3b38d5e66de25) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Fix error in how nested parameters were handled in simulation mode, #2911
+
+* [#3039](https://github.com/jspsych/jsPsych/pull/3039) [`852d5745`](https://github.com/jspsych/jsPsych/commit/852d57451668aec2975b3f8a0313409bdf332bbb) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Fixed how simulation mode handles `setTimeout` calls to ensure that timeouts are cleared at the end of a trial, even in cases where the user interacts with a simulated trial when the simulation is being run in `visual` mode.
+
+- [#3039](https://github.com/jspsych/jsPsych/pull/3039) [`612d9e12`](https://github.com/jspsych/jsPsych/commit/612d9e125f9002c1ba383a4fafe4123bdfef0f17) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Fixed issue where a trial's `on_load` was not called when using simulation mode but setting a trial's `simulate` option to `false`.
+
+* [#3039](https://github.com/jspsych/jsPsych/pull/3039) [`481efec0`](https://github.com/jspsych/jsPsych/commit/481efec07558fac786167a091dc2582c17cd0c5d) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Fix target of simulation `dispatchEvent` so that simulation mode works with custom `display_element`
+
 ## 7.3.2
 
 ### Patch Changes

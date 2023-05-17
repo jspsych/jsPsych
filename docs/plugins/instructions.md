@@ -1,6 +1,6 @@
 # instructions
 
-Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-instructions/CHANGELOG.md).
+Current version: 1.1.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-instructions/CHANGELOG.md).
 
 This plugin is for showing instructions to the participant. It allows participants to navigate through multiple pages of instructions at their own pace, recording how long the participant spends on each page. Navigation can be done using the mouse or keyboard. participants can be allowed to navigate forwards and backwards through pages, if desired.
 
@@ -35,7 +35,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-instructions@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-instructions@1.1.3"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

@@ -1,5 +1,11 @@
 # @jspsych/plugin-serial-reaction-time
 
+## 1.1.3
+
+### Patch Changes
+
+- [#3039](https://github.com/jspsych/jsPsych/pull/3039) [`952cdf5b`](https://github.com/jspsych/jsPsych/commit/952cdf5b126f6d4058c86e59f50e96c1778bd7f9) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Fixed issue that caused `pre_target_duration` parameter to not work correctly
+
 ## 1.1.2
 
 ### Patch Changes

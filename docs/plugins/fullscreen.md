@@ -1,6 +1,6 @@
 # fullscreen
 
-Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-fullscreen/CHANGELOG.md).
+Current version: 1.2.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-fullscreen/CHANGELOG.md).
 
 The fullscreen plugin allows the experiment to enter or exit fullscreen mode. For security reasons, all browsers require that entry into fullscreen mode is triggered by a user action. To enter fullscreen mode, this plugin has the user click a button. Exiting fullscreen mode can be done without user input.
 
@@ -38,7 +38,7 @@ If you want the display to actually enter fullscreen mode during the simulation,
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.2.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
