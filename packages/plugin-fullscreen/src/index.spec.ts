@@ -23,6 +23,23 @@ describe("fullscreen plugin", () => {
     clickTarget(document.querySelector("#jspsych-fullscreen-btn"));
     expect(document.documentElement.requestFullscreen).toHaveBeenCalled();
   });
+
+  test("records RT of click", async () => {
+    const { getData, expectFinished } = await startTimeline([
+      {
+        type: fullscreen,
+        delay_after: 0,
+      },
+    ]);
+
+    expect(document.documentElement.requestFullscreen).not.toHaveBeenCalled();
+    jest.advanceTimersByTime(1000);
+    clickTarget(document.querySelector("#jspsych-fullscreen-btn"));
+    expect(document.documentElement.requestFullscreen).toHaveBeenCalled();
+    jest.runAllTimers();
+    await expectFinished();
+    expect(getData().values()[0].rt).toBeGreaterThanOrEqual(1000);
+  });
 });
 
 describe("fullscreen plugin simulation", () => {
@@ -63,5 +80,6 @@ describe("fullscreen plugin simulation", () => {
     await expectFinished();
 
     expect(getData().values()[0].success).toBe(true);
+    expect(getData().values()[0].rt).toBeGreaterThan(0);
   });
 });
