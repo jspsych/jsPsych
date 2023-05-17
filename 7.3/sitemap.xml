@@ -2,482 +2,482 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://www.jspsych.org/7.3/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/about/about/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/about/license/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/developers/configuration/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/developers/contributing/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/developers/documentation/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/developers/extension-development/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/developers/plugin-development/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/extensions/list-of-extensions/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/extensions/mouse-tracking/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/extensions/record-video/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/extensions/webgazer/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/browser-device-support/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/data/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/dynamic-parameters/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/events/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/exclude-browser/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/experiment-options/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/extensions/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/eye-tracking/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/fullscreen/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/media-preloading/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/mturk/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/plugins/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/progress-bar/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/prolific/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/record-browser-interactions/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/running-experiments/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/simulation/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/style/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/timeline/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/overview/timing-accuracy/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/animation/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/audio-button-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/audio-keyboard-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/audio-slider-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/browser-check/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/call-function/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/canvas-button-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/canvas-keyboard-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/canvas-slider-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/categorize-animation/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/categorize-html/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/categorize-image/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/cloze/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/external-html/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/free-sort/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/fullscreen/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/html-audio-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/html-button-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/html-keyboard-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/html-slider-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/html-video-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/iat-html/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/iat-image/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/image-button-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/image-keyboard-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/image-slider-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/initialize-camera/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/initialize-microphone/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/instructions/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/list-of-plugins/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/maxdiff/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/mirror-camera/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/preload/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/reconstruction/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/resize/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/same-different-html/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/same-different-image/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/serial-reaction-time-mouse/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/serial-reaction-time/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/sketchpad/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/survey-html-form/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/survey-likert/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/survey-multi-choice/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/survey-multi-select/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/survey-text/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/survey/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/video-button-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/video-keyboard-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/video-slider-response/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/virtual-chinrest/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/visual-search-circle/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/webgazer-calibrate/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/webgazer-init-camera/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/plugins/webgazer-validate/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/reference/jspsych-data/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/reference/jspsych-pluginAPI/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/reference/jspsych-randomization/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/reference/jspsych-turk/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/reference/jspsych/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/support/migration-v7/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/support/support/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/tutorials/hello-world/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/tutorials/rt-task/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://www.jspsych.org/7.3/tutorials/video-tutorials/</loc>
-         <lastmod>2023-05-11</lastmod>
+         <lastmod>2023-05-17</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
