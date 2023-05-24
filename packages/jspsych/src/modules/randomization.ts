@@ -1,6 +1,8 @@
 import rw from "random-words";
 import seedrandom from "seedrandom/lib/alea";
 
+import { deepCopy } from "./utils";
+
 /**
  * Uses the `seedrandom` package to replace Math.random() with a seedable PRNG.
  *
@@ -77,12 +79,13 @@ export function repeat(array, repetitions, unpack = false) {
   return out;
 }
 
-export function shuffle(array: Array<any>) {
+export function shuffle(array: Array<any>, isDeepCopy?: boolean) {
   if (!Array.isArray(array)) {
     console.error("Argument to shuffle() must be an array.");
   }
 
-  const copy_array = array.slice(0);
+  const copy_array = isDeepCopy ? deepCopy(array) : array.slice(0);
+
   let m = copy_array.length,
     t,
     i;

@@ -31,6 +31,25 @@ describe("shuffle", () => {
     expect(shuffledArray).not.toBe(array);
     expect(shuffledArray).toEqual([1, 3, 2]);
   });
+
+  it('should return deep copy when isDeepCopy set to "true"', () => {
+    const array1 = [1, 2, 3];
+    const array2 = [4, 5, 6];
+    const array3 = [7, 8, 9];
+    const array = [array1, array2, array3];
+
+    const shuffledArray = shuffle(array, true);
+
+    array2[0] = -1;
+
+    expect(shuffledArray).toEqual([
+      [1, 2, 3],
+      [7, 8, 9],
+      [4, 5, 6],
+    ]);
+    expect(shuffledArray[0]).not.toBe(array[0]);
+    expect(array[1]).toEqual([-1, 5, 6]);
+  });
 });
 
 describe("shuffleAlternateGroups", () => {
