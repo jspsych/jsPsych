@@ -1,5 +1,11 @@
 # @jspsych/config
 
+## 1.3.3
+
+### Patch Changes
+
+- [#3073](https://github.com/jspsych/jsPsych/pull/3073) [`caef8713`](https://github.com/jspsych/jsPsych/commit/caef8713e28fd0c4ed85ba86c27254ee8418087a) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Update `canvas` package dependency version to fix missing binaries issues with newer node/npm versions
+
 ## 1.3.2
 
 ### Patch Changes
