@@ -2,7 +2,7 @@ import { Class } from "type-fest";
 
 import { ParameterInfos } from "../modules/plugins";
 import { JsPsychPlugin, ParameterType, PluginInfo } from "../modules/plugins";
-import { deepCopy } from "../modules/utils";
+import { deepCopy, deepMerge } from "../modules/utils";
 import { Timeline } from "./Timeline";
 import { GetParameterValueOptions, TimelineNode } from "./TimelineNode";
 import { delay, isPromise, parameterPathArrayToString } from "./util";
@@ -73,7 +73,7 @@ export class Trial extends TimelineNode {
       hasTrialPromiseBeenResolved = true;
     });
 
-    const trialReturnValue = this.invokeTrialMethod();
+    const { trialReturnValue, hasTrialBeenSimulated } = this.invokeTrialMethod();
 
     // Wait until the trial has completed and grab result data
     let result: TrialResult | void;
@@ -86,9 +86,9 @@ export class Trial extends TimelineNode {
         result = await trialPromise;
       }
     } else {
-      // The `simulate` method always invokes `onLoad()`, so we don't call `onLoad()` in simulation
-      // mode
-      if (!this.dependencies.getSimulationMode()) {
+      // The `simulate` method always invokes `onLoad()`, so we don't call `onLoad()` when the trial
+      // has been simulated
+      if (!hasTrialBeenSimulated) {
         this.onLoad();
       }
 
@@ -98,27 +98,36 @@ export class Trial extends TimelineNode {
     return result;
   }
 
-  private invokeTrialMethod(): void | Promise<void | TrialResult> {
+  private invokeTrialMethod(): {
+    trialReturnValue: void | Promise<void | TrialResult>;
+    hasTrialBeenSimulated: boolean;
+  } {
     const globalSimulationMode = this.dependencies.getSimulationMode();
 
     if (globalSimulationMode && typeof this.pluginInstance.simulate === "function") {
       const simulationOptions = this.getSimulationOptions();
 
       if (simulationOptions.simulate !== false) {
-        return this.pluginInstance.simulate(
-          this.trialObject,
-          simulationOptions.mode ?? globalSimulationMode,
-          simulationOptions,
-          this.onLoad
-        );
+        return {
+          hasTrialBeenSimulated: true,
+          trialReturnValue: this.pluginInstance.simulate(
+            this.trialObject,
+            simulationOptions.mode ?? globalSimulationMode,
+            simulationOptions,
+            this.onLoad
+          ),
+        };
       }
     }
 
-    return this.pluginInstance.trial(
-      this.dependencies.getDisplayElement(),
-      this.trialObject,
-      this.onLoad
-    );
+    return {
+      hasTrialBeenSimulated: false,
+      trialReturnValue: this.pluginInstance.trial(
+        this.dependencies.getDisplayElement(),
+        this.trialObject,
+        this.onLoad
+      ),
+    };
   }
 
   /**
@@ -254,32 +263,20 @@ export class Trial extends TimelineNode {
    * global simulation options.
    */
   public getSimulationOptions() {
-    const simulationOptions: SimulationOptions = deepCopy(
-      this.getParameterValue("simulation_options", {
-        replaceResult: (result) => {
-          if (typeof result === "undefined") {
-            return deepCopy(this.dependencies.getGlobalSimulationOptions().default);
-          }
+    const simulationOptions: SimulationOptions = this.getParameterValue("simulation_options", {
+      replaceResult: (result = {}) => {
+        if (typeof result === "string") {
+          // Look up the global simulation options by their key
+          const globalSimulationOptions = this.dependencies.getGlobalSimulationOptions();
+          result = globalSimulationOptions[result] ?? globalSimulationOptions["default"] ?? {};
+        }
 
-          // Evaluate parameter functions and timeline variables beforehand since they might return
-          // a string that we can use in the next step
-          if (typeof result === "function") {
-            result = result();
-          }
-          if (result instanceof TimelineVariable) {
-            result = this.evaluateTimelineVariable(result);
-          }
-
-          if (typeof result === "string") {
-            // Look up the global simulation options by their key
-            const globalSimulationOptions = this.dependencies.getGlobalSimulationOptions();
-            return globalSimulationOptions[result] ?? globalSimulationOptions["default"];
-          }
-
-          return result;
-        },
-      })
-    );
+        return deepMerge(
+          deepCopy(this.dependencies.getGlobalSimulationOptions().default),
+          deepCopy(result)
+        );
+      },
+    });
 
     if (typeof simulationOptions === "undefined") {
       return {};
@@ -329,19 +326,22 @@ export class Trial extends TimelineNode {
 
         let parameterValue = this.getParameterValue(parameterPath, {
           evaluateFunctions: parameterConfig.type !== ParameterType.FUNCTION,
+          replaceResult: (originalResult) => {
+            if (typeof originalResult === "undefined") {
+              if (typeof parameterConfig.default === "undefined") {
+                throw new Error(
+                  `You must specify a value for the "${parameterPathArrayToString(
+                    parameterPath
+                  )}" parameter in the "${this.pluginInfo.name}" plugin.`
+                );
+              } else {
+                return parameterConfig.default;
+              }
+            } else {
+              return originalResult;
+            }
+          },
         });
-
-        if (typeof parameterValue === "undefined") {
-          if (typeof parameterConfig.default === "undefined") {
-            throw new Error(
-              `You must specify a value for the "${parameterPathArrayToString(
-                parameterPath
-              )}" parameter in the "${this.pluginInfo.name}" plugin.`
-            );
-          } else {
-            parameterValue = parameterConfig.default;
-          }
-        }
 
         if (parameterConfig.array && !Array.isArray(parameterValue)) {
           const parameterPathString = parameterPathArrayToString(parameterPath);

@@ -1,5 +1,11 @@
 # @jspsych/plugin-fullscreen
 
+## 1.2.0
+
+### Minor Changes
+
+- [#3039](https://github.com/jspsych/jsPsych/pull/3039) [`09ee347f`](https://github.com/jspsych/jsPsych/commit/09ee347fa55187c7d8d67e8961731664de684532) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Plugin now records RT of the button press to launch fullscreen mode and simulation mode supports setting this property
+
 ## 1.1.2
 
 ### Patch Changes

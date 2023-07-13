@@ -47,6 +47,8 @@ type Info = typeof info;
  */
 class FullscreenPlugin implements JsPsychPlugin<Info> {
   static info = info;
+  private rt = null;
+  private start_time = 0;
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -73,9 +75,11 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
       <button id="jspsych-fullscreen-btn" class="jspsych-btn">${trial.button_label}</button>
     `;
     display_element.querySelector("#jspsych-fullscreen-btn").addEventListener("click", () => {
+      this.rt = Math.round(performance.now() - this.start_time);
       this.enterFullScreen();
       this.endTrial(display_element, true, trial);
     });
+    this.start_time = performance.now();
   }
 
   private endTrial(display_element, success, trial) {
@@ -84,6 +88,7 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
     this.jsPsych.pluginAPI.setTimeout(() => {
       var trial_data = {
         success: success,
+        rt: this.rt,
       };
 
       this.jsPsych.finishTrial(trial_data);
@@ -137,8 +142,11 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
   }
 
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
+    const rt = this.jsPsych.randomization.sampleExGaussian(1000, 100, 1 / 200, true);
+
     const default_data = {
       success: true,
+      rt: rt,
     };
 
     const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
@@ -164,7 +172,7 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
       load_callback();
       this.jsPsych.pluginAPI.clickTarget(
         display_element.querySelector("#jspsych-fullscreen-btn"),
-        this.jsPsych.randomization.sampleExGaussian(1000, 100, 1 / 200, true)
+        data.rt
       );
     }
   }

@@ -564,28 +564,19 @@ describe("Timeline", () => {
       expect(timeline.getParameterValue(["object", "childObject", "childString"])).toEqual("bar");
     });
 
-    it("respects the `replaceResult` function", async () => {
-      const timeline = createTimeline({ timeline: [], timeline_variables: [{ x: "value" }] });
+    it("respects the `replaceResult` function", () => {
+      const timeline = createTimeline({ timeline: [] });
 
       expect(timeline.getParameterValue("key", { replaceResult: () => "value" })).toBe("value");
-      expect(timeline.getParameterValue("key", { replaceResult: () => () => "value" })).toBe(
-        "value"
-      );
-
-      await timeline.run();
-
-      expect(
-        timeline.getParameterValue("undefinedKey", {
-          replaceResult: () => new TimelineVariable("x"),
-        })
-      ).toBe("value");
     });
 
     it("caches results and uses them for nested lookups", async () => {
       const timeline = createTimeline({ timeline: [], object: () => ({ child: "foo" }) });
 
       expect(
-        timeline.getParameterValue("object", { replaceResult: () => ({ child: "bar" }) })
+        timeline.getParameterValue("object", {
+          replaceResult: () => ({ child: "bar" }),
+        })
       ).toEqual({ child: "bar" });
       expect(timeline.getParameterValue(["object", "child"])).toEqual("bar");
     });

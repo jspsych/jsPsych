@@ -48,9 +48,15 @@ See the [contributing to jsPsych](https://www.jspsych.org/latest/developers/cont
 
 ## Citation
 
-If you use this library in academic work, please cite the [paper that describes jsPsych](http://link.springer.com/article/10.3758%2Fs13428-014-0458-y):
+If you use this library in academic work, the preferred citation is:
 
-de Leeuw, J.R. (2015). jsPsych: A JavaScript library for creating behavioral experiments in a Web browser. *Behavior Research Methods*, _47_(1), 1-12. doi:10.3758/s13428-014-0458-y
+de Leeuw, J.R., Gilbert, R.A., & Luchterhandt, B. (2023). jsPsych: Enabling an open-source collaborative ecosystem of behavioral experiments. *Journal of Open Source Software*, *8*(85), 5351, [https://joss.theoj.org/papers/10.21105/joss.05351](https://joss.theoj.org/papers/10.21105/joss.05351).
+
+This paper is an updated description of jsPsych and includes all current core team members. It replaces the earlier paper that described jsPsych:
+
+de Leeuw, J.R. (2015). jsPsych: A JavaScript library for creating behavioral experiments in a Web browser. *Behavior Research Methods*, _47_(1), 1-12. doi:[10.3758/s13428-014-0458-y](http://link.springer.com/article/10.3758%2Fs13428-014-0458-y)
+
+Citations help us demonstrate that this library is used and valued, which allows us to continue working on it.
 
 ## Contributors
 
@@ -59,4 +65,4 @@ The project is currently managed by the core team of Josh de Leeuw ([@jodeleeuw]
 
 jsPsych was created by [Josh de Leeuw](http://www.twitter.com/joshdeleeuw).
 
-We're also grateful for the generous support from a [Mozilla Open Source Support award](https://www.mozilla.org/en-US/moss/), which funded development of the library from 2020-2021.
+We're also grateful for the generous support from a [Mozilla Open Source Support award](https://www.mozilla.org/en-US/moss/), which funded development of the library from 2020-2022.

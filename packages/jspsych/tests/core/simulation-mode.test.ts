@@ -1,5 +1,5 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import { clickTarget, pressKey, simulateTimeline } from "@jspsych/test-utils";
+import { clickTarget, flushPromises, pressKey, simulateTimeline } from "@jspsych/test-utils";
 
 import { JsPsych, ParameterType, initJsPsych } from "../../src";
 
@@ -413,5 +413,208 @@ describe("data simulation mode", () => {
     await expectFinished();
 
     expect(getData().values().length).toBe(2);
+  });
+
+  test("Custom display_element in initJsPsych does not prevent simulation events #3008", async () => {
+    const target = document.createElement("div");
+    target.id = "target";
+    document.body.appendChild(target);
+
+    const jsPsych = initJsPsych({
+      display_element: target,
+    });
+
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+      },
+    ];
+
+    const { expectRunning, expectFinished, getHTML } = await simulateTimeline(
+      timeline,
+      "visual",
+      {},
+      jsPsych
+    );
+
+    await expectRunning();
+
+    expect(getHTML()).toContain("foo");
+
+    jest.runAllTimers();
+
+    await expectFinished();
+  });
+
+  test("Data parameters should be merged when setting trial-level simulation options, #2911", async () => {
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        trial_duration: 1000,
+        response_ends_trial: true,
+      },
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "bar",
+        trial_duration: 1000,
+        response_ends_trial: true,
+        simulation_options: {
+          data: {
+            response: "a",
+          },
+        },
+      },
+    ];
+
+    const { jsPsych, expectRunning, expectFinished, getData } = await simulateTimeline(
+      timeline,
+      "visual",
+      {
+        default: { data: { rt: 200 } },
+      }
+    );
+
+    // Make the event loop tick for each simulated keyboard response
+    jest.runAllTimers();
+    await flushPromises();
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    const data = getData().values();
+
+    expect(data[0].rt).toBe(200);
+    expect(data[1].rt).toBe(200);
+    expect(data[1].response).toBe("a");
+  });
+
+  test("Simulation mode set via string should work, #2912", async () => {
+    const simulation_options = {
+      default: {
+        simulate: false,
+        data: {
+          rt: 200,
+        },
+      },
+      long_response: {
+        simulate: true,
+      },
+    };
+
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+      },
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "bar",
+        trial_duration: 1000,
+        simulation_options: "long_response",
+      },
+    ];
+
+    const { expectRunning, expectFinished, getData, getHTML } = await simulateTimeline(
+      timeline,
+      "visual",
+      simulation_options
+    );
+
+    await expectRunning();
+
+    expect(getHTML()).toContain("foo");
+
+    jest.runAllTimers();
+
+    expect(getHTML()).toContain("foo");
+
+    await pressKey("a");
+
+    expect(getHTML()).toContain("bar");
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    const data = getData().values()[1];
+
+    console.log(data);
+
+    expect(data.rt).toBeGreaterThan(0);
+    expect(data.response).toBeDefined();
+  });
+
+  test("Simulation timeouts are handled correctly when user interacts with simulation, #2862", async () => {
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        simulation_options: {
+          data: {
+            rt: 1000,
+          },
+        },
+      },
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "bar",
+        simulation_options: {
+          data: {
+            rt: 1000,
+          },
+        },
+      },
+    ];
+
+    const { expectRunning, expectFinished, getHTML } = await simulateTimeline(timeline, "visual");
+
+    await expectRunning();
+
+    expect(getHTML()).toContain("foo");
+
+    jest.advanceTimersByTime(500);
+
+    expect(getHTML()).toContain("foo");
+
+    await pressKey("a"); // this is the user responding instead of letting the simulation handle it.
+
+    expect(getHTML()).toContain("bar");
+
+    jest.advanceTimersByTime(800);
+
+    // if the timeout from the first trial is blocked, this trial shouldn't finish yet.
+    expect(getHTML()).toContain("bar");
+
+    // this should be the end of the experiment
+    jest.advanceTimersByTime(201);
+
+    await expectFinished();
+  });
+
+  test("`on_load` function should be called when in simulation mode and `simulate` is `false`, #2859", async () => {
+    const on_load = jest.fn();
+
+    const timeline = [
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "foo",
+        simulation_options: {
+          simulate: false,
+        },
+        on_load,
+      },
+    ];
+
+    const { expectRunning, expectFinished } = await simulateTimeline(timeline, "visual");
+
+    await expectRunning();
+
+    expect(on_load).toHaveBeenCalled();
+
+    await pressKey("a");
+
+    await expectFinished();
   });
 });

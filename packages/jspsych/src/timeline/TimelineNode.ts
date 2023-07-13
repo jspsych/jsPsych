@@ -29,9 +29,9 @@ export type GetParameterValueOptions = {
   cacheResult?: boolean;
 
   /**
-   * A function that will be invoked with the original result before evaluating parameter functions
-   * and timeline variables. Whatever it returns will subsequently be used instead of the original
-   * result.
+   * A function that will be invoked with the original result of the parameter value lookup.
+   * Whatever it returns will subsequently be used instead of the original result. This allows to
+   * modify results before they are cached.
    */
   replaceResult?: (originalResult: any) => any;
 };
@@ -131,15 +131,15 @@ export abstract class TimelineNode {
       result = this.parent.getParameterValue(parameterPath, options);
     }
 
-    if (typeof replaceResult === "function") {
-      result = replaceResult(result);
-    }
-
     if (typeof result === "function" && evaluateFunctions) {
       result = result();
     }
     if (result instanceof TimelineVariable) {
       result = this.evaluateTimelineVariable(result);
+    }
+
+    if (typeof replaceResult === "function") {
+      result = replaceResult(result);
     }
 
     if (cacheResult) {

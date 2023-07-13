@@ -287,7 +287,13 @@ describe("Trial", () => {
           requiredString: { type: ParameterType.STRING },
           stringArray: { type: ParameterType.STRING, default: [], array: true },
           function: { type: ParameterType.FUNCTION, default: functionDefaultValue },
-          complex: { type: ParameterType.COMPLEX, default: {} },
+          complex: {
+            type: ParameterType.COMPLEX,
+            default: { requiredChild: "default" },
+            nested: {
+              requiredChild: { type: ParameterType.STRING },
+            },
+          },
           requiredComplexNested: {
             type: ParameterType.COMPLEX,
             nested: {
@@ -342,7 +348,7 @@ describe("Trial", () => {
             requiredString: "foo",
             stringArray: [],
             function: functionDefaultValue,
-            complex: {},
+            complex: { requiredChild: "default" },
             requiredComplexNested: { child: "I'm nested.", requiredChild: "bar" },
             requiredComplexNestedArray: [
               { child: "I'm nested.", requiredChild: "foo" },
@@ -740,6 +746,21 @@ describe("Trial", () => {
         simulation_options: simulationOptions,
       });
 
+    it("merges in global default simulation options", async () => {
+      dependencies.getGlobalSimulationOptions.mockReturnValue({
+        default: { data: { rt: 0, custom: "default" } },
+        foo: { data: { custom: "foo" } },
+      });
+
+      expect(createSimulationTrial({ data: { rt: 1 } }).getSimulationOptions()).toEqual({
+        data: { rt: 1, custom: "default" },
+      });
+
+      expect(createSimulationTrial("foo").getSimulationOptions()).toEqual({
+        data: { rt: 0, custom: "foo" },
+      });
+    });
+
     describe("if no trial-level simulation options are set", () => {
       it("falls back to parent timeline simulation options", async () => {
         jest
@@ -796,10 +817,10 @@ describe("Trial", () => {
       });
     });
 
-    it("evaluates (global/nested) functions and timeline variables", async () => {
-      const timelineVariables = { x: "foo", y: { data: () => ({ rt: () => 0 }) } };
+    it("evaluates (nested) functions and timeline variables", async () => {
+      const timelineVariables = { x: "foo" };
       jest.mocked(dependencies.getGlobalSimulationOptions).mockReturnValue({
-        foo: new TimelineVariable("y"),
+        foo: { data: { rt: 0 } },
       });
       jest
         .mocked(timeline.evaluateTimelineVariable)
@@ -808,14 +829,6 @@ describe("Trial", () => {
       expect(createSimulationTrial(() => new TimelineVariable("x")).getSimulationOptions()).toEqual(
         { data: { rt: 0 } }
       );
-
-      expect(
-        createSimulationTrial(() => ({
-          data: () => ({ rt: () => 1 }),
-          simulate: () => true,
-          mode: () => "visual",
-        })).getSimulationOptions()
-      ).toEqual({ data: { rt: 1 }, simulate: true, mode: "visual" });
 
       expect(
         createSimulationTrial(() => ({

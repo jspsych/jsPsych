@@ -1,6 +1,8 @@
 import surveyText from "@jspsych/plugin-survey-text";
 import { startTimeline } from "@jspsych/test-utils";
 
+import jsPsychTestComplex from "./test-complex-plugin";
+
 describe("nested defaults", () => {
   test("work in basic situation", async () => {
     const { displayElement } = await startTimeline([
@@ -32,5 +34,23 @@ describe("nested defaults", () => {
     expect(spy).not.toHaveBeenCalled();
 
     spy.mockRestore();
+  });
+});
+
+describe("defaults for COMPLEX parameters", () => {
+  test("default at the top level should work", async () => {
+    const { expectFinished, getData } = await startTimeline([
+      {
+        type: jsPsychTestComplex,
+      },
+    ]);
+
+    await expectFinished();
+
+    expect(getData().values()[0].blocks).toEqual([
+      { x: 10, y: 10 },
+      { x: 20, y: 20 },
+      { x: 30, y: 30 },
+    ]);
   });
 });
