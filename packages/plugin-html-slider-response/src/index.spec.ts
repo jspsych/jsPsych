@@ -4,6 +4,13 @@ import htmlSliderResponse from ".";
 
 jest.useFakeTimers();
 
+afterEach(async () => {
+  const nextButton = document.querySelector("#jspsych-html-slider-response-next");
+  if (nextButton) {
+    await clickTarget(nextButton);
+  }
+});
+
 describe("html-slider-response", () => {
   test("displays html stimulus", async () => {
     const { getHTML } = await startTimeline([
