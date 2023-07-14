@@ -16,12 +16,16 @@ const info = <const>{
       default: undefined,
       array: true,
     },
-    /** The HTML for creating button. Can create own style. Use the "%choice%" string to indicate where the label from the choices parameter should be inserted. */
+    /**
+     * A function that, given a choice and its index, returns the HTML string of that choice's
+     * button.
+     */
     button_html: {
-      type: ParameterType.HTML_STRING,
+      type: ParameterType.FUNCTION,
       pretty_name: "Button HTML",
-      default: '<button class="jspsych-btn">%choice%</button>',
-      array: true,
+      default: function (choice: string, choice_index: number) {
+        return `<button class="jspsych-btn">${choice}</button>`;
+      },
     },
     /** Any content here will be displayed under the button(s). */
     prompt: {
@@ -76,61 +80,41 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    // display stimulus
-    var html = '<div id="jspsych-html-button-response-stimulus">' + trial.stimulus + "</div>";
+    // Display stimulus
+    const stimulusElement = document.createElement("div");
+    stimulusElement.id = "jspsych-html-button-response-stimulus";
+    stimulusElement.innerHTML = trial.stimulus;
 
-    //display buttons
-    var buttons = [];
-    if (Array.isArray(trial.button_html)) {
-      if (trial.button_html.length == trial.choices.length) {
-        buttons = trial.button_html;
-      } else {
-        console.error(
-          "Error in html-button-response plugin. The length of the button_html array does not equal the length of the choices array"
-        );
-      }
-    } else {
-      for (var i = 0; i < trial.choices.length; i++) {
-        buttons.push(trial.button_html);
-      }
-    }
-    html += '<div id="jspsych-html-button-response-btngroup">';
-    for (var i = 0; i < trial.choices.length; i++) {
-      var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
-      html +=
-        '<div class="jspsych-html-button-response-button" style="display: inline-block; margin:' +
-        trial.margin_vertical +
-        " " +
-        trial.margin_horizontal +
-        '" id="jspsych-html-button-response-button-' +
-        i +
-        '" data-choice="' +
-        i +
-        '">' +
-        str +
-        "</div>";
-    }
-    html += "</div>";
+    display_element.appendChild(stimulusElement);
 
-    //show prompt if there is one
+    // Display buttons
+    const buttonGroupElement = document.createElement("div");
+    buttonGroupElement.id = "jspsych-html-button-response-btngroup";
+    buttonGroupElement.style.cssText = `
+      display: flex;
+      justify-content: center;
+      gap: ${trial.margin_vertical} ${trial.margin_horizontal};
+      padding: ${trial.margin_vertical} ${trial.margin_horizontal};
+    `;
+
+    for (const [choiceIndex, choice] of trial.choices.entries()) {
+      buttonGroupElement.insertAdjacentHTML("beforeend", trial.button_html(choice, choiceIndex));
+      const buttonElement = buttonGroupElement.lastChild as HTMLElement;
+      buttonElement.dataset.choice = choiceIndex.toString();
+      buttonElement.addEventListener("click", () => {
+        after_response(choiceIndex);
+      });
+    }
+
+    display_element.appendChild(buttonGroupElement);
+
+    // Show prompt if there is one
     if (trial.prompt !== null) {
-      html += trial.prompt;
+      display_element.insertAdjacentHTML("beforeend", trial.prompt);
     }
-    display_element.innerHTML = html;
 
     // start time
     var start_time = performance.now();
-
-    // add event listeners to buttons
-    for (var i = 0; i < trial.choices.length; i++) {
-      display_element
-        .querySelector("#jspsych-html-button-response-button-" + i)
-        .addEventListener("click", (e) => {
-          var btn_el = e.currentTarget as HTMLButtonElement;
-          var choice = btn_el.getAttribute("data-choice"); // don't use dataset for jsdom compatibility
-          after_response(choice);
-        });
-    }
 
     // store response
     var response = {
@@ -167,14 +151,11 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.querySelector("#jspsych-html-button-response-stimulus").className +=
-        " responded";
+      stimulusElement.classList.add("responded");
 
       // disable all the buttons after a response
-      var btns = document.querySelectorAll(".jspsych-html-button-response-button button");
-      for (var i = 0; i < btns.length; i++) {
-        //btns[i].removeEventListener('click');
-        btns[i].setAttribute("disabled", "disabled");
+      for (const button of buttonGroupElement.children) {
+        button.setAttribute("disabled", "disabled");
       }
 
       if (trial.response_ends_trial) {
@@ -185,9 +166,7 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
     // hide image if timing is set
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
-        display_element.querySelector<HTMLElement>(
-          "#jspsych-html-button-response-stimulus"
-        ).style.visibility = "hidden";
+        stimulusElement.style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
 
@@ -242,7 +221,9 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     if (data.rt !== null) {
       this.jsPsych.pluginAPI.clickTarget(
-        display_element.querySelector(`div[data-choice="${data.response}"] button`),
+        display_element.querySelector(
+          `#jspsych-html-button-response-btngroup [data-choice="${data.response}"]`
+        ),
         data.rt
       );
     }
