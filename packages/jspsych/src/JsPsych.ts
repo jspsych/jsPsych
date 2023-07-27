@@ -86,6 +86,11 @@ export class JsPsych {
   // of jsPsych
   webaudio_context: AudioContext = null;
 
+  /**
+   * the currently active locale (if specified)
+   */
+  locale: string | undefined = undefined;
+
   internal = {
     /**
      * this flag is used to determine whether we are in a scope where
@@ -117,9 +122,14 @@ export class JsPsych {
       override_safe_mode: false,
       case_sensitive_responses: false,
       extensions: [],
+      translations: {},
+      locale: undefined,
+      fallback_locale: undefined,
       ...options,
     };
     this.opts = options;
+
+    this.locale = this.opts.locale;
 
     autoBind(this); // so we can pass JsPsych methods as callbacks and `this` remains the JsPsych instance
 
@@ -377,6 +387,49 @@ export class JsPsych {
 
   getAllTimelineVariables() {
     return this.timeline.allTimelineVariables();
+  }
+
+  setLocale(locale: string) {
+    this.locale = locale;
+  }
+
+  translate(key: string) {
+    // TODO: This should support string processing + maybe more i18n features
+
+    // First pass at translation using the current locale
+    const locale = this.locale;
+    if (locale) {
+      const translation = this.searchTranslation(locale, key);
+      if (translation !== undefined) {
+        return translation;
+      }
+    }
+    // Second pass using the fallback_locale
+    const fallbackLocale = this.opts.fallback_locale;
+    if (fallbackLocale) {
+      const translation = this.searchTranslation(fallbackLocale, key);
+      if (translation !== undefined) {
+        return translation;
+      }
+    }
+    // If nothing is found, default to return the original translation key
+    return key;
+  }
+
+  private searchTranslation(locale: string, key: string) {
+    // First search for translations on the trial itself
+    if (
+      this.current_trial.translations &&
+      locale in this.current_trial.translations &&
+      key in this.current_trial.translations[locale]
+    ) {
+      return this.current_trial.translations[locale][key];
+    }
+    // Then search for global translations
+    if (locale in this.opts.translations && key in this.opts.translations?.[locale]) {
+      return this.opts.translations[locale][key];
+    }
+    return undefined;
   }
 
   addNodeToEndOfTimeline(new_timeline, preload_callback?) {
