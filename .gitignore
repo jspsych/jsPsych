@@ -11,3 +11,5 @@ coverage/
 dist.zip
 packages/jspsych/README.md
 .turbo
+*.pyc
+docs/__generator__/cache

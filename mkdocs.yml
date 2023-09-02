@@ -38,6 +38,12 @@ repo_name: 'jspsych/jspsych'
 edit_uri: edit/main/docs
 site_url: 'https://www.jspsych.org/'
 docs_dir: docs
+plugins:
+  - search
+  - macros:
+      modules: [docs]
+watch:
+  - packages
 nav:
 - Introduction: 'index.md'
 - Tutorials:

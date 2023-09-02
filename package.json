@@ -17,7 +17,8 @@
     "changeset:version": "changeset version && npm install && npm run update-unpkg-links && npm run update-plugin-versions",
     "changeset:publish": "npm run build && changeset publish",
     "docs:deploy": "poetry install && poetry run mike deploy -u",
-    "docs:serve": "poetry install && poetry run mike serve"
+    "docs:serve": "poetry install && poetry run mike serve",
+    "docs:preview": "poetry run mkdocs serve"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.7",
@@ -28,7 +29,8 @@
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "prettier-plugin-import-sort": "^0.0.7",
-    "turbo": "^1.6.3"
+    "turbo": "^1.6.3",
+    "typedoc": "^0.23.20"
   },
   "prettier": {
     "printWidth": 100
