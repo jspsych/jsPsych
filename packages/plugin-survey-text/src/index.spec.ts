@@ -2,7 +2,8 @@ import { clickTarget, simulateTimeline, startTimeline } from "@jspsych/test-util
 
 import surveyText from ".";
 
-const selectInput = (selector: string) => document.querySelector<HTMLInputElement>(selector);
+const selectInput = (inputId: number) =>
+  document.querySelector<HTMLInputElement>(`#input-${inputId}`);
 
 jest.useFakeTimers();
 
@@ -16,8 +17,8 @@ describe("survey-text plugin", () => {
     ]);
 
     expect(displayElement.querySelectorAll("p.jspsych-survey-text").length).toBe(2);
-    expect(selectInput("#input-0").size).toBe(40);
-    expect(selectInput("#input-1").size).toBe(40);
+    expect(selectInput(0).size).toBe(40);
+    expect(selectInput(1).size).toBe(40);
 
     await clickTarget(document.querySelector("#jspsych-survey-text-next"));
 
@@ -36,8 +37,8 @@ describe("survey-text plugin", () => {
     ]);
 
     expect(displayElement.querySelectorAll("p.jspsych-survey-text").length).toBe(2);
-    expect(selectInput("#input-0").size).toBe(50);
-    expect(selectInput("#input-1").size).toBe(20);
+    expect(selectInput(0).size).toBe(50);
+    expect(selectInput(1).size).toBe(20);
 
     await clickTarget(document.querySelector("#jspsych-survey-text-next"));
 
@@ -45,7 +46,7 @@ describe("survey-text plugin", () => {
   });
 
   test("required parameter works", async () => {
-    const { displayElement } = await startTimeline([
+    const { displayElement, expectFinished } = await startTimeline([
       {
         type: surveyText,
         questions: [
@@ -56,8 +57,12 @@ describe("survey-text plugin", () => {
     ]);
 
     expect(displayElement.querySelectorAll("p.jspsych-survey-text").length).toBe(2);
-    expect(selectInput("#input-0").required).toBe(true);
-    expect(selectInput("#input-1").required).toBe(false);
+    expect(selectInput(0).required).toBe(true);
+    expect(selectInput(1).required).toBe(false);
+
+    selectInput(0).value = "42";
+    await clickTarget(document.querySelector("#jspsych-survey-text-next"));
+    await expectFinished();
   });
 
   test("data are logged with the right question when randomize order is true", async () => {
@@ -75,11 +80,11 @@ describe("survey-text plugin", () => {
       },
     ]);
 
-    selectInput("#input-0").value = "a0";
-    selectInput("#input-1").value = "a1";
-    selectInput("#input-2").value = "a2";
-    selectInput("#input-3").value = "a3";
-    selectInput("#input-4").value = "a4";
+    selectInput(0).value = "a0";
+    selectInput(1).value = "a1";
+    selectInput(2).value = "a2";
+    selectInput(3).value = "a3";
+    selectInput(4).value = "a4";
 
     await clickTarget(document.querySelector("#jspsych-survey-text-next"));
 
