@@ -305,7 +305,9 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
     const respond = () => {
       if (data.rt !== null) {
         this.jsPsych.pluginAPI.clickTarget(
-          display_element.querySelector(`div[data-choice="${data.response}"] button`),
+          display_element.querySelector(
+            `#jspsych-audio-button-response-btngroup [data-choice="${data.response}"]`
+          ),
           data.rt
         );
       }
