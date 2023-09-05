@@ -143,7 +143,7 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // Display buttons
       const buttonGroupElement = document.createElement("div");
-      buttonGroupElement.id = "jspsych-html-button-response-btngroup";
+      buttonGroupElement.id = "jspsych-audio-button-response-btngroup";
       buttonGroupElement.style.cssText = `
       display: flex;
       justify-content: center;
