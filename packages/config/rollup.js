@@ -4,8 +4,8 @@ import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import resolve from "@rollup/plugin-node-resolve";
 import replace from "@rollup/plugin-replace";
+import terser from "@rollup/plugin-terser";
 import { defineConfig } from "rollup";
-import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
 import ts from "typescript";
 

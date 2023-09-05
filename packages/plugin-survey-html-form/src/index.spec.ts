@@ -14,7 +14,7 @@ describe("survey-html-form plugin", () => {
     ]);
 
     expect(
-      displayElement.querySelectorAll('#jspsych-survey-html-form input:not([type="submit"]').length
+      displayElement.querySelectorAll('#jspsych-survey-html-form input:not([type="submit"])').length
     ).toBe(3);
 
     // Provide some test input

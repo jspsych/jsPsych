@@ -1,7 +1,7 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import { pressKey, startTimeline } from "@jspsych/test-utils";
 
-jest.useFakeTimers("modern");
+jest.useFakeTimers();
 
 describe("minimum_valid_rt parameter", () => {
   test("has a default value of 0", async () => {
