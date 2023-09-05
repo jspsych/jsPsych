@@ -148,5 +148,5 @@ export const makeCoreRollupConfig = () =>
 export const makeNodeRollupConfig = () =>
   makeConfig({
     globalOptions: { external: ["jspsych"] },
-    nodeOnly: true,
+    isNodeOnlyBuild: true,
   });
