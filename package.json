@@ -27,14 +27,14 @@
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.4",
     "@changesets/cli": "^2.22.0",
+    "alias-hq": "github:bjoluc/alias-hq#tsconfig-parsing-quickfix",
     "husky": "^8.0.1",
     "import-sort-style-module": "^6.0.0",
+    "jest": "*",
     "lint-staged": "^12.4.1",
     "prettier": "^2.6.2",
     "prettier-plugin-import-sort": "^0.0.7",
-    "turbo": "^1.2.9",
-    "jest": "*",
-    "ts-jest": "*"
+    "turbo": "^1.2.9"
   },
   "prettier": {
     "printWidth": 100

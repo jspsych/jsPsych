@@ -48,8 +48,10 @@
     "@rollup/plugin-node-resolve": "15.2.1",
     "@rollup/plugin-replace": "5.0.2",
     "@rollup/plugin-terser": "0.4.3",
+    "@sucrase/jest-plugin": "3.0.0",
     "@types/gulp": "4.0.13",
     "@types/jest": "29.5.4",
+    "alias-hq": "github:bjoluc/alias-hq#tsconfig-parsing-quickfix",
     "babel-preset-minify": "0.5.2",
     "canvas": "2.11.2",
     "gulp": "4.0.2",
@@ -64,7 +66,7 @@
     "regenerator-runtime": "0.14.0",
     "rollup": "3.28.1",
     "rollup-plugin-typescript2": "0.35.0",
-    "ts-jest": "29.1.1",
+    "sucrase": "3.34.0",
     "tslib": "2.6.2",
     "typescript": "^5.2.2"
   }
