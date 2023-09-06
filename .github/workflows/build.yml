@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [14, 16]
+        node: [16, 18, 20]
 
     steps:
       - uses: actions/checkout@v2
@@ -20,13 +20,10 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: npm
 
-      - name: Install npm@v7
-        run: npm install -g npm@7
-
       - name: Install dependencies
         run: npm ci
 
-      # Running this after `npm ci` because `npm ci` removes `node_modules`: 
+      # Running this after `npm ci` because `npm ci` removes `node_modules`:
       - name: Download Turborepo cache
         uses: actions/cache@v2
         with:
