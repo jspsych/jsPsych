@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { DEFAULT_EXTENSIONS as babelDefaultExtensions } from "@babel/core";
 import { babel } from "@rollup/plugin-babel";
 import commonjs from "@rollup/plugin-commonjs";
@@ -9,6 +11,11 @@ import { defineConfig } from "rollup";
 import typescript from "rollup-plugin-typescript2";
 import ts from "typescript";
 
+const getPackageInfo = () => {
+  const { name, version } = JSON.parse(readFileSync("./package.json"));
+  return { name, version };
+};
+
 const makeConfig = ({
   outputOptions = {},
   globalOptions = {},
@@ -16,7 +23,8 @@ const makeConfig = ({
   isNodeOnlyBuild = false,
 }) => {
   const source = "src/index";
-  const destination = "dist/index";
+  const destinationDirectory = "dist";
+  const destination = `${destinationDirectory}/index`;
 
   outputOptions = {
     sourcemap: true,
@@ -62,11 +70,20 @@ const makeConfig = ({
     },
   ];
 
+  let sourcemapBaseUrl;
   if (!isNodeOnlyBuild) {
+    // In builds that are published to NPM (potentially every CI build), point to sourcemaps via the
+    // package's canonical unpkg URL
+    if (process.env.CI) {
+      const { name, version } = getPackageInfo();
+      sourcemapBaseUrl = `https://unpkg.com/${name}@${version}/${destinationDirectory}/`;
+    }
+
     output.push({
       // Build file to be used for tinkering in modern browsers
       file: `${destination}.browser.js`,
       format: "iife",
+      sourcemapBaseUrl,
       ...outputOptions,
       ...iifeOutputOptions,
     });
@@ -103,6 +120,7 @@ const makeConfig = ({
           file: `${destination}.browser.min.js`,
           format: "iife",
           plugins: [terser()],
+          sourcemapBaseUrl,
           ...outputOptions,
           ...iifeOutputOptions,
         },
