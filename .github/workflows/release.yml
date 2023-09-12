@@ -69,36 +69,33 @@ jobs:
             let errorMessage;
             for (const { name, version } of publishedPackages) {
               const tag = `${name}@${version}`;
-              // Only upload the dist archive for the core package, plugins, and extensions
-              if (name === "jspsych" || name.includes("/plugin-") || name.includes("/extension-")) {
-                console.log(`Uploading dist archive release asset for ${tag}`);
-                try {
-                  // https://docs.github.com/en/rest/reference/repos#get-a-release-by-tag-name
-                  const releaseId = (
-                    await github.request("GET /repos/{owner}/{repo}/releases/tags/{tag}", {
-                      owner,
-                      repo,
-                      tag,
-                    })
-                  ).data.id;
-
-                  // https://octokit.github.io/rest.js/v18#repos-upload-release-asset
-                  await github.repos.uploadReleaseAsset({
+              console.log(`Uploading dist archive release asset for ${tag}`);
+              try {
+                // https://docs.github.com/en/rest/reference/repos#get-a-release-by-tag-name
+                const releaseId = (
+                  await github.request("GET /repos/{owner}/{repo}/releases/tags/{tag}", {
                     owner,
                     repo,
-                    release_id: releaseId,
-                    name: `jspsych.zip`,
-                    label: "Dist archive (zip)",
-                    headers: {
-                      "content-type": "application/zip",
-                      "content-length": fs.statSync(distFile).size,
-                    },
-                    data: fs.readFileSync(distFile),
-                  });
-                } catch (error) {
-                  console.log(error);
-                  errorMessage = error.message;
-                }
+                    tag,
+                  })
+                ).data.id;
+
+                // https://octokit.github.io/rest.js/v18#repos-upload-release-asset
+                await github.repos.uploadReleaseAsset({
+                  owner,
+                  repo,
+                  release_id: releaseId,
+                  name: `jspsych.zip`,
+                  label: "Dist archive (zip)",
+                  headers: {
+                    "content-type": "application/zip",
+                    "content-length": fs.statSync(distFile).size,
+                  },
+                  data: fs.readFileSync(distFile),
+                });
+              } catch (error) {
+                console.log(error);
+                errorMessage = error.message;
               }
             }
 
