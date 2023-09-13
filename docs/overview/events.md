@@ -161,7 +161,7 @@ initJsPsych({
 
 ## on_trial_start
 
-The `on_trial_start` callback can be declared in the `initJsPsych` method. The callback will trigger at the start of every trial in the experiment. The function receives a single argument: a modifiable copy of the trial object that will be used to run the next trial. Changes can be made to this object to alter the parameters of the upcoming trial. This callback is executed _before_ the trial-specific `on_start` callback.
+The `on_trial_start` callback can be declared in the `initJsPsych` method. The callback will trigger at the start of every trial in the experiment, before the trial-specific `on_start` callback is executed. The function receives a single argument: a modifiable copy of the trial object that will be used to run the next trial. Changes can be made to this object to alter the parameters of the upcoming trial.
 
 ```javascript
 var current_score = 0; // a variable that is updated throughout the experiment to keep track of the current score.
