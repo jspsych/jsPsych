@@ -399,8 +399,8 @@ var last_10_trials = jsPsych.data.get().last(10);
 Returns a DataCollection with all instances of a particular key removed from the dataset.
 
 ```javascript
-// log a csv file that does not contain the internal_node_id values for each trial
-console.log(jsPsych.data.get().ignore('internal_node_id').csv());
+// log a csv file that does not contain the trial_type values for each trial
+console.log(jsPsych.data.get().ignore('trial_type').csv());
 ```
 
 #### .join()
