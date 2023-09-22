@@ -230,7 +230,7 @@ var trial = {
 ```
 
 !!! note 
-    You cannot remove the `internal_node_id` and `trial_index` values from the trial data, because these are used internally by jsPsych.
+    You cannot remove the `trial_index` value from the trial data.
 
 ## Data collected by all plugins
 
@@ -243,7 +243,6 @@ In addition to the data collected by a plugin, there is a default set of data th
 | trial_type       | string  | The name of the plugin used to run the trial. |
 | trial_index      | numeric | The index of the current trial across the whole experiment. |
 | time_elapsed     | numeric | The number of milliseconds between the start of the experiment and when the trial ended. |
-| internal_node_id | string  | A string identifier for the current TimelineNode. |
 
 ## Creating a new plugin
 

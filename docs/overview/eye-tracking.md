@@ -351,7 +351,6 @@ If you have tips based on your own experience please consider sharing them on ou
       "trial_type": "image-keyboard-response",
       "trial_index": 4,
       "time_elapsed": 30701,
-      "internal_node_id": "0.0-4.0",
       "webgazer_data": [
         { "x": 1065, "y": 437, "t": 39},
         { "x": 943, "y": 377, "t": 79},
