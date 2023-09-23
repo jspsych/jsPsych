@@ -288,52 +288,6 @@ jsPsych.finishTrial({correct_response: true});
 ```
 
 ---
-## jsPsych.getCurrentTimelineNodeID
-
-```javascript
-jsPsych.getCurrentTimelineNodeID()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-Returns the ID of the TimelineNode that is currently active.
-
-### Description
-
-Gets the ID of the active TimelineNode. The ID is a string that follows a specific format:
-
-* `"0.0"` is the ID of the first top-level TimelineNode
-* `"1.0"` is the ID of the second top-level TimelineNode
-* `"2.0"` is the ID of the third top-level TimelineNode, and so on...
-
-If a TimelineNode iterates multiple times (using the loop function, for example), then the iterations are indicated in the second number:
-
-* `"0.0"` is the ID of the first top-level TimelineNode during the first iteration
-* `"0.1"` is the ID of the first top-level TimelineNode during the second iteration
-* `"0.2"` is the ID of the first top-level TimelineNode during the third iteration, and so on...
-
-If TimelineNodes are nested in other TimelineNodes, then the hierarchical structure is shown with `"-"`:
-
-* `"0.0-1.0"` is the ID of the second TimelineNode on the timeline of the first top-level TimelineNode.
-* `"0.0-2.0"` is the ID of the third TimelineNode on the timeline of the first top-level TimelineNode, and so on...
-
-The rules about iterations apply throughout the hierarchical ID:
-
-* `"0.2-1.3"` is the ID of the second TimelineNode, executing for the fourth time, on the timeline of the first top-level TimelineNode, executing for the third time.
-
-
-### Example
-
-```javascript
-var id = jsPsych.getCurrentTimelineNodeID();
-console.log('The current TimelineNode ID is '+id);
-```
-
----
 ## jsPsych.getCurrentTrial
 
 ```javascript
