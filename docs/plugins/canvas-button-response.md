@@ -153,7 +153,7 @@ import canvasButtonResponse from '@jspsych/plugin-canvas-button-response';
                 {
                     type: jsPsychCanvasButtonResponse,
                     stimulus: function(c) {
-                        filledCirc(c, jsPsych.timelineVariable('radius'), jsPsych.timelineVariable('color'));
+                        filledCirc(c, jsPsych.evaluateTimelineVariable('radius'), jsPsych.evaluateTimelineVariable('color'));
                     },
                     canvas_size: [300, 300],
                     choices: ['Red', 'Green', 'Blue'],

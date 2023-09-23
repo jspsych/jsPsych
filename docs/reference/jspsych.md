@@ -206,6 +206,52 @@ var trial = {
 ```
 
 ---
+## jsPsych.evaluateTimelineVariable
+
+```js
+jsPsych.evaluateTimelineVariable(variable_name)
+```
+
+### Parameters
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| variable_name | string | The name of the variable to evaluate. |
+
+### Return value
+
+Returns the current value of the corresponding timeline variable.
+
+### Description
+
+Unlike `jsPsych.timelineVariable()`, `evaluateTimelineVariable()` immediately returns the current value of the timeline variable. 
+It should be used whenever you are in a context where immediate evaluation is appropriate. For example, if you referencing a 
+timeline variable within a function, immediate evaluation is usually correct.
+
+### Examples
+
+#### Invoking timeline variables immediately in a function
+
+```javascript
+const trial = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: function(){
+    return `<img style='width:100px; height:100px;' src='${jsPsych.evaluateTimelineVariable('image')}'></img>`;
+  }
+}
+
+const procedure = {
+  timeline: [trial],
+  timeline_variables: [
+    {image: 'face1.png'},
+    {image: 'face2.png'},
+    {image: 'face3.png'},
+    {image: 'face4.png'}
+  ]
+}
+```
+
+---
 ## jsPsych.finishTrial
 
 ```javascript
@@ -660,11 +706,10 @@ jsPsych.timelineVariable(variable, call_immediate)
 Parameter | Type | Description
 ----------|------|------------
 variable | string | Name of the timeline variable
-call_immediate | bool | This parameter is optional and can usually be omitted. It determines the return value of `jsPsych.timelineVariable`. If `true`, the function returns the _value_ of the current timeline variable. If `false`, the function returns _a function that returns the value_ of the current timeline variable. When `call_immediate` is omitted, the appropriate option is determined automatically based on the context in which this function is called. When `jsPsych.timelineVariable` is used as a parameter value, `call_immediate` will be `false`. This allows it to be used as a [dynamic trial parameter](../overview/dynamic-parameters). When `jsPsych.timelineVariable` is used inside of a function, `call_immediate` will be `true`. It is possible to explicitly set this option to `true` to force the function to immediately return the current value of the timeline variable. 
 
 ### Return value
 
-Either a function that returns the value of the timeline variable, or the value of the timeline variable, depending on the context in which it is used. See `call_immediate` description above.
+Returns a placeholder object that jsPsych uses to evaluate the timeline variable when the trial runs.
 
 ### Description
 
@@ -672,54 +717,12 @@ Either a function that returns the value of the timeline variable, or the value 
 
 ### Examples
 
-#### Standard use as a parameter for a trial
+#### Use as a parameter for a trial
 
 ```javascript
 var trial = {
   type: jsPsychImageKeyboardResponse,
   stimulus: jsPsych.timelineVariable('image')
-}
-
-var procedure = {
-  timeline: [trial],
-  timeline_variables: [
-    {image: 'face1.png'},
-    {image: 'face2.png'},
-    {image: 'face3.png'},
-    {image: 'face4.png'}
-  ]
-}
-```
-
-#### Invoking immediately in a function
-
-```javascript
-var trial = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: function(){
-    return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image')+"'></img>";
-  }
-}
-
-var procedure = {
-  timeline: [trial],
-  timeline_variables: [
-    {image: 'face1.png'},
-    {image: 'face2.png'},
-    {image: 'face3.png'},
-    {image: 'face4.png'}
-  ]
-}
-```
-
-Prior to jsPsych v6.3.0, the `call_immediate` parameter must be set to `true` when `jsPsych.timelineVariable` is called from within a function, such as a [dynamic parameter](../overview/dynamic-parameters):
-
-```javascript
-var trial = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: function(){
-    return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image', true)+"'></img>";
-  }
 }
 
 var procedure = {
