@@ -288,39 +288,6 @@ jsPsych.finishTrial({correct_response: true});
 ```
 
 ---
-## jsPsych.getAllTimelineVariables
-
-```javascript
-jsPsych.getAllTimelineVariables()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-Returns an object with all available timeline variables at this moment in the experiment, represented as `key: value` pairs.
-
-### Description
-
-This function can be used to get all the timeline variables at a particular moment in the experiment. Can be useful for annotating
-data, such as in the example below.
-
-### Example
-
-```javascript
-var trial = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: 'Just a demo',
-  on_finish: function(data){
-    // merge all timeline variables available at this trial into the data for this trial
-    Object.assign(data, jsPsych.getAllTimelineVariables())
-  }
-}
-```
-
----
 ## jsPsych.getCurrentTimelineNodeID
 
 ```javascript
