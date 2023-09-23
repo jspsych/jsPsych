@@ -102,7 +102,7 @@ var trial = {
 
 ## on_timeline_finish
 
-The `on_timeline_finish` callback can be declared in a timeline node. The callback will be triggered when the timeline ends during the experiment. If `timeline_variables`, `conditional_function`, `loop_function`, or `sample` options are used, this function will execute when all trials have finished. If a `loop_function` is used, then this `on_timeline_finish` function will be triggered before the loop function. If the `repetitions` option is used, this function will be triggered at the end of every repetition.
+The `on_timeline_finish` callback can be declared in a timeline node. The callback will be triggered when the timeline ends. The event will trigger only once if the timeline loops, after all repetitions are complete.
 
 ```javascript
 var procedure = {
@@ -115,10 +115,6 @@ var procedure = {
 	],
   on_timeline_finish: function() {
     console.log('This timeline has finished.');
-  },
-  loop_function: function() {
-    console.log('This loop function will execute after on_timeline_finish.');
-    return false;
   }
 }
 ```
@@ -127,7 +123,7 @@ var procedure = {
 
 ## on_timeline_start
 
-The `on_timeline_start` callback can be declared in a timeline node. The callback will be triggered when the timeline starts during the experiment, including when `timeline_variables`, `loop_function`, or `sample` options are used. If a `conditional_function` is used, then the conditional function will execute first, and the `on_timeline_start` function will only execute if the conditional function returns `true`. If the `repetitions` option is used, this function will be triggered at the start of every repetition. 
+The `on_timeline_start` callback can be declared in a timeline node. The callback will be triggered when the timeline starts during the experiment. If a `conditional_function` is used, then the conditional function will execute first, and the `on_timeline_start` function will only execute if the conditional function returns `true`. The event is triggered once, even if the timeline has a `loop_function` or `repetitions`.
 
 ```javascript
 var procedure = {

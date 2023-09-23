@@ -500,20 +500,4 @@ var face_name_procedure = {
 }
 ```
 
-When the `repetititons` option is used (and is greater than 1), these functions will run once per repetition of the timeline.
-
-```javascript
-var repetition_count = 0;
-
-var procedure = {
-	timeline: [trial_1, trial_2],
-	repetitions: 3,
-	on_timeline_start: function() {
-		repetition_count++;
-		console.log('Repetition number ',repetition_count,' has just started.');
-	},
-	on_timeline_finish: function() {
-		console.log('Repetition number ',repetition_count,' has just finished.')
-	}
-}
-```
+These functions will execute only once if the timeline loops.
