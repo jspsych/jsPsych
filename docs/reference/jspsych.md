@@ -67,6 +67,109 @@ var jsPsych = initJsPsych({
 For more examples, see the HTML files in the [examples folder](https://github.com/jspsych/jsPsych/tree/main/examples).
 
 ---
+## jsPsych.abortCurrentTimeline
+
+```javascript
+jsPsych.abortCurrentTimeline()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+None.
+
+### Description
+
+Ends the current timeline. If timelines are nested, then only the timeline that contains the current trial is ended.
+
+### Example
+
+#### Abort timeline if a particular key is pressed
+
+```javascript
+var jsPsych = initJsPsych({
+  on_finish: function() {
+    jsPsych.data.displayData();
+  }
+});
+
+var images = [
+  "img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif",
+  "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif",
+  "img/9.gif", "img/10.gif"
+];
+
+var trials = [];
+for (var i = 0; i < images.length; i++) {
+  trials.push({
+    stimulus: images[i]
+  });
+}
+
+var block = {
+  type: jsPsychImageKeyboardResponse,
+  choices: ['y', 'n'], 
+  prompt: '<p>Press "y" to Continue. Press "n" to end this node of the experiment.</p>',
+  on_finish: function(data) {
+    if (jsPsych.pluginAPI.compareKeys(data.response, 'n')) {
+      jsPsych.abortCurrentTimeline();
+    }
+  },
+  timeline: trials
+}
+
+var after_block = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: '<p>The next node</p>'
+}
+
+jsPsych.run([block, after_block]);
+```
+
+---
+## jsPsych.abortExperiment
+
+```javascript
+jsPsych.abortExperiment(message, data)
+```
+
+### Parameters
+
+| Parameter   | Type   | Description                              |
+| ----------- | ------ | ---------------------------------------- |
+| message | string | A message to display on the screen after the experiment is over. Can include HTML formatting. |
+| data | object | An optional object of key-value pairs to store as data in the final trial of the experiment. 
+
+### Return value
+
+None.
+
+### Description
+
+Ends the experiment, skipping all remaining trials. If the `on_finish` event handler for `jsPsych` returns a `Promise` then the `message` will not be displayed until the promise is resolved.
+
+### Example
+
+#### End the experiment if a particular response is given
+
+```javascript
+var trial = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: 'image1.jpg',
+  choices: ['y', 'n']
+  prompt: '<p>Press "y" to Continue. Press "n" to end the experiment</p>',
+  on_finish: function(data){
+    if(jsPsych.pluginAPI.compareKeys(data.response, "n")){
+      jsPsych.abortExperiment('The experiment was ended by pressing "n".');
+    }
+  }
+}
+```
+
+---
 ## jsPsych.addNodeToEndOfTimeline
 
 ```javascript
@@ -100,109 +203,6 @@ var new_timeline = {
 }
 
 jsPsych.addNodeToEndOfTimeline(new_timeline)
-```
-
----
-## jsPsych.endCurrentTimeline
-
-```javascript
-jsPsych.endCurrentTimeline()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-None.
-
-### Description
-
-Ends the current timeline. If timelines are nested, then only the timeline that contains the current trial is ended.
-
-### Example
-
-#### End timeline if a particular key is pressed
-
-```javascript
-var jsPsych = initJsPsych({
-  on_finish: function() {
-    jsPsych.data.displayData();
-  }
-});
-
-var images = [
-  "img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif",
-  "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif",
-  "img/9.gif", "img/10.gif"
-];
-
-var trials = [];
-for (var i = 0; i < images.length; i++) {
-  trials.push({
-    stimulus: images[i]
-  });
-}
-
-var block = {
-  type: jsPsychImageKeyboardResponse,
-  choices: ['y', 'n'], 
-  prompt: '<p>Press "y" to Continue. Press "n" to end this node of the experiment.</p>',
-  on_finish: function(data) {
-    if (jsPsych.pluginAPI.compareKeys(data.response, 'n')) {
-      jsPsych.endCurrentTimeline();
-    }
-  },
-  timeline: trials
-}
-
-var after_block = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: '<p>The next node</p>'
-}
-
-jsPsych.run([block, after_block]);
-```
-
----
-## jsPsych.endExperiment
-
-```javascript
-jsPsych.endExperiment(end_message, data)
-```
-
-### Parameters
-
-| Parameter   | Type   | Description                              |
-| ----------- | ------ | ---------------------------------------- |
-| end_message | string | A message to display on the screen after the experiment is over. Can include HTML formatting. |
-| data | object | An optional object of key-value pairs to store as data in the final trial of the experiment. 
-
-### Return value
-
-None.
-
-### Description
-
-Ends the experiment, skipping all remaining trials. If the `on_finish` event handler for `jsPsych` returns a `Promise` then the `end_message` will not be displayed until the promise is resolved.
-
-### Example
-
-#### End the experiment if a particular response is given
-
-```javascript
-var trial = {
-  type: jsPsychImageKeyboardResponse,
-  stimulus: 'image1.jpg',
-  choices: ['y', 'n']
-  prompt: '<p>Press "y" to Continue. Press "n" to end the experiment</p>',
-  on_finish: function(data){
-    if(jsPsych.pluginAPI.compareKeys(data.response, "n")){
-      jsPsych.endExperiment('The experiment was ended by pressing "n".');
-    }
-  }
-}
 ```
 
 ---
