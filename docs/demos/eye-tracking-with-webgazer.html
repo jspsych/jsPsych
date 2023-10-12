@@ -121,7 +121,7 @@
       }
 
       var begin = {
-        type: jsPsychHtmKeyboardResponse,
+        type: jsPsychHtmlKeyboardResponse,
         stimulus: `<p>The next screen will show an image to demonstrate adding the webgazer extension to a trial.</p>
           <p>Just look at the image while eye tracking data is collected. The trial will end automatically.</p>
           <p>Press any key to start.</p>
@@ -142,7 +142,7 @@
       }
 
       var show_data = {
-        type: jsPsychHtmKeyboardResponse,
+        type: jsPsychHtmlKeyboardResponse,
         stimulus: function() {
           var trial_data = jsPsych.data.getLastTrialData().values();
           var trial_json = JSON.stringify(trial_data, null, 2);
