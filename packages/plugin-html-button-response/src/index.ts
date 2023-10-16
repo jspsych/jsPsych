@@ -45,17 +45,25 @@ const info = <const>{
       pretty_name: "Trial duration",
       default: null,
     },
-    /** The vertical margin of the button. */
-    margin_vertical: {
+    /** The CSS layout for the buttons. Options: 'flex' or 'grid'. */
+    button_layout: {
       type: ParameterType.STRING,
-      pretty_name: "Margin vertical",
-      default: "0px",
+      pretty_name: "Button layout",
+      default: "grid",
     },
-    /** The horizontal margin of the button. */
-    margin_horizontal: {
+    /** The number of grid rows when `button_layout` is "grid" */
+    button_rows: {
       type: ParameterType.STRING,
-      pretty_name: "Margin horizontal",
-      default: "8px",
+      pretty_name: "Grid rows",
+      default: "1",
+    },
+    /** The number of grid columns when `button_layout` is "grid".
+     * Using "auto" will make the number of columns equal the number
+     * of buttons. */
+    button_cols: {
+      type: ParameterType.STRING,
+      pretty_name: "Grid columns",
+      default: "auto",
     },
     /** If true, then trial will end when user responds. */
     response_ends_trial: {
@@ -90,12 +98,15 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
     // Display buttons
     const buttonGroupElement = document.createElement("div");
     buttonGroupElement.id = "jspsych-html-button-response-btngroup";
-    buttonGroupElement.style.cssText = `
-      display: flex;
-      justify-content: center;
-      gap: ${trial.margin_vertical} ${trial.margin_horizontal};
-      padding: ${trial.margin_vertical} ${trial.margin_horizontal};
-    `;
+    if (trial.button_layout === "grid") {
+      buttonGroupElement.classList.add("jspsych-btn-group-grid");
+      let n_cols =
+        trial.button_cols === "auto" ? trial.choices.length : parseInt(trial.button_cols);
+      buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
+      buttonGroupElement.style.gridTemplateRows = `repeat(${trial.button_rows}, 1fr)`;
+    } else if (trial.button_layout === "flex") {
+      buttonGroupElement.classList.add("jspsych-btn-group-flex");
+    }
 
     for (const [choiceIndex, choice] of trial.choices.entries()) {
       buttonGroupElement.insertAdjacentHTML("beforeend", trial.button_html(choice, choiceIndex));
