@@ -159,7 +159,7 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
         buttonGroupElement.classList.add("jspsych-btn-group-grid");
         if (trial.grid_rows === null && trial.grid_columns === null) {
           throw new Error(
-            "You must specify the number of rows or columns when using the grid layout."
+            "You cannot set `grid_rows` to `null` without providing a value for `grid_columns`."
           );
         }
         const n_cols =
