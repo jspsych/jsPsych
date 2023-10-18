@@ -154,7 +154,7 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // Display buttons
       const buttonGroupElement = document.createElement("div");
-      buttonGroupElement.id = "jspsych-html-button-response-btngroup";
+      buttonGroupElement.id = "jspsych-audio-button-response-btngroup";
       if (trial.button_layout === "grid") {
         buttonGroupElement.classList.add("jspsych-btn-group-grid");
         if (trial.grid_rows === null && trial.grid_columns === null) {
