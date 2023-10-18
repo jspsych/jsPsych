@@ -51,19 +51,22 @@ const info = <const>{
       pretty_name: "Button layout",
       default: "grid",
     },
-    /** The number of grid rows when `button_layout` is "grid" */
+    /** The number of grid rows when `button_layout` is "grid".
+     * Setting to `null` will infer the number of rows based on the
+     * number of columns and buttons.
+     */
     button_rows: {
-      type: ParameterType.STRING,
+      type: ParameterType.INT,
       pretty_name: "Grid rows",
-      default: "1",
+      default: 1,
     },
     /** The number of grid columns when `button_layout` is "grid".
-     * Using "auto" will make the number of columns equal the number
-     * of buttons. */
+     * Setting to `null` (default value) will infer the number of columns
+     * based on the number of rows and buttons. */
     button_cols: {
-      type: ParameterType.STRING,
+      type: ParameterType.INT,
       pretty_name: "Grid columns",
-      default: "auto",
+      default: null,
     },
     /** If true, then trial will end when user responds. */
     response_ends_trial: {
@@ -100,10 +103,21 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
     buttonGroupElement.id = "jspsych-html-button-response-btngroup";
     if (trial.button_layout === "grid") {
       buttonGroupElement.classList.add("jspsych-btn-group-grid");
-      let n_cols =
-        trial.button_cols === "auto" ? trial.choices.length : parseInt(trial.button_cols);
+      if (trial.button_rows === null && trial.button_cols === null) {
+        throw new Error(
+          "You must specify the number of rows or columns when using the grid layout."
+        );
+      }
+      const n_cols =
+        trial.button_cols === null
+          ? Math.ceil(trial.choices.length / trial.button_rows)
+          : trial.button_cols;
+      const n_rows =
+        trial.button_rows === null
+          ? Math.ceil(trial.choices.length / trial.button_cols)
+          : trial.button_rows;
       buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
-      buttonGroupElement.style.gridTemplateRows = `repeat(${trial.button_rows}, 1fr)`;
+      buttonGroupElement.style.gridTemplateRows = `repeat(${n_rows}, 1fr)`;
     } else if (trial.button_layout === "flex") {
       buttonGroupElement.classList.add("jspsych-btn-group-flex");
     }

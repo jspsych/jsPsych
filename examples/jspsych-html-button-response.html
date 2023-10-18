@@ -20,6 +20,7 @@
     type: jsPsychHtmlButtonResponse,
     stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
     choices: ['Green', 'Blue', 'Red'],
+    button_layout: "flex",
     prompt: "<p>What color is this word? (flex layout)</p>"
   });
 
@@ -29,6 +30,15 @@
     choices: ['Green', 'Blue', 'Red'],
     button_layout: "grid",
     prompt: "<p>What color is this word? (grid layout)</p>"
+  });
+
+  timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+    choices: ['Green', 'Blue', 'Red'],
+    button_layout: "grid",
+    button_rows: 2,
+    prompt: "<p>What color is this word? (grid layout, two rows)</p>"
   });
 
   timeline.push({
