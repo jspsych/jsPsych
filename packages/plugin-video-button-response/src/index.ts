@@ -88,17 +88,28 @@ const info = <const>{
       pretty_name: "Trial duration",
       default: null,
     },
-    /** The vertical margin of the button. */
-    margin_vertical: {
+    /** The CSS layout for the buttons. Options: 'flex' or 'grid'. */
+    button_layout: {
       type: ParameterType.STRING,
-      pretty_name: "Margin vertical",
-      default: "0px",
+      pretty_name: "Button layout",
+      default: "grid",
     },
-    /** The horizontal margin of the button. */
-    margin_horizontal: {
-      type: ParameterType.STRING,
-      pretty_name: "Margin horizontal",
-      default: "8px",
+    /** The number of grid rows when `button_layout` is "grid".
+     * Setting to `null` will infer the number of rows based on the
+     * number of columns and buttons.
+     */
+    button_rows: {
+      type: ParameterType.INT,
+      pretty_name: "Grid rows",
+      default: 1,
+    },
+    /** The number of grid columns when `button_layout` is "grid".
+     * Setting to `null` (default value) will infer the number of columns
+     * based on the number of rows and buttons. */
+    button_cols: {
+      type: ParameterType.INT,
+      pretty_name: "Grid columns",
+      default: null,
     },
     /** If true, the trial will end when subject makes a response. */
     response_ends_trial: {
@@ -182,13 +193,27 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // Display buttons
     const buttonGroupElement = document.createElement("div");
-    buttonGroupElement.id = "jspsych-video-button-response-btngroup";
-    buttonGroupElement.style.cssText = `
-      display: flex;
-      justify-content: center;
-      gap: ${trial.margin_vertical} ${trial.margin_horizontal};
-      padding: ${trial.margin_vertical} ${trial.margin_horizontal};
-    `;
+    buttonGroupElement.id = "jspsych-html-button-response-btngroup";
+    if (trial.button_layout === "grid") {
+      buttonGroupElement.classList.add("jspsych-btn-group-grid");
+      if (trial.button_rows === null && trial.button_cols === null) {
+        throw new Error(
+          "You must specify the number of rows or columns when using the grid layout."
+        );
+      }
+      const n_cols =
+        trial.button_cols === null
+          ? Math.ceil(trial.choices.length / trial.button_rows)
+          : trial.button_cols;
+      const n_rows =
+        trial.button_rows === null
+          ? Math.ceil(trial.choices.length / trial.button_cols)
+          : trial.button_rows;
+      buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
+      buttonGroupElement.style.gridTemplateRows = `repeat(${n_rows}, 1fr)`;
+    } else if (trial.button_layout === "flex") {
+      buttonGroupElement.classList.add("jspsych-btn-group-flex");
+    }
 
     for (const [choiceIndex, choice] of trial.choices.entries()) {
       buttonGroupElement.insertAdjacentHTML("beforeend", trial.button_html(choice, choiceIndex));
