@@ -73,7 +73,7 @@ const info = <const>{
      * Setting to `null` will infer the number of rows based on the
      * number of columns and buttons.
      */
-    button_rows: {
+    grid_rows: {
       type: ParameterType.INT,
       pretty_name: "Grid rows",
       default: 1,
@@ -81,7 +81,7 @@ const info = <const>{
     /** The number of grid columns when `button_layout` is "grid".
      * Setting to `null` (default value) will infer the number of columns
      * based on the number of rows and buttons. */
-    button_cols: {
+    grid_columns: {
       type: ParameterType.INT,
       pretty_name: "Grid columns",
       default: null,
@@ -198,19 +198,19 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
     buttonGroupElement.id = "jspsych-html-button-response-btngroup";
     if (trial.button_layout === "grid") {
       buttonGroupElement.classList.add("jspsych-btn-group-grid");
-      if (trial.button_rows === null && trial.button_cols === null) {
+      if (trial.grid_rows === null && trial.grid_columns === null) {
         throw new Error(
           "You must specify the number of rows or columns when using the grid layout."
         );
       }
       const n_cols =
-        trial.button_cols === null
-          ? Math.ceil(trial.choices.length / trial.button_rows)
-          : trial.button_cols;
+        trial.grid_columns === null
+          ? Math.ceil(trial.choices.length / trial.grid_rows)
+          : trial.grid_columns;
       const n_rows =
-        trial.button_rows === null
-          ? Math.ceil(trial.choices.length / trial.button_cols)
-          : trial.button_rows;
+        trial.grid_rows === null
+          ? Math.ceil(trial.choices.length / trial.grid_columns)
+          : trial.grid_rows;
       buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
       buttonGroupElement.style.gridTemplateRows = `repeat(${n_rows}, 1fr)`;
     } else if (trial.button_layout === "flex") {
