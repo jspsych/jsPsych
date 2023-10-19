@@ -58,11 +58,26 @@
   font-size: 14px;
 }
 
+/* Buttons and Button Groups */
+
+.jspsych-btn-group-flex {
+  display: flex;
+  justify-content: center;
+}
+
+.jspsych-btn-group-grid {
+  display: grid;
+  grid-auto-columns: max-content;
+  max-width: fit-content;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 /* borrowing Bootstrap style for btn elements, but combining styles a bit */
 .jspsych-btn {
   display: inline-block;
-  padding: 6px 12px;
-  margin: 0px;
+  padding: 8px 12px;
+  margin: 0.75em;
   font-size: 14px;
   font-weight: 400;
   font-family: "Open Sans", "Arial", sans-serif;
