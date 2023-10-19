@@ -89,13 +89,13 @@ import audioButtonResponse from '@jspsych/plugin-audio-button-response';
 ???+ example "Using custom button HTML to use images as buttons"
 	=== "Code"
 		```javascript
-		var trial = {
-			type: jsPsychAudioButtonResponse,
-			stimulus: 'sound/roar.mp3',
-			choices: ['lion.png', 'elephant.png', 'monkey.png'],
-			prompt: "<p>Which animal made the sound?</p>",
-			button_html: '<img src="%choice%" />'
-		};
+		const trial = {
+    	type: jsPsychAudioButtonResponse,
+    	stimulus: 'sound/roar.mp3',
+    	choices: images,
+    	prompt: "<p>Which animal made the sound?</p>",
+    	button_html: (choice)=>`<img style="cursor: pointer; margin: 10px;" src="${choice}" />`
+    };
 		```
 
 	=== "Demo"
@@ -105,7 +105,23 @@ import audioButtonResponse from '@jspsych/plugin-audio-button-response';
 
 	<a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-audio-button-response-demo-2.html">Open demo in new tab</a>
 
-	**Note**: if you want the images to look more like jsPsych buttons, i.e. with borders and different styles for hover/active/disabled states, then you can also embed the image element inside the default `button_html` string:
-	```js
-	button_html: '<button class="jspsych-btn"><img src="%choice%" /></button>'
-	```
+???+ example "Setting up a grid-based layout"
+	=== "Code"
+		```javascript
+		const trial = {
+    	type: jsPsychAudioButtonResponse,
+      stimulus: 'sound/telephone.mp3',
+      prompt: '<p>Which key was pressed first?</p>',
+      choices: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'],
+      button_layout: 'grid',
+      grid_rows: 4,
+      grid_columns: 3
+    }
+		```
+
+	=== "Demo"
+		<div style="text-align:center;">
+			<iframe src="../../demos/jspsych-audio-button-response-demo-3.html" width="90%;" height="500px;" frameBorder="0"></iframe>
+		</div>
+
+	<a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-audio-button-response-demo-3.html">Open demo in new tab</a>
