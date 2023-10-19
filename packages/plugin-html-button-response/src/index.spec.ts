@@ -15,7 +15,7 @@ describe("html-button-response", () => {
     ]);
 
     expect(getHTML()).toMatchInlineSnapshot(
-      '"<div id="jspsych-html-button-response-stimulus">this is html</div><div id="jspsych-html-button-response-btngroup" style="display: flex; justify-content: center; gap: 0px 8px; padding: 0px 8px;"><button class="jspsych-btn" data-choice="0">button-choice</button></div>"'
+      '"<div id="jspsych-html-button-response-stimulus">this is html</div><div id="jspsych-html-button-response-btngroup" class="jspsych-btn-group-grid" style="grid-template-columns: repeat(1, 1fr); grid-template-rows: repeat(1, 1fr);"><button class="jspsych-btn" data-choice="0">button-choice</button></div>"'
     );
   });
 
