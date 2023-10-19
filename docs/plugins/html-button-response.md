@@ -74,4 +74,33 @@ import htmlButtonResponse from '@jspsych/plugin-html-button-response';
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-html-button-response-demo1.html">Open demo in new tab</a>
 
+???+ example "Using `button_html` to generate custom buttons"
+    === "Code"
+        ```javascript
+        const trial = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus: `<div style="width: 600px">
+                <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: green; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: blue; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: green; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: blue; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: gray; display: inline-block"></div>
+            </div>`,
+            choices: ['red', 'green', 'blue'],
+            prompt: "<p>What color should the gray block be?</p>",
+            button_html: (choice) => `<div style="width: 80px; height: 80px; margin: 20px; background-color: ${choice}; cursor: pointer;"></div>`
+        };
+        ```
+
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../../demos/jspsych-html-button-response-demo2.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-html-button-response-demo2.html">Open demo in new tab</a>
 
