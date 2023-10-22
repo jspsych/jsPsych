@@ -29,7 +29,7 @@
     "@changesets/cli": "^2.22.0",
     "husky": "^8.0.1",
     "import-sort-style-module": "^6.0.0",
-    "lint-staged": "^12.4.1",
+    "lint-staged": "^13.2.1",
     "prettier": "^2.6.2",
     "prettier-plugin-import-sort": "^0.0.7",
     "turbo": "^1.2.9",
