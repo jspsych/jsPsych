@@ -441,7 +441,7 @@ import survey from '@jspsych/plugin-survey';
               {
                 type: 'text',
                 prompt: function() {
-                  return `What's your favorite thing about ${jsPsych.timelineVariable('fruit')}?`;
+                  return `What's your favorite thing about ${jsPsych.evaluateTimelineVariable('fruit')}?`;
                 },
                 name: 'Q2'
               }

@@ -1,8 +1,7 @@
 {
   "extends": "@jspsych/config/tsconfig.core.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "resolveJsonModule": false // using https://stackoverflow.com/a/61426303 instead
+    "baseUrl": "."
   },
-  "include": ["src", "tests", "global.d.ts"]
+  "include": ["src", "tests", "package.json"]
 }

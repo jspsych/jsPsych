@@ -2,10 +2,10 @@
 <html>
   <head>
     <script src="docs-demo-timeline.js"></script>
-    <script src="https://unpkg.com/jspsych@7.3.1"></script>
+    <script src="https://unpkg.com/jspsych@7.3.3"></script>
     <script src="https://unpkg.com/@jspsych/plugin-canvas-button-response@1.1.2"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.2"></script>
-    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" />
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" />
     <link rel="stylesheet" href="docs-demo.css" type="text/css" />
   </head>
   <body></body>
@@ -22,13 +22,13 @@
     }
 
     // To use the canvas stimulus function with timeline variables,
-    // the jsPsych.timelineVariable() function can be used inside your stimulus function.
+    // the jsPsych.evaluateTimelineVariable() function can be used inside your stimulus function.
     // In addition, this code demonstrates how to check whether participants' answers were correct or not.
     const circle_procedure = {
       timeline: [{
         type: jsPsychCanvasButtonResponse,
         stimulus: function(c) {
-            filledCirc(c, jsPsych.timelineVariable('radius'), jsPsych.timelineVariable('color'));
+            filledCirc(c, jsPsych.evaluateTimelineVariable('radius'), jsPsych.evaluateTimelineVariable('color'));
         },
         canvas_size: [300, 300],
         choices: ['Red', 'Green', 'Blue'],

@@ -16,12 +16,16 @@ const info = <const>{
       default: undefined,
       array: true,
     },
-    /** The HTML for creating button. Can create own style. Use the "%choice%" string to indicate where the label from the choices parameter should be inserted. */
+    /**
+     * A function that, given a choice and its index, returns the HTML string of that choice's
+     * button.
+     */
     button_html: {
-      type: ParameterType.HTML_STRING,
+      type: ParameterType.FUNCTION,
       pretty_name: "Button HTML",
-      default: '<button class="jspsych-btn">%choice%</button>',
-      array: true,
+      default: function (choice: string, choice_index: number) {
+        return `<button class="jspsych-btn">${choice}</button>`;
+      },
     },
     /** Any content here will be displayed below the stimulus. */
     prompt: {
@@ -35,17 +39,28 @@ const info = <const>{
       pretty_name: "Trial duration",
       default: null,
     },
-    /** Vertical margin of button. */
-    margin_vertical: {
+    /** The CSS layout for the buttons. Options: 'flex' or 'grid'. */
+    button_layout: {
       type: ParameterType.STRING,
-      pretty_name: "Margin vertical",
-      default: "0px",
+      pretty_name: "Button layout",
+      default: "grid",
     },
-    /** Horizontal margin of button. */
-    margin_horizontal: {
-      type: ParameterType.STRING,
-      pretty_name: "Margin horizontal",
-      default: "8px",
+    /** The number of grid rows when `button_layout` is "grid".
+     * Setting to `null` will infer the number of rows based on the
+     * number of columns and buttons.
+     */
+    grid_rows: {
+      type: ParameterType.INT,
+      pretty_name: "Grid rows",
+      default: 1,
+    },
+    /** The number of grid columns when `button_layout` is "grid".
+     * Setting to `null` (default value) will infer the number of columns
+     * based on the number of rows and buttons. */
+    grid_columns: {
+      type: ParameterType.INT,
+      pretty_name: "Grid columns",
+      default: null,
     },
     /** If true, the trial will end when user makes a response. */
     response_ends_trial: {
@@ -84,6 +99,8 @@ type Info = typeof info;
 class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
   private audio;
+
+  private buttonElements: HTMLElement[] = [];
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -135,50 +152,48 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
         this.audio.addEventListener("ended", enable_buttons);
       }
 
-      //display buttons
-      var buttons = [];
-      if (Array.isArray(trial.button_html)) {
-        if (trial.button_html.length == trial.choices.length) {
-          buttons = trial.button_html;
-        } else {
-          console.error(
-            "Error in audio-button-response plugin. The length of the button_html array does not equal the length of the choices array"
+      // Display buttons
+      const buttonGroupElement = document.createElement("div");
+      buttonGroupElement.id = "jspsych-audio-button-response-btngroup";
+      if (trial.button_layout === "grid") {
+        buttonGroupElement.classList.add("jspsych-btn-group-grid");
+        if (trial.grid_rows === null && trial.grid_columns === null) {
+          throw new Error(
+            "You cannot set `grid_rows` to `null` without providing a value for `grid_columns`."
           );
         }
-      } else {
-        for (var i = 0; i < trial.choices.length; i++) {
-          buttons.push(trial.button_html);
-        }
+        const n_cols =
+          trial.grid_columns === null
+            ? Math.ceil(trial.choices.length / trial.grid_rows)
+            : trial.grid_columns;
+        const n_rows =
+          trial.grid_rows === null
+            ? Math.ceil(trial.choices.length / trial.grid_columns)
+            : trial.grid_rows;
+        buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
+        buttonGroupElement.style.gridTemplateRows = `repeat(${n_rows}, 1fr)`;
+      } else if (trial.button_layout === "flex") {
+        buttonGroupElement.classList.add("jspsych-btn-group-flex");
       }
 
-      var html = '<div id="jspsych-audio-button-response-btngroup">';
-      for (var i = 0; i < trial.choices.length; i++) {
-        var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
-        html +=
-          '<div class="jspsych-audio-button-response-button" style="cursor: pointer; display: inline-block; margin:' +
-          trial.margin_vertical +
-          " " +
-          trial.margin_horizontal +
-          '" id="jspsych-audio-button-response-button-' +
-          i +
-          '" data-choice="' +
-          i +
-          '">' +
-          str +
-          "</div>";
+      for (const [choiceIndex, choice] of trial.choices.entries()) {
+        buttonGroupElement.insertAdjacentHTML("beforeend", trial.button_html(choice, choiceIndex));
+        const buttonElement = buttonGroupElement.lastChild as HTMLElement;
+        buttonElement.dataset.choice = choiceIndex.toString();
+        buttonElement.addEventListener("click", () => {
+          after_response(choiceIndex);
+        });
+        this.buttonElements.push(buttonElement);
       }
-      html += "</div>";
 
-      //show prompt if there is one
+      display_element.appendChild(buttonGroupElement);
+
+      // Show prompt if there is one
       if (trial.prompt !== null) {
-        html += trial.prompt;
+        display_element.insertAdjacentHTML("beforeend", trial.prompt);
       }
 
-      display_element.innerHTML = html;
-
-      if (trial.response_allowed_while_playing) {
-        enable_buttons();
-      } else {
+      if (!trial.response_allowed_while_playing) {
         disable_buttons();
       }
 
@@ -204,7 +219,7 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // function to handle responses by the subject
-    function after_response(choice) {
+    const after_response = (choice) => {
       // measure rt
       var endTime = performance.now();
       var rt = Math.round(endTime - startTime);
@@ -221,7 +236,7 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
       if (trial.response_ends_trial) {
         end_trial();
       }
-    }
+    };
 
     // function to end trial when it is time
     const end_trial = () => {
@@ -255,32 +270,17 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
       trial_complete();
     };
 
-    function button_response(e) {
-      var choice = e.currentTarget.getAttribute("data-choice"); // don't use dataset for jsdom compatibility
-      after_response(choice);
-    }
-
-    function disable_buttons() {
-      var btns = document.querySelectorAll(".jspsych-audio-button-response-button");
-      for (var i = 0; i < btns.length; i++) {
-        var btn_el = btns[i].querySelector("button");
-        if (btn_el) {
-          btn_el.disabled = true;
-        }
-        btns[i].removeEventListener("click", button_response);
+    const disable_buttons = () => {
+      for (const button of this.buttonElements) {
+        button.setAttribute("disabled", "disabled");
       }
-    }
+    };
 
-    function enable_buttons() {
-      var btns = document.querySelectorAll(".jspsych-audio-button-response-button");
-      for (var i = 0; i < btns.length; i++) {
-        var btn_el = btns[i].querySelector("button");
-        if (btn_el) {
-          btn_el.disabled = false;
-        }
-        btns[i].addEventListener("click", button_response);
+    const enable_buttons = () => {
+      for (const button of this.buttonElements) {
+        button.removeAttribute("disabled");
       }
-    }
+    };
 
     return new Promise((resolve) => {
       trial_complete = resolve;
@@ -330,7 +330,9 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
     const respond = () => {
       if (data.rt !== null) {
         this.jsPsych.pluginAPI.clickTarget(
-          display_element.querySelector(`div[data-choice="${data.response}"] button`),
+          display_element.querySelector(
+            `#jspsych-audio-button-response-btngroup [data-choice="${data.response}"]`
+          ),
           data.rt
         );
       }

@@ -18,7 +18,7 @@ describe("image-keyboard-response", () => {
       '<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"'
     );
 
-    pressKey("a");
+    await pressKey("a");
     await expectFinished();
   });
 
@@ -36,7 +36,7 @@ describe("image-keyboard-response", () => {
       '<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"'
     );
 
-    pressKey("f");
+    await pressKey("f");
     await expectFinished();
   });
 
@@ -52,7 +52,7 @@ describe("image-keyboard-response", () => {
     ]);
 
     expect(getHTML()).toContain('<div id="foo">this is a prompt</div>');
-    pressKey("f");
+    await pressKey("f");
     await expectFinished();
   });
 
@@ -76,7 +76,7 @@ describe("image-keyboard-response", () => {
     jest.advanceTimersByTime(500);
     expect(stimulusElement.style.visibility).toContain("hidden");
 
-    pressKey("f");
+    await pressKey("f");
     await expectFinished();
   });
 
@@ -113,7 +113,7 @@ describe("image-keyboard-response", () => {
       '<img src="../media/blue.png" id="jspsych-image-keyboard-response-stimulus"'
     );
 
-    pressKey("f");
+    await pressKey("f");
     await expectFinished();
   });
 

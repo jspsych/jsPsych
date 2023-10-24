@@ -20,19 +20,15 @@ describe("Mouse Tracking Extension", () => {
       },
     ];
 
-    const { displayElement, getHTML, getData, expectFinished } = await startTimeline(
-      timeline,
-      jsPsych
-    );
+    const { displayElement, getData, expectFinished } = await startTimeline(timeline, jsPsych);
 
     const targetRect = displayElement.querySelector("#target").getBoundingClientRect();
 
-    mouseMove(50, 50, displayElement.querySelector("#target"));
-    mouseMove(55, 50, displayElement.querySelector("#target"));
-    mouseMove(60, 50, displayElement.querySelector("#target"));
+    await mouseMove(50, 50, displayElement.querySelector("#target"));
+    await mouseMove(55, 50, displayElement.querySelector("#target"));
+    await mouseMove(60, 50, displayElement.querySelector("#target"));
 
-    pressKey("a");
-
+    await pressKey("a");
     await expectFinished();
 
     expect(getData().values()[0].mouse_tracking_data[0]).toMatchObject({
@@ -70,19 +66,15 @@ describe("Mouse Tracking Extension", () => {
       },
     ];
 
-    const { displayElement, getHTML, getData, expectFinished } = await startTimeline(
-      timeline,
-      jsPsych
-    );
+    const { displayElement, getData, expectFinished } = await startTimeline(timeline, jsPsych);
 
     const targetRect = displayElement.querySelector("#target").getBoundingClientRect();
 
-    mouseDown(50, 50, displayElement.querySelector("#target"));
-    mouseDown(55, 50, displayElement.querySelector("#target"));
-    mouseDown(60, 50, displayElement.querySelector("#target"));
+    await mouseDown(50, 50, displayElement.querySelector("#target"));
+    await mouseDown(55, 50, displayElement.querySelector("#target"));
+    await mouseDown(60, 50, displayElement.querySelector("#target"));
 
-    pressKey("a");
-
+    await pressKey("a");
     await expectFinished();
 
     expect(getData().values()[0].mouse_tracking_data[0]).toMatchObject({
@@ -120,19 +112,15 @@ describe("Mouse Tracking Extension", () => {
       },
     ];
 
-    const { displayElement, getHTML, getData, expectFinished } = await startTimeline(
-      timeline,
-      jsPsych
-    );
+    const { displayElement, getData, expectFinished } = await startTimeline(timeline, jsPsych);
 
     const targetRect = displayElement.querySelector("#target").getBoundingClientRect();
 
-    mouseUp(50, 50, displayElement.querySelector("#target"));
-    mouseUp(55, 50, displayElement.querySelector("#target"));
-    mouseUp(60, 50, displayElement.querySelector("#target"));
+    await mouseUp(50, 50, displayElement.querySelector("#target"));
+    await mouseUp(55, 50, displayElement.querySelector("#target"));
+    await mouseUp(60, 50, displayElement.querySelector("#target"));
 
-    pressKey("a");
-
+    await pressKey("a");
     await expectFinished();
 
     expect(getData().values()[0].mouse_tracking_data[0]).toMatchObject({
@@ -170,19 +158,15 @@ describe("Mouse Tracking Extension", () => {
       },
     ];
 
-    const { displayElement, getHTML, getData, expectFinished } = await startTimeline(
-      timeline,
-      jsPsych
-    );
+    const { displayElement, getData, expectFinished } = await startTimeline(timeline, jsPsych);
 
     const targetRect = displayElement.querySelector("#target").getBoundingClientRect();
 
-    mouseMove(50, 50, displayElement.querySelector("#target"));
-    mouseMove(55, 50, displayElement.querySelector("#target"));
-    mouseDown(60, 50, displayElement.querySelector("#target"));
+    await mouseMove(50, 50, displayElement.querySelector("#target"));
+    await mouseMove(55, 50, displayElement.querySelector("#target"));
+    await mouseDown(60, 50, displayElement.querySelector("#target"));
 
-    pressKey("a");
-
+    await pressKey("a");
     await expectFinished();
 
     expect(getData().values()[0].mouse_tracking_data.length).toBe(1);
@@ -212,16 +196,12 @@ describe("Mouse Tracking Extension", () => {
       },
     ];
 
-    const { displayElement, getHTML, getData, expectFinished } = await startTimeline(
-      timeline,
-      jsPsych
-    );
+    const { displayElement, getData, expectFinished } = await startTimeline(timeline, jsPsych);
 
     const targetRect = displayElement.querySelector("#target").getBoundingClientRect();
     const target2Rect = displayElement.querySelector("#target2").getBoundingClientRect();
 
-    pressKey("a");
-
+    await pressKey("a");
     await expectFinished();
 
     expect(getData().values()[0].mouse_tracking_targets["#target"]).toEqual(targetRect);
@@ -241,25 +221,21 @@ describe("Mouse Tracking Extension", () => {
       },
     ];
 
-    const { displayElement, getHTML, getData, expectFinished } = await startTimeline(
-      timeline,
-      jsPsych
-    );
+    const { displayElement, getData, expectFinished } = await startTimeline(timeline, jsPsych);
 
     const targetRect = displayElement.querySelector("#target").getBoundingClientRect();
 
-    mouseMove(50, 50, displayElement.querySelector("#target"));
+    await mouseMove(50, 50, displayElement.querySelector("#target"));
     jest.advanceTimersByTime(50);
 
     // this one should be ignored
-    mouseMove(55, 50, displayElement.querySelector("#target"));
+    await mouseMove(55, 50, displayElement.querySelector("#target"));
     jest.advanceTimersByTime(50);
 
     // this one should register
-    mouseMove(60, 50, displayElement.querySelector("#target"));
+    await mouseMove(60, 50, displayElement.querySelector("#target"));
 
-    pressKey("a");
-
+    await pressKey("a");
     await expectFinished();
 
     expect(getData().values()[0].mouse_tracking_data[0]).toMatchObject({

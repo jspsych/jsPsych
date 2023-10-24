@@ -11,7 +11,7 @@ test("works on basic timeline", async () => {
         type: htmlKeyboardResponse,
         stimulus: "trial 1",
         on_finish: () => {
-          jsPsych.endExperiment("the end");
+          jsPsych.abortExperiment("the end");
         },
       },
       {
@@ -23,7 +23,7 @@ test("works on basic timeline", async () => {
   );
 
   expect(getHTML()).toMatch("trial 1");
-  pressKey("a");
+  await pressKey("a");
   expect(getHTML()).toMatch("the end");
   await expectFinished();
 });
@@ -35,7 +35,7 @@ test("works with looping timeline (#541)", async () => {
       {
         timeline: [{ type: htmlKeyboardResponse, stimulus: "trial 1" }],
         loop_function: () => {
-          jsPsych.endExperiment("the end");
+          jsPsych.abortExperiment("the end");
         },
       },
     ],
@@ -43,7 +43,7 @@ test("works with looping timeline (#541)", async () => {
   );
 
   expect(getHTML()).toMatch("trial 1");
-  pressKey("a");
+  await pressKey("a");
   expect(getHTML()).toMatch("the end");
   await expectFinished();
 });
@@ -64,7 +64,7 @@ test("if on_finish returns a Promise, wait for resolve before showing end messag
       type: htmlKeyboardResponse,
       stimulus: "foo",
       on_finish: () => {
-        jsPsych.endExperiment("done");
+        jsPsych.abortExperiment("done");
       },
     },
     {

@@ -17,12 +17,16 @@ const info = <const>{
       default: undefined,
       array: true,
     },
-    /** The HTML for creating button. Can create own style. Use the "%choice%" string to indicate where the label from the choices parameter should be inserted. */
+    /**
+     * A function that, given a choice and its index, returns the HTML string of that choice's
+     * button.
+     */
     button_html: {
-      type: ParameterType.HTML_STRING,
+      type: ParameterType.FUNCTION,
       pretty_name: "Button HTML",
-      default: '<button class="jspsych-btn">%choice%</button>',
-      array: true,
+      default: function (choice: string, choice_index: number) {
+        return `<button class="jspsych-btn">${choice}</button>`;
+      },
     },
     /** Any content here will be displayed below the buttons. */
     prompt: {
@@ -84,17 +88,28 @@ const info = <const>{
       pretty_name: "Trial duration",
       default: null,
     },
-    /** The vertical margin of the button. */
-    margin_vertical: {
+    /** The CSS layout for the buttons. Options: 'flex' or 'grid'. */
+    button_layout: {
       type: ParameterType.STRING,
-      pretty_name: "Margin vertical",
-      default: "0px",
+      pretty_name: "Button layout",
+      default: "grid",
     },
-    /** The horizontal margin of the button. */
-    margin_horizontal: {
-      type: ParameterType.STRING,
-      pretty_name: "Margin horizontal",
-      default: "8px",
+    /** The number of grid rows when `button_layout` is "grid".
+     * Setting to `null` will infer the number of rows based on the
+     * number of columns and buttons.
+     */
+    grid_rows: {
+      type: ParameterType.INT,
+      pretty_name: "Grid rows",
+      default: 1,
+    },
+    /** The number of grid columns when `button_layout` is "grid".
+     * Setting to `null` (default value) will infer the number of columns
+     * based on the number of rows and buttons. */
+    grid_columns: {
+      type: ParameterType.INT,
+      pretty_name: "Grid columns",
+      default: null,
     },
     /** If true, the trial will end when subject makes a response. */
     response_ends_trial: {
@@ -127,109 +142,102 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    if (!Array.isArray(trial.stimulus)) {
-      throw new Error(`
-        The stimulus property for the video-button-response plugin must be an array
-        of files. See https://www.jspsych.org/latest/plugins/video-button-response/#parameters
-      `);
-    }
+    display_element.innerHTML = "";
 
-    // setup stimulus
-    var video_html = "<div>";
-    video_html += '<video id="jspsych-video-button-response-stimulus"';
+    // Setup stimulus
+    const stimulusWrapper = document.createElement("div");
+    display_element.appendChild(stimulusWrapper);
+
+    const videoElement = document.createElement("video");
+    stimulusWrapper.appendChild(videoElement);
+    videoElement.id = "jspsych-video-button-response-stimulus";
 
     if (trial.width) {
-      video_html += ' width="' + trial.width + '"';
+      videoElement.width = trial.width;
     }
     if (trial.height) {
-      video_html += ' height="' + trial.height + '"';
+      videoElement.height = trial.height;
     }
-    if (trial.autoplay && trial.start == null) {
-      // if autoplay is true and the start time is specified, then the video will start automatically
-      // via the play() method, rather than the autoplay attribute, to prevent showing the first frame
-      video_html += " autoplay ";
-    }
-    if (trial.controls) {
-      video_html += " controls ";
-    }
+
+    videoElement.controls = trial.controls;
+
+    // if autoplay is true and the start time is specified, then the video will start automatically
+    // via the play() method, rather than the autoplay attribute, to prevent showing the first frame
+    videoElement.autoplay = trial.autoplay && trial.start == null;
+
     if (trial.start !== null) {
       // hide video element when page loads if the start time is specified,
       // to prevent the video element from showing the first frame
-      video_html += ' style="visibility: hidden;"';
+      videoElement.style.visibility = "hidden";
     }
-    video_html += ">";
 
-    var video_preload_blob = this.jsPsych.pluginAPI.getVideoBuffer(trial.stimulus[0]);
-    if (!video_preload_blob) {
-      for (var i = 0; i < trial.stimulus.length; i++) {
-        var file_name = trial.stimulus[i];
-        if (file_name.indexOf("?") > -1) {
-          file_name = file_name.substring(0, file_name.indexOf("?"));
+    const videoPreloadBlob = this.jsPsych.pluginAPI.getVideoBuffer(trial.stimulus[0]);
+    if (!videoPreloadBlob) {
+      for (let filename of trial.stimulus) {
+        if (filename.indexOf("?") > -1) {
+          filename = filename.substring(0, filename.indexOf("?"));
         }
-        var type = file_name.substr(file_name.lastIndexOf(".") + 1);
-        type = type.toLowerCase();
-        if (type == "mov") {
+        const type = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
+        if (type === "mov") {
           console.warn(
             "Warning: video-button-response plugin does not reliably support .mov files."
           );
         }
-        video_html += '<source src="' + file_name + '" type="video/' + type + '">';
+
+        const sourceElement = document.createElement("source");
+        sourceElement.src = filename;
+        sourceElement.type = "video/" + type;
+        videoElement.appendChild(sourceElement);
       }
     }
-    video_html += "</video>";
-    video_html += "</div>";
 
-    //display buttons
-    var buttons = [];
-    if (Array.isArray(trial.button_html)) {
-      if (trial.button_html.length == trial.choices.length) {
-        buttons = trial.button_html;
-      } else {
-        console.error(
-          "Error in video-button-response plugin. The length of the button_html array does not equal the length of the choices array"
+    // Display buttons
+    const buttonGroupElement = document.createElement("div");
+    buttonGroupElement.id = "jspsych-video-button-response-btngroup";
+    if (trial.button_layout === "grid") {
+      buttonGroupElement.classList.add("jspsych-btn-group-grid");
+      if (trial.grid_rows === null && trial.grid_columns === null) {
+        throw new Error(
+          "You cannot set `grid_rows` to `null` without providing a value for `grid_columns`."
         );
       }
-    } else {
-      for (var i = 0; i < trial.choices.length; i++) {
-        buttons.push(trial.button_html);
-      }
+      const n_cols =
+        trial.grid_columns === null
+          ? Math.ceil(trial.choices.length / trial.grid_rows)
+          : trial.grid_columns;
+      const n_rows =
+        trial.grid_rows === null
+          ? Math.ceil(trial.choices.length / trial.grid_columns)
+          : trial.grid_rows;
+      buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
+      buttonGroupElement.style.gridTemplateRows = `repeat(${n_rows}, 1fr)`;
+    } else if (trial.button_layout === "flex") {
+      buttonGroupElement.classList.add("jspsych-btn-group-flex");
     }
-    video_html += '<div id="jspsych-video-button-response-btngroup">';
-    for (var i = 0; i < trial.choices.length; i++) {
-      var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
-      video_html +=
-        '<div class="jspsych-video-button-response-button" style="cursor: pointer; display: inline-block; margin:' +
-        trial.margin_vertical +
-        " " +
-        trial.margin_horizontal +
-        '" id="jspsych-video-button-response-button-' +
-        i +
-        '" data-choice="' +
-        i +
-        '">' +
-        str +
-        "</div>";
-    }
-    video_html += "</div>";
 
-    // add prompt if there is one
+    for (const [choiceIndex, choice] of trial.choices.entries()) {
+      buttonGroupElement.insertAdjacentHTML("beforeend", trial.button_html(choice, choiceIndex));
+      const buttonElement = buttonGroupElement.lastChild as HTMLElement;
+      buttonElement.dataset.choice = choiceIndex.toString();
+      buttonElement.addEventListener("click", () => {
+        after_response(choiceIndex);
+      });
+    }
+
+    display_element.appendChild(buttonGroupElement);
+
+    // Show prompt if there is one
     if (trial.prompt !== null) {
-      video_html += trial.prompt;
+      display_element.insertAdjacentHTML("beforeend", trial.prompt);
     }
-
-    display_element.innerHTML = video_html;
 
     var start_time = performance.now();
 
-    var video_element = display_element.querySelector<HTMLVideoElement>(
-      "#jspsych-video-button-response-stimulus"
-    );
-
-    if (video_preload_blob) {
-      video_element.src = video_preload_blob;
+    if (videoPreloadBlob) {
+      videoElement.src = videoPreloadBlob;
     }
 
-    video_element.onended = () => {
+    videoElement.onended = () => {
       if (trial.trial_ends_after_video) {
         end_trial();
       } else if (!trial.response_allowed_while_playing) {
@@ -237,41 +245,40 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
       }
     };
 
-    video_element.playbackRate = trial.rate;
+    videoElement.playbackRate = trial.rate;
 
     // if video start time is specified, hide the video and set the starting time
     // before showing and playing, so that the video doesn't automatically show the first frame
     if (trial.start !== null) {
-      video_element.pause();
-      video_element.onseeked = () => {
-        video_element.style.visibility = "visible";
-        video_element.muted = false;
+      videoElement.pause();
+      videoElement.onseeked = () => {
+        videoElement.style.visibility = "visible";
+        videoElement.muted = false;
         if (trial.autoplay) {
-          video_element.play();
+          videoElement.play();
         } else {
-          video_element.pause();
+          videoElement.pause();
         }
-        video_element.onseeked = () => {};
+        videoElement.onseeked = () => {};
       };
-      video_element.onplaying = () => {
-        video_element.currentTime = trial.start;
-        video_element.onplaying = () => {};
+      videoElement.onplaying = () => {
+        videoElement.currentTime = trial.start;
+        videoElement.onplaying = () => {};
       };
       // fix for iOS/MacOS browsers: videos aren't seekable until they start playing, so need to hide/mute, play,
       // change current time, then show/unmute
-      video_element.muted = true;
-      video_element.play();
+      videoElement.muted = true;
+      videoElement.play();
     }
 
     let stopped = false;
     if (trial.stop !== null) {
-      video_element.addEventListener("timeupdate", (e) => {
-        var currenttime = video_element.currentTime;
-        if (currenttime >= trial.stop) {
+      videoElement.addEventListener("timeupdate", (e) => {
+        if (videoElement.currentTime >= trial.stop) {
           if (!trial.response_allowed_while_playing) {
             enable_buttons();
           }
-          video_element.pause();
+          videoElement.pause();
           if (trial.trial_ends_after_video && !stopped) {
             // this is to prevent end_trial from being called twice, because the timeupdate event
             // can fire in quick succession
@@ -301,15 +308,11 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // stop the video file if it is playing
       // remove any remaining end event handlers
-      display_element
-        .querySelector<HTMLVideoElement>("#jspsych-video-button-response-stimulus")
-        .pause();
-      display_element.querySelector<HTMLVideoElement>(
-        "#jspsych-video-button-response-stimulus"
-      ).onended = () => {};
+      videoElement.pause();
+      videoElement.onended = () => {};
 
       // gather the data to store for the trial
-      var trial_data = {
+      const trial_data = {
         rt: response.rt,
         stimulus: trial.stimulus,
         response: response.button,
@@ -323,16 +326,16 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // function to handle responses by the subject
-    function after_response(choice: string) {
+    function after_response(choice: number) {
       // measure rt
       var end_time = performance.now();
       var rt = Math.round(end_time - start_time);
-      response.button = parseInt(choice);
+      response.button = choice;
       response.rt = rt;
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      video_element.className += " responded";
+      videoElement.classList.add("responded");
 
       // disable all the buttons after a response
       disable_buttons();
@@ -342,30 +345,15 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
       }
     }
 
-    function button_response(e) {
-      var choice = e.currentTarget.getAttribute("data-choice"); // don't use dataset for jsdom compatibility
-      after_response(choice);
-    }
-
     function disable_buttons() {
-      var btns = document.querySelectorAll(".jspsych-video-button-response-button");
-      for (var i = 0; i < btns.length; i++) {
-        var btn_el = btns[i].querySelector("button");
-        if (btn_el) {
-          btn_el.disabled = true;
-        }
-        btns[i].removeEventListener("click", button_response);
+      for (const button of buttonGroupElement.children) {
+        button.setAttribute("disabled", "disabled");
       }
     }
 
     function enable_buttons() {
-      var btns = document.querySelectorAll(".jspsych-video-button-response-button");
-      for (var i = 0; i < btns.length; i++) {
-        var btn_el = btns[i].querySelector("button");
-        if (btn_el) {
-          btn_el.disabled = false;
-        }
-        btns[i].addEventListener("click", button_response);
+      for (const button of buttonGroupElement.children) {
+        button.removeAttribute("disabled");
       }
     }
 
@@ -425,7 +413,9 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
     const respond = () => {
       if (data.rt !== null) {
         this.jsPsych.pluginAPI.clickTarget(
-          display_element.querySelector(`div[data-choice="${data.response}"] button`),
+          display_element.querySelector(
+            `#jspsych-video-button-response-btngroup [data-choice="${data.response}"]`
+          ),
           data.rt
         );
       }

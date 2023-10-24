@@ -22,11 +22,11 @@ describe("loop function", () => {
     const { jsPsych } = await startTimeline([trial]);
 
     // first trial
-    pressKey("a");
+    await pressKey("a");
     expect(jsPsych.data.get().count()).toBe(1);
 
     // second trial
-    pressKey("a");
+    await pressKey("a");
     expect(jsPsych.data.get().count()).toBe(2);
   });
 
@@ -44,11 +44,11 @@ describe("loop function", () => {
     ]);
 
     // first trial
-    pressKey("a");
+    await pressKey("a");
     expect(jsPsych.data.get().count()).toBe(1);
 
     // second trial
-    pressKey("a");
+    await pressKey("a");
     expect(jsPsych.data.get().count()).toBe(1);
   });
 
@@ -77,13 +77,13 @@ describe("loop function", () => {
     ]);
 
     // first trial
-    pressKey("a");
+    await pressKey("a");
 
     // second trial
-    pressKey("a");
+    await pressKey("a");
 
     // third trial
-    pressKey("a");
+    await pressKey("a");
 
     expect(data_count).toEqual([1, 1, 1]);
     expect(jsPsych.data.get().count()).toBe(3);
@@ -109,7 +109,7 @@ describe("loop function", () => {
                 },
               ],
               loop_function: () => {
-                if (jsPsych.timelineVariable("word") == "b" && counter < 2) {
+                if (jsPsych.evaluateTimelineVariable("word") === "b" && counter < 2) {
                   counter++;
                   return true;
                 } else {
@@ -126,21 +126,21 @@ describe("loop function", () => {
     );
 
     expect(getHTML()).toMatch("a");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("b");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("c");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
   });
 
   test("only runs once when timeline variables are used", async () => {
@@ -163,11 +163,11 @@ describe("loop function", () => {
     ]);
 
     // first trial
-    pressKey("a");
+    await pressKey("a");
     expect(count).toBe(0);
 
     // second trial
-    pressKey("a");
+    await pressKey("a");
     expect(count).toBe(1);
   });
 });
@@ -194,7 +194,7 @@ describe("conditional function", () => {
     expect(getHTML()).toMatch("bar");
 
     // clear
-    pressKey("a");
+    await pressKey("a");
   });
 
   test("completes the timeline when returns true", async () => {
@@ -220,52 +220,12 @@ describe("conditional function", () => {
     expect(getHTML()).toMatch("foo");
 
     // next
-    pressKey("a");
+    await pressKey("a");
 
     expect(getHTML()).toMatch("bar");
 
     // clear
-    pressKey("a");
-  });
-
-  test("executes on every loop of the timeline", async () => {
-    let count = 0;
-    let conditional_count = 0;
-
-    await startTimeline([
-      {
-        timeline: [
-          {
-            type: htmlKeyboardResponse,
-            stimulus: "foo",
-          },
-        ],
-        loop_function: () => {
-          if (count < 1) {
-            count++;
-            return true;
-          } else {
-            return false;
-          }
-        },
-        conditional_function: () => {
-          conditional_count++;
-          return true;
-        },
-      },
-    ]);
-
-    expect(conditional_count).toBe(1);
-
-    // first trial
-    pressKey("a");
-
-    expect(conditional_count).toBe(2);
-
-    // second trial
-    pressKey("a");
-
-    expect(conditional_count).toBe(2);
+    await pressKey("a");
   });
 
   test("executes only once even when repetitions is > 1", async () => {
@@ -290,12 +250,12 @@ describe("conditional function", () => {
     expect(conditional_count).toBe(1);
 
     // first trial
-    pressKey("a");
+    await pressKey("a");
 
     expect(conditional_count).toBe(1);
 
     // second trial
-    pressKey("a");
+    await pressKey("a");
 
     expect(conditional_count).toBe(1);
   });
@@ -322,12 +282,12 @@ describe("conditional function", () => {
     expect(conditional_count).toBe(1);
 
     // first trial
-    pressKey("a");
+    await pressKey("a");
 
     expect(conditional_count).toBe(1);
 
     // second trial
-    pressKey("a");
+    await pressKey("a");
 
     expect(conditional_count).toBe(1);
   });
@@ -350,7 +310,7 @@ describe("conditional function", () => {
                 },
               ],
               conditional_function: () => {
-                if (jsPsych.timelineVariable("word") == "b") {
+                if (jsPsych.evaluateTimelineVariable("word") === "b") {
                   return false;
                 } else {
                   return true;
@@ -365,15 +325,15 @@ describe("conditional function", () => {
     );
 
     expect(getHTML()).toMatch("a");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("b");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("c");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
   });
 });
 
@@ -388,7 +348,7 @@ describe("endCurrentTimeline", () => {
               type: htmlKeyboardResponse,
               stimulus: "foo",
               on_finish: () => {
-                jsPsych.endCurrentTimeline();
+                jsPsych.abortCurrentTimeline();
               },
             },
             {
@@ -406,9 +366,9 @@ describe("endCurrentTimeline", () => {
     );
 
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("woo");
-    pressKey("a");
+    await pressKey("a");
   });
 
   test("works inside nested timelines", async () => {
@@ -423,7 +383,7 @@ describe("endCurrentTimeline", () => {
                   type: htmlKeyboardResponse,
                   stimulus: "foo",
                   on_finish: () => {
-                    jsPsych.endCurrentTimeline();
+                    jsPsych.abortCurrentTimeline();
                   },
                 },
                 {
@@ -448,15 +408,15 @@ describe("endCurrentTimeline", () => {
 
     expect(getHTML()).toMatch("foo");
 
-    pressKey("a");
+    await pressKey("a");
 
     expect(getHTML()).toMatch("bar");
 
-    pressKey("a");
+    await pressKey("a");
 
     expect(getHTML()).toMatch("woo");
 
-    pressKey("a");
+    await pressKey("a");
   });
 });
 
@@ -478,33 +438,8 @@ describe("nested timelines", () => {
     ]);
 
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("bar");
-    pressKey("a");
-  });
-});
-
-describe("add node to end of timeline", () => {
-  test("adds node to end of timeline", async () => {
-    const jsPsych = initJsPsych();
-    const { getHTML } = await startTimeline(
-      [
-        {
-          type: htmlKeyboardResponse,
-          stimulus: "foo",
-          on_start: () => {
-            jsPsych.addNodeToEndOfTimeline({
-              timeline: [{ type: htmlKeyboardResponse, stimulus: "bar" }],
-            });
-          },
-        },
-      ],
-      jsPsych
-    );
-
-    expect(getHTML()).toMatch("foo");
-    pressKey("a");
-    expect(getHTML()).toMatch("bar");
-    pressKey("a");
+    await pressKey("a");
   });
 });

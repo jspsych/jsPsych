@@ -216,7 +216,7 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
     if (trial.pre_target_duration <= 0) {
       showTarget();
     } else {
-      this.jsPsych.pluginAPI.setTimeout(showTarget(), trial.pre_target_duration);
+      this.jsPsych.pluginAPI.setTimeout(showTarget, trial.pre_target_duration);
     }
 
     //show prompt if there is one

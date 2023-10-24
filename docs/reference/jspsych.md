@@ -67,6 +67,109 @@ var jsPsych = initJsPsych({
 For more examples, see the HTML files in the [examples folder](https://github.com/jspsych/jsPsych/tree/main/examples).
 
 ---
+## jsPsych.abortCurrentTimeline
+
+```javascript
+jsPsych.abortCurrentTimeline()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+None.
+
+### Description
+
+Ends the current timeline. If timelines are nested, then only the timeline that contains the current trial is ended.
+
+### Example
+
+#### Abort timeline if a particular key is pressed
+
+```javascript
+var jsPsych = initJsPsych({
+  on_finish: function() {
+    jsPsych.data.displayData();
+  }
+});
+
+var images = [
+  "img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif",
+  "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif",
+  "img/9.gif", "img/10.gif"
+];
+
+var trials = [];
+for (var i = 0; i < images.length; i++) {
+  trials.push({
+    stimulus: images[i]
+  });
+}
+
+var block = {
+  type: jsPsychImageKeyboardResponse,
+  choices: ['y', 'n'], 
+  prompt: '<p>Press "y" to Continue. Press "n" to end this node of the experiment.</p>',
+  on_finish: function(data) {
+    if (jsPsych.pluginAPI.compareKeys(data.response, 'n')) {
+      jsPsych.abortCurrentTimeline();
+    }
+  },
+  timeline: trials
+}
+
+var after_block = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: '<p>The next node</p>'
+}
+
+jsPsych.run([block, after_block]);
+```
+
+---
+## jsPsych.abortExperiment
+
+```javascript
+jsPsych.abortExperiment(message, data)
+```
+
+### Parameters
+
+| Parameter   | Type   | Description                              |
+| ----------- | ------ | ---------------------------------------- |
+| message | string | A message to display on the screen after the experiment is over. Can include HTML formatting. |
+| data | object | An optional object of key-value pairs to store as data in the final trial of the experiment. 
+
+### Return value
+
+None.
+
+### Description
+
+Ends the experiment, skipping all remaining trials. If the `on_finish` event handler for `jsPsych` returns a `Promise` then the `message` will not be displayed until the promise is resolved.
+
+### Example
+
+#### End the experiment if a particular response is given
+
+```javascript
+var trial = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: 'image1.jpg',
+  choices: ['y', 'n']
+  prompt: '<p>Press "y" to Continue. Press "n" to end the experiment</p>',
+  on_finish: function(data){
+    if(jsPsych.pluginAPI.compareKeys(data.response, "n")){
+      jsPsych.abortExperiment('The experiment was ended by pressing "n".');
+    }
+  }
+}
+```
+
+---
 ## jsPsych.addNodeToEndOfTimeline
 
 ```javascript
@@ -103,105 +206,48 @@ jsPsych.addNodeToEndOfTimeline(new_timeline)
 ```
 
 ---
-## jsPsych.endCurrentTimeline
+## jsPsych.evaluateTimelineVariable
 
-```javascript
-jsPsych.endCurrentTimeline()
+```js
+jsPsych.evaluateTimelineVariable(variable_name)
 ```
 
 ### Parameters
 
-None.
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| variable_name | string | The name of the variable to evaluate. |
 
 ### Return value
 
-None.
+Returns the current value of the corresponding timeline variable.
 
 ### Description
 
-Ends the current timeline. If timelines are nested, then only the timeline that contains the current trial is ended.
+Unlike `jsPsych.timelineVariable()`, `evaluateTimelineVariable()` immediately returns the current value of the timeline variable. 
+It should be used whenever you are in a context where immediate evaluation is appropriate. For example, if you referencing a 
+timeline variable within a function, immediate evaluation is usually correct.
 
-### Example
+### Examples
 
-#### End timeline if a particular key is pressed
+#### Invoking timeline variables immediately in a function
 
 ```javascript
-var jsPsych = initJsPsych({
-  on_finish: function() {
-    jsPsych.data.displayData();
-  }
-});
-
-var images = [
-  "img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif",
-  "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif",
-  "img/9.gif", "img/10.gif"
-];
-
-var trials = [];
-for (var i = 0; i < images.length; i++) {
-  trials.push({
-    stimulus: images[i]
-  });
-}
-
-var block = {
-  type: jsPsychImageKeyboardResponse,
-  choices: ['y', 'n'], 
-  prompt: '<p>Press "y" to Continue. Press "n" to end this node of the experiment.</p>',
-  on_finish: function(data) {
-    if (jsPsych.pluginAPI.compareKeys(data.response, 'n')) {
-      jsPsych.endCurrentTimeline();
-    }
-  },
-  timeline: trials
-}
-
-var after_block = {
+const trial = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: '<p>The next node</p>'
+  stimulus: function(){
+    return `<img style='width:100px; height:100px;' src='${jsPsych.evaluateTimelineVariable('image')}'></img>`;
+  }
 }
 
-jsPsych.run([block, after_block]);
-```
-
----
-## jsPsych.endExperiment
-
-```javascript
-jsPsych.endExperiment(end_message, data)
-```
-
-### Parameters
-
-| Parameter   | Type   | Description                              |
-| ----------- | ------ | ---------------------------------------- |
-| end_message | string | A message to display on the screen after the experiment is over. Can include HTML formatting. |
-| data | object | An optional object of key-value pairs to store as data in the final trial of the experiment. 
-
-### Return value
-
-None.
-
-### Description
-
-Ends the experiment, skipping all remaining trials. If the `on_finish` event handler for `jsPsych` returns a `Promise` then the `end_message` will not be displayed until the promise is resolved.
-
-### Example
-
-#### End the experiment if a particular response is given
-
-```javascript
-var trial = {
-  type: jsPsychImageKeyboardResponse,
-  stimulus: 'image1.jpg',
-  choices: ['y', 'n']
-  prompt: '<p>Press "y" to Continue. Press "n" to end the experiment</p>',
-  on_finish: function(data){
-    if(jsPsych.pluginAPI.compareKeys(data.response, "n")){
-      jsPsych.endExperiment('The experiment was ended by pressing "n".');
-    }
-  }
+const procedure = {
+  timeline: [trial],
+  timeline_variables: [
+    {image: 'face1.png'},
+    {image: 'face2.png'},
+    {image: 'face3.png'},
+    {image: 'face4.png'}
+  ]
 }
 ```
 
@@ -239,85 +285,6 @@ This method tells jsPsych that the current trial is over. It is used in all of t
 ```javascript
 // this code would be in a plugin
 jsPsych.finishTrial({correct_response: true});
-```
-
----
-## jsPsych.getAllTimelineVariables
-
-```javascript
-jsPsych.getAllTimelineVariables()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-Returns an object with all available timeline variables at this moment in the experiment, represented as `key: value` pairs.
-
-### Description
-
-This function can be used to get all the timeline variables at a particular moment in the experiment. Can be useful for annotating
-data, such as in the example below.
-
-### Example
-
-```javascript
-var trial = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: 'Just a demo',
-  on_finish: function(data){
-    // merge all timeline variables available at this trial into the data for this trial
-    Object.assign(data, jsPsych.getAllTimelineVariables())
-  }
-}
-```
-
----
-## jsPsych.getCurrentTimelineNodeID
-
-```javascript
-jsPsych.getCurrentTimelineNodeID()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-Returns the ID of the TimelineNode that is currently active.
-
-### Description
-
-Gets the ID of the active TimelineNode. The ID is a string that follows a specific format:
-
-* `"0.0"` is the ID of the first top-level TimelineNode
-* `"1.0"` is the ID of the second top-level TimelineNode
-* `"2.0"` is the ID of the third top-level TimelineNode, and so on...
-
-If a TimelineNode iterates multiple times (using the loop function, for example), then the iterations are indicated in the second number:
-
-* `"0.0"` is the ID of the first top-level TimelineNode during the first iteration
-* `"0.1"` is the ID of the first top-level TimelineNode during the second iteration
-* `"0.2"` is the ID of the first top-level TimelineNode during the third iteration, and so on...
-
-If TimelineNodes are nested in other TimelineNodes, then the hierarchical structure is shown with `"."`:
-
-* `"0.0-1.0"` is the ID of the second TimelineNode on the timeline of the first top-level TimelineNode.
-* `"0.0-2.0"` is the ID of the third TimelineNode on the timeline of the first top-level TimelineNode, and so on...
-
-The rules about iterations apply throughout the hierarchical ID:
-
-* `"0.2-1.3"` is the ID of the second TimelineNode, executing for the fourth time, on the timeline of the first top-level TimelineNode, executing for the third time.
-
-
-### Example
-
-```javascript
-var id = jsPsych.getCurrentTimelineNodeID();
-console.log('The current TimelineNode ID is '+id);
 ```
 
 ---
@@ -660,11 +627,10 @@ jsPsych.timelineVariable(variable, call_immediate)
 Parameter | Type | Description
 ----------|------|------------
 variable | string | Name of the timeline variable
-call_immediate | bool | This parameter is optional and can usually be omitted. It determines the return value of `jsPsych.timelineVariable`. If `true`, the function returns the _value_ of the current timeline variable. If `false`, the function returns _a function that returns the value_ of the current timeline variable. When `call_immediate` is omitted, the appropriate option is determined automatically based on the context in which this function is called. When `jsPsych.timelineVariable` is used as a parameter value, `call_immediate` will be `false`. This allows it to be used as a [dynamic trial parameter](../overview/dynamic-parameters). When `jsPsych.timelineVariable` is used inside of a function, `call_immediate` will be `true`. It is possible to explicitly set this option to `true` to force the function to immediately return the current value of the timeline variable. 
 
 ### Return value
 
-Either a function that returns the value of the timeline variable, or the value of the timeline variable, depending on the context in which it is used. See `call_immediate` description above.
+Returns a placeholder object that jsPsych uses to evaluate the timeline variable when the trial runs.
 
 ### Description
 
@@ -672,54 +638,12 @@ Either a function that returns the value of the timeline variable, or the value 
 
 ### Examples
 
-#### Standard use as a parameter for a trial
+#### Use as a parameter for a trial
 
 ```javascript
 var trial = {
   type: jsPsychImageKeyboardResponse,
   stimulus: jsPsych.timelineVariable('image')
-}
-
-var procedure = {
-  timeline: [trial],
-  timeline_variables: [
-    {image: 'face1.png'},
-    {image: 'face2.png'},
-    {image: 'face3.png'},
-    {image: 'face4.png'}
-  ]
-}
-```
-
-#### Invoking immediately in a function
-
-```javascript
-var trial = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: function(){
-    return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image')+"'></img>";
-  }
-}
-
-var procedure = {
-  timeline: [trial],
-  timeline_variables: [
-    {image: 'face1.png'},
-    {image: 'face2.png'},
-    {image: 'face3.png'},
-    {image: 'face4.png'}
-  ]
-}
-```
-
-Prior to jsPsych v6.3.0, the `call_immediate` parameter must be set to `true` when `jsPsych.timelineVariable` is called from within a function, such as a [dynamic parameter](../overview/dynamic-parameters):
-
-```javascript
-var trial = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: function(){
-    return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image', true)+"'></img>";
-  }
 }
 
 var procedure = {

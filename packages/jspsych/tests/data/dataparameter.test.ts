@@ -13,7 +13,7 @@ describe("The data parameter", () => {
       },
     ]);
 
-    pressKey("a");
+    await pressKey("a");
     await finished;
 
     expect(getData().values()[0].added).toBe(true);
@@ -28,8 +28,8 @@ describe("The data parameter", () => {
       },
     ]);
 
-    pressKey("a");
-    pressKey("a");
+    await pressKey("a");
+    await pressKey("a");
     await finished;
 
     expect(getData().filter({ added: true }).count()).toBe(2);
@@ -50,8 +50,8 @@ describe("The data parameter", () => {
       jsPsych
     );
 
-    pressKey("a");
-    pressKey("a");
+    await pressKey("a");
+    await pressKey("a");
     await finished;
 
     expect(getData().filter({ added: true }).count()).toBe(2);
@@ -71,8 +71,8 @@ describe("The data parameter", () => {
       jsPsych
     );
 
-    pressKey("a"); // trial 1
-    pressKey("a"); // trial 2
+    await pressKey("a"); // trial 1
+    await pressKey("a"); // trial 2
 
     expect(getData().filter({ added: true }).count()).toBe(1);
     expect(getData().filter({ added: false }).count()).toBe(1);
@@ -96,8 +96,8 @@ describe("The data parameter", () => {
       jsPsych
     );
 
-    pressKey("a"); // trial 1
-    pressKey("a"); // trial 2
+    await pressKey("a"); // trial 1
+    await pressKey("a"); // trial 2
 
     expect(getData().filter({ added: true }).count()).toBe(1);
     expect(getData().filter({ added: false }).count()).toBe(1);
@@ -124,8 +124,8 @@ describe("The data parameter", () => {
       jsPsych
     );
 
-    pressKey("a"); // trial 1
-    pressKey("a"); // trial 2
+    await pressKey("a"); // trial 1
+    await pressKey("a"); // trial 2
 
     expect(getData().filter({ added_copy: true }).count()).toBe(1);
     expect(getData().filter({ added_copy: false }).count()).toBe(1);
@@ -150,8 +150,8 @@ describe("The data parameter", () => {
       jsPsych
     );
 
-    pressKey("a");
-    pressKey("a");
+    await pressKey("a");
+    await pressKey("a");
     await finished;
 
     expect(getData().filter({ added: true, foo: 1 }).count()).toBe(2);
@@ -168,7 +168,7 @@ describe("The data parameter", () => {
       },
     ]);
 
-    pressKey("a");
+    await pressKey("a");
     await finished;
 
     expect(getData().values()[0].a).toBe(1);

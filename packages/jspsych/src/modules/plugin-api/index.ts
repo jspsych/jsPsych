@@ -9,19 +9,23 @@ import { TimeoutAPI } from "./TimeoutAPI";
 
 export function createJointPluginAPIObject(jsPsych: JsPsych) {
   const settings = jsPsych.getInitSettings();
+  const keyboardListenerAPI = new KeyboardListenerAPI(
+    jsPsych.getDisplayContainerElement,
+    settings.case_sensitive_responses,
+    settings.minimum_valid_rt
+  );
+  const timeoutAPI = new TimeoutAPI();
+  const mediaAPI = new MediaAPI(settings.use_webaudio);
+  const hardwareAPI = new HardwareAPI();
+  const simulationAPI = new SimulationAPI(
+    jsPsych.getDisplayContainerElement,
+    timeoutAPI.setTimeout.bind(timeoutAPI)
+  );
   return Object.assign(
     {},
-    ...[
-      new KeyboardListenerAPI(
-        jsPsych.getDisplayContainerElement,
-        settings.case_sensitive_responses,
-        settings.minimum_valid_rt
-      ),
-      new TimeoutAPI(),
-      new MediaAPI(settings.use_webaudio, jsPsych.webaudio_context),
-      new HardwareAPI(),
-      new SimulationAPI(),
-    ].map((object) => autoBind(object))
+    ...[keyboardListenerAPI, timeoutAPI, mediaAPI, hardwareAPI, simulationAPI].map((object) =>
+      autoBind(object)
+    )
   ) as KeyboardListenerAPI & TimeoutAPI & MediaAPI & HardwareAPI & SimulationAPI;
 }
 

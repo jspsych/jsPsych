@@ -12,12 +12,13 @@ Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 stimulus | HTML string | undefined | The HTML content to be displayed.
 choices | array of strings | [] | Labels for the buttons. Each different string in the array will generate a different button.
-button_html | HTML string | `'<button class="jspsych-btn">%choice%</button>'` | A template of HTML for generating the button elements. You can override this to create customized buttons of various kinds. The string `%choice%` will be changed to the corresponding element of the `choices` array. You may also specify an array of strings, if you need different HTML to render for each button. If you do specify an array, the `choices` array and this array must have the same length. The HTML from position 0 in the `button_html` array will be used to create the button for element 0 in the `choices` array, and so on.
+button_html | function | ``(choice: string, choice_index: number)=>`<button class="jspsych-btn">${choice}</button>``; | A function that generates the HTML for each button in the `choices` array. The function gets the string and index of the item in the `choices` array and should return valid HTML. If you want to use different markup for each button, you can do that by using a conditional on either parameter. The default parameter returns a button element with the text label of the choice.
 prompt | string | null | This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).
 trial_duration | numeric | null | How long to wait for the participant to make a response before ending the trial in milliseconds. If the participant fails to make a response before this timer is reached, the participant's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, the trial will wait for a response indefinitely.
 stimulus_duration | numeric | null | How long to display the stimulus in milliseconds. The visibility CSS property of the stimulus will be set to `hidden` after this time has elapsed. If this is null, then the stimulus will remain visible until the trial ends.
-margin_vertical | string | '0px' | Vertical margin of the button(s).
-margin_horizontal | string | '8px' | Horizontal margin of the button(s).
+button_layout | string | 'grid' | Setting to `'grid'` will make the container element have the CSS property `display: grid` and enable the use of `grid_rows` and `grid_columns`. Setting to `'flex'` will make the container element have the CSS property `display: flex`. You can customize how the buttons are laid out by adding inline CSS in the `button_html` parameter.
+grid_rows | number | 1 | The number of rows in the button grid. Only applicable when `button_layout` is set to `'grid'`. If null, the number of rows will be determined automatically based on the number of buttons and the number of columns.
+grid_columns | number | null | The number of columns in the button grid. Only applicable when `button_layout` is set to `'grid'`. If null, the number of columns will be determined automatically based on the number of buttons and the number of rows.
 response_ends_trial | boolean | true | If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
 
 ## Data Generated
@@ -73,4 +74,33 @@ import htmlButtonResponse from '@jspsych/plugin-html-button-response';
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-html-button-response-demo1.html">Open demo in new tab</a>
 
+???+ example "Using `button_html` to generate custom buttons"
+    === "Code"
+        ```javascript
+        const trial = {
+            type: jsPsychHtmlButtonResponse,
+            stimulus: `<div style="width: 600px">
+                <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: green; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: blue; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: green; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: blue; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+                <div style="width: 50px; height: 50px; background-color: gray; display: inline-block"></div>
+            </div>`,
+            choices: ['red', 'green', 'blue'],
+            prompt: "<p>What color should the gray block be?</p>",
+            button_html: (choice) => `<div style="width: 80px; height: 80px; margin: 20px; background-color: ${choice}; cursor: pointer;"></div>`
+        };
+        ```
+
+    === "Demo"
+        <div style="text-align:center;">
+            <iframe src="../../demos/jspsych-html-button-response-demo2.html" width="90%;" height="600px;" frameBorder="0"></iframe>
+        </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-html-button-response-demo2.html">Open demo in new tab</a>
 

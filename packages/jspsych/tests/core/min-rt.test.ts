@@ -1,7 +1,7 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import { pressKey, startTimeline } from "@jspsych/test-utils";
 
-jest.useFakeTimers("modern");
+jest.useFakeTimers();
 
 describe("minimum_valid_rt parameter", () => {
   test("has a default value of 0", async () => {
@@ -17,7 +17,7 @@ describe("minimum_valid_rt parameter", () => {
     ]);
 
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("bar");
   });
 
@@ -37,12 +37,12 @@ describe("minimum_valid_rt parameter", () => {
     );
 
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("foo");
 
     jest.advanceTimersByTime(100);
 
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("bar");
   });
 });

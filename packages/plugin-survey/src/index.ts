@@ -65,7 +65,7 @@ const info = <const>{
         likert_scale_values: {
           type: ParameterType.COMPLEX,
           pretty_name: "Likert scale values",
-          default: null,
+          default: [],
           array: true,
         },
         /** Likert only: Minimum rating scale value. */
@@ -103,7 +103,7 @@ const info = <const>{
           type: ParameterType.COMPLEX,
           pretty_name: "Statements",
           array: true,
-          default: null,
+          default: [],
           nested: {
             /** Statement text */
             prompt: {
@@ -139,7 +139,7 @@ const info = <const>{
         options: {
           type: ParameterType.STRING,
           pretty_name: "Options",
-          default: null,
+          default: [],
           array: true,
         },
         /** Drop-down/multi-choice/multi-select/ranking only: re-ordering of options array */
@@ -661,7 +661,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
     question.title = params.prompt;
     question.isRequired = params.required;
-    if (params.likert_scale_values !== null) {
+    if (params.likert_scale_values.length > 0) {
       question.rateValues = params.likert_scale_values;
     } else {
       question.rateMin = params.likert_scale_min;

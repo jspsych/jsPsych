@@ -16,12 +16,16 @@ const info = <const>{
       default: undefined,
       array: true,
     },
-    /** The html of the button. Can create own style. */
+    /**
+     * A function that, given a choice and its index, returns the HTML string of that choice's
+     * button.
+     */
     button_html: {
-      type: ParameterType.HTML_STRING,
+      type: ParameterType.FUNCTION,
       pretty_name: "Button HTML",
-      default: '<button class="jspsych-btn">%choice%</button>',
-      array: true,
+      default: function (choice: string, choice_index: number) {
+        return `<button class="jspsych-btn">${choice}</button>`;
+      },
     },
     /** Any content here will be displayed under the button. */
     prompt: {
@@ -41,17 +45,28 @@ const info = <const>{
       pretty_name: "Trial duration",
       default: null,
     },
-    /** The vertical margin of the button. */
-    margin_vertical: {
+    /** The CSS layout for the buttons. Options: 'flex' or 'grid'. */
+    button_layout: {
       type: ParameterType.STRING,
-      pretty_name: "Margin vertical",
-      default: "0px",
+      pretty_name: "Button layout",
+      default: "grid",
     },
-    /** The horizontal margin of the button. */
-    margin_horizontal: {
-      type: ParameterType.STRING,
-      pretty_name: "Margin horizontal",
-      default: "8px",
+    /** The number of grid rows when `button_layout` is "grid".
+     * Setting to `null` will infer the number of rows based on the
+     * number of columns and buttons.
+     */
+    grid_rows: {
+      type: ParameterType.INT,
+      pretty_name: "Grid rows",
+      default: 1,
+    },
+    /** The number of grid columns when `button_layout` is "grid".
+     * Setting to `null` (default value) will infer the number of columns
+     * based on the number of rows and buttons. */
+    grid_columns: {
+      type: ParameterType.INT,
+      pretty_name: "Grid columns",
+      default: null,
     },
     /** If true, then trial will end when user responds. */
     response_ends_trial: {
@@ -85,72 +100,63 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    // create canvas
-    var html =
-      '<div id="jspsych-canvas-button-response-stimulus">' +
-      '<canvas id="jspsych-canvas-stimulus" height="' +
-      trial.canvas_size[0] +
-      '" width="' +
-      trial.canvas_size[1] +
-      '"></canvas>' +
-      "</div>";
+    // Create canvas
+    const stimulusElement = document.createElement("div");
+    stimulusElement.id = "jspsych-canvas-button-response-stimulus";
 
-    //display buttons
-    var buttons = [];
-    if (Array.isArray(trial.button_html)) {
-      if (trial.button_html.length == trial.choices.length) {
-        buttons = trial.button_html;
-      } else {
-        console.error(
-          "Error in canvas-button-response plugin. The length of the button_html array does not equal the length of the choices array"
+    const canvasElement = document.createElement("canvas");
+    canvasElement.id = "jspsych-canvas-stimulus";
+    canvasElement.height = trial.canvas_size[0];
+    canvasElement.width = trial.canvas_size[1];
+    stimulusElement.appendChild(canvasElement);
+
+    display_element.appendChild(stimulusElement);
+
+    // Display buttons
+    const buttonGroupElement = document.createElement("div");
+    buttonGroupElement.id = "jspsych-canvas-button-response-btngroup";
+    if (trial.button_layout === "grid") {
+      buttonGroupElement.classList.add("jspsych-btn-group-grid");
+      if (trial.grid_rows === null && trial.grid_columns === null) {
+        throw new Error(
+          "You cannot set `grid_rows` to `null` without providing a value for `grid_columns`."
         );
       }
-    } else {
-      for (var i = 0; i < trial.choices.length; i++) {
-        buttons.push(trial.button_html);
-      }
+      const n_cols =
+        trial.grid_columns === null
+          ? Math.ceil(trial.choices.length / trial.grid_rows)
+          : trial.grid_columns;
+      const n_rows =
+        trial.grid_rows === null
+          ? Math.ceil(trial.choices.length / trial.grid_columns)
+          : trial.grid_rows;
+      buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
+      buttonGroupElement.style.gridTemplateRows = `repeat(${n_rows}, 1fr)`;
+    } else if (trial.button_layout === "flex") {
+      buttonGroupElement.classList.add("jspsych-btn-group-flex");
     }
-    html += '<div id="jspsych-canvas-button-response-btngroup">';
-    for (var i = 0; i < trial.choices.length; i++) {
-      var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
-      html +=
-        '<div class="jspsych-canvas-button-response-button" style="display: inline-block; margin:' +
-        trial.margin_vertical +
-        " " +
-        trial.margin_horizontal +
-        '" id="jspsych-canvas-button-response-button-' +
-        i +
-        '" data-choice="' +
-        i +
-        '">' +
-        str +
-        "</div>";
-    }
-    html += "</div>";
 
-    //show prompt if there is one
-    if (trial.prompt !== null) {
-      html += trial.prompt;
+    for (const [choiceIndex, choice] of trial.choices.entries()) {
+      buttonGroupElement.insertAdjacentHTML("beforeend", trial.button_html(choice, choiceIndex));
+      const buttonElement = buttonGroupElement.lastChild as HTMLElement;
+      buttonElement.dataset.choice = choiceIndex.toString();
+      buttonElement.addEventListener("click", () => {
+        after_response(choiceIndex);
+      });
     }
-    display_element.innerHTML = html;
+
+    display_element.appendChild(buttonGroupElement);
+
+    // Show prompt if there is one
+    if (trial.prompt !== null) {
+      display_element.insertAdjacentHTML("beforeend", trial.prompt);
+    }
 
     //draw
-    let c = document.getElementById("jspsych-canvas-stimulus");
-    trial.stimulus(c);
+    trial.stimulus(canvasElement);
 
     // start time
     var start_time = performance.now();
-
-    // add event listeners to buttons
-    for (var i = 0; i < trial.choices.length; i++) {
-      display_element
-        .querySelector<HTMLButtonElement>("#jspsych-canvas-button-response-button-" + i)
-        .addEventListener("click", (e: MouseEvent) => {
-          var btn_el = e.currentTarget as Element;
-          var choice = btn_el.getAttribute("data-choice"); // don't use dataset for jsdom compatibility
-          after_response(choice);
-        });
-    }
 
     // store response
     var response = {
@@ -186,14 +192,11 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.querySelector("#jspsych-canvas-button-response-stimulus").className +=
-        " responded";
+      stimulusElement.classList.add("responded");
 
       // disable all the buttons after a response
-      var btns = document.querySelectorAll(".jspsych-canvas-button-response-button button");
-      for (var i = 0; i < btns.length; i++) {
-        //btns[i].removeEventListener('click');
-        btns[i].setAttribute("disabled", "disabled");
+      for (const button of buttonGroupElement.children) {
+        button.setAttribute("disabled", "disabled");
       }
 
       if (trial.response_ends_trial) {
@@ -204,9 +207,7 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
     // hide image if timing is set
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
-        display_element.querySelector<HTMLElement>(
-          "#jspsych-canvas-button-response-stimulus"
-        ).style.visibility = "hidden";
+        stimulusElement.style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
 
@@ -262,7 +263,9 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     if (data.rt !== null) {
       this.jsPsych.pluginAPI.clickTarget(
-        display_element.querySelector(`div[data-choice="${data.response}"] button`),
+        display_element.querySelector(
+          `#jspsych-canvas-button-response-btngroup [data-choice="${data.response}"]`
+        ),
         data.rt
       );
     }

@@ -25,7 +25,7 @@ const info = <const>{
     stimuli: {
       type: ParameterType.IMAGE,
       pretty_name: "Stimuli",
-      default: null,
+      default: [],
       array: true,
     },
     /**
@@ -249,7 +249,7 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
     ];
   }
 
-  private generateDisplayLocs(n_locs, trial) {
+  private generateDisplayLocs(n_locs: number, trial: TrialType<Info>) {
     // circle params
     var diam = trial.circle_diameter; // pixels
     var radi = diam / 2;
@@ -272,7 +272,7 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
     return display_locs;
   }
 
-  private generatePresentationSet(trial) {
+  private generatePresentationSet(trial: TrialType<Info>) {
     var to_present = [];
     if (trial.target !== null && trial.foil !== null && trial.set_size !== null) {
       if (trial.target_present) {
@@ -285,7 +285,7 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
           to_present.push(trial.foil);
         }
       }
-    } else if (trial.stimuli !== null) {
+    } else if (trial.stimuli.length > 0) {
       to_present = trial.stimuli;
     } else {
       console.error(

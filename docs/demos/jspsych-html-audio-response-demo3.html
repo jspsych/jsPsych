@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://unpkg.com/jspsych@7.3.1"></script>
+  <script src="https://unpkg.com/jspsych@7.3.3"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.2"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-audio-response@1.0.2"></script>
   <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@1.1.2"></script>
   <script src="https://unpkg.com/@jspsych/plugin-initialize-microphone@1.0.2"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css">
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css">
   <style>
     .jspsych-btn {margin-bottom: 10px;}
   </style>
@@ -61,7 +61,7 @@
     },
     prompt: '<p>Click the object the matches the spoken name.</p>',
     choices: ['img/9.gif','img/10.gif','img/11.gif','img/12.gif'],
-    button_html: '<img src="%choice%" style="width:100px; padding: 20px;"></img>'
+    button_html: (choice) => `<img src=${choice} style="width:100px; padding: 20px;"></img>`
   }
 
   var trial_loop = {

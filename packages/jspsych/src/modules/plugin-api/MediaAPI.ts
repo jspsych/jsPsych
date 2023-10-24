@@ -9,7 +9,15 @@ const preloadParameterTypes = <const>[
 type PreloadType = typeof preloadParameterTypes[number];
 
 export class MediaAPI {
-  constructor(private useWebaudio: boolean, private webaudioContext?: AudioContext) {}
+  constructor(private useWebaudio: boolean) {
+    if (
+      this.useWebaudio &&
+      typeof window !== "undefined" &&
+      typeof window.AudioContext !== "undefined"
+    ) {
+      this.context = new AudioContext();
+    }
+  }
 
   // video //
   private video_buffers = {};
@@ -21,18 +29,12 @@ export class MediaAPI {
   }
 
   // audio //
-  private context = null;
+  private context: AudioContext = null;
   private audio_buffers = [];
 
-  initAudio() {
-    this.context = this.useWebaudio ? this.webaudioContext : null;
-  }
-
   audioContext() {
-    if (this.context !== null) {
-      if (this.context.state !== "running") {
-        this.context.resume();
-      }
+    if (this.context && this.context.state !== "running") {
+      this.context.resume();
     }
     return this.context;
   }

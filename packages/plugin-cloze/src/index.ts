@@ -31,7 +31,7 @@ const info = <const>{
     mistake_fn: {
       type: ParameterType.FUNCTION,
       pretty_name: "Mistake function",
-      default: () => { },
+      default: () => {},
     },
   },
 };
@@ -49,7 +49,7 @@ type Info = typeof info;
 class ClozePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) { }
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var html = '<div class="cloze">';

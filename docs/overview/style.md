@@ -11,7 +11,7 @@ To change an element's style using inline CSS, you can set the element's "style"
 In the example below, the stimulus font size is set to 30px and the text color is set to red. These changes will _only_ be applied to this stimulus text in this specific trial.
 
 ```javascript
-var trial = {
+const trial = {
 	type: jsPsychHtmlKeyboardResponse,
 	stimulus: '<p style="font-size:30px;color:red;">hello world!</p>'
 }
@@ -20,14 +20,14 @@ var trial = {
 You can also use a [dynamic parameter](dynamic-parameters) to combine inline CSS and trial-specific variables. This allows you to easily apply the same inline CSS to multiple trials. Here's an example using a dynamic stimulus parameter and [timeline variables](timeline.md#timeline-variables):
 
 ```javascript
-var trial = {
+const trial = {
 	type: jsPsychHtmlKeyboardResponse,
 	stimulus: function() {
-        var stim = '<p style="font-size:30px;font-weight:bold;">'+jsPsych.timelineVariable('text')+'</p>';
+        const stim = `<p style="font-size:30px;font-weight:bold;">${jsPsych.evaluatetimelineVariable('text')}</p>`;
         return stim;
     }
 }
-var trial_procedure = {
+const trial_procedure = {
     timeline: [trial],
     timeline_variables: [
         {text: 'Welcome'},
@@ -86,9 +86,9 @@ In the example below, the default font size is set to 25px throughout the experi
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.3.1"></script>
+  <script src="https://unpkg.com/jspsych@7.3.3"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css">
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css">
   <style> 
     .jspsych-display-element {
       font-size: 25px;
@@ -105,9 +105,9 @@ This example shows how to add a custom CSS file in addition to the styles provid
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.3.1"></script>
+  <script src="https://unpkg.com/jspsych@7.3.3"></script>
   <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css">
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css">
   <link rel="stylesheet" href="my_experiment_style.css">
 </head>
 ```
@@ -138,15 +138,15 @@ You can use a static `css_classes` parameter value if you always want to apply t
 
 ```html
  <head>
-  <script src="https://unpkg.com/jspsych@7.3.1"></script>
+  <script src="https://unpkg.com/jspsych@7.3.3"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css">
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css">
   <style> 
     .fixation {font-size: 90px; font-weight: bold; color: gray;}
   </style>
 </head>
 <script>
-var fixation = {
+const fixation = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '+',
     choices: "NO_KEYS",
@@ -176,16 +176,16 @@ In the example below, the CSS selector `.left-align #stimulus` selects the eleme
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.3.1"></script>
+  <script src="https://unpkg.com/jspsych@7.3.3"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css">
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css">
   <style> 
     .left-align #stimulus {text-align: left; width: 600px;}
     .right-align #stimulus {text-align: right; width: 600px;}
   </style>
 </head>
 <script>
-var trial_procedure = {
+const trial_procedure = {
     timeline: [{
         type: jsPsychHtmlKeyboardResponse,
         stimulus: '<p id="stimulus">This is the stimulus.</p>',
@@ -206,9 +206,9 @@ It's also possible to pass multiple class names to the `css_classes` parameter. 
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.3.1"></script>
+  <script src="https://unpkg.com/jspsych@7.3.3"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css">
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css">
   <style> 
     .left-align #stimulus {text-align: left; width: 600px;}
     .right-align #stimulus {text-align: right; width: 600px;}
@@ -217,14 +217,16 @@ It's also possible to pass multiple class names to the `css_classes` parameter. 
   </style>
 </head>
 <script>
-var trial_procedure = {
+const trial_procedure = {
     timeline: [{
         type: jsPsychHtmlKeyboardResponse,
         stimulus: '<p id="stimulus">This is the stimulus.</p>',
         prompt: '<p>This text will not be affected by the CSS classes '+
             'because it does not have the "stimulus" ID.</p>',
         css_classes: jsPsych.timelineVariable('css_classes'),
-        data: {condition: jsPsych.timelineVariable('condition')}
+        data: {
+          condition: jsPsych.timelineVariable('condition')
+        }
     }],
     timeline_variables: [
         {css_classes: ['left-align','teal'], condition: 'left-teal'},

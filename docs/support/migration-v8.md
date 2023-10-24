@@ -46,7 +46,9 @@ const trial = {
 We've added some better error support for `evaluateTimelineVariable()` so that it will throw an error if there's no corresponding timeline variable to evaluate. 
 
 We've removed support for `jsPsych.getAllTimelineVariables()` and replaced it with the trial-level property `save_timeline_variables`. 
-If you need to save timeline variables to jsPsych's data, you can set `save_timeline_variables: true` in the trial.
+
+If you need to save all the timeline variables of a trial to jsPsych's data, you can set `save_timeline_variables: true` in the trial.
+
 
 ## Trial parameters
 

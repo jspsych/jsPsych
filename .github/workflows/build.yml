@@ -9,31 +9,31 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [14, 16]
+        node: [18]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
           cache: npm
 
-      - name: Install npm@v7
-        run: npm install -g npm@7
-
       - name: Install dependencies
         run: npm ci
 
-      # Running this after `npm ci` because `npm ci` removes `node_modules`: 
+      # Running this after `npm ci` because `npm ci` removes `node_modules`:
       - name: Download Turborepo cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules/.cache/turbo
           key: ${{ runner.os }}-node-${{ matrix.node }}-turbo-${{ hashFiles('node_modules/.cache/turbo') }}
           restore-keys: |
             ${{ runner.os }}-node-${{ matrix.node }}-turbo-
+
+      - name: Check types
+        run: npm run tsc
 
       - name: Build packages
         run: npm run build
@@ -43,9 +43,8 @@ jobs:
       #   run: npm run lint
 
       - name: Run tests
-        run: npm run test -- --ci --coverage --maxWorkers=2
-        env:
-          NODE_OPTIONS: "--max-old-space-size=4096" # Increase heap size for jest
+        run: npm run test -- --ci --coverage --maxWorkers=2 --reporters=default --reporters=github-actions
+
       # TODO setup codecov or coveralls
       # - name: Upload coverage to Codecov
       #   uses: codecov/codecov-action@v1

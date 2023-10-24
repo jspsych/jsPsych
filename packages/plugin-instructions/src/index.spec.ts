@@ -16,10 +16,10 @@ describe("instructions plugin", () => {
 
     expect(getHTML()).toContain("page 1");
 
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toContain("page 2");
 
-    pressKey("a");
+    await pressKey("a");
     await expectFinished();
   });
 
@@ -35,13 +35,13 @@ describe("instructions plugin", () => {
 
     expect(getHTML()).toContain("page 1");
 
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toContain("page 2");
 
-    pressKey("ArrowLeft");
+    await pressKey("ArrowLeft");
     expect(getHTML()).toContain("page 2");
 
-    pressKey("a");
+    await pressKey("a");
     await expectFinished();
   });
 
@@ -54,8 +54,8 @@ describe("instructions plugin", () => {
       },
     ]);
 
-    pressKey("a");
-    pressKey("a");
+    await pressKey("a");
+    await pressKey("a");
 
     await expectFinished();
 
@@ -103,5 +103,64 @@ describe("instructions plugin simulation", () => {
 
     expect(data.view_history.length).toBeGreaterThanOrEqual(6);
     expect(data.view_history[data.view_history.length - 1].page_index).toBe(5);
+  });
+
+  test("Setting RT correctly sets the total length of the trial, #2462", async () => {
+    const timeline = [
+      {
+        type: instructions,
+        pages: ["page 1", "page 2", "page 3"],
+        simulation_options: {
+          data: {
+            rt: 4000,
+          },
+        },
+      },
+    ];
+
+    const { getData, expectFinished } = await simulateTimeline(timeline);
+
+    await expectFinished();
+
+    const data = getData().values()[0];
+
+    console.log(data.view_history);
+
+    expect(data.rt).toBe(4000);
+
+    let sum_view_history_rt = 0;
+    for (const view of data.view_history) {
+      sum_view_history_rt += view.viewing_time;
+    }
+
+    // this may not be exactly 4000 due to rounding errors
+
+    expect(Math.abs(sum_view_history_rt - 4000)).toBeLessThan(10);
+  });
+
+  test("Setting view history correctly sets the total RT, #2462", async () => {
+    const timeline = [
+      {
+        type: instructions,
+        pages: ["page 1", "page 2", "page 3"],
+        simulation_options: {
+          data: {
+            view_history: [
+              { page_index: 0, viewing_time: 1000 },
+              { page_index: 1, viewing_time: 1000 },
+              { page_index: 2, viewing_time: 1000 },
+            ],
+          },
+        },
+      },
+    ];
+
+    const { getData, expectFinished } = await simulateTimeline(timeline);
+
+    await expectFinished();
+
+    const data = getData().values()[0];
+
+    expect(data.rt).toBe(3000);
   });
 });

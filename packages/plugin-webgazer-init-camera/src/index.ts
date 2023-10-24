@@ -1,3 +1,4 @@
+import type WebGazerExtension from "@jspsych/extension-webgazer";
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
@@ -38,6 +39,8 @@ class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>, on_load: () => void) {
+    const extension = this.jsPsych.extensions.webgazer as WebGazerExtension;
+
     let trial_complete;
 
     var start_time = performance.now();
@@ -45,8 +48,8 @@ class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
 
     // function to end trial when it is time
     const end_trial = () => {
-      this.jsPsych.extensions["webgazer"].pause();
-      this.jsPsych.extensions["webgazer"].hideVideo();
+      extension.pause();
+      extension.hideVideo();
 
       // kill any remaining setTimeout handlers
       this.jsPsych.pluginAPI.clearAllTimeouts();
@@ -85,8 +88,8 @@ class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
 
       display_element.innerHTML = html;
 
-      this.jsPsych.extensions["webgazer"].showVideo();
-      this.jsPsych.extensions["webgazer"].resume();
+      extension.showVideo();
+      extension.resume();
 
       var wg_container = display_element.querySelector("#webgazer-init-container");
 
@@ -115,8 +118,8 @@ class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
       });
     };
 
-    if (!this.jsPsych.extensions.webgazer.isInitialized()) {
-      this.jsPsych.extensions.webgazer
+    if (!extension.isInitialized()) {
+      extension
         .start()
         .then(() => {
           showTrial();
