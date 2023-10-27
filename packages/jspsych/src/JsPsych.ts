@@ -70,7 +70,6 @@ export class JsPsych {
       on_interaction_data_update: () => {},
       on_close: () => {},
       use_webaudio: true,
-      exclusions: {},
       show_progress_bar: false,
       message_progress_bar: "Completion Progress",
       auto_update_progress_bar: true,
