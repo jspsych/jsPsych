@@ -378,4 +378,11 @@ export class Trial extends TimelineNode {
   public getLatestNode() {
     return this;
   }
+
+  public getTimelineByName(name: string): Timeline | undefined {
+    // This returns undefined because the function is looking
+    // for a timeline. If we get to this point, then none
+    // of the parent nodes match the name.
+    return undefined;
+  }
 }

@@ -331,4 +331,12 @@ export class Timeline extends TimelineNode {
   public getLatestNode() {
     return this.currentChild?.getLatestNode() ?? this;
   }
+
+  public getTimelineByName(name: string) {
+    if (this.description.name === name) {
+      return this;
+    }
+
+    return this.currentChild?.getTimelineByName(name);
+  }
 }

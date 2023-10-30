@@ -81,6 +81,8 @@ export interface TimelineDescription extends Record<string, any> {
   timeline: TimelineArray;
   timeline_variables?: Record<string, any>[];
 
+  name?: string;
+
   // Control flow
 
   /** https://www.jspsych.org/latest/overview/timeline/#repeating-a-set-of-trials */
@@ -112,6 +114,7 @@ export interface TimelineDescription extends Record<string, any> {
 export const timelineDescriptionKeys = [
   "timeline",
   "timeline_variables",
+  "name",
   "repetitions",
   "loop_function",
   "conditional_function",
