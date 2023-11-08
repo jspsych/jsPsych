@@ -6,7 +6,7 @@ import TestPlugin from "../../tests/TestPlugin";
 import { JsPsychPlugin, ParameterType } from "../modules/plugins";
 import { Timeline } from "./Timeline";
 import { Trial } from "./Trial";
-import { parameterPathArrayToString } from "./util";
+import { PromiseWrapper, parameterPathArrayToString } from "./util";
 import {
   SimulationOptionsParameter,
   TimelineVariable,
@@ -166,6 +166,27 @@ describe("Trial", () => {
 
       expect(onFinishCallback).toHaveBeenCalledTimes(1);
       expect(onFinishCallback).toHaveBeenCalledWith(expect.objectContaining({ my: "result" }));
+    });
+
+    it("awaits async `on_finish` callbacks", async () => {
+      const onFinishCallbackPromise = new PromiseWrapper();
+      const trial = createTrial({
+        type: TestPlugin,
+        on_finish: () => onFinishCallbackPromise.get(),
+      });
+
+      let hasTrialCompleted = false;
+      trial.run().then(() => {
+        hasTrialCompleted = true;
+      });
+
+      await flushPromises();
+      expect(hasTrialCompleted).toBe(false);
+
+      onFinishCallbackPromise.resolve();
+      await flushPromises();
+
+      expect(hasTrialCompleted).toBe(true);
     });
 
     it("invokes the global `onTrialResultAvailable` and `onTrialFinished` callbacks", async () => {

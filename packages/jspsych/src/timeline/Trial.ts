@@ -232,7 +232,7 @@ export class Trial extends TimelineNode {
     );
     Object.assign(this.result, extensionResults);
 
-    this.runParameterCallback("on_finish", this.getResult());
+    await Promise.resolve(this.runParameterCallback("on_finish", this.getResult()));
 
     this.dependencies.onTrialFinished(this);
   }
