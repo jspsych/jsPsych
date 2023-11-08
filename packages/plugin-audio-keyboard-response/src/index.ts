@@ -1,6 +1,8 @@
 import autoBind from "auto-bind";
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { AudioPlayer } from "../../jspsych/src/modules/plugin-api/AudioPlayer";
+
 const info = <const>{
   name: "audio-keyboard-response",
   parameters: {
@@ -61,7 +63,7 @@ type Info = typeof info;
  */
 class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
-  private audio;
+  private audio: AudioPlayer;
   private params: TrialType<Info>;
   private display: HTMLElement;
   private response: { rt: number; key: string } = { rt: null, key: null };
@@ -175,7 +177,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     }
   }
 
-  simulate(
+  async simulate(
     trial: TrialType<Info>,
     simulation_mode,
     simulation_options: any,
@@ -183,20 +185,24 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   ) {
     if (simulation_mode == "data-only") {
       load_callback();
-      this.simulate_data_only(trial, simulation_options);
+      return this.simulate_data_only(trial, simulation_options);
     }
     if (simulation_mode == "visual") {
-      this.simulate_visual(trial, simulation_options, load_callback);
+      return this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
 
   private simulate_data_only(trial: TrialType<Info>, simulation_options) {
     const data = this.create_simulation_data(trial, simulation_options);
 
-    this.jsPsych.finishTrial(data);
+    return data;
   }
 
-  private simulate_visual(trial: TrialType<Info>, simulation_options, load_callback: () => void) {
+  private async simulate_visual(
+    trial: TrialType<Info>,
+    simulation_options,
+    load_callback: () => void
+  ) {
     const data = this.create_simulation_data(trial, simulation_options);
 
     const display_element = this.jsPsych.getDisplayElement();
@@ -207,7 +213,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       }
     };
 
-    this.trial(display_element, trial, () => {
+    const result = await this.trial(display_element, trial, () => {
       load_callback();
       if (!trial.response_allowed_while_playing) {
         this.audio.addEventListener("ended", respond);
@@ -215,6 +221,8 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         respond();
       }
     });
+
+    return result;
   }
 
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
