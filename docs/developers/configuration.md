@@ -9,9 +9,7 @@ In order to work on code in the jsPsych or the jspsych-contrib repository, it is
 
 ### Install Node.js
 
-The jsPsych development setup requires Node.js >= v14 to be installed on your machine.
-We recommend that you [install version 16](https://nodejs.org/en/) since it includes version 7 of NPM (required for the workspaces feature that the jsPsych repositories use).
-If you are bound to Node.js v14, make sure to install NPM v7 manually (via `npm install -g npm@7`).
+The jsPsych development setup requires a [Node.js LTS version](https://nodejs.org/en/download/) to be installed on your machine.
 
 ### Clone the repository and install the dependencies
 
@@ -31,9 +29,10 @@ in a terminal.
 Then run `npm install`.
 This will create a `node_modules` directory and install all the dependencies into it that are required to build and test jsPsych.
 
-!!! attention
-    It is important that `npm install` is only run in the root directory of the repository (due to the NPM workspaces feature).
-    If you accidentally ran `npm install` anywhere else, remove the `node_modules` directory and the `package-lock.json` file that were created at that location and run `npm install` in the root directory again.
+!!! info
+    The jsPsych (-contrib) repositories depend on the `canvas` package which comes with pre-built binaries.
+    On systems for which no pre-built binaries are available, `npm install` will try to build the binaries from scratch, sometimes failing with an error message mentioning the `canvas` package.
+    If you are facing such installation issues, please follow the [installation instructions](https://github.com/Automattic/node-canvas/wiki#installation-guides) of the `canvas` package and run `npm install` again afterwards.
 
 !!! info
     If you are running `npm install` in the core jsPsych repository, this will also execute the build chain for all packages in the jsPsych repository.
