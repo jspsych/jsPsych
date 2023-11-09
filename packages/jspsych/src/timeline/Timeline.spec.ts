@@ -864,4 +864,45 @@ describe("Timeline", () => {
       expect(timeline.getLatestNode()).toBe(nestedTrial);
     });
   });
+
+  describe("getActiveTimelineByName()", () => {
+    it("returns the timeline with the given name", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timeline = createTimeline({
+        timeline: [{ timeline: [{ type: TestPlugin }], name: "innerTimeline" }],
+        name: "outerTimeline",
+      });
+
+      timeline.run();
+
+      expect(timeline.getActiveTimelineByName("outerTimeline")).toBe(timeline);
+      expect(timeline.getActiveTimelineByName("innerTimeline")).toBe(
+        timeline.children[0] as Timeline
+      );
+    });
+
+    it("returns only active timelines", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timeline = createTimeline({
+        timeline: [
+          { type: TestPlugin },
+          { timeline: [{ type: TestPlugin }], name: "innerTimeline" },
+        ],
+        name: "outerTimeline",
+      });
+
+      timeline.run();
+
+      expect(timeline.getActiveTimelineByName("outerTimeline")).toBe(timeline);
+      expect(timeline.getActiveTimelineByName("innerTimeline")).toBeUndefined();
+
+      await TestPlugin.finishTrial();
+
+      expect(timeline.getActiveTimelineByName("innerTimeline")).toBe(
+        timeline.children[1] as Timeline
+      );
+    });
+  });
 });

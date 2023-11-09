@@ -208,6 +208,18 @@ export class JsPsych {
     }
   }
 
+  /**
+   * Aborts a named timeline. The timeline must be currently running in order to abort it.
+   *
+   * @param name The name of the timeline to abort. Timelines can be given names by setting the `name` parameter in the description of the timeline.
+   */
+  abortTimelineByName(name: string): void {
+    const timeline = this.timeline?.getActiveTimelineByName(name);
+    if (timeline) {
+      timeline.abort();
+    }
+  }
+
   getCurrentTrial() {
     const activeNode = this.timeline?.getLatestNode();
     if (activeNode instanceof Trial) {

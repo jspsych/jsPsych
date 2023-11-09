@@ -69,6 +69,11 @@ export abstract class TimelineNode {
    */
   abstract getLatestNode(): TimelineNode;
 
+  /**
+   * Returns an active child timeline (or itself) that matches the given name, or `undefined` if no such child exists.
+   */
+  abstract getActiveTimelineByName(name: string): Timeline | undefined;
+
   protected status = TimelineNodeStatus.PENDING;
 
   constructor(protected readonly dependencies: TimelineNodeDependencies) {}

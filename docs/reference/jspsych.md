@@ -170,6 +170,74 @@ var trial = {
 ```
 
 ---
+## jsPsych.abortTimelineByName
+
+```javascript
+jsPsych.abortTimelineByName()
+```
+
+### Parameters
+
+| Parameter       | Type     | Description                              |
+| --------------- | -------- | ---------------------------------------- |
+| name | string   | The name of the timeline to abort. |
+
+### Return value
+
+None.
+
+### Description
+
+Ends the currently active timeline that matches the `name` parameter. This can be used to control which level is aborted in a nested timeline structure.
+
+### Example
+
+#### Abort a procedure if an incorrect response is given.
+
+```javascript
+const fixation = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: '<p>+</p>',
+  choices: "NO_KEYS",
+  trial_duration: 1000
+}
+
+const test = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: jsPsych.timelineVariable('stimulus'),
+  choices: ['y', 'n'],
+  on_finish: function(data){
+    if(jsPsych.pluginAPI.compareKeys(data.response, "n")){
+      jsPsych.abortTimelineByName('memory_test');
+    }
+  }
+}
+
+const memoryResponseProcedure = {
+  timeline: [fixation, test]
+}
+
+// the variable `encode` is not shown, but imagine a trial that displays
+// some stimulus to remember.
+const memoryEncodeProcedure = {
+  timeline: [fixation, encode]
+}
+
+const memoryTestProcedure = {
+  timeline: [memoryEncodeProcedure, memoryResponseProcedure]
+  name: 'memory_test',
+  timeline_variables: [
+    {stimulus: 'image1.png'},
+    {stimulus: 'image2.png'},
+    {stimulus: 'image3.png'},
+    {stimulus: 'image4.png'}
+  ]
+}
+
+
+```
+
+---
 ## jsPsych.addNodeToEndOfTimeline
 
 ```javascript
