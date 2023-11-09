@@ -70,9 +70,9 @@ export abstract class TimelineNode {
   abstract getLatestNode(): TimelineNode;
 
   /**
-   * Returns a child timeline (or itself) that matches the given name, or `undefined` if no such child exists.
+   * Returns an active child timeline (or itself) that matches the given name, or `undefined` if no such child exists.
    */
-  abstract getTimelineByName(name: string): Timeline | undefined;
+  abstract getActiveTimelineByName(name: string): Timeline | undefined;
 
   protected status = TimelineNodeStatus.PENDING;
 

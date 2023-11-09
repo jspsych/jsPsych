@@ -332,11 +332,11 @@ export class Timeline extends TimelineNode {
     return this.currentChild?.getLatestNode() ?? this;
   }
 
-  public getTimelineByName(name: string) {
+  public getActiveTimelineByName(name: string) {
     if (this.description.name === name) {
       return this;
     }
 
-    return this.currentChild?.getTimelineByName(name);
+    return this.currentChild?.getActiveTimelineByName(name);
   }
 }

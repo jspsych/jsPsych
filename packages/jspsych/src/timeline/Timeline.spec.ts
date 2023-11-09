@@ -865,7 +865,7 @@ describe("Timeline", () => {
     });
   });
 
-  describe("getTimelineByName()", () => {
+  describe("getActiveTimelineByName()", () => {
     it("returns the timeline with the given name", async () => {
       TestPlugin.setManualFinishTrialMode();
 
@@ -876,8 +876,10 @@ describe("Timeline", () => {
 
       timeline.run();
 
-      expect(timeline.getTimelineByName("outerTimeline")).toBe(timeline);
-      expect(timeline.getTimelineByName("innerTimeline")).toBe(timeline.children[0] as Timeline);
+      expect(timeline.getActiveTimelineByName("outerTimeline")).toBe(timeline);
+      expect(timeline.getActiveTimelineByName("innerTimeline")).toBe(
+        timeline.children[0] as Timeline
+      );
     });
 
     it("returns only active timelines", async () => {
@@ -893,12 +895,14 @@ describe("Timeline", () => {
 
       timeline.run();
 
-      expect(timeline.getTimelineByName("outerTimeline")).toBe(timeline);
-      expect(timeline.getTimelineByName("innerTimeline")).toBeUndefined();
+      expect(timeline.getActiveTimelineByName("outerTimeline")).toBe(timeline);
+      expect(timeline.getActiveTimelineByName("innerTimeline")).toBeUndefined();
 
       await TestPlugin.finishTrial();
 
-      expect(timeline.getTimelineByName("innerTimeline")).toBe(timeline.children[1] as Timeline);
+      expect(timeline.getActiveTimelineByName("innerTimeline")).toBe(
+        timeline.children[1] as Timeline
+      );
     });
   });
 });
