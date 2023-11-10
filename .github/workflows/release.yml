@@ -16,24 +16,24 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js 16
-        uses: actions/setup-node@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
       - name: Download Turborepo cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules/.cache/turbo
-          key: ${{ runner.os }}-node-16-turbo-${{ hashFiles('node_modules/.cache/turbo') }}
+          key: ${{ runner.os }}-node-20-turbo-${{ hashFiles('node_modules/.cache/turbo') }}
           restore-keys: |
-            ${{ runner.os }}-node-16-turbo-
+            ${{ runner.os }}-node-20-turbo-
 
       - name: Run tests
         run: npm run test -- --ci --maxWorkers=2
