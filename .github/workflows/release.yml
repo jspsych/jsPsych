@@ -16,12 +16,12 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 20
           cache: npm
 
       - name: Install dependencies
@@ -31,9 +31,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules/.cache/turbo
-          key: ${{ runner.os }}-node-18-turbo-${{ hashFiles('node_modules/.cache/turbo') }}
+          key: ${{ runner.os }}-node-20-turbo-${{ hashFiles('node_modules/.cache/turbo') }}
           restore-keys: |
-            ${{ runner.os }}-node-18-turbo-
+            ${{ runner.os }}-node-20-turbo-
 
       - name: Check types
         run: npm run tsc
