@@ -1,5 +1,21 @@
 # @jspsych/config
 
+## 2.0.0
+
+### Major Changes
+
+- [#3122](https://github.com/jspsych/jsPsych/pull/3122) [`715a9d13`](https://github.com/jspsych/jsPsych/commit/715a9d130ec1d4772ce0b61956d8c19be5348fca) Thanks [@bjoluc](https://github.com/bjoluc)! - Upgrade build tools to their latest versions. This doesn't introduce breaking changes to the artifacts built using `@jspsych/config`, but it requires some minor changes to projects using `@jspsych/config`:
+
+  - The minimum required Node.js version is now 18.0.0
+  - Jest has been upgraded from v28 to v29 and ts-jest has been replaced with the more performant Sucrase Jest plugin to avoid significant memory leaks. As a consequence, Jest does no longer type-check code. If you are facing any issues, please check Jest's [upgrade guide](https://jestjs.io/docs/upgrading-to-jest29) for instructions on updating your tests.
+  - TypeScript has been upgraded from version 4 to version 5. This is very unlikely to break anything in your code though.
+
+### Patch Changes
+
+- [#3122](https://github.com/jspsych/jsPsych/pull/3122) [`535e5d90`](https://github.com/jspsych/jsPsych/commit/535e5d903c4a5d6c71f3eecb73bc62b51e044a1f) Thanks [@bjoluc](https://github.com/bjoluc)! - Remove erroneous browser builds from the rollup configuration returned by `makeNodeRollupConfig()`
+
+- [#3184](https://github.com/jspsych/jsPsych/pull/3184) [`9acfa29c`](https://github.com/jspsych/jsPsych/commit/9acfa29c8db1d7a8816c53ac49651f15493f2cf4) Thanks [@bjoluc](https://github.com/bjoluc)! - Point to source maps via canonical unpkg URLs in NPM-published browser builds. This prevents 404 errors when using redirecting CDN URLs (as described in #3043).
+
 ## 1.3.3
 
 ### Patch Changes
