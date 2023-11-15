@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.jspsych.org/7.3/overview/plugins/">
       
       <link rel="icon" href="../../img/jspsych-favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.15">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-8.5.10">
     
     
       
@@ -19,16 +19,18 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.c382b1dc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
         
           
           
           <meta name="theme-color" content="#4cae4f">
         
       
+      
+
     
     
     
@@ -41,7 +43,7 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -51,10 +53,13 @@
   
 
 
-  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
-  <script async src="https://www.google-analytics.com/analytics.js"></script>
+  <script id="__analytics">function __md_analytics(){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");ga("send","event","feedback","click",t,e),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){ga("send","pageview",e.pathname)})});var e=document.createElement("script");e.async=!0,e.src="https://www.google-analytics.com/analytics.js",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
 
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
 
+    
     
     
   </head>
@@ -65,7 +70,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="orange">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="orange">
   
     
     
@@ -85,9 +90,7 @@
     </div>
     
       <div data-md-component="outdated" hidden>
-        <aside class="md-banner md-banner--warning">
-          
-        </aside>
+        
       </div>
     
     
@@ -136,7 +139,7 @@
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
@@ -160,7 +163,7 @@
         <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     jspsych/jspsych
@@ -204,7 +207,7 @@
       <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     jspsych/jspsych
@@ -2067,14 +2070,16 @@
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
+                  
+
   <a href="https://github.com/jspsych/jsPsych/edit/main/docs/overview/plugins.md" title="Edit this page" class="md-content__button md-icon">
+    
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
-
 
 
 <h1 id="plugins">Plugins<a class="headerlink" href="#plugins" title="Permanent link">&para;</a></h1>
@@ -2086,8 +2091,8 @@ Part of creating an experiment with jsPsych involves figuring out which plugins 
 <h2 id="using-a-plugin">Using a plugin<a class="headerlink" href="#using-a-plugin" title="Permanent link">&para;</a></h2>
 <p>To use a plugin, you'll need to load the plugin's JavaScript file in your experiment's HTML page. All jsPsych experiments also need to load the "jsPsych.js" file.</p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/jspsych@7.3.3&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/jspsych@7.3.4&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.3&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
 </code></pre></div>
 <p>Once a plugin is loaded, you can use JavaScript to define a trial that uses that plugin. All jsPsych trials need a <code>type</code> parameter, which tells jsPsych what plugin to use to run the trial. The trial's <code>type</code> is similar to the plugin name, but it always starts with "jsPsych" and is written in <em>camel case</em> rather than with dashes between the words. The trial's <code>type</code> parameter should NOT be a string (i.e., no quotes around the <code>type</code> value). Here are some examples of plugin names and types:</p>
@@ -2114,18 +2119,18 @@ Part of creating an experiment with jsPsych involves figuring out which plugins 
 </tbody>
 </table>
 <p>The following JavaScript code defines a trial using the <code>image-keyboard-response</code> plugin to display an image file. This trial uses the default values for valid keys, stimulus duration, trial duration, and other parameters. </p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">image_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">image_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span><span class="w"> </span>
-<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;images/happy_face.jpg&#39;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;images/happy_face.jpg&#39;</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>You can override any default parameter values by adding them into your trial object. Here's an example of overriding the default values for <code>trial_duration</code> and <code>post_trial_gap</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">image_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;images/happy_face.jpg&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">3000</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">post_trial_gap</span><span class="o">:</span><span class="w"> </span><span class="mf">2000</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">image_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;images/happy_face.jpg&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">3000</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">post_trial_gap</span><span class="o">:</span><span class="w"> </span><span class="mf">2000</span>
+<span class="p">}</span>
 </code></pre></div>
 <h2 id="parameters-available-in-all-plugins">Parameters available in all plugins<a class="headerlink" href="#parameters-available-in-all-plugins" title="Permanent link">&para;</a></h2>
 <p>Each plugin specifies its own set of parameters. Check the documentation for a plugin to see what parameters are available and what they do.</p>
@@ -2188,135 +2193,135 @@ Part of creating an experiment with jsPsych involves figuring out which plugins 
 <p>The <code>data</code> parameter allows you to add additional properties to the trial data. This can be useful for storing properties of the trial that are not directly apparent from the values that the plugin records. The <code>data</code> parameter value must be an object that contains key-value pairs.</p>
 <p>A simple example is the <a href="https://en.wikipedia.org/wiki/Eriksen_flanker_task">Flanker Task</a>. In this experiment, participants respond to the direction of a central arrow by pressing a key to the left for a left-pointing arrow (&lt;) and a key to the right for a right-pointing arrow (&gt;). The arrow appears in the center of <em>flankers</em>, or arrows that the participant should ignore. Those flankers can be congruent (&gt;&gt;&gt;&gt;&gt;) or incongruent (&lt;&lt;&gt;&lt;&lt;).</p>
 <p>A trial for the Flanker Task written with jsPsych might look like this:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;&lt;&lt;&lt;&lt;&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;j&#39;</span><span class="p">],</span><span class="w"></span>
-<span class="w">  </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus_type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;congruent&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">target_direction</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;left&#39;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;&lt;&lt;&lt;&lt;&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;j&#39;</span><span class="p">],</span>
+<span class="w">  </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">stimulus_type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;congruent&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">target_direction</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;left&#39;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>Note the use of the data parameter to add a property <code>stimulus_type</code> with the value <code>congruent</code> and a property <code>target_direction</code> with the value <code>left</code>. Having these properties recorded directly in the data simplifies data analysis, making it easy to aggregate data by <code>stimulus_type</code> and/or <code>target_direction</code>.</p>
 <h3 id="the-post_trial_gap-iti-parameter">The post_trial_gap (ITI) parameter<a class="headerlink" href="#the-post_trial_gap-iti-parameter" title="Permanent link">&para;</a></h3>
 <p>The default inter-trial interval (ITI) in jsPsych is 0 ms. This can be adjusted at the experiment-wide level by changing the <code>default_iti</code> parameter in <code>initJsPsych()</code>.</p>
 <p>The ITI can also be controlled at the trial level through the <code>post_trial_gap</code> parameter. Setting this parameter to a positive integer <em>x</em> will cause a blank screen to display after the trial for <em>x</em> milliseconds. Setting this parameter for a trial will override the <code>default_iti</code> value set in <code>initJsPsych</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;There will be a 1.5 second blank screen after this trial.&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">post_trial_gap</span><span class="o">:</span><span class="w"> </span><span class="mf">1500</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;There will be a 1.5 second blank screen after this trial.&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">post_trial_gap</span><span class="o">:</span><span class="w"> </span><span class="mf">1500</span>
+<span class="p">}</span>
 </code></pre></div>
 <h3 id="the-on_start-parameter">The on_start parameter<a class="headerlink" href="#the-on_start-parameter" title="Permanent link">&para;</a></h3>
 <p>Immediately before a trial runs, there is an opportunity to run an arbitrary function through the <code>on_start</code> event handler. This event handler is passed a single argument containing an <em>editable</em> copy of the trial parameters. This function can therefore be used to alter the trial based on the state of the experiment, among other uses.</p>
-<div class="highlight"><pre><span></span><code><span class="c1">// when this trial runs, the on_start function will change the trial&#39;s stimulus and data parameters,</span><span class="w"></span>
-<span class="c1">// so the trial will display an incongruent Flanker stimulus with a right-facing central arrow</span><span class="w"></span>
-<span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;&lt;&lt;&lt;&lt;&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;j&#39;</span><span class="p">],</span><span class="w"></span>
-<span class="w">  </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus_type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;congruent&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">target_direction</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;left&#39;</span><span class="w"></span>
-<span class="w">  </span><span class="p">},</span><span class="w"></span>
-<span class="w">  </span><span class="nx">on_start</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">trial</span><span class="p">){</span><span class="w"></span>
-<span class="w">    </span><span class="nx">trial</span><span class="p">.</span><span class="nx">stimulus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&lt;&lt;&gt;&lt;&lt;&#39;</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="nx">trial</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">stimulus_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;incongruent&#39;</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="nx">trial</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">target_direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;right&#39;</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="c1">// when this trial runs, the on_start function will change the trial&#39;s stimulus and data parameters,</span>
+<span class="c1">// so the trial will display an incongruent Flanker stimulus with a right-facing central arrow</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;&lt;&lt;&lt;&lt;&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;j&#39;</span><span class="p">],</span>
+<span class="w">  </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">stimulus_type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;congruent&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">target_direction</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;left&#39;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nx">on_start</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">trial</span><span class="p">){</span>
+<span class="w">    </span><span class="nx">trial</span><span class="p">.</span><span class="nx">stimulus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;&lt;&lt;&gt;&lt;&lt;&#39;</span><span class="p">;</span>
+<span class="w">    </span><span class="nx">trial</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">stimulus_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;incongruent&#39;</span><span class="p">;</span>
+<span class="w">    </span><span class="nx">trial</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">target_direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;right&#39;</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h3 id="the-on_finish-parameter">The on_finish parameter<a class="headerlink" href="#the-on_finish-parameter" title="Permanent link">&para;</a></h3>
 <p>After a trial is completed, there is an opportunity to run an arbitrary function through the <code>on_finish</code> event handler. This function is passed a single argument containing an <em>editable</em> copy of the data recorded for that trial. This function can therefore be used to update the state of the experiment based on the data collected, or modify the data collected.</p>
 <p>The <code>on_finish</code> function can be useful to calculate new data properties that were unknowable at the start of the trial. For example, with the Flanker Task example above, the <code>on_finish</code> function could check the response and use to this information to add a new property to the data called <code>correct</code>, which is either <code>true</code> or <code>false</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="c1">// in addition to all of the standard data collected for this trial, </span><span class="w"></span>
-<span class="c1">// this on_finish function adds a property called &#39;correct&#39; </span><span class="w"></span>
-<span class="c1">// which is either &#39;true&#39; or &#39;false&#39;</span><span class="w"></span>
-<span class="c1">// depending on the response that was made</span><span class="w"></span>
-<span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;&lt;&lt;&lt;&lt;&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;j&#39;</span><span class="p">],</span><span class="w"></span>
-<span class="w">  </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus_type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;congruent&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">target_direction</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;left&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">correct_response</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;f&#39;</span><span class="w"></span>
-<span class="w">  </span><span class="p">},</span><span class="w"></span>
-<span class="w">  </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">.</span><span class="nx">correct_response</span><span class="p">)){</span><span class="w"></span>
-<span class="w">      </span><span class="nx">data</span><span class="p">.</span><span class="nx">correct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">      </span><span class="nx">data</span><span class="p">.</span><span class="nx">correct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="c1">// in addition to all of the standard data collected for this trial, </span>
+<span class="c1">// this on_finish function adds a property called &#39;correct&#39; </span>
+<span class="c1">// which is either &#39;true&#39; or &#39;false&#39;</span>
+<span class="c1">// depending on the response that was made</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;&lt;&lt;&lt;&lt;&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">,</span><span class="s1">&#39;j&#39;</span><span class="p">],</span>
+<span class="w">  </span><span class="nx">data</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">stimulus_type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;congruent&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">target_direction</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">correct_response</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;f&#39;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">.</span><span class="nx">correct_response</span><span class="p">)){</span>
+<span class="w">      </span><span class="nx">data</span><span class="p">.</span><span class="nx">correct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">data</span><span class="p">.</span><span class="nx">correct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h3 id="the-on_load-parameter">The on_load parameter<a class="headerlink" href="#the-on_load-parameter" title="Permanent link">&para;</a></h3>
 <p>The <code>on_load</code> callback function will trigger once the trial has completed loading. 
 For most plugins, this will occur once the display has been initially updated but before any user interactions or timed events (e.g., animations) have occurred. 
 This can be useful for changing various aspects of the page elements and their properties that would otherwise require modifying the plugin file.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;imgA.png&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">on_load</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// this will change the src attribute of the image after 500ms</span><span class="w"></span>
-<span class="w">    </span><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="w"></span>
-<span class="w">      </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">).</span><span class="nx">src</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;imgB.png&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"> </span><span class="mf">500</span><span class="p">);</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">};</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;imgA.png&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">on_load</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// this will change the src attribute of the image after 500ms</span>
+<span class="w">    </span><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+<span class="w">      </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">).</span><span class="nx">src</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;imgB.png&#39;</span>
+<span class="w">    </span><span class="p">},</span><span class="w"> </span><span class="mf">500</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
 </code></pre></div>
 <h3 id="the-css_classes-parameter">The css_classes parameter<a class="headerlink" href="#the-css_classes-parameter" title="Permanent link">&para;</a></h3>
 <p>The <code>css_classes</code> parameter allows you to add an array of CSS class names to the jsPsych display element on that specific trial. 
 This allows you to create custom style and formatting rules that are only applied to specific trials. 
 If you want CSS rules that only apply to specific elements during a trial, you can use additional CSS selectors.</p>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span><span class="w"></span>
-<span class="w">  </span><span class="p">.</span><span class="nc">flanker-stimulus</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="kt">%</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="p">.</span><span class="nc">flanker-stimulus</span><span class="w"> </span><span class="p">#</span><span class="nn">prompt</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="kt">px</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="w">  </span><span class="p">.</span><span class="nc">fixation</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="kt">px</span><span class="p">;</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="p">.</span><span class="nc">flanker-stimulus</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="kt">%</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="p">.</span><span class="nc">flanker-stimulus</span><span class="w"> </span><span class="p">#</span><span class="nn">prompt</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="p">.</span><span class="nc">fixation</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
 <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="w"></span>
-<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">fixation_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">css_classes</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;fixation&#39;</span><span class="p">]</span><span class="w"></span>
-<span class="w">  </span><span class="p">};</span><span class="w"></span>
-<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">flanker_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;ArrowLeft&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ArrowRight&quot;</span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&gt;&gt;&gt;&gt;&gt;&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;span id=&quot;prompt&quot;&gt;Press the left or right arrow key.&lt;/span&gt;&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">css_classes</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;flanker-stimulus&#39;</span><span class="p">]</span><span class="w"></span>
-<span class="w">  </span><span class="p">};</span><span class="w"></span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">fixation_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;+&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">css_classes</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;fixation&#39;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">flanker_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;ArrowLeft&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ArrowRight&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&gt;&gt;&gt;&gt;&gt;&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;span id=&quot;prompt&quot;&gt;Press the left or right arrow key.&lt;/span&gt;&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">css_classes</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;flanker-stimulus&#39;</span><span class="p">]</span>
+<span class="w">  </span><span class="p">};</span>
 <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 </code></pre></div>
 <h3 id="the-save_trial_parameters-parameter">The save_trial_parameters parameter<a class="headerlink" href="#the-save_trial_parameters-parameter" title="Permanent link">&para;</a></h3>
 <p>The <code>save_trial_parameters</code> parameter allows you to tell jsPsych what parameters you want to be saved to the data. This can be used to override the parameter values that the plugin saves by default. You can add more parameter values to the data that are not normally saved, or remove parameter values that normally are saved. This can be especially useful when the parameter value is dynamic (i.e. a function) and you want to record the value that was used during the trial.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlButtonResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;p style=&quot;color: orange; font-size: 48px; font-weight: bold;&quot;&gt;BLUE&lt;/p&gt;&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">  </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">([</span><span class="s1">&#39;Yes&#39;</span><span class="p">,</span><span class="s1">&#39;No&#39;</span><span class="p">]);</span><span class="w"></span>
-<span class="w">  </span><span class="p">},</span><span class="w"></span>
-<span class="w">  </span><span class="nx">post_trial_gap</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">([</span><span class="mf">200</span><span class="p">,</span><span class="mf">300</span><span class="p">,</span><span class="mf">400</span><span class="p">,</span><span class="mf">500</span><span class="p">],</span><span class="mf">1</span><span class="p">)[</span><span class="mf">0</span><span class="p">];</span><span class="w"></span>
-<span class="w">  </span><span class="p">},</span><span class="w"></span>
-<span class="w">  </span><span class="nx">save_trial_parameters</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// save the randomly-selected button order and post trial gap duration to the trial data</span><span class="w"></span>
-<span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">post_trial_gap</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="c1">// don&#39;t save the stimulus</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="w">  </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlButtonResponse</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;p style=&quot;color: orange; font-size: 48px; font-weight: bold;&quot;&gt;BLUE&lt;/p&gt;&#39;</span><span class="p">,</span>
+<span class="w">  </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">shuffle</span><span class="p">([</span><span class="s1">&#39;Yes&#39;</span><span class="p">,</span><span class="s1">&#39;No&#39;</span><span class="p">]);</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nx">post_trial_gap</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">randomization</span><span class="p">.</span><span class="nx">sampleWithoutReplacement</span><span class="p">([</span><span class="mf">200</span><span class="p">,</span><span class="mf">300</span><span class="p">,</span><span class="mf">400</span><span class="p">,</span><span class="mf">500</span><span class="p">],</span><span class="mf">1</span><span class="p">)[</span><span class="mf">0</span><span class="p">];</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nx">save_trial_parameters</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// save the randomly-selected button order and post trial gap duration to the trial data</span>
+<span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">post_trial_gap</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// don&#39;t save the stimulus</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -2359,16 +2364,25 @@ If you want CSS rules that only apply to specific elements during a trial, you c
 <h2 id="creating-a-new-plugin">Creating a new plugin<a class="headerlink" href="#creating-a-new-plugin" title="Permanent link">&para;</a></h2>
 <p>See our <a href="../../developers/plugin-development/">developer's guide for plugins</a> for information about how to create a new plugin.</p>
 
-              
-            </article>
-          </div>
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
         </div>
         
       </main>
       
         <footer class="md-footer">
   
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
         <a href="../timeline/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Creating an Experiment: The Timeline" rel="prev">
@@ -2427,7 +2441,7 @@ If you want CSS rules that only apply to specific elements during a trial, you c
       
     
     <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
     </a>
   
     
@@ -2436,7 +2450,7 @@ If you want CSS rules that only apply to specific elements during a trial, you c
       
     
     <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
     </a>
   
 </div>
@@ -2449,11 +2463,13 @@ If you want CSS rules that only apply to specific elements during a trial, you c
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.a6c66575.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
       
+    
     
   </body>
 </html>

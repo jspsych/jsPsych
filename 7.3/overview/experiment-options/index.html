@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.jspsych.org/7.3/overview/experiment-options/">
       
       <link rel="icon" href="../../img/jspsych-favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.15">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-8.5.10">
     
     
       
@@ -19,16 +19,18 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.c382b1dc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
         
           
           
           <meta name="theme-color" content="#4cae4f">
         
       
+      
+
     
     
     
@@ -41,7 +43,7 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -51,10 +53,13 @@
   
 
 
-  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
-  <script async src="https://www.google-analytics.com/analytics.js"></script>
+  <script id="__analytics">function __md_analytics(){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");ga("send","event","feedback","click",t,e),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){ga("send","pageview",e.pathname)})});var e=document.createElement("script");e.async=!0,e.src="https://www.google-analytics.com/analytics.js",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
 
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
 
+    
     
     
   </head>
@@ -65,7 +70,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="orange">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="orange">
   
     
     
@@ -85,9 +90,7 @@
     </div>
     
       <div data-md-component="outdated" hidden>
-        <aside class="md-banner md-banner--warning">
-          
-        </aside>
+        
       </div>
     
     
@@ -136,7 +139,7 @@
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
@@ -160,7 +163,7 @@
         <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     jspsych/jspsych
@@ -204,7 +207,7 @@
       <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     jspsych/jspsych
@@ -2055,35 +2058,37 @@
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
+                  
+
   <a href="https://github.com/jspsych/jsPsych/edit/main/docs/overview/experiment-options.md" title="Edit this page" class="md-content__button md-icon">
+    
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
-
 
 
 <h1 id="experiment-wide-settings">Experiment-wide settings<a class="headerlink" href="#experiment-wide-settings" title="Permanent link">&para;</a></h1>
 <p>There are several options that can be set when calling <code>initJsPsych()</code> to initialize the jsPsych experiment.</p>
 <p>Options are specified in the object passed to <code>initJsPsych</code>. For example, to specify a default inter-trial interval, a minimum valid response time duration, and a maximum width for all of the experiment's page content, the object would contain:</p>
-<div class="highlight"><pre><span></span><code><span class="nx">initJsPsych</span><span class="p">({</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nx">initJsPsych</span><span class="p">({</span>
 <span class="w">    </span><span class="nx">default_iti</span><span class="o">:</span><span class="w"> </span><span class="mf">250</span><span class="p">,</span><span class="w"> </span>
 <span class="w">    </span><span class="nx">minimum_valid_rt</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span><span class="w"> </span>
 <span class="w">    </span><span class="nx">experiment_width</span><span class="o">:</span><span class="w"> </span><span class="mf">800</span><span class="w"> </span>
-<span class="p">});</span><span class="w"></span>
+<span class="p">});</span>
 </code></pre></div>
 <h2 id="controlling-where-jspsych-renders-on-the-page">Controlling where jsPsych renders on the page<a class="headerlink" href="#controlling-where-jspsych-renders-on-the-page" title="Permanent link">&para;</a></h2>
 <p>By default, jsPsych will render the experiment in the <code>&lt;body&gt;</code> element of a page. It is possible to display the experiment in a different element (e.g., a <code>&lt;div&gt;</code>) by specifying the <code>display_element</code> parameter. </p>
 <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
     <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;jspsych-target&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="w"></span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
 
-<span class="w">    </span><span class="nx">initJsPsych</span><span class="p">({</span><span class="w"></span>
-<span class="w">        </span><span class="nx">display_element</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;jspsych-target&#39;</span><span class="w"></span>
-<span class="w">    </span><span class="p">});</span><span class="w"></span>
+<span class="w">    </span><span class="nx">initJsPsych</span><span class="p">({</span>
+<span class="w">        </span><span class="nx">display_element</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;jspsych-target&#39;</span>
+<span class="w">    </span><span class="p">});</span>
 
 <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 </code></pre></div>
@@ -2105,68 +2110,77 @@
 <h2 id="choose-the-method-for-playing-audio-files">Choose the method for playing audio files<a class="headerlink" href="#choose-the-method-for-playing-audio-files" title="Permanent link">&para;</a></h2>
 <p>Specifying the <code>use_webaudio</code> parameter in <code>initJsPsych()</code> allows you to choose whether to use the WebAudio API or HTML5 audio for playing audio files during your experiment. By default, jsPsych uses the WebAudio API to play audio files. Among other features, the WebAudio API allows for more precise measurement of response times relative to the onset of the audio. </p>
 <p>However, loading files through the WebAudio API causes errors when running an experiment offline (i.e., by double-clicking on the HTML file, rather than hosting it on a web server). This is due to the <a href="https://security.stackexchange.com/a/190321">cross-origin security policy</a> implemented by web browsers. For this reason, jsPsych switches to a 'safe mode' when it detects that the webpage is running offline, and automatically uses HTML5 audio to prevent errors, even when <code>use_webaudio</code> has been explicitly set to <code>true</code>. For more information, see the section <a href="../running-experiments/#cross-origin-requests-cors-and-safe-mode">Cross-origin requests (CORS) and safe mode</a> on the Running Experiments page.</p>
-<div class="highlight"><pre><span></span><code><span class="nx">initJsPsych</span><span class="p">({</span><span class="w"></span>
-<span class="w">    </span><span class="nx">use_webaudio</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nx">initJsPsych</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">use_webaudio</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">});</span>
 </code></pre></div>
 <h2 id="set-the-default-intertrial-interval">Set the default intertrial interval<a class="headerlink" href="#set-the-default-intertrial-interval" title="Permanent link">&para;</a></h2>
 <p>By default the next trial in a timeline will begin immediately after the conclusion of the previous trial. An experiment-wide delay can be specified using the <code>default_iti</code> parameter to <code>initJsPsych()</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="nx">initJsPsych</span><span class="p">({</span><span class="w"></span>
-<span class="w">    </span><span class="nx">default_iti</span><span class="o">:</span><span class="w"> </span><span class="mf">500</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nx">initJsPsych</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">default_iti</span><span class="o">:</span><span class="w"> </span><span class="mf">500</span>
+<span class="p">});</span>
 </code></pre></div>
 <p>This parameter is specified in milliseconds. A blank screen will display between each trial for the duration of the ITI.</p>
 <h2 id="specify-the-maximum-width-of-the-experiment">Specify the maximum width of the experiment<a class="headerlink" href="#specify-the-maximum-width-of-the-experiment" title="Permanent link">&para;</a></h2>
 <p>The experiment will, by default, take up 100% of the display element. Usually the display element is the <code>&lt;body&gt;</code>, and the experiment is the full width of the screen. (This can be overridden by specifying the <code>display_element</code> parameter described above).</p>
 <p>Specifying the <code>experiment_width</code> parameter will set a maximum width for the display. The parameter is specified in pixels.</p>
-<div class="highlight"><pre><span></span><code><span class="nx">initJsPsych</span><span class="p">({</span><span class="w"></span>
-<span class="w">    </span><span class="nx">experiment_width</span><span class="o">:</span><span class="w"> </span><span class="mf">750</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nx">initJsPsych</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">experiment_width</span><span class="o">:</span><span class="w"> </span><span class="mf">750</span>
+<span class="p">});</span>
 </code></pre></div>
 <h2 id="specify-a-minimum-valid-response-time">Specify a minimum valid response time<a class="headerlink" href="#specify-a-minimum-valid-response-time" title="Permanent link">&para;</a></h2>
 <p>By default, jsPsych will treat any keyboard response time as valid. However, it's possible to specify a minimum valid response time (in ms) for key presses. Any key press that is less than this value will be treated as invalid and ignored. Note that this parameter only applies to <em>keyboard responses</em>, and not to other response types such as buttons and sliders. The default value is 0.</p>
-<div class="highlight"><pre><span></span><code><span class="c1">// ignore any keyboard responses that are less than 100 ms</span><span class="w"></span>
-<span class="nx">initJsPsych</span><span class="p">({</span><span class="w"></span>
-<span class="w">    </span><span class="nx">minimum_valid_rt</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="c1">// ignore any keyboard responses that are less than 100 ms</span>
+<span class="nx">initJsPsych</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">minimum_valid_rt</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span>
+<span class="p">});</span>
 </code></pre></div>
 <h2 id="choose-whether-you-want-keyboard-choicesresponses-to-be-case-sensitive">Choose whether you want keyboard choices/responses to be case-sensitive<a class="headerlink" href="#choose-whether-you-want-keyboard-choicesresponses-to-be-case-sensitive" title="Permanent link">&para;</a></h2>
 <p>JavaScript keyboard events make a distinction between uppercase and lowercase key responses (e.g. 'a' and 'A'). Often the researcher just cares about which physical key was pressed, and not whether the key press would result in an uppercase letter (for instance, if CapsLock is on or if the Shift key is held down). For this reason, jsPsych converts all key choice parameters and key responses as lowercase by default. This makes it easier to specify key choices (e.g. <code>choices: ['a']</code>, instead of <code>choices: ['a','A']</code>), and it makes it easier to check and score a participant's response. </p>
 <p>There may be situations when you want key choices and responses to be case-sensitive. You can change this by setting the <code>case_sensitive_responses</code> parameter to <code>true</code> in <code>initJsPsych</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="c1">// use case-sensitive key choices and responses, </span><span class="w"></span>
-<span class="c1">// i.e. uppercase and lower case letters (&#39;a&#39; and &#39;A&#39;) will be treated as different key choices, </span><span class="w"></span>
-<span class="c1">// and will be recorded this way in the data</span><span class="w"></span>
-<span class="nx">initJsPsych</span><span class="p">({</span><span class="w"></span>
-<span class="w">    </span><span class="nx">case_sensitive_responses</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="c1">// use case-sensitive key choices and responses, </span>
+<span class="c1">// i.e. uppercase and lower case letters (&#39;a&#39; and &#39;A&#39;) will be treated as different key choices, </span>
+<span class="c1">// and will be recorded this way in the data</span>
+<span class="nx">initJsPsych</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">case_sensitive_responses</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">});</span>
 </code></pre></div>
 <p>Note that this setting only applies to key choices and responses that use jsPsych's keyboard response listener, such as in the *<code>-keyboard-response</code> plugins. This does NOT apply to responses that are made by typing into a text box, such as in the <code>survey-text</code> and <code>cloze</code> plugins.</p>
 <h2 id="override-safe-mode-when-running-experiments-offline">Override 'safe mode' when running experiments offline<a class="headerlink" href="#override-safe-mode-when-running-experiments-offline" title="Permanent link">&para;</a></h2>
 <p>By default, jsPsych switches to a 'safe mode' when it detects that the webpage is running offline (via the <code>file://</code> protocol) in order to prevent certain errors. Specifically, in safe mode, HTML5 audio is used to play audio files (even when <code>use_webaudio</code> has been explicitly set to <code>true</code>) and video preloading is disabled (both automatic and manual preloading). For more information, see the <a href="../running-experiments/#cross-origin-requests-cors-and-safe-mode">Cross-origin requests (CORS) and safe mode</a> section on the Running Experiments page.</p>
 <p>It's possible to override this safe mode feature by setting the <code>override_safe_mode</code> parameter to <code>true</code> in <code>initJsPsych</code>. This is something you might do if you've disabled certain security settings in your browser for testing purposes. This parameter has no effect when your experiment is running online (on a server), because it will be using the <code>http://</code> or <code>https://</code> protocol, which does not trigger safe mode. </p>
-<div class="highlight"><pre><span></span><code><span class="nx">initJsPsych</span><span class="p">({</span><span class="w"></span>
-<span class="w">    </span><span class="nx">override_safe_mode</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nx">initJsPsych</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">override_safe_mode</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">});</span>
 </code></pre></div>
 <h2 id="add-extensions">Add extensions<a class="headerlink" href="#add-extensions" title="Permanent link">&para;</a></h2>
 <p><a href="extensions/">Extensions</a> are jsPsych modules that can run throughout the experiment and interface with any plugin to extend the functionality of the plugin. One example of an extension is eye tracking, which allows you to gather gaze data during any trial and add it to that trial's data object. If you want to use extensions in your experiment, you must specify this when you initialize the experiment with <code>initJsPsych</code>. The <code>extensions</code> parameter in <code>initJsPsych</code> is an array of objects, where each object specifies the extension that you'd like to use in the experiment. Below is an example of adding the webgazer extension.</p>
-<div class="highlight"><pre><span></span><code><span class="nx">initJsPsych</span><span class="p">({</span><span class="w"></span>
-<span class="w">    </span><span class="nx">extensions</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychExtensionWebgazer</span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">]</span><span class="w"></span>
-<span class="p">});</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="nx">initJsPsych</span><span class="p">({</span>
+<span class="w">    </span><span class="nx">extensions</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychExtensionWebgazer</span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">});</span>
 </code></pre></div>
 
-              
-            </article>
-          </div>
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
         </div>
         
       </main>
       
         <footer class="md-footer">
   
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
         <a href="../running-experiments/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Running Experiments" rel="prev">
@@ -2225,7 +2239,7 @@
       
     
     <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
     </a>
   
     
@@ -2234,7 +2248,7 @@
       
     
     <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
     </a>
   
 </div>
@@ -2247,11 +2261,13 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.a6c66575.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
       
+    
     
   </body>
 </html>

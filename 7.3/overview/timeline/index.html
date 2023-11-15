@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://www.jspsych.org/7.3/overview/timeline/">
       
       <link rel="icon" href="../../img/jspsych-favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.15">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-8.5.10">
     
     
       
@@ -19,16 +19,18 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.c382b1dc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.cc9b2e1e.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
         
           
           
           <meta name="theme-color" content="#4cae4f">
         
       
+      
+
     
     
     
@@ -41,7 +43,7 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -51,10 +53,13 @@
   
 
 
-  <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),"undefined"!=typeof location$&&location$.subscribe(function(e){ga("send","pageview",e.pathname)})})</script>
-  <script async src="https://www.google-analytics.com/analytics.js"></script>
+  <script id="__analytics">function __md_analytics(){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-50563838-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){var e;this.value&&(e=document.location.pathname,ga("send","pageview",e+"?q="+this.value))}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");ga("send","event","feedback","click",t,e),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){ga("send","pageview",e.pathname)})});var e=document.createElement("script");e.async=!0,e.src="https://www.google-analytics.com/analytics.js",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
 
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
 
+    
     
     
   </head>
@@ -65,7 +70,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="green" data-md-color-accent="orange">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="orange">
   
     
     
@@ -85,9 +90,7 @@
     </div>
     
       <div data-md-component="outdated" hidden>
-        <aside class="md-banner md-banner--warning">
-          
-        </aside>
+        
       </div>
     
     
@@ -136,7 +139,7 @@
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
@@ -160,7 +163,7 @@
         <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     jspsych/jspsych
@@ -204,7 +207,7 @@
       <a href="https://github.com/jspsych/jsPsych" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     jspsych/jspsych
@@ -2163,81 +2166,83 @@
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
+                  
+
   <a href="https://github.com/jspsych/jsPsych/edit/main/docs/overview/timeline.md" title="Edit this page" class="md-content__button md-icon">
+    
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
-
 
 
 <h1 id="creating-an-experiment-the-timeline">Creating an Experiment: The Timeline<a class="headerlink" href="#creating-an-experiment-the-timeline" title="Permanent link">&para;</a></h1>
 <p>To create an experiment using jsPsych, you need to specify a timeline that describes the structure of the experiment. The timeline is an ordered set of trials. You must create the timeline before launching the experiment. Most of the code you will write for an experiment will be code to create the timeline. This page walks through the creation of timelines, including very basic examples and more advanced features.</p>
 <h2 id="a-single-trial">A single trial<a class="headerlink" href="#a-single-trial" title="Permanent link">&para;</a></h2>
 <p>To create a trial, you need to create an object that describes the trial. The most important feature of this object is the <code>type</code> parameter. This tells jsPsych which plugin to use to run the trial. For example, if you want to use the <a href="../plugins/html-keyboard-response">html-keyboard-response plugin</a> to display a short message, the trial object would look like this:</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Welcome to the experiment.&#39;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Welcome to the experiment.&#39;</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>The parameters for this object (e.g., <code>stimulus</code>) will depend on the plugin that you choose. Each plugin defines the set of parameters that are needed to run a trial with that plugin. Visit the documentation for a plugin to learn about the parameters that you can use with that plugin.</p>
 <p>To create a timeline with the single trial and run the experiment, just embed the trial object in an array. A timeline can simply be an array of trials.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">timeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nx">trial</span><span class="p">];</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">timeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nx">trial</span><span class="p">];</span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">timeline</span><span class="p">);</span><span class="w"></span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">(</span><span class="nx">timeline</span><span class="p">);</span>
 </code></pre></div>
 <p>To create and run a simple experiment like this complete the <a href="../../tutorials/hello-world/">hello world tutorial</a>.</p>
 <h2 id="multiple-trials">Multiple trials<a class="headerlink" href="#multiple-trials" title="Permanent link">&para;</a></h2>
 <p>Scaling up to multiple trials is straightforward. Create an object for each trial, and add each object to the timeline array.</p>
-<div class="highlight"><pre><span></span><code><span class="c1">// with lots of trials, it might be easier to add the trials</span><span class="w"></span>
-<span class="c1">// to the timeline array as they are defined.</span><span class="w"></span>
-<span class="kd">var</span><span class="w"> </span><span class="nx">timeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="c1">// with lots of trials, it might be easier to add the trials</span>
+<span class="c1">// to the timeline array as they are defined.</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">timeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
 
-<span class="kd">var</span><span class="w"> </span><span class="nx">trial_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;This is trial 1.&#39;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">trial_1</span><span class="p">);</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">trial_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;This is trial 1.&#39;</span>
+<span class="p">}</span>
+<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">trial_1</span><span class="p">);</span>
 
-<span class="kd">var</span><span class="w"> </span><span class="nx">trial_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;This is trial 2.&#39;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">trial_2</span><span class="p">);</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">trial_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;This is trial 2.&#39;</span>
+<span class="p">}</span>
+<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">trial_2</span><span class="p">);</span>
 
-<span class="kd">var</span><span class="w"> </span><span class="nx">trial_3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;This is trial 3.&#39;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
-<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">trial_3</span><span class="p">);</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">trial_3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;This is trial 3.&#39;</span>
+<span class="p">}</span>
+<span class="nx">timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">trial_3</span><span class="p">);</span>
 </code></pre></div>
 <h2 id="nested-timelines">Nested timelines<a class="headerlink" href="#nested-timelines" title="Permanent link">&para;</a></h2>
 <p>Each object on the timeline can also have it's own timeline. This is useful for many reasons. One is that it allows you to define common parameters across trials once and have them apply to all the trials on the nested timeline. The example below creates a series of trials using the <a href="../plugins/image-keyboard-response/">image-keyboard-response plugin</a>, where the only thing that changes from trial-to-trial is the image file being displayed on the screen.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">judgment_trials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;p&gt;Press a number 1-7 to indicate how unusual the image is.&lt;/p&gt;&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">,</span><span class="s1">&#39;5&#39;</span><span class="p">,</span><span class="s1">&#39;6&#39;</span><span class="p">,</span><span class="s1">&#39;7&#39;</span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image1.png&#39;</span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image2.png&#39;</span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image3.png&#39;</span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">]</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">judgment_trials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;p&gt;Press a number 1-7 to indicate how unusual the image is.&lt;/p&gt;&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">,</span><span class="s1">&#39;5&#39;</span><span class="p">,</span><span class="s1">&#39;6&#39;</span><span class="p">,</span><span class="s1">&#39;7&#39;</span><span class="p">],</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image1.png&#39;</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image2.png&#39;</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image3.png&#39;</span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>In the above code, the <code>type</code>, <code>prompt</code>, and <code>choices</code> parameters are automatically applied to all of the objects in the <code>timeline</code> array. This creates three trials with the same <code>type</code>, <code>prompt</code>, and <code>choices</code> parameters, but different values for the <code>stimulus</code> parameter.</p>
 <p>You can also override the values by declaring a new value in the <code>timeline</code> array. In the example below, the second trial will display a different prompt message.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">judgment_trials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;p&gt;Press a number 1-7 to indicate how unusual the image is.&lt;/p&gt;&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">,</span><span class="s1">&#39;5&#39;</span><span class="p">,</span><span class="s1">&#39;6&#39;</span><span class="p">,</span><span class="s1">&#39;7&#39;</span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image1.png&#39;</span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image2.png&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;p&gt;Press 1 for this trial.&lt;/p&gt;&#39;</span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image3.png&#39;</span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">]</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">judgment_trials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;p&gt;Press a number 1-7 to indicate how unusual the image is.&lt;/p&gt;&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="s1">&#39;4&#39;</span><span class="p">,</span><span class="s1">&#39;5&#39;</span><span class="p">,</span><span class="s1">&#39;6&#39;</span><span class="p">,</span><span class="s1">&#39;7&#39;</span><span class="p">],</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image1.png&#39;</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image2.png&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;&lt;p&gt;Press 1 for this trial.&lt;/p&gt;&#39;</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;image3.png&#39;</span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>Timelines can be nested any number of times.</p>
 <h2 id="timeline-variables">Timeline variables<a class="headerlink" href="#timeline-variables" title="Permanent link">&para;</a></h2>
@@ -2246,110 +2251,110 @@
 <p>What follows is an example of how to use timeline variables. The <a href="../../tutorials/rt-task/">simple reaction time tutorial</a> also explains how to use timeline variables.</p>
 <p>Suppose we want to create an experiment where people see a set of faces. Perhaps this is a memory experiment and this is the phase of the experiment where the faces are being presented for the first time. In between each face, a fixation cross is displayed on the screen. Without timeline variables, we would need to add many trials to the timeline, alternating between trials showing the fixation cross and trials showing the face and name. This could be done efficiently using a loop or function to create the timeline, but timeline variables make it even easier - as well as adding extra features like sampling and randomization.</p>
 <p>Here's a basic version of the task with timeline variables.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">500</span><span class="w"></span>
-<span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;face&#39;</span><span class="p">),</span><span class="w"></span>
-<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">2500</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">]</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;+&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">500</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;face&#39;</span><span class="p">),</span>
+<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">2500</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>In the above version, there are four separate trials defined in the <code>timeline_variables</code> parameter. Each trial has a variable <code>face</code> and a variable <code>name</code>. The <code>timeline</code> defines a procedure of showing a fixation cross for 500ms followed by the face and name for 2500ms.  This procedure will repeat four times, with the first trial showing <code>'person-1.jpg'</code>, the second <code>'person-2.jpg'</code>, and so on. The variables are referenced within the procedure by calling the <code>jsPsych.timelineVariable()</code> method and passing in the name of the variable.</p>
 <p>What if we wanted to add an additional step to the task where the name is displayed prior to the face appearing? (Maybe this is one condition of an experiment investigating whether the order of name-face or face-name affects retention.) We can add another variable to our list that gives the name associated with each image. Then we can add another trial to our timeline to show the name.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">500</span><span class="w"></span>
-<span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">),</span><span class="w"></span>
-<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">1000</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;+&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">500</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">),</span>
+<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">1000</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychImageKeyboardResponse</span><span class="p">,</span>
 <span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;face&#39;</span><span class="p">),</span><span class="w">         </span>
-<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">1000</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">]</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">1000</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
 </code></pre></div>
 <h3 id="using-in-a-function">Using in a function<a class="headerlink" href="#using-in-a-function" title="Permanent link">&para;</a></h3>
 <p>Continung the example from the previous section, what if we wanted to show the name with the face, combining the two variables together? 
 To do this, we can use a <a href="../dynamic-parameters/">dynamic parameter</a> (a function) to create an HTML-string that uses both variables in a single parameter.
 The value of the <code>stimulus</code> parameter will be a function that returns an HTML string that contains both the image and the name. </p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">500</span><span class="w"></span>
-<span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">),</span><span class="w"></span>
-<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">1000</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="w"></span>
-<span class="w">        </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;+&#39;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">500</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">),</span>
+<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">1000</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span>
 <span class="w">                </span><span class="kd">var</span><span class="w"> </span><span class="nx">html</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`</span>
 <span class="sb">                    &lt;img src=&quot;</span><span class="si">${</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;face&#39;</span><span class="p">)</span><span class="si">}</span><span class="sb">&quot;&gt;</span>
-<span class="sb">                    &lt;p&gt;</span><span class="si">${</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span><span class="si">}</span><span class="sb">&lt;/p&gt;`</span><span class="p">;</span><span class="w"></span>
-<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="nx">html</span><span class="p">;</span><span class="w"></span>
+<span class="sb">                    &lt;p&gt;</span><span class="si">${</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span><span class="si">}</span><span class="sb">&lt;/p&gt;`</span><span class="p">;</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="nx">html</span><span class="p">;</span>
 <span class="w">            </span><span class="p">},</span><span class="w">          </span>
-<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">2500</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">]</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">            </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;NO_KEYS&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nx">trial_duration</span><span class="o">:</span><span class="w"> </span><span class="mf">2500</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
 </code></pre></div>
 <h3 id="random-orders-of-trials">Random orders of trials<a class="headerlink" href="#random-orders-of-trials" title="Permanent link">&para;</a></h3>
 <p>If we want to randomize the order of the trials, we can set <code>randomize_order</code> to <code>true</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">randomize_order</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span>
+<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nx">randomize_order</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
 </code></pre></div>
 <h3 id="sampling-methods">Sampling methods<a class="headerlink" href="#sampling-methods" title="Permanent link">&para;</a></h3>
 <p>There are also sampling methods that can be used to select a set of trials from the timeline_variables.
@@ -2366,250 +2371,259 @@ Valid values for <code>type</code> are </p>
 </ul>
 <h4 id="sampling-with-replacement">Sampling with replacement<a class="headerlink" href="#sampling-with-replacement" title="Permanent link">&para;</a></h4>
 <p>This <code>sample</code> parameter will create 10 repetitions, sampling with replacement.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">sample</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;with-replacement&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nx">size</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span>
+<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nx">sample</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;with-replacement&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">size</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h4 id="sampling-with-replacement-unequal-probabilities">Sampling with replacement, unequal probabilities<a class="headerlink" href="#sampling-with-replacement-unequal-probabilities" title="Permanent link">&para;</a></h4>
 <p>This <code>sample</code> parameter will make the "Alex" trial three times as likely to be sampled as the others.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">sample</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;with-replacement&#39;</span><span class="p">,</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span>
+<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nx">sample</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;with-replacement&#39;</span><span class="p">,</span>
 <span class="w">        </span><span class="nx">size</span><span class="o">:</span><span class="w"> </span><span class="mf">10</span><span class="p">,</span><span class="w"> </span>
-<span class="w">        </span><span class="nx">weights</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">3</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">]</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="nx">weights</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="mf">3</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h4 id="sampling-without-replacement">Sampling without replacement<a class="headerlink" href="#sampling-without-replacement" title="Permanent link">&para;</a></h4>
 <p>This <code>sample</code> parameter will pick three of the four possible trials to run at random.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">sample</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;without-replacement&#39;</span><span class="p">,</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span>
+<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nx">sample</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;without-replacement&#39;</span><span class="p">,</span>
 <span class="w">        </span><span class="nx">size</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h4 id="repeating-each-trial-a-fixed-number-of-times-in-a-random-order">Repeating each trial a fixed number of times in a random order<a class="headerlink" href="#repeating-each-trial-a-fixed-number-of-times-in-a-random-order" title="Permanent link">&para;</a></h4>
 <p>This <code>sample</code> parameter will create 3 repetitions of each trial, for a total of 12 trials, with a random order.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">sample</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;fixed-repetitions&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nx">size</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span>
+<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nx">sample</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;fixed-repetitions&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">size</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h4 id="alternating-groups">Alternating groups<a class="headerlink" href="#alternating-groups" title="Permanent link">&para;</a></h4>
 <p>This <code>sample</code> parameter puts the "Alex" and "Chad" trials in group 1 and the "Beth" and "Dave" trials in group 2. 
 The resulting sample of trials will follow the pattern <code>group 1</code> -&gt; <code>group 2</code> -&gt; <code>group 1</code> -&gt; <code>group 2</code>.
  Each trial will be selected only one time. 
 If you wanted <code>group 2</code> to sometimes be first, you could set <code>randomize_group_order: true</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">sample</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;alternate-groups&#39;</span><span class="p">,</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span>
+<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nx">sample</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;alternate-groups&#39;</span><span class="p">,</span>
 <span class="w">        </span><span class="nx">groups</span><span class="o">:</span><span class="w"> </span><span class="p">[[</span><span class="mf">0</span><span class="p">,</span><span class="mf">2</span><span class="p">],[</span><span class="mf">1</span><span class="p">,</span><span class="mf">3</span><span class="p">]],</span><span class="w">  </span>
-<span class="w">        </span><span class="nx">randomize_group_order</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="w">        </span><span class="nx">randomize_group_order</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h4 id="custom-sampling-function">Custom sampling function<a class="headerlink" href="#custom-sampling-function" title="Permanent link">&para;</a></h4>
 <p>Any sampling method can be implemented using the <code>custom</code> type sampler. 
 The order of trials will be determined by running the function supplied as <code>fn</code>. 
 The function has a single parameter, <code>t</code>, which is an array of integers from <code>0</code> to <code>n-1</code>, where <code>n</code> is the number of trials in the <code>timeline_variables</code> array. 
 The function must return an array that specifies the order of the trials, e.g., returning <code>[3,3,2,2,1,1,0,0]</code> would result in the order <code>Dave</code> -&gt; <code>Dave</code> -&gt; <code>Chad</code> -&gt; <code>Chad</code> -&gt; <code>Beth</code> -&gt; <code>Beth</code> -&gt; <code>Alex</code> -&gt; <code>Alex</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">sample</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;custom&#39;</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="nx">fn</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">t</span><span class="p">){</span><span class="w"></span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nx">t</span><span class="p">.</span><span class="nx">reverse</span><span class="p">();</span><span class="w"> </span><span class="c1">// show the trials in the reverse order</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span>
+<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nx">sample</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;custom&#39;</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">fn</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">t</span><span class="p">){</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nx">t</span><span class="p">.</span><span class="nx">reverse</span><span class="p">();</span><span class="w"> </span><span class="c1">// show the trials in the reverse order</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h2 id="repeating-a-set-of-trials">Repeating a set of trials<a class="headerlink" href="#repeating-a-set-of-trials" title="Permanent link">&para;</a></h2>
 <p>To repeat a timeline multiple times, you can create an object (node) that contains a <code>timeline</code>, which is the timeline array to repeat, and <code>repetitions</code>, which is the number of times to repeat that timeline. </p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;This trial will be repeated twice.&#39;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;This trial will be repeated twice.&#39;</span>
+<span class="p">}</span>
 
-<span class="kd">var</span><span class="w"> </span><span class="nx">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">trial</span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">repetitions</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">trial</span><span class="p">],</span>
+<span class="w">    </span><span class="nx">repetitions</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>The <code>repetitions</code> parameter can be used alongside other node parameters, such as timeline variables, loop functions, and/or conditional functions. If you are using <code>timeline_variables</code> and <code>randomize_order</code> is <code>true</code>, then the order of the timeline variables will re-randomize before every repetition.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">randomize_order</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span>
+<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nx">randomize_order</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">    </span><span class="nx">repetitions</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span>
-<span class="p">}</span><span class="w"></span>
+<span class="p">}</span>
 </code></pre></div>
 <h2 id="looping-timelines">Looping timelines<a class="headerlink" href="#looping-timelines" title="Permanent link">&para;</a></h2>
 <p>Any timeline can be looped using the <code>loop_function</code> option. 
 The loop function must be a function that evaluates to <code>true</code> if the timeline should repeat, and <code>false</code> if the timeline should end. It receives a single parameter, named <code>data</code> by convention. 
 This parameter will be the <a href="../../reference/jspsych-data/#datacollection">DataCollection object</a> with all of the data from the trials executed in the last iteration of the timeline. 
 The loop function will be evaluated after the timeline is completed.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;This trial is in a loop. Press R to repeat this trial, or C to continue.&#39;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;This trial is in a loop. Press R to repeat this trial, or C to continue.&#39;</span>
+<span class="p">}</span>
 
-<span class="kd">var</span><span class="w"> </span><span class="nx">loop_node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">trial</span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">loop_function</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span><span class="w"></span>
-<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">values</span><span class="p">()[</span><span class="mf">0</span><span class="p">].</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;r&#39;</span><span class="p">)){</span><span class="w"></span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">loop_node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">trial</span><span class="p">],</span>
+<span class="w">    </span><span class="nx">loop_function</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">values</span><span class="p">()[</span><span class="mf">0</span><span class="p">].</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;r&#39;</span><span class="p">)){</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h2 id="conditional-timelines">Conditional timelines<a class="headerlink" href="#conditional-timelines" title="Permanent link">&para;</a></h2>
 <p>A timeline can be skipped or not based on the evaluation of the <code>conditional_function</code> option. 
 If the conditional function evaluates to <code>true</code>, the timeline will execute normally. 
 If the conditional function evaluates to <code>false</code> then the timeline will be skipped. 
 The conditional function is evaluated whenever jsPsych is about to run the first trial on the timeline.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">jsPsych</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">initJsPsych</span><span class="p">();</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">jsPsych</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">initJsPsych</span><span class="p">();</span>
 
-<span class="kd">var</span><span class="w"> </span><span class="nx">pre_if_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;The next trial is in a conditional statement. Press S to skip it, or V to view it.&#39;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">pre_if_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;The next trial is in a conditional statement. Press S to skip it, or V to view it.&#39;</span>
+<span class="p">}</span>
 
-<span class="kd">var</span><span class="w"> </span><span class="nx">if_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;You chose to view the trial. Press any key to continue.&#39;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">if_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;You chose to view the trial. Press any key to continue.&#39;</span>
+<span class="p">}</span>
 
-<span class="kd">var</span><span class="w"> </span><span class="nx">if_node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">if_trial</span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">conditional_function</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// get the data from the previous trial,</span><span class="w"></span>
-<span class="w">        </span><span class="c1">// and check which key was pressed</span><span class="w"></span>
-<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">last</span><span class="p">(</span><span class="mf">1</span><span class="p">).</span><span class="nx">values</span><span class="p">()[</span><span class="mf">0</span><span class="p">];</span><span class="w"></span>
-<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;s&#39;</span><span class="p">)){</span><span class="w"></span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">if_node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">if_trial</span><span class="p">],</span>
+<span class="w">    </span><span class="nx">conditional_function</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span>
+<span class="w">        </span><span class="c1">// get the data from the previous trial,</span>
+<span class="w">        </span><span class="c1">// and check which key was pressed</span>
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">last</span><span class="p">(</span><span class="mf">1</span><span class="p">).</span><span class="nx">values</span><span class="p">()[</span><span class="mf">0</span><span class="p">];</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">compareKeys</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;s&#39;</span><span class="p">)){</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 
-<span class="kd">var</span><span class="w"> </span><span class="nx">after_if_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;This is the trial after the conditional.&#39;</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">after_if_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;This is the trial after the conditional.&#39;</span>
+<span class="p">}</span>
 
-<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">([</span><span class="nx">pre_if_trial</span><span class="p">,</span><span class="w"> </span><span class="nx">if_node</span><span class="p">,</span><span class="w"> </span><span class="nx">after_if_trial</span><span class="p">]);</span><span class="w"></span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">([</span><span class="nx">pre_if_trial</span><span class="p">,</span><span class="w"> </span><span class="nx">if_node</span><span class="p">,</span><span class="w"> </span><span class="nx">after_if_trial</span><span class="p">]);</span>
 </code></pre></div>
 <h2 id="timeline-start-and-finish-functions">Timeline start and finish functions<a class="headerlink" href="#timeline-start-and-finish-functions" title="Permanent link">&para;</a></h2>
 <p>You can run a custom function at the start and end of a timeline node using the <code>on_timeline_start</code> and <code>on_timeline_finish</code> callback function parameters. These are functions that will run when the timeline starts and ends, respectively. </p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">trial_1</span><span class="p">,</span><span class="w"> </span><span class="nx">trial_2</span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">on_timeline_start</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;The trial procedure just started.&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="nx">on_timeline_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;The trial procedure just finished.&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">trial_1</span><span class="p">,</span><span class="w"> </span><span class="nx">trial_2</span><span class="p">],</span>
+<span class="w">    </span><span class="nx">on_timeline_start</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;The trial procedure just started.&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nx">on_timeline_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;The trial procedure just finished.&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>This works the same way with timeline variables. The <code>on_timeline_start</code> and <code>on_timeline_finish</code> functions will run when timeline variables trials start and end, respectively.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span><span class="w"></span>
-<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
-<span class="w">    </span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">randomize_order</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">on_timeline_start</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;First trial is starting.&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="nx">on_timeline_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Last trial just finished.&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">face_name_procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[...],</span>
+<span class="w">    </span><span class="nx">timeline_variables</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-1.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Alex&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-2.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Beth&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-3.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Chad&#39;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="nx">face</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;person-4.jpg&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Dave&#39;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nx">randomize_order</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">on_timeline_start</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;First trial is starting.&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nx">on_timeline_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Last trial just finished.&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <p>When the <code>repetititons</code> option is used (and is greater than 1), these functions will run once per repetition of the timeline.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">repetition_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span><span class="w"></span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">repetition_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
 
-<span class="kd">var</span><span class="w"> </span><span class="nx">procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">trial_1</span><span class="p">,</span><span class="w"> </span><span class="nx">trial_2</span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nx">repetitions</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="nx">on_timeline_start</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nx">repetition_count</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Repetition number &#39;</span><span class="p">,</span><span class="nx">repetition_count</span><span class="p">,</span><span class="s1">&#39; has just started.&#39;</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="p">},</span><span class="w"></span>
-<span class="w">    </span><span class="nx">on_timeline_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Repetition number &#39;</span><span class="p">,</span><span class="nx">repetition_count</span><span class="p">,</span><span class="s1">&#39; has just finished.&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="p">}</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">timeline</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">trial_1</span><span class="p">,</span><span class="w"> </span><span class="nx">trial_2</span><span class="p">],</span>
+<span class="w">    </span><span class="nx">repetitions</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">on_timeline_start</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">repetition_count</span><span class="o">++</span><span class="p">;</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Repetition number &#39;</span><span class="p">,</span><span class="nx">repetition_count</span><span class="p">,</span><span class="s1">&#39; has just started.&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nx">on_timeline_finish</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Repetition number &#39;</span><span class="p">,</span><span class="nx">repetition_count</span><span class="p">,</span><span class="s1">&#39; has just finished.&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 
-              
-            </article>
-          </div>
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
         </div>
         
       </main>
       
         <footer class="md-footer">
   
-    <nav class="md-footer__inner md-grid" aria-label="Footer">
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
         <a href="../../tutorials/video-tutorials/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Video Tutorials" rel="prev">
@@ -2668,7 +2682,7 @@ The conditional function is evaluated whenever jsPsych is about to run the first
       
     
     <a href="https://github.com/jspsych" target="_blank" rel="noopener" title="github.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
     </a>
   
     
@@ -2677,7 +2691,7 @@ The conditional function is evaluated whenever jsPsych is about to run the first
       
     
     <a href="https://twitter.com/joshdeleeuw" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
     </a>
   
 </div>
@@ -2690,11 +2704,13 @@ The conditional function is evaluated whenever jsPsych is about to run the first
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.a6c66575.min.js"></script>
+      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
       
+    
     
   </body>
 </html>
