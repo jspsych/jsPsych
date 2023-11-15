@@ -9,7 +9,7 @@ In order to work on code in the jsPsych or the jspsych-contrib repository, it is
 
 ### Install Node.js
 
-The jsPsych development setup requires [Node.js](https://nodejs.org/en/) >= v18 to be installed on your machine.
+The jsPsych development setup requires a [Node.js LTS version](https://nodejs.org/en/download/) to be installed on your machine.
 
 ### Clone the repository and install the dependencies
 
@@ -29,6 +29,11 @@ in a terminal.
 
 Then run `npm install`.
 This will create a `node_modules` directory and install all the dependencies into it that are required to build and test jsPsych.
+
+!!! info
+The jsPsych (-contrib) repositories depend on the `canvas` package which comes with pre-built binaries.
+On systems for which no pre-built binaries are available, `npm install` will try to build the binaries from scratch, sometimes failing with an error message mentioning the `canvas` package.
+If you are facing such installation issues, please follow the [installation instructions](https://github.com/Automattic/node-canvas/wiki#installation-guides) of the `canvas` package and run `npm install` again afterwards.
 
 !!! info
 If you are running `npm install` in the core jsPsych repository, this will also execute the build chain for all packages in the jsPsych repository.
