@@ -39,7 +39,7 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-mirror-camera@1.0.1"></script>
+<script src="https://unpkg.com/@jspsych/plugin-mirror-camera@1.0.2"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

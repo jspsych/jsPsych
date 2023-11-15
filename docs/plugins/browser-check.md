@@ -1,6 +1,6 @@
 # browser-check
 
-Current version: 1.0.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-browser-check/CHANGELOG.md).
+Current version: 1.0.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-browser-check/CHANGELOG.md).
 
 This plugin measures and records various features of the participant's browser and can end the experiment if defined inclusion criteria are not met.
 
@@ -80,7 +80,7 @@ As with all simulated plugins, you can override the default (actual) data with f
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-browser-check@1.0.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-browser-check@1.0.3"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
