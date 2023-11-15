@@ -1,5 +1,11 @@
 # @jspsych/plugin-fullscreen
 
+## 1.2.1
+
+### Patch Changes
+
+- [#3184](https://github.com/jspsych/jsPsych/pull/3184) [`9acfa29c`](https://github.com/jspsych/jsPsych/commit/9acfa29c8db1d7a8816c53ac49651f15493f2cf4) Thanks [@bjoluc](https://github.com/bjoluc)! - Point to source maps via canonical unpkg URLs in NPM-published browser builds. This prevents 404 errors when using redirecting CDN URLs (as described in #3043).
+
 ## 1.2.0
 
 ### Minor Changes
