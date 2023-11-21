@@ -73,10 +73,14 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
   private data_available_handler;
   private recorded_data_chunks = [];
 
-  constructor(private jsPsych: JsPsych) {}
+  constructor(private jsPsych: JsPsych) { }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     this.recorder = this.jsPsych.pluginAPI.getMicrophoneRecorder();
+
+    if (this.recorder === null) {
+      throw new Error('Error in html-audio-response plugin. A microphone has not been found, have you ran the initialize-microphone plugin?');
+    }
 
     this.setupRecordingEvents(display_element, trial);
 
