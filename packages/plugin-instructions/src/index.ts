@@ -64,6 +64,12 @@ const info = <const>{
       pretty_name: "Button label next",
       default: "Next",
     },
+    /** The callback function when page changes */
+    page_change_callback: {
+      type: ParameterType.FUNCTION,
+      pretty_name: "Page change callback",
+      default: function (current_page: number) {},
+    },
   },
 };
 
@@ -93,8 +99,7 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
 
     var last_page_update_time = start_time;
 
-    function btnListener(evt) {
-      evt.target.removeEventListener("click", btnListener);
+    function btnListener() {
       if (this.id === "jspsych-instructions-back") {
         back();
       } else if (this.id === "jspsych-instructions-next") {
@@ -143,12 +148,12 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
         if (current_page != 0 && trial.allow_backward) {
           display_element
             .querySelector("#jspsych-instructions-back")
-            .addEventListener("click", btnListener);
+            .addEventListener("click", btnListener, { once: true });
         }
 
         display_element
           .querySelector("#jspsych-instructions-next")
-          .addEventListener("click", btnListener);
+          .addEventListener("click", btnListener, { once: true });
       } else {
         if (trial.show_page_number && trial.pages.length > 1) {
           // page numbers for non-mouse navigation
@@ -169,6 +174,8 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
       } else {
         show_current_page();
       }
+
+      trial.page_change_callback(current_page);
     }
 
     function back() {
@@ -177,6 +184,8 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
       current_page--;
 
       show_current_page();
+
+      trial.page_change_callback(current_page);
     }
 
     function add_current_page_to_view_history() {
