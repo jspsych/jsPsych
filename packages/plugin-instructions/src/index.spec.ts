@@ -63,6 +63,37 @@ describe("instructions plugin", () => {
     expect(data[0].page_index).toEqual(0);
     expect(data[1].page_index).toEqual(1);
   });
+
+  test("forward and backward callback works", async () => {
+    let count = [0, 0, 0, 0];
+    const { expectFinished } = await startTimeline([
+      {
+        type: instructions,
+        pages: ["page 1", "page 2", "page 3"],
+        page_change_callback: function (page_number: number) {
+          count[page_number]++;
+        },
+      },
+    ]);
+
+    // Go to second page; count[1]++
+    await pressKey("ArrowRight");
+
+    // Go to first page; count[0]++
+    await pressKey("ArrowLeft");
+
+    // Go to second page; count[1]++
+    await pressKey("ArrowRight");
+
+    // Go to last page; count[2]++
+    await pressKey("ArrowRight");
+
+    // Finish trial; count[3]++
+    await pressKey("ArrowRight");
+    await expectFinished();
+
+    expect(count).toEqual([1, 2, 1, 1]);
+  });
 });
 
 describe("instructions plugin simulation", () => {
