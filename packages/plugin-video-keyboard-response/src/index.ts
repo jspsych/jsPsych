@@ -88,6 +88,12 @@ const info = <const>{
       pretty_name: "Response allowed while playing",
       default: true,
     },
+    /** If true, multiple responses are recorded. If false, only the first response will be recorded. */
+    multiple_responses_allowed: {
+      type: ParameterType.BOOL,
+      pretty_name: "Multiple responses allowed",
+      default: true,
+    },
   },
 };
 
@@ -246,6 +252,7 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     var response = {
       rt: null,
       key: null,
+      video_time: null
     };
 
     // function to end trial when it is time
@@ -270,6 +277,7 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         rt: response.rt,
         stimulus: trial.stimulus,
         response: response.key,
+        video_time: response.video_time,
       };
 
       // clear the display
@@ -286,9 +294,18 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       display_element.querySelector("#jspsych-video-keyboard-response-stimulus").className +=
         " responded";
 
-      // only record the first response
+      // by default only record the first response
       if (response.key == null) {
-        response = info;
+        if(!trial.multiple_responses_allowed){
+          // Would make sense to add it to a list, but then it would not be backwards compatible?
+          response = {rt: info.rt, key: info.key, video_time: video_element.currentTime,};
+        }else{
+          response = {rt: [info.rt], key: [info.key], video_time: [video_element.currentTime]};
+        }
+      }else if (trial.multiple_responses_allowed){
+        response.rt.push(info.rt);
+        response.key.push(info.key);
+        response.video_time.push(video_element.currentTime);
       }
 
       if (trial.response_ends_trial) {
@@ -302,7 +319,7 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         callback_function: after_response,
         valid_responses: trial.choices,
         rt_method: "performance",
-        persist: false,
+        persist: trial.multiple_responses_allowed,
         allow_held_key: false,
       });
     }
