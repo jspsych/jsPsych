@@ -59,10 +59,8 @@ export class JsPsychData {
   write(trial: Trial) {
     const result = trial.getResult();
     Object.assign(result, this.dataProperties);
-    if (trial.getParameterValue("record_data") ?? true) {
-      this.results.push(result);
-      this.resultToTrialMap.set(result, trial);
-    }
+    this.results.push(result);
+    this.resultToTrialMap.set(result, trial);
   }
 
   addProperties(properties) {

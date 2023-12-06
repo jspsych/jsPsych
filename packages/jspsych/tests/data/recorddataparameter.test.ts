@@ -18,17 +18,28 @@ describe("The record_data parameter", () => {
   });
 
   it("Can be set to false to prevent the data from being recorded", async () => {
-    const { getData } = await startTimeline([
-      {
-        type: htmlKeyboardResponse,
-        stimulus: "<p>foo</p>",
-        record_data: false,
-      },
-    ]);
+    const onFinish = jest.fn();
+    const onTrialFinish = jest.fn();
+    const onDataUpdate = jest.fn();
+
+    const { getData } = await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "<p>foo</p>",
+          record_data: false,
+          on_finish: onFinish,
+        },
+      ],
+      { on_trial_finish: onTrialFinish, on_data_update: onDataUpdate }
+    );
 
     await pressKey(" ");
 
     expect(getData().count()).toBe(0);
+    expect(onFinish).toHaveBeenCalledWith(undefined);
+    expect(onTrialFinish).toHaveBeenCalledWith(undefined);
+    expect(onDataUpdate).not.toHaveBeenCalled();
   });
 
   it("Can be set as a timeline variable", async () => {

@@ -345,14 +345,20 @@ export class JsPsych {
     },
 
     onTrialResultAvailable: (trial: Trial) => {
-      trial.getResult().time_elapsed = this.getTotalTime();
-      this.data.write(trial);
+      const result = trial.getResult();
+      if (result) {
+        result.time_elapsed = this.getTotalTime();
+        this.data.write(trial);
+      }
     },
 
     onTrialFinished: (trial: Trial) => {
       const result = trial.getResult();
       this.options.on_trial_finish(result);
-      this.options.on_data_update(result);
+
+      if (result) {
+        this.options.on_data_update(result);
+      }
 
       if (this.progressBar && this.options.auto_update_progress_bar) {
         this.progressBar.progress = this.timeline.getNaiveProgress();
