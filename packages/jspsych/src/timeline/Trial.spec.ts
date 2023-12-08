@@ -725,6 +725,20 @@ describe("Trial", () => {
       expect(trial.getResult()).toEqual(expect.objectContaining({ my: "result" }));
       expect(trial.getResults()).toEqual([expect.objectContaining({ my: "result" })]);
     });
+
+    it("does not return the result when the `record_data` trial parameter is `false`", async () => {
+      TestPlugin.setManualFinishTrialMode();
+      const trial = createTrial({ type: TestPlugin, record_data: false });
+      trial.run();
+
+      expect(trial.getResult()).toBeUndefined();
+      expect(trial.getResults()).toEqual([]);
+
+      await TestPlugin.finishTrial();
+
+      expect(trial.getResult()).toBeUndefined();
+      expect(trial.getResults()).toEqual([]);
+    });
   });
 
   describe("evaluateTimelineVariable()", () => {
