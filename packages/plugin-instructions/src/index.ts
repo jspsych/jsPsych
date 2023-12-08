@@ -65,7 +65,7 @@ const info = <const>{
       default: "Next",
     },
     /** The callback function when page changes */
-    page_change_callback: {
+    on_page_change: {
       type: ParameterType.FUNCTION,
       pretty_name: "Page change callback",
       default: function (current_page: number) {},
@@ -175,7 +175,7 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
         show_current_page();
       }
 
-      trial.page_change_callback(current_page);
+      trial.on_page_change(current_page);
     }
 
     function back() {
@@ -185,7 +185,7 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
 
       show_current_page();
 
-      trial.page_change_callback(current_page);
+      trial.on_page_change(current_page);
     }
 
     function add_current_page_to_view_history() {

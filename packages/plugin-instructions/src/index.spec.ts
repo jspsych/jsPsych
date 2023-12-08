@@ -70,7 +70,7 @@ describe("instructions plugin", () => {
       {
         type: instructions,
         pages: ["page 1", "page 2", "page 3"],
-        page_change_callback: function (page_number: number) {
+        on_page_change: function (page_number: number) {
           count[page_number]++;
         },
       },
