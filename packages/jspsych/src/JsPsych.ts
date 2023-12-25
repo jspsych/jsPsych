@@ -82,6 +82,13 @@ export class JsPsych {
    */
   private simulation_options;
 
+  /**
+   * Callbacks for extensions/plugins called on finish of the experiments.
+   * Can be used to cleanup stuff
+   */
+
+  private onfinish_callbacks = new Array<() => void>();
+
   // storing a single webaudio context to prevent problems with multiple inits
   // of jsPsych
   webaudio_context: AudioContext = null;
@@ -507,8 +514,16 @@ export class JsPsych {
     this.doTrial(this.timeline.trial());
   }
 
+  public addFinishExperimentCallback(callback: () => void) {
+    this.onfinish_callbacks.push(callback);
+  }
+
   private finishExperiment() {
     const finish_result = this.opts.on_finish(this.data.get());
+
+    for (var callback of this.onfinish_callbacks) {
+      callback();
+    }
 
     const done_handler = () => {
       if (typeof this.timeline.end_message !== "undefined") {
