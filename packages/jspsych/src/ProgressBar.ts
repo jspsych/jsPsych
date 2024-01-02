@@ -2,7 +2,10 @@
  * Maintains a visual progress bar using HTML and CSS
  */
 export class ProgressBar {
-  constructor(private readonly containerElement: HTMLDivElement, private readonly message: string) {
+  constructor(
+    private readonly containerElement: HTMLDivElement,
+    private readonly message: string | ((progress: number) => string)
+  ) {
     this.setupElements();
   }
 
@@ -14,7 +17,13 @@ export class ProgressBar {
   /** Adds the progress bar HTML code into `this.containerElement` */
   private setupElements() {
     this.messageSpan = document.createElement("span");
-    this.messageSpan.innerHTML = this.message;
+
+    if (Object.prototype.toString.call(this.message) === "[object Function]") {
+      this.messageSpan.innerHTML = (this.message as (progress: number) => string)(0);
+    } else {
+      // Progress starts at 0 when experiment commences
+      this.messageSpan.innerHTML = this.message as string;
+    }
 
     this.innerDiv = document.createElement("div");
     this.innerDiv.id = "jspsych-progressbar-inner";
@@ -31,6 +40,10 @@ export class ProgressBar {
   /** Updates the progress bar according to `this.progress` */
   private update() {
     this.innerDiv.style.width = this._progress * 100 + "%";
+
+    if (Object.prototype.toString.call(this.message) === "[object Function]") {
+      this.messageSpan.innerHTML = (this.message as (progress: number) => string)(this._progress);
+    }
   }
 
   /**
