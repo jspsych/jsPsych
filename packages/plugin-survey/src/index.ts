@@ -108,14 +108,9 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     this.survey.onComplete.add((sender, options) => {
       // add default values to any questions without responses
       const all_questions = sender.getAllQuestions();
-      console.log("all questions: ", all_questions);
       const data_names = Object.keys(sender.data);
-      console.log("data names: ", data_names);
       for (const question of all_questions) {
-        console.log("question name: ", question.name);
         if (!data_names.includes(question.name)) {
-          console.log("data names does not include ", question.name);
-          console.log("question default value: ", question.defaultValue);
           sender.mergeData({ [question.name]: question.defaultValue ?? null });
         }
       }
