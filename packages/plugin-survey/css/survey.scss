@@ -1,25 +1,32 @@
-@use "survey-knockout/survey.css";
+@use "survey-jquery/defaultV2.min.css";
 
-.sv_main {
-  font-family: "Open Sans", "Arial", sans-serif;
-  font-size: 18px;
-  text-align: left;
-
-  .sv_body {
-    border-top-width: 0;
-  }
-
-  .sv_p_root {
-    .sv_row {
-      border-bottom: none;
-    }
-  }
-
-  .sv_container .sv_body .sv_p_root .sv_q_title {
-    font-weight: normal;
-  }
-
-  .sv_q_erbox {
-    font-size: 0.85em;
-  }
+// move buttons to right
+div#sv-nav-complete.sv-action, div#sv-nav-next.sv-action {
+  margin-left: auto !important;
 }
+
+// TO DO: keeping this here for reference until we decide on default style
+
+// .sv_main {
+//   font-family: "Open Sans", "Arial", sans-serif;
+//   font-size: 18px;
+//   text-align: left;
+
+//   .sv_body {
+//     border-top-width: 0;
+//   }
+
+//   .sv_p_root {
+//     .sv_row {
+//       border-bottom: none;
+//     }
+//   }
+
+//   .sv_container .sv_body .sv_p_root .sv_q_title {
+//     font-weight: normal;
+//   }
+
+//   .sv_q_erbox {
+//     font-size: 0.85em;
+//   }
+// }
