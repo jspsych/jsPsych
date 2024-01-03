@@ -8,9 +8,6 @@
   <link rel="stylesheet" href="../jspsych/css/jspsych.css" />
   <link rel="stylesheet" href="css/survey.css" />
   <style>
-    .continue-button-right div#sv-nav-complete {
-      margin-left: auto !important;
-    }
     .continue-button-center div.sd-action-bar.sd-footer.sd-body__navigation {
       justify-content: center !important;
     }
@@ -254,8 +251,7 @@
   const validation_trial = {
     type: jsPsychSurvey,
     survey_json: JSON.stringify(validation),
-    validation_function: validate_yes,
-    css_classes: ['continue-button-right']
+    validation_function: validate_yes
   };
 
   // dynamic survey example: center the continue button
