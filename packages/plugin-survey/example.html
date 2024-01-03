@@ -1,97 +1,271 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <script src="../jspsych/dist/index.browser.js"></script>
-    <script src="./dist/index.browser.js"></script>
-    <link rel="stylesheet" href="../jspsych/css/jspsych.css" />
-    <link rel="stylesheet" href="css/survey.css" />
-  </head>
-  <body></body>
-  <script type="text/javascript">
 
-    var jsPsych = initJsPsych({
-      on_finish: function() {
-        jsPsych.data.displayData();
+<head>
+  <meta charset="utf-8" />
+  <script src="../jspsych/dist/index.browser.js"></script>
+  <script src="./dist/index.browser.js"></script>
+  <link rel="stylesheet" href="../jspsych/css/jspsych.css" />
+  <link rel="stylesheet" href="css/survey.css" />
+  <style>
+    .continue-button-right div#sv-nav-complete {
+      margin-left: auto !important;
+    }
+    .continue-button-center div.sd-action-bar.sd-footer.sd-body__navigation {
+      justify-content: center !important;
+    }
+  </style>
+</head>
+
+<body></body>
+<script type="text/javascript">
+
+  const jsPsych = initJsPsych({
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+
+  // survey JSON example: text input, dropdown, multi-select dropdown, collapsible fields
+  const contact_info = {
+    title: "jsPsych Survey Plugin example",
+    pages: [{
+      title: "Page 1 title: Personal Details",
+      name: "PersonalDetails",
+      elements: [{
+        type: "text",
+        name: "FirstName",
+        title: "First name:",
+        isRequired: true,
+      },
+      {
+        type: "text",
+        name: "LastName",
+        title: "Last name:",
+        isRequired: true,
+        startWithNewLine: false,
+      },
+      {
+        type: "panel",
+        name: "Contacts",
+        state: "collapsed",
+        title: "Contact (optional)",
+        elements: [{
+          type: "text",
+          name: "Phone",
+          title: "Phone number:",
+          defaultValue: "(123) 456-7890"
+        }, {
+          type: "text",
+          name: "GitHub",
+          title: "GitHub username:"
+        },
+        {
+          type: "text",
+          name: "email",
+          title: "Email:"
+        }]
+      }]
+    },
+    {
+      title: "Page 2 title: Location",
+      name: "Location",
+      description: "Here are some questions with the 'description' shown below the question. The titles are hidden by setting the 'title' string to a space character. (You can also set the survey's 'questionTitleLocation' to' 'hidden', but that applies to the whole survey.)",
+      elements: [
+      {
+        type: "text",
+        name: "State",
+        title: " ",
+        width: "20%",
+        minWidth: "128px",
+        startWithNewLine: false,
+        description: "Enter a state"
+      },
+      {
+        type: "dropdown",
+        name: "Country",
+        title: " ",
+        startWithNewLine: false,
+        width: "60%",
+        minWidth: "256px",
+        description: "Select a country (start typing to search, press Enter to select)",
+        choicesByUrl: {
+          url: "https://surveyjs.io/api/CountriesExample"
+        },
+        placeholder: "",
+        allowClear: false
+      }, 
+      {
+        type: "tagbox",
+        choicesByUrl: {
+          url: "https://surveyjs.io/api/CountriesExample"
+        },
+        name: "all-countries",
+        title: "Which countries have you been to?",
+        description: "Multi-select dropdown - please select all that apply."
+      }]
+    }],
+    showQuestionNumbers: "off",
+    questionDescriptionLocation: "underInput",
+    completeText: "Continue",
+    widthMode: "static",
+    width: "900",
+    fitToContainer: true
+  };
+
+  const contact_info_trial = {
+    type: jsPsychSurvey,
+    survey_json: JSON.stringify(contact_info)
+  };
+
+  // survey JSON example: making questions conditional on previous answers
+  const vegetables = {
+    
+    pages: [{
+      title: "Example of conditional questions",
+      elements: [{
+        name: "vegetables-score",
+        title: "I like vegetables.",
+        type: "radiogroup",
+        choices: [
+          { value: 1, text: "Strongly Disagree" },
+          { value: 2, text: "Disagree" },
+          { value: 3, text: "Neutral" },
+          { value: 4, text: "Agree" },
+          { value: 5, text: "Strongly Agree" }
+        ],
+        isRequired: true
+      }]
+    }, {
+      elements: [{
+        name: "vegetables-like",
+        title: "You like vegetables! Which one is your favorite?",
+        type: "comment",
+        visibleIf: "{vegetables-score} = 4"
+      }, {
+        name: "vegetables-eat",
+        title: "On a scale of zero to ten, how likely are you to eat broccoli today?",
+        type: "rating",
+        rateMin: 0,
+        rateMax: 10
+      }],
+      visibleIf: "{vegetables-score} >= 4"
+    }, {
+      elements: [{
+        name: "vegetables-disklike",
+        title: "You don't like vegetables! Please explain why.",
+        type: "comment"
+      }],
+      visibleIf: "{vegetables-score} =< 2"
+    }],
+    showQuestionNumbers: "off",
+    completeText: "Next",
+    questionTitleLocation: "top",
+    css_classes: ["continue-button-center"]
+  };
+
+  const vegetables_trial = {
+    type: jsPsychSurvey,
+    survey_json: JSON.stringify(vegetables)
+  };
+
+  // survey JSON example: referencing previous answers
+  const animals = {
+    title: "jsPsych Survey Plugin: referencing answers from previous questions",
+    elements: [{
+      type: "checkbox",
+      name: "favorite-animals",
+      title: "What are your favorite animals?",
+      description: "Please select at least TWO features to see the Carry Forward functionality.",
+      isRequired: true,
+      colCount: 2,
+      choices: [
+        "Hippopotamus",
+        "Raccoon",
+        "Kangaroo",
+        "Shark",
+        "Cat",
+        "Hedgehog",
+        "Bunny",
+        "Monkey"
+      ]
+    }, {
+      type: "ranking",
+      name: "animals-ranked",
+      title: "Which of these animals would make the best pet? Please rank your favorite animals from BEST (1) to WORST pet option.",
+      visibleIf: "{favorite-animals.length} > 1",
+      isRequired: true,
+      choicesFromQuestion: "favorite-animals",
+      choicesFromQuestionMode: "selected"
+    }],
+    showQuestionNumbers: false
+  };
+  const animals_trial = {
+    type: jsPsychSurvey,
+    survey_json: JSON.stringify(animals)
+  };
+
+  // survey JSON example: response validation, right-align continue button
+  function validate_yes(_, options) {
+    // select the question you want to validate using its name
+    if (options.name === "yesno") {
+      if (options.value !== "Yes") {
+        options.error = "Please select Yes to continue.";
       }
-    });
+    }
+  }
+  const validation = {
+    name: "Validation",
+    title: "jsPsych Survey Plugin: response validation",
+    elements: [
+      {
+        type: "text",
+        name: "ssn",
+        title: "Social Security number",
+        description: "Please enter 9 numbers.",
+        requiredErrorText: "You SSN must be a 9-digit number.",
+        validators: [{
+          type: "regex",
+          text: "Your SSN must be a 9-digit number",
+          regex: "^(?!0{3})(?!6{3})[0-8]\\d{2}-?(?!0{2})\\d{2}-?(?!0{4})\\d{4}$"
+        }],
+        maxLength: 9
+      },
+      {
+        type: "text",
+        name: "birthdate",
+        title: "Date of birth",
+        inputType: "date",
+        maxValueExpression: "today()",
+        description: "Enter a future date to view the validation."
+      },
+      {
+        type: "boolean",
+        name: "yesno",
+        title: "Select 'Yes'",
+        valueTrue: "Yes",
+        valueFalse: "No"
+      },
+    ],
+    checkErrorsMode: "onValueChanged",
+    showQuestionNumbers: false,
+    completeText: "Continue",
+  };
+  const validation_trial = {
+    type: jsPsychSurvey,
+    survey_json: JSON.stringify(validation),
+    validation_function: validate_yes,
+    css_classes: ['continue-button-right']
+  };
 
-    var options = ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5', 'Option 6'];
+  // dynamic survey example: center the continue button
 
-    var survey_trial = {
-      type: jsPsychSurvey,
-      pages: [
-        [
-          {type: 'html', prompt: '<p>Here is some arbitrary text via an "html" question type.<br>Similar to preamble but can be inserted anywhere in the question set.</p><p>This trial uses automatic question numbering (continued across pages).</p>'},
-          {type: 'text', prompt: 'This is a single-line text question. The correct answer is "hello".', required: true, correct_response: "hello"},
-          {type: 'text', prompt: 'This is a multi-line text question.', placeholder: 'This is a placeholder.', textbox_rows: 10, textbox_columns: 40},
-          {type: 'text', prompt: 'This is a single-line text question of input_type "number"', input_type: 'number'},
-          {type: 'text', prompt: 'This is a single-line text question of input_type "date"', input_type: 'date'},
-        ],
-        [
-          {
-            type: 'likert',
-            prompt: 'This is a likert question prompt.',
-            likert_scale_values: [
-              {value: 1},
-              {value: 2},
-              {value: 3}
-            ],
-            likert_scale_min_label: 'Agree',
-            likert_scale_max_label: 'Disagree',
-          },
-        ],
-        [
-          {
-            type: 'likert-table',
-            prompt: 'Please indicate how much you agree with the following statements:',
-            statements: [{prompt: 'I like cats.', name: 'cat'},{prompt: 'I like giraffes.', name: 'giraffe'},{prompt: 'I like antelopes.', name: 'antelope'},{prompt: 'I like lizards.', name: 'lizard'}],
-            options: ['A lot', 'Somewhat', 'Not very much'],
-            name: 'animals',
-            required: true,
-            randomize_statement_order: true,
-         }
-        ],
-        [
-          {
-            type: 'ranking', prompt: 'Please order the shapes from your most to least favorite.', options: ['Triangle','Circle','Square'], option_reorder: 'random'
-          },
-        ],
-        [
-          {
-            type: 'drop-down', prompt: 'Which shape do you like the best?', options: ['Triangle','Circle','Square'], add_other_option: true, option_reorder: 'asc', dropdown_select_prompt: 'Select one:', required: true
-          }
-        ],
-        [
-          {type: 'multi-choice', prompt: 'This is a multi-choice question with options in one column (the default).', options: options},
-          {type: 'multi-choice', prompt: 'This is a multi-choice question with options in one row. The correct response is option 5.', options: options, columns: 0, correct_response: "Option 5"},
-          {type: 'multi-choice', prompt: 'This is a multi-choice question with options in two columns, with an "other" option.', options: options, columns: 2, add_other_option: true},
-          {type: 'multi-select', prompt: 'This is a multi-select question.', options: options},
-          {type: 'multi-select', prompt: 'This is a multi-select question with three columns and random option ordering.', options: options, columns: 3, option_reorder: 'random'},
-        ]
-      ],
-      button_label_next: "Next >",
-      button_label_back: "< Back",
-      button_label_finish: "Finish!",
-      show_question_numbers: 'on',
-      required_question_label: "",
-      required_error_text: "You forgot to answer this question!"
-    };
+  // dynamic survey example:
 
-    var survey_trial_random = {
-      type: jsPsychSurvey,
-      pages: [[
-        {type: 'text', prompt: 'Question 1.', textbox_rows: 2, textbox_columns: 20},
-        {type: 'text', prompt: 'Question 2.'},
-        {type: 'text', prompt: 'Question 3.', textbox_columns: 50},
-        {type: 'text', prompt: 'Question 4.', textbox_rows: 2},
-        {type: 'text', prompt: 'Question 5.'},
-        {type: 'text', prompt: 'Question 6.', textbox_rows: 10, textbox_columns: 20},
-      ]],
-      title: 'This is a separate survey trial. The order of questions should be randomized.',
-      randomize_question_order: true
-    };
+  // applying a different theme
 
-    jsPsych.run([survey_trial, survey_trial_random]);
-  </script>
+  jsPsych.run([contact_info_trial, vegetables_trial, animals_trial, validation_trial]);
+
+</script>
+
 </html>
