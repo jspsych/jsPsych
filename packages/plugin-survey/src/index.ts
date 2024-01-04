@@ -15,7 +15,7 @@ const info = <const>{
      */
     survey_json: {
       type: ParameterType.STRING,
-      default: {},
+      default: "{}",
       pretty_name: "Survey JSON",
     },
     /**
