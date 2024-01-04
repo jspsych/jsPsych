@@ -9,13 +9,32 @@ import * as SurveyJS from "survey-jquery";
 const info = <const>{
   name: "survey",
   parameters: {
+    /**
+     * A SurveyJS survey model defined in JSON.
+     * See: https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#define-a-static-survey-model-in-json
+     */
     survey_json: {
       type: ParameterType.STRING,
       default: {},
+      pretty_name: "Survey JSON",
     },
+    /**
+     * A SurveyJS survey model defined as a function. The function receives an empty SurveyJS survey object as an argument.
+     * See: https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#create-or-change-a-survey-model-dynamically
+     */
+    survey_function: {
+      type: ParameterType.FUNCTION,
+      default: null,
+      pretty_name: "Survey function",
+    },
+    /**
+     * A function that can be used to validate responses. This function is called whenever the SurveyJS onValidateQuestion event occurs.
+     * See: https://surveyjs.io/form-library/documentation/data-validation#implement-custom-client-side-validation
+     */
     validation_function: {
       type: ParameterType.FUNCTION,
       default: null,
+      pretty_name: "Validation function",
     },
   },
 };
