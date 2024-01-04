@@ -115,7 +115,16 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
   }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    if (trial.survey_json === "{}" && trial.survey_function === null) {
+      console.warn(
+        "Survey plugin: you must define the survey using a non-empty JSON object and/or a survey function."
+      );
+    }
     this.survey = new SurveyJS.Model(trial.survey_json);
+
+    if (trial.survey_function !== null) {
+      trial.survey_function(this.survey);
+    }
 
     //this.survey.applyTheme(PlainLightPanelless); // TO DO: can we apply this theme and still customize some values?
     this.applyStyles(this.survey); // customize colors
