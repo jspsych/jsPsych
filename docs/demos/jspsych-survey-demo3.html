@@ -5,9 +5,9 @@
     <script src="docs-demo-timeline.js"></script>
     <script src="https://unpkg.com/jspsych@7.3.4"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.3"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-survey@0.2.2"></script>
+    <script src="../../packages/plugin-survey/dist/index.browser.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
-    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.2.2/css/survey.css">
+    <link rel="stylesheet" href="../../packages/plugin-survey/css/survey.css">
     <link rel="stylesheet" href="docs-demo.css" type="text/css">
   </head>
   <body></body>
@@ -17,62 +17,81 @@
 
     const trial = {
       type: jsPsychSurvey,
-      pages: [
-        [
+      survey_json: JSON.stringify({
+        showQuestionNumbers: false,
+        title: 'Likert scale examples',
+        elements: [
           {
-            type: 'likert',
-            prompt: 'I like to eat vegetables.',
-            likert_scale_min_label: 'Strongly Disagree',
-            likert_scale_max_label: 'Strongly Agree',
-            likert_scale_values: [
-              {value: 1},
-              {value: 2},
-              {value: 3},
-              {value: 4},
-              {value: 5}
-            ]
+            type: 'rating',
+            name: 'like-vegetables',
+            title: 'I like to eat vegetables.',
+            description: 'Button rating scale with min/max descriptions',
+            minRateDescription: 'Strongly Disagree',
+            maxRateDescription: 'Strongly Agree',
+            displayMode: 'buttons',
+            rateValues: [1,2,3,4,5]
           }, 
           {
-            type: 'likert',
-            prompt: 'I like to eat fruit.',
-            likert_scale_min_label: 'Strongly Disagree',
-            likert_scale_max_label: 'Strongly Agree',
-            likert_scale_values: [
-              {value: 1},
-              {value: 2},
-              {value: 3},
-              {value: 4},
-              {value: 5}
-            ]
+            type: 'rating',
+            name: 'like-fruit',
+            title: 'I like to eat fruit.',
+            description: 'Dropdown rating scale with min/max descriptions',
+            minRateDescription: 'Strongly Disagree',
+            maxRateDescription: 'Strongly Agree',
+            displayMode: 'dropdown',
+            rateCount: 10,
+            rateMax: 10,
           },
           {
-            type: 'likert',
-            prompt: 'I like to eat meat.',
-            likert_scale_min_label: 'Strongly Disagree',
-            likert_scale_max_label: 'Strongly Agree',
-            likert_scale_values: [
-              {value: 1},
-              {value: 2},
-              {value: 3},
-              {value: 4},
-              {value: 5}
-            ]
-          },  
-          
-        ],
-        [
+            type: 'rating',
+            name: 'like-meat',
+            title: 'I like to eat meat.',
+            description: 'Star rating scale',
+            rateType: 'stars',
+            rateCount: 10,
+            rateMax: 10,
+          },
           {
-            type: 'likert-table',
-            prompt: ' ',
-            statements: [
-              {prompt: 'I like to eat vegetables', name: 'VeggiesTable'},
-              {prompt: 'I like to eat fruit', name: 'FruitTable'},
-              {prompt: 'I like to eat meat', name: 'MeatTable'},
+            type: 'rating',
+            name: 'like-cooking',
+            title: 'How much do you enjoy cooking?',
+            description: 'Smiley rating scale',
+            rateType: 'smileys',
+            rateCount: 10,
+            rateMax: 10,
+            scaleColorMode: 'colored',
+          },
+          {
+            type: 'matrix',
+            name: 'like-food-matrix',
+            title: ' ',
+            alternateRows: true,
+            isAllRowRequired: true,
+            rows: [
+              {text: 'I like to eat vegetables.', value: 'VeggiesTable'},
+              {text: 'I like to eat fruit.', value: 'FruitTable'},
+              {text: 'I like to eat meat.', value: 'MeatTable'},
+              {text: 'I like to cook.', value: 'CookTable'},
             ],
-            options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'],
+            columns: [{
+              "value": 5,
+              "text": "Strongly agree"
+            }, {
+              "value": 4,
+              "text": "Agree"
+            }, {
+              "value": 3,
+              "text": "Neutral"
+            }, {
+              "value": 2,
+              "text": "Disagree"
+            }, {
+              "value": 1,
+              "text": "Strongly disagree"
+            }]
           }
         ]
-      ],
+      })
     };
 
     const timeline = [trial];
