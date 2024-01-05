@@ -20,6 +20,11 @@ div.sd-question__content:has(div.sd-dropdown) {
   display: block;
 }
 
+// prevent item labels from wrapping
+span.sd-item__control-label {
+  text-wrap: nowrap
+}
+
 // TO DO: keeping this here for reference until we decide on default style
 
 // .sv_main {
