@@ -11,7 +11,7 @@ div.sd-question__content {
 }
 
 // center the question titles that aren't automatically centered 
-div.sd-title.sd-element__title.sd-question__title.sd-question__title--answer {
+div.sd-title.sd-element__title.sd-question__title, h5.sd-title.sd-element__title.sd-question__title {
   display: inline-block;
 }
 
