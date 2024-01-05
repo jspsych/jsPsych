@@ -4,9 +4,9 @@
     <script src="docs-demo-timeline.js"></script>
     <script src="https://unpkg.com/jspsych@7.3.4"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.3"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-survey@0.2.2"></script>
+    <script src="../../packages/plugin-survey/dist/index.browser.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
-    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.2.2/css/survey.css">
+    <link rel="stylesheet" href="../../packages/plugin-survey/css/survey.css">
     <link rel="stylesheet" href="docs-demo.css" type="text/css">
   </head>
   <body></body>
@@ -16,28 +16,46 @@
 
     const trial = {
       type: jsPsychSurvey,
-      pages: [
-        [
-          {
-            type: 'html',
-            prompt: 'Please answer the following questions:',
-          },
-          {
-            type: 'multi-choice',
-            prompt: "Which of the following do you like the most?", 
-            name: 'VegetablesLike', 
-            options: ['Tomato', 'Cucumber', 'Eggplant', 'Corn', 'Peas'], 
-            required: true
-          }, 
-          {
-            type: 'multi-select',
-            prompt: "Which of the following do you like?", 
-            name: 'FruitLike', 
-            options: ['Apple', 'Banana', 'Orange', 'Grape', 'Strawberry'], 
-            required: false,
-          }
+      survey_json: JSON.stringify({
+        showQuestionNumbers: false,
+        elements:
+          [
+            {
+              type: 'html',
+              name: 'info',
+              html: '<p><strong>Please answer the following questions:</strong></p>',
+            },
+            {
+              type: 'radiogroup',
+              title: "Which of the following do you like the most?", 
+              name: 'vegetablesLike', 
+              choices: ['Tomato', 'Cucumber', 'Eggplant', 'Corn', 'Peas', 'Broccoli'], 
+              colCount: 2,
+              required: true,
+              showNoneItem: true,
+              showOtherItem: true,
+            }, 
+            {
+              type: 'checkbox',
+              title: "Which of the following do you like?", 
+              name: 'fruitLike', 
+              description: "You can select as many as you want. Select at least 2 to see a conditional question appear below.",
+              choices: ['Apple', 'Banana', 'Orange', 'Grape', 'Strawberry', 'Kiwi', 'Mango'], 
+              colCount: 2,
+              showOtherItem: true,
+              showSelectAllItem: true,
+              required: false,
+            },
+            {
+              type: 'ranking',
+              title: "Of the fruits that you like, which one is your favorite?",
+              name: "fruitFavorite",
+              choicesFromQuestion: "fruitLike",
+              choicesFromQuestionMode: "selected",
+              visibleIf: "{fruitLike.length} > 1",
+            },
         ]
-      ],
+      }),
     };
 
     const timeline = [trial];
