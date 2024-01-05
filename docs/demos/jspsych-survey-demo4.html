@@ -5,9 +5,9 @@
     <script src="docs-demo-timeline.js"></script>
     <script src="https://unpkg.com/jspsych@7.3.4"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.3"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-survey@0.2.2"></script>
+    <script src="../../packages/plugin-survey/dist/index.browser.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
-    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.2.2/css/survey.css">
+    <link rel="stylesheet" href="../../packages/plugin-survey/css/survey.css">
     <link rel="stylesheet" href="docs-demo.css" type="text/css">
   </head>
   <body></body>
@@ -17,17 +17,38 @@
 
     const trial = {
       type: jsPsychSurvey,
-      pages: [
-        [
-          {
-            type: 'multi-choice',
-            prompt: 'During the experiment, are allowed to write things down on paper to help you?',
-            options: ["Yes", "No"],
-            correct_response: "No",
-            required: true
-          }, 
-        ]
-      ],
+      survey_json: JSON.stringify({
+        showQuestionNumbers: false,
+        title: 'Multiple choice question with a correct answer.',
+        pages: [{
+          name: 'question',
+          elements: [
+            {
+              type: 'radiogroup',
+              title: 'During the experiment, are you allowed to write things down on paper to help you?',
+              choices: ["Yes", "No"],
+              correctAnswer: "No",
+              isRequired: true
+            }
+          ],
+        }, {
+          name: 'score',
+          elements: [
+            {
+              type: 'html',
+              name: 'incorrect',
+              visibleIf: '{correctAnswers} < {questionCount}',
+              html: '<h4>That response was incorrect.</h4>'
+            },
+            {
+              type: 'html',
+              name: 'correct',
+              visibleIf: '{correctAnswers} == {questionCount}',
+              html: '<h4>Congratulations!</h4>'
+            }
+          ]
+        }]
+      })
     };
 
     const timeline = [trial];
