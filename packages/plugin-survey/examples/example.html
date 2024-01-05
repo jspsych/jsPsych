@@ -3,10 +3,10 @@
 
 <head>
   <meta charset="utf-8" />
-  <script src="../jspsych/dist/index.browser.js"></script>
-  <script src="./dist/index.browser.js"></script>
-  <link rel="stylesheet" href="../jspsych/css/jspsych.css" />
-  <link rel="stylesheet" href="css/survey.css" />
+  <script src="../../jspsych/dist/index.browser.js"></script>
+  <script src="../dist/index.browser.js"></script>
+  <link rel="stylesheet" href="../../jspsych/css/jspsych.css" />
+  <link rel="stylesheet" href="../css/survey.css" />
   <style>
     .continue-button-center div.sd-action-bar.sd-footer.sd-body__navigation {
       justify-content: center !important;
@@ -23,6 +23,40 @@
     }
   });
 
+  // combining the survey_json and survey_function parameters
+  const jspsych_rating_json = {
+    pages: [{
+      name: "JsonAndDynamicExample",
+      elements: [{
+        type: "radiogroup",
+        name: "jspsych_rating",
+        title: "How much do you like jsPsych?",
+        choices: [
+          { value: 1, text: "Not at all" },
+          { value: 2, text: "Not very much" },
+          { value: 3, text: "It's ok" },
+          { value: 4, text: "Somewhat" },
+          { value: 5, text: "A lot" },
+        ], 
+        colCount: 0
+      }]
+    }]
+  };
+
+  const jspsych_rating_function = (survey) => {
+    const page = survey.getPageByName('JsonAndDynamicExample')
+    const jspsych_improve = page.addNewQuestion("comment", "jspsych_improve");
+    jspsych_improve.title = "What would make jsPsych better?";
+    jspsych_improve.visibleIf = "{jspsych_rating} < 4";
+    survey.showQuestionNumbers = false;
+  }
+
+  const jspsych_rating_trial = {
+    type: jsPsychSurvey,
+    survey_json: JSON.stringify(jspsych_rating_json),
+    survey_function: jspsych_rating_function
+  };
+
   // survey JSON example: text input, dropdown, multi-select dropdown, collapsible fields
   const contact_info = {
     title: "jsPsych Survey Plugin example",
@@ -34,6 +68,7 @@
         name: "FirstName",
         title: "First name:",
         isRequired: true,
+        autocomplete: 'given-name'
       },
       {
         type: "text",
@@ -41,6 +76,7 @@
         title: "Last name:",
         isRequired: true,
         startWithNewLine: false,
+        autocomplete: 'family-name'
       },
       {
         type: "panel",
@@ -49,9 +85,11 @@
         title: "Contact (optional)",
         elements: [{
           type: "text",
+          inputType: 'tel',
           name: "Phone",
           title: "Phone number:",
-          defaultValue: "(123) 456-7890"
+          defaultValue: "(123) 456-7890",
+          autocomplete: 'tel'
         }, {
           type: "text",
           name: "GitHub",
@@ -59,8 +97,10 @@
         },
         {
           type: "text",
+          inputType: 'email',
           name: "email",
-          title: "Email:"
+          title: "Email:",
+          autocomplete: 'email'
         }]
       }]
     },
@@ -76,7 +116,8 @@
         width: "20%",
         minWidth: "128px",
         startWithNewLine: false,
-        description: "Enter a state"
+        description: "Enter a state",
+        autocomplete: "off"
       },
       {
         type: "dropdown",
@@ -117,7 +158,6 @@
 
   // survey JSON example: making questions conditional on previous answers
   const vegetables = {
-    
     pages: [{
       title: "Example of conditional questions",
       elements: [{
@@ -226,7 +266,8 @@
           text: "Your SSN must be a 9-digit number",
           regex: "^(?!0{3})(?!6{3})[0-8]\\d{2}-?(?!0{2})\\d{2}-?(?!0{4})\\d{4}$"
         }],
-        maxLength: 9
+        maxLength: 9,
+        autocomplete: "off"
       },
       {
         type: "text",
@@ -254,13 +295,7 @@
     validation_function: validate_yes
   };
 
-  // dynamic survey example: center the continue button
-
-  // dynamic survey example:
-
-  // applying a different theme
-
-  jsPsych.run([contact_info_trial, vegetables_trial, animals_trial, validation_trial]);
+  jsPsych.run([jspsych_rating_trial, contact_info_trial, vegetables_trial, animals_trial, validation_trial]);
 
 </script>
 
