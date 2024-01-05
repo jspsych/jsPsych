@@ -5,6 +5,21 @@ div#sv-nav-complete.sv-action, div#sv-nav-next.sv-action {
   margin-left: auto !important;
 }
 
+// center the question content 
+div.sd-question__content {
+  display: inline-block;
+}
+
+// center the question titles that aren't automatically centered 
+div.sd-title.sd-element__title.sd-question__title.sd-question__title--answer {
+  display: inline-block;
+}
+
+// for dropdown questions, set the div back to block, otherwise the option text/description doesn't fit in the dropdown box
+div.sd-question__content:has(div.sd-dropdown) {
+  display: block;
+}
+
 // TO DO: keeping this here for reference until we decide on default style
 
 // .sv_main {
