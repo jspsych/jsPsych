@@ -41,7 +41,7 @@ export class ProgressBar {
 
   private updateMessage() {
     if (typeof this.message === "function") {
-      this.messageSpan.innerHTML = this.message(0);
+      this.messageSpan.innerHTML = this.message(this._progress);
     } else {
       this.messageSpan.innerHTML = this.message;
     }
