@@ -18,12 +18,7 @@ export class ProgressBar {
   private setupElements() {
     this.messageSpan = document.createElement("span");
 
-    if (Object.prototype.toString.call(this.message) === "[object Function]") {
-      this.messageSpan.innerHTML = (this.message as (progress: number) => string)(0);
-    } else {
-      // Progress starts at 0 when experiment commences
-      this.messageSpan.innerHTML = this.message as string;
-    }
+    this.updateMessage();
 
     this.innerDiv = document.createElement("div");
     this.innerDiv.id = "jspsych-progressbar-inner";
@@ -41,8 +36,14 @@ export class ProgressBar {
   private update() {
     this.innerDiv.style.width = this._progress * 100 + "%";
 
-    if (Object.prototype.toString.call(this.message) === "[object Function]") {
-      this.messageSpan.innerHTML = (this.message as (progress: number) => string)(this._progress);
+    this.updateMessage();
+  }
+
+  private updateMessage() {
+    if (typeof this.message === "function") {
+      this.messageSpan.innerHTML = this.message(0);
+    } else {
+      this.messageSpan.innerHTML = this.message;
     }
   }
 
