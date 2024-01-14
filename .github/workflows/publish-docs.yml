@@ -28,8 +28,11 @@ jobs:
         id: version
         run: echo "version=$(node -p "require('./packages/jspsych/package.json').version")" >> "$GITHUB_ENV"
 
+      - name: Remove patch version
+        run: echo "version_major_minor=${{ env.version }}" | awk -F. '{print $1"."$2}' >> "$GITHUB_ENV"
+
       - name: Deploy docs
-        run: npm run docs:deploy ${{ env.version }}
+        run: npm run docs:deploy ${{ env.version_major_minor }}
 
       - name: Checkout gh-docs branch
         uses: actions/checkout@v2
