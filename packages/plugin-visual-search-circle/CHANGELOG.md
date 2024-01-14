@@ -1,5 +1,11 @@
 # @jspsych/plugin-visual-search-circle
 
+## 1.2.1
+
+### Patch Changes
+
+- [#3213](https://github.com/jspsych/jsPsych/pull/3213) [`7b797727`](https://github.com/jspsych/jsPsych/commit/7b797727fa3b2b384ef964eb53d74f474ec902ef) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Fix display clearing problem introduced with version 1.2.0
+
 ## 1.2.0
 
 ### Minor Changes
