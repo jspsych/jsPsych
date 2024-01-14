@@ -26,10 +26,10 @@ jobs:
 
       - name: Get current version
         id: version
-        run: echo "::set-output name=version::$(node -p "const version = require('./packages/jspsych/package.json').version; const [major, minor] = version.split('.'); return `${major}.${minor}`;")"
+        run: echo "version=$(node -p "const version = require('./packages/jspsych/package.json').version; const [major, minor] = version.split('.'); `${major}.${minor}`;")" >> "$GITHUB_ENV"
 
       - name: Deploy docs
-        run: npm run docs:deploy ${{ steps.version.outputs.version }}
+        run: npm run docs:deploy "$version"
 
       - name: Checkout gh-docs branch
         uses: actions/checkout@v2
