@@ -22,14 +22,11 @@ jobs:
           python-version: '3.8'
 
       - name: Install poetry using pip
-        run: pip install poetry
-
-      - name: Install dependencies
-        run: npm ci
+        run: pipx install poetry==1.7.0
 
       - name: Get current version
         id: version
-        run: echo "::set-output name=version::$(node -p "require('./packages/jspsych/package.json').version")"
+        run: echo "::set-output name=version::$(node -p "const version = require('./packages/jspsych/package.json').version; const [major, minor] = version.split('.'); return `${major}.${minor}`;")
 
       - name: Deploy docs
         run: npm run docs:deploy ${{ steps.version.outputs.version }}
