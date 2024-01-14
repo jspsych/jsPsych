@@ -32,6 +32,7 @@ The `target_present` and `fixation_image` parameters must always be specified. O
 | target_absent_key  | string          | 'f'           | The key to press if the target is not present in the search array. |
 | trial_duration     | numeric         | null          | The maximum amount of time the participant is allowed to search before the trial will continue. A value of null will allow the participant to search indefinitely. |
 | fixation_duration  | numeric         | 1000          | How long to show the fixation image for before the search array (in milliseconds). |
+| response_ends_trial| boolean         | true         | If true, the trial will end when the participant makes a response. |
 
 ## Data Generated
 
