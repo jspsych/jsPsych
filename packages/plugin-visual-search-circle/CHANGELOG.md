@@ -1,5 +1,11 @@
 # @jspsych/plugin-visual-search-circle
 
+## 1.2.0
+
+### Minor Changes
+
+- [#3211](https://github.com/jspsych/jsPsych/pull/3211) [`37430e13`](https://github.com/jspsych/jsPsych/commit/37430e13e9645d90e853471010bee0c95c895954) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Adds response_ends_trial parameter, with a default value of `true`
+
 ## 1.1.3
 
 ### Patch Changes
