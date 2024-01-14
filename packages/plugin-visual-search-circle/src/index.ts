@@ -166,6 +166,8 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
     };
 
     const end_trial = () => {
+      display_element.innerHTML = "";
+
       this.jsPsych.pluginAPI.clearAllTimeouts();
       this.jsPsych.pluginAPI.cancelAllKeyboardResponses();
 

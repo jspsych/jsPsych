@@ -28,6 +28,8 @@ describe("visual-search-circle", () => {
     await pressKey("a");
     await expectFinished();
 
+    expect(displayElement.querySelectorAll("img").length).toBe(0);
+
     expect(getData().values()[0].correct).toBe(true);
   });
 
@@ -57,6 +59,8 @@ describe("visual-search-circle", () => {
 
     jest.runAllTimers();
     await expectFinished();
+
+    expect(displayElement.querySelectorAll("img").length).toBe(0);
 
     expect(getData().values()[0].correct).toBe(true);
   });
