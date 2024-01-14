@@ -26,7 +26,7 @@ jobs:
 
       - name: Get current version
         id: version
-        run: echo "version=$(node -p "const version = require('./packages/jspsych/package.json').version; const [major, minor] = version.split('.'); `${major}.${minor}`;")" >> $GITHUB_ENV
+        run: echo "version=$(node -p "const version = require('./packages/jspsych/package.json').version; const [major, minor] = version.split('.'); `${major}.${minor}`;")" >> "$GITHUB_ENV"
 
       - name: Deploy docs
         run: npm run docs:deploy ${{ env.version }}
