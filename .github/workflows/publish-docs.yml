@@ -39,16 +39,14 @@ jobs:
       - name: Deploy docs
         run: npm run docs:deploy ${{ env.version_major_minor }}
 
-      - name: Checkout gh-docs branch
-        uses: actions/checkout@v2
-        with:
-          ref: gh-docs
+      - name: Switch to gh-pages branch
+        run: git checkout gh-pages
 
-      - name: Push gh-docs branch
+      - name: Push gh-pages branch
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: gh-docs
+          branch: gh-pages
           force: true
 
 
