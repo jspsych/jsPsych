@@ -89,6 +89,12 @@ const info = <const>{
       pretty_name: "Fixation duration",
       default: 1000,
     },
+    /** Whether a keyboard response ends the trial early */
+    response_ends_trial: {
+      type: ParameterType.BOOL,
+      pretty_name: "Response ends trial",
+      default: true,
+    },
   },
 };
 
@@ -153,12 +159,21 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
       }, trial.fixation_duration);
     };
 
-    const end_trial = (rt: number, correct: boolean, key_press: string) => {
+    const response = {
+      rt: null,
+      key: null,
+      correct: false,
+    };
+
+    const end_trial = () => {
+      this.jsPsych.pluginAPI.clearAllTimeouts();
+      this.jsPsych.pluginAPI.cancelAllKeyboardResponses();
+
       // data saving
-      var trial_data = {
-        correct: correct,
-        rt: rt,
-        response: key_press,
+      const trial_data = {
+        correct: response.correct,
+        rt: response.rt,
+        response: response.key,
         locations: display_locs,
         target_present: trial.target_present,
         set_size: trial.set_size,
@@ -186,11 +201,7 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
           "px;'></img>";
       }
 
-      var trial_over = false;
-
       const after_response = (info: { key: string; rt: number }) => {
-        trial_over = true;
-
         var correct = false;
 
         if (
@@ -202,12 +213,16 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
           correct = true;
         }
 
-        clear_display();
+        response.rt = info.rt;
+        response.key = info.key;
+        response.correct = correct;
 
-        end_trial(info.rt, correct, info.key);
+        if (trial.response_ends_trial) {
+          end_trial();
+        }
       };
 
-      var valid_keys = [trial.target_present_key, trial.target_absent_key];
+      const valid_keys = [trial.target_present_key, trial.target_absent_key];
 
       const key_listener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
@@ -219,19 +234,11 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
 
       if (trial.trial_duration !== null) {
         this.jsPsych.pluginAPI.setTimeout(() => {
-          if (!trial_over) {
+          if (!response.rt) {
             this.jsPsych.pluginAPI.cancelKeyboardResponse(key_listener);
-
-            trial_over = true;
-
-            var rt = null;
-            var correct = false;
-            var key_press = null;
-
-            clear_display();
-
-            end_trial(rt, correct, key_press);
           }
+
+          end_trial();
         }, trial.trial_duration);
       }
 
