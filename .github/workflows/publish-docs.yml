@@ -31,6 +31,11 @@ jobs:
       - name: Remove patch version
         run: echo "version_major_minor=${{ env.version }}" | awk -F. '{print $1"."$2}' >> "$GITHUB_ENV"
 
+      - name: Config git
+        run: |
+          git config --global user.name docs-bot
+          git config --global user.email docs@jspsych.org
+
       - name: Deploy docs
         run: npm run docs:deploy ${{ env.version_major_minor }}
 
