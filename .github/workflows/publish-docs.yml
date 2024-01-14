@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  deploy-docs:
     runs-on: ubuntu-latest
 
     steps:
