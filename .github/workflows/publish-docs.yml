@@ -1,0 +1,49 @@
+name: Publish Docs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install poetry using pip
+        run: pip install poetry
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get current version
+        id: version
+        run: echo "::set-output name=version::$(node -p "require('./packages/jspsych/package.json').version")"
+
+      - name: Deploy docs
+        run: npm run docs:deploy ${{ steps.version.outputs.version }}
+
+      - name: Checkout gh-docs branch
+        uses: actions/checkout@v2
+        with:
+          ref: gh-docs
+
+      - name: Push gh-docs branch
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-docs
+          force: true
+
+
