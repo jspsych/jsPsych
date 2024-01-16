@@ -18,8 +18,6 @@ export class ProgressBar {
   private setupElements() {
     this.messageSpan = document.createElement("span");
 
-    this.updateMessage();
-
     this.innerDiv = document.createElement("div");
     this.innerDiv.id = "jspsych-progressbar-inner";
     this.update();
@@ -36,10 +34,6 @@ export class ProgressBar {
   private update() {
     this.innerDiv.style.width = this._progress * 100 + "%";
 
-    this.updateMessage();
-  }
-
-  private updateMessage() {
     if (typeof this.message === "function") {
       this.messageSpan.innerHTML = this.message(this._progress);
     } else {
