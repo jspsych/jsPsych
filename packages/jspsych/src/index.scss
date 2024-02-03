@@ -30,7 +30,6 @@
 }
 
 .jspsych-content {
-  max-width: 95%; /* this is mainly an IE 10-11 fix */
   text-align: center;
   margin: auto; /* this is for overflowing content */
 }
@@ -73,7 +72,6 @@
   margin-left: auto;
 }
 
-/* borrowing Bootstrap style for btn elements, but combining styles a bit */
 .jspsych-btn {
   display: inline-block;
   padding: 8px 12px;
@@ -123,10 +121,11 @@
   width: 100%;
   background: transparent;
 }
+
 .jspsych-slider:focus {
   outline: none;
 }
-/* track */
+
 .jspsych-slider::-webkit-slider-runnable-track {
   appearance: none;
   -webkit-appearance: none;
@@ -138,6 +137,7 @@
   border-radius: 2px;
   border: 1px solid #aaa;
 }
+
 .jspsych-slider::-moz-range-track {
   appearance: none;
   width: 100%;
@@ -148,6 +148,7 @@
   border-radius: 2px;
   border: 1px solid #aaa;
 }
+
 .jspsych-slider::-ms-track {
   appearance: none;
   width: 99%;
@@ -158,7 +159,7 @@
   border-radius: 2px;
   border: 1px solid #aaa;
 }
-/* thumb */
+
 .jspsych-slider::-webkit-slider-thumb {
   border: 1px solid #666;
   height: 24px;
@@ -169,6 +170,7 @@
   -webkit-appearance: none;
   margin-top: -9px;
 }
+
 .jspsych-slider::-moz-range-thumb {
   border: 1px solid #666;
   height: 24px;
@@ -177,6 +179,7 @@
   background: #ffffff;
   cursor: pointer;
 }
+
 .jspsych-slider::-ms-thumb {
   border: 1px solid #666;
   height: 20px;
@@ -187,7 +190,7 @@
   margin-top: -2px;
 }
 
-/* jsPsych progress bar */
+/* progress bar */
 
 #jspsych-progressbar-container {
   color: #555;
@@ -199,10 +202,12 @@
   width: 100%;
   line-height: 1em;
 }
+
 #jspsych-progressbar-container span {
   font-size: 14px;
   padding-right: 14px;
 }
+
 #jspsych-progressbar-outer {
   background-color: #eee;
   width: 50%;
@@ -212,13 +217,14 @@
   vertical-align: middle;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
+
 #jspsych-progressbar-inner {
   background-color: #aaa;
   width: 0%;
   height: 100%;
 }
 
-/* Control appearance of jsPsych.data.displayData() */
+/* Appearance of jsPsych.data.displayData() */
 #jspsych-data-display {
   text-align: left;
 }
