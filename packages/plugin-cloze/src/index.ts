@@ -3,7 +3,7 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 const info = <const>{
   name: "cloze",
   parameters: {
-    /** The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. %solution%). */
+    /** The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. %solution%). For multiple answers, type them with a slash (i.e. %1/2/3%). */
     text: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Cloze text",
@@ -25,6 +25,12 @@ const info = <const>{
     allow_blanks: {
       type: ParameterType.BOOL,
       pretty_name: "Allow blanks",
+      default: true,
+    },
+    /** Boolean value indicating if the solutions checker must be case sensitive. */
+    case_sensitivity: {
+      type: ParameterType.BOOL,
+      pretty_name: "Case sensitivity",
       default: true,
     },
     /** Function called if either the check_answers is set to TRUE or the allow_blanks is set to FALSE and there is a discrepancy between the set answers and the answers provide or if all input fields aren't filled out, respectively. */
@@ -55,7 +61,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
     var html = '<div class="cloze">';
     // odd elements are text, even elements are the blanks
     var elements = trial.text.split("%");
-    const solutions = this.getSolutions(trial.text);
+    const solutions = this.getSolutions(trial.text, trial.case_sensitivity);
 
     let solution_counter = 0;
     for (var i = 0; i < elements.length; i++) {
@@ -78,10 +84,12 @@ class ClozePlugin implements JsPsychPlugin<Info> {
 
       for (var i = 0; i < solutions.length; i++) {
         var field = document.getElementById("input" + i) as HTMLInputElement;
-        answers.push(field.value.trim());
+        answers.push(
+          trial.case_sensitivity ? field.value.trim() : field.value.toLowerCase().trim()
+        );
 
         if (trial.check_answers) {
-          if (answers[i] !== solutions[i]) {
+          if (!solutions[i].includes(answers[i])) {
             field.style.color = "red";
             answers_correct = false;
           } else {
@@ -112,15 +120,18 @@ class ClozePlugin implements JsPsychPlugin<Info> {
       trial.button_text +
       "</button>";
     display_element.querySelector("#finish_cloze_button").addEventListener("click", check);
+
+    (display_element.querySelector("#input0") as HTMLElement).focus();
   }
 
-  private getSolutions(text: string) {
-    const solutions = [];
+  private getSolutions(text: string, case_sensitive: boolean) {
+    const solutions: String[][] = [];
     const elements = text.split("%");
-    for (let i = 0; i < elements.length; i++) {
-      if (i % 2 == 1) {
-        solutions.push(elements[i].trim());
-      }
+
+    for (let i = 1; i < elements.length; i += 2) {
+      solutions.push(
+        case_sensitive ? elements[i].trim().split("/") : elements[i].toLowerCase().trim().split("/")
+      );
     }
 
     return solutions;
@@ -142,13 +153,13 @@ class ClozePlugin implements JsPsychPlugin<Info> {
   }
 
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
-    const solutions = this.getSolutions(trial.text);
+    const solutions = this.getSolutions(trial.text, trial.case_sensitivity);
     const responses = [];
-    for (const word of solutions) {
-      if (word == "") {
+    for (const wordList of solutions) {
+      if (wordList.includes("")) {
         responses.push(this.jsPsych.randomization.randomWords({ exactly: 1 }));
       } else {
-        responses.push(word);
+        responses.push(wordList);
       }
     }
 
@@ -166,6 +177,8 @@ class ClozePlugin implements JsPsychPlugin<Info> {
   private simulate_data_only(trial: TrialType<Info>, simulation_options) {
     const data = this.create_simulation_data(trial, simulation_options);
 
+    data.response = data.response[0];
+
     this.jsPsych.finishTrial(data);
   }
 
@@ -180,7 +193,9 @@ class ClozePlugin implements JsPsychPlugin<Info> {
     const inputs = display_element.querySelectorAll('input[type="text"]');
     let rt = this.jsPsych.randomization.sampleExGaussian(750, 200, 0.01, true);
     for (let i = 0; i < data.response.length; i++) {
-      this.jsPsych.pluginAPI.fillTextInput(inputs[i] as HTMLInputElement, data.response[i], rt);
+      let res = data.response[i][Math.floor(Math.random() * data.response[i].length)];
+
+      this.jsPsych.pluginAPI.fillTextInput(inputs[i] as HTMLInputElement, res, rt);
       rt += this.jsPsych.randomization.sampleExGaussian(750, 200, 0.01, true);
     }
     this.jsPsych.pluginAPI.clickTarget(display_element.querySelector("#finish_cloze_button"), rt);
