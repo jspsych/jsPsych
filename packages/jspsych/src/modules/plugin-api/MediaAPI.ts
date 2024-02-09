@@ -1,5 +1,6 @@
 import { ParameterType } from "../../modules/plugins";
 import { unique } from "../utils";
+import { AudioPlayer } from "./AudioPlayer";
 
 const preloadParameterTypes = <const>[
   ParameterType.AUDIO,
@@ -9,7 +10,7 @@ const preloadParameterTypes = <const>[
 type PreloadType = typeof preloadParameterTypes[number];
 
 export class MediaAPI {
-  constructor(private useWebaudio: boolean) {
+  constructor(public useWebaudio: boolean) {
     if (
       this.useWebaudio &&
       typeof window !== "undefined" &&
@@ -32,36 +33,24 @@ export class MediaAPI {
   private context: AudioContext = null;
   private audio_buffers = [];
 
-  audioContext() {
+  audioContext(): AudioContext {
     if (this.context && this.context.state !== "running") {
       this.context.resume();
     }
     return this.context;
   }
 
-  getAudioBuffer(audioID) {
-    return new Promise((resolve, reject) => {
-      // check whether audio file already preloaded
-      if (
-        typeof this.audio_buffers[audioID] == "undefined" ||
-        this.audio_buffers[audioID] == "tmp"
-      ) {
-        // if audio is not already loaded, try to load it
-        this.preloadAudio(
-          [audioID],
-          () => {
-            resolve(this.audio_buffers[audioID]);
-          },
-          () => {},
-          (e) => {
-            reject(e.error);
-          }
-        );
-      } else {
-        // audio is already loaded
-        resolve(this.audio_buffers[audioID]);
-      }
-    });
+  async getAudioPlayer(audioID: string): Promise<AudioPlayer> {
+    if (this.audio_buffers[audioID] instanceof AudioPlayer) {
+      return this.audio_buffers[audioID];
+    } else {
+      this.audio_buffers[audioID] = new AudioPlayer(audioID, {
+        useWebAudio: this.useWebaudio,
+        audioContext: this.context,
+      });
+      await this.audio_buffers[audioID].load();
+      return this.audio_buffers[audioID];
+    }
   }
 
   // preloading stimuli //
@@ -72,8 +61,8 @@ export class MediaAPI {
   preloadAudio(
     files,
     callback_complete = () => {},
-    callback_load = (filepath) => {},
-    callback_error = (error_msg) => {}
+    callback_load = (filepath: string) => {},
+    callback_error = (error: string) => {}
   ) {
     files = unique(files.flat());
 
@@ -84,80 +73,31 @@ export class MediaAPI {
       return;
     }
 
-    const load_audio_file_webaudio = (source, count = 1) => {
-      const request = new XMLHttpRequest();
-      request.open("GET", source, true);
-      request.responseType = "arraybuffer";
-      request.onload = () => {
-        this.context.decodeAudioData(
-          request.response,
-          (buffer) => {
-            this.audio_buffers[source] = buffer;
-            n_loaded++;
-            callback_load(source);
-            if (n_loaded == files.length) {
-              callback_complete();
-            }
-          },
-          (e) => {
-            callback_error({ source: source, error: e });
-          }
-        );
-      };
-      request.onerror = (e) => {
-        let err: ProgressEvent | string = e;
-        if (request.status == 404) {
-          err = "404";
-        }
-        callback_error({ source: source, error: err });
-      };
-      request.onloadend = (e) => {
-        if (request.status == 404) {
-          callback_error({ source: source, error: "404" });
-        }
-      };
-      request.send();
-      this.preload_requests.push(request);
-    };
-
-    const load_audio_file_html5audio = (source, count = 1) => {
-      const audio = new Audio();
-      const handleCanPlayThrough = () => {
-        this.audio_buffers[source] = audio;
-        n_loaded++;
-        callback_load(source);
-        if (n_loaded == files.length) {
-          callback_complete();
-        }
-        audio.removeEventListener("canplaythrough", handleCanPlayThrough);
-      };
-      audio.addEventListener("canplaythrough", handleCanPlayThrough);
-      audio.addEventListener("error", function handleError(e) {
-        callback_error({ source: audio.src, error: e });
-        audio.removeEventListener("error", handleError);
-      });
-      audio.addEventListener("abort", function handleAbort(e) {
-        callback_error({ source: audio.src, error: e });
-        audio.removeEventListener("abort", handleAbort);
-      });
-      audio.src = source;
-      this.preload_requests.push(audio);
-    };
-
     for (const file of files) {
-      if (typeof this.audio_buffers[file] !== "undefined") {
+      // check if file was already loaded
+      if (this.audio_buffers[file] instanceof AudioPlayer) {
         n_loaded++;
         callback_load(file);
         if (n_loaded == files.length) {
           callback_complete();
         }
       } else {
-        this.audio_buffers[file] = "tmp";
-        if (this.audioContext() !== null) {
-          load_audio_file_webaudio(file);
-        } else {
-          load_audio_file_html5audio(file);
-        }
+        this.audio_buffers[file] = new AudioPlayer(file, {
+          useWebAudio: this.useWebaudio,
+          audioContext: this.context,
+        });
+        this.audio_buffers[file]
+          .load()
+          .then(() => {
+            n_loaded++;
+            callback_load(file);
+            if (n_loaded == files.length) {
+              callback_complete();
+            }
+          })
+          .catch((e) => {
+            callback_error(e);
+          });
       }
     }
   }
@@ -223,7 +163,7 @@ export class MediaAPI {
       const request = new XMLHttpRequest();
       request.open("GET", video, true);
       request.responseType = "blob";
-      request.onload =  () => {
+      request.onload = () => {
         if (request.status === 200 || request.status === 0) {
           const videoBlob = request.response;
           video_buffers[video] = URL.createObjectURL(videoBlob); // IE10+
@@ -234,14 +174,14 @@ export class MediaAPI {
           }
         }
       };
-      request.onerror =  (e) => {
+      request.onerror = (e) => {
         let err: ProgressEvent | string = e;
         if (request.status == 404) {
           err = "404";
         }
         callback_error({ source: video, error: err });
       };
-      request.onloadend =  (e) => {
+      request.onloadend = (e) => {
         if (request.status == 404) {
           callback_error({ source: video, error: "404" });
         }
