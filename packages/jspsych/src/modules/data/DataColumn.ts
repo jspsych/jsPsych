@@ -10,7 +10,18 @@ export class DataColumn {
   }
 
   mean() {
-    return this.sum() / this.count();
+    let sum = 0;
+    let count = 0;
+    for (const value of this.values) {
+      if (typeof value !== "undefined" && value !== null) {
+        sum += value;
+        count++;
+      }
+    }
+    if (count === 0) {
+      return undefined;
+    }
+    return sum / count;
   }
 
   median() {
