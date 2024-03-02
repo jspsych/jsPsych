@@ -264,7 +264,7 @@ export function randomID(length = 32) {
  */
 export function randomInt(lower: number, upper: number) {
   if (upper < lower) {
-    throw new Error("Upper boundary must be less than or equal to lower boundary");
+    throw new Error("Upper boundary must be greater than or equal to lower boundary");
   }
   return lower + Math.floor(Math.random() * (upper - lower + 1));
 }
