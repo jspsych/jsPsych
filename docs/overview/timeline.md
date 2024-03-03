@@ -55,7 +55,7 @@ timeline.push(trial_3);
 
 ## Nested timelines
 
-Each object on the timeline can also have it's own timeline. This is useful for many reasons. One is that it allows you to define common parameters across trials once and have them apply to all the trials on the nested timeline. The example below creates a series of trials using the [image-keyboard-response plugin](../plugins/image-keyboard-response/), where the only thing that changes from trial-to-trial is the image file being displayed on the screen.
+Each object on the timeline can also have its own timeline. This is useful for many reasons. One is that it allows you to define common parameters across trials once and have them apply to all the trials on the nested timeline. The example below creates a series of trials using the [image-keyboard-response plugin](../plugins/image-keyboard-response/), where the only thing that changes from trial-to-trial is the image file being displayed on the screen.
 
 ```javascript
 var judgment_trials = {
