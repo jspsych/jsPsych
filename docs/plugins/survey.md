@@ -2,22 +2,234 @@
 
 Current version: 0.2.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md).
 
-The survey plugin displays one or more questions of different types, on one or more pages that the participant can navigate. This plugin is built on top of the [SurveyJS](https://surveyjs.io/) library.
+The survey plugin displays one or more questions of different types, on one or more pages that the participant can navigate. This plugin is built on top of the [SurveyJS](https://surveyjs.io/) form library. 
 
-The supported question types are: 
+## SurveyJS Documentation
 
-- [`"drop-down"`](#drop-down) for presenting a question with a limited set of options in a drop-down menu. The participant can only select one option. 
-- [`"likert"`](#likert) for presenting a prompt along with a discrete rating scale.
-- [`"likert-table"`](#likert-table) for presenting a prompt along with a table of statements/questions (rows) and repeated response options for each statement/question (columns).
-- [`"multi-choice"`](#multi-choice) for presenting a question with a limited set of options. The participant can only select one option.
-- [`"multi-select"`](#multi-select) for presenting a question with a limited set of options. The participant can select multiple options.
-- [`"ranking"`](#ranking) for presenting a question with a limited set of options, where participants respond by dragging and dropping (ordering/ranking) the options.
-- [`"text"`](#text) for presenting a question with a free response text field in which the participant can type in an answer.
+SurveyJS is a large and powerful library, with lots of helpful documentation. Here we have tried to orient jsPsych users to the basic steps for constructing surveys and highlight the features that jsPsych users may find most useful. However, it is not possible for us to reproduce the SurveyJS documentation here, so we encourage you to use their documentation and examples. 
 
-There is also an [`"html"`](#html) type for adding arbitrary HTML-formatted content (without any associated response field) in the question set.
+!!! note
+    SurveyJS offers a number of different products - when looking at their documentation website, make sure that you're looking at the free ['form library'](https://surveyjs.io/form-library).
 
-!!! warning
-    Development on this plugin is ongoing and we plan to incorporate more of the features that [SurveyJS](https://surveyjs.io/) provides. Prior to release of version `1.0` of the plugin, we expect the parameters and implementation of this plugin to change. We recommend performing a little bit of extra testing with any experiments that utilize this plugin. 
+SurveyJS allows you to build surveys using a JSON string, a JavaScript function, or a combination of both. 
+
+- [Define a survey in JSON](https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#define-a-static-survey-model-in-json)
+- [Create or change a survey with JavaScript](https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#create-or-change-a-survey-model-dynamically)
+
+The jsPsych `survey` plugin provides parameters that accept these methods of constructing a SurveyJS survey. 
+
+Here are some other great places to start learning about SurveyJS:
+
+- [Add multiple pages to a survey](https://surveyjs.io/form-library/documentation/design-survey/create-a-multi-page-survey#add-multiple-pages-to-a-survey)
+- [Configure conditional page visibility](https://surveyjs.io/form-library/documentation/design-survey/create-a-multi-page-survey#configure-page-visibility)
+- [Page navigation UI](https://surveyjs.io/form-library/documentation/design-survey/create-a-multi-page-survey#page-navigation-ui) (previous, next, and submit buttons)
+- [Add conditional logic and dynamic texts](https://surveyjs.io/form-library/documentation/design-survey/conditional-logic)
+- [Set default values](https://surveyjs.io/form-library/documentation/design-survey/pre-populate-form-fields#default-question-values)
+
+You can find realistic examples on this [SurveyJS examples/demos page](https://surveyjs.io/form-library/examples/overview).
+
+## Question/Element Types
+
+SurveyJS requires that you add one or more "elements" to a survey. Elements are typically questions that the participant can (or must) respond to. But there are also some non-question elements, such as "expression", "html" and "image" types.
+
+The SurveyJS question/element types are listed below, with links to more information and examples in the SurveyJS documentation. 
+
+!!! tip 
+    On the SurveyJS example page for each question type, you will see a demo survey. At the bottom of the page, there is a 'Code' button you can click to see the code that runs this demo. Click on the 'json.js' file to see the JSON you can use in jsPsych's `survey_json` parameter. 
+    ![SurveyJS documentation with example JSON](../img/surveyjs_docs_example_json.png)
+
+### boolean
+
+The "boolean" type is a yes/no (or other two-option) multiple choice question. It differs from the "radiogroup" (multiple choice) question type in that it offers different response format options (left/right slider button, yes/no checkbox) in addition to the standard multiple choice format (two separate radio buttons).
+
+[SurveyJS boolean example](https://surveyjs.io/form-library/examples/yes-no-question/jquery) 
+
+[SurveyJS boolean API documentation](https://surveyjs.io/form-library/documentation/api-reference/boolean-question-model)
+
+### checkbox
+
+This is the "multi-select" question type: participants can select one or more options from the set of choices.
+
+[SurveyJS checkbox example](https://surveyjs.io/form-library/examples/create-checkboxes-question-in-javascript/jquery) 
+
+[SurveyJS checkbox API documentation](https://surveyjs.io/form-library/documentation/api-reference/checkbox-question-model)
+
+### comment
+
+This is the "long text" question type. It's similar to the text input question, but unlike text input, you can make the comment text box larger than a single line. You can also make the box resizeable and limit the number of characters.
+
+[SurveyJS comment example](https://surveyjs.io/form-library/examples/add-open-ended-question-to-a-form/jquery) 
+
+[SurveyJS comment API documentation](https://surveyjs.io/form-library/documentation/api-reference/comment-field-model)
+
+### dropdown
+
+The dropdown question type allows participants to select a single option from a list presented in a drop-down box. 
+
+[SurveyJS dropdown example](https://surveyjs.io/form-library/examples/create-dropdown-menu-in-javascript/jquery) 
+
+[SurveyJS dropdown API documentation](https://surveyjs.io/form-library/documentation/api-reference/dropdown-menu-model)
+
+### tagbox
+
+This is a multi-select dropdown question type. It is similar to a dropdown question, but allows participants to select more than one response from the drop-down list.
+
+[SurveyJS tagbox example](https://surveyjs.io/form-library/examples/how-to-create-multiselect-tag-box/jquery) 
+
+[SurveyJS API documentation](https://surveyjs.io/form-library/documentation/api-reference/dropdown-tag-box-model)
+
+### expression
+
+This is a read-only element that calculates a value based on a specified expression. This question type can be used to dynamically calculate values based on the participant's responses and/or predefined variables and display the calculated value on the page. For example, if you asked participants to estimate the percentage of their day doing various activies, you could have participants enter a percentage value for each activity, and use this 'expression' question to calculate and display the total percentage across all activities (to ensure that it does not exceed 100).
+
+[SurveyJS expression example](https://surveyjs.io/form-library/examples/expression-question-for-dynamic-form-calculations/jquery) 
+
+[SurveyJS expression API documentation](https://surveyjs.io/form-library/documentation/api-reference/expression-model)
+
+### file
+
+This question allows participants to upload one or more files (images, documents, etc.). It provides drag-and-drop and browse/select options. Files can be uploaded to a server or stored directly in the survey results JSON object as base64-encoded text.
+
+!!! note 
+    When using this question type, you will need to choose how to handle the files. One option is to save the file with the rest of the response data as a Base64-encoded text string (`storeDataAsText: true`), but keep in mind that this will significantly increase the size of the response data and should only be used for small files. Another option is to upload the participant's file to a server, which you can do using the `onUploadFiles` event handler in the jsPsych `survey_function` function. You can read more about these options in the SurveyJS [file upload documentation](https://surveyjs.io/form-library/examples/file-upload/jquery#content-docs), and see an example of the file upload option in the `index.js` part of this [code example](https://surveyjs.io/form-library/examples/file-upload/jquery#content-code).
+
+[SurveyJS file example](https://surveyjs.io/form-library/examples/file-upload/jquery) 
+
+[SurveyJS file API documentation](https://surveyjs.io/form-library/documentation/api-reference/file-model)
+
+### html
+
+Most SurveyJS question types do not support HTML markup in the display fields. The html element allows you to add custom HTML to the survey, so that you can insert images, hyperlinks, etc. 
+
+[SurveyJS HTML example](https://surveyjs.io/form-library/examples/add-html-form-field/jquery#) 
+
+[SurveyJS HTML API documentation](https://surveyjs.io/form-library/documentation/api-reference/add-custom-html-to-survey)
+
+### image
+
+This element adds an image or video to the survey page.
+
+[SurveyJS image example](https://surveyjs.io/form-library/examples/add-image-and-video-to-survey/jquery#) 
+
+[SurveyJS image API documentation](https://surveyjs.io/form-library/documentation/api-reference/add-image-to-survey)
+
+### imagepicker
+
+This question type displays images/videos and allows the participant to select one or more as their repsonse.
+
+[SurveyJS imagepicker example](https://surveyjs.io/form-library/examples/image-picker-question/jquery)
+
+[SurveyJS imagepicker API documentation](https://surveyjs.io/form-library/documentation/api-reference/image-picker-question-model)
+
+### matrix
+
+The matrix question creates a table of multiple choice questions (rows) that use the same set of response options (columns). This is often used for presenting multiple questions/statements with a Likert or similar rating scale.
+
+[SurveyJS matrix example](https://surveyjs.io/form-library/examples/single-selection-matrix-table-question/jquery) 
+
+[SurveyJS matrix API documentation](https://surveyjs.io/form-library/documentation/api-reference/matrix-table-question-model)
+
+### matrixdropdown
+
+This question type allows you to present a matrix (table) of questions, with different types of response options in each cell. Despite the "dropdown" part of the question type name, this question type allows not only dropdown questions in the matrix cells, but also checkbox, radiogroup, text, and comment.
+
+[SurveyJS matrixdropdown example](https://surveyjs.io/form-library/examples/multi-select-matrix-question/jquery) 
+
+[SurveyJS matrixdropdown API documentation](https://surveyjs.io/form-library/documentation/api-reference/matrix-table-with-dropdown-list)
+
+### multipletext
+
+This question type allows you to present multiple [text questions](#text) as part of a single 'question', which can be useful if you want to group together related short-answer text input boxes (e.g. separate first/middle/last text boxes for entering full name). Each 'item' within this question type defines a single text question, and supports the text question's input types (email, date, etc.) for built-in formatting and validation. In the results, there will be a single key for this question (either the question name, if specified in the question parameters, otheriwse automatically named `questionN`), and the value will be an object with key-value pairs for each text entry 'item' (`"item1Name": "item1Response", "item2Name": "item2Response"`, etc.).
+
+[SurveyJS multipletext example](https://surveyjs.io/form-library/examples/multiple-text-box-question/jquery) 
+
+[SurveyJS multipletext API documentation](https://surveyjs.io/form-library/documentation/api-reference/multiple-text-entry-question-model)
+
+### panel
+
+This element allows you to group related questions together. This can help with visual organization on the page, and can help participants understand the purpose of a set of questions. Panels appear as a title/description above a box that contains the panel's nested elements/questions. The panel can be initially expanded (show all questions) and collapsed (hide all questions), and users can toggle this state by clicking on the panel title.
+
+[SurveyJS panel example](https://surveyjs.io/form-library/examples/set-properties-on-multiple-questions-using-panel/jquery) 
+
+[SurveyJS panel API documentation](https://surveyjs.io/form-library/documentation/api-reference/panel-model)
+
+### paneldynamic
+
+The paneldyanmic element allows you to set up a group of questions that repeat based on the participant's response(s) to another question. This can be useful when the participant will have an unknown number of responses, and you want to ask the same questions about each response. For instance, you could use this element type to set up a series of questions about the participant's children, employment history, favorite hobbies, etc. The paneldynamic element allows participants to add/delete the 'subpanels' (response and associated question set).
+
+[SurveyJS paneldynamic example](https://surveyjs.io/form-library/examples/duplicate-group-of-fields-in-form/jquery) 
+
+[SurveyJS paneldynamic API documentation](https://surveyjs.io/form-library/documentation/api-reference/dynamic-panel-model)
+
+### radiogroup
+
+This is a multiple choice question type. Participants can select a single option from the set of choices.
+
+[SurveyJS radiogroup example](https://surveyjs.io/form-library/examples/single-select-radio-button-group/jquery) 
+
+[SurveyJS radiogroup API documentation](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model)
+
+### rating
+
+The rating question type is a type of multiple-choice question that is intended for allowing participants to evaluate something on a scale. The scale can display a range of numbers, graphic symbols (stars, faces), or text labels. The scale options can be presented as a set of horizontal buttons, a drop-down menu, or "auto" (displays buttons if there is sufficient page width, otherwise drop-down; see the [SurveyJS Rating UI page](https://surveyjs.io/form-library/examples/ui-adaptation-modes-for-rating-scale/jquery) for more documentation and examples).
+
+[SurveyJS rating example](https://surveyjs.io/form-library/examples/rating-scale/jquery) 
+
+[SurveyJS rating API documentation](https://surveyjs.io/form-library/documentation/api-reference/rating-scale-question-model)
+
+### ranking
+
+The ranking question allows participants to arrange a set of choices in order of preference, importance, or other criteria, or assign a numerical value to each choice based on their relative rank. The options are displayed vertically, and participants can drag-and-drop to change their order.
+This question type can be useful when used with the SurveyJS "carry forward" feature. For instance, you can take the participant's responses from a previous checkbox (multi-select) question and use those selections as the options to rank in a ranking question (see the `reference_previous_answers.html` example in the jsPsych survey package). It's also possible to combine the selection and ranking steps into a single question using the ['select items to rank'](https://surveyjs.io/form-library/examples/select-items-to-rank/jquery) approach, which allows participants to 'select' items by dragging them into a separate ranking area, and re-order the items in the ranking area.
+
+[SurveyJS ranking example](https://surveyjs.io/form-library/documentation/api-reference/ranking-question-model) 
+
+[SurveyJS ranking API documentation](https://surveyjs.io/form-library/documentation/api-reference/ranking-question-model)
+
+### signaturepad
+
+The signaturepad question allows participants to add their digital signature to the survey by drawing with the mouse or finger (on a trackpad or touchscreen-enabled device). You can specify the pen color and box size, and save the signature as Base64-encoded text in PNG (default), JPEG, or SVG format. You can also save the image directly to a server rather than encoding it as text with the rest of the response data. See this [SurveyJS demo and documentation](https://surveyjs.io/form-library/examples/upload-signature-pad-data-to-server/jquery#content-code) about uploading the signature as an image file, and the [file question](#file) for more information and warnings about handling files.
+
+[SurveyJS signaturepad example](https://surveyjs.io/form-library/examples/signature-pad-widget-javascript/jquery)
+
+[SurveyJS signaturepad API documentation](https://surveyjs.io/form-library/documentation/api-reference/signature-pad-model)
+
+### text 
+
+In addition to a basic text input box, you can select from any of these other input types: **color, date, datetime-local, email, month, number, password, range, tel, time, url, week**. Setting these input types will change things like (1) the format of the response elements, (2) the characters/values that the participant is allowed to enter, and/or (3) add automatic validation for the response format.
+
+[SurveyJS text input examples](https://surveyjs.io/form-library/examples/text-entry-question/jquery) - includes email, password, and URL input types
+
+[SurveyJS date/time input examples](https://surveyjs.io/form-library/examples/datetime-entry-question/jquery)
+
+[SurveyJS numeric input examples](https://surveyjs.io/form-library/examples/numeric-entry-question/jquery) - includes range input (slider) and telephone number input types
+
+[SurveyJS color input example](https://surveyjs.io/form-library/examples/color-input-question/jquery)
+
+[SurveyJS text API documentation](https://surveyjs.io/form-library/documentation/api-reference/text-entry-question-model)
+
+## Other options and features
+
+- [Automatic question numbering](https://surveyjs.io/form-library/examples/how-to-number-pages-and-questions/jquery) (across the survey, within each page, and using custom values/characters)
+- [Response validation](https://surveyjs.io/form-library/examples/javascript-form-validation/jquery)
+- [Table of contents and navigation across sections](https://surveyjs.io/form-library/examples/table-of-contents/jquery)
+- [Progress bar](https://surveyjs.io/form-library/examples/configure-form-navigation-with-progress-indicators/jquery)
+- [Carry responses forward from a selection question](https://surveyjs.io/form-library/examples/carry-forward-responses/jquery)
+- [Carry responses forward from a dynamic matrix/panel](https://surveyjs.io/form-library/examples/pipe-answers-from-dynamic-matrix-or-panel/jquery)
+- [Conditional visibility for elements/questions](https://surveyjs.io/form-library/examples/implement-conditional-logic-to-change-question-visibility/jquery)
+- Special choices for multi-choice-type questions: [None](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model#showNoneItem), [Other](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model#showOtherItem), [Select All](https://surveyjs.io/form-library/documentation/api-reference/checkbox-question-model#showSelectAllItem), [Refuse to answer](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model#showRefuseItem), and [Don't know](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model#showDontKnowItem)
+- [Localization](https://surveyjs.io/form-library/examples/survey-localization/jquery) (adapting the survey's language based on a country/region value and associated set of content and UI translations)
+- [Text piping](https://surveyjs.io/form-library/examples/text-piping-in-surveys/jquery) (dynamically insert text into questions/answers based on previous responses)
+- [Survey API documentation](https://surveyjs.io/form-library/documentation/api-reference/survey-data-model)
+
+## Limitations
+
+Currently, the jsPsych `survey` plugin does not support certain features of the SurveyJS library. These are:
+
+- **The "[complete page](https://surveyjs.io/form-library/documentation/design-survey/create-a-multi-page-survey#complete-page)" parameter.** This is a parameter for HTML formatted content that should appear after the participant clicks the 'submit' button. Instead of using this parameter, you should create another jsPsych trial that comes after the survey trial to serve the same purpose.
+- **Quizzes and automatic response scoring with the question's `correctAnswer` property.** SurveyJS does not store this value or the response score in the data - instead this is only used to display scores on the survey's 'complete page'. Since the complete page is not supported, this 'correctAnswer' property also does not work as intended in the jsPsych plugin.
+
+The jsPsych 'survey' plugin is also not compatible with jsPsych's timeline variables feature.
 
 ## CSS
 
@@ -42,143 +254,9 @@ Other parameters can be left unspecified if the default value is acceptable.
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-pages | array | *undefined* | An array of arrays. Each inner array contains the content for a single page, which is made up of one or more question objects. 
-button_label_next | string |  'Continue' | Label of the button to move forward to the next page, or finish the survey.
-button_label_back | string | 'Back' | Label of the button to move to a previous page in the survey.
-button_label_finish | string | 'Finish' | Label of the button to submit responses.
-autocomplete | boolean | `false` | This determines whether or not all of the input elements on the page should allow autocomplete. Setting this to `true` will enable autocomplete or auto-fill for the form.
-show_question_numbers | string | "off" | One of: "on", "onPage", "off". If "on", questions will be labelled starting with "1." on the first page, and numbering will continue across pages. If "onPage", questions will be labelled starting with "1.", with separate numbering on each page. If "off", no numbers will be added before the question prompts. Note: HTML question types are ignored in automatic numbering.
-title | string | `null` | If specified, this text will be shown at the top of the survey pages.
-required_error | string | "Please answer the question." | Text to display if a required question is not responeded to.
-required_question_label | string | "*" | String to display at the end of required questions. Use an empty string ("") if you do not want to add a label to the end of required questions.
-
-### Question types and parameters
-
-#### Parameters for all question types
-
-Parameters with a default value of *undefined* must be specified. 
-Other parameters can be left unspecified if the default value is acceptable.
-
-Parameter | Type | Default Value | Description
-----------|------|---------------|------------
-type | string | *undefined* | The question type. Options are: "drop-down", "html", "likert", "likert-table", "multi-choice", "multi-select", "ranking", "rating", "text".
-prompt | string | *undefined* | The prompt/question that will be associated with the question's response field. If the question type is "html", then this string is the HTML-formatted string to be displayed. If the question type is "likert-table", the prompt is a general question or title presented above the table.
-required | boolean | `false` | Whether a response to the question is required (`true`) or not (`false`), using the HTML5 `required` attribute. 
-name | string | `null` | Name of the question to be used for storing data. If this parameter is not provided, then default names will be used to identify the questions in the data: `P0_Q0`, `P0_Q1`, `P1_Q0` etc. Question names must be unique across all pages within the trial.
-
-#### Drop-down
-
-Present a question with a limited set of options in a drop-down menu. The participant can only select one option.
-
-In addition to the parameters for all question types, the drop-down question type also offers the following parameters. 
-Parameters with a default value of *undefined* must be specified.
-Other parameters can be left unspecified if the default value is acceptable.
-
-Parameter | Type | Default Value | Description
-----------|------|---------------|------------
-options | array of strings | *undefined* | This array contains the set of multiple choice options to display for the question.
-option_reorder | string | "none" | One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the `options` array. If `random`, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.
-correct_response | string | null | String from the `options` array that should be considered correct. If specified, the data will include a `correct` property that indicates whether the response was correct (`true`) or not (`false`).
-
-#### HTML
-
-Present arbitrary HTML-formatted content embedded in the list of questions, including text, images, and sounds. There are no response options.
-
-The only available parameters are those listed for all question types with a default value of *undefined* (`type` and `prompt`) and `name`. 
-The `name` parameter is optional and used to identify the question in the data, with a response value of `null`. 
-The `required` parameter will be ignored.
-
-#### Likert
-
-Present a prompt along with a discrete rating scale. The scale values are presented as buttons that can be selected and de-selected. 
-The scale is specified by the `likert_scale_values` parameter, which is an array of text labels and associated values, or it is generated using the `likert_rating_min`/`max`/`stepsize` parameters (along with optional maximum/minimum descriptions). 
-
-In addition to the parameters for all question types, the likert question type also offers the following parameters. 
-Parameters with a default value of *undefined* must be specified.
-Other parameters can be left unspecified if the default value is acceptable.
-
-Parameter | Type | Default Value | Description
-----------|------|---------------|------------
-likert_scale_values | array of objects | `null` | Array of objects that defines the rating scale labels and associated values to be stored in the data. Each object defines a single rating option. The objects must have a `value` property, which is an integer or string value that will be stored as the response in the data. The objects can optionally have a `text` property, which is a string that will be displayed for that rating option (example: `[{value: 1, text: "A lot"},{value: 2, text: "Somewhat"},{value: 3, text: "Not much"}]`). If no `text` property is specified then the `value` will be displayed (examples: `[{value: 1},{value: 2},{value: 3}]`, `[{value: "Yes"},{value: "Maybe"},{value: "No"}]`). If provided, this parameter will override the `likert_rating_min`/`max`/`stepsize` parameters.
-likert_scale_min | integer | 1 | If the `likert_scale_values` array is not specified, then this parameter will define the minimum scale value. 
-likert_scale_max | integer | 5 | If the `likert_scale_values` array is not specified, then this parameter will define the maximum scale value. 
-likert_scale_stepsize | integer | 1 | If the `likert_scale_values` array is not specified, then this parameter will define the step size that should be used for generating rating options between the minimum and maximum values. 
-likert_scale_min_label | string | `null` | Description for the minimum (first) rating option. If provided, this text will be shown inside the first rating button, before the rating text/value. This parameter is meant for defining the scale's minimum when integer values are used for the rating scale buttons.
-likert_scale_max_label | string | `null` | Description for the maximum (last) rating option. If provided, this text will be shown inside the first rating button, after the rating text/value. This parameter is meant for defining the scale's maximum when integer values are used for the rating scale buttons.
-
-#### Likert-table
-
-Present a prompt along with a table of statements/questions (rows) and repeated response options for each statement/question (columns). 
-
-In addition to the parameters for all question types, the likert-table question type also offers the following parameters. 
-Parameters with a default value of *undefined* must be specified.
-Other parameters can be left unspecified if the default value is acceptable.
-
-Parameter | Type | Default Value | Description
-----------|------|---------------|------------
-statements | array of objects | *undefined* | This array contains one or more objects representing the statements/questions to be presented in the table rows. Each object must have a `prompt`, which is the statement/question text. The objects can optionally include a `name`, which is how the statement should be identified in the data. If no `name` is provided, then the default values of "S0", "S1" etc. will be used.
-options | array of strings | *undefined* | This array contains the set of multiple choice options to be presented in the table columns.
-randomize_statement_order | boolean | `false` | If `true`, the order of statements/questions in the `statements` array will be randomized.
-
-#### Multi-choice
-
-Present a question with a limited set of options. The participant can only select one option.
-
-In addition to the parameters for all question types, the multi-choice question type also offers the following parameters. 
-Parameters with a default value of *undefined* must be specified.
-Other parameters can be left unspecified if the default value is acceptable.
-
-Parameter | Type | Default Value | Description
-----------|------|---------------|------------
-options | array of strings | *undefined* | This array contains the set of multiple choice options to display for the question.
-option_reorder | string | "none" | One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the `options` array. If `random`, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.
-columns | integer | 1 | Number of columns to use for displaying the options. If 1 (default), the choices will be displayed in a single column (vertically). If 0, choices will be displayed in a single row (horizontally). Any value greater than 1 can be used to display options in multiple columns. 
-correct_response | string | null | String from the `options` array that should be considered correct. If specified, the data will include a `correct` property that indicates whether the response was correct (`true`) or not (`false`).
-
-#### Multi-select
-
-Present a question with a limited set of options. The participant can select multiple options.
-
-In addition to the parameters for all question types, the multi-select question type also offers the following parameters. 
-Parameters with a default value of *undefined* must be specified.
-Other parameters can be left unspecified if the default value is acceptable.
-
-Parameter | Type | Default Value | Description
-----------|------|---------------|------------
-options | array of strings | *undefined* | This array contains the set of options to display for the question.
-option_reorder | string | "none" | One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the `options` array. If `random`, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.
-columns | integer | 1 | Number of columns to use for displaying the options. If 1 (default), the choices will be displayed in a single column (vertically). If 0, choices will be displayed in a single row (horizontally). Any value greater than 1 can be used to display options in multiple columns. 
-correct_response | array of strings | null | Array of one or more strings from the `options` array that should be considered correct. If specified, the data will include a `correct` property that indicates whether the response was correct (`true`) or not (`false`).
-
-#### Ranking
-
-Present a question with a limited set of options, where participants respond by dragging and dropping (ordering/ranking) the options. It is ideally used with a short list of options (up to about 7 items). It supports mouse responses, touch responses (mobile devices), and keyboard responses (Tab and Shift-Tab to select, and Up/Down arrow keys to re-order).
-
-In addition to the parameters for all question types, the ranking question type also offers the following parameters. 
-Parameters with a default value of *undefined* must be specified.
-Other parameters can be left unspecified if the default value is acceptable.
-
-Parameter | Type | Default Value | Description
-----------|------|---------------|------------
-options | array of strings | *undefined* | This array contains the set of to-be-ranked options for the question.
-option_reorder | string | "none" | One of: "none", "asc", "desc", "random". If "none", the options will be listed in the order given in the `options` array. If `random`, the option order will be randomized. If "asc" or "desc", the options will be presented in ascending or descending order, respectively.
-correct_response | array of strings | null | The same array of strings used for the `options` array, but listed in the order that should be considered correct. If specified, the data will include a `correct` property that indicates whether the response was correct (`true`) or not (`false`).
-
-#### Text
-
-Present a question with a free response text field in which the participant can type in an answer.
-
-In addition to the parameters for all question types, the text question also offers the following parameters. 
-Parameters with a default value of *undefined* must be specified. 
-Other parameters can be left unspecified if the default value is acceptable.
-
-Parameter | Type | Default Value | Description
-----------|------|---------------|------------
-placeholder | string | "" | Placeholder text in the text response field. 
-textbox_rows | integer | 1 | The number of rows (height) for the response text box. 
-textbox_columns | integer | 40 | The number of columns (width) for the response text box. 
-validation | string | "" | A regular expression used to validate the response.
-input_type | string | "text" | Type for the HTML `<input>` element. The `input_type` parameter must be one of "color", "date", "datetime-local", "email", "month", "number", "password", "range", "tel", "text", "time", "url", "week". If the `textbox_rows` parameter is larger than 1, the `input_type` parameter will be ignored. The `textbox_columns` parameter only affects questions with `input_type` "email", "password", "tel", "url", or "text".
+survey_json | JSON string | "{}"| A SurveyJS-compatible JSON string that defines the survey. If used with the `survey_function` parameter, the survey will initially be constructed with this JSON string and then passed to the `survey_function`.
+survey_function | function | null | A function that receives a SurveyJS survey object as an argument. If no `survey_json` is specified, then the function receives an empty survey model and must add all pages/elements to it. If a `survey_json` string is provided, then this forms the basis of the survey object that is passed into the `survey_function`. 
+validation_function | function | null | A function that can be used to validate responses. This function is called whenever the SurveyJS `onValidateQuestion` event occurs. (It is also possible to add this function to the survey using the `survey_function` parameter - we've just added it as a parameter for convenience).
 
 ## Data Generated
 
@@ -186,7 +264,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 
 Name | Type | Value
 -----|------|------
-response | object | An object containing the response to each question. The object will have a separate key (variable) for each question, with the first question on the first page being recorded in `P0_Q0`, the second question on the first page in `P0_Q1`, and so on. If the `name` parameter is defined for the question, then the response object will use the value of `name` as the key for each question. The response type will depend on the question type. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. Note that, if any questions use the `other` option (`add_other_option: true`), then the response value will be the `other_option_text` (e.g. "Other") and any text written in the textbox will be saved as "(question name)-Comment". |
+response | object | An object containing the response to each question. The object will have a separate key (variable) for each question. If the `name` parameter is defined for the question (recommended), then the response object will use the value of `name` as the key for each question. If any questions do not have a name parameter, their keys will named automatically, with the first unnamed question recorded as `question1`, the second as `question2`, and so on. The response type will depend on the question type. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
 rt | numeric | The response time in milliseconds for the participant to make a response. The time is measured from when the questions first appear on the screen until the participant's response(s) are submitted. |
 
 ## Simulation Mode
@@ -199,12 +277,14 @@ Using the CDN-hosted JavaScript file:
 
 ```js
 <script src="https://unpkg.com/@jspsych/plugin-survey@0.2.2"></script>
+<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.2.2/css/survey.css">
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
 
 ```js
 <script src="jspsych/plugin-survey.js"></script>
+<link rel="stylesheet" href="jspsych/plugin-survey.css">
 ```
 
 Using NPM:
@@ -214,6 +294,7 @@ npm install @jspsych/plugin-survey
 ```
 ```js
 import survey from '@jspsych/plugin-survey';
+import '@jspsych/plugin-survey/css/survey.css'
 ```
 
 ## Examples
