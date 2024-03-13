@@ -20,7 +20,7 @@
       survey_json: JSON.stringify({
         showQuestionNumbers: false,
         title: 'My questionnaire',
-        completeText: 'Submit',
+        completeText: 'Done!',
         pageNextText: 'Continue',
         pagePrevText: 'Previous',
         pages: [
@@ -56,8 +56,8 @@
                 choices: ['Blue','Yellow','Pink','Teal','Orange','Lime green'],
                 showNoneItem: true,
                 showOtherItem: true,
-                name: 'FavColor', 
-                colCount: 2
+                colCount: 0,
+                name: 'FavColor',
               }, 
               {
                 type: 'checkbox',
@@ -65,7 +65,7 @@
                 choices: ['Lion','Squirrel','Badger','Whale', 'Turtle'],
                 choicesOrder: 'random',
                 colCount: 0,
-                name: 'AnimalLike', 
+                name: 'FavAnimals', 
               }
             ]
           }

@@ -216,7 +216,7 @@ In addition to a basic text input box, you can select from any of these other in
 - [Progress bar](https://surveyjs.io/form-library/examples/configure-form-navigation-with-progress-indicators/jquery)
 - [Carry responses forward from a selection question](https://surveyjs.io/form-library/examples/carry-forward-responses/jquery)
 - [Carry responses forward from a dynamic matrix/panel](https://surveyjs.io/form-library/examples/pipe-answers-from-dynamic-matrix-or-panel/jquery)
-- [Conditional visibility for elements/questions](https://surveyjs.io/form-library/examples/implement-conditional-logic-to-change-question-visibility/jquery)
+- [Conditional visibility for elements/questions](https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#conditional-visibility) (see also [this example](https://surveyjs.io/form-library/examples/implement-conditional-logic-to-change-question-visibility/jquery))
 - Special choices for multi-choice-type questions: [None](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model#showNoneItem), [Other](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model#showOtherItem), [Select All](https://surveyjs.io/form-library/documentation/api-reference/checkbox-question-model#showSelectAllItem), [Refuse to answer](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model#showRefuseItem), and [Don't know](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model#showDontKnowItem)
 - [Localization](https://surveyjs.io/form-library/examples/survey-localization/jquery) (adapting the survey's language based on a country/region value and associated set of content and UI translations)
 - [Text piping](https://surveyjs.io/form-library/examples/text-piping-in-surveys/jquery) (dynamically insert text into questions/answers based on previous responses)
@@ -299,34 +299,35 @@ import '@jspsych/plugin-survey/css/survey.css'
 
 ## Examples
 
-???+ example "Basic single page"
+???+ example "Single page with radiogroup (multiple choice) and checkbox"
     === "Code"
 
         ```javascript
-        var trial = {
+        const trial = {
           type: jsPsychSurvey,
-          pages: [
-            [
-              {
-                type: 'html',
-                prompt: 'Please answer the following questions:',
-              },
-              {
-                type: 'multi-choice',
-                prompt: "Which of the following do you like the most?", 
-                name: 'VegetablesLike', 
-                options: ['Tomato', 'Cucumber', 'Eggplant', 'Corn', 'Peas'], 
-                required: true
-              }, 
-              {
-                type: 'multi-select',
-                prompt: "Which of the following do you like?", 
-                name: 'FruitLike', 
-                options: ['Apple', 'Banana', 'Orange', 'Grape', 'Strawberry'], 
-                required: false,
-              }
+          survey_json: JSON.stringify({
+            showQuestionNumbers: false,
+            elements:
+              [
+                {
+                  type: 'radiogroup',
+                  title: "Which of the following do you like the most?", 
+                  name: 'vegetablesLike', 
+                  choices: ['Tomato', 'Cucumber', 'Eggplant', 'Corn', 'Peas', 'Broccoli']
+                }, 
+                {
+                  type: 'checkbox',
+                  title: "Which of the following do you like?", 
+                  name: 'fruitLike', 
+                  description: "You can select as many as you want.",
+                  choices: ['Apple', 'Banana', 'Orange', 'Grape', 'Strawberry', 'Kiwi', 'Mango'], 
+                  showOtherItem: true,
+                  showSelectAllItem: true,
+                  showNoneItem: true,
+                  required: true,
+                }
             ]
-          ],
+          }),
         };
         ```
 
@@ -337,51 +338,66 @@ import '@jspsych/plugin-survey/css/survey.css'
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo1.html">Open demo in new tab</a>
 
-???+ example "Multiple pages, more customization"
+???+ example "Multiple pages with text and multiple choice questions, and more customization"
     === "Code"
 
         ```javascript
-        var trial = {
+        const trial = {
           type: jsPsychSurvey,
-          pages: [
-            [
+          survey_json: JSON.stringify({
+            showQuestionNumbers: false,
+            title: 'My questionnaire',
+            completeText: 'Done!',
+            pageNextText: 'Continue',
+            pagePrevText: 'Previous',
+            pages: [
               {
-                type: 'text',
-                prompt: "Where were you born?", 
-                placeholder: 'City, State, Country',
-                name: 'birthplace', 
-                required: true,
-              }, 
+                name: 'page1',
+                elements: [
+                    {
+                      type: 'text',
+                      title: 'Where were you born?', 
+                      placeholder: 'City, State, Country',
+                      name: 'birthplace', 
+                      size: 30,
+                      isRequired: true,
+                    }, 
+                    {
+                      type: 'text',
+                      title: 'How old are you?', 
+                      name: 'age', 
+                      isRequired: false,
+                      inputType: 'number',
+                      min: 0,
+                      max: 100,
+                      defaultValue: 0
+                    }
+                  ]
+              },
               {
-                type: 'text',
-                prompt: "How old are you?", 
-                name: 'age', 
-                textbox_columns: 5,
-                required: false,
-              }
-            ],
-            [
-              {
-                type: 'multi-choice',
-                prompt: "What&#39;s your favorite color?", 
-                options: ['blue','yellow','pink','teal','orange','lime green','other','none of these'],
-                name: 'FavColor', 
-              }, 
-              {
-                type: 'multi-select',
-                prompt: "Which of these animals do you like? Select all that apply.", 
-                options: ['lion','squirrel','badger','whale'],
-                option_reorder: 'random',
-                columns: 0,
-                name: 'AnimalLike', 
+                name: 'page2',
+                elements: [
+                  {
+                    type: 'radiogroup',
+                    title: "What's your favorite color?", 
+                    choices: ['Blue','Yellow','Pink','Teal','Orange','Lime green'],
+                    showNoneItem: true,
+                    showOtherItem: true,
+                    colCount: 0,
+                    name: 'FavColor',
+                  }, 
+                  {
+                    type: 'checkbox',
+                    title: 'Which of these animals do you like? Select all that apply.', 
+                    choices: ['Lion','Squirrel','Badger','Whale', 'Turtle'],
+                    choicesOrder: 'random',
+                    colCount: 0,
+                    name: 'FavAnimals', 
+                  }
+                ]
               }
             ]
-          ],
-          title: 'My questionnaire',
-          button_label_next: 'Continue',
-          button_label_back: 'Previous',
-          button_label_finish: 'Submit',
-          show_question_numbers: 'onPage'
+          })
         };
         ```
 
@@ -392,68 +408,88 @@ import '@jspsych/plugin-survey/css/survey.css'
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo2.html">Open demo in new tab</a>
 
-???+ example "Single and multiple item Likert-style scales"
+???+ example "Rating and matrix questions for Likert-style scales"
+    This example shows several different options for presenting a single question/statement and a rating scale (buttons, dropdown, stars, smileys). It also shows a table of several questions/statements (rows) to be rated on the same scale (columns).
     === "Code"
 
         ```javascript
         const trial = {
           type: jsPsychSurvey,
-          pages: [
-            [
+          survey_json: JSON.stringify({
+            showQuestionNumbers: false,
+            title: 'Likert scale examples',
+            elements: [
               {
-                type: 'likert',
-                prompt: 'I like to eat vegetables.',
-                likert_scale_min_label: 'Strongly Disagree',
-                likert_scale_max_label: 'Strongly Agree',
-                likert_scale_values: [
-                  {value: 1},
-                  {value: 2},
-                  {value: 3},
-                  {value: 4},
-                  {value: 5}
-                ]
+                type: 'rating',
+                name: 'like-vegetables',
+                title: 'I like to eat vegetables.',
+                description: 'Button rating scale with min/max descriptions',
+                minRateDescription: 'Strongly Disagree',
+                maxRateDescription: 'Strongly Agree',
+                displayMode: 'buttons',
+                rateValues: [1,2,3,4,5]
               }, 
               {
-                type: 'likert',
-                prompt: 'I like to eat fruit.',
-                likert_scale_min_label: 'Strongly Disagree',
-                likert_scale_max_label: 'Strongly Agree',
-                likert_scale_values: [
-                  {value: 1},
-                  {value: 2},
-                  {value: 3},
-                  {value: 4},
-                  {value: 5}
-                ]
+                type: 'rating',
+                name: 'like-fruit',
+                title: 'I like to eat fruit.',
+                description: 'Dropdown rating scale with min/max descriptions',
+                minRateDescription: 'Strongly Disagree',
+                maxRateDescription: 'Strongly Agree',
+                displayMode: 'dropdown',
+                rateCount: 10,
+                rateMax: 10,
               },
               {
-                type: 'likert',
-                prompt: 'I like to eat meat.',
-                likert_scale_min_label: 'Strongly Disagree',
-                likert_scale_max_label: 'Strongly Agree',
-                likert_scale_values: [
-                  {value: 1},
-                  {value: 2},
-                  {value: 3},
-                  {value: 4},
-                  {value: 5}
-                ]
-              },  
-              
-            ],
-            [
+                type: 'rating',
+                name: 'like-meat',
+                title: 'I like to eat meat.',
+                description: 'Star rating scale',
+                rateType: 'stars',
+                rateCount: 10,
+                rateMax: 10,
+              },
               {
-                type: 'likert-table',
-                prompt: ' ',
-                statements: [
-                  {prompt: 'I like to eat vegetables', name: 'VeggiesTable'},
-                  {prompt: 'I like to eat fruit', name: 'FruitTable'},
-                  {prompt: 'I like to eat meat', name: 'MeatTable'},
+                type: 'rating',
+                name: 'like-cooking',
+                title: 'How much do you enjoy cooking?',
+                description: 'Smiley rating scale',
+                rateType: 'smileys',
+                rateCount: 10,
+                rateMax: 10,
+                scaleColorMode: 'colored',
+              },
+              {
+                type: 'matrix',
+                name: 'like-food-matrix',
+                title: 'Matrix question for rating mutliple statements on the same scale.',
+                alternateRows: true,
+                isAllRowRequired: true,
+                rows: [
+                  {text: 'I like to eat vegetables.', value: 'VeggiesTable'},
+                  {text: 'I like to eat fruit.', value: 'FruitTable'},
+                  {text: 'I like to eat meat.', value: 'MeatTable'},
+                  {text: 'I like to cook.', value: 'CookTable'},
                 ],
-                options: ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'],
+                columns: [{
+                  "value": 5,
+                  "text": "Strongly agree"
+                }, {
+                  "value": 4,
+                  "text": "Agree"
+                }, {
+                  "value": 3,
+                  "text": "Neutral"
+                }, {
+                  "value": 2,
+                  "text": "Disagree"
+                }, {
+                  "value": 1,
+                  "text": "Strongly disagree"
+                }]
               }
             ]
-          ],
+          })
         };
         ```
 
@@ -464,23 +500,44 @@ import '@jspsych/plugin-survey/css/survey.css'
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo3.html">Open demo in new tab</a>
 
-???+ example "Response scoring"
+???+ example "Conditional question visibility based on response"
     === "Code"
 
         ```javascript
         const trial = {
           type: jsPsychSurvey,
-          pages: [
-            [
-              {
-                type: 'multi-choice',
-                prompt: 'During the experiment, are allowed to write things down on paper to help you?',
-                options: ["Yes", "No"],
-                correct_response: "No",
-                required: true
-              }, 
-            ]
-          ],
+          survey_json: JSON.stringify({
+            showQuestionNumbers: false,
+            title: 'Conditional question visibility.',
+            pages: [{
+              name: 'question',
+              elements: [
+                {
+                  type: 'radiogroup',
+                  title: 'During the experiment, are you allowed to write things down on paper to help you?',
+                  choices: ["Yes", "No"],
+                  name: "WriteOK",
+                  isRequired: true
+                }
+              ],
+            }, {
+              name: 'feedback',
+              elements: [
+                {
+                  type: 'html',
+                  name: 'incorrect',
+                  visibleIf: '{WriteOK} = "Yes"',
+                  html: '<h4>That response was incorrect.</h4><p>Please return to the previous page and try again.</p>'
+                },
+                {
+                  type: 'html',
+                  name: 'correct',
+                  visibleIf: '{WriteOK} == "No"',
+                  html: '<h4>Congratulations!</h4>'
+                }
+              ]
+            }]
+          })
         };
         ```
 
@@ -491,57 +548,75 @@ import '@jspsych/plugin-survey/css/survey.css'
 
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo4.html">Open demo in new tab</a>
 
-???+ example "Adding data to trial"
-    When adding any data to a Survey trial, you should add it via the `data` parameter at the whole-trial level (not inside the question objects), even if it only relates to one question out of multiple questions/pages contained wihtin the trial.
+???+ example "Repeating survey trials with different variables"
+    The survey plugin is not compatible with the jsPsych timeline variables feature, so an alternative to creating a set of repeating survey trials is to construct them in a loop.
+    When adding any data to a survey trial, you should add it via the `data` parameter at the whole-trial level (not inside the question objects), even if it only relates to one question out of multiple questions/pages contained within the trial.
     === "Code"
 
         ```javascript
-        const question_info = [
+        // values that change across survey trials - each object represents a single trial
+        const question_variables = [
           {
             'fruit': 'apples',
             'Q1_prompt': 'Do you like apples?', 
-            'Q1_type': 'regular'
+            'Q1_type': 'regular',
+            'Q2_word': 'like'
+          },
+          {
+            'fruit': 'pears',
+            'Q1_prompt': 'Do you like pears?', 
+            'Q1_type': 'regular',
+            'Q2_word': 'like'
           },
           {
             'fruit': 'bananas',
             'Q1_prompt': 'Do you NOT like bananas?', 
-            'Q1_type': 'reverse'
+            'Q1_type': 'reverse',
+            'Q2_word': 'hate'
           },
         ];
 
-        const survey = {
-          type: jsPsychSurvey,
-          pages: [
-            [
+        // create an array to store all of our survey trials so that we can easily randomize their order
+        survey_trials = [];
+
+        // construct the survey trials dynamically using an array of question-specific information
+        for (let i=0; i<question_variables.length; i++) {
+
+          // set up the survey JSON for this trial
+          // any question-specific variables come from the appropriate object in the question_variables array
+          let survey_json = {
+            showQuestionNumbers: false,
+            title: 'Dynamically constructing survey trials.',
+            completeText: 'Next >>',
+            elements: [
               {
-                type: 'multi-choice',
-                prompt: jsPsych.timelineVariable('Q1_prompt'),
-                options: ['Yes', 'No'],
+                type: 'radiogroup',
+                title: question_variables[i].Q1_prompt,
+                choices: ['Yes', 'No'],
                 name: 'Q1'
               },
               {
                 type: 'text',
-                prompt: function() {
-                  return `What's your favorite thing about ${jsPsych.timelineVariable('fruit')}?`;
-                },
+                title: 'What do you '+question_variables[i].Q2_word+' most about '+question_variables[i].fruit+'?',
                 name: 'Q2'
               }
             ]
-          ],
-          // Add data at the whole-trial level here
-          data: {
-            'Q1_prompt': jsPsych.timelineVariable('Q1_prompt'),
-            'Q1_type': jsPsych.timelineVariable('Q1_type'),
-            'fruit': jsPsych.timelineVariable('fruit')                                                        
-          },
-          button_label_finish: 'Continue'                
-        };
+          };
+          
+          // set up a survey trial object using the JSON we've just created for this question, 
+          // and add the trial object to the survey trials array
+          survey_trials.push({
+            type: jsPsychSurvey,
+            survey_json: JSON.stringify(survey_json),
+            data: {
+              'Q1_prompt': question_variables[i].Q1_prompt,
+              'Q1_type': question_variables[i].Q1_type,
+              'Q2_word': question_variables[i].Q2_word,
+              'fruit': question_variables[i].fruit                                                        
+            }  
+          });
 
-        const survey_procedure = {
-          timeline: [survey],
-          timeline_variables: question_info,
-          randomize_order: true
-        };
+        }
         ```
 
     === "Demo"

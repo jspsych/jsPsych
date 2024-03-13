@@ -21,38 +21,21 @@
         elements:
           [
             {
-              type: 'html',
-              name: 'info',
-              html: '<p><strong>Please answer the following questions:</strong></p>',
-            },
-            {
               type: 'radiogroup',
               title: "Which of the following do you like the most?", 
               name: 'vegetablesLike', 
-              choices: ['Tomato', 'Cucumber', 'Eggplant', 'Corn', 'Peas', 'Broccoli'], 
-              colCount: 2,
-              required: true,
-              showNoneItem: true,
-              showOtherItem: true,
+              choices: ['Tomato', 'Cucumber', 'Eggplant', 'Corn', 'Peas', 'Broccoli']
             }, 
             {
               type: 'checkbox',
               title: "Which of the following do you like?", 
               name: 'fruitLike', 
-              description: "You can select as many as you want. Select at least 2 to see a conditional question appear below.",
+              description: "You can select as many as you want.",
               choices: ['Apple', 'Banana', 'Orange', 'Grape', 'Strawberry', 'Kiwi', 'Mango'], 
-              colCount: 2,
               showOtherItem: true,
               showSelectAllItem: true,
-              required: false,
-            },
-            {
-              type: 'ranking',
-              title: "Of the fruits that you like, which one is your favorite?",
-              name: "fruitFavorite",
-              choicesFromQuestion: "fruitLike",
-              choicesFromQuestionMode: "selected",
-              visibleIf: "{fruitLike.length} > 1",
+              showNoneItem: true,
+              required: true,
             },
         ]
       }),
