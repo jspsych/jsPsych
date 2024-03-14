@@ -1,5 +1,17 @@
 # @jspsych/plugin-visual-search-circle
 
+## 1.2.1
+
+### Patch Changes
+
+- [#3213](https://github.com/jspsych/jsPsych/pull/3213) [`7b797727`](https://github.com/jspsych/jsPsych/commit/7b797727fa3b2b384ef964eb53d74f474ec902ef) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Fix display clearing problem introduced with version 1.2.0
+
+## 1.2.0
+
+### Minor Changes
+
+- [#3211](https://github.com/jspsych/jsPsych/pull/3211) [`37430e13`](https://github.com/jspsych/jsPsych/commit/37430e13e9645d90e853471010bee0c95c895954) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Adds response_ends_trial parameter, with a default value of `true`
+
 ## 1.1.3
 
 ### Patch Changes

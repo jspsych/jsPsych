@@ -1,0 +1,53 @@
+name: Publish Docs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+
+      - name: Install poetry using pip
+        run: pipx install poetry==1.7.0
+
+      - name: Get current version
+        id: version
+        run: echo "version=$(node -p "require('./packages/jspsych/package.json').version")" >> "$GITHUB_ENV"
+
+      - name: Remove patch version
+        run: echo "version_major_minor=${{ env.version }}" | awk -F. '{print $1"."$2}' >> "$GITHUB_ENV"
+
+      - name: Config git
+        run: |
+          git config --global user.name docs-bot
+          git config --global user.email docs@jspsych.org
+
+      - name: Deploy docs
+        run: npm run docs:deploy ${{ env.version_major_minor }}
+
+      - name: Switch to gh-pages branch
+        run: git checkout gh-pages
+
+      - name: Push gh-pages branch
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+
+
