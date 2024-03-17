@@ -450,7 +450,7 @@ export class JsPsych {
     options.display_element.innerHTML =
       '<div class="jspsych-content-wrapper"><div id="jspsych-content"></div></div>';
     this.DOM_container = options.display_element;
-    this.DOM_target = document.querySelector("#jspsych-content");
+    this.DOM_target = this.DOM_container.querySelector("#jspsych-content");
 
     // set experiment_width if not null
     if (options.experiment_width !== null) {
