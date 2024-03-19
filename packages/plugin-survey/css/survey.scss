@@ -25,6 +25,23 @@ span.sd-item__control-label {
   text-wrap: nowrap
 }
 
+// left-align all text in the main questions section (title is still centered)
+div.sv-components-row {
+  text-align: left;
+  align-items: center;
+}
+
+// For some reason, when there is no survey title, the content's max-width is not restricted. 
+// This means that the left text align for sv-components-row pushes the content to the far left in this case.
+// The CSS below fixes this by restricting the max-width and centering the content (and setting padding).
+.sd-body.sd-body--responsive {
+  max-width: calc(90 * (var(--sjs-base-unit, var(--base-unit, 8px))));
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: calc(6 * (var(--sjs-base-unit, var(--base-unit, 8px))));
+  padding-bottom: calc(10 * (var(--sjs-base-unit, var(--base-unit, 8px))));
+}
+
 // TO DO: keeping this here for reference until we decide on default style
 
 // .sv_main {
