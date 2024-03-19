@@ -93,6 +93,8 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     // Updated method for creating custom themes
     // https://surveyjs.io/form-library/documentation/manage-default-themes-and-styles#create-a-custom-theme
 
+    //colors["$border-color"] = "#e7e7e7";
+
     survey.applyTheme({
       cssVariables: {
         "--sjs-general-backcolor": "rgba(255, 255, 255, 1)",
@@ -110,7 +112,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       },
       themeName: "plain",
       colorPalette: "light",
-      isPanelless: true,
+      isPanelless: false,
     });
   }
 
