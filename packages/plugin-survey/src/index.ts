@@ -109,6 +109,16 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
         "--sjs-primary-backcolor-dark": "#000000", // next/submit button hover backgound
         "--sjs-primary-forecolor": "rgba(255, 255, 255, 1)", // next/submit button text color
         "--sjs-primary-forecolor-light": "rgba(255, 255, 255, 0.25)",
+        // all shadow and border variables below affect the question/panel borders
+        "--sjs-shadow-small": "0px 0px 0px 1px rgba(0, 0, 0, 0.15)",
+        "--sjs-shadow-small-reset": "0px 0px 0px 0px rgba(0, 0, 0, 0.15)",
+        "--sjs-shadow-medium": "0px 0px 0px 1px rgba(0, 0, 0, 0.1)",
+        "--sjs-shadow-large": "0px 8px 16px 0px rgba(0, 0, 0, 0.05)",
+        "--sjs-shadow-inner": "0px 0px 0px 1px rgba(0, 0, 0, 0.15)",
+        "--sjs-shadow-inner-reset": "0px 0px 0px 0px rgba(0, 0, 0, 0.15)",
+        "--sjs-border-light": "rgba(0, 0, 0, 0.15)",
+        "--sjs-border-default": "rgba(0, 0, 0, 0.15)",
+        "--sjs-border-inside": " rgba(0, 0, 0, 0.16)",
       },
       themeName: "plain",
       colorPalette: "light",
