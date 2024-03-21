@@ -42,6 +42,13 @@ div.sv-components-row {
   padding-bottom: calc(10 * (var(--sjs-base-unit, var(--base-unit, 8px))));
 }
 
+// prevent radio/checkbox labels from overflowing container
+span.sd-item__control-label span.sv-string-viewer {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
 // TO DO: keeping this here for reference until we decide on default style
 
 // .sv_main {
