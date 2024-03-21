@@ -1,25 +1,76 @@
-@use "survey-knockout/survey.css";
+@use "survey-jquery/defaultV2.min.css";
 
-.sv_main {
-  font-family: "Open Sans", "Arial", sans-serif;
-  font-size: 18px;
-  text-align: left;
-
-  .sv_body {
-    border-top-width: 0;
-  }
-
-  .sv_p_root {
-    .sv_row {
-      border-bottom: none;
-    }
-  }
-
-  .sv_container .sv_body .sv_p_root .sv_q_title {
-    font-weight: normal;
-  }
-
-  .sv_q_erbox {
-    font-size: 0.85em;
-  }
+// move buttons to right
+div#sv-nav-complete.sv-action, div#sv-nav-next.sv-action {
+  margin-left: auto !important;
 }
+
+// center the question content 
+div.sd-question__content {
+  display: inline-block;
+}
+
+// center the question titles that aren't automatically centered 
+div.sd-title.sd-element__title.sd-question__title, h5.sd-title.sd-element__title.sd-question__title {
+  display: inline-block;
+}
+
+// for dropdown questions, set the div back to block, otherwise the option text/description doesn't fit in the dropdown box
+div.sd-question__content:has(div.sd-dropdown) {
+  display: block;
+}
+
+// prevent item labels from wrapping
+span.sd-item__control-label {
+  text-wrap: nowrap
+}
+
+// left-align all text in the main questions section (title is still centered)
+div.sv-components-row {
+  text-align: left;
+  align-items: center;
+}
+
+// For some reason, when there is no survey title, the content's max-width is not restricted. 
+// This means that the left text align for sv-components-row pushes the content to the far left in this case.
+// The CSS below fixes this by restricting the max-width and centering the content (and setting padding).
+.sd-body.sd-body--responsive {
+  max-width: calc(90 * (var(--sjs-base-unit, var(--base-unit, 8px))));
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: calc(6 * (var(--sjs-base-unit, var(--base-unit, 8px))));
+  padding-bottom: calc(10 * (var(--sjs-base-unit, var(--base-unit, 8px))));
+}
+
+// prevent radio/checkbox labels from overflowing container
+span.sd-item__control-label span.sv-string-viewer {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+// TO DO: keeping this here for reference until we decide on default style
+
+// .sv_main {
+//   font-family: "Open Sans", "Arial", sans-serif;
+//   font-size: 18px;
+//   text-align: left;
+
+//   .sv_body {
+//     border-top-width: 0;
+//   }
+
+//   .sv_p_root {
+//     .sv_row {
+//       border-bottom: none;
+//     }
+//   }
+
+//   .sv_container .sv_body .sv_p_root .sv_q_title {
+//     font-weight: normal;
+//   }
+
+//   .sv_q_erbox {
+//     font-size: 0.85em;
+//   }
+// }
