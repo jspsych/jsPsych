@@ -157,7 +157,7 @@ The method accepts an object of parameter values (see example below). The valid 
 Parameter | Type | Description
 ----------|------|------------
 callback_function | function | The function to execute whenever a valid keyboard response is generated.
-valid_responses | array | An array of key codes or character strings representing valid responses. Responses not on the list will be ignored. An empty array indicates that all responses are acceptable.
+valid_responses | array | An array of key codes or character strings representing valid responses. Responses not on the list will be ignored. An empty array indicates that no response is acceptable.
 rt_method | string | Indicates which method of recording time to use. The `'performance'` method uses calls to `performance.now()`, which is the standard way of measuring timing in jsPsych. It is [supported by up-to-date versions of all the major browsers](http://caniuse.com/#search=performance). The `audio` method is used in conjuction with an `audio_context` (set as an additional parameter). This uses the clock time of the `audio_context` when audio stimuli are being played.
 audio_context | AudioContext object | The AudioContext of the audio file that is being played.
 audio_context_start_time | numeric | The scheduled time of the sound file in the AudioContext. This will be used as the start time.
