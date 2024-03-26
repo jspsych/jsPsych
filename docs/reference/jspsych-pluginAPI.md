@@ -163,6 +163,7 @@ audio_context | AudioContext object | The AudioContext of the audio file that is
 audio_context_start_time | numeric | The scheduled time of the sound file in the AudioContext. This will be used as the start time.
 allow_held_key | boolean | If `true`, then responses will be registered from keys that are being held down. If `false`, then a held key can only register a response the first time that `getKeyboardResponse` is called for that key. For example, if a participant holds down the `A` key before the experiment starts, then the first time `getKeyboardResponse` is called, the `A` will register as a key press. However, any future calls to `getKeyboardResponse` will not register the `A` until the participant releases the key and presses it again.
 persist | boolean | If false, then the keyboard listener will only trigger the first time a valid key is pressed. If true, then it will trigger every time a valid key is pressed until it is explicitly cancelled by `jsPsych.pluginAPI.cancelKeyboardResponse` or `jsPsych.pluginAPI.cancelAllKeyboardResponses`.
+minimum_valid_rt | number | The minimum valid response time for key presses. Any key press response time that is less than this value will be treated as invalid and ignored.
 
 #### Return value
 
