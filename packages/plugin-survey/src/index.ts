@@ -41,6 +41,29 @@ const info = <const>{
 
 type Info = typeof info;
 
+// Define the mapping between custom jsPsych class names (jspsych-*) and class names provided by SurveyJS.
+// See here for full list: https://github.com/surveyjs/survey-library/blob/master/src/defaultCss/defaultV2Css.ts.
+// To modify the survey plugin CSS:
+// (1) search for the CSS selector that you want to modify,
+// (2) look it up and get the associated ID (note that some of these are nested)
+// (3) if the ID isn't already listed as a key here, add it and use a new jspsych class name as the value
+// (4) in survey.scss, use the jspsych class name as the selector and add/modify the rule
+
+const jsPsychSurveyCssClassMap = {
+  body: "jspsych-body",
+  bodyContainer: "jspsych-body-container",
+  question: {
+    content: "jspsych-question-content",
+  },
+  page: {
+    root: "jspsych-page",
+  },
+  footer: "jspsych-footer",
+  navigation: {
+    complete: "jspsych-nav-complete",
+  },
+};
+
 /**
  * **survey**
  *
@@ -140,6 +163,9 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
     //this.survey.applyTheme(PlainLightPanelless); // TO DO: can we apply this theme and still customize some values?
     this.applyStyles(this.survey); // customize colors
+
+    // apply our custom CSS class names
+    this.survey.css = jsPsychSurveyCssClassMap;
 
     if (trial.validation_function) {
       this.survey.onValidateQuestion.add(trial.validation_function);
