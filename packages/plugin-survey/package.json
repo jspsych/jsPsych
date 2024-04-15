@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "jquery": "^3.7.1",
-    "survey-core": "^1.9.121",
-    "survey-jquery": "^1.9.122"
+    "survey-core": "^1.9.138",
+    "survey-jquery": "^1.9.138"
   }
 }
