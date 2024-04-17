@@ -59,6 +59,7 @@ nav:
   - 'Media Preloading': 'overview/media-preloading.md'
   - 'Fullscreen Experiments': 'overview/fullscreen.md'
   - 'Eye Tracking': 'overview/eye-tracking.md'
+  - 'Building Surveys': 'overview/building-surveys.md'
   - 'Exclude Participants Based on Browser Features': 'overview/exclude-browser.md'
   - 'Automatic Progress Bar': 'overview/progress-bar.md'
   - 'Integrating with Prolific': 'overview/prolific.md'
