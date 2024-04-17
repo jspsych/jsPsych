@@ -54,6 +54,7 @@ const jsPsychSurveyCssClassMap = {
   bodyContainer: "jspsych-body-container",
   question: {
     content: "jspsych-question-content",
+    mainRoot: "jspsych-question-root",
   },
   page: {
     root: "jspsych-page",

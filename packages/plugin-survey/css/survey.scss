@@ -10,6 +10,11 @@ div#sv-nav-complete.sv-action, div#sv-nav-next.sv-action {
   display: inline-block;
 }
 
+// prevent question content from overflowing question border/panel
+.jspsych-question-root {
+  overflow: scroll;
+}
+
 // left-align all text in the main questions section (title is still centered)
 .jspsych-body-container {
   text-align: left;
