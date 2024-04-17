@@ -15,11 +15,27 @@
 
     const jsPsych = initJsPsych();
 
+    const survey_function = (survey) => {
+      // if it's the question page, hide the buttons and move on automatically
+      // if it's the feedback page, then show the navigation buttons
+      function updateNavButtons(sender, options) {
+        if (options.newCurrentPage.getPropertyValue("name") === "feedback") {
+          survey.showNavigationButtons = "bottom";
+        } else {
+          survey.showNavigationButtons = "none";
+        }
+      }
+      survey.onCurrentPageChanging.add(updateNavButtons);
+    }
+
     const trial = {
       type: jsPsychSurvey,
       survey_json: JSON.stringify({
         showQuestionNumbers: false,
         title: 'Conditional question visibility.',
+        showNavigationButtons: "none",
+        goNextPageAutomatic: true,
+        allowCompleteSurveyAutomatic: true,
         pages: [{
           name: 'question',
           elements: [
@@ -48,7 +64,8 @@
             }
           ]
         }]
-      })
+      }),
+      survey_function: survey_function
     };
 
     const timeline = [trial];
