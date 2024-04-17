@@ -26,7 +26,7 @@ div#sv-nav-complete.sv-action, div#sv-nav-next.sv-action {
 // The CSS below fixes this by restricting the max-width and centering the content (and setting padding).
 .jspsych-body {
   width: auto;
-  max-width: 90%;
+  max-width: 80%;
   margin-left: auto;
   margin-right: auto;
   padding-top: calc(6 * (var(--sjs-base-unit, var(--base-unit, 8px))));
