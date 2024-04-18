@@ -7759,8 +7759,16 @@ div#sv-nav-complete.sv-action, div#sv-nav-next.sv-action {
   margin-left: auto !important;
 }
 
+input[type=text] {
+  width: auto;
+}
+
 .jspsych-question-content {
   display: inline-block;
+}
+
+.jspsych-question-root {
+  overflow: scroll;
 }
 
 .jspsych-body-container {
@@ -7769,7 +7777,8 @@ div#sv-nav-complete.sv-action, div#sv-nav-next.sv-action {
 }
 
 .jspsych-body {
-  max-width: calc(90 * (var(--sjs-base-unit, var(--base-unit, 8px))));
+  width: auto;
+  max-width: 80%;
   margin-left: auto;
   margin-right: auto;
   padding-top: calc(6 * (var(--sjs-base-unit, var(--base-unit, 8px))));
