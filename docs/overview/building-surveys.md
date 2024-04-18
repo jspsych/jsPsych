@@ -7,7 +7,6 @@ jsPsych has several plugins that allow you to present survey questions during yo
 * Survey-* plugins: `survey-likert`, `survey-multi-choice`, `survey-multi-select`, `survey-text`
     * Only one question type and one page per trial
     * Parameterization makes it easy to define questions
-    * Simple formatting that blends nicely with jsPsych's default style
     * Work with timeline variables
     * Ideal for adding survey-style questions into repetitive trial procedures
     * Limited functionality and customization options
@@ -43,7 +42,7 @@ Here are some other places to start learning about SurveyJS:
 - [Add conditional logic and dynamic texts](https://surveyjs.io/form-library/documentation/design-survey/conditional-logic)
 - [Set default values](https://surveyjs.io/form-library/documentation/design-survey/pre-populate-form-fields#default-question-values)
 
-SurveyJS has a large number of more specific features that some researchers might find useful, including:
+SurveyJS has some more specific features that some researchers might find useful, including:
 
 - [Automatic question numbering](https://surveyjs.io/form-library/examples/how-to-number-pages-and-questions/jquery) (across the survey, within each page, and using custom values/characters)
 - [Response validation](https://surveyjs.io/form-library/examples/javascript-form-validation/jquery)
@@ -56,7 +55,7 @@ SurveyJS has a large number of more specific features that some researchers migh
 - [Localization](https://surveyjs.io/form-library/examples/survey-localization/jquery) (adapting the survey's language based on a country/region value)
 - [Text piping](https://surveyjs.io/form-library/examples/text-piping-in-surveys/jquery) (dynamically insert text into questions/answers based on previous responses)
 
-You can find realistic examples on this [SurveyJS examples/demos page](https://surveyjs.io/form-library/examples/overview). And to view all of the survey-level options, see the [Survey API documentation](https://surveyjs.io/form-library/documentation/api-reference/survey-data-model).
+You can find realistic examples on the [SurveyJS examples/demos page](https://surveyjs.io/form-library/examples/overview). And to view all of the survey-level options, see the [Survey API documentation](https://surveyjs.io/form-library/documentation/api-reference/survey-data-model).
 
 ### Creating a survey with JSON
 
@@ -73,9 +72,9 @@ const survey_json = {
 };
 ```
 
-Each element is an object with a 'type', which is the element/question type (see the `survey` plugin's [Questions/Elements section](../plugins/survey.md#questionelement-types) for a list of type options). The element objects should also contain any other parameters and configuration options for that question, such as the question name (used to identify the question in the data), title (prompt shown to the participant), whether or not a response is required, and other parameters that might be relevant to that particular question type.
+Each element is an object with a 'type', which is the element/question type (see the `survey` plugin's [Questions/Elements section](../plugins/survey.md#questionelement-types) for a list of type options). The element objects should also contain any other parameters and configuration options for that question, such as the question name (used to identify the question in the data), title (prompt shown to the participant), whether or not a response is required, and other parameters that might be relevant to that particular question type. The [Questions/Elements section](../plugins/survey.md#questionelement-types) in the `survey` plugin documentation contains links to the SurveyJS documentation for each question type, where you can find more information about the required and optional parameters.
 
-Once you've created the survey JSON string, it can be used as the `survey_json` parameter in a jsPsych `survey` trial:
+Once you've created the survey JSON string, as we've done above, it can be used as the `survey_json` parameter in a jsPsych `survey` trial:
 
 ```javascript
 const survey_trial = {
@@ -95,7 +94,9 @@ That's it! The code above will create a valid survey.
 
 #### Multiple pages
 
-You can specify 'elements' as a top-level property in the survey JSON, and those elements will be shown on a single page. If you'd like the survey to have more than one page, then you should add a 'pages' property to the survey JSON object. The value of 'pages' should be an array of objects, where each object defines a single page that contains its own 'elements' array. In the example below, there are two pages - each page has a set of elements/questions, as well as a page name and title.
+You can specify 'elements' as a top-level property in the survey JSON, and those elements will be shown on a single page. If you'd like the survey to have more than one page, then you can add a 'pages' property to the survey JSON object. The value of 'pages' should be an array of objects, where each object defines a single page. Each page object should contain its own 'elements' array. 
+
+The example below defines a survey with two pages. Each page has a set of elements/questions, as well as some optional parameters (page name and title).
 
 ```javascript
 const survey_json = {
@@ -166,7 +167,7 @@ For more survey JSON examples, see the [SurveyJS JSON documentation](https://sur
 
 ### Using JavaScript to create or modify the survey
 
-SurveyJS allows you to create or modify your survey using JavaScript. The JavaScript approach can do any of the configuration that can be done in JSON, plus it allows you to (1) make your survey more dynamic (e.g. change the contents of the survey based on the participant's responses), and (2) define other functions that should run during the survey.
+SurveyJS allows you to create or modify your survey using JavaScript. The JavaScript approach can do any of the configuration that can be done in JSON, plus it allows you to make your survey more dynamic. For instance, you could use the survey function parameter to change the contents of the survey based on the participant's earlier responses. The survey function parameter also allows you to define any other functions that should run during the survey. For instance, you might want to run custom code in response to a page change or response input event.
 
 In the jsPsych `survey` plugin, the `survey_function` parameter receives a 'survey' argument, which is a SurveyJS survey model that you can manipulate. If you do not include a value for the `survey_json` parameter, then the `survey_function` will receive an empty survey. In this case, your `survey_function` must add at least one page with at least one element/question to produce a valid survey.
 
@@ -174,7 +175,9 @@ Here's the JavaScript function that would create the same survey that's defined 
 
 ```javascript
 const survey_function = (survey) => {
+  // add page
   const page = survey.addNewPage("page1");
+  // add question
   const text_question = page.addNewQuestion("text", "example");
   text_question.title = "Enter some text in the box below!";
 };
@@ -191,7 +194,9 @@ timeline.push(survey_trial);
 
 If you specify survey JSON using the `survey_json` parameter, then the `survey_function` will receive a survey object that was created using your JSON. This means that, in your survey function, you can access all of the survey elements that you have defined in the JSON.
 
-Here's a slightly more realistic case for when you might want to use the `survey_function` parameter. In this example, we ask the participant to make a color choice earlier in the experiment, and then reference their choice in a `survey` trial question. We can't do this with the JSON configuration because we cannot know the participant's color choice in advance - it only becomes available during the experiment, and is then stored in the jsPsych data. However, we can use the `survey_function` to dynamically access their color response from the jsPsych data and use that value in the survey question title. We'll use the `survey_function` just for this one dynamic part of the survey, and define everything else in JSON.
+Here's a slightly more realistic case for when you might want to use the `survey_function` parameter. In this example, we want to ask the participant to make a color choice at the start of the experiment, and then reference their choice in a later `survey` trial question. We can't do this with the JSON configuration because we cannot know the participant's color choice in advance - it only becomes available during the experiment. 
+
+However, we can use the `survey_function` to dynamically access the participant's color response from the jsPsych data and use that value in the survey question title. We'll use the `survey_function` just for this one dynamic part of the survey, and define everything else in JSON.
 
 ```javascript
 // Create an array of color choices
@@ -216,16 +221,18 @@ const color_survey_json = {
   }]
 };
 
-// Create a survey function to access the participant's response from an earlier trial
-// and modify the survey accordingly
+// Create a survey function to access the participant's response 
+// from an earlier trial and modify the survey accordingly
 const color_survey_function = (survey) => {
   // Get the earlier color selection response (button index) from the jsPsych data
   const color_choice_index = jsPsych.data.get().filter({trial_id: 'color_trial'}).values()[0].response;
   const color_choice = color_choices[color_choice_index];
-  // Get the question that we want to modify from the survey
+  // Get the question that we want to modify
   const color_confirmation_question = survey.getQuestionByName('color_confirmation');
-  // Change the question title so that it references the name of the color that was selected
-  color_confirmation_question.title = `Earlier you chose ${color_choice.toUpperCase()}. Do you still like that color?`;
+  // Change the question title to include the name of the color that was selected
+  color_confirmation_question.title = `
+    Earlier you chose ${color_choice.toUpperCase()}. Do you still like that color?
+  `;
 }
 
 // Create the jsPsych survey trial using both the survey JSON and survey function
@@ -235,7 +242,7 @@ const color_survey_trial = {
   survey_function: color_survey_function
 };
 
-timeline = [select_color_trial, color_survey_trial];
+jsPsych.run([select_color_trial, color_survey_trial]);
 ```
 
 For more information about creating/modifying surveys with JavaScript, see the [SurveyJS documentation](https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#create-or-change-a-survey-model-dynamically). The SurveyJS API reference contains all of the properties (parameters), methods, and events you can use when working with the survey, page, and question objects.
@@ -252,13 +259,13 @@ You can create `survey` trials entirely with JSON, entirely with a JavaScript fu
 
 #### Creating dynamic surveys with JSON
 
-You cannot include JavaScript functions as values in your `survey_json`, but SurveyJS has implemented some convenience options for setting up certain kinds of dynamic survey behavior from within the JSON configuration. For instance, the survey JSON can contain expressions that dynamically determine the visibility of a question or choice/column/row (see [Conditional Visibility](https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#conditional-visibility) and [Expressions](https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#expressions)). As another example, you can use a placeholder value to insert the response from a particular question into a text string (see [Dynamic Texts: Question Values](https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#question-values)).
+You cannot include JavaScript functions as values in your `survey_json`. Fortunately, SurveyJS has implemented some convenience options for setting up certain kinds of dynamic survey behavior from within the JSON configuration. For instance, you can define a condition expression from within the JSON that will dynamically show/hide a question or choice/column/row (see [Conditional Visibility](https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#conditional-visibility) and [Expressions](https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#expressions)). As another example, you can use a placeholder value inside a text string to insert the response from a particular question into that string (see [Dynamic Texts: Question Values](https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#question-values)).
 
-In general, in the `survey_json` you can access information that exists *within that same `survey` trial* and use it to produce dynamic behavior (e.g. putting placeholder values in text strings, automatically populating choice values, etc.). But if you need to access information that becomes available during the experiment but *outside of that particular `survey` trial*, you will need to use the `survey_function` parameter. 
+In general, you can access information in the survey JSON that exists *within that same `survey` trial* and use it to produce dynamic behavior (e.g. putting placeholder values in text strings, automatically populating choice values, etc.). But if you need to access information that becomes available during the experiment but *outside of that particular `survey` trial*, you will need to use the `survey_function` parameter. 
 
 #### Defining survey questions programmatically
 
-Finally, the `survey_function` parameter can also be useful when you want to create your survey content programmatically, rather than writing out each question in JSON. For instance, if you were going to present the exact same question format for a large set of different prompts, you could define them one-by-one in the `survey_json` like this:
+The `survey_function` parameter can also be useful when you want to create your survey content programmatically, rather than writing out each question separately in JSON. For instance, if you were going to present the exact same question format for a large set of different prompts, you could define them one-by-one in the `survey_json` like this:
 
 ```json
 '{
@@ -328,4 +335,7 @@ const survey_function = (survey) => {
 ```
 
 !!! tip "Use the matrix question type for Likert-style tables"
-    The example above was used to illustrate how you can loop over information to programmatically construct a series of questions. But in fact, for this example and similar cases where you have different question prompts that all use the same response type/options, you might want to use the SurveyJS ["matrix" question type](https://surveyjs.io/form-library/examples/single-selection-matrix-table-question/jquery). This question type creates a table where each row is a question and each column is a response option. The table format is often used for Likert scales, satisfaction surveys, etc. You can even create a table that repeats a set of questions with different response types using the SurveyJS [multi-select matrix](https://surveyjs.io/form-library/examples/multi-select-matrix-question/jquery#) approach ("matrixdropdown" question type).
+    The example above was used to illustrate how you can loop over information to programmatically construct a series of questions. But in cases where you have different question prompts that all use the same multiple choice options, you might prefer to use the the SurveyJS ["matrix" question type](https://surveyjs.io/form-library/examples/single-selection-matrix-table-question/jquery). This question type creates a table where each row is a question and each column is a response option. The table format is often used for Likert scales, satisfaction surveys, etc. You can even create a table that repeats a set of questions with different response types using the SurveyJS [multi-select matrix](https://surveyjs.io/form-library/examples/multi-select-matrix-question/jquery#) ("matrixdropdown") question type.
+
+
+Another option is to create your JSON configuration programmatically. This can be done in JavaScript that runs when the experiment first loads (before `jsPsych.run` is called). You can find an example that demonstrates this approach in the `survey` plugin's [Examples](../plugins/survey.md#examples) section.
