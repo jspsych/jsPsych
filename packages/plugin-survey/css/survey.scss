@@ -5,6 +5,11 @@ div#sv-nav-complete.sv-action, div#sv-nav-next.sv-action {
   margin-left: auto !important;
 }
 
+// TO DO: get this to work with the SurveyJS class name map
+input[type="text"] {
+  width: auto;
+}
+
 // center the question content 
 .jspsych-question-content {
   display: inline-block;
