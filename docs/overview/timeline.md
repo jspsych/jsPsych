@@ -4,7 +4,7 @@ To create an experiment using jsPsych, you need to specify a timeline that descr
 
 ## A single trial
 
-To create a trial, you need to create an object that describes the trial. The most important feature of this object is the `type` parameter. This tells jsPsych which plugin to use to run the trial. For example, if you want to use the [html-keyboard-response plugin](../plugins/html-keyboard-response) to display a short message, the trial object would look like this:
+To create a trial, you need to create an object that describes the trial. The most important feature of this object is the `type` parameter. This tells jsPsych which plugin to use to run the trial. For example, if you want to use the [html-keyboard-response plugin](../plugins/html-keyboard-response.md) to display a short message, the trial object would look like this:
 
 ```javascript
 var trial = {
@@ -55,7 +55,7 @@ timeline.push(trial_3);
 
 ## Nested timelines
 
-Each object on the timeline can also have it's own timeline. This is useful for many reasons. One is that it allows you to define common parameters across trials once and have them apply to all the trials on the nested timeline. The example below creates a series of trials using the [image-keyboard-response plugin](../plugins/image-keyboard-response/), where the only thing that changes from trial-to-trial is the image file being displayed on the screen.
+Each object on the timeline can also have it's own timeline. This is useful for many reasons. One is that it allows you to define common parameters across trials once and have them apply to all the trials on the nested timeline. The example below creates a series of trials using the [image-keyboard-response plugin](../plugins/image-keyboard-response.md), where the only thing that changes from trial-to-trial is the image file being displayed on the screen.
 
 ```javascript
 var judgment_trials = {

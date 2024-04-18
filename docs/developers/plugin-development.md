@@ -31,7 +31,7 @@ The plugin's `trial()` method is responsible for running a single trial. When th
 There are three parameters that are passed into the trial method. 
 
 * `display_element` is the DOM element where jsPsych content is being rendered. This parameter will be an `HTMLElement`, and you can use it to modify the portion of the document that jsPsych controls.
-* `trial` is an object containing all of the parameters specified in the corresponding [TimelineNode](../overview/timeline). 
+* `trial` is an object containing all of the parameters specified in the corresponding [TimelineNode](../overview/timeline.md).
 * `on_load` is an optional parameter that contains a callback function to invoke when `trial()` has completed its initial loading. See [handling the on_load event](#asynchronous-loading).
 
 The only requirement for the `trial` method is that it calls `jsPsych.finishTrial()` when it is done. This is how jsPsych knows to advance to the next trial in the experiment (or end the experiment if it is the last trial). The plugin can do whatever it needs to do before that point.
@@ -168,7 +168,7 @@ trial(display_element, trial){
 
 ### Asynchronous loading
 
-One of the [trial events](../overview/events) is `on_load`, which is normally triggered automatically when the `.trial()` method returns. In most cases, this return happens after the plugin has done its initial setup of the DOM (e.g., rendering an image, setting up event listeners and timers, etc.). However, in some cases a plugin may implement an asynchronous operation that needs to complete before the initial loading of the plugin is considered done. An example of this is the `audio-keyboard-response` plugin, in which the check to see if the audio file is loaded is asynchronous and the `.trial()` method returns before the audio file has been initialized and the display updated. 
+One of the [trial events](../overview/events.md) is `on_load`, which is normally triggered automatically when the `.trial()` method returns. In most cases, this return happens after the plugin has done its initial setup of the DOM (e.g., rendering an image, setting up event listeners and timers, etc.). However, in some cases a plugin may implement an asynchronous operation that needs to complete before the initial loading of the plugin is considered done. An example of this is the `audio-keyboard-response` plugin, in which the check to see if the audio file is loaded is asynchronous and the `.trial()` method returns before the audio file has been initialized and the display updated.
 
 If you would like to manually trigger the `on_load` event for a plugin, the `.trial()` method accepts an optional third parameter that is a callback function to invoke when loading is complete. 
 
