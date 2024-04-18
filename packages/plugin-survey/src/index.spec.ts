@@ -56,7 +56,7 @@ describe("survey plugin", () => {
     await expectRunning();
 
     const complete_button = displayElement.querySelector(
-      'input[type="button"].sd-navigation__complete-btn'
+      'input[type="button"].jspsych-nav-complete'
     );
     expect(complete_button).not.toBeNull();
     clickTarget(complete_button);
@@ -101,7 +101,7 @@ describe("survey plugin", () => {
     expect(displayElement.querySelector('div[data-name="question_2"]')).not.toBeNull();
 
     const complete_button = displayElement.querySelector(
-      'input[type="button"].sd-navigation__complete-btn'
+      'input[type="button"].jspsych-nav-complete'
     );
     expect(complete_button).not.toBeNull();
     clickTarget(complete_button);
