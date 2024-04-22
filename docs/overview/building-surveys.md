@@ -7,7 +7,7 @@ jsPsych has several plugins that allow you to present survey questions during yo
 * Survey-* plugins: `survey-likert`, `survey-multi-choice`, `survey-multi-select`, `survey-text`
     * Only one question type and one page per trial
     * Parameterization makes it easy to define questions
-    * Work with timeline variables
+    * Work with [timeline variables](timeline.md#timeline-variables)
     * Ideal for adding survey-style questions into repetitive trial procedures
     * Limited functionality and customization options
 * `survey-html-form` plugin
