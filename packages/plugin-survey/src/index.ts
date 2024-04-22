@@ -63,6 +63,7 @@ const jsPsychSurveyCssClassMap = {
   navigation: {
     complete: "jspsych-nav-complete",
   },
+  rowMultiple: "jspsych-row-multiple",
 };
 
 /**

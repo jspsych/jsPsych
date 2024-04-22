@@ -60,3 +60,8 @@ input[type="text"] {
 div#sv-nav-complete.sv-action.sv-action--hidden {
   display: none;
 }
+
+// remove min-width from questions that appear in the same row
+.jspsych-row-multiple > div {
+  min-width: unset !important;
+}
