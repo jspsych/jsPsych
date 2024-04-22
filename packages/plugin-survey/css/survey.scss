@@ -53,4 +53,10 @@ input[type="text"] {
 .jspsych-nav-complete {
   background: var(--sjs-questionpanel-backcolor, var(--sjs-question-background, var(--sjs-general-backcolor, var(--background, #fff))));
   color: var(--sjs-primary-backcolor, var(--primary, #19b394));
+  display: block;
+}
+
+// remove the complete button from page flow when it is hidden
+div#sv-nav-complete.sv-action.sv-action--hidden {
+  display: none;
 }
