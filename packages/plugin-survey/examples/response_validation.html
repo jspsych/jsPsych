@@ -41,15 +41,14 @@
     elements: [
       {
         type: "text",
-        name: "ssn",
-        title: "Social Security number",
-        description: "Please enter 9 numbers.",
-        requiredErrorText: "Your SSN must be a 9-digit number.",
+        name: "number",
+        title: "Please enter a 9-digit number.",
+        requiredErrorText: "You must enter a 9-digit number.",
         // There are some question validators that can be added directly into the survey JSON
         // https://surveyjs.io/form-library/documentation/data-validation#built-in-client-side-validators
         validators: [{
           type: "regex",
-          text: "Your SSN must be a 9-digit number",
+          text: "You must enter a 9-digit number",
           regex: "(?=\\d{9})"
         }],
         maxLength: 9,
