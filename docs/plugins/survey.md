@@ -47,7 +47,7 @@ The "boolean" type is a yes/no (or other two-option) multiple choice question. I
 
 #### checkbox
 
-This is the "multi-select" question type: participants can select one or more options from the set of choices.
+This checkbox question type allows participants to select one or more options from the set of choices. You can optionally include special choices, such as "Select all", "None", and "Other" with a text box that appears when selected.
 
 - [Checkbox example](https://surveyjs.io/form-library/examples/create-checkboxes-question-in-javascript/jquery)
 - [Checkbox API documentation](https://surveyjs.io/form-library/documentation/api-reference/checkbox-question-model)
@@ -148,7 +148,7 @@ The paneldyanmic element allows you to set up a group of questions that repeat b
 
 #### radiogroup
 
-This is a multiple choice question type. Participants can select a single option from the set of choices.
+This is a multiple choice question type. Participants can select a single option from the set of choices. You can optionally add special choices, such as "Other" with a text box that appears when selected.
 
 - [Radiogroup example](https://surveyjs.io/form-library/examples/single-select-radio-button-group/jquery) 
 - [Radiogroup API documentation](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model)
