@@ -1,10 +1,6 @@
-// import SurveyJS dependencies: survey-core and survey-jquery (UI theme): https://surveyjs.io/documentation/surveyjs-architecture#surveyjs-packages
-import $ from "jquery";
+// import SurveyJS dependencies: survey-core and survey-knockout-ui (UI theme): https://surveyjs.io/documentation/surveyjs-architecture#surveyjs-packages
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
-import { StylesManager } from "survey-core";
-// TO DO: decide whether to apply this theme or remove it
-import { PlainLightPanelless } from "survey-core/themes/plain-light-panelless";
-import * as SurveyJS from "survey-jquery";
+import * as SurveyJS from "survey-knockout-ui";
 
 const info = <const>{
   name: "survey",
@@ -76,7 +72,7 @@ const jsPsychSurveyCssClassMap = {
  */
 class SurveyPlugin implements JsPsychPlugin<Info> {
   static info = info;
-  private survey: $.Survey;
+  private survey: SurveyJS.Survey;
   private start_time: number;
 
   constructor(private jsPsych: JsPsych) {
@@ -86,6 +82,8 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
   applyStyles(survey) {
     // TO DO: this method of applying custom styles is deprecated, but I'm
     // saving this here for reference while we make decisions about default style
+
+    // import { StylesManager } from "survey-core";
 
     // const colors = StylesManager.ThemeColors["default"];
 
@@ -157,7 +155,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
         "Survey plugin: you must define the survey using a non-empty JSON object and/or a survey function."
       );
     }
-    this.survey = new SurveyJS.Model(trial.survey_json);
+    this.survey = new SurveyJS.Survey(trial.survey_json);
 
     if (trial.survey_function !== null) {
       trial.survey_function(this.survey);
@@ -197,7 +195,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     // remove flex display from jspsych-content-wrapper to get formatting to work
     document.querySelector<HTMLElement>(".jspsych-content-wrapper").style.display = "block";
 
-    $(display_element).Survey({ model: this.survey });
+    this.survey.render(display_element);
 
     this.start_time = performance.now();
   }
