@@ -185,7 +185,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
       // clear display and reset flex on jspsych-content-wrapper
       display_element.innerHTML = "";
-      $(".jspsych-content-wrapper").css("display", "flex");
+      document.querySelector<HTMLElement>(".jspsych-content-wrapper").style.display = "flex";
 
       // finish trial and save data
       this.jsPsych.finishTrial({
@@ -195,7 +195,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     });
 
     // remove flex display from jspsych-content-wrapper to get formatting to work
-    $(".jspsych-content-wrapper").css("display", "block");
+    document.querySelector<HTMLElement>(".jspsych-content-wrapper").style.display = "block";
 
     $(display_element).Survey({ model: this.survey });
 
