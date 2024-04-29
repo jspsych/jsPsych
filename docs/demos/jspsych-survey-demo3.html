@@ -17,7 +17,7 @@
 
     const trial = {
       type: jsPsychSurvey,
-      survey_json: JSON.stringify({
+      survey_json: {
         showQuestionNumbers: false,
         title: 'Likert scale examples',
         pages: [
@@ -89,7 +89,7 @@
             ]
           }
         ]
-      })
+      }
     };
 
     const timeline = [trial];

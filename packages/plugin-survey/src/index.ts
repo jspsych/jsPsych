@@ -6,13 +6,13 @@ const info = <const>{
   name: "survey",
   parameters: {
     /**
-     * A SurveyJS survey model defined in JSON.
+     * A SurveyJS survey model defined as a JavaScript object.
      * See: https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#define-a-static-survey-model-in-json
      */
     survey_json: {
-      type: ParameterType.STRING,
-      default: "{}",
-      pretty_name: "Survey JSON",
+      type: ParameterType.OBJECT,
+      default: {},
+      pretty_name: "Survey JSON object",
     },
     /**
      * A SurveyJS survey model defined as a function. The function receives an empty SurveyJS survey object as an argument.
@@ -150,9 +150,10 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
   }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    if (trial.survey_json === "{}" && trial.survey_function === null) {
-      console.warn(
-        "Survey plugin: you must define the survey using a non-empty JSON object and/or a survey function."
+    // check for empty JSON and no survey function
+    if (JSON.stringify(trial.survey_json) === "{}" && trial.survey_function === null) {
+      console.error(
+        "Survey plugin warning: you must define the survey using a non-empty JSON object and/or a survey function."
       );
     }
     this.survey = new SurveyJS.Survey(trial.survey_json);
@@ -161,7 +162,6 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       trial.survey_function(this.survey);
     }
 
-    //this.survey.applyTheme(PlainLightPanelless); // TO DO: can we apply this theme and still customize some values?
     this.applyStyles(this.survey); // customize colors
 
     // apply our custom CSS class names

@@ -4,19 +4,19 @@ Current version: 1.0.0. [See version history](https://github.com/jspsych/jsPsych
 
 SurveyJS version: 1.9.138
 
-This plugin is a wrapper for the [**SurveyJS form library**](https://surveyjs.io/form-library/documentation/overview). It displays survey-style questions across one or more pages. You can mix different question types on the same page, and participants can navigate back and forth through multiple survey pages without losing responses. SurveyJS provides a large number of built-in question types, response validation options, conditional display options, and other useful features for building complex surveys. See the [Building Surveys in jsPsych](../overview/building-surveys.md) page for a more detailed list of features. 
+This plugin is a wrapper for the [**SurveyJS form library**](https://surveyjs.io/form-library/documentation/overview). It displays survey-style questions across one or more pages. You can mix different question types on the same page, and participants can navigate back and forth through multiple survey pages without losing responses. SurveyJS provides a large number of built-in question types, response validation options, conditional display options, special response options ("None", "Select all", "Other"), and other useful features for building complex surveys. See the [Building Surveys in jsPsych](../overview/building-surveys.md) page for a more detailed list of all options and features.
 
-With SurveyJS, surveys can be defined using a JSON string, a JavaScript function, or a combination of both. The jsPsych `survey` plugin provides parameters that accept these methods of constructing a SurveyJS survey, and passes them into SurveyJS. The fact that this plugin just acts as a wrapper means you can take advantage of all of the SurveyJS features, and copy/paste directly from SurveyJS examples into the plugin's `survey_json` parameter (for JSON configuration) or `survey_function` parameter (for JavaScript code). 
+With SurveyJS, surveys can be defined using a JavaScript/JSON object, a JavaScript function, or a combination of both. The jsPsych `survey` plugin provides parameters that accept these methods of constructing a SurveyJS survey, and passes them into SurveyJS. The fact that this plugin just acts as a wrapper means you can take advantage of all of the SurveyJS features, and copy/paste directly from SurveyJS examples into the plugin's `survey_json` parameter (for JSON object configuration) or `survey_function` parameter (for JavaScript code).
 
-This page contains the plugin's reference information and examples. The [Building Surveys in jsPsych](../overview/building-surveys.md) page contains a more detailed guide for using this plugin. 
+This page contains the plugin's reference information and examples. The [Building Surveys in jsPsych](../overview/building-surveys.md) page contains a more detailed guide for using this plugin.
 
-For the most comprehensive guides on survey configuration and features, please see the [SurveyJS form library documentation](https://surveyjs.io/form-library/documentation/overview) and [examples](https://surveyjs.io/form-library/examples/overview). 
+For the most comprehensive guides on survey configuration and features, please see the [SurveyJS form library documentation](https://surveyjs.io/form-library/documentation/overview) and [examples](https://surveyjs.io/form-library/examples/overview).
 
 !!! warning "Limitations"
 
     The jsPsych `survey` plugin is not compatible with certain jsPsych and SurveyJS features. Specifically:
 
-    - **It is not compatible with jsPsych's timeline variables feature.**
+    - **It is not always well-suited for use with jsPsych's [timeline variables](../overview/timeline.md#timeline-variables) feature.** This is because the timeline variables array must store the entire `survey_json` object for each trial, rather than just the parameters that change across trials, which are nested within the `survey_json` object. We offer some alternative methods for dynamically constructing questions/trials in [this section](../overview/building-surveys.md#defining-survey-trialsquestions-programmatically) of the Building Surveys in jsPsych documentation page.
     - **It does not support the SurveyJS "[complete page](https://surveyjs.io/form-library/documentation/design-survey/create-a-multi-page-survey#complete-page)" parameter.** This is a parameter for HTML formatted content that should appear after the participant clicks the 'submit' button. Instead of using this parameter, you should create another jsPsych trial that comes after the survey trial to serve the same purpose.
     - **It does not support the SurveyJS question's `correctAnswer` property**, which is used for SurveyJS quizzes and automatic response scoring. SurveyJS does not store this value or the response score in the data - instead this is only used to display scores on the survey's 'complete page'. Since the complete page is not supported, this 'correctAnswer' property also does not work as intended in the jsPsych plugin.
 
@@ -30,13 +30,13 @@ Other parameters can be left unspecified if the default value is acceptable.
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-survey_json | JSON string | "{}"| A SurveyJS-compatible JSON string that defines the survey. If used with the `survey_function` parameter, the survey will initially be constructed with this JSON string and then passed to the `survey_function`. See the [SurveyJS JSON documentation](https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#define-a-static-survey-model-in-json) for more information.
-survey_function | function | null | A function that receives a SurveyJS survey object as an argument. If no `survey_json` is specified, then the function receives an empty survey model and must add all pages/elements to it. If a `survey_json` string is provided, then this forms the basis of the survey object that is passed into the `survey_function`. See the [SurveyJS JavaScript documentation](https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#create-or-change-a-survey-model-dynamically) for more information.
+survey_json | object | `{}` | A SurveyJS-compatible JavaScript object that defines the survey (we refer to this as the survey 'JSON' for consistency with the SurveyJS documentation, but this parameter should be a JSON-compatible JavaScript object rather than a string). If used with the `survey_function` parameter, the survey will initially be constructed with this object and then passed to the `survey_function`. See the [SurveyJS JSON documentation](https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#define-a-static-survey-model-in-json) for more information.
+survey_function | function | null | A function that receives a SurveyJS survey object as an argument. If no `survey_json` is specified, then the function receives an empty survey model and must add all pages/elements to it. If a `survey_json` object is provided, then this object forms the basis of the survey model that is passed into the `survey_function`. See the [SurveyJS JavaScript documentation](https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#create-or-change-a-survey-model-dynamically) for more information.
 validation_function | function | null | A function that can be used to validate responses. This function is called whenever the SurveyJS `onValidateQuestion` event occurs. (Note: it is also possible to add this function to the survey using the `survey_function` parameter - we've just added it as a parameter for convenience).
 
 ### Question/Element Types
 
-You must add one or more SurveyJS "element" to a survey, using the plugin's survey JSON or survey function parameter. SurveyJS elements are mostly made up of different question types, but also include non-response content such as HTML and images/video. The [Building Surveys in jsPsych](../overview/building-surveys.md) page contains more information about how to define survey elements, and you can see some examples in the [Examples section](#examples) on this page.
+You must add one or more SurveyJS "element" to a survey, using the plugin's survey JSON and/or survey function parameter. SurveyJS elements are mostly made up of different question types, but also include non-response content such as HTML and images/video. The [Building Surveys in jsPsych](../overview/building-surveys.md) page contains more information about how to define survey elements, and you can see some examples in the [Examples section](#examples) on this page.
 
 For reference, the SurveyJS question/element types are listed below, with links to more information and examples in the SurveyJS documentation. 
 
@@ -247,7 +247,7 @@ import '@jspsych/plugin-survey/css/survey.css'
         ```javascript
         const trial = {
           type: jsPsychSurvey,
-          survey_json: JSON.stringify({
+          survey_json: {
             showQuestionNumbers: false,
             elements:
               [
@@ -269,7 +269,7 @@ import '@jspsych/plugin-survey/css/survey.css'
                   required: true,
                 }
             ]
-          })
+          }
         };
         ```
 
@@ -286,7 +286,7 @@ import '@jspsych/plugin-survey/css/survey.css'
         ```javascript
         const trial = {
           type: jsPsychSurvey,
-          survey_json: JSON.stringify({
+          survey_json: {
             showQuestionNumbers: false,
             title: 'My questionnaire',
             completeText: 'Done!',
@@ -299,7 +299,7 @@ import '@jspsych/plugin-survey/css/survey.css'
                     {
                       type: 'text',
                       title: 'Where were you born?', 
-                      placeholder: 'City, State, Country',
+                      placeholder: 'City, State/Region, Country',
                       name: 'birthplace', 
                       size: 30,
                       isRequired: true,
@@ -339,7 +339,7 @@ import '@jspsych/plugin-survey/css/survey.css'
                 ]
               }
             ]
-          })
+          }
         };
         ```
 
@@ -358,7 +358,7 @@ import '@jspsych/plugin-survey/css/survey.css'
         ```javascript
         const trial = {
           type: jsPsychSurvey,
-          survey_json: JSON.stringify({
+          survey_json: {
             showQuestionNumbers: false,
             title: 'Likert scale examples',
             pages: [
@@ -430,7 +430,7 @@ import '@jspsych/plugin-survey/css/survey.css'
                 ]
               }
             ]
-          })
+          }
         };
         ```
 
@@ -447,8 +447,8 @@ import '@jspsych/plugin-survey/css/survey.css'
 
         ```javascript
         const survey_function = (survey) => {
-          // if it's the question page, hide the buttons and move on automatically
-          // if it's the feedback page, then show the navigation buttons
+          // If it's the question page, then hide the buttons and move on automatically.
+          // If it's the feedback page, then show the navigation buttons.
           function updateNavButtons(sender, options) {
             if (options.newCurrentPage.getPropertyValue("name") === "feedback") {
               survey.showNavigationButtons = "bottom";
@@ -461,7 +461,7 @@ import '@jspsych/plugin-survey/css/survey.css'
 
         const trial = {
           type: jsPsychSurvey,
-          survey_json: JSON.stringify({
+          survey_json: {
             showQuestionNumbers: false,
             title: 'Conditional question visibility.',
             showNavigationButtons: "none",
@@ -495,7 +495,7 @@ import '@jspsych/plugin-survey/css/survey.css'
                 }
               ]
             }]
-          }),
+          },
           survey_function: survey_function
         };
         ```
@@ -508,7 +508,7 @@ import '@jspsych/plugin-survey/css/survey.css'
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo4.html">Open demo in new tab</a>
 
 ??? example "Repeating survey trials with different variables"
-    The survey plugin is not compatible with the jsPsych timeline variables feature, so an alternative to creating a set of repeating survey trials is to construct them in a loop.
+    The survey plugin is not well-suited for use with the jsPsych timeline variables feature, so an alternative to creating a set of repeating survey trials is to construct them in a loop.
     When adding any data to a survey trial, you should add it via the `data` parameter at the whole-trial level (not inside the question objects), even if it only relates to one question out of multiple questions/pages contained within the trial.
     === "Code"
 
@@ -566,7 +566,7 @@ import '@jspsych/plugin-survey/css/survey.css'
           // and add the trial object to the survey trials array
           survey_trials.push({
             type: jsPsychSurvey,
-            survey_json: JSON.stringify(survey_json),
+            survey_json: survey_json,
             data: {
               'Q1_prompt': question_variables[i].Q1_prompt,
               'Q1_type': question_variables[i].Q1_type,
@@ -643,7 +643,7 @@ import '@jspsych/plugin-survey/css/survey.css'
 
         const image_video_html_trial = {
           type: jsPsychSurvey,
-          survey_json: JSON.stringify(image_video_html_trial_info)
+          survey_json: image_video_html_trial_info
         };
 
         // Using images as response options
@@ -675,7 +675,7 @@ import '@jspsych/plugin-survey/css/survey.css'
 
         const image_choice_trial = {
           type: jsPsychSurvey,
-          survey_json: JSON.stringify(image_choice_trial_info)
+          survey_json: image_choice_trial_info
         };
 
         // Add sound to an HTML element
@@ -704,7 +704,7 @@ import '@jspsych/plugin-survey/css/survey.css'
 
         const sound_trial = {
           type: jsPsychSurvey,
-          survey_json: JSON.stringify(sound_trial_info)
+          survey_json: sound_trial_info
         }
 
         const timeline = [image_video_html_trial, image_choice_trial, sound_trial];
@@ -726,71 +726,70 @@ import '@jspsych/plugin-survey/css/survey.css'
         const timeline = [];
         
         const text_masking_json = {
-          "elements": [
+          elements: [
             {
-            
-              "type": "html",
-              "name": "intro",
-              "html": "<h3>Input masking examples</h3><p>You can use input masking with text questions to add automatic formatting to the participant's answer. The mask types are: currency, decimal, pattern, and datetime. These masks will also restrict the types of characters that can be entered, e.g. only numbers or letters."
+              type: "html",
+              name: "intro",
+              html: "<h3>Input masking examples</h3><p>You can use input masking with text questions to add automatic formatting to the participant's answer. The mask types are: currency, decimal, pattern, and datetime. These masks will also restrict the types of characters that can be entered, e.g. only numbers or letters."
             },
             {
-              "type": "text",
-              "name": "currency",
-              "title": "Currency:",
-              "description": "This currency mask adds a prefix/suffix to the number to indicate the currency. Enter some numbers to see the result.",
-              "maskType": "currency",
-              "maskSettings": {
-                "prefix": "$",
-                "suffix": " USD"
+              type: "text",
+              name: "currency",
+              title: "Currency:",
+              description: "This currency mask adds a prefix/suffix to the number to indicate the currency. Enter some numbers to see the result.",
+              maskType: "currency",
+              maskSettings: {
+                prefix: "$",
+                suffix: " USD"
               }
             },
             {
-              "type": "text",
-              "name": "decimal",
-              "title": "Decimal:",
-              "description": "This numeric mask will specify the number of decimals allowed. You can enter numbers with up to three decimals (precision: 3).",
-              "maskType": "numeric",
-              "maskSettings": {
-                "precision": 3
+              type: "text",
+              name: "decimal",
+              title: "Decimal:",
+              description: "This numeric mask will specify the number of decimals allowed. You can enter numbers with up to three decimals (precision: 3).",
+              maskType: "numeric",
+              maskSettings: {
+                precision: 3
               }
             },
             {
-              "type": "text",
-              "name": "phone",
-              "title": "Phone:",
-              "description": "This pattern mask will format the numbers as a phone number.",
-              "maskType": "pattern",
-              "maskSettings": {
-                "pattern": "+9 (999)-999-9999"
+              type: "text",
+              name: "phone",
+              title: "Phone:",
+              description: "This pattern mask will format the numbers as a phone number.",
+              maskType: "pattern",
+              maskSettings: {
+                pattern: "+9 (999)-999-9999"
               }
             },
             {
-              "type": "text",
-              "name": "creditcard",
-              "title": "Credit card number:",
-              "description": "This pattern mask will format the numbers as a credit card number.",
-              "maskType": "pattern",
-              "maskSettings": {
-                "pattern": "9999 9999 9999 9999"
+              type: "text",
+              name: "creditcard",
+              title: "Credit card number:",
+              description: "This pattern mask will format the numbers as a credit card number.",
+              maskType: "pattern",
+              maskSettings: {
+                pattern: "9999 9999 9999 9999"
               }
             },
             {
-              "type": "text",
-              "name": "licenseplate",
-              "title": "License plate number:",
-              "description": "A pattern mask can also be used with letters. Enter a license plate number in the format ABC-1234.",
-              "maskType": "pattern",
-              "maskSettings": {
-                "pattern": "aaa-9999"
+              type: "text",
+              name: "licenseplate",
+              title: "License plate number:",
+              description: "A pattern mask can also be used with letters. Enter a license plate number in the format ABC-1234.",
+              maskType: "pattern",
+              maskSettings: {
+                pattern: "aaa-9999"
               }
             }
           ],
-          "showQuestionNumbers": false
+          showQuestionNumbers: false
         };
 
         timeline.push({
           type: jsPsychSurvey,
-          survey_json: JSON.stringify(text_masking_json)
+          survey_json: text_masking_json
         });
         ```
 

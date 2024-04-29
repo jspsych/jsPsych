@@ -17,7 +17,7 @@
 
     const trial = {
       type: jsPsychSurvey,
-      survey_json: JSON.stringify({
+      survey_json: {
         showQuestionNumbers: false,
         title: 'My questionnaire',
         completeText: 'Done!',
@@ -30,7 +30,7 @@
                 {
                   type: 'text',
                   title: 'Where were you born?', 
-                  placeholder: 'City, State, Country',
+                  placeholder: 'City, State/Region, Country',
                   name: 'birthplace', 
                   size: 30,
                   isRequired: true,
@@ -70,7 +70,7 @@
             ]
           }
         ]
-      })
+      }
     };
 
     const timeline = [trial];

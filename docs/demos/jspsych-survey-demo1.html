@@ -16,7 +16,7 @@
 
     const trial = {
       type: jsPsychSurvey,
-      survey_json: JSON.stringify({
+      survey_json: {
         showQuestionNumbers: false,
         elements:
           [
@@ -38,7 +38,7 @@
               required: true,
             },
         ]
-      }),
+      },
     };
 
     const timeline = [trial];

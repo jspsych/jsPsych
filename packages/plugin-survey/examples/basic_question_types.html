@@ -79,7 +79,7 @@
         width: "20%",
         minWidth: "128px",
         startWithNewLine: false,
-        description: "Enter a state",
+        description: "Enter a state or region",
         autocomplete: "off"
       },
       {
@@ -103,7 +103,7 @@
         },
         name: "all-countries",
         title: "Which countries have you been to?",
-        description: "Multi-select dropdown - please select all that apply."
+        description: "Multi-select dropdown - please select all that apply. Try selecting lots of countries to see how the input area grows."
       }]
     }],
     showQuestionNumbers: "off",
@@ -116,7 +116,7 @@
 
   const contact_info_trial = {
     type: jsPsychSurvey,
-    survey_json: JSON.stringify(contact_info)
+    survey_json: contact_info
   };
 
   jsPsych.run([contact_info_trial]);
