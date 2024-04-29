@@ -3,13 +3,13 @@ declare const info: {
   readonly name: "survey";
   readonly parameters: {
     /**
-     * A SurveyJS survey model defined in JSON.
+     * A SurveyJS survey model defined as a JavaScript object.
      * See: https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#define-a-static-survey-model-in-json
      */
     readonly survey_json: {
-      readonly type: ParameterType.STRING;
-      readonly default: "{}";
-      readonly pretty_name: "Survey JSON";
+      readonly type: ParameterType.OBJECT;
+      readonly default: {};
+      readonly pretty_name: "Survey JSON object";
     };
     /**
      * A SurveyJS survey model defined as a function. The function receives an empty SurveyJS survey object as an argument.
@@ -46,13 +46,13 @@ declare class SurveyPlugin implements JsPsychPlugin<Info> {
     readonly name: "survey";
     readonly parameters: {
       /**
-       * A SurveyJS survey model defined in JSON.
+       * A SurveyJS survey model defined as a JavaScript object.
        * See: https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#define-a-static-survey-model-in-json
        */
       readonly survey_json: {
-        readonly type: ParameterType.STRING;
-        readonly default: "{}";
-        readonly pretty_name: "Survey JSON";
+        readonly type: ParameterType.OBJECT;
+        readonly default: {};
+        readonly pretty_name: "Survey JSON object";
       };
       /**
        * A SurveyJS survey model defined as a function. The function receives an empty SurveyJS survey object as an argument.
