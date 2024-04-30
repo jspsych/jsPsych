@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <script src="../../jspsych/dist/index.browser.js"></script>
+  <script src="../dist/index.browser.js"></script>
+  <link rel="stylesheet" href="../../jspsych/css/jspsych.css" />
+  <link rel="stylesheet" href="../css/survey.css" />
+</head>
+
+<body></body>
+<script type="text/javascript">
+
+  const jsPsych = initJsPsych({
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+
+  // This example shows how to validate responses using a function passed to jsPsych's "validation_function"
+  // parameter, and using a survey question's 'validators' parameter.
+
+  // Define a function to be passed to jsPsych's "validation_function" parameter.
+  // This function runs whenever the survey's 'onValidateQuestion' event occurs, and is more flexible than the
+  // built-in question validators that SurveyJS allows you to add through the survey JSON.
+  // https://surveyjs.io/form-library/documentation/data-validation#implement-custom-client-side-validation
+  function validate_yes(_, options) {
+    // Select the question you want to validate using the question name
+    if (options.name === "yesno") {
+      // Do your validation here...
+      if (options.value !== "Yes") {
+        options.error = "Oh no! You have to select 'Yes' to continue.";
+      }
+    }
+  }
+
+  const validation = {
+    name: "Validation",
+    title: "jsPsych Survey Plugin: response validation",
+    elements: [
+      {
+        type: "text",
+        name: "number",
+        title: "Please enter a 9-digit number.",
+        requiredErrorText: "You must enter a 9-digit number.",
+        // There are some question validators that can be added directly into the survey JSON
+        // https://surveyjs.io/form-library/documentation/data-validation#built-in-client-side-validators
+        validators: [{
+          type: "regex",
+          text: "You must enter a 9-digit number",
+          regex: "(?=\\d{9})"
+        }],
+        maxLength: 9,
+        autocomplete: "off"
+      },
+      {
+        type: "text",
+        name: "birthdate",
+        title: "Date of birth",
+        inputType: "date",
+        maxValueExpression: "today()",
+        description: "To view the validation, type in a future date and try to continue."
+      },
+      {
+        type: "boolean",
+        name: "yesno",
+        title: "Select 'Yes'",
+        valueTrue: "Yes",
+        valueFalse: "No"
+      },
+    ],
+    checkErrorsMode: "onValueChanged",
+    showQuestionNumbers: false,
+    completeText: "Continue",
+  };
+
+  const validation_trial = {
+    type: jsPsychSurvey,
+    survey_json: validation,
+    validation_function: validate_yes
+  };
+
+  jsPsych.run([validation_trial]);
+
+</script>
+
+</html>
