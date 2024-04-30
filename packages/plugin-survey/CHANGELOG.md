@@ -1,5 +1,11 @@
 # @jspsych/plugin-survey
 
+## 1.0.0
+
+### Major Changes
+
+- [#3204](https://github.com/jspsych/jsPsych/pull/3204) [`6d99a71f`](https://github.com/jspsych/jsPsych/commit/6d99a71fb19365ba4a968aaa5025a6b7dbb23135) Thanks [@becky-gilbert](https://github.com/becky-gilbert)! - To take advantage of all of the SurveyJS features, we have re-written the survey plugin so that it now takes a SurveyJS-compatible JavaScript/JSON object ('survey_json') and/or a SurveyJS-compatible function ('survey_function') that manipulates a SurveyJS model. This is a breaking change. See the jsPsych Survey Plugin page for documentation and examples: https://www.jspsych.org/latest/plugins/survey/. More details about creating the SurveyJS JSON configuration and functions can be found on their website: https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#create-a-survey-model.
+
 ## 0.2.2
 
 ### Patch Changes
