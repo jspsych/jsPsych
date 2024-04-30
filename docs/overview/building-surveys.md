@@ -26,7 +26,7 @@ The [`survey` plugin](../plugins/survey.md) differs from most other jsPsych plug
 
 ## Getting started with SurveyJS
 
-The [SurveyJS form library]((https://surveyjs.io/form-library/documentation/overview)) is a large and powerful survey-building framework with its own helpful documentation, examples, and demos. Here we have tried to orient jsPsych users to the basic steps for constructing surveys and highlight the features that jsPsych users may find most useful. However, it is not possible for us to reproduce the SurveyJS documentation here, so we encourage you to take advantage of their comprehensive documentation and demo/code examples.
+The [SurveyJS form library](https://surveyjs.io/form-library/documentation/overview) is a large and powerful survey-building framework with its own helpful documentation, examples, and demos. Here we have tried to orient jsPsych users to the basic steps for constructing surveys and highlight the features that jsPsych users may find most useful. However, it is not possible for us to reproduce the SurveyJS documentation here, so we encourage you to take advantage of their comprehensive documentation and demo/code examples.
 
 SurveyJS allows you to build surveys using a JavaScript/JSON object, a JavaScript function, or a combination of both. You can read more about these options in the SurveyJS documentation:
 
