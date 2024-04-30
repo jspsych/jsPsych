@@ -25,7 +25,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Name | Type | Value
 -----|------|------
 
-No data currently added by this plugin. Use the [webgazer-validate](../webgazer-validate) plugin to measure the precision and accuracy of calibration.
+No data currently added by this plugin. Use the [webgazer-validate](webgazer-validate.md) plugin to measure the precision and accuracy of calibration.
 
 ## Simulation Mode
 
