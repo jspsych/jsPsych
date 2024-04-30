@@ -354,7 +354,7 @@ Rather than repeating a question format within the same trial, perhaps you want 
     };
     ```
 
-    !!! tip "Consider using a survey-* plugin for a presenting single question type"
+    !!! tip "Consider using a survey-* plugin for presenting a single question type"
         The example above was created just to demonstrate how to combine the `survey` plugin and timeline variables. But if this were a real experiment, since each survey trial contains just one question, we'd be better off using one of the other survey-* plugins because the parameterization of those plugins works well with timeline variables. Of course, you may have other reasons for wanting to use the `survey` plugin in this type of trial procedure, for instance to take advantage of some its convenience features (e.g. different question types on the same page, response validation).
 
 
