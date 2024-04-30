@@ -538,6 +538,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../overview/building-surveys/" class="md-nav__link">
+        Building Surveys
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../overview/exclude-browser/" class="md-nav__link">
         Exclude Participants Based on Browser Features
       </a>
@@ -4309,7 +4323,7 @@ data, such as in the example below.</p>
 <tr>
 <td>call_immediate</td>
 <td>bool</td>
-<td>This parameter is optional and can usually be omitted. It determines the return value of <code>jsPsych.timelineVariable</code>. If <code>true</code>, the function returns the <em>value</em> of the current timeline variable. If <code>false</code>, the function returns <em>a function that returns the value</em> of the current timeline variable. When <code>call_immediate</code> is omitted, the appropriate option is determined automatically based on the context in which this function is called. When <code>jsPsych.timelineVariable</code> is used as a parameter value, <code>call_immediate</code> will be <code>false</code>. This allows it to be used as a <a href="../overview/dynamic-parameters">dynamic trial parameter</a>. When <code>jsPsych.timelineVariable</code> is used inside of a function, <code>call_immediate</code> will be <code>true</code>. It is possible to explicitly set this option to <code>true</code> to force the function to immediately return the current value of the timeline variable.</td>
+<td>This parameter is optional and can usually be omitted. It determines the return value of <code>jsPsych.timelineVariable</code>. If <code>true</code>, the function returns the <em>value</em> of the current timeline variable. If <code>false</code>, the function returns <em>a function that returns the value</em> of the current timeline variable. When <code>call_immediate</code> is omitted, the appropriate option is determined automatically based on the context in which this function is called. When <code>jsPsych.timelineVariable</code> is used as a parameter value, <code>call_immediate</code> will be <code>false</code>. This allows it to be used as a <a href="../../overview/dynamic-parameters/">dynamic trial parameter</a>. When <code>jsPsych.timelineVariable</code> is used inside of a function, <code>call_immediate</code> will be <code>true</code>. It is possible to explicitly set this option to <code>true</code> to force the function to immediately return the current value of the timeline variable.</td>
 </tr>
 </tbody>
 </table>
@@ -4352,7 +4366,7 @@ data, such as in the example below.</p>
 <span class="w">  </span><span class="p">]</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>Prior to jsPsych v6.3.0, the <code>call_immediate</code> parameter must be set to <code>true</code> when <code>jsPsych.timelineVariable</code> is called from within a function, such as a <a href="../overview/dynamic-parameters">dynamic parameter</a>:</p>
+<p>Prior to jsPsych v6.3.0, the <code>call_immediate</code> parameter must be set to <code>true</code> when <code>jsPsych.timelineVariable</code> is called from within a function, such as a <a href="../../overview/dynamic-parameters/">dynamic parameter</a>:</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
 <span class="w">  </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="p">(){</span>

@@ -538,6 +538,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../overview/building-surveys/" class="md-nav__link">
+        Building Surveys
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../overview/exclude-browser/" class="md-nav__link">
         Exclude Participants Based on Browser Features
       </a>
@@ -4048,7 +4062,7 @@
 <tr>
 <td>valid_responses</td>
 <td>array</td>
-<td>An array of key codes or character strings representing valid responses. Responses not on the list will be ignored. An empty array indicates that all responses are acceptable.</td>
+<td>An array of key codes or character strings representing valid responses. Responses not on the list will be ignored. An empty array indicates that no response is acceptable.</td>
 </tr>
 <tr>
 <td>rt_method</td>
@@ -4074,6 +4088,11 @@
 <td>persist</td>
 <td>boolean</td>
 <td>If false, then the keyboard listener will only trigger the first time a valid key is pressed. If true, then it will trigger every time a valid key is pressed until it is explicitly cancelled by <code>jsPsych.pluginAPI.cancelKeyboardResponse</code> or <code>jsPsych.pluginAPI.cancelAllKeyboardResponses</code>.</td>
+</tr>
+<tr>
+<td>minimum_valid_rt</td>
+<td>number</td>
+<td>The minimum valid response time for key presses. Any key press response time that is less than this value will be treated as invalid and ignored.</td>
 </tr>
 </tbody>
 </table>

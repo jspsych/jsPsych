@@ -538,6 +538,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../overview/building-surveys/" class="md-nav__link">
+        Building Surveys
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../overview/exclude-browser/" class="md-nav__link">
         Exclude Participants Based on Browser Features
       </a>
@@ -2170,7 +2184,7 @@
 <p>There are three parameters that are passed into the trial method. </p>
 <ul>
 <li><code>display_element</code> is the DOM element where jsPsych content is being rendered. This parameter will be an <code>HTMLElement</code>, and you can use it to modify the portion of the document that jsPsych controls.</li>
-<li><code>trial</code> is an object containing all of the parameters specified in the corresponding <a href="../overview/timeline">TimelineNode</a>. </li>
+<li><code>trial</code> is an object containing all of the parameters specified in the corresponding <a href="../../overview/timeline/">TimelineNode</a>.</li>
 <li><code>on_load</code> is an optional parameter that contains a callback function to invoke when <code>trial()</code> has completed its initial loading. See <a href="#asynchronous-loading">handling the on_load event</a>.</li>
 </ul>
 <p>The only requirement for the <code>trial</code> method is that it calls <code>jsPsych.finishTrial()</code> when it is done. This is how jsPsych knows to advance to the next trial in the experiment (or end the experiment if it is the last trial). The plugin can do whatever it needs to do before that point.</p>
@@ -2275,7 +2289,7 @@
 <span class="p">}</span>
 </code></pre></div>
 <h3 id="asynchronous-loading">Asynchronous loading<a class="headerlink" href="#asynchronous-loading" title="Permanent link">&para;</a></h3>
-<p>One of the <a href="../overview/events">trial events</a> is <code>on_load</code>, which is normally triggered automatically when the <code>.trial()</code> method returns. In most cases, this return happens after the plugin has done its initial setup of the DOM (e.g., rendering an image, setting up event listeners and timers, etc.). However, in some cases a plugin may implement an asynchronous operation that needs to complete before the initial loading of the plugin is considered done. An example of this is the <code>audio-keyboard-response</code> plugin, in which the check to see if the audio file is loaded is asynchronous and the <code>.trial()</code> method returns before the audio file has been initialized and the display updated. </p>
+<p>One of the <a href="../../overview/events/">trial events</a> is <code>on_load</code>, which is normally triggered automatically when the <code>.trial()</code> method returns. In most cases, this return happens after the plugin has done its initial setup of the DOM (e.g., rendering an image, setting up event listeners and timers, etc.). However, in some cases a plugin may implement an asynchronous operation that needs to complete before the initial loading of the plugin is considered done. An example of this is the <code>audio-keyboard-response</code> plugin, in which the check to see if the audio file is loaded is asynchronous and the <code>.trial()</code> method returns before the audio file has been initialized and the display updated.</p>
 <p>If you would like to manually trigger the <code>on_load</code> event for a plugin, the <code>.trial()</code> method accepts an optional third parameter that is a callback function to invoke when loading is complete. </p>
 <p>In order to tell jsPsych to <em>not</em> invoke the regular callback when the <code>.trial()</code> method returns, you need to explicitly return a <code>Promise</code>. As of version <code>7.0</code> this Promise only serves as a flag to tell jsPsych that the <code>on_load</code> event should not be triggered. In future versions we may make the <code>Promise</code> functional so that the <code>trial</code> operation can be an <code>async</code> function.</p>
 <p>Here's a sketch of how the <code>on_load</code> event can be utilized in a plugin. Note that this example is only a sketch and leaves out all the stuff that happens between loading and finishing the trial. See the source for the <code>audio-keyboard-response</code> plugin for a complete exampe.</p>
