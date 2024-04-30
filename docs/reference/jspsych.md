@@ -687,7 +687,7 @@ jsPsych.setProgressBar(0.85);
 ## jsPsych.timelineVariable
 
 ```javascript
-jsPsych.timelineVariable(variable, call_immediate)
+jsPsych.timelineVariable(variable)
 ```
 
 ### Parameters
