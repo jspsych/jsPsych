@@ -82,6 +82,9 @@ export const createCoreDistArchive = () =>
     // jspsych.css
     src("packages/jspsych/css/jspsych.css").pipe(rename("/dist/jspsych.css")),
 
+    // survey.css
+    src("packages/survey/css/survey.css").pipe(rename("/dist/survey.css")),
+
     // Examples
     src("examples/**/*", { base: "." })
       // Rewrite script source paths
