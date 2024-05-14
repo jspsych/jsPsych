@@ -1,6 +1,6 @@
 # survey
 
-Current version: 1.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md).
+Current version: 1.0.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md).
 
 SurveyJS version: 1.9.138
 
@@ -205,7 +205,7 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 This plugin requires an additional stylesheet called `survey.css`. You can load it via: 
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@1.0.0/css/survey.css">
+<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@1.0.1/css/survey.css">
 ```
 
 If you are using a bundler such as [webpack](https://webpack.js.org/), you can also import it in JavaScript as follows, depending on your bundler configuration:
@@ -218,8 +218,8 @@ import '@jspsych/plugin-survey/css/survey.css'
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-survey@1.0.0"></script>
-<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@1.0.0/css/survey.css">
+<script src="https://unpkg.com/@jspsych/plugin-survey@1.0.1"></script>
+<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@1.0.1/css/survey.css">
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
