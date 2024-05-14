@@ -1,5 +1,11 @@
 # @jspsych/config
 
+## 2.0.1
+
+### Patch Changes
+
+- [#3287](https://github.com/jspsych/jsPsych/pull/3287) [`54e04dc9`](https://github.com/jspsych/jsPsych/commit/54e04dc93f54a7a019db1fee4961dcc5e02b6fc0) Thanks [@becky-gilbert](https://github.com/becky-gilbert)! - Adds the survey.css file to the dist archive (#3131).
+
 ## 2.0.0
 
 ### Major Changes
