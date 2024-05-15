@@ -1,5 +1,11 @@
 # @jspsych/config
 
+## 2.0.2
+
+### Patch Changes
+
+- [#3293](https://github.com/jspsych/jsPsych/pull/3293) [`7bcd4e0a`](https://github.com/jspsych/jsPsych/commit/7bcd4e0a25b46e2cf384f6b747092e75fabce00f) Thanks [@becky-gilbert](https://github.com/becky-gilbert)! - This fixes an error in the gulp task that creates the dist archive for a release, which was causing the dist archive to fail.
+
 ## 2.0.1
 
 ### Patch Changes
