@@ -19,6 +19,7 @@ stimulus_duration | numeric | null | How long to display the stimulus in millise
 margin_vertical | string | '0px' | Vertical margin of the button(s).
 margin_horizontal | string | '8px' | Horizontal margin of the button(s).
 response_ends_trial | boolean | true | If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
+enable_button_after | numeric | null | How long the button will delay enabling in milliseconds.
 
 ## Data Generated
 

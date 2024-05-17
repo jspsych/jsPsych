@@ -86,6 +86,12 @@ const info = <const>{
       pretty_name: "Render on canvas",
       default: true,
     },
+    /** The delay of enabling button */
+    enable_button_after: {
+      type: ParameterType.INT,
+      pretty_name: "Enable button after",
+      default: null,
+    },
   },
 };
 
@@ -333,6 +339,28 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
       if (trial.response_ends_trial) {
         end_trial();
       }
+    }
+
+    function enable_buttons() {
+      var btns = document.querySelectorAll(".jspsych-image-button-response-button button");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].removeAttribute("disabled");
+      }
+    }
+
+    function disable_buttons() {
+      var btns = document.querySelectorAll(".jspsych-image-button-response-button button");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].setAttribute("disabled", "disabled");
+      }
+    }
+
+    // set timer of button delay
+    if (trial.enable_button_after !== null) {
+      disable_buttons();
+      this.jsPsych.pluginAPI.setTimeout(() => {
+        enable_buttons();
+      }, trial.enable_button_after);
     }
 
     // hide image if timing is set

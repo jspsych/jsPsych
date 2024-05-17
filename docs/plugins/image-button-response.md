@@ -25,6 +25,7 @@ margin_vertical | string | '0px' | Vertical margin of the button(s).
 margin_horizontal | string | '8px' | Horizontal margin of the button(s).
 response_ends_trial | boolean | true | If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
 render_on_canvas | boolean | true | If true, the image will be drawn onto a canvas element. This prevents a blank screen (white flash) between consecutive image trials in some browsers, like Firefox and Edge. If false, the image will be shown via an img element, as in previous versions of jsPsych. If the stimulus is an **animated gif**, you must set this parameter to false, because the canvas rendering method will only present static images.
+enable_button_after | numeric | null | How long the button will delay enabling in milliseconds.
 
 ## Data Generated
 
