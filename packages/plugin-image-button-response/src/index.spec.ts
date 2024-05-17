@@ -153,6 +153,30 @@ describe("image-button-response", () => {
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
   });
+
+  test("delay enable button", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: imageButtonResponse,
+        stimulus: "../media/blue.png",
+        choices: ["button-choice"],
+        enable_button_after: 500,
+        render_on_canvas: false,
+      },
+    ]);
+
+    const btns = document.querySelectorAll(".jspsych-image-button-response-button button");
+
+    for (let i = 0; i < btns.length; i++) {
+      expect(btns[i].getAttribute("disabled")).toBe("disabled");
+    }
+
+    jest.advanceTimersByTime(500);
+
+    for (let i = 0; i < btns.length; i++) {
+      expect(btns[i].hasAttribute("disabled")).toBe(false);
+    }
+  });
 });
 
 describe("image-button-response simulation", () => {

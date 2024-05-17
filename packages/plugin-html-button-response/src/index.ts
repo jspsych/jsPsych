@@ -59,6 +59,12 @@ const info = <const>{
       pretty_name: "Response ends trial",
       default: true,
     },
+    /** The delay of enabling button */
+    enable_button_after: {
+      type: ParameterType.INT,
+      pretty_name: "Enable button after",
+      default: null,
+    },
   },
 };
 
@@ -189,6 +195,20 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
           "#jspsych-html-button-response-stimulus"
         ).style.visibility = "hidden";
       }, trial.stimulus_duration);
+    }
+
+    // disable all the buttons and set a timeout that enables them after a specified delay if timing is set
+    if (trial.enable_button_after !== null) {
+      var btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].setAttribute("disabled", "disabled");
+      }
+      this.jsPsych.pluginAPI.setTimeout(() => {
+        var btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].removeAttribute("disabled");
+        }
+      }, trial.enable_button_after);
     }
 
     // end trial if time limit is set

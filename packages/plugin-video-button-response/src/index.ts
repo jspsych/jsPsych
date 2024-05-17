@@ -108,6 +108,12 @@ const info = <const>{
       pretty_name: "Response allowed while playing",
       default: true,
     },
+    /** The delay of enabling button */
+    enable_button_after: {
+      type: ParameterType.INT,
+      pretty_name: "Enable button after",
+      default: null,
+    },
   },
 };
 
@@ -269,7 +275,11 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
         var currenttime = video_element.currentTime;
         if (currenttime >= trial.stop) {
           if (!trial.response_allowed_while_playing) {
-            enable_buttons();
+            if (trial.enable_button_after !== null) {
+              enable_buttons_delayed(trial.enable_button_after);
+            } else {
+              enable_buttons();
+            }
           }
           video_element.pause();
           if (trial.trial_ends_after_video && !stopped) {
@@ -282,8 +292,17 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
       });
     }
 
+    const enable_buttons_delayed = (delay: number) => {
+      this.jsPsych.pluginAPI.setTimeout(enable_buttons, delay);
+    };
+
     if (trial.response_allowed_while_playing) {
-      enable_buttons();
+      disable_buttons();
+      if (trial.enable_button_after !== null) {
+        enable_buttons_delayed(trial.enable_button_after);
+      } else {
+        enable_buttons();
+      }
     } else {
       disable_buttons();
     }
