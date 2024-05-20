@@ -2347,7 +2347,7 @@
 
 
 <h1 id="survey">survey<a class="headerlink" href="#survey" title="Permanent link">&para;</a></h1>
-<p>Current version: 1.0.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md">See version history</a>.</p>
+<p>Current version: 1.0.1. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md">See version history</a>.</p>
 <p>SurveyJS version: 1.9.138</p>
 <p>This plugin is a wrapper for the <a href="https://surveyjs.io/form-library/documentation/overview"><strong>SurveyJS form library</strong></a>. It displays survey-style questions across one or more pages. You can mix different question types on the same page, and participants can navigate back and forth through multiple survey pages without losing responses. SurveyJS provides a large number of built-in question types, response validation options, conditional display options, special response options ("None", "Select all", "Other"), and other useful features for building complex surveys. See the <a href="../../overview/building-surveys/">Building Surveys in jsPsych</a> page for a more detailed list of all options and features.</p>
 <p>With SurveyJS, surveys can be defined using a JavaScript/JSON object, a JavaScript function, or a combination of both. The jsPsych <code>survey</code> plugin provides parameters that accept these methods of constructing a SurveyJS survey, and passes them into SurveyJS. The fact that this plugin just acts as a wrapper means you can take advantage of all of the SurveyJS features, and copy/paste directly from SurveyJS examples into the plugin's <code>survey_json</code> parameter (for JSON object configuration) or <code>survey_function</code> parameter (for JavaScript code).</p>
@@ -2555,15 +2555,15 @@ This question type can be useful when used with the SurveyJS "carry forward" fea
 <p>This plugin does not yet support <a href="../../overview/simulation/">simulation mode</a>.</p>
 <h2 id="css">CSS<a class="headerlink" href="#css" title="Permanent link">&para;</a></h2>
 <p>This plugin requires an additional stylesheet called <code>survey.css</code>. You can load it via: </p>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/@jspsych/plugin-survey@1.0.0/css/survey.css&quot;</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/@jspsych/plugin-survey@1.0.1/css/survey.css&quot;</span><span class="p">&gt;</span>
 </code></pre></div>
 <p>If you are using a bundler such as <a href="https://webpack.js.org/">webpack</a>, you can also import it in JavaScript as follows, depending on your bundler configuration:
 <div class="highlight"><pre><span></span><code><span class="k">import</span><span class="w"> </span><span class="s1">&#39;@jspsych/plugin-survey/css/survey.css&#39;</span>
 </code></pre></div></p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey@1.0.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
-<span class="o">&lt;</span><span class="nx">link</span><span class="w"> </span><span class="nx">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span><span class="w"> </span><span class="nx">href</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey@1.0.0/css/survey.css&quot;</span><span class="o">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey@1.0.1&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+<span class="o">&lt;</span><span class="nx">link</span><span class="w"> </span><span class="nx">rel</span><span class="o">=</span><span class="s2">&quot;stylesheet&quot;</span><span class="w"> </span><span class="nx">href</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey@1.0.1/css/survey.css&quot;</span><span class="o">&gt;</span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-survey.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
