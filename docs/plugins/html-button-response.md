@@ -20,6 +20,7 @@ button_layout | string | 'grid' | Setting to `'grid'` will make the container el
 grid_rows | number | 1 | The number of rows in the button grid. Only applicable when `button_layout` is set to `'grid'`. If null, the number of rows will be determined automatically based on the number of buttons and the number of columns.
 grid_columns | number | null | The number of columns in the button grid. Only applicable when `button_layout` is set to `'grid'`. If null, the number of columns will be determined automatically based on the number of buttons and the number of rows.
 response_ends_trial | boolean | true | If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
+enable_button_after | numeric | 0 | How long the button will delay enabling in milliseconds.
 
 ## Data Generated
 

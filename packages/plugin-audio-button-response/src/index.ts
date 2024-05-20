@@ -83,6 +83,12 @@ const info = <const>{
       pretty_name: "Response allowed while playing",
       default: true,
     },
+    /** The delay of enabling button */
+    enable_button_after: {
+      type: ParameterType.INT,
+      pretty_name: "Enable button after",
+      default: 0,
+    },
   },
 };
 
@@ -193,7 +199,12 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
         display_element.insertAdjacentHTML("beforeend", trial.prompt);
       }
 
-      if (!trial.response_allowed_while_playing) {
+      if (trial.response_allowed_while_playing) {
+        if (trial.enable_button_after > 0) {
+          disable_buttons();
+          enable_buttons();
+        }
+      } else {
         disable_buttons();
       }
 
@@ -276,11 +287,23 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
       }
     };
 
-    const enable_buttons = () => {
+    const enable_buttons_without_delay = () => {
       for (const button of this.buttonElements) {
         button.removeAttribute("disabled");
       }
     };
+
+    const enable_buttons_with_delay = (delay: number) => {
+      this.jsPsych.pluginAPI.setTimeout(enable_buttons_without_delay, delay);
+    };
+
+    function enable_buttons() {
+      if (trial.enable_button_after > 0) {
+        enable_buttons_with_delay(trial.enable_button_after);
+      } else {
+        enable_buttons_without_delay();
+      }
+    }
 
     return new Promise((resolve) => {
       trial_complete = resolve;
@@ -305,7 +328,9 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
     const default_data = {
       stimulus: trial.stimulus,
-      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+      rt:
+        this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true) +
+        trial.enable_button_after,
       response: this.jsPsych.randomization.randomInt(0, trial.choices.length - 1),
     };
 

@@ -27,6 +27,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | response_ends_trial            | boolean          | true                                     | If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to listen to the stimulus for a fixed amount of time, even if they respond before the time is complete. |
 | trial_ends_after_audio         | boolean          | false                                    | If true, then the trial will end as soon as the audio file finishes playing. |
 | response_allowed_while_playing | boolean          | true                                     | If true, then responses are allowed while the audio is playing. If false, then the audio must finish playing before the button choices are enabled and a response is accepted. Once the audio has played all the way through, the buttons are enabled and a response is allowed (including while the audio is being re-played via on-screen playback controls). |
+| enable_button_after            | numeric          | 0                                              | How long the button will delay enabling in milliseconds. If `response_allowed_while_playing` is `true`, the timer will start immediately. If it is `false`, the timer will start at the end of the audio. |
 
 ## Data Generated
 
