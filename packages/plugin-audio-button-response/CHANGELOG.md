@@ -1,5 +1,11 @@
 # @jspsych/plugin-audio-button-response
 
+## 1.2.0
+
+### Minor Changes
+
+- [#3298](https://github.com/jspsych/jsPsych/pull/3298) [`a4088529`](https://github.com/jspsych/jsPsych/commit/a4088529cf65c0fc37a3a6ad4870cd69f96383ad) Thanks [@thtTNT](https://github.com/thtTNT)! - Issue (#3289), Add parameter "enable_button_after" to all "-button-response" plugins
+
 ## 1.1.3
 
 ### Patch Changes
