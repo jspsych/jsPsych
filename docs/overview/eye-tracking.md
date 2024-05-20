@@ -169,7 +169,7 @@ If you have tips based on your own experience please consider sharing them on ou
       <head>
         <script src="https://unpkg.com/jspsych@7.3.4"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.3"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
         <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.3"></script>
         <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.3"></script>

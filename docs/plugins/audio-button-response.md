@@ -1,6 +1,6 @@
 # audio-button-response
 
-Current version: 1.1.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-button-response/CHANGELOG.md).
+Current version: 1.2.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-button-response/CHANGELOG.md).
 
 This plugin plays audio files and records responses generated with a button click.
 
@@ -48,7 +48,7 @@ This may change in a future version as we improve the simulation modes.
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-audio-button-response@1.1.3"></script>
+<script src="https://unpkg.com/@jspsych/plugin-audio-button-response@1.2.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
