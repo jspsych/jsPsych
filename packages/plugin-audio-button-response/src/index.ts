@@ -68,6 +68,12 @@ const info = <const>{
       pretty_name: "Response allowed while playing",
       default: true,
     },
+    /** The delay of enabling button */
+    enable_button_after: {
+      type: ParameterType.INT,
+      pretty_name: "Enable button after",
+      default: 0,
+    },
   },
 };
 
@@ -177,6 +183,7 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
       display_element.innerHTML = html;
 
       if (trial.response_allowed_while_playing) {
+        disable_buttons();
         enable_buttons();
       } else {
         disable_buttons();
@@ -255,6 +262,10 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
       trial_complete();
     };
 
+    const enable_buttons_with_delay = (delay: number) => {
+      this.jsPsych.pluginAPI.setTimeout(enable_buttons_without_delay, delay);
+    };
+
     function button_response(e) {
       var choice = e.currentTarget.getAttribute("data-choice"); // don't use dataset for jsdom compatibility
       after_response(choice);
@@ -271,7 +282,7 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
       }
     }
 
-    function enable_buttons() {
+    function enable_buttons_without_delay() {
       var btns = document.querySelectorAll(".jspsych-audio-button-response-button");
       for (var i = 0; i < btns.length; i++) {
         var btn_el = btns[i].querySelector("button");
@@ -279,6 +290,14 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
           btn_el.disabled = false;
         }
         btns[i].addEventListener("click", button_response);
+      }
+    }
+
+    function enable_buttons() {
+      if (trial.enable_button_after > 0) {
+        enable_buttons_with_delay(trial.enable_button_after);
+      } else {
+        enable_buttons_without_delay();
       }
     }
 
@@ -305,7 +324,9 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
     const default_data = {
       stimulus: trial.stimulus,
-      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+      rt:
+        this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true) +
+        trial.enable_button_after,
       response: this.jsPsych.randomization.randomInt(0, trial.choices.length - 1),
     };
 

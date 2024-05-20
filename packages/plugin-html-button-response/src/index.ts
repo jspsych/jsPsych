@@ -59,6 +59,12 @@ const info = <const>{
       pretty_name: "Response ends trial",
       default: true,
     },
+    /** The delay of enabling button */
+    enable_button_after: {
+      type: ParameterType.INT,
+      pretty_name: "Enable button after",
+      default: 0,
+    },
   },
 };
 
@@ -191,6 +197,20 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
       }, trial.stimulus_duration);
     }
 
+    // disable all the buttons and set a timeout that enables them after a specified delay if timing is set
+    if (trial.enable_button_after > 0) {
+      var btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].setAttribute("disabled", "disabled");
+      }
+      this.jsPsych.pluginAPI.setTimeout(() => {
+        var btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].removeAttribute("disabled");
+        }
+      }, trial.enable_button_after);
+    }
+
     // end trial if time limit is set
     if (trial.trial_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
@@ -215,7 +235,9 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
     const default_data = {
       stimulus: trial.stimulus,
-      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+      rt:
+        this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true) +
+        trial.enable_button_after,
       response: this.jsPsych.randomization.randomInt(0, trial.choices.length - 1),
     };
 
