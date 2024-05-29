@@ -4,47 +4,106 @@ import { Variable } from "./Variable";
 
 export class JsPsychMetadata {
   private metadata: {};
-
-  // private author: string;
-  // private context: string;
-  // private authorsList: List[Authors];
-  // private variablesList: Variables[];
+  private authors: {};
+  private variables: {};
 
   constructor(private JsPsych: JsPsych) {
     this.generateDefaultMetaData();
   }
 
-  setMetadata(key: string, value: any): void {
+  setMetadataField(key: string, value: any): void {
     this.metadata[key] = value;
   }
 
-  getMetadata(key: string): any {
+  getMetadataField(key: string): any {
     return this.metadata[key];
   }
 
-  getAllMetadata(): Record<string, any> {
-    return this.metadata;
+  // formats metadata into lists rather than dicts
+  getMetadata(): {} {
+    const res = this.metadata;
+    const author_list = [];
+    const var_list = [];
+
+    for (const key of Object.keys(this.authors)) {
+      author_list.push(this.authors[key]);
+    }
+    res["author"] = author_list;
+
+    for (const key of Object.keys(this.variables)) {
+      var_list.push(this.variables[key]);
+    }
+    res["variableMeasured"] = var_list;
+
+    return res;
   }
 
-  removeMetadata(key: string): void {
-    delete this.metadata[key];
-  }
-
+  // Can update with more important information
   generateDefaultMetaData(): void {
     this.metadata = {};
+    this.setMetadataField("name", "title");
+    this.setMetadataField("schemaVersion", "Psych-DS 0.4.0");
+    this.setMetadataField("description", "Dataset generated using JsPsych");
+    this.authors = {};
+    this.variables = {};
   }
 
-  createVariableMetaData(): void {}
+  // may need to include, missing documentation in the document
+  setAuthor(fields: {
+    type?: string;
+    ();
+    name: string;
+    givenName?: string; // required
+    familyName?: string;
+    identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
+  }): void {
+    if (Object.keys(fields).length == 1) {
+      // if only name, just add to list without dict format, according to documentation
+      this.authors[fields.name] = fields.name;
+      return;
+    }
 
-  convertToJsonObject() {}
+    const new_variable: { [key: string]: any } = {}; // Define an empty object to store the variables
+    for (const key in fields) {
+      // Check if the property is defined and not null
+      if (fields[key] !== undefined && fields[key] !== null) {
+        new_variable[key] = fields[key];
+      }
+    }
 
-  getAndSetVariable() {}
+    this.authors[new_variable.name] = new_variable;
+  }
 
-  // need an automatic method to pass in metadata
+  setVariable(fields: {
+    type?: string;
+    name: string; // required
+    description?: string | {};
+    value?: string; // string, boolean, or number
+    identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
+    minValue?: number;
+    maxValue?: number;
+    levels?: []; // technically property values in the other one but not sure how to format it
+    levelsOrdered?: boolean;
+    na?: boolean;
+    naValue?: string;
+    alternateName?: string;
+    privacy?: string;
+  }): void {
+    const new_variable: { [key: string]: any } = {}; // Define an empty object to store the variables
 
-  displayMetaData(): void {
+    for (const key in fields) {
+      // Check if the property is defined and not null
+      if (fields[key] !== undefined && fields[key] !== null) {
+        new_variable[key] = fields[key];
+      }
+    }
+
+    this.variables[new_variable.name] = new_variable;
+  }
+
+  displayMetadata(): void {
     // Format the metadata as a JSON string for display
-    const metadata_string = JSON.stringify(this.metadata, null, 2);
+    const metadata_string = JSON.stringify(this.getMetadata(), null, 2);
 
     // Get the display element from jsPsych
     const display_element = this.JsPsych.getDisplayElement();
