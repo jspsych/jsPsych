@@ -40,7 +40,8 @@
           type: jsPsychHtmlKeyboardResponse,
           choices: "NO_KEYS",
           stimulus: "<p style='text-align:center; font-size:80px;'>+</p>",
-          trial_duration: 500
+          trial_duration: 500,
+          description: ""
         },
         {
           type: jsPsychImageKeyboardResponse,
@@ -56,7 +57,7 @@
       repetitions: 2
     };
 
-    // beginning of documentation code
+    // beginning of code to document
 
     const author1 = {
       name: "John Cena"
@@ -95,6 +96,12 @@
       ],
     }
     jsPsych.metadata.setVariable(stimulus_var);
+
+    const stimulus_updated = jsPsych.metadata.getVariable("Stimulus");
+    stimulus_updated["name"] = "stimulus_updated";
+    stimulus_updated["levels"].push("img/test.jpg"); // pushing to levels
+    Object.assign(stimulus_updated["description"], {"<h1>TestingTESTING</h1>": "shock factor"});
+
 
     jsPsych.run([preload, node]);
 

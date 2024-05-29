@@ -11,6 +11,7 @@ export class JsPsychMetadata {
     this.generateDefaultMetaData();
   }
 
+  // Methods for accessing and setting simple fields
   setMetadataField(key: string, value: any): void {
     this.metadata[key] = value;
   }
@@ -19,7 +20,7 @@ export class JsPsychMetadata {
     return this.metadata[key];
   }
 
-  // formats metadata into lists rather than dicts
+  // To get the final data
   getMetadata(): {} {
     const res = this.metadata;
     const author_list = [];
@@ -51,7 +52,6 @@ export class JsPsychMetadata {
   // may need to include, missing documentation in the document
   setAuthor(fields: {
     type?: string;
-    ();
     name: string;
     givenName?: string; // required
     familyName?: string;
@@ -74,6 +74,13 @@ export class JsPsychMetadata {
     this.authors[new_variable.name] = new_variable;
   }
 
+  getAuthor(name: string): {} {
+    if (name in this.authors) {
+      return this.authors[name];
+    } else return {};
+  }
+
+  // Simple set, get structure so taht can get fields and return
   setVariable(fields: {
     type?: string;
     name: string; // required
@@ -99,6 +106,12 @@ export class JsPsychMetadata {
     }
 
     this.variables[new_variable.name] = new_variable;
+  }
+
+  getVariable(name: string): {} {
+    if (name in this.variables) {
+      return this.variables[name];
+    } else return {};
   }
 
   displayMetadata(): void {
