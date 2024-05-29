@@ -12,7 +12,9 @@
 
     var jsPsych = initJsPsych({
       on_finish: function() {
-        jsPsych.data.displayData();
+        // jsPsych.data.get().localSave('csv', 'timeline-variables.csv');
+        jsPsych.metadata.displayMetaData();
+        // jsPsych.data.displayData();
       },
       default_iti: 250
     });
@@ -26,8 +28,8 @@
     };
 
     var timeline_variables = [
-      { v1: 'img/happy_face_1.jpg', v2: 'Ann' },
-      { v1: 'img/happy_face_2.jpg', v2: 'Jackson' },
+      { v1: 'img/happy_face_1.jpg', v2: 'Ann'},
+      { v1: 'img/happy_face_2.jpg', v2: 'Jackson'},
       { v1: 'img/happy_face_3.jpg', v2: 'Riley' }
     ];
 
@@ -47,12 +49,14 @@
           prompt: function() { 
             return '<p>Have you seen '+jsPsych.timelineVariable('v2', true)+ ' before? Press "y" or "n".</p>' 
           },
-          stimulus_width: 300
+          stimulus_width: 300,
         }
       ],
       randomize_order: true,
       repetitions: 2
     };
+
+    jsPsych.metadata.setMetadata("author", "bob joe");
 
     jsPsych.run([preload, node]);
 

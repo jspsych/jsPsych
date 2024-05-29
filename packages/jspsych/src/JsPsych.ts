@@ -3,6 +3,7 @@ import autoBind from "auto-bind";
 import { version } from "../package.json";
 import { MigrationError } from "./migration";
 import { JsPsychData } from "./modules/data";
+import { JsPsychMetadata } from "./modules/metadata";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { ParameterType, universalPluginParameters } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
@@ -21,6 +22,7 @@ export class JsPsych {
   utils = utils;
   data: JsPsychData;
   pluginAPI: PluginAPI;
+  metadata: JsPsychMetadata;
 
   version() {
     return version;
@@ -145,6 +147,7 @@ export class JsPsych {
 
     // initialize modules
     this.data = new JsPsychData(this);
+    this.metadata = new JsPsychMetadata(this);
     this.pluginAPI = createJointPluginAPIObject(this);
 
     // create instances of extensions
