@@ -59,6 +59,7 @@ export class VariablesMap {
     return var_list;
   }
 
+  // could replace this method and instead pass in fields directly, would make it faster
   setVariable(fields: {
     type?: string;
     name: string; // required
@@ -87,9 +88,16 @@ export class VariablesMap {
   }
 
   getVariable(name: string): {} {
-    if (name in this.variables) {
-      return this.variables[name];
-    } else return {};
+    return this.variables[name] || {};
+  }
+
+  getVariableNames(): string[] {
+    var var_list = [];
+    for (const key of Object.keys(this.variables)) {
+      var_list.push(this.variables[key]["name"]);
+    }
+
+    return var_list;
   }
 
   // levels, description
@@ -106,13 +114,36 @@ export class VariablesMap {
       return;
     }
 
+    // if we want to append to description can add feature laters
     if (field_name !== "levels" && field_name !== "name") {
-      // updates or adds fields to a variable
       updated_var[field_name] = added_value;
     } else if (field_name === "levels") {
+      if (!Array.isArray(updated_var["levels"])) {
+        updated_var["levels"] = [];
+      }
       updated_var["levels"].push(added_value);
     } else if (field_name === "name") {
+      const old_name = updated_var["name"];
       updated_var["name"] = added_value;
+      delete this.variables[old_name];
+
+      this.setVariable(
+        updated_var as {
+          type?: string;
+          name: string;
+          description?: string | {};
+          value?: string;
+          identifier?: string;
+          minValue?: number;
+          maxValue?: number;
+          levels?: string[] | [];
+          levelsOrdered?: boolean;
+          na?: boolean;
+          naValue?: string;
+          alternateName?: string;
+          privacy?: string;
+        }
+      );
     }
   }
 
@@ -122,5 +153,43 @@ export class VariablesMap {
     } else {
       console.error(`Variable "${var_name}" does not exist.`);
     }
+  }
+
+  deleteVariablesTest(): void {
+    // this.generateFakeMetadata(); called in jsPsychMetadata function
+    this.deleteVariable("trial_type");
+    this.deleteVariable("trial_index");
+    this.deleteVariable("stimulus_updated");
+    this.deleteVariable("Response Time (rt)");
+    this.deleteVariable("Stimulus");
+    this.deleteVariable("internal_node_id");
+    this.deleteVariable("time_elapsed");
+    this.deleteVariable("rt (Response time)");
+  }
+
+  updateVariableTest(): void {
+    // editing new variables
+    const test_var = {
+      type: "PropertyValue",
+      name: "Test",
+      description: "Random description",
+      value: "numeric",
+    };
+    this.setVariable(test_var);
+    this.updateVariable("Test", "levels", "<p>hello world</p>");
+    this.updateVariable("Test", "levels", "<h1>BOOOOOOO</h1>");
+    this.updateVariable("Test", "levels", "<p>......spot me......</p>");
+
+    this.updateVariable("Test", "name", "NewTest");
+    // jsPsych.metadata.deleteVariable("Test");
+    // jsPsych.metadata.deleteVariable("NewTest");
+    this.updateVariable("NewTest", "minValue", 10);
+    this.updateVariable("NewTest", "description", "this is a new description");
+  }
+
+  getVariableTest(): void {
+    console.log(this.getVariableNames());
+    console.log(this.getVariable("trial_type"));
+    console.log(this.getVariable("blablablah"));
   }
 }

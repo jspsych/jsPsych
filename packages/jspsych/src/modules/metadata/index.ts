@@ -4,9 +4,7 @@ import { VariablesMap } from "./VariablesMap";
 
 export class JsPsychMetadata {
   private metadata: {};
-  // private authors: {};
   private authors: AuthorsMap;
-  // private variables: {};
   private variables: VariablesMap;
 
   constructor(private JsPsych: JsPsych) {
@@ -96,6 +94,10 @@ export class JsPsychMetadata {
     this.variables.deleteVariable(var_name);
   }
 
+  getVariableNames(): string[] {
+    return this.variables.getVariableNames();
+  }
+
   // display at the end of the experiment
   displayMetadata(): void {
     // Format the metadata as a JSON string for display
@@ -166,11 +168,6 @@ export class JsPsychMetadata {
       ],
     };
     this.setVariable(stimulus_var);
-
-    // const stimulus_updated = this.getVariable("Stimulus");
-    // stimulus_updated["name"] = "stimulus_updated";
-    // stimulus_updated["levels"].push("img/test.jpg"); // pushing to levels
-    // Object.assign(stimulus_updated["description"], { "<h1>TestingTESTING</h1>": "shock factor" });
 
     return;
   }
