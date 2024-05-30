@@ -7,11 +7,9 @@ export class AuthorsMap {
 
   getList(): ({} | string)[] {
     const author_list = [];
-
     for (const key of Object.keys(this.authors)) {
       author_list.push(this.authors[key]);
     }
-
     return author_list;
   }
 

@@ -55,7 +55,6 @@ export class VariablesMap {
     for (const key of Object.keys(this.variables)) {
       var_list.push(this.variables[key]);
     }
-
     return var_list;
   }
 
@@ -114,10 +113,7 @@ export class VariablesMap {
       return;
     }
 
-    // if we want to append to description can add feature laters
-    if (field_name !== "levels" && field_name !== "name") {
-      updated_var[field_name] = added_value;
-    } else if (field_name === "levels") {
+    if (field_name === "levels") {
       if (!Array.isArray(updated_var["levels"])) {
         updated_var["levels"] = [];
       }
@@ -144,6 +140,8 @@ export class VariablesMap {
           privacy?: string;
         }
       );
+    } else {
+      updated_var[field_name] = added_value;
     }
   }
 

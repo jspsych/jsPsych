@@ -33,12 +33,8 @@ export class JsPsychMetadata {
   // To get the final data
   getMetadata(): {} {
     const res = this.metadata;
-
-    const author_list = this.authors.getList();
-    res["author"] = author_list;
-
-    const var_list = this.variables.getList();
-    res["variableMeasured"] = var_list;
+    res["author"] = this.authors.getList();
+    res["variableMeasured"] = this.variables.getList();
 
     return res;
   }
@@ -100,31 +96,26 @@ export class JsPsychMetadata {
 
   // display at the end of the experiment
   displayMetadata(): void {
-    // Format the metadata as a JSON string for display
     const metadata_string = JSON.stringify(this.getMetadata(), null, 2);
-    // Get the display element from jsPsych
     const display_element = this.JsPsych.getDisplayElement();
-    // Set the inner HTML of the display element to include a preformatted text block
     display_element.innerHTML = '<pre id="jspsych-metadata-display"></pre>';
-    // Set the text content of the preformatted text block to the metadata string
     document.getElementById("jspsych-metadata-display").textContent = metadata_string;
   }
 
   // Method to save metadata as JSON file
   saveAsJsonFile(): void {
-    const jsonString = JSON.stringify(this.getMetadata(), null, 2); // Convert object to JSON string with pretty print
-    const blob = new Blob([jsonString], { type: "application/json" }); // Create a Blob from the JSON string
-    const url = URL.createObjectURL(blob); // Create a URL for the Blob
+    const jsonString = JSON.stringify(this.getMetadata(), null, 2);
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
 
-    // Create a temporary anchor element and trigger a download
     const a = document.createElement("a");
     a.href = url;
     a.download = "dataset_description.json";
-    document.body.appendChild(a); // Append anchor to body
-    a.click(); // Trigger download
-    document.body.removeChild(a); // Remove anchor from body
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 
-    URL.revokeObjectURL(url); // Clean up the URL object
+    URL.revokeObjectURL(url);
   }
 
   // method testing different get and set methods and generating fake metadata
