@@ -13,7 +13,7 @@
     var jsPsych = initJsPsych({
       on_finish: function() {
         // jsPsych.data.get().localSave('csv', 'timeline-variables.csv');
-        jsPsych.metadata.generateFakeMetadata();
+        jsPsych.metadata.saveAsJsonFile();
         jsPsych.metadata.displayMetadata(); // documentation code
         // jsPsych.data.displayData();
       },
@@ -57,8 +57,18 @@
       randomize_order: true,
       repetitions: 2
     };
+
+    jsPsych.metadata.generateFakeMetadata();
+    jsPsych.metadata.deleteVariable("trial_type");    
+    jsPsych.metadata.deleteVariable("trial_index");    
+    jsPsych.metadata.deleteVariable("stimulus_updated");    
+    jsPsych.metadata.deleteVariable("Response Time (rt)");    
+    jsPsych.metadata.deleteVariable("Stimulus");    
+    jsPsych.metadata.deleteVariable("internal_node_id");    
+    jsPsych.metadata.deleteVariable("time_elapsed");    
+    jsPsych.metadata.deleteVariable("rt (Response time)"); 
     
-    
+
     jsPsych.run([preload, node]);
 
   </script>

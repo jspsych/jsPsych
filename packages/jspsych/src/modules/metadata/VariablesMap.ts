@@ -2,7 +2,52 @@ export class VariablesMap {
   private variables: {};
 
   constructor() {
+    this.generateDefaultVariables();
+  }
+
+  // trial type, trial index, time elapsed, interal typenode id
+  generateDefaultVariables(): void {
     this.variables = {};
+
+    const trial_type_var = {
+      type: "Property_Value",
+      name: "trial_type",
+      description: "Plugin type that has been used to run trials",
+      value: "string",
+    };
+    this.setVariable(trial_type_var);
+
+    const trial_index_var = {
+      type: "PropertyValue",
+      name: "trial_index",
+      description: "Position of trial in the timeline",
+      value: "numeric",
+    };
+    this.setVariable(trial_index_var);
+
+    const time_elapsed_var = {
+      type: "PropertyValue",
+      name: "time_elapsed",
+      description: "Time (in ms) since the start of the experiment",
+      value: "numeric",
+    };
+    this.setVariable(time_elapsed_var);
+
+    const response_time_var = {
+      type: "PropertyValue",
+      name: "rt (Response time)",
+      description: "Time measured in ms participant takes to respond to a stimulus",
+      value: "numeric",
+    };
+    this.setVariable(response_time_var);
+
+    const internal_type_node_id = {
+      type: "PropertyValue",
+      name: "internal_node_id",
+      description: "Internal measurements of node",
+      value: "interval",
+    };
+    this.setVariable(internal_type_node_id);
   }
 
   getList(): {}[] {
@@ -47,16 +92,35 @@ export class VariablesMap {
     } else return {};
   }
 
-  replaceVariable(
-    var_name: string,
-    field_name: string,
-    new_value: string | boolean | number
-  ): void {}
-
   // levels, description
-  updateMapping(
+  updateVariable(
     var_name: string,
     field_name: string,
-    added_value: string | boolean | number
-  ): void {}
+    added_value: string | boolean | number | {}
+  ): void {
+    const updated_var = this.getVariable(var_name);
+
+    if (Object.keys(updated_var).length === 0) {
+      // error checking to see variable exists
+      console.error(`Variable "${var_name}" does not exist.`);
+      return;
+    }
+
+    if (field_name !== "levels" && field_name !== "name") {
+      // updates or adds fields to a variable
+      updated_var[field_name] = added_value;
+    } else if (field_name === "levels") {
+      updated_var["levels"].push(added_value);
+    } else if (field_name === "name") {
+      updated_var["name"] = added_value;
+    }
+  }
+
+  deleteVariable(var_name: string): void {
+    if (var_name in this.variables) {
+      delete this.variables[var_name];
+    } else {
+      console.error(`Variable "${var_name}" does not exist.`);
+    }
+  }
 }
