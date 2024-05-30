@@ -227,6 +227,16 @@ export class JsPsych {
     return this.DOM_container;
   }
 
+  private columnMap(data, trial): void {
+    const mapping = trial.column_map;
+    for (const oldKey of Object.keys(mapping)) {
+      const newKey = mapping[oldKey];
+      data[newKey] = data[oldKey];
+      delete data[oldKey];
+    }
+    return data
+  }
+
   finishTrial(data = {}) {
     if (this.current_trial_finished) {
       return;
@@ -241,8 +251,15 @@ export class JsPsych {
       this.DOM_target.classList.remove(...this.current_trial.css_classes);
     }
 
-    // write the data from the trial
-    this.data.write(data);
+    //Mapping responses to custom column
+    if ('column_map' in this.current_trial) {
+      // write the data from the trial after mapping columns
+      const mapped_data = this.columnMap(data, this.current_trial);
+      this.data.write(mapped_data);
+    } else {
+      //write data
+      this.data.write(data);
+    }
 
     // get back the data with all of the defaults in
     const trial_data = this.data.getLastTrialData();
@@ -510,7 +527,26 @@ export class JsPsych {
     this.doTrial(this.timeline.trial());
   }
 
+  private getAutomaticMetaData() {
+
+    var variablesToBeUpdated = this.data.getVariablesToBeUpdated();
+
+    for (const variable of variablesToBeUpdated) {
+      var field = {
+        name: variable,
+        description: "Unknown",
+        levels: this.data.getLevels(variable)
+      }
+
+      this.metadata.setVariable(field);
+    }
+     
+  }
+
   private finishExperiment() {
+
+    this.getAutomaticMetaData();
+
     const finish_result = this.opts.on_finish(this.data.get());
 
     const done_handler = () => {

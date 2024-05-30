@@ -171,4 +171,21 @@ export class JsPsychData {
     this.reset();
     this.dataProperties = {};
   }
+
+  //Returns all possible values for a column in the data.
+  getLevels(column: string) {
+    var column_data = this.allData.select(column).values;
+    return column_data.filter((value, index, array) => array.indexOf(value)===index);
+  }
+//Returns all the variables in the experiment/the header column of data as list.
+  getVariableList() {
+    return this.allData.uniqueNames();
+  }
+
+//Returns the variables in the experiment save the default variables all experiments share.
+  getVariablesToBeUpdated() {
+    var allVariables = this.allData.uniqueNames();
+    var defaultVariables = ["trial_type","trial_index","time_elapsed","internal_node_id"]
+    return allVariables.filter(n => !defaultVariables.includes(n));
+  }
 }
