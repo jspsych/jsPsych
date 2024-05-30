@@ -1,14 +1,26 @@
 import { JsPsych } from "../../JsPsych";
-import { Author } from "./Author";
-import { Variable } from "./Variable";
+import { AuthorsMap } from "./AuthorsMap";
+import { VariablesMap } from "./VariablesMap";
 
 export class JsPsychMetadata {
   private metadata: {};
-  private authors: {};
-  private variables: {};
+  // private authors: {};
+  private authors: AuthorsMap;
+  // private variables: {};
+  private variables: VariablesMap;
 
   constructor(private JsPsych: JsPsych) {
-    this.generateDefaultMetaData();
+    this.generateDefaultMetadata();
+  }
+
+  // Can update with more important information
+  generateDefaultMetadata(): void {
+    this.metadata = {};
+    this.setMetadataField("name", "title");
+    this.setMetadataField("schemaVersion", "Psych-DS 0.4.0");
+    this.setMetadataField("description", "Dataset generated using JsPsych");
+    this.authors = new AuthorsMap();
+    this.variables = new VariablesMap();
   }
 
   // Methods for accessing and setting simple fields
@@ -23,30 +35,14 @@ export class JsPsychMetadata {
   // To get the final data
   getMetadata(): {} {
     const res = this.metadata;
-    const author_list = [];
-    const var_list = [];
 
-    for (const key of Object.keys(this.authors)) {
-      author_list.push(this.authors[key]);
-    }
+    const author_list = this.authors.getList();
     res["author"] = author_list;
 
-    for (const key of Object.keys(this.variables)) {
-      var_list.push(this.variables[key]);
-    }
+    const var_list = this.variables.getList();
     res["variableMeasured"] = var_list;
 
     return res;
-  }
-
-  // Can update with more important information
-  generateDefaultMetaData(): void {
-    this.metadata = {};
-    this.setMetadataField("name", "title");
-    this.setMetadataField("schemaVersion", "Psych-DS 0.4.0");
-    this.setMetadataField("description", "Dataset generated using JsPsych");
-    this.authors = {};
-    this.variables = {};
   }
 
   // may need to include, missing documentation in the document
@@ -57,27 +53,11 @@ export class JsPsychMetadata {
     familyName?: string;
     identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
   }): void {
-    if (Object.keys(fields).length == 1) {
-      // if only name, just add to list without dict format, according to documentation
-      this.authors[fields.name] = fields.name;
-      return;
-    }
-
-    const new_variable: { [key: string]: any } = {}; // Define an empty object to store the variables
-    for (const key in fields) {
-      // Check if the property is defined and not null
-      if (fields[key] !== undefined && fields[key] !== null) {
-        new_variable[key] = fields[key];
-      }
-    }
-
-    this.authors[new_variable.name] = new_variable;
+    this.authors.setAuthor(fields);
   }
 
   getAuthor(name: string): {} {
-    if (name in this.authors) {
-      return this.authors[name];
-    } else return {};
+    return this.authors.getAuthor(name);
   }
 
   // Simple set, get structure so taht can get fields and return
@@ -89,29 +69,29 @@ export class JsPsychMetadata {
     identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
     minValue?: number;
     maxValue?: number;
-    levels?: []; // technically property values in the other one but not sure how to format it
+    levels?: string[] | []; // technically property values in the other one but not sure how to format it
     levelsOrdered?: boolean;
     na?: boolean;
     naValue?: string;
     alternateName?: string;
     privacy?: string;
   }): void {
-    const new_variable: { [key: string]: any } = {}; // Define an empty object to store the variables
+    this.variables.setVariable(fields);
 
-    for (const key in fields) {
-      // Check if the property is defined and not null
-      if (fields[key] !== undefined && fields[key] !== null) {
-        new_variable[key] = fields[key];
-      }
-    }
+    // const new_variable: { [key: string]: any } = {}; // Define an empty object to store the variables
 
-    this.variables[new_variable.name] = new_variable;
+    // for (const key in fields) {
+    //   // Check if the property is defined and not null
+    //   if (fields[key] !== undefined && fields[key] !== null) {
+    //     new_variable[key] = fields[key];
+    //   }
+    // }
+
+    // this.variables[new_variable.name] = new_variable;
   }
 
   getVariable(name: string): {} {
-    if (name in this.variables) {
-      return this.variables[name];
-    } else return {};
+    return this.variables.getVariable(name);
   }
 
   displayMetadata(): void {
@@ -126,5 +106,54 @@ export class JsPsychMetadata {
 
     // Set the text content of the preformatted text block to the metadata string
     document.getElementById("jspsych-metadata-display").textContent = metadata_string;
+  }
+
+  generateFakeMetadata(): void {
+    const author1 = {
+      name: "John Cena",
+    };
+    this.setAuthor(author1);
+
+    const author2 = {
+      name: "Wreck-it-Ralph",
+      identifier: "www.google.com",
+    };
+    this.setAuthor(author2);
+
+    const prop_value_var = {
+      type: "PropertyValue",
+      name: "Response Time (rt)",
+      description: "Time participant takes to respond to a stimulus",
+      value: "numeric",
+      minValue: 0,
+      maxValue: 10000,
+    };
+    this.setVariable(prop_value_var);
+
+    const stimulus_var = {
+      type: "PropertyValue",
+      name: "Stimulus",
+      description: {
+        "<p style='text-align:center; font-size:80px;'>+</p>":
+          "This is a fixation screen that helps concentrate focus",
+        '["img/happy_face_1.jpg", "img/happy_face_2.jpg","img/happy_face_3.jpg"]':
+          "These are different pictures of peoples faces that we using for the study",
+      },
+      value: "null",
+      levels: [
+        "<p style='text-align:center; font-size:80px;'>+</p>",
+        "img/happy_face_1.jpg",
+        "img/happy_face_2.jpg",
+        "img/happy_face_3.jpg",
+      ],
+    };
+    this.setVariable(stimulus_var);
+
+    const stimulus_updated = this.getVariable("Stimulus");
+    stimulus_updated["name"] = "stimulus_updated";
+    stimulus_updated["levels"].push("img/test.jpg"); // pushing to levels
+    Object.assign(stimulus_updated["description"], { "<h1>TestingTESTING</h1>": "shock factor" });
+
+    return;
   }
 }

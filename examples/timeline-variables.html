@@ -13,6 +13,7 @@
     var jsPsych = initJsPsych({
       on_finish: function() {
         // jsPsych.data.get().localSave('csv', 'timeline-variables.csv');
+        jsPsych.metadata.generateFakeMetadata();
         jsPsych.metadata.displayMetadata(); // documentation code
         // jsPsych.data.displayData();
       },
@@ -56,53 +57,8 @@
       randomize_order: true,
       repetitions: 2
     };
-
-    // beginning of code to document
-
-    const author1 = {
-      name: "John Cena"
-    };
-    jsPsych.metadata.setAuthor(author1);
-
-    const author2 = {
-      name: "Wreck-it-Ralph",
-      identifier: "www.google.com"
-    };
-    jsPsych.metadata.setAuthor(author2);
-
-    const prop_value_var = {
-      type: "PropertyValue",
-      name: "Response Time (rt)",
-      description: "Time participant takes to respond to a stimulus",
-      value: "numeric",
-      minValue: 0,
-      maxValue: 10000
-    };
-    jsPsych.metadata.setVariable(prop_value_var);
-
-    const stimulus_var = { 
-      type: "PropertyValue",
-      name: "Stimulus",
-      description: {
-        "<p style='text-align:center; font-size:80px;'>+</p>": "This is a fixation screen that helps concentrate focus",
-        "[\"img/happy_face_1.jpg\", \"img/happy_face_2.jpg\",\"img/happy_face_3.jpg\"]" : "These are different pictures of peoples faces that we using for the study",
-      },
-      value: "null",
-      levels: [
-        "<p style='text-align:center; font-size:80px;'>+</p>",
-        "img/happy_face_1.jpg",
-        "img/happy_face_2.jpg",
-        "img/happy_face_3.jpg"
-      ],
-    }
-    jsPsych.metadata.setVariable(stimulus_var);
-
-    const stimulus_updated = jsPsych.metadata.getVariable("Stimulus");
-    stimulus_updated["name"] = "stimulus_updated";
-    stimulus_updated["levels"].push("img/test.jpg"); // pushing to levels
-    Object.assign(stimulus_updated["description"], {"<h1>TestingTESTING</h1>": "shock factor"});
-
-
+    
+    
     jsPsych.run([preload, node]);
 
   </script>
