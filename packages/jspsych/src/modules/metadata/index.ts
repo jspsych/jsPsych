@@ -4,9 +4,7 @@ import { VariablesMap } from "./VariablesMap";
 
 export class JsPsychMetadata {
   private metadata: {};
-  // private authors: {};
   private authors: AuthorsMap;
-  // private variables: {};
   private variables: VariablesMap;
 
   constructor(private JsPsych: JsPsych) {
@@ -35,12 +33,8 @@ export class JsPsychMetadata {
   // To get the final data
   getMetadata(): {} {
     const res = this.metadata;
-
-    const author_list = this.authors.getList();
-    res["author"] = author_list;
-
-    const var_list = this.variables.getList();
-    res["variableMeasured"] = var_list;
+    res["author"] = this.authors.getList();
+    res["variableMeasured"] = this.variables.getList();
 
     return res;
   }
@@ -60,7 +54,7 @@ export class JsPsychMetadata {
     return this.authors.getAuthor(name);
   }
 
-  // Simple set, get structure so taht can get fields and return
+  // Simple set will overwrite, get structure so that can get fields and return
   setVariable(fields: {
     type?: string;
     name: string; // required
@@ -77,37 +71,54 @@ export class JsPsychMetadata {
     privacy?: string;
   }): void {
     this.variables.setVariable(fields);
-
-    // const new_variable: { [key: string]: any } = {}; // Define an empty object to store the variables
-
-    // for (const key in fields) {
-    //   // Check if the property is defined and not null
-    //   if (fields[key] !== undefined && fields[key] !== null) {
-    //     new_variable[key] = fields[key];
-    //   }
-    // }
-
-    // this.variables[new_variable.name] = new_variable;
   }
 
+  // saving a variable
   getVariable(name: string): {} {
     return this.variables.getVariable(name);
   }
 
+  updateVariable(
+    var_name: string,
+    field_name: string,
+    added_value: string | boolean | number | {}
+  ): void {
+    this.variables.updateVariable(var_name, field_name, added_value);
+  }
+
+  deleteVariable(var_name: string): void {
+    this.variables.deleteVariable(var_name);
+  }
+
+  getVariableNames(): string[] {
+    return this.variables.getVariableNames();
+  }
+
+  // display at the end of the experiment
   displayMetadata(): void {
-    // Format the metadata as a JSON string for display
     const metadata_string = JSON.stringify(this.getMetadata(), null, 2);
-
-    // Get the display element from jsPsych
     const display_element = this.JsPsych.getDisplayElement();
-
-    // Set the inner HTML of the display element to include a preformatted text block
     display_element.innerHTML = '<pre id="jspsych-metadata-display"></pre>';
-
-    // Set the text content of the preformatted text block to the metadata string
     document.getElementById("jspsych-metadata-display").textContent = metadata_string;
   }
 
+  // Method to save metadata as JSON file
+  saveAsJsonFile(): void {
+    const jsonString = JSON.stringify(this.getMetadata(), null, 2);
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "dataset_description.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+  }
+
+  // method testing different get and set methods and generating fake metadata
   generateFakeMetadata(): void {
     const author1 = {
       name: "John Cena",
@@ -148,11 +159,6 @@ export class JsPsychMetadata {
       ],
     };
     this.setVariable(stimulus_var);
-
-    const stimulus_updated = this.getVariable("Stimulus");
-    stimulus_updated["name"] = "stimulus_updated";
-    stimulus_updated["levels"].push("img/test.jpg"); // pushing to levels
-    Object.assign(stimulus_updated["description"], { "<h1>TestingTESTING</h1>": "shock factor" });
 
     return;
   }
