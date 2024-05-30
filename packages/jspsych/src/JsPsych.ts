@@ -532,10 +532,18 @@ export class JsPsych {
     var variablesToBeUpdated = this.data.getVariablesToBeUpdated();
 
     for (const variable of variablesToBeUpdated) {
+      var variableValues = this.data.get().select(variable).values;
+      var variableType = typeof variableValues.filter((v) => v !== null)[0];
+
       var field = {
         name: variable,
         description: "Unknown",
-        levels: this.data.getLevels(variable)
+        value: variableType,
+        // If the variable type is string, then categories or levels are automatically calculated.
+        ...(variableType === 'string'  && {levels: this.data.getLevels(variable)}),
+        //Likewise if the variable type is numeric, min and max values are calculated.
+        ...(variableType === 'number' && {minValue: this.data.get().select(variable).min()}),
+        ...(variableType === 'number' && {maxValue: this.data.get().select(variable).max()})
       }
 
       this.metadata.setVariable(field);
