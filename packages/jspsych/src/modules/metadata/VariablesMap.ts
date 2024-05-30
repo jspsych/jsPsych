@@ -5,7 +5,7 @@ export class VariablesMap {
     this.generateDefaultVariables();
   }
 
-  // trial type, trial index, time elapsed, interal typenode id
+  // trial type, trial index, time elapsed, interal typenode id - can add more below
   generateDefaultVariables(): void {
     this.variables = {};
 
