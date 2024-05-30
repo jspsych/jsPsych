@@ -1,0 +1,79 @@
+@startuml Metadata
+
+class JsPsychMetadata {
+  -Map metadata
+  -AuthorsMap authors
+  -VariablesMap variables
+  
+  +void generateDefaultMetadata()
+  +void setMetadataField(key: string, value: any)
+  +any getMetadataField(key: string)
+  +Map getMetadata()
+  +void setAuthor(fields: AuthorFields)
+  +Map getAuthor(name: string)
+  +void setVariable(fields: VariableFields)
+  +Map getVariable(name: string)
+  +void updateVariable(var_name: string, field_name: string, added_value: string | boolean | number | {})
+  +void deleteVariable(var_name: string)
+  +string[] getVariableNames()
+  +void displayMetadata() 
+  +void saveAsJsonFile()
+  +void generateFakeMetadata()
+}
+
+class AuthorsMap {
+  -Map authors
+
+  +Map[] or string[] getList()
+  +void setAuthor(fields: AuthorFields)
+  +{} getAuthor(name: string)
+}
+
+class VariablesMap {
+  -variables: {}
+
+  +void generateDefaultVariables()
+  +{}[] getList()
+  +void setVariable(fields: VariableFields)
+  +{} getVariable(name: string)
+  +string[] getVariableNames()
+  +void updateVariable(var_name: string, field_name: string, added_value: string | boolean | number | Map)
+  +void deleteVariable(var_name: string)
+}
+
+
+class AuthorFields {
+  +type: string
+  +name: string
+  +givenName: string
+  +familyName: string
+  +identifier: string
+}
+
+class VariableFields {
+  +type: string
+  +name: string
+  +description: string | Object
+  +value: string
+  +identifier: string
+  +minValue: number
+  +maxValue: number
+  +levels: string[]
+  +levelsOrdered: boolean
+  +na: boolean
+  +naValue: string
+  +alternateName: string
+  +privacy: string
+}
+
+JsPsychMetadata -down-> VariableFields : uses
+JsPsychMetadata -down-> AuthorFields : uses
+JsPsychMetadata -down> AuthorsMap : uses
+JsPsychMetadata -down> VariablesMap : uses
+
+
+AuthorsMap -down> AuthorFields : uses
+VariablesMap -down> VariableFields : uses
+
+
+@enduml
