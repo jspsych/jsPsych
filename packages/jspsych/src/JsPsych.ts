@@ -227,12 +227,16 @@ export class JsPsych {
     return this.DOM_container;
   }
 
+  /** Maps the data given out by a plugin in a trial to different columns with names specified by the user.
+   * @param data - The data object produced by a plugin at the end of trial to which rewriting is applied.
+   * @param {object} trial.columm_map - The column_map property in the trial object which specifies the mapping of default column to new column in key-value form.
+  */
   private columnMap(data, trial): void {
     const mapping = trial.column_map;
     for (const oldKey of Object.keys(mapping)) {
-      const newKey = mapping[oldKey];
-      data[newKey] = data[oldKey];
-      delete data[oldKey];
+      const newKey = mapping[oldKey]; //values under default column temporarily stored
+      data[newKey] = data[oldKey]; //values pushed to data object under new column name
+      delete data[oldKey]; //old or default column data deleted
     }
     return data
   }
@@ -251,13 +255,13 @@ export class JsPsych {
       this.DOM_target.classList.remove(...this.current_trial.css_classes);
     }
 
-    //Mapping responses to custom column
+    // check if data needs to be mapped to custom columns
     if ('column_map' in this.current_trial) {
-      // write the data from the trial after mapping columns
+      // write the data from the trial after mapping to columns
       const mapped_data = this.columnMap(data, this.current_trial);
       this.data.write(mapped_data);
     } else {
-      //write data
+      // write data normally
       this.data.write(data);
     }
 
@@ -527,13 +531,15 @@ export class JsPsych {
     this.doTrial(this.timeline.trial());
   }
 
+/** Generates metadata automatically from the data once the experiment is over*/
+
   private getAutomaticMetaData() {
 
     var variablesToBeUpdated = this.data.getVariablesToBeUpdated();
 
     for (const variable of variablesToBeUpdated) {
-      var variableValues = this.data.get().select(variable).values;
-      var variableType = typeof variableValues.filter((v) => v !== null)[0];
+      var variableValues = this.data.get().select(variable).values; //collects raw values of a column of data as an array
+      var variableType = typeof variableValues.filter((v) => v !== null)[0]; //filters out null and assumes the type of the first element is overall type
 
       var field = {
         name: variable,
@@ -541,11 +547,12 @@ export class JsPsych {
         value: variableType,
         // If the variable type is string, then categories or levels are automatically calculated.
         ...(variableType === 'string'  && {levels: this.data.getLevels(variable)}),
-        //Likewise if the variable type is numeric, min and max values are calculated.
-        ...(variableType === 'number' && {minValue: this.data.get().select(variable).min()}),
-        ...(variableType === 'number' && {maxValue: this.data.get().select(variable).max()})
+        //Likewise if the variable type is numeric, min and max values are calculated, but are commented out because they make metadata specific to only trial at hand.
+        //...(variableType === 'number' && {minValue: this.data.get().select(variable).min()}),
+        //...(variableType === 'number' && {maxValue: this.data.get().select(variable).max()})
       }
 
+      //passes a field to set the metadata for each variable that is not default
       this.metadata.setVariable(field);
     }
      
