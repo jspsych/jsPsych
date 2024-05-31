@@ -203,7 +203,20 @@
   height: 100%;
 }
 
-/* Control appearance of jsPsych.data.displayData() */
-#jspsych-data-display {
+/* Control appearance of jsPsych.data.displayData(), jsPsych.metadata.displayMetadata() and jsPsych.displayDataAndMetadata() */
+#jspsych-data-display,
+#jspsych-metadata-display {
   text-align: left;
+  white-space: pre-wrap;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  margin-bottom: 20px;
+}
+
+#jspsych-data-header,
+#jspsych-metadata-header {
+  font-size: 32px;
+  font-weight: 700px;
+  margin-bottom: 10px;
 }

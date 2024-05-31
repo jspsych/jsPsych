@@ -87,7 +87,7 @@ export class JsPsychData {
     }
   }
 
-  displayData(format = "json") {
+  displayData(format = "json", elementId = "jspsych-data-display") {
     format = format.toLowerCase();
     if (format != "json" && format != "csv") {
       console.log("Invalid format declared for displayData function. Using json as default.");
@@ -98,9 +98,8 @@ export class JsPsychData {
 
     const display_element = this.jsPsych.getDisplayElement();
 
-    display_element.innerHTML = '<pre id="jspsych-data-display"></pre>';
-
-    document.getElementById("jspsych-data-display").textContent = data_string;
+    display_element.innerHTML += `<p id="jspsych-data-header">Data</p><pre id="${elementId}" class="jspsych-preformat"></pre>`;
+    document.getElementById(elementId).textContent = data_string;
   }
 
   urlVariables() {
@@ -175,17 +174,17 @@ export class JsPsychData {
   //Returns all possible values for a column in the data.
   getLevels(column: string) {
     var column_data = this.allData.select(column).values;
-    return column_data.filter((value, index, array) => array.indexOf(value)===index);
+    return column_data.filter((value, index, array) => array.indexOf(value) === index);
   }
-//Returns all the variables in the experiment/the header column of data as list.
+  //Returns all the variables in the experiment/the header column of data as list.
   getVariableList() {
     return this.allData.uniqueNames();
   }
 
-//Returns the variables in the experiment save the default variables all experiments share.
+  //Returns the variables in the experiment save the default variables all experiments share.
   getVariablesToBeUpdated() {
     var allVariables = this.allData.uniqueNames();
-    var defaultVariables = ["trial_type","trial_index","time_elapsed","internal_node_id"]
-    return allVariables.filter(n => !defaultVariables.includes(n));
+    var defaultVariables = ["trial_type", "trial_index", "time_elapsed", "internal_node_id"];
+    return allVariables.filter((n) => !defaultVariables.includes(n));
   }
 }

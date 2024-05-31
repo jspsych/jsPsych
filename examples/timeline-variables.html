@@ -14,8 +14,10 @@
       on_finish: function() {
         // jsPsych.data.get().localSave('csv', 'timeline-variables.csv');
         // jsPsych.metadata.saveAsJsonFile();
-        jsPsych.metadata.displayMetadata(); // documentation code
+        // jsPsych.metadata.displayMetadata(); // documentation code
         // jsPsych.data.displayData();
+
+        jsPsych.displayDataAndMetadata();
       },
       default_iti: 250
     });
@@ -52,6 +54,10 @@
             return '<p>Have you seen '+jsPsych.timelineVariable('v2', true)+ ' before? Press "y" or "n".</p>' 
           },
           stimulus_width: 300,
+          column_map: {
+            response: "face_response",
+            stimulus: "face_stimulus"
+          }
         }
       ],
       randomize_order: true,

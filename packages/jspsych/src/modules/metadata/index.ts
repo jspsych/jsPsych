@@ -2,16 +2,50 @@ import { JsPsych } from "../../JsPsych";
 import { AuthorsMap } from "./AuthorsMap";
 import { VariablesMap } from "./VariablesMap";
 
+/**
+ * Description placeholder
+ *
+ * @export
+ * @class JsPsychMetadata
+ * @typedef {JsPsychMetadata}
+ */
 export class JsPsychMetadata {
+  /**
+   * Description placeholder
+   *
+   * @private
+   * @type {{}}
+   */
   private metadata: {};
+  /**
+   * Description placeholder
+   *
+   * @private
+   * @type {AuthorsMap}
+   */
   private authors: AuthorsMap;
+  /**
+   * Description placeholder
+   *
+   * @private
+   * @type {VariablesMap}
+   */
   private variables: VariablesMap;
 
+  /**
+   * Creates an instance of JsPsychMetadata.
+   *
+   * @constructor
+   * @param {JsPsych} JsPsych
+   */
   constructor(private JsPsych: JsPsych) {
     this.generateDefaultMetadata();
   }
 
   // Can update with more important information
+  /**
+   * Description placeholder
+   */
   generateDefaultMetadata(): void {
     this.metadata = {};
     this.setMetadataField("name", "title");
@@ -22,15 +56,32 @@ export class JsPsychMetadata {
   }
 
   // Methods for accessing and setting simple fields
+  /**
+   * Description placeholder
+   *
+   * @param {string} key
+   * @param {*} value
+   */
   setMetadataField(key: string, value: any): void {
     this.metadata[key] = value;
   }
 
+  /**
+   * Description placeholder
+   *
+   * @param {string} key
+   * @returns {*}
+   */
   getMetadataField(key: string): any {
     return this.metadata[key];
   }
 
   // To get the final data
+  /**
+   * Description placeholder
+   *
+   * @returns {{}}
+   */
   getMetadata(): {} {
     const res = this.metadata;
     res["author"] = this.authors.getList();
@@ -40,6 +91,17 @@ export class JsPsychMetadata {
   }
 
   // may need to include, missing documentation in the document
+  /**
+   * Description placeholder
+   *
+   * @param {{
+   *     type?: string;
+   *     name: string;
+   *     givenName?: string; // required
+   *     familyName?: string;
+   *     identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
+   *   }} fields
+   */
   setAuthor(fields: {
     type?: string;
     name: string;
@@ -50,11 +112,36 @@ export class JsPsychMetadata {
     this.authors.setAuthor(fields);
   }
 
+  /**
+   * Description placeholder
+   *
+   * @param {string} name
+   * @returns {{}}
+   */
   getAuthor(name: string): {} {
     return this.authors.getAuthor(name);
   }
 
   // Simple set will overwrite, get structure so that can get fields and return
+  /**
+   * Description placeholder
+   *
+   * @param {{
+   *     type?: string;
+   *     name: string; // required
+   *     description?: string | {};
+   *     value?: string; // string, boolean, or number
+   *     identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
+   *     minValue?: number;
+   *     maxValue?: number;
+   *     levels?: string[] | []; // technically property values in the other one but not sure how to format it
+   *     levelsOrdered?: boolean;
+   *     na?: boolean;
+   *     naValue?: string;
+   *     alternateName?: string;
+   *     privacy?: string;
+   *   }} fields
+   */
   setVariable(fields: {
     type?: string;
     name: string; // required
@@ -74,10 +161,23 @@ export class JsPsychMetadata {
   }
 
   // saving a variable
+  /**
+   * Description placeholder
+   *
+   * @param {string} name
+   * @returns {{}}
+   */
   getVariable(name: string): {} {
     return this.variables.getVariable(name);
   }
 
+  /**
+   * Description placeholder
+   *
+   * @param {string} var_name
+   * @param {string} field_name
+   * @param {(string | boolean | number | {})} added_value
+   */
   updateVariable(
     var_name: string,
     field_name: string,
@@ -86,23 +186,39 @@ export class JsPsychMetadata {
     this.variables.updateVariable(var_name, field_name, added_value);
   }
 
+  /**
+   * Description placeholder
+   *
+   * @param {string} var_name
+   */
   deleteVariable(var_name: string): void {
     this.variables.deleteVariable(var_name);
   }
 
+  /**
+   * Description placeholder
+   *
+   * @returns {string[]}
+   */
   getVariableNames(): string[] {
     return this.variables.getVariableNames();
   }
 
   // display at the end of the experiment
-  displayMetadata(): void {
+  /**
+   * Description placeholder
+   */
+  displayMetadata(elementId = "jspsych-metadata-display") {
     const metadata_string = JSON.stringify(this.getMetadata(), null, 2);
     const display_element = this.JsPsych.getDisplayElement();
-    display_element.innerHTML = '<pre id="jspsych-metadata-display"></pre>';
-    document.getElementById("jspsych-metadata-display").textContent = metadata_string;
+    display_element.innerHTML += `<p id="jspsych-metadata-header">Metadata</p><pre id="${elementId}" class="jspsych-preformat"></pre>`;
+    document.getElementById(elementId).textContent = metadata_string;
   }
 
   // Method to save metadata as JSON file
+  /**
+   * Description placeholder
+   */
   saveAsJsonFile(): void {
     const jsonString = JSON.stringify(this.getMetadata(), null, 2);
     const blob = new Blob([jsonString], { type: "application/json" });
@@ -119,6 +235,9 @@ export class JsPsychMetadata {
   }
 
   // method testing different get and set methods and generating fake metadata
+  /**
+   * Description placeholder
+   */
   generateFakeMetadata(): void {
     const author1 = {
       name: "John Cena",

@@ -234,7 +234,7 @@ export class JsPsych {
       data[newKey] = data[oldKey];
       delete data[oldKey];
     }
-    return data
+    return data;
   }
 
   finishTrial(data = {}) {
@@ -252,7 +252,7 @@ export class JsPsych {
     }
 
     //Mapping responses to custom column
-    if ('column_map' in this.current_trial) {
+    if ("column_map" in this.current_trial) {
       // write the data from the trial after mapping columns
       const mapped_data = this.columnMap(data, this.current_trial);
       this.data.write(mapped_data);
@@ -528,7 +528,6 @@ export class JsPsych {
   }
 
   private getAutomaticMetaData() {
-
     var variablesToBeUpdated = this.data.getVariablesToBeUpdated();
 
     for (const variable of variablesToBeUpdated) {
@@ -540,19 +539,17 @@ export class JsPsych {
         description: "Unknown",
         value: variableType,
         // If the variable type is string, then categories or levels are automatically calculated.
-        ...(variableType === 'string'  && {levels: this.data.getLevels(variable)}),
+        ...(variableType === "string" && { levels: this.data.getLevels(variable) }),
         //Likewise if the variable type is numeric, min and max values are calculated.
-        ...(variableType === 'number' && {minValue: this.data.get().select(variable).min()}),
-        ...(variableType === 'number' && {maxValue: this.data.get().select(variable).max()})
-      }
+        ...(variableType === "number" && { minValue: this.data.get().select(variable).min() }),
+        ...(variableType === "number" && { maxValue: this.data.get().select(variable).max() }),
+      };
 
       this.metadata.setVariable(field);
     }
-     
   }
 
   private finishExperiment() {
-
     this.getAutomaticMetaData();
 
     const finish_result = this.opts.on_finish(this.data.get());
@@ -957,5 +954,27 @@ export class JsPsych {
 
   getProgressBarCompleted() {
     return this.progress_bar_amount;
+  }
+
+  /**
+   * Method that clears the screen, printing data and metadata allowing the researcher to view both post-trial.
+   *
+   * @param {string} [dataFormat="json"]
+   * @param {string} [dataElementId="jspsych-data-display"]
+   * @param {string} [metadataElementId="jspsych-metadata-display"]
+   */
+  displayDataAndMetadata(
+    dataFormat = "json",
+    dataElementId = "jspsych-data-display",
+    metadataElementId = "jspsych-metadata-display"
+  ) {
+    const display_element = this.getDisplayElement();
+
+    // Clear the display element before appending new content
+    display_element.innerHTML = "";
+
+    // Call the displayData and displayMetadata methods
+    this.metadata.displayMetadata(metadataElementId);
+    this.data.displayData(dataFormat, dataElementId);
   }
 }
