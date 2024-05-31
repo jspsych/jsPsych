@@ -14,7 +14,13 @@ export class AuthorsMap {
   }
 
   // overwrites previous author when used
-  setAuthor(fields): void {
+  setAuthor(fields: {
+    type?: string;
+    name: string;
+    givenName?: string; // required
+    familyName?: string;
+    identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
+  }): void {
     if (Object.keys(fields).length == 1) {
       // if only name, just add to list without dict format, according to documentation
       this.authors[fields.name] = fields.name;

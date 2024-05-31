@@ -10,7 +10,7 @@ export class VariablesMap {
     this.variables = {};
 
     const trial_type_var = {
-      type: "Property_Value",
+      type: "PropertyValue",
       name: "trial_type",
       description: "Plugin type that has been used to run trials",
       value: "string",
@@ -153,18 +153,6 @@ export class VariablesMap {
     }
   }
 
-  deleteVariablesTest(): void {
-    // this.generateFakeMetadata(); called in jsPsychMetadata function
-    this.deleteVariable("trial_type");
-    this.deleteVariable("trial_index");
-    this.deleteVariable("stimulus_updated");
-    this.deleteVariable("Response Time (rt)");
-    this.deleteVariable("Stimulus");
-    this.deleteVariable("internal_node_id");
-    this.deleteVariable("time_elapsed");
-    this.deleteVariable("rt (Response time)");
-  }
-
   updateVariableTest(): void {
     // editing new variables
     const test_var = {
@@ -183,11 +171,5 @@ export class VariablesMap {
     // jsPsych.metadata.deleteVariable("NewTest");
     this.updateVariable("NewTest", "minValue", 10);
     this.updateVariable("NewTest", "description", "this is a new description");
-  }
-
-  getVariableTest(): void {
-    console.log(this.getVariableNames());
-    console.log(this.getVariable("trial_type"));
-    console.log(this.getVariable("blablablah"));
   }
 }
