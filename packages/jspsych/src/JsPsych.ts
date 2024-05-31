@@ -238,7 +238,7 @@ export class JsPsych {
       data[newKey] = data[oldKey]; //values pushed to data object under new column name
       delete data[oldKey]; //old or default column data deleted
     }
-    return data
+    return data;
   }
 
   finishTrial(data = {}) {
@@ -555,11 +555,9 @@ export class JsPsych {
       //passes a field to set the metadata for each variable that is not default
       this.metadata.setVariable(field);
     }
-     
   }
 
   private finishExperiment() {
-
     this.getAutomaticMetaData();
 
     const finish_result = this.opts.on_finish(this.data.get());
@@ -964,5 +962,27 @@ export class JsPsych {
 
   getProgressBarCompleted() {
     return this.progress_bar_amount;
+  }
+
+  /**
+   * Method that clears the screen, printing data and metadata allowing the researcher to view both post-trial.
+   *
+   * @param {string} [dataFormat="json"] - The format in which data should be displayed. Defaults to "json".
+   * @param {string} [dataElementId="jspsych-data-display"] - The ID of the HTML element where the data will be displayed.
+   * @param {string} [metadataElementId="jspsych-metadata-display"] - The ID of the HTML element where the metadata will be displayed.
+   */
+  displayDataAndMetadata(
+    dataFormat = "json",
+    dataElementId = "jspsych-data-display",
+    metadataElementId = "jspsych-metadata-display"
+  ) {
+    const display_element = this.getDisplayElement();
+
+    // Clear the display element before appending new content
+    display_element.innerHTML = "";
+
+    // Call the displayData and displayMetadata methods
+    this.metadata.displayMetadata(metadataElementId);
+    this.data.displayData(dataFormat, dataElementId);
   }
 }
