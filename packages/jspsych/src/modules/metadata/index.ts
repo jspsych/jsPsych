@@ -3,7 +3,7 @@ import { AuthorsMap } from "./AuthorsMap";
 import { VariablesMap } from "./VariablesMap";
 
 /**
- * Description placeholder
+ * Class that handles the storage, update and retrieval of Metadata.
  *
  * @export
  * @class JsPsychMetadata
@@ -11,21 +11,21 @@ import { VariablesMap } from "./VariablesMap";
  */
 export class JsPsychMetadata {
   /**
-   * Description placeholder
+   * Field that contains all metadata fields that aren't represented as a list.
    *
    * @private
    * @type {{}}
    */
   private metadata: {};
   /**
-   * Description placeholder
+   * Custom class that stores and handles the storage, update and retrieval of author metadata.
    *
    * @private
    * @type {AuthorsMap}
    */
   private authors: AuthorsMap;
   /**
-   * Description placeholder
+   * Custom class that stores and handles the storage, update and retrieval of variable metadata.
    *
    * @private
    * @type {VariablesMap}
@@ -33,7 +33,8 @@ export class JsPsychMetadata {
   private variables: VariablesMap;
 
   /**
-   * Creates an instance of JsPsychMetadata.
+   * Creates an instance of JsPsychMetadata while passing in JsPsych object to have access to context
+   *  allowing it to access the screen printing information.
    *
    * @constructor
    * @param {JsPsych} JsPsych
@@ -41,10 +42,11 @@ export class JsPsychMetadata {
   constructor(private JsPsych: JsPsych) {
     this.generateDefaultMetadata();
   }
-
-  // Can update with more important information
+  w;
   /**
-   * Description placeholder
+   * Method that fills in JsPsychMetadata class with all the universal fields with default information.
+   * This is automatically called whenever creating an instance of JsPsychMetadata and indicates all
+   * the required fields that need to filled in to be Psych-DS compliant.
    */
   generateDefaultMetadata(): void {
     this.metadata = {};
@@ -55,32 +57,31 @@ export class JsPsychMetadata {
     this.variables = new VariablesMap();
   }
 
-  // Methods for accessing and setting simple fields
   /**
-   * Description placeholder
+   * Method that sets simple metadata fields. This method can also be used to update/overwrite existing fields.
    *
-   * @param {string} key
-   * @param {*} value
+   * @param {string} key - Metadata field name
+   * @param {*} value - Data associated with the field
    */
   setMetadataField(key: string, value: any): void {
     this.metadata[key] = value;
   }
 
   /**
-   * Description placeholder
+   * Simple get that accesses the data associated with a field.
    *
-   * @param {string} key
-   * @returns {*}
+   * @param {string} key - Field name
+   * @returns {*} - Data associated with the field
    */
   getMetadataField(key: string): any {
     return this.metadata[key];
   }
 
-  // To get the final data
   /**
-   * Description placeholder
+   * Returns the final Metadata in a single javascript object. Bundles together the author and variables
+   * together in a list rather than object compliant with Psych-DS standards.
    *
-   * @returns {{}}
+   * @returns {{}} - Final Metadata object
    */
   getMetadata(): {} {
     const res = this.metadata;
@@ -90,17 +91,17 @@ export class JsPsychMetadata {
     return res;
   }
 
-  // may need to include, missing documentation in the document
   /**
-   * Description placeholder
+   * Method that creates an author. This method can also be used to overwrite existing authors
+   * with the same name in order to update fields.
    *
    * @param {{
    *     type?: string;
    *     name: string;
-   *     givenName?: string; // required
+   *     givenName?: string;
    *     familyName?: string;
-   *     identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
-   *   }} fields
+   *     identifier?: string;
+   *   }} fields - All the required or possible fields associated with listing an author according to Psych-DS standards.
    */
   setAuthor(fields: {
     type?: string;
@@ -113,18 +114,18 @@ export class JsPsychMetadata {
   }
 
   /**
-   * Description placeholder
+   * Method that fetches an author object allowing user to update (in existing workflow should not be necessary).
    *
-   * @param {string} name
-   * @returns {{}}
+   * @param {string} name - Name of author to be used as key.
+   * @returns {{}} - Object with author information.
    */
   getAuthor(name: string): {} {
     return this.authors.getAuthor(name);
   }
 
-  // Simple set will overwrite, get structure so that can get fields and return
   /**
-   * Description placeholder
+   * Method that creates a variable. This method can also be used to overwrite variables with the same name
+   * as a way to update fields.
    *
    * @param {{
    *     type?: string;
@@ -140,7 +141,7 @@ export class JsPsychMetadata {
    *     naValue?: string;
    *     alternateName?: string;
    *     privacy?: string;
-   *   }} fields
+   *   }} fields - Fields associated with the current Psych-DS standard.
    */
   setVariable(fields: {
     type?: string;
@@ -160,23 +161,24 @@ export class JsPsychMetadata {
     this.variables.setVariable(fields);
   }
 
-  // saving a variable
   /**
-   * Description placeholder
+   * Allows you to access a variable's information by using the name of the variable. Can
+   * be used to update fields within a variable, but suggest using updateVariable() to prevent errors.
    *
-   * @param {string} name
-   * @returns {{}}
+   * @param {string} name - Name of variable to be accessed
+   * @returns {{}} - Returns object of fields
    */
   getVariable(name: string): {} {
     return this.variables.getVariable(name);
   }
 
   /**
-   * Description placeholder
+   * Allows you to update a variable or add a value in the case of updating values. In other situations will
+   * replace the existing value with the new value.
    *
-   * @param {string} var_name
-   * @param {string} field_name
-   * @param {(string | boolean | number | {})} added_value
+   * @param {string} var_name - Name of variable to be updated.
+   * @param {string} field_name - Name of field to be updated.
+   * @param {(string | boolean | number | {})} added_value - Value to be used in the update.
    */
   updateVariable(
     var_name: string,
@@ -187,26 +189,27 @@ export class JsPsychMetadata {
   }
 
   /**
-   * Description placeholder
+   * Allows you to delete a variable by key/name.
    *
-   * @param {string} var_name
+   * @param {string} var_name - Name of variable to be deleted.
    */
   deleteVariable(var_name: string): void {
     this.variables.deleteVariable(var_name);
   }
 
   /**
-   * Description placeholder
+   * Gets a list of all the variable names.
    *
-   * @returns {string[]}
+   * @returns {string[]} - List of variable string names.
    */
   getVariableNames(): string[] {
     return this.variables.getVariableNames();
   }
 
-  // display at the end of the experiment
   /**
-   * Description placeholder
+   * Method that allows you to display metadata at the end of an experiment.
+   *
+   * @param {string} [elementId="jspsych-metadata-display"] - Id for how to style the metadata. Defaults to default styling.
    */
   displayMetadata(elementId = "jspsych-metadata-display") {
     const metadata_string = JSON.stringify(this.getMetadata(), null, 2);
@@ -215,9 +218,9 @@ export class JsPsychMetadata {
     document.getElementById(elementId).textContent = metadata_string;
   }
 
-  // Method to save metadata as JSON file
   /**
-   * Description placeholder
+   * Method that begins a download for the dataset_dea.cription.json at the end of experiment.
+   * Allows you to download the metadat.
    */
   saveAsJsonFile(): void {
     const jsonString = JSON.stringify(this.getMetadata(), null, 2);
@@ -232,53 +235,5 @@ export class JsPsychMetadata {
     document.body.removeChild(a);
 
     URL.revokeObjectURL(url);
-  }
-
-  // method testing different get and set methods and generating fake metadata
-  /**
-   * Description placeholder
-   */
-  generateFakeMetadata(): void {
-    const author1 = {
-      name: "John Cena",
-    };
-    this.setAuthor(author1);
-
-    const author2 = {
-      name: "Wreck-it-Ralph",
-      identifier: "www.google.com",
-    };
-    this.setAuthor(author2);
-
-    const prop_value_var = {
-      type: "PropertyValue",
-      name: "Response Time (rt)",
-      description: "Time participant takes to respond to a stimulus",
-      value: "numeric",
-      minValue: 0,
-      maxValue: 10000,
-    };
-    this.setVariable(prop_value_var);
-
-    const stimulus_var = {
-      type: "PropertyValue",
-      name: "Stimulus",
-      description: {
-        "<p style='text-align:center; font-size:80px;'>+</p>":
-          "This is a fixation screen that helps concentrate focus",
-        '["img/happy_face_1.jpg", "img/happy_face_2.jpg","img/happy_face_3.jpg"]':
-          "These are different pictures of peoples faces that we using for the study",
-      },
-      value: "null",
-      levels: [
-        "<p style='text-align:center; font-size:80px;'>+</p>",
-        "img/happy_face_1.jpg",
-        "img/happy_face_2.jpg",
-        "img/happy_face_3.jpg",
-      ],
-    };
-    this.setVariable(stimulus_var);
-
-    return;
   }
 }

@@ -959,9 +959,9 @@ export class JsPsych {
   /**
    * Method that clears the screen, printing data and metadata allowing the researcher to view both post-trial.
    *
-   * @param {string} [dataFormat="json"]
-   * @param {string} [dataElementId="jspsych-data-display"]
-   * @param {string} [metadataElementId="jspsych-metadata-display"]
+   * @param {string} [dataFormat="json"] - The format in which data should be displayed. Defaults to "json".
+   * @param {string} [dataElementId="jspsych-data-display"] - The ID of the HTML element where the data will be displayed.
+   * @param {string} [metadataElementId="jspsych-metadata-display"] - The ID of the HTML element where the metadata will be displayed.
    */
   displayDataAndMetadata(
     dataFormat = "json",

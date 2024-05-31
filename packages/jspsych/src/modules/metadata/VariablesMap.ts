@@ -1,11 +1,33 @@
+/**
+ * Custom class that stores and handles the storage, update and retrieval of variable metadata.
+ *
+ * @export
+ * @class VariablesMap
+ * @typedef {VariablesMap}
+ */
 export class VariablesMap {
+  /**
+   * Field that holds a map of the current variables allowing for fast look-up.
+   *
+   * @private
+   * @type {{}}
+   */
   private variables: {};
 
+  /**
+   *  Creates the VariablesMap bycalling generateDefaultVariables() method to
+   * generate the basic metadata common to every dataset_description.json file.
+   *
+   * @constructor
+   */
   constructor() {
     this.generateDefaultVariables();
   }
 
-  // trial type, trial index, time elapsed, interal typenode id - can add more below
+  /**
+   * Generates the default variables shared between every JsPsych experiment and fills in
+   * with filler descriptions for reseachers to change.
+   */
   generateDefaultVariables(): void {
     this.variables = {};
 
@@ -50,6 +72,11 @@ export class VariablesMap {
     this.setVariable(internal_type_node_id);
   }
 
+  /**
+   * Returns a list of the variables instead of an object according to the Psych-DS format.
+   *
+   * @returns {{}[]} - The list of variables represented as objects.
+   */
   getList(): {}[] {
     var var_list = [];
     for (const key of Object.keys(this.variables)) {
@@ -58,7 +85,27 @@ export class VariablesMap {
     return var_list;
   }
 
-  // could replace this method and instead pass in fields directly, would make it faster
+  /**
+   * Allows user to set a variable and includes all the fields that are possible according to
+   * Psych-DS guidelines. Only requires the name field which it uses a key to map to the variable.
+   * Can also be used to overwrite existing variables if they have the same name.
+   *
+   * @param {{
+   *     type?: string;
+   *     name: string; // required
+   *     description?: string | {};
+   *     value?: string; // string, boolean, or number
+   *     identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
+   *     minValue?: number;
+   *     maxValue?: number;
+   *     levels?: string[] | []; // technically property values in the other one but not sure how to format it
+   *     levelsOrdered?: boolean;
+   *     na?: boolean;
+   *     naValue?: string;
+   *     alternateName?: string;
+   *     privacy?: string;
+   *   }} fields - Input fields as specified by Psych-DS standards.
+   */
   setVariable(fields: {
     type?: string;
     name: string; // required
@@ -86,10 +133,22 @@ export class VariablesMap {
     this.variables[new_variable.name] = new_variable;
   }
 
+  /**
+   * Allows you to get information for a single variable returning empty dict if it doesn't exist.
+   * Allows you to update fields but not recommended in favor of updateVariable.
+   *
+   * @param {string} name - Name of variable to map to.
+   * @returns {{}} - Variable information or empty dict if doesn't exist
+   */
   getVariable(name: string): {} {
     return this.variables[name] || {};
   }
 
+  /**
+   * Method that gets a list of the names of variables.
+   *
+   * @returns {string[]} - String list containing names of existing variables.
+   */
   getVariableNames(): string[] {
     var var_list = [];
     for (const key of Object.keys(this.variables)) {
@@ -99,7 +158,15 @@ export class VariablesMap {
     return var_list;
   }
 
-  // levels, description
+  /**
+   * Allows you to update a variable or add a value in the case of updating values. In other situations will
+   * replace the existing value with the new value. Has special cases and logic for levels and names making it
+   * easier to update variable values.
+   *
+   * @param {string} var_name
+   * @param {string} field_name
+   * @param {(string | boolean | number | {})} added_value
+   */
   updateVariable(
     var_name: string,
     field_name: string,
@@ -145,31 +212,16 @@ export class VariablesMap {
     }
   }
 
+  /**
+   * Allows you to delete a variable by key/name. Returns console error if not found.
+   *
+   * @param {string} var_name - Name of variable to be deleted.
+   */
   deleteVariable(var_name: string): void {
     if (var_name in this.variables) {
       delete this.variables[var_name];
     } else {
       console.error(`Variable "${var_name}" does not exist.`);
     }
-  }
-
-  updateVariableTest(): void {
-    // editing new variables
-    const test_var = {
-      type: "PropertyValue",
-      name: "Test",
-      description: "Random description",
-      value: "numeric",
-    };
-    this.setVariable(test_var);
-    this.updateVariable("Test", "levels", "<p>hello world</p>");
-    this.updateVariable("Test", "levels", "<h1>BOOOOOOO</h1>");
-    this.updateVariable("Test", "levels", "<p>......spot me......</p>");
-
-    this.updateVariable("Test", "name", "NewTest");
-    // jsPsych.metadata.deleteVariable("Test");
-    // jsPsych.metadata.deleteVariable("NewTest");
-    this.updateVariable("NewTest", "minValue", 10);
-    this.updateVariable("NewTest", "description", "this is a new description");
   }
 }
