@@ -42,7 +42,7 @@
     "@types/gulp": "4.0.10",
     "@types/jest": "29.2.3",
     "alias-hq": "github:bjoluc/alias-hq#fix-jest-plugin",
-    "canvas": "2.10.2",
+    "canvas": "2.11.2",
     "esbuild": "0.15.14",
     "gulp": "4.0.2",
     "gulp-cli": "2.3.0",
