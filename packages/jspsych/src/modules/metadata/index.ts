@@ -52,6 +52,8 @@ export class JsPsychMetadata {
     this.metadata = {};
     this.setMetadataField("name", "title");
     this.setMetadataField("schemaVersion", "Psych-DS 0.4.0");
+    this.setMetadataField("@context", "https://schema.org");
+    this.setMetadataField("@type", "Dataset");
     this.setMetadataField("description", "Dataset generated using JsPsych");
     this.authors = new AuthorsMap();
     this.variables = new VariablesMap();
@@ -148,7 +150,7 @@ export class JsPsychMetadata {
     name: string; // required
     description?: string | {};
     value?: string; // string, boolean, or number
-    identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
+    identifier?: string; // identifier that distinguish across dataset (URL)
     minValue?: number;
     maxValue?: number;
     levels?: string[] | []; // technically property values in the other one but not sure how to format it
