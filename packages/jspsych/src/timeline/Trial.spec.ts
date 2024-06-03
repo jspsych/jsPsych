@@ -462,6 +462,21 @@ describe("Trial", () => {
         );
       });
 
+      it("allows null values for parameters with a non-null default value", async () => {
+        TestPlugin.setParameterInfos({
+          allowedNullString: { type: ParameterType.STRING, default: "foo" },
+        });
+
+        const trial = createTrial({ type: TestPlugin, allowedNullString: null });
+        await trial.run();
+
+        expect(trial.pluginInstance.trial).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({ allowedNullString: null }),
+          expect.anything()
+        );
+      });
+
       describe("with missing required parameters", () => {
         it("errors on missing simple parameters", async () => {
           TestPlugin.setParameterInfos({ requiredString: { type: ParameterType.STRING } });
