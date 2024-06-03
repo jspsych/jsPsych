@@ -55,6 +55,11 @@ export interface TrialDescription extends Record<string, any> {
   /** https://www.jspsych.org/latest/overview/extensions/ */
   extensions?: Parameter<TrialExtensionsConfiguration>;
 
+  /**
+   * Whether to record the data of this trial. Defaults to `true`.
+   */
+  record_data?: Parameter<boolean>;
+
   // Events
 
   /** https://www.jspsych.org/latest/overview/events/#on_start-trial */
@@ -80,6 +85,8 @@ export type TimelineArray = Array<TimelineDescription | TrialDescription | Timel
 export interface TimelineDescription extends Record<string, any> {
   timeline: TimelineArray;
   timeline_variables?: Record<string, any>[];
+
+  name?: string;
 
   // Control flow
 
@@ -112,6 +119,7 @@ export interface TimelineDescription extends Record<string, any> {
 export const timelineDescriptionKeys = [
   "timeline",
   "timeline_variables",
+  "name",
   "repetitions",
   "loop_function",
   "conditional_function",

@@ -208,6 +208,18 @@ export class JsPsych {
     }
   }
 
+  /**
+   * Aborts a named timeline. The timeline must be currently running in order to abort it.
+   *
+   * @param name The name of the timeline to abort. Timelines can be given names by setting the `name` parameter in the description of the timeline.
+   */
+  abortTimelineByName(name: string): void {
+    const timeline = this.timeline?.getActiveTimelineByName(name);
+    if (timeline) {
+      timeline.abort();
+    }
+  }
+
   getCurrentTrial() {
     const activeNode = this.timeline?.getLatestNode();
     if (activeNode instanceof Trial) {
@@ -345,14 +357,20 @@ export class JsPsych {
     },
 
     onTrialResultAvailable: (trial: Trial) => {
-      trial.getResult().time_elapsed = this.getTotalTime();
-      this.data.write(trial);
+      const result = trial.getResult();
+      if (result) {
+        result.time_elapsed = this.getTotalTime();
+        this.data.write(trial);
+      }
     },
 
     onTrialFinished: (trial: Trial) => {
       const result = trial.getResult();
       this.options.on_trial_finish(result);
-      this.options.on_data_update(result);
+
+      if (result) {
+        this.options.on_data_update(result);
+      }
 
       if (this.progressBar && this.options.auto_update_progress_bar) {
         this.progressBar.progress = this.timeline.getNaiveProgress();

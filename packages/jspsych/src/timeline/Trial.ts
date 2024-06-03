@@ -232,7 +232,7 @@ export class Trial extends TimelineNode {
     );
     Object.assign(this.result, extensionResults);
 
-    this.runParameterCallback("on_finish", this.getResult());
+    await Promise.resolve(this.runParameterCallback("on_finish", this.getResult()));
 
     this.dependencies.onTrialFinished(this);
   }
@@ -299,14 +299,16 @@ export class Trial extends TimelineNode {
   }
 
   /**
-   * Returns the result object of this trial or `undefined` if the result is not yet known.
+   * Returns the result object of this trial or `undefined` if the result is not yet known or the
+   * `record_data` trial parameter is `false`.
    */
   public getResult() {
-    return this.result;
+    return this.getParameterValue("record_data") === false ? undefined : this.result;
   }
 
   public getResults() {
-    return this.result ? [this.result] : [];
+    const result = this.getResult();
+    return result ? [result] : [];
   }
 
   /**
@@ -377,5 +379,12 @@ export class Trial extends TimelineNode {
 
   public getLatestNode() {
     return this;
+  }
+
+  public getActiveTimelineByName(name: string): Timeline | undefined {
+    // This returns undefined because the function is looking
+    // for a timeline. If we get to this point, then none
+    // of the parent nodes match the name.
+    return undefined;
   }
 }

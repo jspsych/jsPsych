@@ -337,7 +337,7 @@ describe("conditional function", () => {
   });
 });
 
-describe("endCurrentTimeline", () => {
+describe("abortCurrentTimeline", () => {
   test("stops the current timeline, skipping to the end after the trial completes", async () => {
     const jsPsych = initJsPsych();
     const { getHTML } = await startTimeline(
@@ -416,6 +416,84 @@ describe("endCurrentTimeline", () => {
 
     expect(getHTML()).toMatch("woo");
 
+    await pressKey("a");
+  });
+});
+
+describe("abortTimelineByName", () => {
+  test("stops the timeline with the given name, skipping to the end after the trial completes", async () => {
+    const jsPsych = initJsPsych();
+    const { getHTML } = await startTimeline(
+      [
+        {
+          timeline: [
+            {
+              type: htmlKeyboardResponse,
+              stimulus: "foo",
+              on_finish: () => {
+                jsPsych.abortTimelineByName("timeline");
+              },
+            },
+            {
+              type: htmlKeyboardResponse,
+              stimulus: "bar",
+            },
+          ],
+          name: "timeline",
+        },
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "woo",
+        },
+      ],
+      jsPsych
+    );
+
+    expect(getHTML()).toMatch("foo");
+    await pressKey("a");
+    expect(getHTML()).toMatch("woo");
+    await pressKey("a");
+  });
+
+  test("works inside nested timelines", async () => {
+    const jsPsych = initJsPsych();
+    const { getHTML } = await startTimeline(
+      [
+        {
+          timeline: [
+            {
+              timeline: [
+                {
+                  type: htmlKeyboardResponse,
+                  stimulus: "foo",
+                  on_finish: () => {
+                    jsPsych.abortTimelineByName("timeline");
+                  },
+                },
+                {
+                  type: htmlKeyboardResponse,
+                  stimulus: "skip me!",
+                },
+              ],
+            },
+            {
+              type: htmlKeyboardResponse,
+              stimulus: "skip me too!",
+            },
+          ],
+          name: "timeline",
+        },
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "woo",
+        },
+      ],
+      jsPsych
+    );
+
+    expect(getHTML()).toMatch("foo");
+    await pressKey("a");
+    expect(getHTML()).toMatch("woo");
     await pressKey("a");
   });
 });

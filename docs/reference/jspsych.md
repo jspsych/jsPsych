@@ -26,7 +26,7 @@ The settings object can contain several parameters. None of the parameters are r
 | on_close                   | function | Function to execute when the user leaves the page. Can be used, for example, to save data before the page is closed. |
 | exclusions                 | object   | Specifies restrictions on the browser the participant can use to complete the experiment. See list of options below. *This feature is deprecated as of v7.1 and will be removed in v8.0. The [browser-check plugin](../plugins/browser-check.md) is an improved way to handle exclusions.* |
 | show_progress_bar          | boolean  | If `true`, then [a progress bar](../overview/progress-bar.md) is shown at the top of the page. Default is `false`. |
-| message_progress_bar       | string   | Message to display next to the progress bar. The default is 'Completion Progress'. |
+| message_progress_bar       | string or function   | Message to display next to the progress bar or a function that returns that message. The default is 'Completion Progress'. If `message_progress_bar` is a function, it receives one single argument which is the current progress, ranging from 0 to 1; the function gets called on every progress bar update automatically. |
 | auto_update_progress_bar   | boolean  | If true, then the progress bar at the top of the page will automatically update as every top-level timeline or trial is completed. |
 | use_webaudio               | boolean  | If false, then jsPsych will not attempt to use the WebAudio API for audio playback. Instead, HTML5 Audio objects will be used. The WebAudio API offers more precise control over the timing of audio events, and should be used when possible. The default value is `true`. |
 | default_iti                | numeric  | The default inter-trial interval in ms. The default value if none is specified is 0ms. |
@@ -167,6 +167,74 @@ var trial = {
     }
   }
 }
+```
+
+---
+## jsPsych.abortTimelineByName
+
+```javascript
+jsPsych.abortTimelineByName()
+```
+
+### Parameters
+
+| Parameter       | Type     | Description                              |
+| --------------- | -------- | ---------------------------------------- |
+| name | string   | The name of the timeline to abort. |
+
+### Return value
+
+None.
+
+### Description
+
+Ends the currently active timeline that matches the `name` parameter. This can be used to control which level is aborted in a nested timeline structure.
+
+### Example
+
+#### Abort a procedure if an incorrect response is given.
+
+```javascript
+const fixation = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: '<p>+</p>',
+  choices: "NO_KEYS",
+  trial_duration: 1000
+}
+
+const test = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: jsPsych.timelineVariable('stimulus'),
+  choices: ['y', 'n'],
+  on_finish: function(data){
+    if(jsPsych.pluginAPI.compareKeys(data.response, "n")){
+      jsPsych.abortTimelineByName('memory_test');
+    }
+  }
+}
+
+const memoryResponseProcedure = {
+  timeline: [fixation, test]
+}
+
+// the variable `encode` is not shown, but imagine a trial that displays
+// some stimulus to remember.
+const memoryEncodeProcedure = {
+  timeline: [fixation, encode]
+}
+
+const memoryTestProcedure = {
+  timeline: [memoryEncodeProcedure, memoryResponseProcedure]
+  name: 'memory_test',
+  timeline_variables: [
+    {stimulus: 'image1.png'},
+    {stimulus: 'image2.png'},
+    {stimulus: 'image3.png'},
+    {stimulus: 'image4.png'}
+  ]
+}
+
+
 ```
 
 ---
