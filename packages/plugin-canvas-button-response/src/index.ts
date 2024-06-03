@@ -108,6 +108,7 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
     canvasElement.id = "jspsych-canvas-stimulus";
     canvasElement.height = trial.canvas_size[0];
     canvasElement.width = trial.canvas_size[1];
+    canvasElement.style.display = "block";
     stimulusElement.appendChild(canvasElement);
 
     display_element.appendChild(stimulusElement);
