@@ -108,6 +108,18 @@ const info = <const>{
       default: null,
     },
   },
+  metadata_description: {
+    success:
+      "If true, then all files loaded successfully within the max_load_time. If false, then one or more file requests returned a failure and/or the file loading did not complete within the max_load_time duration.",
+    timeout:
+      "If true, then the files did not finish loading within the max_load_time duration. If false, then the file loading did not timeout. Note that when the preload trial does not timeout (timeout: false), it is still possible for loading to fail (success: false). This happens if one or more files fails to load and all file requests trigger either a success or failure event before the max_load_time duration.",
+    failed_images:
+      "One or more image file paths that produced a loading failure before the trial ended.",
+    failed_audio:
+      "One or more audio file paths that produced a loading failure before the trial ended.",
+    failed_video:
+      "One or more video file paths that produced a loading failure before the trial ended.",
+  },
 };
 
 type Info = typeof info;

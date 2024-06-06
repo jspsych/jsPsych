@@ -1013,10 +1013,17 @@ export class JsPsych {
       // value == value that is used to add to field, only change description field
 
       // determines what are the fields to use from the generateMetadataPipeline
-      if (key === "stimulus") {
-        this.metadata.updateVariable("stimulus", "description", { [pluginName]: value });
-      } else if (key === "response") {
-        this.metadata.updateVariable("response", "description", { [pluginName]: value });
+      if (key === "stimulus" || key === "response") {
+        this.metadata.updateVariable(key, "description", { [pluginName]: value });
+      } else if (
+        key === "rt" ||
+        key === "success" ||
+        key === "timeout" ||
+        key === "failed_images" ||
+        key === "failed_audio" ||
+        key === "failed_video"
+      ) {
+        this.metadata.updateVariable(key, "description", value);
       }
     });
   }

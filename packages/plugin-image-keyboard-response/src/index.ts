@@ -68,8 +68,8 @@ const info = <const>{
     },
   },
   metadata_description: {
-    htmlKeyboard: "imagekeyboardresponse",
     stimulus: "The path of the image that was displayed.",
+    rt: "The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response.",
     response: "Indicates which key the participant pressed.",
   },
 };
