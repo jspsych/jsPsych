@@ -1005,8 +1005,18 @@ export class JsPsych {
   // stimulus and response are two fo the ones that should be added as a dict
   private processPlugin(plugin: {}): void {
     const pluginType = plugin["type"];
-    // const pluginDefaultMetadata = pluginType.getDefaultMetadata();
-    // console.log(pluginType);
-    console.log(pluginType.info.description);
+    const pluginName = pluginType.info.name;
+    const description_fields = pluginType.info.description;
+
+    Object.entries(description_fields).forEach(([key, value]) => {
+      // key == variable name
+      // value == value that is used to add to field, only change description field
+
+      if (key === "stimulus") {
+        this.metadata.updateVariable("stimulus", "description", { [pluginName]: value });
+      } else if (key === "response") {
+        this.metadata.updateVariable("response", "description", { [pluginName]: value });
+      }
+    });
   }
 }

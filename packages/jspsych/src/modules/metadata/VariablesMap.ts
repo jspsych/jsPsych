@@ -181,12 +181,20 @@ export class VariablesMap {
     }
 
     if (field_name === "levels") {
+      // pushes items to array
       if (!Array.isArray(updated_var["levels"])) {
         updated_var["levels"] = [];
       }
       updated_var["levels"].push(added_value);
-    } else if (var_name === "response" || var_name === "stimulus") {
-      // fill this in with logic to update the maps for the description
+    } else if (
+      field_name === "description" &&
+      (var_name === "response" || var_name === "stimulus")
+    ) {
+      // adds fields to description
+      if (typeof updated_var["description"] !== "object") {
+        updated_var["description"] = {};
+      }
+      Object.assign(updated_var["description"], added_value); // Assuming added_value is { chatplugin: "response that user input" }
     } else if (field_name === "name") {
       const old_name = updated_var["name"];
       updated_var["name"] = added_value;
