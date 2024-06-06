@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <script src="../../packages/plugin-survey/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+    <link rel="stylesheet" href="../../packages/plugin-survey/css/survey.css">
+    <link rel="stylesheet" href="docs-demo.css" type="text/css">
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    const survey_function = (survey) => {
+      // If it's the question page, then hide the buttons and move on automatically.
+      // If it's the feedback page, then show the navigation buttons.
+      function updateNavButtons(sender, options) {
+        if (options.newCurrentPage.getPropertyValue("name") === "feedback") {
+          survey.showNavigationButtons = "bottom";
+        } else {
+          survey.showNavigationButtons = "none";
+        }
+      }
+      survey.onCurrentPageChanging.add(updateNavButtons);
+    }
+
+    const trial = {
+      type: jsPsychSurvey,
+      survey_json: {
+        showQuestionNumbers: false,
+        title: 'Conditional question visibility.',
+        showNavigationButtons: "none",
+        goNextPageAutomatic: true,
+        allowCompleteSurveyAutomatic: true,
+        pages: [{
+          name: 'question',
+          elements: [
+            {
+              type: 'radiogroup',
+              title: 'During the experiment, are you allowed to write things down on paper to help you?',
+              choices: ["Yes", "No"],
+              name: "WriteOK",
+              isRequired: true
+            }
+          ],
+        }, {
+          name: 'feedback',
+          elements: [
+            {
+              type: 'html',
+              name: 'incorrect',
+              visibleIf: '{WriteOK} = "Yes"',
+              html: '<h4>That response was incorrect.</h4><p>Please return to the previous page and try again.</p>'
+            },
+            {
+              type: 'html',
+              name: 'correct',
+              visibleIf: '{WriteOK} == "No"',
+              html: '<h4>Congratulations!</h4>'
+            }
+          ]
+        }]
+      },
+      survey_function: survey_function
+    };
+
+    const timeline = [trial];
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>

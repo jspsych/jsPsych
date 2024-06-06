@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.2.1"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+    <style>
+      html,
+      body {
+        background-color: white;
+      }
+      .jspsych-btn {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    const enter_fullscreen = {
+      type: jsPsychFullscreen,
+      fullscreen_mode: true
+    }
+
+    const trial_in_fullscreen = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: 'This trial will be in fullscreen mode.',
+      choices: ['Continue']
+    }
+
+    const exit_fullscreen = {
+      type: jsPsychFullscreen,
+      fullscreen_mode: false,
+      delay_after: 0
+    }
+
+    const trial_after_fullscreen = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: 'This trial will NOT be in fullscreen mode.',
+      choices: ['Continue']
+    }
+
+    const timeline = [enter_fullscreen, trial_in_fullscreen, exit_fullscreen, trial_after_fullscreen];
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <script src="../../packages/plugin-survey/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+    <link rel="stylesheet" href="../../packages/plugin-survey/css/survey.css">
+    <link rel="stylesheet" href="docs-demo.css" type="text/css">
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    const trial = {
+      type: jsPsychSurvey,
+      survey_json: {
+        showQuestionNumbers: false,
+        title: 'My questionnaire',
+        completeText: 'Done!',
+        pageNextText: 'Continue',
+        pagePrevText: 'Previous',
+        pages: [
+          {
+            name: 'page1',
+            elements: [
+                {
+                  type: 'text',
+                  title: 'Where were you born?', 
+                  placeholder: 'City, State/Region, Country',
+                  name: 'birthplace', 
+                  size: 30,
+                  isRequired: true,
+                }, 
+                {
+                  type: 'text',
+                  title: 'How old are you?', 
+                  name: 'age', 
+                  isRequired: false,
+                  inputType: 'number',
+                  min: 0,
+                  max: 100,
+                  defaultValue: 0
+                }
+              ]
+          },
+          {
+            name: 'page2',
+            elements: [
+              {
+                type: 'radiogroup',
+                title: "What's your favorite color?", 
+                choices: ['Blue','Yellow','Pink','Teal','Orange','Lime green'],
+                showNoneItem: true,
+                showOtherItem: true,
+                colCount: 0,
+                name: 'FavColor',
+              }, 
+              {
+                type: 'checkbox',
+                title: 'Which of these animals do you like? Select all that apply.', 
+                choices: ['Lion','Squirrel','Badger','Whale', 'Turtle'],
+                choicesOrder: 'random',
+                colCount: 0,
+                name: 'FavAnimals', 
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    const timeline = [trial];
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>

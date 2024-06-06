@@ -10,5 +10,10 @@
     "version": "6.3",
     "title": "v6",
     "aliases": []
+  },
+  {
+    "version": "v7",
+    "title": "v7",
+    "aliases": []
   }
 ]

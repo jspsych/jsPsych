@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <!-- <script src="../../packages/extension-record-video/dist/index.browser.js"></script> -->
+    <script src="https://unpkg.com/@jspsych/extension-record-video@1.0.2"></script>
+    <!-- <script src="../../packages/plugin-initialize-camera/dist/index.browser.js"></script> -->
+    <script src="https://unpkg.com/@jspsych/plugin-initialize-camera@1.0.2"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+    <link rel="stylesheet" href="docs-demo.css" type="text/css">
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych({
+      extensions: [
+        { type: jsPsychExtensionRecordVideo}
+      ]
+    });
+
+    const init_camera = {
+      type: jsPsychInitializeCamera
+    };
+
+    const trial = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: `<div id="target" style="width:250px; height: 250px; background-color: #333; position: relative; margin: 2em auto;">
+          <div class="orbit" style="width:25px; height:25px; border-radius:25px;background-color: #f00; position: absolute; top:calc(50% - 12px); left:calc(50% - 12px);"></div>
+        </div>
+        <style>
+          .orbit {
+            transform: translateX(100px);
+            animation: orbit 4s infinite;
+          }
+          @keyframes orbit {
+            0% {
+              transform: rotate(0deg) translateX(100px);
+            }
+            100% {
+              transform: rotate(360deg) translateX(100px);
+            }
+          }
+        </style>`,
+      choices: ['Done'],
+      prompt: "<p>Video is recording. Click done after a few seconds.</p>",
+      extensions: [
+        {type: jsPsychExtensionRecordVideo}
+      ]
+    };
+
+    const timeline = [init_camera, trial];
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>

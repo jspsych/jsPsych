@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-call-function@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+    <link rel="stylesheet" href="docs-demo.css" type="text/css" />
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    const trial = {
+      type: jsPsychCallFunction,
+      async: true,
+      func: function(done){
+        // generate a delay between 1500 and 3000 milliseconds to simulate
+        // waiting for an event to finish after an unknown duration,
+        // then finish the trial
+        const rand_delay = (Math.floor(Math.random() * (3000 - 1500 + 1) + 1500));
+        jsPsych.pluginAPI.setTimeout(function() {
+          // end the trial and save the delay duration to the data
+          done(rand_delay.toString()+"ms");
+        }, rand_delay)
+      }
+    };
+
+    const timeline = [trial];
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>

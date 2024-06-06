@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-browser-check@1.0.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    const trial = {
+      type: jsPsychBrowserCheck,
+      inclusion_function: (data) => {
+        return data.browser == 'chrome' && data.mobile === false
+      },
+      exclusion_message: (data) => {
+        if(data.mobile){
+          return '<p>You must use a desktop/laptop computer to participate in this experiment.</p>';
+        } else if(data.browser !== 'chrome'){
+          return '<p>You must use Chrome as your browser to complete this experiment.</p>'
+        }
+      }
+    };
+
+    const timeline = [trial];
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>

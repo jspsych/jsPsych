@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-canvas-button-response@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+    <link rel="stylesheet" href="docs-demo.css" type="text/css" />
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    function filledCirc(canvas, radius, color) {
+      var ctx = canvas.getContext("2d");
+      ctx.beginPath();
+      ctx.arc(150, 150, radius, 0, 2 * Math.PI);
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+
+    // To use the canvas stimulus function with timeline variables,
+    // the jsPsych.timelineVariable() function can be used inside your stimulus function.
+    // In addition, this code demonstrates how to check whether participants' answers were correct or not.
+    const circle_procedure = {
+      timeline: [{
+        type: jsPsychCanvasButtonResponse,
+        stimulus: function(c) {
+            filledCirc(c, jsPsych.timelineVariable('radius'), jsPsych.timelineVariable('color'));
+        },
+        canvas_size: [300, 300],
+        choices: ['Red', 'Green', 'Blue'],
+        prompt: '<p>What color is the circle?</p>',
+        data: {
+          radius: jsPsych.timelineVariable('radius'),
+          color: jsPsych.timelineVariable('color'),
+          correct_response: jsPsych.timelineVariable('correct_response')
+        },
+        on_finish: function(data){
+          data.correct = (data.response == data.correct_response);
+        }
+      }],
+      timeline_variables: [
+        {radius: 80, color: 'red', correct_response: 0},
+        {radius: 100, color: 'green', correct_response: 1},
+        {radius: 50, color: 'blue', correct_response: 2}
+      ],
+      randomize_order: true
+    };
+
+    const timeline = [circle_procedure];
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>

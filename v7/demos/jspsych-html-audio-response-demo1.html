@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/jspsych@7.3.4"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-audio-response@1.0.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-initialize-microphone@1.0.3"></script>
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css">
+  <style>
+    .jspsych-btn {margin-bottom: 10px;}
+  </style>
+</head>
+<body></body>
+<script>
+
+  var jsPsych = initJsPsych();
+
+  var start = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: '',
+    choices: ['Run demo']
+  };
+
+  var show_data = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: function() {
+      var trial_data = jsPsych.data.getLastTrialData().values();
+      var trial_json = JSON.stringify(trial_data, null, 2);
+      return `<p style="margin-bottom:0px;"><strong>Trial data:</strong></p>
+        <pre style="margin-top:0px;text-align:left;">${trial_json}</pre>`;
+    },
+    choices: ['Repeat demo']
+  };
+
+  var init_mic = {
+    type: jsPsychInitializeMicrophone
+  }
+
+  var trial = {
+    type: jsPsychHtmlAudioResponse,
+    stimulus: `
+      <p style="font-size:48px; color:red;">GREEN</p>
+      <p>Speak the color of the ink.</p>`,
+    recording_duration: 3500
+  };
+
+  var trial_loop = {
+    timeline: [trial, show_data],
+    loop_function: function() {
+      return true;
+    }
+  };
+
+  if (typeof jsPsych !== "undefined") {
+    jsPsych.run([start, init_mic, trial_loop]);
+  } else {
+    document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+  }
+
+</script>
+
+</html>

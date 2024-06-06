@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-visual-search-circle@1.2.1"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+    <link rel="stylesheet" href="docs-demo.css" type="text/css">
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    const preload = {
+      type: jsPsychPreload,
+      images: ['img/backwardN.gif', 'img/normalN.gif', 'img/fixation.gif']
+    }
+
+    const instructions = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: `<p>Press J if there is a backwards N.</p>
+        <p>Press F if all the Ns are in the normal orientation.</p>`,
+      choices: ['Continue']
+    }
+
+    const trial = {
+      type: jsPsychVisualSearchCircle,
+      target: 'img/backwardN.gif',
+      foil: 'img/normalN.gif',
+      fixation_image: 'img/fixation.gif',
+      target_present: true,
+      set_size: 4
+    }
+
+    const timeline = [instructions, trial];
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline, [preload]));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>

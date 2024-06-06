@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-serial-reaction-time@1.1.4"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+    <link rel="stylesheet" href="docs-demo.css" type="text/css" />
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    const instructions = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: '<p>Use the S, F, H, and K keys to respond.</p>',
+      choices: ['Continue']
+    }
+
+    const grid = [
+      [1,1,1,1]
+    ]
+
+    const response_map = [
+      ['s','f','h','k']
+    ]
+
+    const trial_1 = {
+      type: jsPsychSerialReactionTime,
+      grid: grid,
+      choices: response_map,
+      target: [0,0]
+    }
+    const trial_2 = {
+      type: jsPsychSerialReactionTime,
+      grid: grid,
+      choices: response_map,
+      target: [0,1]
+    }
+    const trial_3 = {
+      type: jsPsychSerialReactionTime,
+      grid: grid,
+      choices: response_map,
+      target: [0,2]
+    }
+    const trial_4 = {
+      type: jsPsychSerialReactionTime,
+      grid: grid,
+      choices: response_map,
+      target: [0,3]
+    }
+
+    const timeline = [instructions, trial_1, trial_2, trial_3, trial_4];
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>

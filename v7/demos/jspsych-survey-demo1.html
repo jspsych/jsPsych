@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <script src="../../packages/plugin-survey/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+    <link rel="stylesheet" href="../../packages/plugin-survey/css/survey.css">
+    <link rel="stylesheet" href="docs-demo.css" type="text/css">
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    const trial = {
+      type: jsPsychSurvey,
+      survey_json: {
+        showQuestionNumbers: false,
+        elements:
+          [
+            {
+              type: 'radiogroup',
+              title: "Which of the following do you like the most?", 
+              name: 'vegetablesLike', 
+              choices: ['Tomato', 'Cucumber', 'Eggplant', 'Corn', 'Peas', 'Broccoli']
+            }, 
+            {
+              type: 'checkbox',
+              title: "Which of the following do you like?", 
+              name: 'fruitLike', 
+              description: "You can select as many as you want.",
+              choices: ['Apple', 'Banana', 'Orange', 'Grape', 'Strawberry', 'Kiwi', 'Mango'], 
+              showOtherItem: true,
+              showSelectAllItem: true,
+              showNoneItem: true,
+              required: true,
+            },
+        ]
+      },
+    };
+
+    const timeline = [trial];
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>

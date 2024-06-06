@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-same-different-image@1.1.3"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+    <link rel="stylesheet" href="docs-demo.css" type="text/css">
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    const preload = {
+      type: jsPsychPreload,
+      images: [
+        'img/happy_face_1.jpg',
+        'img/sad_face_3.jpg'
+      ]
+    }
+
+    const trial = {
+      type: jsPsychSameDifferentImage,
+      stimuli: [
+        'img/happy_face_1.jpg',
+        'img/sad_face_3.jpg'
+      ],
+      prompt: `<p>Press s if the faces had the same emotional expression.</p>
+        <p>Press d if the faces had different emotional expressions.</p>`,
+      same_key: 's',
+      different_key: 'd',
+      first_stim_duration: 800,
+      second_stim_duration: 800,
+      answer: 'different'
+    }
+
+    const timeline = [trial];
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline, [preload]));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>

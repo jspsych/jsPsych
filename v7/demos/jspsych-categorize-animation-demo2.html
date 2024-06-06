@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-categorize-animation@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+    <style>
+      #jspsych-categorize-animation-stimulus {
+        height: 80% !important;
+        width: 80% !important;
+      }
+      .jspsych-btn {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    const preload_trial = {
+      type: jsPsychPreload,
+      auto_preload: true
+    }
+
+    const images = [
+        'img/happy_face_1.jpg',
+        'img/happy_face_2.jpg',
+        'img/happy_face_3.jpg',
+        'img/happy_face_4.jpg'
+    ];
+
+    const trial = {
+      type: jsPsychCategorizeAnimation,
+      stimuli: images,
+      choices: ['p', 'q'],
+      prompt: `Press the P or Q key.`,
+      key_answer: 'q',
+      text_answer: 'Dax', // the label for the sequence is 'Dax'
+      correct_text: 'Correct! This was a %ANS%.',
+      incorrect_text: 'Incorrect. This was a %ANS%.'
+    };
+
+    const timeline = [trial];
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline, [preload_trial]));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="docs-demo-timeline.js"></script>
+  <script src="https://unpkg.com/jspsych@7.3.4"></script>
+  <!-- <script src="../../packages/jspsych/dist/index.browser.js"></script> -->
+  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-video-response@1.0.2"></script>
+  <!-- <script src="../../packages/plugin-html-video-response/dist/index.browser.js"></script> -->
+  <script src="https://unpkg.com/@jspsych/plugin-initialize-camera@1.0.2"></script>
+  <!-- <script src="../../packages/plugin-initialize-camera/dist/index.browser.js"></script> -->
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css">
+  <link rel="stylesheet" href="docs-demo.css" type="text/css">
+</head>
+<body></body>
+<script>
+
+  var jsPsych = initJsPsych();
+
+  var init_camera = {
+    type: jsPsychInitializeCamera
+  }
+
+  var trial = {
+    type: jsPsychHtmlVideoResponse,
+    stimulus: `
+      <p style="font-size:48px; color:red;"> <-- </p>
+      <p>Turn your head in the direction of the arrow</p>`,
+    recording_duration: 3500,
+    show_done_button: false,
+  };
+
+  const timeline = [init_camera, trial];
+
+  if (typeof jsPsych !== "undefined") {
+    jsPsych.run(generateDocsDemoTimeline(timeline));
+  } else {
+    document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+  }
+
+</script>
+
+</html>

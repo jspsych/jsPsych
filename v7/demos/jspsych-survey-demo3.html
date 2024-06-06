@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <script src="../../packages/plugin-survey/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+    <link rel="stylesheet" href="../../packages/plugin-survey/css/survey.css">
+    <link rel="stylesheet" href="docs-demo.css" type="text/css">
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    const trial = {
+      type: jsPsychSurvey,
+      survey_json: {
+        showQuestionNumbers: false,
+        title: 'Likert scale examples',
+        pages: [
+          {
+            elements: [
+              {
+                type: 'rating',
+                name: 'like-vegetables',
+                title: 'I like to eat vegetables.',
+                description: 'Button rating scale with min/max descriptions',
+                minRateDescription: 'Strongly Disagree',
+                maxRateDescription: 'Strongly Agree',
+                displayMode: 'buttons',
+                rateValues: [1,2,3,4,5]
+              }, 
+              {
+                type: 'rating',
+                name: 'like-cake',
+                title: 'I like to eat cake.',
+                description: 'Star rating scale with min/max descriptions',
+                minRateDescription: 'Strongly Disagree',
+                maxRateDescription: 'Strongly Agree',
+                rateType: 'stars',
+                rateCount: 10,
+                rateMax: 10,
+              },
+              {
+                type: 'rating',
+                name: 'like-cooking',
+                title: 'How much do you enjoy cooking?',
+                description: 'Smiley rating scale without min/max descriptions',
+                rateType: 'smileys',
+                rateCount: 10,
+                rateMax: 10,
+                scaleColorMode: 'colored',
+              }
+            ]
+          }, {
+            elements: [
+              {
+                type: 'matrix',
+                name: 'like-food-matrix',
+                title: 'Matrix question for rating mutliple statements on the same scale.',
+                alternateRows: true,
+                isAllRowRequired: true,
+                rows: [
+                  {text: 'I like to eat vegetables.', value: 'VeggiesTable'},
+                  {text: 'I like to eat fruit.', value: 'FruitTable'},
+                  {text: 'I like to eat cake.', value: 'CakeTable'},
+                  {text: 'I like to cook.', value: 'CookTable'},
+                ],
+                columns: [{
+                  "value": 5,
+                  "text": "Strongly agree"
+                }, {
+                  "value": 4,
+                  "text": "Agree"
+                }, {
+                  "value": 3,
+                  "text": "Neutral"
+                }, {
+                  "value": 2,
+                  "text": "Disagree"
+                }, {
+                  "value": 1,
+                  "text": "Strongly disagree"
+                }]
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    const timeline = [trial];
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>
