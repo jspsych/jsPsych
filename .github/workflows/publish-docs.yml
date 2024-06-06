@@ -30,8 +30,8 @@ jobs:
         id: version
         run: echo "version=$(node -p "require('./packages/jspsych/package.json').version")" >> "$GITHUB_ENV"
 
-      - name: Remove patch version
-        run: echo "version_major_minor=${{ env.version }}" | awk -F. '{print $1"."$2}' >> "$GITHUB_ENV"
+      - name: Select only major version
+        run: echo "version_major=${{ env.version }}" | awk -F. '{print "v"$1}' >> "$GITHUB_ENV"
 
       - name: Config git
         run: |
@@ -39,7 +39,7 @@ jobs:
           git config --global user.email docs@jspsych.org
 
       - name: Deploy docs
-        run: npm run docs:deploy ${{ env.version_major_minor }}
+        run: npm run docs:deploy ${{ env.version_major }}
 
       - name: Switch to gh-pages branch
         run: git checkout gh-pages
