@@ -52,6 +52,11 @@ const info = <const>{
       default: true,
     },
   },
+  description: {
+    htmlKeyboard: "htmlkeyboardresponse",
+    stimulus: "The HTML content that was displayed on the screen.",
+    response: "Indicates which key the participant pressed.",
+  },
 };
 
 type Info = typeof info;

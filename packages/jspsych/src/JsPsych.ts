@@ -230,7 +230,7 @@ export class JsPsych {
   /** Maps the data given out by a plugin in a trial to different columns with names specified by the user.
    * @param data - The data object produced by a plugin at the end of trial to which rewriting is applied.
    * @param {object} trial.columm_map - The column_map property in the trial object which specifies the mapping of default column to new column in key-value form.
-  */
+   */
   private columnMap(data, trial): void {
     const mapping = trial.column_map;
     for (const oldKey of Object.keys(mapping)) {
@@ -256,7 +256,7 @@ export class JsPsych {
     }
 
     // check if data needs to be mapped to custom columns
-    if ('column_map' in this.current_trial) {
+    if ("column_map" in this.current_trial) {
       // write the data from the trial after mapping to columns
       const mapped_data = this.columnMap(data, this.current_trial);
       this.data.write(mapped_data);
@@ -531,10 +531,9 @@ export class JsPsych {
     this.doTrial(this.timeline.trial());
   }
 
-/** Generates metadata automatically from the data once the experiment is over*/
+  /** Generates metadata automatically from the data once the experiment is over*/
 
   private getAutomaticMetaData() {
-
     var variablesToBeUpdated = this.data.getVariablesToBeUpdated();
 
     for (const variable of variablesToBeUpdated) {
@@ -546,11 +545,11 @@ export class JsPsych {
         description: "Unknown",
         value: variableType,
         // If the variable type is string, then categories or levels are automatically calculated.
-        ...(variableType === 'string'  && {levels: this.data.getLevels(variable)}),
+        ...(variableType === "string" && { levels: this.data.getLevels(variable) }),
         //Likewise if the variable type is numeric, min and max values are calculated, but are commented out because they make metadata specific to only trial at hand.
         //...(variableType === 'number' && {minValue: this.data.get().select(variable).min()}),
         //...(variableType === 'number' && {maxValue: this.data.get().select(variable).max()})
-      }
+      };
 
       //passes a field to set the metadata for each variable that is not default
       this.metadata.setVariable(field);
@@ -984,5 +983,30 @@ export class JsPsych {
     // Call the displayData and displayMetadata methods
     this.metadata.displayMetadata(metadataElementId);
     this.data.displayData(dataFormat, dataElementId);
+  }
+
+  // what woudl a jspsych metadata function look like?
+  // would we want to access it directly or should we pass an object function to jspsych which then manages the call into it
+  generateMetadataTimeline(timeline: any[] | {}): void {
+    if (Array.isArray(timeline)) {
+      // Handle the case where timeline is an array
+      for (const item of timeline) {
+        this.processPlugin(item);
+      }
+    } else if (typeof timeline === "object" && timeline !== null) {
+      // Pass in single trial item
+      this.processPlugin(timeline);
+    } else {
+      throw new Error("Invalid input: timeline must be either an array or an object.");
+    }
+  }
+
+  // getes metadata and adds to the metadata module/field
+  // stimulus and response are two fo the ones that should be added as a dict
+  private processPlugin(plugin: {}): void {
+    const pluginType = plugin["type"];
+    // const pluginDefaultMetadata = pluginType.getDefaultMetadata();
+    // console.log(pluginType);
+    console.log(pluginType.info.description);
   }
 }

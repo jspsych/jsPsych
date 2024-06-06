@@ -42,7 +42,6 @@ export class JsPsychMetadata {
   constructor(private JsPsych: JsPsych) {
     this.generateDefaultMetadata();
   }
-  w;
   /**
    * Method that fills in JsPsychMetadata class with all the universal fields with default information.
    * This is automatically called whenever creating an instance of JsPsychMetadata and indicates all

@@ -5,6 +5,7 @@
     <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-image-keyboard-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-preload/dist/index.browser.js"></script>
+    <!-- <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script> -->
     <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body></body>
@@ -16,7 +17,7 @@
         // jsPsych.metadata.saveAsJsonFile();
         // jsPsych.metadata.displayMetadata(); // documentation code
         // jsPsych.data.displayData();
-
+        jsPsych.generateMetadataTimeline(node['timeline']);
         jsPsych.displayDataAndMetadata();
       },
       default_iti: 250
@@ -36,6 +37,9 @@
       { v1: 'img/happy_face_3.jpg', v2: 'Riley' }
     ];
 
+    const subject_id = jsPsych.randomization.randomID(10);
+    const filename = `${subject_id}.csv`;
+
     var node = {
       timeline_variables: timeline_variables,
       timeline: [
@@ -51,18 +55,26 @@
           choices: ['y','n'], 
           stimulus: jsPsych.timelineVariable('v1'),
           prompt: function() { 
-            return '<p>Have you seen '+jsPsych.timelineVariable('v2', true)+ ' before? Press "y" or "n".</p>' 
+            return '<p>Have you seen '+ jsPsych.timelineVariable('v2', true)+ ' before? Press "y" or "n".</p>' 
           },
           stimulus_width: 300,
           column_map: {
             response: "face_response",
             stimulus: "face_stimulus"
           }
-        }
+        }, 
       ],
       randomize_order: true,
       repetitions: 2
     };
+
+    // const save_data = {
+    //   type: jsPsychPipe,
+    //   action: "save",
+    //   experiment_id: "crULjYGcdM2Y",
+    //   filename: filename,
+    //   data_string: ()=>jsPsych.data.get().csv()
+    // };
     
     jsPsych.run([preload, node]);
 

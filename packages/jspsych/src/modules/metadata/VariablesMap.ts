@@ -185,6 +185,8 @@ export class VariablesMap {
         updated_var["levels"] = [];
       }
       updated_var["levels"].push(added_value);
+    } else if (var_name === "response" || var_name === "stimulus") {
+      // fill this in with logic to update the maps for the description
     } else if (field_name === "name") {
       const old_name = updated_var["name"];
       updated_var["name"] = added_value;

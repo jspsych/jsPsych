@@ -88,7 +88,7 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       key: null,
     };
 
-    // function to end trial when it is time
+    // function to end trial when it is
     const end_trial = () => {
       // kill any remaining setTimeout handlers
       this.jsPsych.pluginAPI.clearAllTimeouts();
