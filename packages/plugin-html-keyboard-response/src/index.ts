@@ -52,7 +52,7 @@ const info = <const>{
       default: true,
     },
   },
-  description: {
+  metadata_description: {
     htmlKeyboard: "htmlkeyboardresponse",
     stimulus: "The HTML content that was displayed on the screen.",
     response: "Indicates which key the participant pressed.",

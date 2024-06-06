@@ -190,11 +190,26 @@ export class VariablesMap {
       field_name === "description" &&
       (var_name === "response" || var_name === "stimulus")
     ) {
-      // adds fields to description
+      // getting key and value for new value for clarity
+      const add_key = Object.keys(added_value)[0];
+      const add_value = Object.values(added_value)[0];
+      var exists = false;
+      // creates map for description if doesn't exist
       if (typeof updated_var["description"] !== "object") {
         updated_var["description"] = {};
       }
-      Object.assign(updated_var["description"], added_value); // Assuming added_value is { chatplugin: "response that user input" }
+
+      // appends key to other keys if default value/description are the same already exist to keep metadata shorter
+      Object.entries(updated_var["description"]).forEach(([key, value]) => {
+        if (value === add_value) {
+          delete updated_var["description"][key]; // deletes old version
+          updated_var["description"][key + ", " + add_key] = add_value;
+          exists = true;
+        }
+      });
+
+      // if value escription doesn't exist, adds
+      if (!exists) Object.assign(updated_var["description"], added_value); // Assuming added_value is { chatplugin: "response that user input" }
     } else if (field_name === "name") {
       const old_name = updated_var["name"];
       updated_var["name"] = added_value;

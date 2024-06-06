@@ -67,7 +67,7 @@ const info = <const>{
       default: true,
     },
   },
-  description: {
+  metadata_description: {
     htmlKeyboard: "imagekeyboardresponse",
     stimulus: "The path of the image that was displayed.",
     response: "Indicates which key the participant pressed.",

@@ -1006,12 +1006,13 @@ export class JsPsych {
   private processPlugin(plugin: {}): void {
     const pluginType = plugin["type"];
     const pluginName = pluginType.info.name;
-    const description_fields = pluginType.info.description;
+    const description_fields = pluginType.info.metadata_description;
 
     Object.entries(description_fields).forEach(([key, value]) => {
       // key == variable name
       // value == value that is used to add to field, only change description field
 
+      // determines what are the fields to use from the generateMetadataPipeline
       if (key === "stimulus") {
         this.metadata.updateVariable("stimulus", "description", { [pluginName]: value });
       } else if (key === "response") {
