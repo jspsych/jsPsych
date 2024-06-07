@@ -1,3 +1,3 @@
-import { makeNodeRollupConfig } from "@jspsych/config/rollup";
+import { makeRollupConfig } from "@jspsych/config/rollup";
 
-export default makeNodeRollupConfig();
+export default makeRollupConfig("jsPsychMetadata");

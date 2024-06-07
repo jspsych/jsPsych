@@ -10,7 +10,7 @@ import { VariablesMap } from "./VariablesMap";
  * @class JsPsychMetadata
  * @typedef {JsPsychMetadata}
  */
-export class JsPsychMetadata {
+export default class JsPsychMetadata {
   /**
    * Field that contains all metadata fields that aren't represented as a list.
    *
@@ -213,15 +213,16 @@ export class JsPsychMetadata {
    *
    * @param {string} [elementId="jspsych-metadata-display"] - Id for how to style the metadata. Defaults to default styling.
    */
-  displayMetadata(elementId = "jspsych-metadata-display") {
+  displayMetadata(display_element) {
+    const elementId = "jspsych-metadata-display";
     const metadata_string = JSON.stringify(this.getMetadata(), null, 2);
-    const display_element = this.JsPsych.getDisplayElement();
+    // const display_element = this.JsPsych.getDisplayElement();
     display_element.innerHTML += `<p id="jspsych-metadata-header">Metadata</p><pre id="${elementId}" class="jspsych-preformat"></pre>`;
-    document.getElementById(elementId).textContent = metadata_string;
+    document.getElementById(elementId).textContent += metadata_string;
   }
 
   /**
-   * Method that begins a download for the dataset_dea.cription.json at the end of experiment.
+   * Method that begins a download for the dataset_description.json at the end of experiment.
    * Allows you to download the metadat.
    */
   saveAsJsonFile(): void {
@@ -237,5 +238,18 @@ export class JsPsychMetadata {
     document.body.removeChild(a);
 
     URL.revokeObjectURL(url);
+  }
+
+  generate(data) {
+    if (typeof data === "string") {
+      data = JSON.parse(data);
+    }
+
+    for (const data_point of data) {
+      // console.log("NEW ELEMENT \n")
+      console.log(data_point);
+    }
+
+    return this.getMetadata();
   }
 }

@@ -5,6 +5,7 @@
     <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-image-keyboard-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-preload/dist/index.browser.js"></script>
+    <script src="../packages/metadata/dist/index.browser.js"></script>  
     <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body></body>
@@ -12,10 +13,17 @@
 
     var jsPsych = initJsPsych({
       on_finish: function() {
-        jsPsych.data.displayData();
+        metadata.generate(jsPsych.data.get().json());
+
+        // metadata.saveAsJsonFile();
+        jsPsych.data.displayData();  
+        metadata.displayMetadata(jsPsych.getDisplayElement());
       },
       default_iti: 250
     });
+
+    var metadata = new jsPsychMetadata(); // could declare with jsPsych to show the after
+
 
     // manually preload the image files, since they are passed to the image-keyboard-response stimulus parameter
     // through timeline variables, and therefore cannot be automatically preloaded
