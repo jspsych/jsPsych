@@ -174,6 +174,10 @@ export default class JsPsychMetadata {
     return this.variables.getVariable(name);
   }
 
+  containsVariable(name: string): boolean {
+    return this.variables.containsVariable(name);
+  }
+
   /**
    * Allows you to update a variable or add a value in the case of updating values. In other situations will
    * replace the existing value with the new value.
@@ -245,11 +249,49 @@ export default class JsPsychMetadata {
       data = JSON.parse(data);
     }
 
-    for (const data_point of data) {
-      // console.log("NEW ELEMENT \n")
-      console.log(data_point);
+    // observations can be thought of as rows
+    for (const observation of data) {
+      console.log("NEW OBSERVATION ----");
+      this.generateObservation(observation);
+      // console.log(this.getMetadata());
     }
 
     return this.getMetadata();
+  }
+
+  private generateObservation(observation) {
+    // variables can be thought of mapping of one column in a row
+    const pluginType = observation["trial_type"];
+
+    for (const variable in observation) {
+      const value = observation[variable]; // use this to handle levels
+
+      if (this.containsVariable(variable)) {
+        // logic updates existing variable
+        this.generateUpdate(variable, pluginType);
+      } else {
+        // logic to create new variable
+        this.generateVariable(variable, value, pluginType);
+      }
+    }
+  }
+
+  private generateVariable(variable, value, pluginType) {
+    // probably should work in a call to the plugin here
+    console.log("does not contain var: " + variable + " of type plugin: " + pluginType);
+    const type = typeof value;
+
+    const new_var = {
+      type: "PropertyValue",
+      name: variable,
+      description: "FILL IN THIS DESCRIPTION",
+      value: type,
+    };
+    console.log(new_var);
+    this.setVariable(new_var);
+  }
+
+  private generateUpdate(variable, pluginType) {
+    console.log("contains var: " + variable, " of type plugin: " + pluginType);
   }
 }

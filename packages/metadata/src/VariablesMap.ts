@@ -63,14 +63,14 @@ export class VariablesMap {
     //   value: "numeric",
     // };
     // this.setVariable(response_time_var);
-
-    const internal_type_node_id = {
-      type: "PropertyValue",
-      name: "internal_node_id",
-      description: "A string identifier for the current TimelineNode.",
-      value: "interval",
-    };
-    this.setVariable(internal_type_node_id);
+    // not necessary in this iteration
+    // const internal_type_node_id = {
+    //   type: "PropertyValue",
+    //   name: "internal_node_id",
+    //   description: "A string identifier for the current TimelineNode.",
+    //   value: "interval",
+    // };
+    // this.setVariable(internal_type_node_id);
   }
 
   /**
@@ -143,6 +143,10 @@ export class VariablesMap {
    */
   getVariable(name: string): {} {
     return this.variables[name] || {};
+  }
+
+  containsVariable(name: string): boolean {
+    return name in this.variables;
   }
 
   /**
