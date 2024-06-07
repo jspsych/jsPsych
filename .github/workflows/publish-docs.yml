@@ -24,22 +24,19 @@ jobs:
           python-version: '3.8'
 
       - name: Install poetry using pip
-        run: pipx install poetry==1.7.0
+        run: pipx install poetry==1.8.0
 
-      - name: Get current version
-        id: version
-        run: echo "version=$(node -p "require('./packages/jspsych/package.json').version")" >> "$GITHUB_ENV"
-
-      - name: Remove patch version
-        run: echo "version_major_minor=${{ env.version }}" | awk -F. '{print $1"."$2}' >> "$GITHUB_ENV"
-
+      - name: Get major version only
+        id: version_major
+        run: echo "version_major=v$(node -p "require('./packages/jspsych/package.json').version" | awk -F. '{print $1}')" >> "$GITHUB_ENV"
+        
       - name: Config git
         run: |
           git config --global user.name docs-bot
           git config --global user.email docs@jspsych.org
 
       - name: Deploy docs
-        run: npm run docs:deploy ${{ env.version_major_minor }}
+        run: npm run docs:deploy ${{ env.version_major }} latest
 
       - name: Switch to gh-pages branch
         run: git checkout gh-pages

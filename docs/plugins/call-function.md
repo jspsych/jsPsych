@@ -119,6 +119,7 @@ import callFunction from '@jspsych/plugin-call-function';
 			}
 		}
 		```
+<a name="async-example"></a>
 
 ???+ example "Async function call: simulate waiting for an event to finish"
 	=== "Code"

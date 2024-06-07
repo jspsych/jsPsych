@@ -326,6 +326,33 @@ jsPsych.pluginAPI.getAutoPreloadList(timeline);
 
 ---
 
+### getCameraRecorder
+
+```javascript
+jsPsych.pluginAPI.getCameraRecorder()
+```
+
+#### Parameters
+
+None
+
+#### Return value
+
+A `MediaRecorder` object connected to the `MediaStream` for the active camera.
+
+#### Description
+
+Provides access to the `MediaRecorder` created by [initializeCameraRecorder()](#initializecamerarecorder).
+If no camera recorder exists, it returns `null`.
+
+#### Example
+
+```javascript
+const recorder = jsPsych.pluginAPI.getCameraRecorder();
+```
+
+---
+
 ### getMicrophoneRecorder
 
 ```javascript
@@ -349,6 +376,40 @@ If no microphone recorder exists, it returns `null`.
 
 ```javascript
 const recorder = jsPsych.pluginAPI.getMicrophoneRecorder();
+```
+
+---
+
+### initializeCameraRecorder
+
+```javascript
+jsPsych.pluginAPI.initializeCameraRecorder(stream)
+```
+
+#### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+stream | `MediaStream` | The `MediaStream` object from an active camera device.
+opts | `MediaRecorderOptions` | The `MediaRecorderOptions` for the recorder. See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/MediaRecorder) for details about these options.
+
+#### Return value
+
+None.
+
+#### Description
+
+Generates a `MediaRecorder` object from provided `MediaStream` and stores this for access via [getCameraRecorder()](#getcamerarecorder).
+
+#### Example
+
+```javascript
+const stream = await navigator.mediaDevices.getUserMedia({
+  audio: true,
+  video: { width: 1280, height: 720 }, // request a certain resolution
+});
+
+jsPsych.pluginAPI.initializeCameraRecorder(stream);
 ```
 
 ---
