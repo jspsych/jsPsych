@@ -281,6 +281,9 @@ export default class JsPsychMetadata {
     console.log("does not contain var: " + variable + " of type plugin: " + pluginType);
     const type = typeof value;
 
+    // should check type in order to see if need to see with levels -- if numeric type is not it
+    // do need to update levels? -- write in levels logic ot the VariablesMap
+
     const new_var = {
       type: "PropertyValue",
       name: variable,
@@ -293,5 +296,13 @@ export default class JsPsychMetadata {
 
   private generateUpdate(variable, pluginType) {
     console.log("contains var: " + variable, " of type plugin: " + pluginType);
+
+    // fill in with logic on how to update the plugin -- will need to think about levels
+    // need to call the other UPDATEVARIABLE logic -- where if it is just a description can probably add it to the thing
+    // how to check levels
+  }
+
+  private getPluginInfo(pluginType) {
+    // fill in with logic on how to call plugin api and unpkg
   }
 }

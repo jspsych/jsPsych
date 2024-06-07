@@ -245,6 +245,16 @@ export class VariablesMap {
     }
   }
 
+  checkDescription(field_name, var_name, updated_var): boolean {
+    if (field_name === "description") {
+      // check if description is a dict or a string
+      // if it is a string check if it's equal, if it isn't return true
+      // if it is a dict then let it pass
+    }
+
+    return false;
+  }
+
   /**
    * Allows you to delete a variable by key/name. Returns console error if not found.
    *
