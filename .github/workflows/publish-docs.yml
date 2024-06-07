@@ -24,7 +24,7 @@ jobs:
           python-version: '3.8'
 
       - name: Install poetry using pip
-        run: pipx install poetry==1.7.0
+        run: pipx install poetry==1.8.0
 
       - name: Get current version
         id: version
