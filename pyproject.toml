@@ -1,8 +1,4 @@
 [tool.poetry]
-name = "jspsych"
-version = "0"
-description = ""
-authors = []
 package-mode = false
 
 [tool.poetry.dependencies]
