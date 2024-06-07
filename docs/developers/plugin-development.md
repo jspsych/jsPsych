@@ -135,9 +135,9 @@ trial(display_element, trial){
 
 ### Responding to keyboard events
 
-While the plugin framework allows you to set up any events that you would like to, including normal handling of `keyup` or `keydown` events, the `jsPsych.pluginAPI` module contains the [`getKeyboardResponse` function](../reference/jspsych-pluginAPI.md#jspsychpluginapigetkeyboardresponse), which implements some additional helpful functionality for key responses in an experiment.
+While the plugin framework allows you to set up any events that you would like to, including normal handling of `keyup` or `keydown` events, the `jsPsych.pluginAPI` module contains the [`getKeyboardResponse` function](../reference/jspsych-pluginAPI.md#getkeyboardresponse), which implements some additional helpful functionality for key responses in an experiment.
 
-Here's a basic example. See the [`getKeyboardResponse` docs](../reference/jspsych-pluginAPI.md#jspsychpluginapigetkeyboardresponse) for additional examples.
+Here's a basic example. See the [`getKeyboardResponse` docs](../reference/jspsych-pluginAPI.md#getkeyboardresponse) for additional examples.
 
 ```js
 trial(display_element, trial){

@@ -146,7 +146,7 @@ var procedure = {
 
 ## on_trial_finish
 
-The `on_trial_finish` callback can be declared in the `initJsPsych` method. The callback will trigger at the end of every trial in the experiment, after the trial object's [`on_finish`](#onfinishtrial) callback has been run. The callback function will be passed a single argument, containing the data object from the trial. If you want a callback to trigger only for the end of certain trials, use the [`on_finish`](#onfinishtrial) callback on the trial object instead.
+The `on_trial_finish` callback can be declared in the `initJsPsych` method. The callback will trigger at the end of every trial in the experiment, after the trial object's [`on_finish`](#on_finish-trial) callback has been run. The callback function will be passed a single argument, containing the data object from the trial. If you want a callback to trigger only for the end of certain trials, use the [`on_finish`](#on_finish-trial) callback on the trial object instead.
 
 ```javascript
 initJsPsych({
