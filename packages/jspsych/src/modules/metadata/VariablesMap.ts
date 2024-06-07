@@ -57,7 +57,7 @@ export class VariablesMap {
 
     const response_time_var = {
       type: "PropertyValue",
-      name: "rt (Response time)",
+      name: "rt", // adjusted to response time
       description: "Time measured in ms participant takes to respond to a stimulus",
       value: "numeric",
     };
@@ -181,14 +181,14 @@ export class VariablesMap {
     }
 
     if (field_name === "levels") {
-      // pushes items to array
+      // for levels adds value, creating new array if necessary
       if (!Array.isArray(updated_var["levels"])) {
         updated_var["levels"] = [];
       }
       updated_var["levels"].push(added_value);
     } else if (
       field_name === "description" &&
-      (var_name === "response" || var_name === "stimulus")
+      (var_name === "response" || var_name === "stimulus" || var_name == "rt")
     ) {
       // getting key and value for new value for clarity
       const add_key = Object.keys(added_value)[0];
@@ -202,13 +202,16 @@ export class VariablesMap {
       // appends key to other keys if default value/description are the same already exist to keep metadata shorter
       Object.entries(updated_var["description"]).forEach(([key, value]) => {
         if (value === add_value) {
-          delete updated_var["description"][key]; // deletes old version
-          updated_var["description"][key + ", " + add_key] = add_value;
+          if (!key.includes(add_key)) {
+            // substring check to see it doesn't exist
+            delete updated_var["description"][key]; // deletes old version
+            updated_var["description"][key + ", " + add_key] = add_value;
+          }
           exists = true;
         }
       });
 
-      // if value escription doesn't exist, adds
+      // if value description doesn't exist previous, adds
       if (!exists) Object.assign(updated_var["description"], added_value); // Assuming added_value is { chatplugin: "response that user input" }
     } else if (field_name === "name") {
       const old_name = updated_var["name"];

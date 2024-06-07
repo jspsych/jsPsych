@@ -65,6 +65,11 @@ const info = <const>{
       default: "Next",
     },
   },
+  metadata_description: {
+    view_history:
+      "An array containing the order of pages the participant viewed (including when the participant returned to previous pages) and the time spent viewing each page. Each object in the array represents a single page view, and contains keys called page_index (the page number, starting with 0) and viewing_time (duration of the page view). This will be encoded as a JSON string when data is saved using the .json() or .csv() functions.",
+    rt: "The response time in milliseconds for the participant to view all of the pages.",
+  },
 };
 
 type Info = typeof info;

@@ -988,9 +988,12 @@ export class JsPsych {
   // what woudl a jspsych metadata function look like?
   // would we want to access it directly or should we pass an object function to jspsych which then manages the call into it
   generateMetadataTimeline(timeline: any[] | {}): void {
+    console.log(timeline);
+
     if (Array.isArray(timeline)) {
       // Handle the case where timeline is an array
       for (const item of timeline) {
+        console.log(item);
         this.processPlugin(item);
       }
     } else if (typeof timeline === "object" && timeline !== null) {
@@ -1008,23 +1011,28 @@ export class JsPsych {
     const pluginName = pluginType.info.name;
     const description_fields = pluginType.info.metadata_description;
 
-    Object.entries(description_fields).forEach(([key, value]) => {
-      // key == variable name
-      // value == value that is used to add to field, only change description field
+    // Ensure description_fields is defined and is an object
+    if (description_fields && typeof description_fields === "object") {
+      Object.entries(description_fields).forEach(([key, value]) => {
+        // key == variable name
+        // value == value that is used to add to field, only change description field
 
-      // determines what are the fields to use from the generateMetadataPipeline
-      if (key === "stimulus" || key === "response") {
-        this.metadata.updateVariable(key, "description", { [pluginName]: value });
-      } else if (
-        key === "rt" ||
-        key === "success" ||
-        key === "timeout" ||
-        key === "failed_images" ||
-        key === "failed_audio" ||
-        key === "failed_video"
-      ) {
-        this.metadata.updateVariable(key, "description", value);
-      }
-    });
+        // determines what are the fields to use from the generateMetadataPipeline
+        if (key === "stimulus" || key === "response" || key === "rt") {
+          this.metadata.updateVariable(key, "description", { [pluginName]: value });
+        } else if (
+          key === "success" ||
+          key === "timeout" ||
+          key === "failed_images" ||
+          key === "failed_audio" ||
+          key === "failed_video" ||
+          key === "view_history"
+        ) {
+          this.metadata.updateVariable(key, "description", value);
+        }
+      });
+    } else {
+      console.warn(`Description fields for plugin ${pluginName} are undefined or not an object.`);
+    }
   }
 }
