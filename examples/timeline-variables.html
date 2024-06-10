@@ -11,10 +11,29 @@
   <body></body>
   <script>
 
+    const metadata_options = {
+      randomField: "this is a field",
+      author: {
+        "John Cena": {
+          name: "John Cena",
+          givenName: "Sammy Salami",
+        },
+        "Darnell": {
+          givenName: "bob",
+        }
+      },
+      variables: {
+        "trial_type" : {
+          description: {
+            "chat-plugin": "this chat plugin allows you to talk to gpt!",
+          }
+        }
+      },
+    }
+
     var jsPsych = initJsPsych({
-      on_finish: function() {
-      
-        metadata.generate(jsPsych.data.get().json());
+      on_finish: function() {      
+        metadata.generate(jsPsych.data.get().json(), metadata_options);
  
         // metadata.saveAsJsonFile();
         jsPsych.data.displayData();  

@@ -62,16 +62,18 @@ export class AuthorsMap {
       this.authors[fields.name] = fields.name;
       return;
     }
+    const new_author: { [key: string]: any } = {}; // Define an empty object to store the variables
+    new_author["name"] = fields["name"]; // to ensure that name is always first
+    delete fields["name"];
 
-    const new_variable: { [key: string]: any } = {}; // Define an empty object to store the variables
     for (const key in fields) {
       // Check if the property is defined and not null
       if (fields[key] !== undefined && fields[key] !== null) {
-        new_variable[key] = fields[key];
+        new_author[key] = fields[key];
       }
     }
 
-    this.authors[new_variable.name] = new_variable;
+    this.authors[new_author.name] = new_author;
   }
 
   /**

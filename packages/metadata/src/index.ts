@@ -248,20 +248,49 @@ export default class JsPsychMetadata {
   }
 
   // passing in authors mapping and variables mapping and then goes through each variable
-  generate(data) {
+  generate(data, metadata = {}) {
     // have it so that can pass in a dict of object that the researcher wants to do
     if (typeof data === "string") {
       data = JSON.parse(data);
     }
 
-    // observations can be thought of as rows
     for (const observation of data) {
-      console.log("NEW OBSERVATION ----");
       this.generateObservation(observation);
-      // console.log(this.getMetadata());
     }
 
     // iterate through this dict and figure out best way to handle variable updates and formatting the object
+
+    for (const key in metadata) {
+      const value = metadata[key];
+
+      if (key === "variables") {
+        if (typeof value !== "object" || value === null) {
+          console.error("Author object is not correct type");
+          continue;
+        }
+
+        // all of the variables must already exist because should have datapoints
+        for (const variable_key in value) {
+          const variable = value[variable_key];
+
+          for (const parameter in variable) {
+            const parameter_value = variable[parameter];
+            this.updateVariable(variable_key, parameter, parameter_value);
+          }
+        }
+      } else if (key === "author") {
+        if (typeof value !== "object" || value === null) {
+          console.error("Author object is not correct type");
+          continue;
+        }
+
+        for (const author_key in value) {
+          const author = value[author_key];
+          if (!("name" in author)) author["name"] = author_key;
+          this.setAuthor(author);
+        }
+      } else this.setMetadataField(key, value);
+    }
 
     return this.getMetadata();
   }
@@ -287,7 +316,6 @@ export default class JsPsychMetadata {
     // probably should work in a call to the plugin here
     const description = this.getPluginInfo(pluginType);
     const type = typeof value;
-    console.log(type);
 
     // probs should have update description called here
     const new_var = {
@@ -299,8 +327,6 @@ export default class JsPsychMetadata {
 
     this.setVariable(new_var);
     this.updateFields(variable, value, type);
-
-    console.log(this.getVariable(variable));
   }
 
   // hardest part is updating the description
@@ -329,6 +355,8 @@ export default class JsPsychMetadata {
       this.updateVariable(variable, "maxValue", value);
     }
   }
+
+  private createAuthor() {}
 
   private getPluginInfo(pluginType) {
     // fill in with logic on how to call plugin api and unpkg
