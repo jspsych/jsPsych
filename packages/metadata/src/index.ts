@@ -11,6 +11,7 @@ import { VariablesMap } from "./VariablesMap";
  * @typedef {JsPsychMetadata}
  */
 export default class JsPsychMetadata {
+  private count: number;
   /**
    * Field that contains all metadata fields that aren't represented as a list.
    *
@@ -57,6 +58,7 @@ export default class JsPsychMetadata {
     this.setMetadataField("description", "Dataset generated using JsPsych");
     this.authors = new AuthorsMap();
     this.variables = new VariablesMap();
+    this.count = 0;
   }
 
   /**
@@ -244,6 +246,7 @@ export default class JsPsychMetadata {
     URL.revokeObjectURL(url);
   }
 
+  // passing in authors mapping and variables mapping and then goes through each variable
   generate(data) {
     // have it so that can pass in a dict of object that the researcher wants to do
     if (typeof data === "string") {
@@ -283,14 +286,13 @@ export default class JsPsychMetadata {
     // probably should work in a call to the plugin here
     const description = this.getPluginInfo(pluginType);
     const type = typeof value;
-    // should check type in order to see if need to see with levels -- if numeric type is not it
-    // do need to update levels? -- write in levels logic ot the VariablesMap
+    console.log(type);
 
     // probs should have update description called here
     const new_var = {
       type: "PropertyValue",
       name: variable,
-      description: "FILL IN THIS DESCRIPTION", // can't get description unless finish the unpkg
+      description: { default: "FILL IN THIS DESCRIPTION" }, // can't get description unless finish the unpkg
       value: type,
     };
 
@@ -301,22 +303,24 @@ export default class JsPsychMetadata {
   }
 
   // hardest part is updating the description
+  // want to hardcode in the variables check
+  // logic is that probably won't need to be doing the dict thing
+  // implement all as description
   private generateUpdate(variable, value, pluginType) {
     const type = typeof value;
     const field_name = "description";
     // update description
     const description = this.getPluginInfo(pluginType);
-    const new_value = {}; // logic: this is an object with { key = pluginType, value = Description }
-    // if the field is already a dictionary
-    // if the new value that is being added doesn't match the old value
+    // const new_value = { pluginType: description };
+    const key = "hello" + this.count;
+    const test_value = "THIS IS ANOTHER DESCRIPTION" + this.count;
+    const new_value = { [key]: test_value };
 
-    // fill in with logic on how to update the plugin -- will need to think about levels
-    // need to call the other UPDATEVARIABLE logic -- where if it is just a description can probably add it to the thing
-    // how to check levels
-
-    // this.updateVariable(variable, field_name, new_value);
+    this.updateVariable(variable, field_name, new_value);
 
     this.updateFields(variable, value, type);
+
+    this.count += 1;
   }
 
   private updateFields(variable, value, type) {

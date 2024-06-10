@@ -13,8 +13,9 @@
 
     var jsPsych = initJsPsych({
       on_finish: function() {
+      
         metadata.generate(jsPsych.data.get().json());
-
+ 
         // metadata.saveAsJsonFile();
         jsPsych.data.displayData();  
         metadata.displayMetadata(jsPsych.getDisplayElement());

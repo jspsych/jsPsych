@@ -34,7 +34,7 @@ export class VariablesMap {
     const trial_type_var = {
       type: "PropertyValue",
       name: "trial_type",
-      description: "The name of the plugin used to run the trial.",
+      description: { default: "The name of the plugin used to run the trial." },
       value: "string",
     };
     this.setVariable(trial_type_var);
@@ -42,7 +42,7 @@ export class VariablesMap {
     const trial_index_var = {
       type: "PropertyValue",
       name: "trial_index",
-      description: "The index of the current trial across the whole experiment.",
+      description: { default: "The index of the current trial across the whole experiment." },
       value: "numeric",
     };
     this.setVariable(trial_index_var);
@@ -50,27 +50,13 @@ export class VariablesMap {
     const time_elapsed_var = {
       type: "PropertyValue",
       name: "time_elapsed",
-      description:
-        "The number of milliseconds between the start of the experiment and when the trial ended.",
+      description: {
+        default:
+          "The number of milliseconds between the start of the experiment and when the trial ended.",
+      },
       value: "numeric",
     };
     this.setVariable(time_elapsed_var);
-
-    // const response_time_var = {
-    //   type: "PropertyValue",
-    //   name: "rt", // adjusted to response time
-    //   description: "Time measured in ms participant takes to respond to a stimulus",
-    //   value: "numeric",
-    // };
-    // this.setVariable(response_time_var);
-    // not necessary in this iteration
-    // const internal_type_node_id = {
-    //   type: "PropertyValue",
-    //   name: "internal_node_id",
-    //   description: "A string identifier for the current TimelineNode.",
-    //   value: "interval",
-    // };
-    // this.setVariable(internal_type_node_id);
   }
 
   /**
@@ -80,8 +66,32 @@ export class VariablesMap {
    */
   getList(): {}[] {
     var var_list = [];
+
+    // need to check that this works as intended
     for (const key of Object.keys(this.variables)) {
-      var_list.push(this.variables[key]);
+      const variable = this.variables[key];
+      const description = variable["description"];
+      const numKeys = Object.keys(description).length;
+
+      if (numKeys === 0) console.error("Empty description"); // error: description empty
+      else if (numKeys === 1) {
+        // description becomes single field (assumed to be default)
+        const key = Object.keys(description)[0];
+        variable["description"] = description[key];
+      } else if (numKeys == 2) {
+        delete description["default"]; // deletes default
+
+        if (Object.keys(description).length == 1) {
+          // error checking that it reduced to one key
+          const key = Object.keys(description)[0];
+          variable["description"] = description[key];
+        }
+      } else if (numKeys > 2) {
+        // deletes default
+        delete description["default"];
+      }
+
+      var_list.push(variable);
     }
     return var_list;
   }
@@ -189,11 +199,7 @@ export class VariablesMap {
       this.updateLevels(updated_var, added_value);
     } else if (field_name === "minValue" || field_name === "maxValue") {
       this.updateMinMax(updated_var, added_value, field_name);
-    } else if (
-      field_name === "description" &&
-      (var_name === "response" || var_name === "stimulus" || var_name == "rt") // error with not hard coding - mention with josh
-    ) {
-      // handles logic with dict description
+    } else if (field_name === "description") {
       this.updateDescription(updated_var, added_value);
     } else if (field_name === "name") {
       this.updateName(updated_var, added_value);
@@ -232,6 +238,12 @@ export class VariablesMap {
     // getting key and value for new value for clarity
     const add_key = Object.keys(added_value)[0];
     const add_value = Object.values(added_value)[0];
+
+    if (add_key === "undefined" || add_value === "undefined") {
+      console.error("New value is passed in correct format");
+      return;
+    }
+
     var exists = false;
     // creates map for description if doesn't exist
     if (typeof updated_var["description"] !== "object") {
