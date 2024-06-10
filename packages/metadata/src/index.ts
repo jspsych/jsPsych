@@ -245,6 +245,7 @@ export default class JsPsychMetadata {
   }
 
   generate(data) {
+    // have it so that can pass in a dict of object that the researcher wants to do
     if (typeof data === "string") {
       data = JSON.parse(data);
     }
@@ -255,6 +256,8 @@ export default class JsPsychMetadata {
       this.generateObservation(observation);
       // console.log(this.getMetadata());
     }
+
+    // iterate through this dict and figure out best way to handle variable updates and formatting the object
 
     return this.getMetadata();
   }
@@ -268,7 +271,7 @@ export default class JsPsychMetadata {
 
       if (this.containsVariable(variable)) {
         // logic updates existing variable
-        this.generateUpdate(variable, pluginType);
+        this.generateUpdate(variable, value, pluginType);
       } else {
         // logic to create new variable
         this.generateVariable(variable, value, pluginType);
@@ -278,28 +281,54 @@ export default class JsPsychMetadata {
 
   private generateVariable(variable, value, pluginType) {
     // probably should work in a call to the plugin here
-    console.log("does not contain var: " + variable + " of type plugin: " + pluginType);
+    const description = this.getPluginInfo(pluginType);
     const type = typeof value;
-
     // should check type in order to see if need to see with levels -- if numeric type is not it
     // do need to update levels? -- write in levels logic ot the VariablesMap
 
+    // probs should have update description called here
     const new_var = {
       type: "PropertyValue",
       name: variable,
-      description: "FILL IN THIS DESCRIPTION",
+      description: "FILL IN THIS DESCRIPTION", // can't get description unless finish the unpkg
       value: type,
     };
-    console.log(new_var);
+
     this.setVariable(new_var);
+    this.updateFields(variable, value, type);
+
+    console.log(this.getVariable(variable));
   }
 
-  private generateUpdate(variable, pluginType) {
-    console.log("contains var: " + variable, " of type plugin: " + pluginType);
+  // hardest part is updating the description
+  private generateUpdate(variable, value, pluginType) {
+    const type = typeof value;
+    const field_name = "description";
+    // update description
+    const description = this.getPluginInfo(pluginType);
+    const new_value = {}; // logic: this is an object with { key = pluginType, value = Description }
+    // if the field is already a dictionary
+    // if the new value that is being added doesn't match the old value
 
     // fill in with logic on how to update the plugin -- will need to think about levels
     // need to call the other UPDATEVARIABLE logic -- where if it is just a description can probably add it to the thing
     // how to check levels
+
+    // this.updateVariable(variable, field_name, new_value);
+
+    this.updateFields(variable, value, type);
+  }
+
+  private updateFields(variable, value, type) {
+    // calls updates where updateVariable handles logic
+    if (type !== "number" && type !== "object") {
+      this.updateVariable(variable, "levels", value);
+    }
+    // calls updates where updateVariable handles logic
+    if (type === "number") {
+      this.updateVariable(variable, "minValue", value);
+      this.updateVariable(variable, "maxValue", value);
+    }
   }
 
   private getPluginInfo(pluginType) {

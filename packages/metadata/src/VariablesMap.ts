@@ -186,70 +186,120 @@ export class VariablesMap {
     }
 
     if (field_name === "levels") {
-      // for levels adds value, creating new array if necessary
-      if (!Array.isArray(updated_var["levels"])) {
-        updated_var["levels"] = [];
-      }
-      updated_var["levels"].push(added_value);
+      this.updateLevels(updated_var, added_value);
+    } else if (field_name === "minValue" || field_name === "maxValue") {
+      this.updateMinMax(updated_var, added_value, field_name);
     } else if (
       field_name === "description" &&
-      (var_name === "response" || var_name === "stimulus" || var_name == "rt")
+      (var_name === "response" || var_name === "stimulus" || var_name == "rt") // error with not hard coding - mention with josh
     ) {
-      // getting key and value for new value for clarity
-      const add_key = Object.keys(added_value)[0];
-      const add_value = Object.values(added_value)[0];
-      var exists = false;
-      // creates map for description if doesn't exist
-      if (typeof updated_var["description"] !== "object") {
-        updated_var["description"] = {};
-      }
-
-      // appends key to other keys if default value/description are the same already exist to keep metadata shorter
-      Object.entries(updated_var["description"]).forEach(([key, value]) => {
-        if (value === add_value) {
-          if (!key.includes(add_key)) {
-            // substring check to see it doesn't exist
-            delete updated_var["description"][key]; // deletes old version
-            updated_var["description"][key + ", " + add_key] = add_value;
-          }
-          exists = true;
-        }
-      });
-
-      // if value description doesn't exist previous, adds
-      if (!exists) Object.assign(updated_var["description"], added_value); // Assuming added_value is { chatplugin: "response that user input" }
+      // handles logic with dict description
+      this.updateDescription(updated_var, added_value);
     } else if (field_name === "name") {
-      const old_name = updated_var["name"];
-      updated_var["name"] = added_value;
-      delete this.variables[old_name];
-
-      this.setVariable(
-        updated_var as {
-          type?: string;
-          name: string;
-          description?: string | {};
-          value?: string;
-          identifier?: string;
-          minValue?: number;
-          maxValue?: number;
-          levels?: string[] | [];
-          levelsOrdered?: boolean;
-          na?: boolean;
-          naValue?: string;
-          alternateName?: string;
-          privacy?: string;
-        }
-      );
+      this.updateName(updated_var, added_value);
     } else {
       updated_var[field_name] = added_value;
     }
   }
 
-  checkDescription(field_name, var_name, updated_var): boolean {
-    if (field_name === "description") {
-      // check if description is a dict or a string
-      // if it is a string check if it's equal, if it isn't return true
-      // if it is a dict then let it pass
+  private updateLevels(updated_var, added_value) {
+    // for levels adds value, creating new array if necessary
+    if (!Array.isArray(updated_var["levels"])) {
+      updated_var["levels"] = [];
+    }
+    if (!updated_var["levels"].includes(added_value)) {
+      updated_var["levels"].push(added_value);
+    }
+  }
+
+  private updateMinMax(updated_var, added_value, field_name) {
+    // check if min or max
+    if (!("minValue" in updated_var) || !("maxValue" in updated_var)) {
+      updated_var["maxValue"] = updated_var["minValue"] = added_value;
+      return;
+    }
+
+    // redundant checks, including them because of current formatting but want to delete field_name
+    if (field_name === "minValue" && updated_var["minValue"] > added_value) {
+      updated_var["minValue"] = added_value;
+    } else if (field_name === "maxValue" && updated_var["maxValue"] < added_value) {
+      updated_var["maxValue"] = added_value;
+    }
+  }
+
+  // used to handle logic for dict descriptions
+  private updateDescription(updated_var, added_value) {
+    // getting key and value for new value for clarity
+    const add_key = Object.keys(added_value)[0];
+    const add_value = Object.values(added_value)[0];
+    var exists = false;
+    // creates map for description if doesn't exist
+    if (typeof updated_var["description"] !== "object") {
+      updated_var["description"] = {};
+    }
+
+    // appends key to other keys if default value/description are the same already exist to keep metadata shorter
+    Object.entries(updated_var["description"]).forEach(([key, value]) => {
+      if (value === add_value) {
+        if (!key.includes(add_key)) {
+          // substring check to see it doesn't exist
+          delete updated_var["description"][key]; // deletes old version
+          updated_var["description"][key + ", " + add_key] = add_value;
+        }
+        exists = true;
+      }
+    });
+
+    // if value description doesn't exist previous, adds
+    if (!exists) Object.assign(updated_var["description"], added_value); // Assuming added_value is { chatplugin: "response that user input" }
+  }
+
+  private updateName(updated_var, added_value) {
+    const old_name = updated_var["name"];
+    updated_var["name"] = added_value;
+    delete this.variables[old_name];
+
+    this.setVariable(
+      updated_var as {
+        type?: string;
+        name: string;
+        description?: string | {};
+        value?: string;
+        identifier?: string;
+        minValue?: number;
+        maxValue?: number;
+        levels?: string[] | [];
+        levelsOrdered?: boolean;
+        na?: boolean;
+        naValue?: string;
+        alternateName?: string;
+        privacy?: string;
+      }
+    );
+  }
+
+  // if the field is already a dictionary
+  // if the new value that is being added doesn't match the old value
+  checkDescription(var_name, field_name, added_var): boolean {
+    if (field_name !== "description") return false;
+
+    const variable = this.getVariable(var_name);
+
+    if (Object.keys(variable).length === 0) {
+      console.error("Variable has not been initalized");
+      return false;
+    }
+
+    const field = variable[field_name];
+
+    if (typeof field === "undefined") {
+      // will want to create a new field in this case, creates an error if not as a dict
+      console.error("Field has not been defined");
+      return false;
+    }
+
+    if (field !== added_var || typeof field === "object") {
+      return true; // means that should be initalized to a dict
     }
 
     return false;
