@@ -33,6 +33,8 @@ export default class JsPsychMetadata {
    */
   private variables: VariablesMap;
 
+  private cache: {};
+
   /**
    * Creates an instance of JsPsychMetadata while passing in JsPsych object to have access to context
    *  allowing it to access the screen printing information.
@@ -57,6 +59,7 @@ export default class JsPsychMetadata {
     this.setMetadataField("description", "Dataset generated using JsPsych");
     this.authors = new AuthorsMap();
     this.variables = new VariablesMap();
+    this.cache = {};
   }
 
   /**
