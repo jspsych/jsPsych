@@ -11,7 +11,6 @@ import { VariablesMap } from "./VariablesMap";
  * @typedef {JsPsychMetadata}
  */
 export default class JsPsychMetadata {
-  private count: number;
   /**
    * Field that contains all metadata fields that aren't represented as a list.
    *
@@ -58,7 +57,6 @@ export default class JsPsychMetadata {
     this.setMetadataField("description", "Dataset generated using JsPsych");
     this.authors = new AuthorsMap();
     this.variables = new VariablesMap();
-    this.count = 0;
   }
 
   /**
@@ -292,7 +290,7 @@ export default class JsPsychMetadata {
     const new_var = {
       type: "PropertyValue",
       name: variable,
-      description: { default: "FILL IN THIS DESCRIPTION" }, // can't get description unless finish the unpkg
+      description: { default: "FILL IN THIS DESCRIPTION" }, // need to adjust this based on what is handling
       value: type,
     };
 
@@ -309,18 +307,12 @@ export default class JsPsychMetadata {
   private generateUpdate(variable, value, pluginType) {
     const type = typeof value;
     const field_name = "description";
-    // update description
     const description = this.getPluginInfo(pluginType);
     // const new_value = { pluginType: description };
-    const key = "hello" + this.count;
-    const test_value = "THIS IS ANOTHER DESCRIPTION" + this.count;
-    const new_value = { [key]: test_value };
+    const new_description = { [pluginType]: "Fill in this description" };
 
-    this.updateVariable(variable, field_name, new_value);
-
+    this.updateVariable(variable, field_name, new_description);
     this.updateFields(variable, value, type);
-
-    this.count += 1;
   }
 
   private updateFields(variable, value, type) {
