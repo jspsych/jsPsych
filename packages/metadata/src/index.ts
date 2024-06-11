@@ -274,11 +274,13 @@ export default class JsPsychMetadata {
   private async generateObservation(observation) {
     // variables can be thought of mapping of one column in a row
     const pluginType = observation["trial_type"];
+    const ignored_fields = new Set(["trial_type", "trial_index", "time_elapsed"]);
 
     for (const variable in observation) {
       const value = observation[variable];
 
-      if (this.containsVariable(variable)) {
+      if (ignored_fields.has(variable)) this.updateFields(variable, value, typeof value);
+      else if (this.containsVariable(variable)) {
         // logic updates existing variable
         await this.generateUpdate(variable, value, pluginType);
       } else {

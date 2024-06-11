@@ -34,7 +34,10 @@ export class VariablesMap {
     const trial_type_var = {
       type: "PropertyValue",
       name: "trial_type",
-      description: { default: "The name of the plugin used to run the trial." },
+      description: {
+        default: "unknown",
+        jsPsych: "The name of the plugin used to run the trial.",
+      },
       value: "string",
     };
     this.setVariable(trial_type_var);
@@ -42,7 +45,10 @@ export class VariablesMap {
     const trial_index_var = {
       type: "PropertyValue",
       name: "trial_index",
-      description: { default: "The index of the current trial across the whole experiment." },
+      description: {
+        default: "unknown",
+        jsPsych: "The index of the current trial across the whole experiment.",
+      },
       value: "numeric",
     };
     this.setVariable(trial_index_var);
@@ -51,7 +57,8 @@ export class VariablesMap {
       type: "PropertyValue",
       name: "time_elapsed",
       description: {
-        default:
+        default: "unknown",
+        jsPsych:
           "The number of milliseconds between the start of the experiment and when the trial ended.",
       },
       value: "numeric",
