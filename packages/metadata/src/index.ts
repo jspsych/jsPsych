@@ -258,38 +258,8 @@ export default class JsPsychMetadata {
       this.generateObservation(observation);
     }
 
-    // iterate through this dict and figure out best way to handle variable updates and formatting the object
-
     for (const key in metadata) {
-      const value = metadata[key];
-
-      if (key === "variables") {
-        if (typeof value !== "object" || value === null) {
-          console.error("Author object is not correct type");
-          continue;
-        }
-
-        // all of the variables must already exist because should have datapoints
-        for (const variable_key in value) {
-          const variable = value[variable_key];
-
-          for (const parameter in variable) {
-            const parameter_value = variable[parameter];
-            this.updateVariable(variable_key, parameter, parameter_value);
-          }
-        }
-      } else if (key === "author") {
-        if (typeof value !== "object" || value === null) {
-          console.error("Author object is not correct type");
-          continue;
-        }
-
-        for (const author_key in value) {
-          const author = value[author_key];
-          if (!("name" in author)) author["name"] = author_key;
-          this.setAuthor(author);
-        }
-      } else this.setMetadataField(key, value);
+      this.processMetadata(metadata, key);
     }
 
     return this.getMetadata();
@@ -300,7 +270,7 @@ export default class JsPsychMetadata {
     const pluginType = observation["trial_type"];
 
     for (const variable in observation) {
-      const value = observation[variable]; // use this to handle levels
+      const value = observation[variable];
 
       if (this.containsVariable(variable)) {
         // logic updates existing variable
@@ -356,7 +326,58 @@ export default class JsPsychMetadata {
     }
   }
 
-  private createAuthor() {}
+  private processMetadata(metadata, key) {
+    const value = metadata[key];
+    console.log("PROCESS METADATA", key, "for value", value);
+
+    if (key === "variables") {
+      if (typeof value !== "object" || value === null) {
+        console.error("Variable object is either null or incorrect type");
+        return;
+      }
+
+      // all of the variables must already exist because should have datapoints
+      for (let variable_key in value) {
+        if (!this.containsVariable(variable_key)) {
+          console.error("Metadata does not contain variable:", variable_key);
+          continue;
+        }
+
+        const variable_parameters = value[variable_key];
+
+        if (typeof variable_parameters !== "object" || variable_parameters === null) {
+          console.error(
+            "Parameters of variable:",
+            variable_key,
+            "is either null or incorrect type. The value",
+            variable_parameters,
+            "is either null or not an object."
+          );
+          continue;
+        }
+
+        console.log("PROCESS VARIABLE:", variable_key, "for parameters:", variable_parameters);
+
+        for (const parameter in variable_parameters) {
+          // calling updates for each of the renamed parameters within variable/errors handled by method call
+          const parameter_value = variable_parameters[parameter];
+          this.updateVariable(variable_key, parameter, parameter_value);
+          if (parameter === "name") variable_key = parameter_value; // renames future instances if changing name
+        }
+      }
+    } else if (key === "author") {
+      if (typeof value !== "object" || value === null) {
+        console.error("Author object is not correct type");
+        return;
+      }
+
+      for (const author_key in value) {
+        const author = value[author_key];
+        if (!("name" in author)) author["name"] = author_key;
+        this.setAuthor(author);
+      }
+    } else this.setMetadataField(key, value);
+  }
 
   private getPluginInfo(pluginType) {
     // fill in with logic on how to call plugin api and unpkg
