@@ -48,11 +48,11 @@
     }
 
     var jsPsych = initJsPsych({
-      on_finish: function() {      
-        metadata.generate(jsPsych.data.get().json(), metadata_options);
+      on_finish: async function() {      
+        await metadata.generate(jsPsych.data.get().json());
  
         // metadata.saveAsJsonFile();
-        jsPsych.data.displayData();  
+        //jsPsych.data.displayData();  
         metadata.displayMetadata(jsPsych.getDisplayElement());
       },
       default_iti: 250
@@ -71,8 +71,8 @@
 
     var timeline_variables = [
       { v1: 'img/happy_face_1.jpg', v2: 'Ann' },
-      { v1: 'img/happy_face_2.jpg', v2: 'Jackson' },
-      { v1: 'img/happy_face_3.jpg', v2: 'Riley' }
+      //{ v1: 'img/happy_face_2.jpg', v2: 'Jackson' },
+      //{ v1: 'img/happy_face_3.jpg', v2: 'Riley' }
     ];
 
     var node = {
