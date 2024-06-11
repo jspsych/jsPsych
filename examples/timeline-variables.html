@@ -49,7 +49,7 @@
 
     var jsPsych = initJsPsych({
       on_finish: function() {      
-        metadata.generate(jsPsych.data.get().json(), metadata_options);
+        metadata.generate(jsPsych.data.get().json());
  
         // metadata.saveAsJsonFile();
         jsPsych.data.displayData();  

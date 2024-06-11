@@ -268,11 +268,13 @@ export default class JsPsychMetadata {
   private generateObservation(observation) {
     // variables can be thought of mapping of one column in a row
     const pluginType = observation["trial_type"];
+    const ignored_fields = new Set(["trial_type", "trial_index", "time_elapsed"]);
 
     for (const variable in observation) {
       const value = observation[variable];
 
-      if (this.containsVariable(variable)) {
+      if (ignored_fields.has(variable)) this.updateFields(variable, value, typeof value);
+      else if (this.containsVariable(variable)) {
         // logic updates existing variable
         this.generateUpdate(variable, value, pluginType);
       } else {
@@ -291,7 +293,7 @@ export default class JsPsychMetadata {
     const new_var = {
       type: "PropertyValue",
       name: variable,
-      description: { default: "FILL IN THIS DESCRIPTION" }, // need to adjust this based on what is handling
+      description: { default: "unknown" }, // need to adjust this based on what is handling
       value: type,
     };
 
@@ -308,7 +310,7 @@ export default class JsPsychMetadata {
     const field_name = "description";
     const description = this.getPluginInfo(pluginType);
     // const new_value = { pluginType: description };
-    const new_description = { [pluginType]: "Fill in this description" };
+    const new_description = { [pluginType]: "unknown" };
 
     this.updateVariable(variable, field_name, new_description);
     this.updateFields(variable, value, type);
