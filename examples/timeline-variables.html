@@ -50,9 +50,8 @@
     var jsPsych = initJsPsych({
       on_finish: async function() {      
         await metadata.generate(jsPsych.data.get().json());
- 
         // metadata.saveAsJsonFile();
-        //jsPsych.data.displayData();  
+        jsPsych.data.displayData();  
         metadata.displayMetadata(jsPsych.getDisplayElement());
       },
       default_iti: 250

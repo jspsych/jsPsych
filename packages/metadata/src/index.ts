@@ -253,11 +253,57 @@ export default class JsPsychMetadata {
     URL.revokeObjectURL(url);
   }
 
-  // passing in authors mapping and variables mapping and then goes through each variable
-  async generate(data, metadata = {}) {
+  /**
+   * Parses a CSV string into a JSON object.
+   *
+   * @param {string} csv - The CSV string to be parsed.
+   * @returns {Array<Object>} - The parsed JSON object.
+   */
+  private parseCSV(csv) {
+    const lines = csv.split("\n");
+    const headers = lines[0].split(",").map((header) => header.trim());
+    const result = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const obj = {};
+      const currentline = lines[i].split(",");
+
+      headers.forEach((header, index) => {
+        obj[header] = currentline[index] ? currentline[index].trim() : "";
+      });
+
+      result.push(obj);
+    }
+
+    return result;
+  }
+
+  /**
+   * Generates observations based on the input data and processes optional metadata.
+   *
+   * This method accepts data, which can be an array of observation objects, a JSON string,
+   * or a CSV string. If the data is in CSV format, set the `csv` parameter to `true` to
+   * parse it into a JSON object. Each observation is processed asynchronously using the
+   * `generateObservation` method. Optionally, metadata can be provided in the form of an
+   * object, and each key-value pair in the metadata object will be processed by the
+   * `processMetadata` method.
+   *
+   * @async
+   * @param {Array|String} data - The data to generate observations from. Can be an array of objects, a JSON string, or a CSV string.
+   * @param {Object} [metadata={}] - Optional metadata to be processed. Each key-value pair in this object will be processed individually.
+   * @param {boolean} [csv=false] - Flag indicating if the data is in CSV format. If true, the data will be parsed as CSV.
+   */
+  async generate(data, metadata = {}, csv = false) {
     // have it so that can pass in a dict of object that the researcher wants to do
-    if (typeof data === "string") {
+    // make it so that help
+    if (csv) data = this.parseCSV(data);
+    else if (typeof data === "string") {
       data = JSON.parse(data);
+    }
+
+    if (typeof data !== "object") {
+      console.error("Unable to parse data object object, not in correct format");
+      return;
     }
 
     for (const observation of data) {
@@ -267,8 +313,6 @@ export default class JsPsychMetadata {
     for (const key in metadata) {
       this.processMetadata(metadata, key);
     }
-    console.log(this.cache);
-    this.getMetadata();
   }
 
   private async generateObservation(observation) {
@@ -280,86 +324,68 @@ export default class JsPsychMetadata {
       const value = observation[variable];
 
       if (ignored_fields.has(variable)) this.updateFields(variable, value, typeof value);
-      else if (this.containsVariable(variable)) {
-        // logic updates existing variable
-        await this.generateUpdate(variable, value, pluginType);
-      } else {
-        // logic to create new variable
-        await this.generateVariable(variable, value, pluginType);
-      }
+      else await this.generateMetadata(variable, value, pluginType);
     }
   }
 
-  private async generateVariable(variable, value, pluginType) {
+  private async generateMetadata(variable, value, pluginType) {
     // probably should work in a call to the plugin here
     const description = await this.getPluginInfo(pluginType, variable);
-    const type = typeof value;
-
-    // probs should have update description called here
-    const new_var = {
-      type: "PropertyValue",
-      name: variable,
-      // If a description is not found from getPluginInfo, we pass a placeholder string
-      // instead of null so the system doesn't break *why doesn't null work?(promise error)*
-      description: description ? { [pluginType]: description } : { [pluginType]: "unknown" },
-      value: type,
-    };
-
-    this.setVariable(new_var);
-    this.updateFields(variable, value, type);
-  }
-
-  // hardest part is updating the description
-  // want to hardcode in the variables check
-  // logic is that probably won't need to be doing the dict thing
-  // implement all as description
-  private async generateUpdate(variable, value, pluginType) {
-    const type = typeof value;
-    const field_name = "description";
-    const description = await this.getPluginInfo(pluginType, variable);
-
-    // If a description is not found from getPluginInfo, we pass a placeholder string
-    // instead of null so the system doesn't break *why doesn't null work?(promise error)*
     const new_description = description
       ? { [pluginType]: description }
       : { [pluginType]: "unknown" };
+    const type = typeof value;
 
-    this.updateVariable(variable, field_name, new_description);
+    if (!this.containsVariable(variable)) {
+      // probs should have update description called here
+      const new_var = {
+        type: "PropertyValue",
+        name: variable,
+        description: { default: "unknown" },
+        value: type,
+      };
+      this.setVariable(new_var);
+    }
+
+    // hit the update variable decription fields
+    this.updateVariable(variable, "description", new_description);
     this.updateFields(variable, value, type);
   }
 
   private updateFields(variable, value, type) {
     // calls updates where updateVariable handles logic
-    if (type !== "number" && type !== "object") {
-      this.updateVariable(variable, "levels", value);
+    if (type === "number") {
+      this.updateVariable(variable, "minValue", value); // technically can refactor one call to do both but makes confusing
+      this.updateVariable(variable, "maxValue", value);
+      return;
     }
     // calls updates where updateVariable handles logic
-    if (type === "number") {
-      this.updateVariable(variable, "minValue", value);
-      this.updateVariable(variable, "maxValue", value);
+    if (type !== "number" && type !== "object") {
+      this.updateVariable(variable, "levels", value);
     }
   }
 
   private processMetadata(metadata, key) {
     const value = metadata[key];
 
+    // iterating through variables metadata
     if (key === "variables") {
       if (typeof value !== "object" || value === null) {
-        console.error("Variable object is either null or incorrect type");
+        console.warn("Variable object is either null or incorrect type");
         return;
       }
 
       // all of the variables must already exist because should have datapoints
       for (let variable_key in value) {
         if (!this.containsVariable(variable_key)) {
-          console.error("Metadata does not contain variable:", variable_key);
+          console.warn("Metadata does not contain variable:", variable_key);
           continue;
         }
 
         const variable_parameters = value[variable_key];
 
         if (typeof variable_parameters !== "object" || variable_parameters === null) {
-          console.error(
+          console.warn(
             "Parameters of variable:",
             variable_key,
             "is either null or incorrect type. The value",
@@ -369,16 +395,17 @@ export default class JsPsychMetadata {
           continue;
         }
 
+        // calling updates for each of the renamed parameters within variable/errors handled by method call
         for (const parameter in variable_parameters) {
-          // calling updates for each of the renamed parameters within variable/errors handled by method call
           const parameter_value = variable_parameters[parameter];
           this.updateVariable(variable_key, parameter, parameter_value);
           if (parameter === "name") variable_key = parameter_value; // renames future instances if changing name
         }
       }
-    } else if (key === "author") {
+    } // iterating through each individual author class
+    else if (key === "author") {
       if (typeof value !== "object" || value === null) {
-        console.error("Author object is not correct type");
+        console.warn("Author object is not correct type");
         return;
       }
 
@@ -419,7 +446,7 @@ export default class JsPsychMetadata {
       const scriptContent = await response.text();
 
       // Extract the JSDoc description for the variable from the script content
-      const description = getJsdocsDescription(scriptContent, variableName);
+      const description = this.getJsdocsDescription(scriptContent, variableName);
 
       // Check again if the cache for the pluginType exists, if not initialize it
       if (!this.cache[pluginType]) this.cache[pluginType] = {};
@@ -444,43 +471,43 @@ export default class JsPsychMetadata {
       return null;
     }
   }
-}
 
-/**
- * Extracts the description for a variable of a plugin from the JSDoc comments present in the script of the plugin. The script content is
- * drawn from the remotely hosted source file of the plugin through getPluginInfo. The script content is taken
- * as a string and Regex is used to extract the description.
- *
- *
- * @param {string} scriptContent - The content of the script from which the JSDoc description is to be extracted.
- * @param {string} variableName - The name of the variable for which the JSDoc description is to be extracted.
- * @returns {string} The extracted JSDoc description, cleaned and trimmed.
- */
-function getJsdocsDescription(scriptContent: string, variableName: string) {
-  // Regex to match part of the content that starts with 'parameters:' and ends with '};', which
-  // is parameters info. THIS MUST BE CHANGED TO data FOR NEW PLUGIN LAYOUT
-  const paramRegex = scriptContent.match(/parameters:\s*{([\s\S]*?)};\s*/).join();
+  /**
+   * Extracts the description for a variable of a plugin from the JSDoc comments present in the script of the plugin. The script content is
+   * drawn from the remotely hosted source file of the plugin through getPluginInfo. The script content is taken
+   * as a string and Regex is used to extract the description.
+   *
+   *
+   * @param {string} scriptContent - The content of the script from which the JSDoc description is to be extracted.
+   * @param {string} variableName - The name of the variable for which the JSDoc description is to be extracted.
+   * @returns {string} The extracted JSDoc description, cleaned and trimmed.
+   */
+  private getJsdocsDescription(scriptContent: string, variableName: string) {
+    // Regex to match part of the content that starts with 'parameters:' and ends with '};', which
+    // is parameters info. THIS MUST BE CHANGED TO data FOR NEW PLUGIN LAYOUT
+    const paramRegex = scriptContent.match(/parameters:\s*{([\s\S]*?)};\s*/).join();
 
-  // Regex that matches everything up to the variable name
-  const regex = new RegExp(`((.|\n)*)(?=${variableName}:)`);
+    // Regex that matches everything up to the variable name
+    const regex = new RegExp(`((.|\n)*)(?=${variableName}:)`);
 
-  // Regex on paramRegex, to get everything from 'paramaters:' to the variable name.
-  const variableRegex = paramRegex.match(regex)[0];
+    // Regex on paramRegex, to get everything from 'paramaters:' to the variable name.
+    const variableRegex = paramRegex.match(regex)[0];
 
-  // Finds the index of the last occurence of `/**` in the variableRegex string, and slices it from there
-  // to give the JSDoc comment for our variable.
-  const descrip = variableRegex.slice(variableRegex.lastIndexOf("/**"));
+    // Finds the index of the last occurence of `/**` in the variableRegex string, and slices it from there
+    // to give the JSDoc comment for our variable.
+    const descrip = variableRegex.slice(variableRegex.lastIndexOf("/**"));
 
-  // Regex to remove the leading and trailing '/**' and '*/' characters.
-  const clean = descrip.match(/(?<=\*\*)([\s\S]*?)(?=\*\/)/)[1];
+    // Regex to remove the leading and trailing '/**' and '*/' characters.
+    const clean = descrip.match(/(?<=\*\*)([\s\S]*?)(?=\*\/)/)[1];
 
-  //CLEANING:
-  // Regex to remove all newline characters.
-  const cleaner = clean.replace(/(\r\n|\n|\r)/gm, "");
+    //CLEANING:
+    // Regex to remove all newline characters.
+    const cleaner = clean.replace(/(\r\n|\n|\r)/gm, "");
 
-  // Remove all '*' characters from the JSDoc comment.
-  const cleanest = cleaner.replace(/\*/gm, "");
+    // Remove all '*' characters from the JSDoc comment.
+    const cleanest = cleaner.replace(/\*/gm, "");
 
-  // Return the cleaned JSDoc comment, trimmed of leading and trailing whitespace
-  return cleanest.trim();
+    // Return the cleaned JSDoc comment, trimmed of leading and trailing whitespace
+    return cleanest.trim();
+  }
 }
