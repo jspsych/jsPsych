@@ -328,7 +328,6 @@ export default class JsPsychMetadata {
 
   private processMetadata(metadata, key) {
     const value = metadata[key];
-    console.log("PROCESS METADATA", key, "for value", value);
 
     if (key === "variables") {
       if (typeof value !== "object" || value === null) {
@@ -355,8 +354,6 @@ export default class JsPsychMetadata {
           );
           continue;
         }
-
-        console.log("PROCESS VARIABLE:", variable_key, "for parameters:", variable_parameters);
 
         for (const parameter in variable_parameters) {
           // calling updates for each of the renamed parameters within variable/errors handled by method call
