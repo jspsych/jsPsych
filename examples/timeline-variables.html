@@ -20,7 +20,11 @@
         },
         "Darnell": {
           givenName: "bob",
-        }
+        },
+        "Bob": "Bob",
+        "Ostrich": {
+          bbq: 10,
+        },
       },
       variables: {
         "trial_type" : {
@@ -28,7 +32,7 @@
             "chat-plugin": "this chat plugin allows you to talk to gpt!",
           }
         },
-        "rt" : "adfasfajskf;ajdfddas",
+        // "rt" : "adfasfajskf;ajdfddas",
         "time_elapsed": { 
           bbq: "indicates the number of barbeques",
           description: {
@@ -49,7 +53,7 @@
 
     var jsPsych = initJsPsych({
       on_finish: async function() {      
-        await metadata.generate(jsPsych.data.get().json());
+        await metadata.generate(jsPsych.data.get().json(), metadata_options);
         // metadata.saveAsJsonFile();
         jsPsych.data.displayData();  
         metadata.displayMetadata(jsPsych.getDisplayElement());

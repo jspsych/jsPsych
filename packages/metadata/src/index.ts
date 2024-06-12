@@ -1,5 +1,4 @@
-import { JsPsych } from "jspsych";
-
+import { AuthorFields } from "./AuthorsMap";
 import { AuthorsMap } from "./AuthorsMap";
 import { VariablesMap } from "./VariablesMap";
 
@@ -48,7 +47,7 @@ export default class JsPsychMetadata {
    * @constructor
    * @param {JsPsych} JsPsych
    */
-  constructor(private JsPsych: JsPsych) {
+  constructor() {
     this.generateDefaultMetadata();
   }
   /**
@@ -106,31 +105,19 @@ export default class JsPsychMetadata {
    * Method that creates an author. This method can also be used to overwrite existing authors
    * with the same name in order to update fields.
    *
-   * @param {{
-   *     type?: string;
-   *     name: string;
-   *     givenName?: string;
-   *     familyName?: string;
-   *     identifier?: string;
-   *   }} fields - All the required or possible fields associated with listing an author according to Psych-DS standards.
+   * @param {AuthorFields | string} author - All the required or possible fields associated with listing an author according to Psych-DS standards. Option as a string to define an author according only to name.
    */
-  setAuthor(fields: {
-    type?: string;
-    name: string;
-    givenName?: string; // required
-    familyName?: string;
-    identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
-  }): void {
-    this.authors.setAuthor(fields);
+  setAuthor(fields: AuthorFields): void {
+    this.authors.setAuthor(fields); // Assuming `authors` is an instance of the AuthorsMap class
   }
 
   /**
    * Method that fetches an author object allowing user to update (in existing workflow should not be necessary).
    *
    * @param {string} name - Name of author to be used as key.
-   * @returns {{}} - Object with author information.
+   * @returns {(AuthorFields | string | {})} - Object with author information. Empty object if not found.
    */
-  getAuthor(name: string): {} {
+  getAuthor(name: string): AuthorFields | string | {} {
     return this.authors.getAuthor(name);
   }
 
@@ -404,6 +391,7 @@ export default class JsPsychMetadata {
       }
     } // iterating through each individual author class
     else if (key === "author") {
+      console.log(value);
       if (typeof value !== "object" || value === null) {
         console.warn("Author object is not correct type");
         return;
@@ -411,7 +399,9 @@ export default class JsPsychMetadata {
 
       for (const author_key in value) {
         const author = value[author_key];
-        if (!("name" in author)) author["name"] = author_key;
+
+        if (typeof author !== "string" && !("name" in author)) author["name"] = author_key;
+
         this.setAuthor(author);
       }
     } else this.setMetadataField(key, value);
@@ -457,7 +447,8 @@ export default class JsPsychMetadata {
       // Return the description
       return description;
     } catch (error) {
-      console.error(`Failed to fetch info from ${unpkgUrl}:`, error);
+      // console.error(`Failed to fetch info from ${unpkgUrl}:`, error); // DISABLING to test other features
+
       // Error is likely due to 1)a fetch failure, or 2)no JSDoc comments in the script content matched.
 
       //HANDLE FETCH FAILURE CASES
