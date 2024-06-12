@@ -53,7 +53,11 @@
 
     var jsPsych = initJsPsych({
       on_finish: async function() {      
+        // console.log(jsPsych.data.get().json());
+        // console.log(jsPsych.data.get().csv());
         await metadata.generate(jsPsych.data.get().json(), metadata_options);
+
+        // await metadata.generate(jsPsych.data.get().csv(), metadata_options, true);
         // metadata.saveAsJsonFile();
         jsPsych.data.displayData();  
         metadata.displayMetadata(jsPsych.getDisplayElement());

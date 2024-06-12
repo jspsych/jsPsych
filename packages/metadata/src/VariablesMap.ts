@@ -296,7 +296,7 @@ export class VariablesMap {
     const add_value = Object.values(added_value)[0];
 
     if (add_key === "undefined" || add_value === "undefined") {
-      console.error("New value is passed in bad format");
+      console.error("New value is passed in bad format", added_value);
       return;
     }
 

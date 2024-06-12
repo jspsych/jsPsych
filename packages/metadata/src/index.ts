@@ -228,6 +228,53 @@ export default class JsPsychMetadata {
   }
 
   /**
+   * Function to convert string csv into a javascript json object.
+   *
+   * Created by reversing function in datamodule using ChatGPT.
+   *
+   * @private
+   * @param {*} csv - CSV that is represented as string
+   * @returns {*} - Returns a json object
+   */
+  private CSV2JSON(csvString) {
+    const lines = csvString.split("\r\n");
+    const result = [];
+    const headers = lines[0].split(",").map((header) => header.replace(/""/g, '"').slice(1, -1));
+
+    for (let i = 1; i < lines.length; i++) {
+      if (!lines[i]) continue; // Skip empty lines
+      const obj = {};
+      const currentLine = lines[i]
+        .split(",")
+        .map((value) => value.replace(/""/g, '"').slice(1, -1));
+
+      headers.forEach((header, index) => {
+        const value = currentLine[index];
+        if (value !== undefined && value !== "") {
+          if (!isNaN(value)) {
+            obj[header] = parseFloat(value); // Convert to number if possible
+          } else if (value.toLowerCase() === "null") {
+            obj[header] = null; // Set as null if the string is "null"
+          } else {
+            try {
+              obj[header] = JSON.parse(value); // Try to parse as JSON (handles objects and arrays)
+            } catch (e) {
+              obj[header] = value; // Use the string value if parsing fails
+            }
+          }
+        }
+        // If value is undefined or empty, skip adding it to the object
+      });
+
+      if (Object.keys(obj).length > 0) {
+        result.push(obj);
+      }
+    }
+
+    return result;
+  }
+
+  /**
    * Generates observations based on the input data and processes optional metadata.
    *
    * This method accepts data, which can be an array of observation objects, a JSON string,
@@ -240,12 +287,12 @@ export default class JsPsychMetadata {
    * @async
    * @param {Array|String} data - The data to generate observations from. Can be an array of objects, a JSON string, or a CSV string.
    * @param {Object} [metadata={}] - Optional metadata to be processed. Each key-value pair in this object will be processed individually.
-   * @param {boolean} [csv=false] - Flag indicating if the data is in CSV format. If true, the data will be parsed as CSV.
+   * @param {boolean} [csv=false] - Flag indicating if the data is in a string CSV. If true, the data will be parsed as CSV.
    */
-  async generate(data, metadata = {}) {
-    // have it so that can pass in a dict of object that the researcher wants to do
-    // make it so that help
-    if (typeof data === "string") {
+  async generate(data, metadata = {}, csv = false) {
+    if (csv) {
+      data = this.CSV2JSON(data);
+    } else if (typeof data === "string") {
       data = JSON.parse(data);
     }
 
@@ -270,6 +317,8 @@ export default class JsPsychMetadata {
 
     for (const variable in observation) {
       const value = observation[variable];
+
+      if (value === null) continue;
 
       if (ignored_fields.has(variable)) this.updateFields(variable, value, typeof value);
       else await this.generateMetadata(variable, value, pluginType);
@@ -407,7 +456,7 @@ export default class JsPsychMetadata {
       // Return the description
       return description;
     } catch (error) {
-      // console.error(`Failed to fetch info from ${unpkgUrl}:`, error); // DISABLING to test other features
+      console.error(`Failed to fetch info from ${unpkgUrl}:`, error); // DISABLING to test other features
 
       // Error is likely due to 1)a fetch failure, or 2)no JSDoc comments in the script content matched.
 
