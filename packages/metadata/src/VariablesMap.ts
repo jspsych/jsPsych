@@ -1,4 +1,28 @@
 /**
+ * Interface that defines the type for the fields that are specified for variables
+ * according to Psych-DS regulations, with name being the one required field.
+ *
+ * @export
+ * @interface VariableFields
+ * @typedef {VariableFields}
+ */
+export interface VariableFields {
+  type?: string;
+  name: string; // required
+  description?: string | {};
+  value?: string; // string, boolean, or number
+  identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
+  minValue?: number;
+  maxValue?: number;
+  levels?: string[] | []; // technically property values in the other one but not sure how to format it
+  levelsOrdered?: boolean;
+  na?: boolean;
+  naValue?: string;
+  alternateName?: string;
+  privacy?: string;
+}
+
+/**
  * Custom class that stores and handles the storage, update and retrieval of variable metadata.
  *
  * @export
@@ -10,9 +34,9 @@ export class VariablesMap {
    * Field that holds a map of the current variables allowing for fast look-up.
    *
    * @private
-   * @type {{}}
+   * @type {{ [key: string]: VariableFields }}
    */
-  private variables: {};
+  private variables: { [key: string]: VariableFields };
 
   /**
    *  Creates the VariablesMap bycalling generateDefaultVariables() method to
@@ -26,12 +50,12 @@ export class VariablesMap {
 
   /**
    * Generates the default variables shared between every JsPsych experiment and fills in
-   * with filler descriptions for reseachers to change.
+   * with default descriptions according to JsPsych documentation.
    */
   generateDefaultVariables(): void {
     this.variables = {};
 
-    const trial_type_var = {
+    const trial_type_var: VariableFields = {
       type: "PropertyValue",
       name: "trial_type",
       description: {
@@ -42,7 +66,7 @@ export class VariablesMap {
     };
     this.setVariable(trial_type_var);
 
-    const trial_index_var = {
+    const trial_index_var: VariableFields = {
       type: "PropertyValue",
       name: "trial_index",
       description: {
@@ -53,7 +77,7 @@ export class VariablesMap {
     };
     this.setVariable(trial_index_var);
 
-    const time_elapsed_var = {
+    const time_elapsed_var: VariableFields = {
       type: "PropertyValue",
       name: "time_elapsed",
       description: {
@@ -108,60 +132,61 @@ export class VariablesMap {
    * Psych-DS guidelines. Only requires the name field which it uses a key to map to the variable.
    * Can also be used to overwrite existing variables if they have the same name.
    *
-   * @param {{
-   *     type?: string;
-   *     name: string; // required
-   *     description?: string | {};
-   *     value?: string; // string, boolean, or number
-   *     identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
-   *     minValue?: number;
-   *     maxValue?: number;
-   *     levels?: string[] | []; // technically property values in the other one but not sure how to format it
-   *     levelsOrdered?: boolean;
-   *     na?: boolean;
-   *     naValue?: string;
-   *     alternateName?: string;
-   *     privacy?: string;
-   *   }} fields - Input fields as specified by Psych-DS standards.
+   * @param {VariableFields} variable - The fields of the variable that is being created.
    */
-  setVariable(fields: {
-    type?: string;
-    name: string; // required
-    description?: string | {};
-    value?: string; // string, boolean, or number
-    identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
-    minValue?: number;
-    maxValue?: number;
-    levels?: string[] | []; // technically property values in the other one but not sure how to format it
-    levelsOrdered?: boolean;
-    na?: boolean;
-    naValue?: string;
-    alternateName?: string;
-    privacy?: string;
-  }): void {
-    const new_variable: { [key: string]: any } = {}; // Define an empty object to store the variables
-
-    for (const key in fields) {
-      // Check if the property is defined and not null
-      if (fields[key] !== undefined && fields[key] !== null) {
-        new_variable[key] = fields[key];
-      }
+  setVariable(variable: VariableFields): void {
+    if (!variable.name) {
+      // Ensure name is provided
+      console.warn("Name field is missing. Variable not added.", variable);
+      return;
     }
 
-    this.variables[new_variable.name] = new_variable;
+    this.variables[variable.name] = variable;
+
+    const unexpectedFields = Object.keys(variable).filter(
+      (key) =>
+        ![
+          "type",
+          "name",
+          "description",
+          "value",
+          "identifier",
+          "minValue",
+          "maxValue",
+          "levels",
+          "levelsOrdered",
+          "na",
+          "naValue",
+          "alternateName",
+          "privacy",
+        ].includes(key)
+    );
+    if (unexpectedFields.length > 0) {
+      console.warn(
+        `Unexpected fields (${unexpectedFields.join(
+          ", "
+        )}) detected and included in the variable object.`
+      );
+    }
   }
 
   /**
    * Allows you to get information for a single variable returning empty dict if it doesn't exist.
    * Allows you to update fields but not recommended in favor of updateVariable.
    *
-   * @param {string} name - Name of variable to map to.
-   * @returns {{}} - Variable information or empty dict if doesn't exist
+   * @param {string} name
+   * @returns {(VariableFields | {})} - Variable information or empty dict if doesn't exist
    */
-  getVariable(name: string): {} {
+  getVariable(name: string): VariableFields | {} {
     return this.variables[name] || {};
   }
 
+  /**
+   * Checks if variable exists in VariablesMap.
+   *
+   * @param {string} name - Name of variable
+   * @returns {boolean} - True if exists, false if doesn't.
+   */
   containsVariable(name: string): boolean {
     return name in this.variables;
   }
@@ -185,14 +210,15 @@ export class VariablesMap {
    * replace the existing value with the new value. Has special cases and logic for levels and names making it
    * easier to update variable values.
    *
-   * @param {string} var_name
-   * @param {string} field_name
-   * @param {(string | boolean | number | {})} added_value
+   *
+   * @param {string} var_name - Name of variable to be updated.
+   * @param {string} field_name - Specific field to be updated.
+   * @param {(string | boolean | number | { [key: string]: string })} added_value - Single value to be updated, with a mapping if adding to description with key representing pluginType.
    */
   updateVariable(
     var_name: string,
     field_name: string,
-    added_value: string | boolean | number | {}
+    added_value: string | boolean | number | { [key: string]: string }
   ): void {
     const updated_var = this.getVariable(var_name);
 
@@ -215,8 +241,15 @@ export class VariablesMap {
     }
   }
 
-  private updateLevels(updated_var, added_value) {
-    // for levels adds value, creating new array if necessary
+  /**
+   * Logic that handles updates to levels field by creating new array if necessary, otherwise
+   * pushing the value if it doesn't already exist. Levels can only be added to with strings.
+   *
+   * @private
+   * @param {*} updated_var - The variable object to be updated.
+   * @param {*} added_value - The value being added to the levels field.
+   */
+  private updateLevels(updated_var, added_value): void {
     if (!Array.isArray(updated_var["levels"])) {
       updated_var["levels"] = [];
     }
@@ -225,7 +258,15 @@ export class VariablesMap {
     }
   }
 
-  private updateMinMax(updated_var, added_value, field_name) {
+  /**
+   * Logic to update the min and max for the specific value.
+   *
+   * @private
+   * @param {*} updated_var - The variable object to be updated.
+   * @param {*} added_value - The value that is being checked against current min/max.
+   * @param {*} field_name - The name of field that is being checked (min or max).
+   */
+  private updateMinMax(updated_var, added_value, field_name): void {
     // check if min or max
     if (!("minValue" in updated_var) || !("maxValue" in updated_var)) {
       updated_var["maxValue"] = updated_var["minValue"] = added_value;
@@ -240,14 +281,22 @@ export class VariablesMap {
     }
   }
 
-  // used to handle logic for dict descriptions
-  private updateDescription(updated_var, added_value) {
+  /**
+   * Logic for updating description field that checks to see value already exists. If it does,
+   * appends the pluginType to the current key and pushes that along with the value. Creates
+   * map if it does not exist.
+   *
+   * @private
+   * @param {*} updated_var - The variable to be updated.
+   * @param {*} added_value - The value to be added with the key being the name of the plugin and the key being the description field.
+   */
+  private updateDescription(updated_var, added_value): void {
     // getting key and value for new value for clarity
     const add_key = Object.keys(added_value)[0];
     const add_value = Object.values(added_value)[0];
 
     if (add_key === "undefined" || add_value === "undefined") {
-      console.error("New value is passed in correct format");
+      console.error("New value is passed in bad format");
       return;
     }
 
@@ -273,55 +322,20 @@ export class VariablesMap {
     if (!exists) Object.assign(updated_var["description"], added_value); // Assuming added_value is { chatplugin: "response that user input" }
   }
 
-  private updateName(updated_var, added_value) {
+  /**
+   * Logic for updating name. Needs to retain all the old values while creating a new reference in the map
+   * while keeping the same perspe
+   *
+   * @private
+   * @param {*} updated_var
+   * @param {*} added_value
+   */
+  private updateName(updated_var, added_value): void {
     const old_name = updated_var["name"];
     updated_var["name"] = added_value;
     delete this.variables[old_name];
 
-    this.setVariable(
-      updated_var as {
-        type?: string;
-        name: string;
-        description?: string | {};
-        value?: string;
-        identifier?: string;
-        minValue?: number;
-        maxValue?: number;
-        levels?: string[] | [];
-        levelsOrdered?: boolean;
-        na?: boolean;
-        naValue?: string;
-        alternateName?: string;
-        privacy?: string;
-      }
-    );
-  }
-
-  // if the field is already a dictionary
-  // if the new value that is being added doesn't match the old value
-  checkDescription(var_name, field_name, added_var): boolean {
-    if (field_name !== "description") return false;
-
-    const variable = this.getVariable(var_name);
-
-    if (Object.keys(variable).length === 0) {
-      console.error("Variable has not been initalized");
-      return false;
-    }
-
-    const field = variable[field_name];
-
-    if (typeof field === "undefined") {
-      // will want to create a new field in this case, creates an error if not as a dict
-      console.error("Field has not been defined");
-      return false;
-    }
-
-    if (field !== added_var || typeof field === "object") {
-      return true; // means that should be initalized to a dict
-    }
-
-    return false;
+    this.setVariable(updated_var);
   }
 
   /**

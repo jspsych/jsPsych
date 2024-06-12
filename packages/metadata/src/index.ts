@@ -1,5 +1,6 @@
 import { AuthorFields } from "./AuthorsMap";
 import { AuthorsMap } from "./AuthorsMap";
+import { VariableFields } from "./VariablesMap";
 import { VariablesMap } from "./VariablesMap";
 
 /**
@@ -141,22 +142,8 @@ export default class JsPsychMetadata {
    *     privacy?: string;
    *   }} fields - Fields associated with the current Psych-DS standard.
    */
-  setVariable(fields: {
-    type?: string;
-    name: string; // required
-    description?: string | {};
-    value?: string; // string, boolean, or number
-    identifier?: string; // identifier that distinguish across dataset (URL)
-    minValue?: number;
-    maxValue?: number;
-    levels?: string[] | []; // technically property values in the other one but not sure how to format it
-    levelsOrdered?: boolean;
-    na?: boolean;
-    naValue?: string;
-    alternateName?: string;
-    privacy?: string;
-  }): void {
-    this.variables.setVariable(fields);
+  setVariable(variable: VariableFields): void {
+    this.variables.setVariable(variable);
   }
 
   /**
@@ -241,31 +228,6 @@ export default class JsPsychMetadata {
   }
 
   /**
-   * Parses a CSV string into a JSON object.
-   *
-   * @param {string} csv - The CSV string to be parsed.
-   * @returns {Array<Object>} - The parsed JSON object.
-   */
-  private parseCSV(csv) {
-    const lines = csv.split("\n");
-    const headers = lines[0].split(",").map((header) => header.trim());
-    const result = [];
-
-    for (let i = 1; i < lines.length; i++) {
-      const obj = {};
-      const currentline = lines[i].split(",");
-
-      headers.forEach((header, index) => {
-        obj[header] = currentline[index] ? currentline[index].trim() : "";
-      });
-
-      result.push(obj);
-    }
-
-    return result;
-  }
-
-  /**
    * Generates observations based on the input data and processes optional metadata.
    *
    * This method accepts data, which can be an array of observation objects, a JSON string,
@@ -280,11 +242,10 @@ export default class JsPsychMetadata {
    * @param {Object} [metadata={}] - Optional metadata to be processed. Each key-value pair in this object will be processed individually.
    * @param {boolean} [csv=false] - Flag indicating if the data is in CSV format. If true, the data will be parsed as CSV.
    */
-  async generate(data, metadata = {}, csv = false) {
+  async generate(data, metadata = {}) {
     // have it so that can pass in a dict of object that the researcher wants to do
     // make it so that help
-    if (csv) data = this.parseCSV(data);
-    else if (typeof data === "string") {
+    if (typeof data === "string") {
       data = JSON.parse(data);
     }
 
@@ -391,7 +352,6 @@ export default class JsPsychMetadata {
       }
     } // iterating through each individual author class
     else if (key === "author") {
-      console.log(value);
       if (typeof value !== "object" || value === null) {
         console.warn("Author object is not correct type");
         return;
@@ -400,7 +360,7 @@ export default class JsPsychMetadata {
       for (const author_key in value) {
         const author = value[author_key];
 
-        if (typeof author !== "string" && !("name" in author)) author["name"] = author_key;
+        if (typeof author !== "string" && !("name" in author)) author["name"] = author_key; // handles string case and empty name (uses handle)
 
         this.setAuthor(author);
       }

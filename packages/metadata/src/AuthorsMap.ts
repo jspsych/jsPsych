@@ -7,11 +7,16 @@
  * @typedef {AuthorFields}
  */
 export interface AuthorFields {
+  /** The type of the author. */
   type?: string;
+  /** The name of the author. (required) */
   name: string;
-  givenName?: string; // required
+  /** The given name of the author. */
+  givenName?: string;
+  /** The family name of the author. */
   familyName?: string;
-  identifier?: string; // identifier that distinguishes across datasets (URL), confusing should check description
+  /** The identifier that distinguishes the author across datasets (URL). */
+  identifier?: string;
 }
 
 /**
@@ -61,27 +66,30 @@ export class AuthorsMap {
    * @param {AuthorFields | string} author - All the required or possible fields associated with listing an author according to Psych-DS standards. Option as a string to define an author according only to name.
    */
   setAuthor(author: AuthorFields | string): void {
-    // handling string
+    // Handling string input
     if (typeof author === "string") {
       this.authors[author] = author;
-    } else {
-      const { type, name, givenName, familyName, identifier, ...rest } = author;
+      return;
+    }
 
-      if (!name) {
-        console.warn("Name field is missing. Author not added.");
-        return;
-      }
+    if (!author.name) {
+      console.warn("Name field is missing. Author not added.");
+      return;
+    }
 
-      const newAuthor: AuthorFields = { name, type, givenName, familyName, identifier, ...rest };
-      this.authors[name] = newAuthor;
+    const { name, ...rest } = author;
+    const newAuthor: AuthorFields = { name, ...rest };
+    this.authors[name] = newAuthor;
 
-      if (Object.keys(rest).length > 0) {
-        // if there are any keys that don't belong
-        const unexpectedFields = Object.keys(rest).join(", ");
-        console.warn(
-          `Unexpected fields (${unexpectedFields}) detected and included in the author object.`
-        );
-      }
+    const unexpectedFields = Object.keys(author).filter(
+      (key) => !["type", "name", "givenName", "familyName", "identifier"].includes(key)
+    );
+    if (unexpectedFields.length > 0) {
+      console.warn(
+        `Unexpected fields (${unexpectedFields.join(
+          ", "
+        )}) detected and included in the author object.`
+      );
     }
   }
 
