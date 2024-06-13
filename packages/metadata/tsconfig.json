@@ -3,5 +3,5 @@
   "compilerOptions": {
     "baseUrl": "."
   },
-  "include": ["src"]
+  "include": ["src", "tests/metadata-module.test.ts"]
 }

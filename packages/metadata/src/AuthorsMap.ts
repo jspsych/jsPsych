@@ -78,18 +78,23 @@ export class AuthorsMap {
     }
 
     const { name, ...rest } = author;
-    const newAuthor: AuthorFields = { name, ...rest };
-    this.authors[name] = newAuthor;
 
-    const unexpectedFields = Object.keys(author).filter(
-      (key) => !["type", "name", "givenName", "familyName", "identifier"].includes(key)
-    );
-    if (unexpectedFields.length > 0) {
-      console.warn(
-        `Unexpected fields (${unexpectedFields.join(
-          ", "
-        )}) detected and included in the author object.`
+    if (Object.keys(rest).length == 0) {
+      this.authors[name] = name;
+    } else {
+      const newAuthor: AuthorFields = { name, ...rest };
+      this.authors[name] = newAuthor;
+
+      const unexpectedFields = Object.keys(author).filter(
+        (key) => !["type", "name", "givenName", "familyName", "identifier"].includes(key)
       );
+      if (unexpectedFields.length > 0) {
+        console.warn(
+          `Unexpected fields (${unexpectedFields.join(
+            ", "
+          )}) detected and included in the author object.`
+        );
+      }
     }
   }
 

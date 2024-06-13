@@ -9,7 +9,7 @@
 export interface VariableFields {
   type?: string;
   name: string; // required
-  description?: string | {};
+  description?: string | Record<string, string>;
   value?: string; // string, boolean, or number
   identifier?: string; // identifier that distinguish across dataset (URL), confusing should check description
   minValue?: number;

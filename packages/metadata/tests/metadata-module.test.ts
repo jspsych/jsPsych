@@ -67,7 +67,10 @@ describe("JsPsychMetadata", () => {
     const trialType = {
       type: "PropertyValue",
       name: "trial_type",
-      description: "Plugin type that has been used to run trials",
+      description: {
+        default: "unknown",
+        jsPsych: "The name of the plugin used to run the trial.",
+      },
       value: "string",
     };
 
