@@ -90,7 +90,7 @@ type Info = typeof info;
  * The trial can be ended automatically if the participant has failed to respond within a fixed length of time.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/latest/plugins/jspsych-html-keyboard-response/ html-keyboard-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/html-keyboard-response/ html-keyboard-response plugin documentation on jspsych.org}
  */
 class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;

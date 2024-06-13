@@ -105,7 +105,7 @@ type Info = typeof info;
  * The participant is free to respond at any point during the animation, and the time of the response is recorded.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/latest/plugins/jspsych-animation/ animation plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/animation/ animation plugin documentation on jspsych.org}
  */
 class AnimationPlugin implements JsPsychPlugin<Info> {
   static info = info;
