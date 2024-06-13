@@ -1,5 +1,7 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "html-keyboard-response",
   parameters: {
@@ -52,6 +54,20 @@ const info = <const>{
       default: true,
     },
   },
+  data: {
+    /** Indicates which key the participant pressed. */
+    response: {
+      type: ParameterType.STRING,
+    },
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** The HTML content that was displayed on the screen. */
+    stimulus: {
+      type: ParameterType.HTML_STRING, // do we want this as a string
+    },
+  },
 };
 
 type Info = typeof info;
@@ -68,6 +84,10 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
   constructor(private jsPsych: JsPsych) {}
+
+  version() {
+    return version;
+  }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var new_html = '<div id="jspsych-html-keyboard-response-stimulus">' + trial.stimulus + "</div>";
