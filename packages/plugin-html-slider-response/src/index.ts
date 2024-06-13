@@ -59,6 +59,24 @@ const info = <const>{
       pretty_name: "Require movement",
       default: false,
     },
+    /** If true, allows the participant to use the keyboard to adjust or pan the slider. */
+    enable_keys: {
+      type: ParameterType.BOOL,
+      pretty_name: "Enable keys",
+      default: false,
+    },
+    /** The keys that the participant can use to adjust the slider by the step value. */
+    keys_adjust: {
+      type: ParameterType.KEYS,
+      pretty_name: "Keys adjust",
+      default: ['ArrowLeft', 'ArrowRight'],
+    },
+    /** The keys that the participant can use to pan the slider. Each key's corresponding value is evenly spaced from one another, with the first value and last value being at `min` and `max` respectively. */
+    keys_panning: {
+      type: ParameterType.KEYS,
+      pretty_name: "Keys panning",
+      default: ['1', '2', '3', '4', '5'],
+    },
     /** Any content here will be displayed below the slider. */
     prompt: {
       type: ParameterType.HTML_STRING,
@@ -99,11 +117,16 @@ type Info = typeof info;
 class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {}
+  constructor(private jsPsych: JsPsych) { }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    // half of the thumb width value from jspsych.css, used to adjust the label positions
+    /** Half of the thumb width value from jspsych.css, used to adjust the label positions */
     var half_thumb_width = 7.5;
+
+    var response = {
+      rt: null,
+      response: null,
+    };
 
     var html = '<div id="jspsych-html-slider-response-wrapper" style="margin: 100px 0px;">';
     html += '<div id="jspsych-html-slider-response-stimulus">' + trial.stimulus + "</div>";
@@ -163,29 +186,57 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     display_element.innerHTML = html;
 
-    var response = {
-      rt: null,
-      response: null,
+    const changeValue = (info) => {
+      let input = display_element.querySelector<HTMLInputElement>("#jspsych-html-slider-response-response");
+      if (this.jsPsych.pluginAPI.compareKeys(info.key, trial.keys_adjust[0])) {
+        input.stepDown();
+      }
+      if (this.jsPsych.pluginAPI.compareKeys(info.key, trial.keys_adjust[1])) {
+        input.stepUp();
+      }
+      if (trial.keys_panning.includes(info.key)) {
+        const panConst = (trial.max - trial.min) / (trial.keys_panning.length - 1);
+        input.value = String(trial.min + panConst * trial.keys_panning.indexOf(info.key));
+        return;
+      }
+    }
+
+    if (trial.enable_keys) {
+      var listener = this.jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: changeValue,
+        valid_responses: "ALL_KEYS",
+        rt_method: "performance",
+        persist: true,
+      });
+    }
+
+    const enable_button = () => {
+      display_element.querySelector<HTMLInputElement>(
+        "#jspsych-html-slider-response-next"
+      ).disabled = false;
     };
 
     if (trial.require_movement) {
-      const enable_button = () => {
-        display_element.querySelector<HTMLInputElement>(
-          "#jspsych-html-slider-response-next"
-        ).disabled = false;
-      };
+      ['mousedown', 'touchstart', 'change'].forEach((type) => {
+        display_element.addEventListener(type, enable_button);
+      });
 
-      display_element
-        .querySelector("#jspsych-html-slider-response-response")
-        .addEventListener("mousedown", enable_button);
+      // prevent unnecessary events from being formed
+      if (trial.enable_keys) {
+        const key_enable_button = (info) => {
+          if (trial.keys_adjust.includes(info.key) || trial.keys_panning.includes(info.key)) {
+            enable_button();
+            this.jsPsych.pluginAPI.cancelKeyboardResponse(listener);
+          }
+        }
 
-      display_element
-        .querySelector("#jspsych-html-slider-response-response")
-        .addEventListener("touchstart", enable_button);
-
-      display_element
-        .querySelector("#jspsych-html-slider-response-response")
-        .addEventListener("change", enable_button);
+        var listener = this.jsPsych.pluginAPI.getKeyboardResponse({
+          callback_function: key_enable_button,
+          valid_responses: "ALL_KEYS",
+          rt_method: "performance",
+          persist: true,
+        });
+      }
     }
 
     const end_trial = () => {
@@ -199,30 +250,34 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
         response: response.response,
       };
 
+      this.jsPsych.pluginAPI.cancelAllKeyboardResponses();
+
       display_element.innerHTML = "";
 
       // next trial
       this.jsPsych.finishTrial(trialdata);
     };
 
+    const gatherData = () => {
+      // measure response time
+      var endTime = performance.now();
+      response.rt = Math.round(endTime - startTime);
+      response.response = display_element.querySelector<HTMLInputElement>(
+        "#jspsych-html-slider-response-response"
+      ).valueAsNumber;
+
+      if (trial.response_ends_trial) {
+        end_trial();
+      } else {
+        display_element.querySelector<HTMLButtonElement>(
+          "#jspsych-html-slider-response-next"
+        ).disabled = true;
+      }
+    }
+
     display_element
       .querySelector("#jspsych-html-slider-response-next")
-      .addEventListener("click", () => {
-        // measure response time
-        var endTime = performance.now();
-        response.rt = Math.round(endTime - startTime);
-        response.response = display_element.querySelector<HTMLInputElement>(
-          "#jspsych-html-slider-response-response"
-        ).valueAsNumber;
-
-        if (trial.response_ends_trial) {
-          end_trial();
-        } else {
-          display_element.querySelector<HTMLButtonElement>(
-            "#jspsych-html-slider-response-next"
-          ).disabled = true;
-        }
-      });
+      .addEventListener("click", gatherData);
 
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {

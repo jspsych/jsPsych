@@ -1,4 +1,4 @@
-import { clickTarget, simulateTimeline, startTimeline } from "@jspsych/test-utils";
+import { pressKey, clickTarget, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import htmlSliderResponse from ".";
 
@@ -49,7 +49,7 @@ describe("html-slider-response", () => {
     );
   });
 
-  test("should set min, max and step", async () => {
+  test("should set min, max, step, and initial value", async () => {
     const { displayElement } = await startTimeline([
       {
         type: htmlSliderResponse,
@@ -58,6 +58,7 @@ describe("html-slider-response", () => {
         min: 2,
         max: 10,
         step: 2,
+        slider_start: 6,
         button_label: "button",
       },
     ]);
@@ -68,6 +69,7 @@ describe("html-slider-response", () => {
     expect(responseElement.min).toBe("2");
     expect(responseElement.max).toBe("10");
     expect(responseElement.step).toBe("2");
+    expect(responseElement.value).toBe("6");
   });
 
   test("should append to bottom on stimulus", async () => {
@@ -140,6 +142,45 @@ describe("html-slider-response", () => {
     clickTarget(document.querySelector("#jspsych-html-slider-response-next"));
 
     await expectFinished();
+  });
+
+  test("should modify value on adjusting keys", async () => {
+    const { displayElement } = await startTimeline([
+      {
+        type: htmlSliderResponse,
+        stimulus: "this is html",
+        labels: ["left", "right"],
+        button_label: "button",
+        enable_keys: true,
+      }
+    ]);
+
+    const responseElement = displayElement.querySelector<HTMLInputElement>(
+      "#jspsych-html-slider-response-response"
+    );
+
+    pressKey("ArrowLeft");
+    expect(responseElement.value).toBe("49");
+  });
+
+  test("should modify value on panning keys", async () => {
+    const { displayElement } = await startTimeline([
+      {
+        type: htmlSliderResponse,
+        stimulus: "this is html",
+        labels: ["left", "right"],
+        button_label: "button",
+        enable_keys: true,
+        keys_panning: ['q', 'w', 'e', 'r', 't', 'y'],
+      }
+    ]);
+
+    const responseElement = displayElement.querySelector<HTMLInputElement>(
+      "#jspsych-html-slider-response-response"
+    );
+
+    pressKey("w");
+    expect(responseElement.value).toBe("20");
   });
 });
 
