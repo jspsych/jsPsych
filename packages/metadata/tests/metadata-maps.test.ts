@@ -2,7 +2,7 @@ import { AuthorsMap } from "../src/AuthorsMap";
 import { VariablesMap } from "../src/VariablesMap";
 import { VariableFields } from "../src/VariablesMap";
 
-const author_data = [
+let author_data = [
   {
     name: "John Cena",
     identifier: "www.johncena.com",
@@ -62,7 +62,7 @@ describe("AuthorsMap", () => {
   });
 });
 
-const variable_data = [
+const variable_data: VariableFields[] = [
   {
     type: "PropertyValue",
     name: "trial_type",
@@ -97,11 +97,7 @@ describe("VariablesMap", () => {
   let variablesMap: VariablesMap;
 
   beforeEach(() => {
-    variablesMap = new VariablesMap(); // generates the default
-    // variablesMap = new VariablesMap();
-    // for (const v of variable_data) {
-    //   variablesMap.setVariable(v);
-    // }
+    variablesMap = new VariablesMap();
   });
 
   test("#setAndGetVariable", () => {
@@ -223,5 +219,96 @@ describe("VariablesMap", () => {
     compare["name"] = newName;
 
     expect(variablesMap.getVariable(newName)).toStrictEqual(compare);
+  });
+
+  test("#gettingListOneKey", () => {
+    for (const variable of variable_data) {
+      variablesMap.deleteVariable(variable["name"]);
+    }
+
+    let one_key_string = {
+      type: "PropertyValue",
+      name: "animation style",
+      description: "unknown",
+      value: "string",
+    };
+
+    variablesMap.setVariable(one_key_string);
+    expect([one_key_string]).toStrictEqual(variablesMap.getList());
+  });
+
+  test("#gettingListTwoUniqueKey", () => {
+    for (const variable of variable_data) {
+      variablesMap.deleteVariable(variable["name"]);
+    }
+
+    let two_key = {
+      type: "PropertyValue",
+      name: "animation style",
+      description: {
+        grown: "how tall the user is",
+        diet: "what the user likes to eat",
+      },
+      value: "string",
+    };
+
+    variablesMap.setVariable(two_key);
+    expect([two_key]).toStrictEqual(variablesMap.getList());
+  });
+
+  test("#gettingListTwoKeyDefault", () => {
+    for (const variable of variable_data) {
+      variablesMap.deleteVariable(variable["name"]);
+    }
+
+    let add_default = {
+      type: "PropertyValue",
+      name: "animation style",
+      description: {
+        default: "how tall the user is",
+        diet: "what the user likes to eat",
+      },
+      value: "string",
+    };
+
+    let expected = {
+      type: "PropertyValue",
+      name: "animation style",
+      description: "what the user likes to eat",
+      value: "string",
+    };
+
+    variablesMap.setVariable(add_default);
+    expect([expected]).toStrictEqual(variablesMap.getList());
+  });
+
+  test("#gettingListThreeKeyDefault", () => {
+    for (const variable of variable_data) {
+      variablesMap.deleteVariable(variable["name"]);
+    }
+
+    let add_default = {
+      type: "PropertyValue",
+      name: "animation style",
+      description: {
+        default: "how tall the user is",
+        diet: "what the user likes to eat",
+        hamburger: "how many hamburgers the user ate",
+      },
+      value: "string",
+    };
+
+    let expected = {
+      type: "PropertyValue",
+      name: "animation style",
+      description: {
+        diet: "what the user likes to eat",
+        hamburger: "how many hamburgers the user ate",
+      },
+      value: "string",
+    };
+
+    variablesMap.setVariable(add_default);
+    expect([expected]).toStrictEqual(variablesMap.getList());
   });
 });
