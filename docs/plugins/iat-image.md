@@ -1,6 +1,6 @@
 # iat-image
 
-Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-iat-image/CHANGELOG.md).
+Current version: 1.1.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-iat-image/CHANGELOG.md).
 
 This plugin runs a single trial of the [implicit association test (IAT)](https://implicit.harvard.edu/implicit/iatdetails.html), using an image as the stimulus.
 
@@ -40,7 +40,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-iat-image@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-iat-image@1.1.3"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

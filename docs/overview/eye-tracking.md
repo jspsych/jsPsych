@@ -14,7 +14,7 @@ Instead, it can be found on the jsdelivr.net CDN at: "https://cdn.jsdelivr.net/g
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.3.3"></script>
+  <script src="https://unpkg.com/jspsych@7.3.4"></script>
   <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@jspsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
 </head>
 ```
@@ -33,9 +33,9 @@ The [webgazer extension](../extensions/webgazer.md) adds functionality to jsPsyc
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.3.3"></script>
+  <script src="https://unpkg.com/jspsych@7.3.4"></script>
   <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@jspsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
-  <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.2"></script>
+  <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.3"></script>
 </head>
 ```
 
@@ -161,25 +161,25 @@ If you have tips based on your own experience please consider sharing them on ou
     Additional example experiments using WebGazer are available in the **/examples** folder of the jsPsych release. See `webgazer.html`, `webgazer_image.html`, and `webgazer_audio.html`. 
 
 !!! example
-    Here's an example of putting all of the pieces above together. This example also shows how to use data from the validation to decide whether or not to recalibrate. You can <a href="/demos/eye-tracking-with-webgazer.html" target="_blank">try this experiment here (opens in new tab)</a>.
+    Here's an example of putting all of the pieces above together. This example also shows how to use data from the validation to decide whether or not to recalibrate. You can <a href="../../demos/eye-tracking-with-webgazer.html" target="_blank">try this experiment here (opens in new tab)</a>.
 
     ```html
     <!DOCTYPE html>
     <html>
       <head>
-        <script src="https://unpkg.com/jspsych@7.3.3"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.2"></script>
-        <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.2"></script>
+        <script src="https://unpkg.com/jspsych@7.3.4"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.3"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.3"></script>
         <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@jspsych@7.0.0/examples/js/webgazer/webgazer.js"></script>
-        <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.2"></script>
+        <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.3"></script>
         <link
           rel="stylesheet"
-          href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css"
+          href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css"
         />
         <style>
           .jspsych-btn {

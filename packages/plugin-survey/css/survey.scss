@@ -1,25 +1,68 @@
-@use "survey-knockout/survey.css";
+@use "survey-core/defaultV2.min.css";
 
-.sv_main {
-  font-family: "Open Sans", "Arial", sans-serif;
-  font-size: 18px;
+// move buttons to right (couldn't figure out a way to do this with the SurveyJS class name map
+div#sv-nav-complete.sv-action, div#sv-nav-next.sv-action {
+  margin-left: auto !important;
+}
+
+// TO DO: get this to work with the SurveyJS class name map
+input[type="text"] {
+  width: auto;
+}
+
+// center the question content 
+.jspsych-question-content {
+  display: inline-block;
+  width: 100%;
+}
+
+// prevent question content from overflowing question border/panel
+.jspsych-question-root {
+  overflow: scroll;
+}
+
+// left-align all text in the main questions section (title is still centered)
+.jspsych-body-container {
   text-align: left;
+  align-items: center;
+}
 
-  .sv_body {
-    border-top-width: 0;
-  }
+// For some reason, when there is no survey title, the content's max-width is not restricted. 
+// This means that the left text align for sv-components-row pushes the content to the far left in this case.
+// The CSS below fixes this by restricting the max-width and centering the content (and setting padding).
+.jspsych-body {
+  width: auto;
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: calc(6 * (var(--sjs-base-unit, var(--base-unit, 8px))));
+  padding-bottom: calc(10 * (var(--sjs-base-unit, var(--base-unit, 8px))));
+}
 
-  .sv_p_root {
-    .sv_row {
-      border-bottom: none;
-    }
-  }
+// removing the padding around the question content helps align the content with the nav buttons
+.jspsych-page {
+  padding: 0;
+  min-width: 400px;
+}
 
-  .sv_container .sv_body .sv_p_root .sv_q_title {
-    font-weight: normal;
-  }
+// removing the padding around the navigation button container helps align the content with the nav buttons
+.jspsych-footer {
+  padding: calc(2 * (var(--sjs-base-unit, var(--base-unit, 8px)))) 0;
+}
 
-  .sv_q_erbox {
-    font-size: 0.85em;
-  }
+// change the 'complete' button colors to match the previous/next buttons
+.jspsych-nav-complete {
+  background: var(--sjs-questionpanel-backcolor, var(--sjs-question-background, var(--sjs-general-backcolor, var(--background, #fff))));
+  color: var(--sjs-primary-backcolor, var(--primary, #19b394));
+  display: block;
+}
+
+// remove the complete button from page flow when it is hidden
+div#sv-nav-complete.sv-action.sv-action--hidden {
+  display: none;
+}
+
+// remove min-width from questions that appear in the same row
+.jspsych-row-multiple > div {
+  min-width: unset !important;
 }

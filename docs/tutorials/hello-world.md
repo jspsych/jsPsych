@@ -45,7 +45,7 @@ To use jsPsych, add a `<script>` tag to load the library. We'll load the library
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@7.3.3"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
   </head>
   <body></body>
 </html>
@@ -60,8 +60,8 @@ You may also want to import the jsPsych stylesheet, which applies a basic set of
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@7.3.3"></script>
-    <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
 </html>
@@ -76,8 +76,8 @@ To add JavaScript code directly to the webpage we need to add a pair of `<script
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@7.3.3"></script>
-    <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
@@ -92,8 +92,8 @@ To initialize jsPsych we use the `initJsPsych()` function and assign the output 
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@7.3.3"></script>
-    <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
@@ -111,9 +111,9 @@ For this demo we want to show some text on the screen. This is exactly what the 
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@7.3.3"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
-    <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+    <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
@@ -129,9 +129,9 @@ Once the plugin is loaded we can create a trial using the plugin. To declare a t
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@7.3.3"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
-    <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+    <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
@@ -147,16 +147,16 @@ Once the plugin is loaded we can create a trial using the plugin. To declare a t
 
 ### Step 5: Run the experiment
 
-Now that we have the trial defined we need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.run` function and passing in a [timeline](../overview/timeline). For a simple experiment like this one, the timeline is just an array containing the list of trials to run.
+Now that we have the trial defined we need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.run` function and passing in a [timeline](../overview/timeline.md). For a simple experiment like this one, the timeline is just an array containing the list of trials to run.
 
 ```html hl_lines="18"
 <!DOCTYPE html>
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@7.3.3"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
-    <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+    <link href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
@@ -307,7 +307,7 @@ For this demo we want to show some text on the screen. This is exactly what the 
 </html>
 ```
 
-Once the plugin is loaded we can create a trial using the plugin. To declare a trial that uses the `html-keyboard-response` plugin, we create an object with the property `type` equal to `jsPsychHtmlKeyboardResponse`. We can specify the other parameters of the plugin in the same object. Here we use the `stimulus` parameter to include a message. You can see the full set of parameters for each plugin on its [documentation page](../plugins/html-keyboard-response).
+Once the plugin is loaded we can create a trial using the plugin. To declare a trial that uses the `html-keyboard-response` plugin, we create an object with the property `type` equal to `jsPsychHtmlKeyboardResponse`. We can specify the other parameters of the plugin in the same object. Here we use the `stimulus` parameter to include a message. You can see the full set of parameters for each plugin on its [documentation page](../plugins/html-keyboard-response.md).
 
 ```html hl_lines="13 14 15 16"
 <!DOCTYPE html>
@@ -332,7 +332,7 @@ Once the plugin is loaded we can create a trial using the plugin. To declare a t
 
 ### Step 7: Run the experiment
 
-Now that we have the trial defined we need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.run` function and passing in a [timeline](../overview/timeline). For a simple experiment like this one, the timeline is just an array containing the list of trials to run.
+Now that we have the trial defined we need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.run` function and passing in a [timeline](../overview/timeline.md). For a simple experiment like this one, the timeline is just an array containing the list of trials to run.
 
 ```html hl_lines="18"
 <!DOCTYPE html>
@@ -429,7 +429,7 @@ const trial = {
 
 ### Step 6: Run
 
-Now that we have the trial defined we need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.run` function and passing in a [timeline](../overview/timeline). For a simple experiment like this one, the timeline is just an array containing the list of trials to run.
+Now that we have the trial defined we need to tell jsPsych to run an experiment consisting of this trial. This requires using the `jsPsych.run` function and passing in a [timeline](../overview/timeline.md). For a simple experiment like this one, the timeline is just an array containing the list of trials to run.
 
 ```js
 import {initJsPsych} from 'jspsych';

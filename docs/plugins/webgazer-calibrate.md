@@ -1,6 +1,6 @@
 # webgazer-calibrate
 
-Current version: 1.0.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-webgazer-calibrate/CHANGELOG.md).
+Current version: 1.0.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-webgazer-calibrate/CHANGELOG.md).
 
 This plugin can be used to calibrate the [WebGazer extension](../extensions/webgazer.md). For a narrative description of eye tracking with jsPsych, see the [eye tracking overview](../overview/eye-tracking.md). 
 
@@ -25,7 +25,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Name | Type | Value
 -----|------|------
 
-No data currently added by this plugin. Use the [webgazer-validate](../webgazer-validate) plugin to measure the precision and accuracy of calibration.
+No data currently added by this plugin. Use the [webgazer-validate](webgazer-validate.md) plugin to measure the precision and accuracy of calibration.
 
 ## Simulation Mode
 
@@ -36,7 +36,7 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.3"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

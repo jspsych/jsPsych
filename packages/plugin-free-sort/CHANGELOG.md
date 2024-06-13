@@ -1,5 +1,13 @@
 # @jspsych/plugin-free-sort
 
+## 1.0.3
+
+### Patch Changes
+
+- [#2893](https://github.com/jspsych/jsPsych/pull/2893) [`2f37c57d`](https://github.com/jspsych/jsPsych/commit/2f37c57d22010f4aa78558dfc3a189d4ac0bbedb) Thanks [@bjoluc](https://github.com/bjoluc)! - Fix event handling on non-touch devices
+
+- [#3184](https://github.com/jspsych/jsPsych/pull/3184) [`9acfa29c`](https://github.com/jspsych/jsPsych/commit/9acfa29c8db1d7a8816c53ac49651f15493f2cf4) Thanks [@bjoluc](https://github.com/bjoluc)! - Point to source maps via canonical unpkg URLs in NPM-published browser builds. This prevents 404 errors when using redirecting CDN URLs (as described in #3043).
+
 ## 1.0.2
 
 ### Patch Changes

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <script src="docs-demo-timeline.js"></script>
+  <script src="https://unpkg.com/jspsych@7.3.4"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+  <script src="../../packages/plugin-survey/dist/index.browser.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+  <link rel="stylesheet" href="../../packages/plugin-survey/css/survey.css" />
+  <link rel="stylesheet" href="docs-demo.css" type="text/css" />
+</head>
+
+<body></body>
+<script>
+
+  const jsPsych = initJsPsych();
+
+  const timeline = [];
+
+  const text_masking_json = {
+    elements: [
+      {
+        type: "html",
+        name: "intro",
+        html: "<h3>Input masking examples</h3><p>You can use input masking with text questions to add automatic formatting to the participant's answer. The mask types are: currency, decimal, pattern, and datetime. These masks will also restrict the types of characters that can be entered, e.g. only numbers or letters."
+      },
+      {
+        type: "text",
+        name: "currency",
+        title: "Currency:",
+        description: "This currency mask adds a prefix/suffix to the number to indicate the currency. Enter some numbers to see the result.",
+        maskType: "currency",
+        maskSettings: {
+          prefix: "$",
+          suffix: " USD"
+        }
+      },
+      {
+        type: "text",
+        name: "decimal",
+        title: "Decimal:",
+        description: "This numeric mask will specify the number of decimals allowed. You can enter numbers with up to three decimals (precision: 3).",
+        maskType: "numeric",
+        maskSettings: {
+          precision: 3
+        }
+      },
+      {
+        type: "text",
+        name: "phone",
+        title: "Phone:",
+        description: "This pattern mask will format the numbers as a phone number.",
+        maskType: "pattern",
+        maskSettings: {
+          pattern: "+9 (999)-999-9999"
+        }
+      },
+      {
+        type: "text",
+        name: "creditcard",
+        title: "Credit card number:",
+        description: "This pattern mask will format the numbers as a credit card number.",
+        maskType: "pattern",
+        maskSettings: {
+          pattern: "9999 9999 9999 9999"
+        }
+      },
+      {
+        type: "text",
+        name: "licenseplate",
+        title: "License plate number:",
+        description: "A pattern mask can also be used with letters. Enter a license plate number in the format ABC-1234.",
+        maskType: "pattern",
+        maskSettings: {
+          pattern: "aaa-9999"
+        }
+      }
+    ],
+    showQuestionNumbers: false
+  };
+
+  timeline.push({
+    type: jsPsychSurvey,
+    survey_json: text_masking_json
+  });
+
+  if (typeof jsPsych !== "undefined") {
+    jsPsych.run(generateDocsDemoTimeline(timeline));
+  } else {
+    document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+  }
+</script>
+
+</html>

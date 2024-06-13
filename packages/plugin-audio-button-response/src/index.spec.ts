@@ -32,6 +32,37 @@ describe.skip("audio-button-response", () => {
 
     await finished;
   });
+
+  test("enable buttons during audio playback", async () => {
+    const timeline = [
+      {
+        type: audioButtonResponse,
+        stimulus: "mymp3.mp3",
+        prompt: "foo",
+        choices: ["choice1"],
+        response_allowed_while_playing: true,
+        enable_button_after: 500,
+      },
+    ];
+
+    const jsPsych = initJsPsych({
+      use_webaudio: false,
+    });
+
+    const { getHTML, finished } = await startTimeline(timeline, jsPsych);
+
+    const btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+
+    for (let i = 0; i < btns.length; i++) {
+      expect(btns[i].getAttribute("disabled")).toBe(true);
+    }
+
+    jest.advanceTimersByTime(500);
+
+    for (let i = 0; i < btns.length; i++) {
+      expect(btns[i].hasAttribute("disabled")).toBe(false);
+    }
+  });
 });
 
 describe("audio-button-response simulation", () => {
