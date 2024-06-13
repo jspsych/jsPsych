@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <script src="../../jspsych/dist/index.browser.js"></script>
+  <script src="../dist/index.browser.js"></script>
+  <link rel="stylesheet" href="../../jspsych/css/jspsych.css" />
+  <link rel="stylesheet" href="../css/survey.css" />
+</head>
+
+<body></body>
+<script type="text/javascript">
+
+  const jsPsych = initJsPsych({
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+
+  // This example shows how to combine several basic question types: 
+  // text (with autocomplete options), dropdown, multi-select dropdown ("tagbox").
+  // This also shows how to create a collapsible panel (group) of questions.
+  const contact_info = {
+    title: "jsPsych Survey Plugin example",
+    pages: [{
+      title: "Page 1 title: Personal Details",
+      name: "PersonalDetails",
+      elements: [{
+        type: "text",
+        name: "FirstName",
+        title: "First name:",
+        isRequired: true,
+        autocomplete: 'given-name'
+      },
+      {
+        type: "text",
+        name: "LastName",
+        title: "Last name:",
+        isRequired: true,
+        startWithNewLine: false,
+        autocomplete: 'family-name'
+      },
+      {
+        type: "panel",
+        name: "Contacts",
+        state: "collapsed",
+        title: "Contact (optional)",
+        elements: [{
+          type: "text",
+          inputType: 'tel',
+          name: "Phone",
+          title: "Phone number:",
+          defaultValue: "(123) 456-7890",
+          autocomplete: 'tel'
+        }, {
+          type: "text",
+          name: "GitHub",
+          title: "GitHub username:"
+        },
+        {
+          type: "text",
+          inputType: 'email',
+          name: "email",
+          title: "Email:",
+          autocomplete: 'email'
+        }]
+      }]
+    },
+    {
+      title: "Page 2 title: Location",
+      name: "Location",
+      description: "Here are some questions with the 'description' shown below the question. The titles are hidden by setting the 'title' string to a space character. (You can also set the survey's 'questionTitleLocation' to' 'hidden', but that applies to the whole survey.)",
+      elements: [
+      {
+        type: "text",
+        name: "State",
+        title: " ",
+        width: "20%",
+        minWidth: "128px",
+        startWithNewLine: false,
+        description: "Enter a state or region",
+        autocomplete: "off"
+      },
+      {
+        type: "dropdown",
+        name: "Country",
+        title: " ",
+        startWithNewLine: false,
+        width: "60%",
+        minWidth: "256px",
+        description: "Select a country (start typing to search, press Enter to select)",
+        choicesByUrl: {
+          url: "https://surveyjs.io/api/CountriesExample"
+        },
+        placeholder: "",
+        allowClear: false
+      }, 
+      {
+        type: "tagbox",
+        choicesByUrl: {
+          url: "https://surveyjs.io/api/CountriesExample"
+        },
+        name: "all-countries",
+        title: "Which countries have you been to?",
+        description: "Multi-select dropdown - please select all that apply. Try selecting lots of countries to see how the input area grows."
+      }]
+    }],
+    showQuestionNumbers: "off",
+    questionDescriptionLocation: "underInput",
+    completeText: "Continue",
+    widthMode: "static",
+    width: "900",
+    fitToContainer: true
+  };
+
+  const contact_info_trial = {
+    type: jsPsychSurvey,
+    survey_json: contact_info
+  };
+
+  jsPsych.run([contact_info_trial]);
+
+</script>
+
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <script src="../../jspsych/dist/index.browser.js"></script>
+  <script src="../dist/index.browser.js"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+  <link rel="stylesheet" href="../../jspsych/css/jspsych.css" />
+  <link rel="stylesheet" href="../css/survey.css" />
+</head>
+
+<body></body>
+<script type="text/javascript">
+
+  const jsPsych = initJsPsych({
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+
+  // This non-survey trial is used to demonstrate how to access prior jsPsych data when
+  // creating the survey trial
+  const color_choices = ['red', 'green', 'blue', 'yellow', 'pink', 'orange', 'purple'];
+  const color_trial = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus: '<h3>jsPsych button response trial</h3><p>Which of these is your favorite color?</p>',
+    choices: color_choices,
+    button_html: '<button class="jspsych-btn" style="color:%choice%";">%choice%</button>',
+    data: {trial_id: 'color_trial'}
+  };
+
+  // This example shows how to combine the survey_json and survey_function parameters.
+  const jspsych_rating_json = {
+    title: "jsPsych survey trial",
+    pages: [{
+      name: "example_page",
+      elements: [{
+        type: "radiogroup",
+        name: "jspsych_rating",
+        title: "How much do you like jsPsych?",
+        description: "(Select one of the first three options to see the conditional question)",
+        choices: [
+          { value: 1, text: "Not at all" },
+          { value: 2, text: "Not very much" },
+          { value: 3, text: "It's ok" },
+          { value: 4, text: "Somewhat" },
+          { value: 5, text: "A lot" },
+        ], 
+        colCount: 0
+      }]
+    }]
+  };
+
+  // The survey_function is a function that can be used to make the contents of the survey conditional 
+  // on things that happened earlier in the experiment, outside of the survey trial.
+  const jspsych_rating_function = (survey) => {
+    survey.showQuestionNumbers = false;
+
+    // Add follow up question to the existing page "example_page" based on response to jspsych_rating question 
+    // presented in this survey trial
+    const page = survey.getPageByName('example_page');
+    const jspsych_improve = page.addNewQuestion("comment", "jspsych_improve");
+    jspsych_improve.title = "What would make jsPsych better?";
+    jspsych_improve.visibleIf = "{jspsych_rating} < 4";
+    
+    // Add a new page with a follow up question based on response to the color question presented in a 
+    // separate jsPsych trial.
+    // First get the response to the color question from the jsPsych data
+    const color_choice_index = jsPsych.data.get().filter({trial_id: 'color_trial'}).values()[0].response;
+    // Get the color choice value from the response index
+    const color_choice = color_choices[color_choice_index];
+    // Add a new page, and add a new question to that page
+    const color_page = survey.addNewPage('color_page');
+    const color_confirmation = color_page.addNewQuestion("boolean", "color_confirmation");
+    color_confirmation.title = `Earlier you said you liked the color ${color_choice.toUpperCase()}. Do you still like that color?`;
+    color_confirmation.renderAs = "radio";
+  }
+
+  const jspsych_rating_trial = {
+    type: jsPsychSurvey,
+    survey_json: jspsych_rating_json,
+    survey_function: jspsych_rating_function
+  };
+
+  jsPsych.run([color_trial, jspsych_rating_trial]);
+
+</script>
+
+</html>
