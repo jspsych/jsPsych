@@ -40,6 +40,7 @@ export default class JsPsychMetadata {
    * @type {{}}
    */
   private cache: {};
+  private requests_cache: {}; // temporary requests cache before implementing faster method
 
   /**
    * Creates an instance of JsPsychMetadata while passing in JsPsych object to have access to context
@@ -66,6 +67,7 @@ export default class JsPsychMetadata {
     this.authors = new AuthorsMap();
     this.variables = new VariablesMap();
     this.cache = {};
+    this.requests_cache = {};
   }
 
   /**
@@ -429,26 +431,35 @@ export default class JsPsychMetadata {
   private async getPluginInfo(pluginType: string, variableName: string) {
     // Check if the cache for the pluginType exists, if not initialize it
     if (!this.cache[pluginType]) this.cache[pluginType] = {};
-
-    // If the variable already exists in the cache for the plugin, return the cached value
-    if (variableName in this.cache[pluginType]) {
+    else if (variableName in this.cache[pluginType]) {
+      // If the variable already exists in the cache for the plugin, return the cached value
       return this.cache[pluginType][variableName];
     }
-    // If not, we proceed to fetch script:
 
+    // If not, we proceed to fetch script:
     // Construct the URL for the unpkg service
     const unpkgUrl = `https://unpkg.com/@jspsych/plugin-${pluginType}/src/index.ts`;
 
     try {
+      // check requests cache
+      if (pluginType in this.requests_cache) {
+        const scriptContent = this.requests_cache[pluginType];
+        const description = this.getJsdocsDescription(scriptContent, variableName);
+        this.cache[pluginType][variableName] = description;
+        return description;
+      }
+
       // Fetch the script content from the unpkg URL
       const response = await fetch(unpkgUrl);
       const scriptContent = await response.text();
+      this.requests_cache[pluginType] = scriptContent;
+      console.log(scriptContent);
 
       // Extract the JSDoc description for the variable from the script content
       const description = this.getJsdocsDescription(scriptContent, variableName);
 
       // Check again if the cache for the pluginType exists, if not initialize it
-      if (!this.cache[pluginType]) this.cache[pluginType] = {};
+      if (!this.cache[pluginType]) this.cache[pluginType] = {}; // don't think this ever returns true, might be able delete
 
       // Cache the description for the variable in the pluginType cache
       this.cache[pluginType][variableName] = description;
@@ -457,11 +468,8 @@ export default class JsPsychMetadata {
       return description;
     } catch (error) {
       console.error(`Failed to fetch info from ${unpkgUrl}:`, error); // DISABLING to test other features
-
       // Error is likely due to 1)a fetch failure, or 2)no JSDoc comments in the script content matched.
-
       //HANDLE FETCH FAILURE CASES
-
       // In case of the latter, we cache the null value to prevent repeated fetch attempts.
 
       if (!this.cache[pluginType]) this.cache[pluginType] = {};
