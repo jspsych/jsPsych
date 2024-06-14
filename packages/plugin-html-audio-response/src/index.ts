@@ -133,7 +133,7 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     this.stop_event_handler = () => {
-      const data = new Blob(this.recorded_data_chunks, { type: "audio/webm" });
+      const data = new Blob(this.recorded_data_chunks, { type: this.recorded_data_chunks[0].type });
       this.audio_url = URL.createObjectURL(data);
       const reader = new FileReader();
       reader.addEventListener("load", () => {
