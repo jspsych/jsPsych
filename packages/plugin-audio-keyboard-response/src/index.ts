@@ -1,36 +1,51 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "audio-keyboard-response",
+  version: version,
   parameters: {
     /** The audio file to be played. */
     stimulus: {
       type: ParameterType.AUDIO,
-      pretty_name: "Stimulus",
       default: undefined,
     },
-    /** Array containing the key(s) the subject is allowed to press to respond to the stimulus. */
+    /** This array contains the key(s) that the participant is allowed to press in order to respond to the stimulus.
+     * Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) -
+     * see [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values)
+     * and [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/)
+     * for more examples. Any key presses that are not listed in the array will be ignored. The default value of `"ALL_KEYS"`
+     * means that all keys will be accepted as valid responses. Specifying `"NO_KEYS"` will mean that no responses are allowed.
+     */
     choices: {
       type: ParameterType.KEYS,
-      pretty_name: "Choices",
       default: "ALL_KEYS",
     },
-    /** Any content here will be displayed below the stimulus. */
+    /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that
+     * it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).
+     */
     prompt: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Prompt",
       default: null,
     },
-    /** The maximum duration to wait for a response. */
+    /** How long to wait for the participant to make a response before ending the trial in milliseconds. If the
+     * participant fails to make a response before this timer is reached, the participant's response will be
+     * recorded as null for the trial and the trial will end. If the value of this parameter is null, then the
+     * trial will wait for a response indefinitely.
+     */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
     },
-    /** If true, the trial will end when user makes a response. */
+    /** If true, then the trial will end whenever the participant makes a response (assuming they make their
+     * response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will
+     * continue until the value for `trial_duration` is reached. You can use set this parameter to `false` to
+     * force the participant to listen to the stimulus for a fixed amount of time, even if they respond before the time is complete
+     */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
     },
     /** If true, then the trial will end as soon as the audio file finishes playing. */
@@ -39,11 +54,30 @@ const info = <const>{
       pretty_name: "Trial ends after audio",
       default: false,
     },
-    /** If true, then responses are allowed while the audio is playing. If false, then the audio must finish playing before a response is accepted. */
+    /** If true, then responses are allowed while the audio is playing. If false, then the audio must finish
+     * playing before a keyboard response is accepted. Once the audio has played all the way through, a valid
+     * keyboard response is allowed (including while the audio is being re-played via on-screen playback controls).
+     */
     response_allowed_while_playing: {
       type: ParameterType.BOOL,
-      pretty_name: "Response allowed while playing",
       default: true,
+    },
+  },
+  data: {
+    /** Indicates which key the participant pressed. If no key was pressed before the trial ended, then the value will be `null`. */
+    response: {
+      type: ParameterType.STRING,
+    },
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus
+     * first began playing until the participant made a key response. If no key was pressed before the trial ended, then the
+     * value will be `null`.
+     */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** Path to the audio file that played during the trial. */
+    stimulus: {
+      type: ParameterType.STRING,
     },
   },
 };
@@ -51,12 +85,21 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **audio-keyboard-response**
+ * This plugin plays audio files and records responses generated with the keyboard.
  *
- * jsPsych plugin for playing an audio file and getting a keyboard response
+ * If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the
+ * playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of
+ * response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio.
+ *
+ * Audio files can be automatically preloaded by jsPsych using the [`preload` plugin](preload.md). However, if you are using
+ * timeline variables or another dynamic method to specify the audio stimulus, then you will need to [manually preload](../overview/media-preloading.md#manual-preloading) the audio.
+ *
+ * The trial can end when the participant responds, when the audio file has finished playing, or if the participant has
+ * failed to respond within a fixed length of time. You can also prevent a keyboard response from being recorded before
+ * the audio has finished playing.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-audio-keyboard-response/ audio-keyboard-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/audio-keyboard-response/ audio-keyboard-response plugin documentation on jspsych.org}
  */
 class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
