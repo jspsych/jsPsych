@@ -441,30 +441,30 @@ export default class JsPsychMetadata {
     const unpkgUrl = `https://unpkg.com/@jspsych/plugin-${pluginType}/src/index.ts`;
 
     try {
+      let description = "unknown";
       // check requests cache
       if (pluginType in this.requests_cache) {
         const scriptContent = this.requests_cache[pluginType];
-        const description = this.getJsdocsDescription(scriptContent, variableName);
+        description = this.getJsdocsDescription(scriptContent, variableName);
         this.cache[pluginType][variableName] = description;
-        return description;
+      } else {
+        // Fetch the script content from the unpkg URL
+        const response = await fetch(unpkgUrl);
+        const scriptContent = await response.text();
+        this.requests_cache[pluginType] = scriptContent;
+        console.log(scriptContent);
+
+        // Extract the JSDoc description for the variable from the script content
+        description = this.getJsdocsDescription(scriptContent, variableName);
+
+        // Check again if the cache for the pluginType exists, if not initialize it
+        if (!this.cache[pluginType]) this.cache[pluginType] = {}; // don't think this ever returns true, might be able delete
+
+        // Cache the description for the variable in the pluginType cache
+        this.cache[pluginType][variableName] = description;
+        // Return the description
       }
 
-      // Fetch the script content from the unpkg URL
-      const response = await fetch(unpkgUrl);
-      const scriptContent = await response.text();
-      this.requests_cache[pluginType] = scriptContent;
-      console.log(scriptContent);
-
-      // Extract the JSDoc description for the variable from the script content
-      const description = this.getJsdocsDescription(scriptContent, variableName);
-
-      // Check again if the cache for the pluginType exists, if not initialize it
-      if (!this.cache[pluginType]) this.cache[pluginType] = {}; // don't think this ever returns true, might be able delete
-
-      // Cache the description for the variable in the pluginType cache
-      this.cache[pluginType][variableName] = description;
-
-      // Return the description
       return description;
     } catch (error) {
       console.error(`Failed to fetch info from ${unpkgUrl}:`, error); // DISABLING to test other features
@@ -476,7 +476,7 @@ export default class JsPsychMetadata {
 
       this.cache[pluginType][variableName] = null;
 
-      return null;
+      return "failed with error";
     }
   }
 
