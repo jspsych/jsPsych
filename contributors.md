@@ -61,4 +61,6 @@ The following people have contributed to the development of jsPsych by writing c
 * Rob Wilkinson - https://github.com/RobAWilkinson
 * Andy Woods - https://github.com/andytwoods
 * Reto Wyss - https://github.com/retowyss
+* Shaobin Jiang - https://github.com/Shaobin-Jiang
 * Haotian Tu - https://github.com/thtTNT
+
