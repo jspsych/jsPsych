@@ -58,6 +58,14 @@
     prompt: "<p>What color is this word? (trial ends after 2s)</p>"
   });
 
+  timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+    choices: ['Green', 'Blue', 'Red'],
+    enable_button_after: 2000,
+    prompt: "<p>What color is this word? (button enable after 2s)</p>"
+  });
+
   jsPsych.run(timeline);
 
   </script>

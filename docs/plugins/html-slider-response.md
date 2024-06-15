@@ -1,6 +1,6 @@
 # html-slider-response
 
-Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-slider-response/CHANGELOG.md).
+Current version: 1.1.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-slider-response/CHANGELOG.md).
 
 This plugin displays HTML content and allows the participant to respond by dragging a slider.
 
@@ -40,7 +40,7 @@ slider_start | numeric | The starting value of the slider.
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-html-slider-response@1.1.3"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

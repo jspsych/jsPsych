@@ -1,11 +1,11 @@
 # Plugins
 
 In jsPsych, plugins define the kinds of trials or events that should occur during the experiment. 
-Some plugins define very general events, like [displaying a set of instructions pages](../plugins/instructions/), [displaying an image and recording a keyboard response](../plugins/image-keyboard-response/), or [playing a sound file and recording a button response](../plugins/audio-button-response/). 
-Other plugins are more specific, like those that display particular kinds of stimuli (e.g., a [circular visual search array](../plugins/visual-search-circle/)), or run a specific version of particular kind of task (e.g., the [Implicit Association Test](../plugins/iat-image/)).
+Some plugins define very general events, like [displaying a set of instructions pages](../plugins/instructions.md), [displaying an image and recording a keyboard response](../plugins/image-keyboard-response.md), or [playing a sound file and recording a button response](../plugins/audio-button-response.md).
+Other plugins are more specific, like those that display particular kinds of stimuli (e.g., a [circular visual search array](../plugins/visual-search-circle.md)), or run a specific version of particular kind of task (e.g., the [Implicit Association Test](../plugins/iat-image.md)).
 Part of creating an experiment with jsPsych involves figuring out which plugins are needed to create the tasks you want your participants to perform.
 
-Plugins provide a structure for a particular trial or task, but often allow for significant customization and flexibility. For example, the [image-keyboard-response plugin](../plugins/image-keyboard-response/) defines a simple structure for showing an image and collecting a keyboard response. You can specify the what the stimulus is, what keys the participant is allowed to press, how long the stimulus should be on the screen, how long the participant has to respond, and so on. Many of these options have reasonable default values; even though the image plugin has many different parameters, you only *need* to specify the image stimulus in order to use it. Each plugin has its own documentation page, which describes what the plugin does, what options are available, and what kind of data it collects.
+Plugins provide a structure for a particular trial or task, but often allow for significant customization and flexibility. For example, the [image-keyboard-response plugin](../plugins/image-keyboard-response.md) defines a simple structure for showing an image and collecting a keyboard response. You can specify the what the stimulus is, what keys the participant is allowed to press, how long the stimulus should be on the screen, how long the participant has to respond, and so on. Many of these options have reasonable default values; even though the image plugin has many different parameters, you only *need* to specify the image stimulus in order to use it. Each plugin has its own documentation page, which describes what the plugin does, what options are available, and what kind of data it collects.
 
 ## Using a plugin
 
@@ -13,8 +13,8 @@ To use a plugin, you'll need to load the plugin's JavaScript file in your experi
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.3.3" type="text/javascript"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2" type="text/javascript"></script>
+  <script src="https://unpkg.com/jspsych@7.3.4" type="text/javascript"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.3" type="text/javascript"></script>
 </head>
 ```
 
@@ -62,6 +62,7 @@ There is also a set of parameters that can be specified for any plugin:
 | css_classes    | string   | null                    | A list of CSS classes to add to the jsPsych display element for the duration of this trial. This allows you to create custom formatting rules (CSS classes) that are only applied to specific trials. For more information and examples, see the [Controlling Visual Appearance page](../overview/style.md) and the "css-classes-parameter.html" file in the jsPsych examples folder. |
 | save_trial_parameters | object | `{}` | An object containing any trial parameters that should or should not be saved to the trial data. Each key is the name of a trial parameter, and its value should be `true` or `false`, depending on whether or not its value should be saved to the data. If the parameter is a function that returns the parameter value, then the value that is returned will be saved to the data. If the parameter is always expected to be a function (e.g., an event-related callback function), then the function itself will be saved as a string. For more examples, see the "save-trial-parameters.html" file in the jsPsych examples folder. |
 | save_timeline_variables | boolean or array | `false` | If set to `true`, then all timeline variables will have their current value recorded to the data for this trial. If set to an array, then any variables listed in the array will be saved.
+| record_data | boolean | `true` | If set to `false`, then the data for this trial will not be recorded. |
 
 ### The data parameter
 

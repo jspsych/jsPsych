@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="../../jspsych/dist/index.browser.js"></script>
+    <script src="../dist/index.browser.js"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+    <link rel="stylesheet" href="../../jspsych/css/jspsych.css" />
+    <link rel="stylesheet" href="../css/survey.css" />
+    <style>
+      /* These CSS changes make the survey plugin content and position more similar to other jsPsych trials. */
+      /* Remove the border around the survey question and align the text to center instead of left. */
+      .jspsych-question-root {
+        box-shadow: none;
+        text-align: center;
+      }
+
+      /* Use flex display for presenting the survey content in the middle of the page instead of at the top. */
+      .jspsych-content-wrapper {
+        display: flex !important;
+      }
+
+      /* This prevents a horizontal scroll bar from appearing on survey trials. */
+      .jspsych-content {
+        width: 95%;
+        max-width: 95%;
+      }
+
+      /* Align the survey navigation buttons to the center */
+      .sv-components-column {
+        align-items: center;
+      }
+    </style>
+  </head>
+
+  <body></body>
+  <script type="text/javascript">
+
+    const jsPsych = initJsPsych({
+      on_finish: function () {
+        jsPsych.data.displayData();
+      }
+    });
+
+    const word_instructions = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p>You will see a series of words, each shown one at a time.</p><p>Each time you see a word, please type in the first related word that comes to mind.</p><p>For instance, if you see the word "banana", you might enter "apple" or "fruit".</p><p>Press any key to start!</p>'
+    };
+
+    // This example shows how to use timeline variables to run a timeline that includes a survey trial.
+    // The survey_json value is stored in the objects in the timeline_variables array.
+    // Note: This example is just meant to show how you can pass the survey_json in using timeline variables. If you wanted to
+    // create a similar task to this one (just one survey question and no other Survey plugin features),
+    // you would be better off using a survey-* plugin!
+    const word_trials = {
+      timeline: [
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: '+',
+          choices: "NO_KEYS",
+          trial_duration: 500
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: jsPsych.timelineVariable('word'),
+          choices: "NO_KEYS",
+          trial_duration: 1000
+        },
+        {
+          type: jsPsychSurvey,
+          survey_json: jsPsych.timelineVariable('survey_json'),
+          data: { word: jsPsych.timelineVariable('word') }
+        }
+      ],
+      timeline_variables: [
+        { word: 'cheese', survey_json: { elements: [{ type: "text", title: "Enter a word related to CHEESE:", autocomplete: "off" }], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } },
+        { word: 'ring', survey_json: { elements: [{ type: "text", title: "Enter a word related to RING:", autocomplete: "off" }], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } },
+        { word: 'bat', survey_json: { elements: [{ type: "text", title: "Enter a word related to BAT:", autocomplete: "off" }], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } },
+        { word: 'cow', survey_json: { elements: [{ type: "text", title: "Enter a word related to COW:", autocomplete: "off" }], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } }
+      ]
+    };
+
+    const semantic_relatedness_instructions = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p>You will see pairs of words, shown one at a time.</p><p>Each time you see a word pair:</p><p>Press <strong>"j"</strong> if the meanings of the two words are <strong>related</strong>, or</p><p>press <strong>"f"</strong> if the meanings of the two words are <strong>not related</strong>.</p><p>Press any key to start!</p>'
+    };
+
+    // This example shows how to use a custom function to dynamically generate the survey_json on each trial.
+    // The custom function takes information from timeline_variables and the participant's response on the last trial
+    // and uses that to create the title for a survey question.
+    const semantic_relatedness = {
+      timeline: [
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: '+',
+          choices: "NO_KEYS",
+          trial_duration: 500
+        },
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: function () {
+            var html = `
+              <div style="display:flex;width:70%;margin:auto;justify-content:space-around;"><span>${jsPsych.timelineVariable('word1')}</span><span>${jsPsych.timelineVariable('word2')}</span></div>`;
+            return html;
+          },
+          choices: ['f', 'j'],
+          trial_duration: 2500
+        },
+        {
+          type: jsPsychSurvey,
+          data: { word1: jsPsych.timelineVariable('word1'), word2: jsPsych.timelineVariable('word2') },
+          survey_json: function () {
+            const last_response = jsPsych.data.getLastTrialData().values()[0].response;
+            const response_type = (last_response === 'j') ? "RELATED" : "NOT RELATED";
+            const question_text = `You said that the words "${jsPsych.timelineVariable('word1')}" and "${jsPsych.timelineVariable('word2')}" are ${response_type}. Please explain your answer.`;
+            const survey_json = {
+              showQuestionNumbers: false,
+              completeText: "Next",
+              focusFirstQuestionAutomatic: true,
+              elements: [
+                {
+                  type: "comment",
+                  title: question_text,
+                  name: "response_explanation"
+                },
+                {
+                  type: "rating",
+                  title: "How confident do you feel about your response?",
+                  rateCount: 10,
+                  rateMax: 10,
+                  displayMode: "buttons",
+                  minRateDescription: "Not confident",
+                  maxRateDescription: "Very confident",
+                  name: "response_confidence"
+                }
+              ]
+            }
+            return survey_json
+          }
+        }
+      ],
+      timeline_variables: [
+        { word1: 'cheese', word2: 'hotel' },
+        { word1: 'ring', word2: 'pear' },
+        { word1: 'bat', word2: 'fly' },
+        { word1: 'cow', word2: 'pig' }
+      ]
+    };
+
+    jsPsych.run([word_instructions, word_trials, semantic_relatedness_instructions, semantic_relatedness]);
+  </script>
+</html>

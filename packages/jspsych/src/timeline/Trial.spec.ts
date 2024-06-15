@@ -462,6 +462,21 @@ describe("Trial", () => {
         );
       });
 
+      it("allows null values for parameters with a non-null default value", async () => {
+        TestPlugin.setParameterInfos({
+          allowedNullString: { type: ParameterType.STRING, default: "foo" },
+        });
+
+        const trial = createTrial({ type: TestPlugin, allowedNullString: null });
+        await trial.run();
+
+        expect(trial.pluginInstance.trial).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({ allowedNullString: null }),
+          expect.anything()
+        );
+      });
+
       describe("with missing required parameters", () => {
         it("errors on missing simple parameters", async () => {
           TestPlugin.setParameterInfos({ requiredString: { type: ParameterType.STRING } });
@@ -724,6 +739,20 @@ describe("Trial", () => {
 
       expect(trial.getResult()).toEqual(expect.objectContaining({ my: "result" }));
       expect(trial.getResults()).toEqual([expect.objectContaining({ my: "result" })]);
+    });
+
+    it("does not return the result when the `record_data` trial parameter is `false`", async () => {
+      TestPlugin.setManualFinishTrialMode();
+      const trial = createTrial({ type: TestPlugin, record_data: false });
+      trial.run();
+
+      expect(trial.getResult()).toBeUndefined();
+      expect(trial.getResults()).toEqual([]);
+
+      await TestPlugin.finishTrial();
+
+      expect(trial.getResult()).toBeUndefined();
+      expect(trial.getResults()).toEqual([]);
     });
   });
 

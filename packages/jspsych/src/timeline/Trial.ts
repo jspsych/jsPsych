@@ -299,14 +299,16 @@ export class Trial extends TimelineNode {
   }
 
   /**
-   * Returns the result object of this trial or `undefined` if the result is not yet known.
+   * Returns the result object of this trial or `undefined` if the result is not yet known or the
+   * `record_data` trial parameter is `false`.
    */
   public getResult() {
-    return this.result;
+    return this.getParameterValue("record_data") === false ? undefined : this.result;
   }
 
   public getResults() {
-    return this.result ? [this.result] : [];
+    const result = this.getResult();
+    return result ? [result] : [];
   }
 
   /**

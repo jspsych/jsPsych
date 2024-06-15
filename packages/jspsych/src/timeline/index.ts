@@ -55,6 +55,11 @@ export interface TrialDescription extends Record<string, any> {
   /** https://www.jspsych.org/latest/overview/extensions/ */
   extensions?: Parameter<TrialExtensionsConfiguration>;
 
+  /**
+   * Whether to record the data of this trial. Defaults to `true`.
+   */
+  record_data?: Parameter<boolean>;
+
   // Events
 
   /** https://www.jspsych.org/latest/overview/events/#on_start-trial */

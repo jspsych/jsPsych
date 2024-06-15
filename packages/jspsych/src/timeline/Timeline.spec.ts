@@ -292,6 +292,19 @@ describe("Timeline", () => {
       expect(onTimelineFinish).toHaveBeenCalledTimes(1);
     });
 
+    it("loop function ignores data from trials where `record_data` is false", async () => {
+      const loopFunction = jest.fn();
+      loopFunction.mockReturnValue(false);
+
+      const timeline = createTimeline({
+        timeline: [{ type: TestPlugin, record_data: false }, { type: TestPlugin }],
+        loop_function: loopFunction,
+      });
+
+      await timeline.run();
+      expect((loopFunction.mock.calls[0][0] as DataCollection).count()).toBe(1);
+    });
+
     describe("with timeline variables", () => {
       it("repeats all trials for each set of variables", async () => {
         const xValues = [];

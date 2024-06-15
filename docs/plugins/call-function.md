@@ -1,6 +1,6 @@
 # call-function
 
-Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-call-function/CHANGELOG.md).
+Current version: 1.1.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-call-function/CHANGELOG.md).
 
 This plugin executes a specified function. This allows the experimenter to run arbitrary code at any point during the experiment.
 
@@ -29,7 +29,7 @@ value | any | The return value of the called function.
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-call-function@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-call-function@1.1.3"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
@@ -119,6 +119,7 @@ import callFunction from '@jspsych/plugin-call-function';
 			}
 		}
 		```
+<a name="async-example"></a>
 
 ???+ example "Async function call: simulate waiting for an event to finish"
 	=== "Code"

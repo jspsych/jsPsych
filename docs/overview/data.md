@@ -70,6 +70,18 @@ var trial = {
 }
 ```
 
+### Skipping data collection for a particular trial
+
+Sometimes you may want to skip data collection for a particular trial. This can be done by setting the `record_data` parameter to `false`. This is useful if you want your data output to only contain the trials that collect relevant responses from the participant. For example, you might want to skip data collection for trials that just present a fixation cross for a fixed period of time.
+
+```js
+var trial = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: 'imgA.jpg',
+  record_data: false
+}
+```
+
 ## Aggregating and manipulating jsPsych data
 
 When accessing the data with `jsPsych.data.get()` the returned object is a special data collection object that exposes a number of methods for aggregating and manipulating the data. The full list of methods is detailed in the [data module documentation](../reference/jspsych-data.md).

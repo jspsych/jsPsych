@@ -1,6 +1,6 @@
 # virtual-chinrest
 
-Current version: 2.0.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-virtual-chinrest/CHANGELOG.md).
+Current version: 2.0.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-virtual-chinrest/CHANGELOG.md).
 
 This plugin provides a "virtual chinrest" that can measure the distance between the participant and the screen. It can also standardize the jsPsych page content to a known physical dimension (e.g., ensuring that a 200px wide stimulus is 2.2cm wide on the participant's monitor). This is based on the work of [Li, Joo, Yeatman, and Reinecke (2020)](https://doi.org/10.1038/s41598-019-57204-1), and the plugin code is a modified version of [their implementation](https://github.com/QishengLi/virtual_chinrest). We recommend citing their work in any paper that makes use of this plugin.
 
@@ -36,7 +36,7 @@ Parameters can be left unspecified if the default value is acceptable.
 
 ## Data Generated
 
-In addition to the [default data collected by all plugins](../overview/plugins.md#datacollectedbyplugins), this plugin collects the following data for each trial.
+In addition to the [default data collected by all plugins](../overview/plugins.md#data-collected-by-all-plugins), this plugin collects the following data for each trial.
 
 _Note: The deg data are **only** returned if viewing distance is estimated with the blindspot method (px2deg, win_height_deg, win_width_deg, item_width_deg)._
 
@@ -64,7 +64,7 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-virtual-chinrest@2.0.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-virtual-chinrest@2.0.3"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

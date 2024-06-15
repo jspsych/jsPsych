@@ -62,7 +62,7 @@ describe("survey-likert plugin simulation", () => {
 
     await expectFinished();
 
-    const surveyData = getData().values()[0].response;
+    const surveyData = getData().values()[0].response as Record<string, number>;
     const all_valid = Object.entries(surveyData).every((x) => {
       return x[1] <= 4 && x[1] >= 0;
     });
@@ -94,7 +94,7 @@ describe("survey-likert plugin simulation", () => {
 
     await expectFinished();
 
-    const surveyData = getData().values()[0].response;
+    const surveyData = getData().values()[0].response as Record<string, number>;
     const all_valid = Object.entries(surveyData).every((x) => {
       return x[1] <= 4 && x[1] >= 0;
     });

@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-webgazer-validate",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "type": "module",
   "main": "dist/index.cjs",
@@ -38,7 +38,7 @@
     "@jspsych/extension-webgazer": ">=1.0.0"
   },
   "devDependencies": {
-    "@jspsych/config": "^1.3.0",
+    "@jspsych/config": "^2.0.0",
     "@jspsych/extension-webgazer": "^1.0.2",
     "@jspsych/test-utils": "^1.1.2"
   }
