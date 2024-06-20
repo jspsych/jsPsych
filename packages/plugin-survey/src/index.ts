@@ -20,7 +20,6 @@ const info = <const>{
     survey_json: {
       type: ParameterType.OBJECT,
       default: {},
-      pretty_name: "Survey JSON object",
     },
     /**
      *
@@ -33,7 +32,6 @@ const info = <const>{
     survey_function: {
       type: ParameterType.FUNCTION,
       default: null,
-      pretty_name: "Survey function",
     },
     /**
      * A function that can be used to validate responses. This function is called whenever the SurveyJS `onValidateQuestion`
@@ -43,7 +41,6 @@ const info = <const>{
     validation_function: {
       type: ParameterType.FUNCTION,
       default: null,
-      pretty_name: "Validation function",
     },
   },
   data: {
