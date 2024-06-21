@@ -49,7 +49,7 @@ const info = <const>{
     /** If set to true, then the stimulus will be shown during feedback. If false, then only the text feedback will display during feedback. */
     show_stim_with_feedback: {
       type: ParameterType.BOOL,
-      no_function: false,
+      default: false,
     },
     /** If true, then category feedback will be displayed for an incorrect response after a timeout (trial_duration is exceeded). If false, then a timeout message will be shown. */
     show_feedback_on_timeout: {
