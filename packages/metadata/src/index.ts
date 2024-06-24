@@ -1,7 +1,6 @@
-import { AuthorFields } from "./AuthorsMap";
-import { AuthorsMap } from "./AuthorsMap";
-import { VariableFields } from "./VariablesMap";
-import { VariablesMap } from "./VariablesMap";
+import { AuthorFields, AuthorsMap } from "./AuthorsMap";
+import { PluginCache } from "./PluginCache";
+import { VariableFields, VariablesMap } from "./VariablesMap";
 
 /**
  * Class that handles the storage, update and retrieval of Metadata.
@@ -25,7 +24,7 @@ export default class JsPsychMetadata {
    * @type {AuthorsMap}
    */
   private authors: AuthorsMap;
-  /**
+  /**;
    * Custom class that stores and handles the storage, update and retrieval of variable metadata.
    *
    * @private
@@ -41,6 +40,7 @@ export default class JsPsychMetadata {
    */
   private variables_cache: {};
   private requests_cache: {}; // temporary requests cache before implementing faster method
+  private pluginCache: PluginCache;
 
   /**
    * Creates an instance of JsPsychMetadata while passing in JsPsych object to have access to context
@@ -50,15 +50,8 @@ export default class JsPsychMetadata {
    * @param {JsPsych} JsPsych
    */
   constructor() {
-    this.generateDefaultMetadata();
-  }
-  /**
-   * Method that fills in JsPsychMetadata class with all the universal fields with default information.
-   * This is automatically called whenever creating an instance of JsPsychMetadata and indicates all
-   * the required fields that need to filled in to be Psych-DS compliant.
-   */
-  generateDefaultMetadata(): void {
     this.metadata = {};
+    // generates default metadata
     this.setMetadataField("name", "title");
     this.setMetadataField("schemaVersion", "Psych-DS 0.4.0");
     this.setMetadataField("@context", "https://schema.org");
@@ -66,6 +59,8 @@ export default class JsPsychMetadata {
     this.setMetadataField("description", "Dataset generated using JsPsych");
     this.authors = new AuthorsMap();
     this.variables = new VariablesMap();
+    this.pluginCache = new PluginCache();
+
     this.variables_cache = {};
     this.requests_cache = {};
   }
@@ -429,12 +424,16 @@ export default class JsPsychMetadata {
    * @returns {Promise<string|null>} The description of the plugin variable if found, otherwise null.
    * @throws Will throw an error if the fetch operation fails.
    */
-  private async getPluginInfo(pluginType: string, variableName: string) {
-    const cache_request = this.checkCache(pluginType, variableName);
-    if (cache_request) return cache_request;
+  // private async getPluginInfo(pluginType: string, variableName: string) {
+  //   const cache_request = this.checkCache(pluginType, variableName);
+  //   if (cache_request) return cache_request;
 
-    const description = await this.fetchAPI(pluginType, variableName);
-    return description;
+  //   const description = await this.fetchAPI(pluginType, variableName);
+  //   return description;
+  // }
+
+  private async getPluginInfo(pluginType: string, variableName: string) {
+    return this.pluginCache.getPluginInfo(pluginType, variableName);
   }
 
   private checkCache(pluginType: string, variableName: string) {
