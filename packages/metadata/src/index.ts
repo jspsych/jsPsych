@@ -39,7 +39,7 @@ export default class JsPsychMetadata {
    * @private
    * @type {{}}
    */
-  private cache: {};
+  private variables_cache: {};
   private requests_cache: {}; // temporary requests cache before implementing faster method
 
   /**
@@ -66,7 +66,7 @@ export default class JsPsychMetadata {
     this.setMetadataField("description", "Dataset generated using JsPsych");
     this.authors = new AuthorsMap();
     this.variables = new VariablesMap();
-    this.cache = {};
+    this.variables_cache = {};
     this.requests_cache = {};
   }
 
@@ -319,6 +319,7 @@ export default class JsPsychMetadata {
 
     for (const variable in observation) {
       const value = observation[variable];
+      // console.log("pluginType:", pluginType, "variable:", variable, "value:", value);
 
       if (value === null) continue;
 
@@ -429,55 +430,78 @@ export default class JsPsychMetadata {
    * @throws Will throw an error if the fetch operation fails.
    */
   private async getPluginInfo(pluginType: string, variableName: string) {
+    const cache_request = this.checkCache(pluginType, variableName);
+    if (cache_request) return cache_request;
+
+    const description = await this.fetchAPI(pluginType, variableName);
+    return description;
+  }
+
+  private checkCache(pluginType: string, variableName: string) {
     // Check if the cache for the pluginType exists, if not initialize it
-    if (!this.cache[pluginType]) this.cache[pluginType] = {};
-    else if (variableName in this.cache[pluginType]) {
+    if (!this.variables_cache[pluginType]) this.variables_cache[pluginType] = {};
+    else if (variableName in this.variables_cache[pluginType]) {
       // If the variable already exists in the cache for the plugin, return the cached value
-      return this.cache[pluginType][variableName];
-    }
-
-    // If not, we proceed to fetch script:
-    // Construct the URL for the unpkg service
-    const unpkgUrl = `https://unpkg.com/@jspsych/plugin-${pluginType}/src/index.ts`;
-
-    try {
-      let description = "unknown";
-      // check requests cache
-      if (pluginType in this.requests_cache) {
-        const scriptContent = this.requests_cache[pluginType];
-        description = this.getJsdocsDescription(scriptContent, variableName);
-        this.cache[pluginType][variableName] = description;
-      } else {
-        // Fetch the script content from the unpkg URL
-        const response = await fetch(unpkgUrl);
-        const scriptContent = await response.text();
-        this.requests_cache[pluginType] = scriptContent;
-        console.log(scriptContent);
-
-        // Extract the JSDoc description for the variable from the script content
-        description = this.getJsdocsDescription(scriptContent, variableName);
-
-        // Check again if the cache for the pluginType exists, if not initialize it
-        if (!this.cache[pluginType]) this.cache[pluginType] = {}; // don't think this ever returns true, might be able delete
-
-        // Cache the description for the variable in the pluginType cache
-        this.cache[pluginType][variableName] = description;
-        // Return the description
-      }
+      return this.variables_cache[pluginType][variableName];
+    } else if (pluginType in this.requests_cache) {
+      // requests_cache hit
+      const scriptContent = this.requests_cache[pluginType];
+      const description = this.getJsdocsDescription(scriptContent, variableName);
+      this.variables_cache[pluginType][variableName] = description;
 
       return description;
+    } else return undefined;
+  }
+
+  private async fetchAPI(pluginType: string, variableName: string) {
+    const unpkgUrl = `http://localhost:3000/plugin/${pluginType}/index.ts`;
+    let description = undefined;
+
+    try {
+      // Fetch the script content from the unpkg URL
+      const response = await fetch(unpkgUrl);
+
+      // Check if the response is not ok
+      if (!response.ok) {
+        throw new Error(`Network response was not ok, status: ${response.status}`);
+      }
+
+      const scriptContent = await response.text();
+      if (!scriptContent) {
+        console.error("fetched script was null...");
+        return description;
+      }
+      this.requests_cache[pluginType] = scriptContent;
+
+      // // Extract the JSDoc description for the variable from the script content
+      description = this.getJsdocsDescription(scriptContent, variableName);
+
+      // if (description) {
+      //   this.variables_cache[pluginType][variableName] = description;
+      // } else {
+      //   throw new Error(`No JSDoc description found for variable: ${variableName}`);
+      // }
     } catch (error) {
-      console.error(`Failed to fetch info from ${unpkgUrl}:`, error); // DISABLING to test other features
-      // Error is likely due to 1)a fetch failure, or 2)no JSDoc comments in the script content matched.
-      //HANDLE FETCH FAILURE CASES
-      // In case of the latter, we cache the null value to prevent repeated fetch attempts.
+      // Handle specific fetch errors
+      if (error instanceof TypeError) {
+        console.error(`Failed to fetch info from ${unpkgUrl}: Network or CORS error`, error);
+      } else if (error.message.includes("Network response was not ok")) {
+        console.error(`Failed to fetch info from ${unpkgUrl}: ${error.message}`);
+      } else if (error.message.includes("No JSDoc description found")) {
+        console.error(error.message);
+      } else {
+        console.error(`Unexpected error occurred:`, error);
+      }
 
-      if (!this.cache[pluginType]) this.cache[pluginType] = {};
+      // Ensure the cache is updated to prevent repeated fetch attempts
+      if (!this.variables_cache[pluginType]) {
+        this.variables_cache[pluginType] = {};
+      }
 
-      this.cache[pluginType][variableName] = null;
-
-      return "failed with error";
+      this.variables_cache[pluginType][variableName] = undefined;
     }
+
+    return description;
   }
 
   /**
@@ -491,6 +515,7 @@ export default class JsPsychMetadata {
    * @returns {string} The extracted JSDoc description, cleaned and trimmed.
    */
   private getJsdocsDescription(scriptContent: string, variableName: string) {
+    // console.log("getJsDocDesc, varName:", variableName);
     // Regex to match part of the content that starts with 'parameters:' and ends with '};', which
     // is parameters info. THIS MUST BE CHANGED TO data FOR NEW PLUGIN LAYOUT
     const paramRegex = scriptContent.match(/parameters:\s*{([\s\S]*?)};\s*/).join();

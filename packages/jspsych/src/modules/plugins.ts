@@ -1,6 +1,12 @@
 import { SetRequired } from "type-fest";
 
-import { SimulationMode, SimulationOptions, TrialDescription, TrialResult } from "../timeline";
+import {
+  Parameter,
+  SimulationMode,
+  SimulationOptions,
+  TrialDescription,
+  TrialResult,
+} from "../timeline";
 
 /**
  * Parameter types for plugins
@@ -138,7 +144,9 @@ export type UniversalPluginParameters = InferredParameters<typeof universalPlugi
 
 export interface PluginInfo {
   name: string;
+  version?: string;
   parameters: ParameterInfos;
+  data?: ParameterInfos;
 }
 
 export interface JsPsychPlugin<I extends PluginInfo> {
