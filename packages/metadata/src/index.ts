@@ -454,6 +454,7 @@ export default class JsPsychMetadata {
   }
 
   private async fetchAPI(pluginType: string, variableName: string) {
+    // const unpkgUrl = `https://unpkg.com/@jspsych/plugin-${pluginType}/src/index.ts`;
     const unpkgUrl = `http://localhost:3000/plugin/${pluginType}/index.ts`;
     let description = undefined;
 
@@ -476,22 +477,13 @@ export default class JsPsychMetadata {
       // // Extract the JSDoc description for the variable from the script content
       description = this.getJsdocsDescription(scriptContent, variableName);
 
-      // if (description) {
-      //   this.variables_cache[pluginType][variableName] = description;
-      // } else {
-      //   throw new Error(`No JSDoc description found for variable: ${variableName}`);
-      // }
-    } catch (error) {
-      // Handle specific fetch errors
-      if (error instanceof TypeError) {
-        console.error(`Failed to fetch info from ${unpkgUrl}: Network or CORS error`, error);
-      } else if (error.message.includes("Network response was not ok")) {
-        console.error(`Failed to fetch info from ${unpkgUrl}: ${error.message}`);
-      } else if (error.message.includes("No JSDoc description found")) {
-        console.error(error.message);
+      if (description) {
+        this.variables_cache[pluginType][variableName] = description;
       } else {
-        console.error(`Unexpected error occurred:`, error);
+        throw new Error(`No JSDoc description found for variable: ${variableName}`);
       }
+    } catch (error) {
+      console.error(`Unexpected error occurred:`, error);
 
       // Ensure the cache is updated to prevent repeated fetch attempts
       if (!this.variables_cache[pluginType]) {
@@ -518,21 +510,25 @@ export default class JsPsychMetadata {
     // console.log("getJsDocDesc, varName:", variableName);
     // Regex to match part of the content that starts with 'parameters:' and ends with '};', which
     // is parameters info. THIS MUST BE CHANGED TO data FOR NEW PLUGIN LAYOUT
-    const paramRegex = scriptContent.match(/parameters:\s*{([\s\S]*?)};\s*/).join();
+    const dataString = scriptContent.match(/data:\s*{([\s\S]*?)};\s*/).join();
+    console.log("dataString:", dataString);
+    console.log("javadoc parser:", this.parseJavadocString(dataString));
 
     // Regex that matches everything up to the variable name
     const regex = new RegExp(`((.|\n)*)(?=${variableName}:)`);
+    console.log("regex:", regex);
 
     // Regex on paramRegex, to get everything from 'paramaters:' to the variable name.
-    const variableRegex = paramRegex.match(regex)[0];
+    const variableRegex = dataString.match(regex)[0];
+    console.log("variableRegex:", variableRegex);
 
     // Finds the index of the last occurence of `/**` in the variableRegex string, and slices it from there
     // to give the JSDoc comment for our variable.
     const descrip = variableRegex.slice(variableRegex.lastIndexOf("/**"));
+    console.log("descrip:", descrip);
 
     // Regex to remove the leading and trailing '/**' and '*/' characters.
     const clean = descrip.match(/(?<=\*\*)([\s\S]*?)(?=\*\/)/)[1];
-
     //CLEANING:
     // Regex to remove all newline characters.
     const cleaner = clean.replace(/(\r\n|\n|\r)/gm, "");
@@ -542,5 +538,34 @@ export default class JsPsychMetadata {
 
     // Return the cleaned JSDoc comment, trimmed of leading and trailing whitespace
     return cleanest.trim();
+  }
+
+  private parseJavadocString(dataString) {
+    const result = {};
+
+    // Regular expression to match each variable block
+    const varRegex = /\/\*\*\s*([\s\S]*?)\s*\*\/\s*(\w+):\s*{\s*([\s\S]*?)\s*},?/gs;
+    const propRegex = /\s*(\w+):\s*([^,\s]+)/g;
+
+    // Match each variable block
+    let match;
+    while ((match = varRegex.exec(dataString)) !== null) {
+      let [, description, varName, props] = match;
+      description = description.trim().replace(/\s+/g, " "); // Clean up description
+
+      const propsObj = {};
+      let propMatch;
+      while ((propMatch = propRegex.exec(props)) !== null) {
+        let [, propName, propValue] = propMatch;
+        propsObj[propName] = propValue;
+      }
+
+      result[varName] = {
+        description: description,
+        ...propsObj, // Add all additional properties to the result object
+      };
+    }
+
+    return result;
   }
 }
