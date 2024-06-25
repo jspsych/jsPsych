@@ -20,7 +20,9 @@ describe("data conversion to csv", () => {
     await clickTarget(document.querySelector("#jspsych-survey-text-next"));
 
     expect(
-      getData().ignore(["rt", "internal_node_id", "time_elapsed", "trial_type", "version"]).csv()
+      getData()
+        .ignore(["rt", "internal_node_id", "time_elapsed", "trial_type", "plugin_version"])
+        .csv()
     ).toBe('"response","trial_index"\r\n"{""Q0"":""Response 1"",""Q1"":""Response 2""}","0"\r\n');
   });
 
@@ -51,7 +53,7 @@ describe("data conversion to csv", () => {
           "trial_type",
           "rt_stim1",
           "response_stim1",
-          "version",
+          "plugin_version",
         ])
         .csv()
     ).toBe(
@@ -81,7 +83,7 @@ describe("data conversion to csv", () => {
           "time_elapsed",
           "trial_type",
           "question_order",
-          "version",
+          "plugin_version",
         ])
         .csv()
     ).toBe('"response","trial_index"\r\n"{""q"":[""fuzz"",""bizz""]}","0"\r\n');

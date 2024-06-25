@@ -21,7 +21,9 @@ describe("data conversion to json", () => {
     await clickTarget(document.querySelector("#jspsych-survey-text-next"));
 
     expect(
-      getData().ignore(["rt", "internal_node_id", "time_elapsed", "trial_type", "version"]).json()
+      getData()
+        .ignore(["rt", "internal_node_id", "time_elapsed", "trial_type", "plugin_version"])
+        .json()
     ).toBe(JSON.stringify([{ response: { Q0: "Response 1", Q1: "Response 2" }, trial_index: 0 }]));
   });
 
@@ -52,7 +54,7 @@ describe("data conversion to json", () => {
           "trial_type",
           "rt_stim1",
           "response_stim1",
-          "version",
+          "plugin_version",
         ])
         .json()
     ).toBe(
@@ -90,7 +92,7 @@ describe("data conversion to json", () => {
           "time_elapsed",
           "trial_type",
           "question_order",
-          "version",
+          "plugin_version",
         ])
         .json()
     ).toBe(
