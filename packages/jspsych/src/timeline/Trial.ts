@@ -36,6 +36,13 @@ export class Trial extends TimelineNode {
     this.trialObject = deepCopy(description);
     this.pluginClass = this.getParameterValue("type", { evaluateFunctions: false });
     this.pluginInfo = this.pluginClass["info"];
+
+    if (!("version" in this.pluginInfo) || !("data" in this.pluginInfo)) {
+      console.warn(
+        this.pluginInfo["name"],
+        "is missing the 'version' and 'data' fields. Please update plugin as 'version' and 'data' will be required in v9."
+      );
+    }
   }
 
   public async run() {
@@ -185,6 +192,7 @@ export class Trial extends TimelineNode {
       ...result,
       trial_type: this.pluginInfo.name,
       trial_index: this.index,
+      version: this.pluginInfo["version"] ? null : this.pluginInfo["version"],
     };
 
     // Add timeline variables to the result according to the `save_timeline_variables` parameter
