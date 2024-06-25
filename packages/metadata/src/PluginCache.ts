@@ -35,7 +35,6 @@ export class PluginCache {
   }
 
   private async fetchScript(pluginType: string) {
-    // handlingcall
     // const unpkgUrl = `https://unpkg.com/@jspsych/plugin-${pluginType}/src/index.ts`;
     const unpkgUrl = `http://localhost:3000/plugin/${pluginType}/index.ts`;
 
