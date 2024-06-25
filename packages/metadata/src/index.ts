@@ -414,14 +414,6 @@ export default class JsPsychMetadata {
    * @returns {Promise<string|null>} The description of the plugin variable if found, otherwise null.
    * @throws Will throw an error if the fetch operation fails.
    */
-  // private async getPluginInfo(pluginType: string, variableName: string) {
-  //   const cache_request = this.checkCache(pluginType, variableName);
-  //   if (cache_request) return cache_request;
-
-  //   const description = await this.fetchAPI(pluginType, variableName);
-  //   return description;
-  // }
-
   private async getPluginInfo(pluginType: string, variableName: string) {
     return this.pluginCache.getPluginInfo(pluginType, variableName);
   }
