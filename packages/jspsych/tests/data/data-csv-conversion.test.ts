@@ -19,9 +19,9 @@ describe("data conversion to csv", () => {
 
     await clickTarget(document.querySelector("#jspsych-survey-text-next"));
 
-    expect(getData().ignore(["rt", "internal_node_id", "time_elapsed", "trial_type"]).csv()).toBe(
-      '"response","trial_index"\r\n"{""Q0"":""Response 1"",""Q1"":""Response 2""}","0"\r\n'
-    );
+    expect(
+      getData().ignore(["rt", "internal_node_id", "time_elapsed", "trial_type", "version"]).csv()
+    ).toBe('"response","trial_index"\r\n"{""Q0"":""Response 1"",""Q1"":""Response 2""}","0"\r\n');
   });
 
   test("same-different-html stimulus array is correctly converted", async () => {
@@ -51,6 +51,7 @@ describe("data conversion to csv", () => {
           "trial_type",
           "rt_stim1",
           "response_stim1",
+          "version",
         ])
         .csv()
     ).toBe(
@@ -74,7 +75,14 @@ describe("data conversion to csv", () => {
 
     expect(
       getData()
-        .ignore(["rt", "internal_node_id", "time_elapsed", "trial_type", "question_order"])
+        .ignore([
+          "rt",
+          "internal_node_id",
+          "time_elapsed",
+          "trial_type",
+          "question_order",
+          "version",
+        ])
         .csv()
     ).toBe('"response","trial_index"\r\n"{""q"":[""fuzz"",""bizz""]}","0"\r\n');
   });

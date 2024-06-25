@@ -20,9 +20,9 @@ describe("data conversion to json", () => {
 
     await clickTarget(document.querySelector("#jspsych-survey-text-next"));
 
-    expect(getData().ignore(["rt", "internal_node_id", "time_elapsed", "trial_type"]).json()).toBe(
-      JSON.stringify([{ response: { Q0: "Response 1", Q1: "Response 2" }, trial_index: 0 }])
-    );
+    expect(
+      getData().ignore(["rt", "internal_node_id", "time_elapsed", "trial_type", "version"]).json()
+    ).toBe(JSON.stringify([{ response: { Q0: "Response 1", Q1: "Response 2" }, trial_index: 0 }]));
   });
 
   test("same-different-html stimulus array is correctly converted", async () => {
@@ -52,6 +52,7 @@ describe("data conversion to json", () => {
           "trial_type",
           "rt_stim1",
           "response_stim1",
+          "version",
         ])
         .json()
     ).toBe(
@@ -83,7 +84,14 @@ describe("data conversion to json", () => {
 
     expect(
       getData()
-        .ignore(["rt", "internal_node_id", "time_elapsed", "trial_type", "question_order"])
+        .ignore([
+          "rt",
+          "internal_node_id",
+          "time_elapsed",
+          "trial_type",
+          "question_order",
+          "version",
+        ])
         .json()
     ).toBe(
       JSON.stringify([

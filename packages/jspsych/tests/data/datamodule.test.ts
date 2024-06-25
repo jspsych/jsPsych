@@ -131,7 +131,7 @@ describe("#displayData", () => {
     jsPsych.data.displayData("csv");
     // check display element HTML
     expect(getHTML()).toMatch(
-      /<pre id="jspsych-data-display">"rt","stimulus","response","trial_type","trial_index","time_elapsed"\r\n"[\d]+","hello","a","html-keyboard-response","0","[\d]+"\r\n<\/pre>/
+      /<pre id="jspsych-data-display">"rt","stimulus","response","trial_type","trial_index","version","time_elapsed"\r\n"[\d]+","hello","a","html-keyboard-response","0","[\d.]+","[\d]+"\r\n<\/pre>/
     );
   });
 });
