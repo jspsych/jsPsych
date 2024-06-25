@@ -1,8 +1,4 @@
 ---
-"@jspsych/config": minor
-"@jspsych/extension-mouse-tracking": minor
-"@jspsych/extension-record-video": minor
-"@jspsych/extension-webgazer": minor
 "jspsych": minor
 "@jspsych/plugin-animation": minor
 "@jspsych/plugin-audio-button-response": minor
@@ -57,7 +53,6 @@
 "@jspsych/plugin-webgazer-calibrate": minor
 "@jspsych/plugin-webgazer-init-camera": minor
 "@jspsych/plugin-webgazer-validate": minor
-"@jspsych/test-utils": minor
 ---
 
 Updated all plugins to implement new pluginInfo standard that contains version, data generated and new documentation style to match migration of docs to be integrated with the code and packages themselves"

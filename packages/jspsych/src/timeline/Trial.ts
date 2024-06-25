@@ -202,7 +202,7 @@ export class Trial extends TimelineNode {
       ...result,
       trial_type: this.pluginInfo.name,
       trial_index: this.index,
-      version: this.pluginInfo["version"] ? this.pluginInfo["version"] : null,
+      plugin_version: this.pluginInfo["version"] ? this.pluginInfo["version"] : null,
     };
 
     // Add timeline variables to the result according to the `save_timeline_variables` parameter
