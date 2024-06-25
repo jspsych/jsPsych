@@ -32,14 +32,6 @@ export default class JsPsychMetadata {
    */
   private variables: VariablesMap;
 
-  /** The cache is a dictionary of dictionaries, with the outer dictionary keyed by type of plugin
-   * and the inner dictionary keyed by variableName. This is so that even if we have two variables
-   * with the same name in different plugins, we can store their descriptions separately.
-   * @private
-   * @type {{}}
-   */
-  private variables_cache: {};
-  private requests_cache: {}; // temporary requests cache before implementing faster method
   private pluginCache: PluginCache;
 
   /**
@@ -60,9 +52,6 @@ export default class JsPsychMetadata {
     this.authors = new AuthorsMap();
     this.variables = new VariablesMap();
     this.pluginCache = new PluginCache();
-
-    this.variables_cache = {};
-    this.requests_cache = {};
   }
 
   /**
@@ -325,7 +314,8 @@ export default class JsPsychMetadata {
 
   private async generateMetadata(variable, value, pluginType) {
     // probably should work in a call to the plugin here
-    const description = await this.getPluginInfo(pluginType, variable);
+    const pluginInfo = await this.getPluginInfo(pluginType, variable);
+    const description = pluginInfo["description"];
     const new_description = description
       ? { [pluginType]: description }
       : { [pluginType]: "unknown" };
@@ -434,137 +424,5 @@ export default class JsPsychMetadata {
 
   private async getPluginInfo(pluginType: string, variableName: string) {
     return this.pluginCache.getPluginInfo(pluginType, variableName);
-  }
-
-  private checkCache(pluginType: string, variableName: string) {
-    // Check if the cache for the pluginType exists, if not initialize it
-    if (!this.variables_cache[pluginType]) this.variables_cache[pluginType] = {};
-    else if (variableName in this.variables_cache[pluginType]) {
-      // If the variable already exists in the cache for the plugin, return the cached value
-      return this.variables_cache[pluginType][variableName];
-    } else if (pluginType in this.requests_cache) {
-      // requests_cache hit
-      const scriptContent = this.requests_cache[pluginType];
-      const description = this.getJsdocsDescription(scriptContent, variableName);
-      this.variables_cache[pluginType][variableName] = description;
-
-      return description;
-    } else return undefined;
-  }
-
-  private async fetchAPI(pluginType: string, variableName: string) {
-    // const unpkgUrl = `https://unpkg.com/@jspsych/plugin-${pluginType}/src/index.ts`;
-    const unpkgUrl = `http://localhost:3000/plugin/${pluginType}/index.ts`;
-    let description = undefined;
-
-    try {
-      // Fetch the script content from the unpkg URL
-      const response = await fetch(unpkgUrl);
-
-      // Check if the response is not ok
-      if (!response.ok) {
-        throw new Error(`Network response was not ok, status: ${response.status}`);
-      }
-
-      const scriptContent = await response.text();
-      if (!scriptContent) {
-        console.error("fetched script was null...");
-        return description;
-      }
-      this.requests_cache[pluginType] = scriptContent;
-
-      // // Extract the JSDoc description for the variable from the script content
-      description = this.getJsdocsDescription(scriptContent, variableName);
-
-      if (description) {
-        this.variables_cache[pluginType][variableName] = description;
-      } else {
-        throw new Error(`No JSDoc description found for variable: ${variableName}`);
-      }
-    } catch (error) {
-      console.error(`Unexpected error occurred:`, error);
-
-      // Ensure the cache is updated to prevent repeated fetch attempts
-      if (!this.variables_cache[pluginType]) {
-        this.variables_cache[pluginType] = {};
-      }
-
-      this.variables_cache[pluginType][variableName] = undefined;
-    }
-
-    return description;
-  }
-
-  /**
-   * Extracts the description for a variable of a plugin from the JSDoc comments present in the script of the plugin. The script content is
-   * drawn from the remotely hosted source file of the plugin through getPluginInfo. The script content is taken
-   * as a string and Regex is used to extract the description.
-   *
-   *
-   * @param {string} scriptContent - The content of the script from which the JSDoc description is to be extracted.
-   * @param {string} variableName - The name of the variable for which the JSDoc description is to be extracted.
-   * @returns {string} The extracted JSDoc description, cleaned and trimmed.
-   */
-  private getJsdocsDescription(scriptContent: string, variableName: string) {
-    // console.log("getJsDocDesc, varName:", variableName);
-    // Regex to match part of the content that starts with 'parameters:' and ends with '};', which
-    // is parameters info. THIS MUST BE CHANGED TO data FOR NEW PLUGIN LAYOUT
-    const dataString = scriptContent.match(/data:\s*{([\s\S]*?)};\s*/).join();
-    console.log("dataString:", dataString);
-    console.log("javadoc parser:", this.parseJavadocString(dataString));
-
-    // Regex that matches everything up to the variable name
-    const regex = new RegExp(`((.|\n)*)(?=${variableName}:)`);
-    console.log("regex:", regex);
-
-    // Regex on paramRegex, to get everything from 'paramaters:' to the variable name.
-    const variableRegex = dataString.match(regex)[0];
-    console.log("variableRegex:", variableRegex);
-
-    // Finds the index of the last occurence of `/**` in the variableRegex string, and slices it from there
-    // to give the JSDoc comment for our variable.
-    const descrip = variableRegex.slice(variableRegex.lastIndexOf("/**"));
-    console.log("descrip:", descrip);
-
-    // Regex to remove the leading and trailing '/**' and '*/' characters.
-    const clean = descrip.match(/(?<=\*\*)([\s\S]*?)(?=\*\/)/)[1];
-    //CLEANING:
-    // Regex to remove all newline characters.
-    const cleaner = clean.replace(/(\r\n|\n|\r)/gm, "");
-
-    // Remove all '*' characters from the JSDoc comment.
-    const cleanest = cleaner.replace(/\*/gm, "");
-
-    // Return the cleaned JSDoc comment, trimmed of leading and trailing whitespace
-    return cleanest.trim();
-  }
-
-  private parseJavadocString(dataString) {
-    const result = {};
-
-    // Regular expression to match each variable block
-    const varRegex = /\/\*\*\s*([\s\S]*?)\s*\*\/\s*(\w+):\s*{\s*([\s\S]*?)\s*},?/gs;
-    const propRegex = /\s*(\w+):\s*([^,\s]+)/g;
-
-    // Match each variable block
-    let match;
-    while ((match = varRegex.exec(dataString)) !== null) {
-      let [, description, varName, props] = match;
-      description = description.trim().replace(/\s+/g, " "); // Clean up description
-
-      const propsObj = {};
-      let propMatch;
-      while ((propMatch = propRegex.exec(props)) !== null) {
-        let [, propName, propValue] = propMatch;
-        propsObj[propName] = propValue;
-      }
-
-      result[varName] = {
-        description: description,
-        ...propsObj, // Add all additional properties to the result object
-      };
-    }
-
-    return result;
   }
 }

@@ -2,7 +2,7 @@ export class PluginCache {
   private pluginFields: { [key: string]: {} };
 
   constructor() {
-    this.pluginFields = {};
+    this.pluginFields = {}; // caching previous results
   }
 
   /**
@@ -17,11 +17,9 @@ export class PluginCache {
    */
   async getPluginInfo(pluginType: string, variableName: string) {
     if (pluginType in this.pluginFields) {
-      console.log("exists -- plugintype:", pluginType, "variableName:", variableName);
-
       return this.pluginFields[pluginType][variableName];
     } else {
-      console.log("doesn't exist -- plugintype:", pluginType, "variableName:", variableName);
+      console.log("doesn't exist -- plugintype:", pluginType, "variableName:", variableName); // checking search
 
       const fields = await this.generatePluginFields(pluginType);
       this.pluginFields[pluginType] = fields;
@@ -37,6 +35,7 @@ export class PluginCache {
   }
 
   private async fetchScript(pluginType: string) {
+    // handlingcall
     // const unpkgUrl = `https://unpkg.com/@jspsych/plugin-${pluginType}/src/index.ts`;
     const unpkgUrl = `http://localhost:3000/plugin/${pluginType}/index.ts`;
 
@@ -50,6 +49,7 @@ export class PluginCache {
     }
   }
 
+  // written with the help of chatgpt
   private parseJavadocString(script: string) {
     const dataString = script.match(/data:\s*{([\s\S]*?)};\s*/).join();
     const result = {};
