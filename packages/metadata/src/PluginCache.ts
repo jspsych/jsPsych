@@ -18,7 +18,6 @@ export class PluginCache {
   async getPluginInfo(pluginType: string, variableName: string) {
     // fetches if it doesn't exist
     if (!(pluginType in this.pluginFields)) {
-      console.log("doesn't exist -- plugintype:", pluginType, "variableName:", variableName); // checking search
       const fields = await this.generatePluginFields(pluginType);
       this.pluginFields[pluginType] = fields;
     }
@@ -57,7 +56,7 @@ export class PluginCache {
         pluginType,
         "with error",
         error,
-        "If you are using a plugin not in the main JsPsych branch it will not automatically fetch."
+        "Note: if you are using a plugin not in the main JsPsych branch this will always fail."
       );
       return undefined;
     }

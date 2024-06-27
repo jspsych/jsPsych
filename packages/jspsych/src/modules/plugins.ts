@@ -144,9 +144,7 @@ export type UniversalPluginParameters = InferredParameters<typeof universalPlugi
 
 export interface PluginInfo {
   name: string;
-  version?: string;
   parameters: ParameterInfos;
-  data?: ParameterInfos;
 }
 
 export interface JsPsychPlugin<I extends PluginInfo> {
