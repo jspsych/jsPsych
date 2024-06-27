@@ -25,7 +25,11 @@ export class PluginCache {
 
     if (variableName in this.pluginFields[pluginType])
       return this.pluginFields[pluginType][variableName];
-    else return "unknown";
+    else
+      return {
+        description: "unknown",
+        type: "unknown",
+      };
   }
 
   private async generatePluginFields(pluginType: string) {
