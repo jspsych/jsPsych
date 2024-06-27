@@ -39,7 +39,7 @@ describe("JsPsychMetadata", () => {
 
   test("#setAndGetVariable", () => {
     const trialType = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "trial_type",
       description: "Plugin type that has been used to run trials",
       value: "string",
@@ -51,7 +51,7 @@ describe("JsPsychMetadata", () => {
 
   test("#deleteVariable", () => {
     const trialType = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "trial_type",
       description: "Plugin type that has been used to run trials",
       value: "string",
@@ -64,7 +64,7 @@ describe("JsPsychMetadata", () => {
 
   test("#updateVariable", () => {
     const trialType = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "trial_type",
       description: {
         default: "unknown",

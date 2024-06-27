@@ -11,11 +11,11 @@ let author_data = [
     name: "Barrack Obama",
   },
   {
-    type: "Author",
+    "@type": "Author",
     name: "Donald Trump",
   },
   {
-    type: "Contributor",
+    "@type": "Contributor",
     name: "Stan Johnson",
     givenName: "Julio Jones",
     familyName: "Aaron",
@@ -42,7 +42,7 @@ describe("AuthorsMap", () => {
 
   test("#setOverwrite", () => {
     const newJohnCena = {
-      type: "WWE Pro Wrestler",
+      "@type": "WWE Pro Wrestler",
       name: "John Cena",
     };
 
@@ -64,7 +64,7 @@ describe("AuthorsMap", () => {
 
 const variable_data: VariableFields[] = [
   {
-    type: "PropertyValue",
+    "@type": "PropertyValue",
     name: "trial_type",
     description: {
       default: "unknown",
@@ -73,7 +73,7 @@ const variable_data: VariableFields[] = [
     value: "string",
   },
   {
-    type: "PropertyValue",
+    "@type": "PropertyValue",
     name: "trial_index",
     description: {
       default: "unknown",
@@ -82,7 +82,7 @@ const variable_data: VariableFields[] = [
     value: "numeric",
   },
   {
-    type: "PropertyValue",
+    "@type": "PropertyValue",
     name: "time_elapsed",
     description: {
       default: "unknown",
@@ -108,7 +108,7 @@ describe("VariablesMap", () => {
 
   test("#setOverwrite", () => {
     const newTrialType: VariableFields = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "trial_type",
       description: {
         default: "different fields",
@@ -143,7 +143,7 @@ describe("VariablesMap", () => {
   // // updating normal variable (exists and doesn't exist)
   test("#updateNormalVariables", () => {
     const compare = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "trial_type",
       description: {
         default: "unknown",
@@ -169,7 +169,7 @@ describe("VariablesMap", () => {
 
   test("#updateLevels", () => {
     interface Compare {
-      type: string;
+      "@type": string;
       name: string;
       description: {};
       value: string;
@@ -177,7 +177,7 @@ describe("VariablesMap", () => {
     }
 
     const compare: Compare = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "trial_type",
       description: {
         default: "unknown",
@@ -205,7 +205,7 @@ describe("VariablesMap", () => {
   // // updating name (checking references)
   test("#updatingName", () => {
     const compare = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "trial_type",
       description: {
         default: "unknown",
@@ -227,7 +227,7 @@ describe("VariablesMap", () => {
     }
 
     let one_key_string = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "animation style",
       description: "unknown",
       value: "string",
@@ -243,7 +243,7 @@ describe("VariablesMap", () => {
     }
 
     let two_key = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "animation style",
       description: {
         grown: "how tall the user is",
@@ -262,7 +262,7 @@ describe("VariablesMap", () => {
     }
 
     let add_default = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "animation style",
       description: {
         default: "how tall the user is",
@@ -272,7 +272,7 @@ describe("VariablesMap", () => {
     };
 
     let expected = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "animation style",
       description: "what the user likes to eat",
       value: "string",
@@ -288,7 +288,7 @@ describe("VariablesMap", () => {
     }
 
     let add_default = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "animation style",
       description: {
         default: "how tall the user is",
@@ -299,7 +299,7 @@ describe("VariablesMap", () => {
     };
 
     let expected = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "animation style",
       description: {
         diet: "what the user likes to eat",

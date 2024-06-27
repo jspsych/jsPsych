@@ -8,7 +8,7 @@
  */
 export interface AuthorFields {
   /** The type of the author. */
-  type?: string;
+  "@type"?: string;
   /** The name of the author. (required) */
   name: string;
   /** The given name of the author. */
@@ -86,7 +86,7 @@ export class AuthorsMap {
       this.authors[name] = newAuthor;
 
       const unexpectedFields = Object.keys(author).filter(
-        (key) => !["type", "name", "givenName", "familyName", "identifier"].includes(key)
+        (key) => !["@type", "name", "givenName", "familyName", "identifier"].includes(key)
       );
       if (unexpectedFields.length > 0) {
         console.warn(

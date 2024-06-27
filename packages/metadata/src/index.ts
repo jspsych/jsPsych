@@ -113,7 +113,7 @@ export default class JsPsychMetadata {
    * as a way to update fields.
    *
    * @param {{
-   *     type?: string;
+   *     @type?: string;
    *     name: string; // required
    *     description?: string | {};
    *     value?: string; // string, boolean, or number
@@ -324,7 +324,7 @@ export default class JsPsychMetadata {
     if (!this.containsVariable(variable)) {
       // probs should have update description called here
       const new_var = {
-        type: "PropertyValue",
+        "@type": "PropertyValue",
         name: variable,
         description: { default: "unknown" },
         value: type,

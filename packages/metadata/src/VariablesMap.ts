@@ -7,7 +7,7 @@
  * @typedef {VariableFields}
  */
 export interface VariableFields {
-  type?: string;
+  "@type"?: string;
   name: string; // required
   description?: string | Record<string, string>;
   value?: string; // string, boolean, or number
@@ -56,7 +56,7 @@ export class VariablesMap {
     this.variables = {};
 
     const trial_type_var: VariableFields = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "trial_type",
       description: {
         default: "unknown",
@@ -67,7 +67,7 @@ export class VariablesMap {
     this.setVariable(trial_type_var);
 
     const trial_index_var: VariableFields = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "trial_index",
       description: {
         default: "unknown",
@@ -78,7 +78,7 @@ export class VariablesMap {
     this.setVariable(trial_index_var);
 
     const time_elapsed_var: VariableFields = {
-      type: "PropertyValue",
+      "@type": "PropertyValue",
       name: "time_elapsed",
       description: {
         default: "unknown",
@@ -146,7 +146,7 @@ export class VariablesMap {
     const unexpectedFields = Object.keys(variable).filter(
       (key) =>
         ![
-          "type",
+          "@type",
           "name",
           "description",
           "value",
