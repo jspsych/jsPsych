@@ -16,22 +16,27 @@ export class PluginCache {
    * @throws Will throw an error if the fetch operation fails.
    */
   async getPluginInfo(pluginType: string, variableName: string) {
-    if (pluginType in this.pluginFields) {
-      return this.pluginFields[pluginType][variableName];
-    } else {
+    // fetches if it doesn't exist
+    if (!(pluginType in this.pluginFields)) {
       console.log("doesn't exist -- plugintype:", pluginType, "variableName:", variableName); // checking search
-
       const fields = await this.generatePluginFields(pluginType);
       this.pluginFields[pluginType] = fields;
-      console.log(fields);
-      return fields[variableName];
     }
+
+    if (variableName in this.pluginFields[pluginType])
+      return this.pluginFields[pluginType][variableName];
+    else return "unknown";
   }
 
   private async generatePluginFields(pluginType: string) {
     const script = await this.fetchScript(pluginType);
-    const fields = this.parseJavadocString(script);
-    return fields;
+
+    // parses if they exist
+    if (script !== undefined && script !== null && script !== "")
+      return this.parseJavadocString(script);
+    else {
+      return {}; // returns empty if can't fetch
+    }
   }
 
   private async fetchScript(pluginType: string) {
@@ -43,7 +48,13 @@ export class PluginCache {
       const scriptContent = await response.text();
       return scriptContent;
     } catch (error) {
-      console.error(`Unexpected error occurred:`, error);
+      console.error(
+        `Plugin fetching failed for:`,
+        pluginType,
+        "with error",
+        error,
+        "If you are using a plugin not in the main JsPsych branch it will not automatically fetch."
+      );
       return undefined;
     }
   }
