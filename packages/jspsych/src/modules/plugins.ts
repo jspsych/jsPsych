@@ -1,6 +1,12 @@
 import { SetRequired } from "type-fest";
 
-import { SimulationMode, SimulationOptions, TrialDescription, TrialResult } from "../timeline";
+import {
+  Parameter,
+  SimulationMode,
+  SimulationOptions,
+  TrialDescription,
+  TrialResult,
+} from "../timeline";
 
 /**
  * Parameter types for plugins
