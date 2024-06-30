@@ -1,8 +1,11 @@
 import type WebGazerExtension from "@jspsych/extension-webgazer";
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "webgazer-validate",
+  version: version,
   parameters: {
     /** Array of points in [x,y] coordinates */
     validation_points: {
@@ -60,20 +63,58 @@ const info = <const>{
       default: false,
     },
   },
+  data: {
+    /** Raw gaze data for the trial. The array will contain a nested array for each validation point. Within each nested array will be a list of `{x,y,dx,dy}` values specifying the absolute x and y pixels, as well as the distance from the target for that gaze point. */
+    raw_gaze: {
+      type: ParameterType.COMPLEX,
+      array: true,
+      nested: {
+        x: {
+          type: ParameterType.INT,
+        },
+        y: {
+          type: ParameterType.INT,
+        },
+        dx: {
+          type: ParameterType.INT,
+        },
+        dy: {
+          type: ParameterType.INT,
+        },
+      },
+    },
+    /** The percentage of samples within the `roi_radius` for each validation point. */
+    percent_in_roi: {
+      type: ParameterType.FLOAT,
+      array: true,
+    },
+    /** The average `x` and `y` distance from each validation point, plus the median distance `r` of the points from this average offset. */
+    average_offset: {
+      type: ParameterType.FLOAT,
+      array: true,
+    },
+    /** The average number of samples per second. Calculated by finding samples per second for each point and then averaging these estimates together. */
+    samples_per_sec: {
+      type: ParameterType.FLOAT,
+    },
+    /** The list of validation points, in the order that they appeared. */
+    validation_points: {
+      type: ParameterType.INT,
+      array: true,
+    },
+  },
 };
 
 type Info = typeof info;
 
 /**
- * **webgazer-validate**
- *
- * jsPsych plugin for measuring the accuracy and precision of eye gaze predictions.
- * Intended for use with the Webgazer eye-tracking extension, after the webcam has been initialized with the
- * `webgazer-init-camera` plugin and calibrated with the `webgazer-calibrate` plugin.
+ * This plugin can be used to measure the accuracy and precision of gaze predictions made by the
+ * [WebGazer extension](../extensions/webgazer.md). For a narrative description of eye tracking with jsPsych,
+ * see the [eye tracking overview](../overview/eye-tracking.md).
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-webgazer-validate/ webgazer-validate plugin} and
- * {@link https://www.jspsych.org/overview/eye-tracking/ eye-tracking overview} documentation on jspsych.org
+ * @see {@link https://www.jspsych.org/latest/plugins/webgazer-validate/ webgazer-validate plugin} and
+ * {@link https://www.jspsych.org/latest/overview/eye-tracking/ eye-tracking overview} documentation on jspsych.org
  */
 class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
   static info = info;

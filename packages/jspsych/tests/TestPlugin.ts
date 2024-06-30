@@ -7,7 +7,9 @@ import { PromiseWrapper } from "../src/timeline/util";
 
 export const testPluginInfo = <const>{
   name: "test",
+  version: "0.0.1",
   parameters: {},
+  data: {},
 };
 
 class TestPlugin implements JsPsychPlugin<typeof testPluginInfo> {

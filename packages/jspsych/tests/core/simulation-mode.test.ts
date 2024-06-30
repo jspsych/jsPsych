@@ -246,12 +246,14 @@ describe("data simulation mode", () => {
     class FakePlugin {
       static info = {
         name: "fake-plugin",
+        version: "0.0.1",
         parameters: {
           foo: {
             type: ParameterType.BOOL,
             default: true,
           },
         },
+        data: {},
       };
 
       constructor(private jsPsych: JsPsych) {}

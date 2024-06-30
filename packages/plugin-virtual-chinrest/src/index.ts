@@ -1,19 +1,27 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "virtual-chinrest",
+  version: version,
   parameters: {
-    /** What units to resize to? ["none"/"cm"/"inch"/"deg"]. If "none", no resizing will be done to the jsPsych content after this trial. */
+    /**
+     * Units to resize the jsPsych content to after the trial is over: `"none"` `"cm"` `"inch"` or `"deg"`.
+     * If `"none"`, no resizing will be done to the jsPsych content after the virtual-chinrest trial ends.
+     */
     resize_units: {
       type: ParameterType.SELECT,
-      pretty_name: "Resize units",
       options: ["none", "cm", "inch", "deg"],
       default: "none",
     },
-    /** After the scaling factor is applied, this many pixels will equal one unit of measurement. */
+    /**
+     * After the scaling factor is applied, this many pixels will equal one unit of measurement, where
+     * the units are indicated by `resize_units`. This is only used when resizing is done after the
+     * trial ends (i.e. the `resize_units` parameter is not "none").
+     */
     pixels_per_unit: {
       type: ParameterType.INT,
-      pretty_name: "Pixels per unit",
       default: 100,
     },
     // mouse_adjustment: {
@@ -21,10 +29,11 @@ const info = <const>{
     //   pretty_name: "Adjust Using Mouse?",
     //   default: true,
     // },
-    /** Any content here will be displayed above the card stimulus. */
+    /** This string can contain HTML markup. Any content here will be displayed
+     * **below the card stimulus** during the resizing phase.
+     */
     adjustment_prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Adjustment prompt",
       default: `
           <div style="text-align: left;">
           <p>Click and drag the lower right corner of the image until it is the same size as a credit card held up to the screen.</p>
@@ -32,44 +41,41 @@ const info = <const>{
           <p>If you do not have access to a real card you can use a ruler to measure the image width to 3.37 inches or 85.6 mm.</p>
           </div>`,
     },
-    /** Content of the button displayed below the card stimulus. */
+    /** Content of the button displayed below the card stimulus during the resizing phase. */
     adjustment_button_prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Adjustment button prompt",
       default: "Click here when the image is the correct size",
     },
-    /** Path to an image to be shown in the resizable item div. */
+    /** Path of the item to be presented in the card stimulus during the resizing phase. If `null` then no
+     * image is shown, and a solid color background is used instead. _An example image is available in
+     * `/examples/img/card.png`_
+     */
     item_path: {
       type: ParameterType.IMAGE,
-      pretty_name: "Item path",
       default: null,
       preload: false,
     },
-    /** The height of the item to be measured, in mm. */
+    /** The known height of the physical item (e.g. credit card) to be measured, in mm. */
     item_height_mm: {
       type: ParameterType.FLOAT,
-      pretty_name: "Item height (mm)",
       default: 53.98,
     },
-    /** The width of the item to be measured, in mm. */
+    /** The known width of the physical item (e.g. credit card) to be measured, in mm. */
     item_width_mm: {
       type: ParameterType.FLOAT,
-      pretty_name: "Item width (mm)",
       default: 85.6,
     },
-    /** The initial size of the card, in pixels, along the largest dimension. */
+    /** The initial size of the card stimulus, in pixels, along its largest dimension. */
     item_init_size: {
       type: ParameterType.INT,
-      pretty_name: "Initial Size",
       default: 250,
     },
-    /** How many times to measure the blindspot location? If 0, blindspot will not be detected, and viewing distance and degree data not computed. */
+    /** How many times to measure the blindspot location. If `0`, blindspot will not be detected, and viewing distance and degree data will not be computed. */
     blindspot_reps: {
       type: ParameterType.INT,
-      pretty_name: "Blindspot measurement repetitions",
       default: 5,
     },
-    /** HTML-formatted prompt to be shown on the screen during blindspot estimates. */
+    /** This string can contain HTML markup. Any content here will be displayed **above the blindspot task**. */
     blindspot_prompt: {
       type: ParameterType.HTML_STRING,
       pretty_name: "Blindspot prompt",
@@ -92,30 +98,76 @@ const info = <const>{
     //   pretty_name: "Blindspot start prompt",
     //   default: "Start"
     // },
-    /** Text accompanying the remaining measurements counter. */
+    /** Text accompanying the remaining measurements counter that appears below the blindspot task. */
     blindspot_measurements_prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Blindspot measurements prompt",
       default: "Remaining measurements: ",
     },
-    /** HTML-formatted string for reporting the distance estimate. It can contain a span with ID 'distance-estimate', which will be replaced with the distance estimate. If "none" is given, viewing distance will not be reported to the participant. */
+    /** Estimated viewing distance data displayed after blindspot task. If `"none"` is given, viewing distance will not be reported to the participant. The HTML `span` element with `id = distance-estimate` returns the distance. */
     viewing_distance_report: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Viewing distance report",
       default:
         "<p>Based on your responses, you are sitting about <span id='distance-estimate' style='font-weight: bold;'></span> from the screen.</p><p>Does that seem about right?</p>",
     },
-    /** Label for the button that can be clicked on the viewing distance report screen to re-do the blindspot estimate(s). */
+    /** Text for the button on the viewing distance report page to re-do the viewing distance estimate. If the participant click this button, the blindspot task starts again. */
     redo_measurement_button_label: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Re-do measurement button label",
       default: "No, that is not close. Try again.",
     },
-    /** Label for the button that can be clicked on the viewing distance report screen to accept the viewing distance estimate. */
+    /** Text for the button on the viewing distance report page that can be clicked to accept the viewing distance estimate. */
     blindspot_done_prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Blindspot done prompt",
       default: "Yes",
+    },
+  },
+  data: {
+    /** The response time in milliseconds. */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** The height in millimeters of the item to be measured. */
+    item_height_mm: {
+      type: ParameterType.FLOAT,
+    },
+    /** The width in millimeters of the item to be measured. */
+    item_width_mm: {
+      type: ParameterType.FLOAT,
+    },
+    /** Final height of the resizable div container, in degrees. */
+    item_height_deg: {
+      type: ParameterType.FLOAT,
+    },
+    /** Final width of the resizable div container, in degrees. */
+    item_width_deg: {
+      type: ParameterType.FLOAT,
+    },
+    /** Final width of the resizable div container, in pixels. */
+    item_width_px: {
+      type: ParameterType.FLOAT,
+    },
+    /** Pixels to degrees conversion factor. */
+    px2deg: {
+      type: ParameterType.INT,
+    },
+    /** Pixels to millimeters conversion factor. */
+    px2mm: {
+      type: ParameterType.FLOAT,
+    },
+    /** Scaling factor that will be applied to the div containing jsPsych content. */
+    scale_factor: {
+      type: ParameterType.FLOAT,
+    },
+    /** The interior width of the window in degrees. */
+    win_width_deg: {
+      type: ParameterType.FLOAT,
+    },
+    /** The interior height of the window in degrees. */
+    win_height_deg: {
+      type: ParameterType.FLOAT,
+    },
+    /** Estimated distance to the screen in millimeters. */
+    view_dist_mm: {
+      type: ParameterType.FLOAT,
     },
   },
 };
@@ -134,14 +186,30 @@ declare global {
 }
 
 /**
- * **virtual-chinrest**
  *
- * jsPsych plugin for estimating physical distance from monitor and optionally resizing experiment content, based on Qisheng Li 11/2019. /// https://github.com/QishengLi/virtual_chinrest
+ * This plugin provides a "virtual chinrest" that can measure the distance between the participant and the screen. It
+ * can also standardize the jsPsych page content to a known physical dimension (e.g., ensuring that a 200px wide stimulus
+ * is 2.2cm wide on the participant's monitor). This is based on the work of [Li, Joo, Yeatman, and Reinecke
+ * (2020)](https://doi.org/10.1038/s41598-019-57204-1), and the plugin code is a modified version of
+ * [their implementation](https://github.com/QishengLi/virtual_chinrest). We recommend citing their work in any paper
+ * that makes use of this plugin.
+ *
+ * !!! note "Citation"
+ *     Li, Q., Joo, S. J., Yeatman, J. D., & Reinecke, K. (2020). Controlling for Participants’ Viewing Distance in Large-Scale, Psychophysical Online Experiments Using a Virtual Chinrest. _Scientific Reports, 10_(1), 1-11. doi: [10.1038/s41598-019-57204-1](https://doi.org/10.1038/s41598-019-57204-1)
+ *
+ * The plugin works in two phases.
+ *
+ * **Phase 1**. To calculate the pixel-to-cm conversion rate for a participant’s display, participants are asked to place
+ * a credit card or other item of the same size on the screen and resize an image until it is the same size as the credit
+ * card. Since we know the physical dimensions of the card, we can find the conversion rate for the participant's display.
+ *
+ * **Phase 2**. To measure the participant's viewing distance from their screen we use a [blind spot](<https://en.wikipedia.org/wiki/Blind_spot_(vision)>) task. Participants are asked to focus on a black square on the screen with their right eye closed, while a red dot repeatedly sweeps from right to left. They press the spacebar on their keyboard whenever they perceive that the red dot has disappeared. This part allows the plugin to use the distance between the black square and the red dot when it disappears from eyesight to estimate how far the participant is from the monitor. This estimation assumes that the blind spot is located at 13.5° temporally.
+ *
  *
  * @author Gustavo Juantorena
  * 08/2020 // https://github.com/GEJ1
  * Contributions from Peter J. Kohler: https://github.com/pjkohler
- * @see {@link https://www.jspsych.org/plugins/jspsych-virtual-chinrest/ virtual-chinrest plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/virtual-chinrest/ virtual-chinrest plugin documentation on jspsych.org}
  */
 class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
   static info = info;

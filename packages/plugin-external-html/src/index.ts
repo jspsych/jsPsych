@@ -1,43 +1,51 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "external-html",
+  version: version,
   parameters: {
-    /** The url of the external html page */
+    /** The URL of the page to display. */
     url: {
       type: ParameterType.STRING,
-      pretty_name: "URL",
       default: undefined,
     },
-    /** The key to continue to the next page. */
+    /** The key character the participant can use to advance to the next trial. If left as null, then the participant will not be able to advance trials using the keyboard. */
     cont_key: {
       type: ParameterType.KEY,
-      pretty_name: "Continue key",
       default: null,
     },
-    /** The button to continue to the next page. */
+    /** The ID of a clickable element on the page. When the element is clicked, the trial will advance. */
     cont_btn: {
       type: ParameterType.STRING,
-      pretty_name: "Continue button",
       default: null,
     },
-    /** Function to check whether user is allowed to continue after clicking cont_key or clicking cont_btn */
+    /** `function(){ return true; }` | This function is called with the jsPsych `display_element` as the only argument when the participant attempts to advance the trial. The trial will only advance if the function return `true`. This can be used to verify that the participant has correctly filled out a form before continuing, for example. */
     check_fn: {
       type: ParameterType.FUNCTION,
-      pretty_name: "Check function",
       default: () => true,
     },
-    /** Whether or not to force a page refresh. */
+    /** If `true`, then the plugin will avoid using the cached version of the HTML page to load if one exists. */
     force_refresh: {
       type: ParameterType.BOOL,
-      pretty_name: "Force refresh",
       default: false,
     },
-    /** If execute_Script == true, then all JavasScript code on the external page will be executed. */
+    /** If `true`, then scripts on the remote page will be executed. */
     execute_script: {
       type: ParameterType.BOOL,
       pretty_name: "Execute scripts",
       default: false,
+    },
+  },
+  data: {
+    /** The url of the page. */
+    url: {
+      type: ParameterType.STRING,
+    },
+    /** The response time in milliseconds for the participant to finish the trial. */
+    rt: {
+      type: ParameterType.INT,
     },
   },
 };
@@ -45,14 +53,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **external-html**
- *
- * jsPsych plugin to load and display an external html page. To proceed to the next trial, the
- * user might either press a button on the page or a specific key. Afterwards, the page will be hidden and
- * the experiment will continue.
+ * The HTML plugin displays an external HTML document (often a consent form). Either a keyboard response or a button press can be used to continue to the next trial. It allows the experimenter to check if conditions are met (such as indicating informed consent) before continuing.
  *
  * @author Erik Weitnauer
- * @see {@link https://www.jspsych.org/plugins/jspsych-external-html/ external-html plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/external-html/ external-html plugin documentation on jspsych.org}
  */
 class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
   static info = info;

@@ -1,57 +1,81 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "same-different-image",
+  version: version,
   parameters: {
-    /** Array containing the images to be displayed. */
+    /** A pair of stimuli, represented as an array with two entries,
+     * one for each stimulus. The stimulus is a path to an image file.
+     * Stimuli will be shown in the order that they are defined in the array. */
     stimuli: {
       type: ParameterType.IMAGE,
-      pretty_name: "Stimuli",
       default: undefined,
       array: true,
     },
-    /** Correct answer: either "same" or "different". */
+    /** Either `'same'` or `'different'`. */
     answer: {
       type: ParameterType.SELECT,
-      pretty_name: "Answer",
       options: ["same", "different"],
       default: undefined,
     },
     /** The key that subjects should press to indicate that the two stimuli are the same. */
     same_key: {
       type: ParameterType.KEY,
-      pretty_name: "Same key",
       default: "q",
     },
     /** The key that subjects should press to indicate that the two stimuli are different. */
     different_key: {
       type: ParameterType.KEY,
-      pretty_name: "Different key",
       default: "p",
     },
-    /** How long to show the first stimulus for in milliseconds. If null, then the stimulus will remain on the screen until any keypress is made. */
+    /** How long to show the first stimulus for in milliseconds. If the value of this parameter is null then the stimulus will be shown until the participant presses any key. */
     first_stim_duration: {
       type: ParameterType.INT,
-      pretty_name: "First stimulus duration",
       default: 1000,
     },
     /** How long to show a blank screen in between the two stimuli */
     gap_duration: {
       type: ParameterType.INT,
-      pretty_name: "Gap duration",
       default: 500,
     },
     /** How long to show the second stimulus for in milliseconds. If null, then the stimulus will remain on the screen until a valid response is made. */
     second_stim_duration: {
       type: ParameterType.INT,
-      pretty_name: "Second stimulus duration",
       default: 1000,
     },
-    /** Any content here will be displayed below the stimulus. */
+    /** This string can contain HTML markup. Any content here will be displayed
+     * below the stimulus. The intention is that it can be used to provide a
+     * reminder about the action the participant is supposed to take
+     * (e.g., which key to press). */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
+    },
+  },
+  data: {
+    /** An array of length 2 containing the paths to the image files that the participant saw for each trial.
+     * This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. */
+    stimulus: {
+      type: ParameterType.STRING,
+      array: true,
+    },
+    /** Indicates which key the participant pressed.  */
+    response: {
+      type: ParameterType.STRING,
+    },
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the second stimulus first appears on the screen until the participant's response. */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** `true` if the participant's response matched the `answer` for this trial. */
+    correct: {
+      type: ParameterType.BOOL,
+    },
+    /** The correct answer to the trial, either `'same'` or `'different'`. */
+    answer: {
+      type: ParameterType.STRING,
     },
   },
 };
@@ -59,12 +83,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **same-different-image**
- *
- * jsPsych plugin for showing two image stimuli sequentially and getting a same / different judgment via keypress
+ * The same-different-image plugin displays two stimuli sequentially. Stimuli are images.
+ * The participant responds using the keyboard, and indicates whether the stimuli were the
+ * same or different. Same does not necessarily mean identical; a category judgment could be
+ * made, for example.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-same-different-image/ same-different-image plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/same-different-image/ same-different-image plugin documentation on jspsych.org}
  */
 class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
   static info = info;

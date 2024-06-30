@@ -1,135 +1,167 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "video-slider-response",
+  version: version,
   parameters: {
-    /** Array of the video file(s) to play. Video can be provided in multiple file formats for better cross-browser support. */
+    /** An array of file paths to the video. You can specify multiple formats of the same video (e.g., .mp4, .ogg, .webm)
+     * to maximize the [cross-browser compatibility](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats).
+     * Usually .mp4 is a safe cross-browser option. The plugin does not reliably support .mov files. The player will use
+     * the first source file in the array that is compatible with the browser, so specify the files in order of preference.
+     */
     stimulus: {
       type: ParameterType.VIDEO,
-      pretty_name: "Video",
       default: undefined,
       array: true,
     },
-    /** Any content here will be displayed below the stimulus. */
+    /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that
+     * it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).
+     */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
     /** The width of the video in pixels. */
     width: {
       type: ParameterType.INT,
-      pretty_name: "Width",
       default: "",
     },
     /** The height of the video display in pixels. */
     height: {
       type: ParameterType.INT,
-      pretty_name: "Height",
       default: "",
     },
     /** If true, the video will begin playing as soon as it has loaded. */
     autoplay: {
       type: ParameterType.BOOL,
-      pretty_name: "Autoplay",
       default: true,
     },
-    /** If true, the subject will be able to pause the video or move the playback to any point in the video. */
+    /** If true, controls for the video player will be available to the participant. They will be able to pause the
+     * video or move the playback to any point in the video.
+     */
     controls: {
       type: ParameterType.BOOL,
-      pretty_name: "Controls",
       default: false,
     },
     /** Time to start the clip. If null (default), video will start at the beginning of the file. */
     start: {
       type: ParameterType.FLOAT,
-      pretty_name: "Start",
       default: null,
     },
     /** Time to stop the clip. If null (default), video will stop at the end of the file. */
     stop: {
       type: ParameterType.FLOAT,
-      pretty_name: "Stop",
       default: null,
     },
     /** The playback rate of the video. 1 is normal, <1 is slower, >1 is faster. */
     rate: {
       type: ParameterType.FLOAT,
-      pretty_name: "Rate",
       default: 1,
     },
     /** Sets the minimum value of the slider. */
     min: {
       type: ParameterType.INT,
-      pretty_name: "Min slider",
       default: 0,
     },
     /** Sets the maximum value of the slider. */
     max: {
       type: ParameterType.INT,
-      pretty_name: "Max slider",
       default: 100,
     },
     /** Sets the starting value of the slider. */
     slider_start: {
       type: ParameterType.INT,
-      pretty_name: "Slider starting value",
       default: 50,
     },
-    /** Sets the step of the slider. */
+    /** Sets the step of the slider. This is the smallest amount by which the slider can change. */
     step: {
       type: ParameterType.INT,
-      pretty_name: "Step",
       default: 1,
     },
-    /** Array containing the labels for the slider. Labels will be displayed at equidistant locations along the slider. */
+    /**
+     * Labels displayed at equidistant locations on the slider. For example, two labels will be placed at the ends
+     * of the slider. Three labels would place two at the ends and one in the middle. Four will place two at the
+     * ends, and the other two will be at 33% and 67% of the slider width.
+     */
     labels: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Labels",
       default: [],
       array: true,
     },
-    /** Width of the slider in pixels. */
+    /** Set the width of the slider in pixels. If left null, then the width will be equal to the widest element in
+     * the display.
+     */
     slider_width: {
       type: ParameterType.INT,
-      pretty_name: "Slider width",
       default: null,
     },
-    /** Label of the button to advance. */
+    /** Label of the button to end the trial. */
     button_label: {
       type: ParameterType.STRING,
-      pretty_name: "Button label",
       default: "Continue",
     },
-    /** If true, the participant will have to move the slider before continuing. */
+    /** If true, the participant must move the slider before clicking the continue button. */
     require_movement: {
       type: ParameterType.BOOL,
-      pretty_name: "Require movement",
       default: false,
     },
     /** If true, the trial will end immediately after the video finishes playing. */
     trial_ends_after_video: {
       type: ParameterType.BOOL,
-      pretty_name: "End trial after video finishes",
       default: false,
     },
-    /** How long to show trial before it ends. */
+    /** How long to wait for the participant to make a response before ending the trial in milliseconds. If the
+     * participant fails to make a response before this timer is reached, the participant's response will be
+     * recorded as null for the trial and the trial will end. If the value of this parameter is null, then the
+     * trial will wait for a response indefinitely.
+     */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
     },
-    /** If true, the trial will end when subject makes a response. */
+    /** If true, then the trial will end whenever the participant makes a response (assuming they make their response
+     * before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until
+     * the value for `trial_duration` is reached. You can set this parameter to `false` to force the participant
+     * to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
+     */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
     },
-    /** If true, then responses are allowed while the video is playing. If false, then the video must finish playing before a response is accepted. */
+    /**
+     * If true, then responses are allowed while the video is playing. If false, then the video must finish playing
+     * before the slider is enabled and the trial can end via the next button click. Once the video has played all
+     * the way through, the slider is enabled and a response is allowed (including while the video is being re-played
+     * via on-screen playback controls).
+     */
     response_allowed_while_playing: {
       type: ParameterType.BOOL,
-      pretty_name: "Response allowed while playing",
       default: true,
+    },
+  },
+  data: {
+    /** The numeric value of the slider. */
+    response: {
+      type: ParameterType.INT,
+    },
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** The `stimulus` array. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions.  */
+    stimulus: {
+      type: ParameterType.STRING,
+      array: true,
+    },
+    /** The starting value of the slider. */
+    slider_start: {
+      type: ParameterType.INT,
+    },
+    /** The start time of the video clip. */
+    start: {
+      type: ParameterType.FLOAT,
     },
   },
 };
@@ -137,12 +169,19 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **video-slider-response**
+ * This plugin plays a video and allows the participant to respond by dragging a slider. The stimulus can be displayed
+ * until a response is given, or for a pre-determined amount of time. The trial can be ended automatically when the
+ * participant responds, when the video file has finished playing, or if the participant has failed to respond within
+ * a fixed length of time. You can also prevent the slider response from being made before the video has finished playing.
  *
- * jsPsych plugin for playing a video file and getting a slider response
+ * Video files can be automatically preloaded by jsPsych using the [`preload` plugin](preload.md). However, if you are
+ * using timeline variables or another dynamic method to specify the video stimulus, you will need to
+ * [manually preload](../overview/media-preloading.md#manual-preloading) the videos. Also note that video preloading
+ * is disabled when the experiment is running as a file (i.e. opened directly in the browser, rather than through a
+ * server), in order to prevent CORS errors - see the section on [Running Experiments](../overview/running-experiments.md) for more information.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-video-slider-response/ video-slider-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/video-slider-response/ video-slider-response plugin documentation on jspsych.org}
  */
 class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;

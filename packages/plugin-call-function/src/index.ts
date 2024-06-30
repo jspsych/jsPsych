@@ -1,19 +1,30 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "call-function",
+  version: version,
   parameters: {
-    /** Function to call */
+    /** The function to call. */
     func: {
       type: ParameterType.FUNCTION,
-      pretty_name: "Function",
       default: undefined,
     },
-    /** Is the function call asynchronous? */
+    /** Set to true if `func` is an asynchoronous function. If this is true, then the first argument passed to `func`
+     * will be a callback that you should call when the async operation is complete. You can pass data to the callback.
+     * See example below.
+     */
     async: {
       type: ParameterType.BOOL,
-      pretty_name: "Asynchronous",
       default: false,
+    },
+  },
+  data: {
+    /** The return value of the called function. */
+    value: {
+      type: ParameterType.COMPLEX,
+      default: undefined,
     },
   },
 };
@@ -21,12 +32,12 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **call-function**
+ * This plugin executes a specified function. This allows the experimenter to run arbitrary code at any point during the experiment.
  *
- * jsPsych plugin for calling an arbitrary function during a jsPsych experiment
+ * The function cannot take any arguments. If arguments are needed, then an anonymous function should be used to wrap the function call (see examples below).
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-call-function/ call-function plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/call-function/ call-function plugin documentation on jspsych.org}
  */
 class CallFunctionPlugin implements JsPsychPlugin<Info> {
   static info = info;

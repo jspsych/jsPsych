@@ -1,5 +1,9 @@
+import { ParameterInfos } from "./plugins";
+
 export interface JsPsychExtensionInfo {
   name: string;
+  version?: string;
+  data?: ParameterInfos;
 }
 
 export interface JsPsychExtension {

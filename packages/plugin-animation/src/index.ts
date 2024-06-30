@@ -1,53 +1,99 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "animation",
+  version: version,
   parameters: {
-    /** Array containing the image(s) to be displayed. */
+    /** Each element of the array is a path to an image file. */
     stimuli: {
       type: ParameterType.IMAGE,
-      pretty_name: "Stimuli",
       default: undefined,
       array: true,
     },
-    /** Duration to display each image. */
+    /** How long to display each image in milliseconds. */
     frame_time: {
       type: ParameterType.INT,
-      pretty_name: "Frame time",
       default: 250,
     },
-    /** Length of gap to be shown between each image. */
+    /** If greater than 0, then a gap will be shown between each image in the sequence. This parameter
+     * specifies the length of the gap in milliseconds.
+     */
     frame_isi: {
       type: ParameterType.INT,
-      pretty_name: "Frame gap",
       default: 0,
     },
-    /** Number of times to show entire sequence */
+    /** How many times to show the entire sequence. There will be no gap (other than the gap specified by `frame_isi`)
+     * between repetitions. */
     sequence_reps: {
       type: ParameterType.INT,
-      pretty_name: "Sequence repetitions",
       default: 1,
     },
-    /** Array containing the key(s) the subject is allowed to press to respond to the stimuli. */
+    /** This array contains the key(s) that the participant is allowed to press in order to respond to the stimulus.
+     * Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) - see
+     * [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) and
+     * [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/)
+     * for more examples. Any key presses that are not listed in the array will be ignored. The default value of `"ALL_KEYS"`
+     * means that all keys will be accepted as valid responses. Specifying `"NO_KEYS"` will mean that no responses are allowed. */
     choices: {
       type: ParameterType.KEYS,
-      pretty_name: "Choices",
       default: "ALL_KEYS",
     },
-    /** Any content here will be displayed below stimulus. */
+    /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that
+     * it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key(s) to press). */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
     /**
-     * If true, the images will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
-     * If false, the image will be shown via an img element.
+     * If true, the images will be drawn onto a canvas element. This prevents a blank screen (white flash) between consecutive
+     * images in some browsers, like Firefox and Edge. If false, the image will be shown via an img element, as in previous
+     * versions of jsPsych.
      */
     render_on_canvas: {
       type: ParameterType.BOOL,
-      pretty_name: "Render on canvas",
       default: true,
+    },
+  },
+  data: {
+    /** An array, where each element is an object that represents a stimulus in the animation sequence. Each object has
+     * a `stimulus` property, which is the image that was displayed, and a `time` property, which is the time in ms,
+     * measured from when the sequence began, that the stimulus was displayed. The array will be encoded in JSON format
+     * when data is saved using either the `.json()` or `.csv()` functions.
+     */
+    animation_sequence: {
+      type: ParameterType.COMPLEX,
+      array: true,
+      parameters: {
+        stimulus: {
+          type: ParameterType.STRING,
+        },
+        time: {
+          type: ParameterType.INT,
+        },
+      },
+    },
+    /** An array, where each element is an object representing a response given by the participant. Each object has a
+     * `stimulus` property, indicating which image was displayed when the key was pressed, an `rt` property, indicating
+     * the time of the key press relative to the start of the animation, and a `key_press` property, indicating which
+     * key was pressed. The array will be encoded in JSON format when data is saved using either the `.json()` or `.csv()`
+     * functions.
+     */
+    response: {
+      type: ParameterType.COMPLEX,
+      array: true,
+      parameters: {
+        stimulus: {
+          type: ParameterType.STRING,
+        },
+        rt: {
+          type: ParameterType.INT,
+        },
+        key_press: {
+          type: ParameterType.STRING,
+        },
+      },
     },
   },
 };
@@ -55,12 +101,11 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **animation**
- *
- * jsPsych plugin for showing animations and recording keyboard responses
+ * This plugin displays a sequence of images at a fixed frame rate. The sequence can be looped a specified number of times.
+ * The participant is free to respond at any point during the animation, and the time of the response is recorded.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-animation/ animation plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/animation/ animation plugin documentation on jspsych.org}
  */
 class AnimationPlugin implements JsPsychPlugin<Info> {
   static info = info;

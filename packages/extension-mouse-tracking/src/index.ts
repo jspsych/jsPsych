@@ -1,4 +1,6 @@
-import { JsPsych, JsPsychExtension, JsPsychExtensionInfo } from "jspsych";
+import { JsPsych, JsPsychExtension, JsPsychExtensionInfo, ParameterType } from "jspsych";
+
+import { version } from "../package.json";
 
 interface InitializeParameters {
   /**
@@ -24,9 +26,75 @@ interface OnStartParameters {
   events?: Array<string>;
 }
 
+/**
+ * https://www.jspsych.org/latest/extensions/mouse-tracking/
+ */
 class MouseTrackingExtension implements JsPsychExtension {
   static info: JsPsychExtensionInfo = {
     name: "mouse-tracking",
+    version: version,
+    data: {
+      /**
+       * An array of objects containing mouse movement data for the trial. Each object has an `x`, a `y`,  a `t`, and an
+       * `event` property. The `x` and `y` properties specify the mouse coordinates in pixels relative to the top left
+       * corner of the viewport and `t` specifies the time in milliseconds since the start of the trial. The `event`
+       * will be either 'mousemove', 'mousedown', or 'mouseup' depending on which event was generated.
+       */
+      mouse_tracking_data: {
+        type: ParameterType.COMPLEX,
+        array: true,
+        nested: {
+          x: {
+            type: ParameterType.INT,
+          },
+          y: {
+            type: ParameterType.INT,
+          },
+          t: {
+            type: ParameterType.INT,
+          },
+          event: {
+            type: ParameterType.STRING,
+          },
+        },
+      },
+      /**
+       * An object contain the pixel coordinates of elements on the screen specified by the `.targets` parameter. Each key
+       * in this object will be a `selector` property, containing the CSS selector string used to find the element. The object
+       * corresponding to each key will contain `x` and `y` properties specifying the top-left corner of the object, `width`
+       * and `height` values, plus `top`, `bottom`, `left`, and `right` parameters which specify the
+       * [bounding rectangle](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) of the element.
+       */
+      mouse_tracking_targets: {
+        type: ParameterType.COMPLEX,
+        nested: {
+          x: {
+            type: ParameterType.INT,
+          },
+          y: {
+            type: ParameterType.INT,
+          },
+          width: {
+            type: ParameterType.INT,
+          },
+          height: {
+            type: ParameterType.INT,
+          },
+          top: {
+            type: ParameterType.INT,
+          },
+          bottom: {
+            type: ParameterType.INT,
+          },
+          left: {
+            type: ParameterType.INT,
+          },
+          right: {
+            type: ParameterType.INT,
+          },
+        },
+      },
+    },
   };
 
   constructor(private jsPsych: JsPsych) {}

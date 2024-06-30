@@ -1,83 +1,93 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "categorize-animation",
+  version: version,
   parameters: {
-    /** Array of paths to image files. */
+    /** Each element of the array is a path to an image file. */
     stimuli: {
       type: ParameterType.IMAGE,
-      pretty_name: "Stimuli",
       default: undefined,
       array: true,
     },
-    /** The key to indicate correct response */
+    /** The key character indicating the correct response. */
     key_answer: {
       type: ParameterType.KEY,
-      pretty_name: "Key answer",
       default: undefined,
     },
-    /** Array containing the key(s) the subject is allowed to press to respond to the stimuli. */
+    /** This array contains the key(s) that the participant is allowed to press in order to respond to the stimulus. Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) - see [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) and [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/) for more examples. Any key presses that are not listed in the array will be ignored. The default value of `"ALL_KEYS"` means that all keys will be accepted as valid responses. Specifying `"NO_KEYS"` will mean that no responses are allowed. */
     choices: {
       type: ParameterType.KEYS,
-      pretty_name: "Choices",
       default: "ALL_KEYS",
     },
-    /** Text to describe correct answer. */
+    /** A text label that describes the correct answer. Used in conjunction with the `correct_text` and `incorrect_text` parameters. */
     text_answer: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Text answer",
       default: null,
     },
-    /** String to show when subject gives correct answer */
+    /** String to show when the correct answer is given. Can contain HTML formatting. The special string `%ANS%` can be used within the string. If present, the plugin will put the `text_answer` for the trial in place of the %ANS% string (see example below). */
     correct_text: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Correct text",
       default: "Correct.",
     },
-    /** String to show when subject gives incorrect answer. */
+    /** String to show when the wrong answer is given. Can contain HTML formatting. The special string `%ANS%` can be used within the string. If present, the plugin will put the `text_answer` for the trial in place of the %ANS% string (see example below). */
     incorrect_text: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Incorrect text",
       default: "Wrong.",
     },
-    /** Duration to display each image. */
+    /** How long to display each image (in milliseconds). */
     frame_time: {
       type: ParameterType.INT,
-      pretty_name: "Frame time",
       default: 500,
     },
-    /** How many times to display entire sequence. */
+    /** How many times to show the entire sequence. */
     sequence_reps: {
       type: ParameterType.INT,
-      pretty_name: "Sequence repetitions",
       default: 1,
     },
-    /** If true, subject can response before the animation sequence finishes */
+    /** If true, the participant can respond before the animation sequence finishes. */
     allow_response_before_complete: {
       type: ParameterType.BOOL,
-      pretty_name: "Allow response before complete",
       default: false,
     },
-    /** How long to show feedback */
+    /** How long to show the feedback (milliseconds). */
     feedback_duration: {
       type: ParameterType.INT,
-      pretty_name: "Feedback duration",
       default: 2000,
     },
-    /** Any content here will be displayed below the stimulus. */
+    /** This string can contain HTML markup. Any content here will be displayed below the stimulus or the end of the animation depending on the allow_response_before_complete parameter. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press). */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
     /**
-     * If true, the images will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
-     * If false, the image will be shown via an img element.
+     * If true, the images will be drawn onto a canvas element. This prevents a blank screen (white flash) between consecutive images in some browsers, like Firefox and Edge.
+     * If false, the image will be shown via an img element, as in previous versions of jsPsych.
      */
     render_on_canvas: {
       type: ParameterType.BOOL,
-      pretty_name: "Render on canvas",
       default: true,
+    },
+  },
+  data: {
+    /** Array of stimuli displayed in the trial. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. */
+    stimulus: {
+      type: ParameterType.STRING,
+      array: true,
+    },
+    /** Indicates which key the participant pressed.  */
+    response: {
+      type: ParameterType.STRING,
+    },
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** `true` if the participant got the correct answer, `false` otherwise. */
+    correct: {
+      type: ParameterType.BOOL,
     },
   },
 };
@@ -85,12 +95,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **categorize-animation**
- *
- * jsPsych plugin for categorization trials with feedback and animated stimuli
+ * The categorize animation plugin shows a sequence of images at a specified frame rate. The participant responds by pressing a key. Feedback indicating the correctness of the response is given.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-categorize-animation/ categorize-animation plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/categorize-animation/ categorize-animation plugin documentation on jspsych.org}
  */
 class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
   static info = info;

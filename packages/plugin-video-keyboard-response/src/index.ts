@@ -1,7 +1,10 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "video-keyboard-response",
+  version: version,
   parameters: {
     /** Array of the video file(s) to play. Video can be provided in multiple file formats for better cross-browser support. */
     stimulus: {
@@ -89,17 +92,42 @@ const info = <const>{
       default: true,
     },
   },
+  data: {
+    /** Indicates which key the participant pressed. */
+    response: {
+      type: ParameterType.STRING,
+    },
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the
+     * stimulus first appears on the screen until the participant's response.
+     * */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** The `stimulus` array. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. */
+    stimulus: {
+      type: ParameterType.STRING,
+      array: true,
+    },
+  },
 };
 
 type Info = typeof info;
 
 /**
- * **video-keyboard-response**
+ * This plugin plays a video file and records a keyboard response. The stimulus can be displayed until a response is
+ * given, or for a pre-determined amount of time. The trial can be ended automatically when the participant responds,
+ * when the video file has finished playing, or if the participant has failed to respond within a fixed length of time.
+ * You can also prevent a keyboard response from being recorded before the video has finished playing.
  *
- * jsPsych plugin for playing a video file and getting a keyboard response
+ * Video files can be automatically preloaded by jsPsych using the [`preload` plugin](preload.md). However, if you are
+ * using timeline variables or another dynamic method to specify the video stimulus, you will need to
+ * [manually preload](../overview/media-preloading.md#manual-preloading) the videos. Also note that video preloading
+ * is disabled when the experiment is running as a file (i.e. opened directly in the browser, rather than through a
+ * server), in order to prevent CORS errors - see the section on [Running Experiments](../overview/running-experiments.md)
+ * for more information.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-video-keyboard-response/ video-keyboard-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/video-keyboard-response/ video-keyboard-response plugin documentation on jspsych.org}
  */
 class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
