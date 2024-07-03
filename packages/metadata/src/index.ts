@@ -299,16 +299,22 @@ export default class JsPsychMetadata {
   private async generateObservation(observation) {
     // variables can be thought of mapping of one column in a row
     const pluginType = observation["trial_type"];
+    const extensionType = observation["extension_type"];
     const ignored_fields = new Set(["trial_type", "trial_index", "time_elapsed"]);
 
     for (const variable in observation) {
       const value = observation[variable];
       // console.log("pluginType:", pluginType, "variable:", variable, "value:", value);
 
-      if (value === null) continue;
+      if (value === null) continue; // Why are we skipping null values?
 
       if (ignored_fields.has(variable)) this.updateFields(variable, value, typeof value);
-      else await this.generateMetadata(variable, value, pluginType);
+      else {
+        await this.generateMetadata(variable, value, pluginType);
+        extensionType
+          ? extensionType.forEach((ext) => this.generateMetadata(variable, value, ext))
+          : console.log("No extensionType");
+      }
     }
   }
 
