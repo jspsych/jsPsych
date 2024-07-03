@@ -211,6 +211,8 @@ class WebGazerExtension implements JsPsychExtension {
 
     // send back the gazeData
     return {
+      extension_type: "webgazer",
+      extension_version: version,
       webgazer_data: this.currentTrialData,
       webgazer_targets: this.currentTrialTargets,
     };
