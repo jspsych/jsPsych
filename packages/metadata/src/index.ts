@@ -89,6 +89,14 @@ export default class JsPsychMetadata {
   }
 
   /**
+   * Generates the default descriptions for extension_type and extension_version in metadata. Should be called after
+   * default metadata is generated, and only should be called once.
+   **/
+  generateDefaultExtensionVariables(): void {
+    this.variables.generateDefaultExtensionVariables();
+  }
+
+  /**
    * Method that creates an author. This method can also be used to overwrite existing authors
    * with the same name in order to update fields.
    *
@@ -302,7 +310,16 @@ export default class JsPsychMetadata {
     const pluginType = observation["trial_type"];
     const extensionType = observation["extension_type"]; // fix for non-list (single item extension)
     const extensionVersion = observation["extension_version"];
-    const ignored_fields = new Set(["trial_type", "trial_index", "time_elapsed"]);
+
+    if (extensionType) this.generateDefaultExtensionVariables(); // After first call, generation is stopped.
+
+    const ignored_fields = new Set([
+      "trial_type",
+      "trial_index",
+      "time_elapsed",
+      "extenstion_type",
+      "extension_version",
+    ]);
 
     for (const variable in observation) {
       const value = observation[variable];
@@ -312,11 +329,13 @@ export default class JsPsychMetadata {
       if (ignored_fields.has(variable)) this.updateFields(variable, value, typeof value);
       else {
         await this.generateMetadata(variable, value, pluginType, version);
-        extensionType
-          ? extensionType.forEach((ext, index) =>
+        if (extensionType) {
+          await Promise.all(
+            extensionType.map((ext, index) =>
               this.generateMetadata(variable, value, ext, extensionVersion[index])
-            ) // verify
-          : console.log("No extensionType");
+            )
+          );
+        }
       }
     }
   }
