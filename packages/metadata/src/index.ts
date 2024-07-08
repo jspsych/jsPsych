@@ -61,7 +61,7 @@ export default class JsPsychMetadata {
    * @param {string} key - Metadata field name
    * @param {*} value - Data associated with the field
    */
-  private setMetadataField(key: string, value: any): void {
+  setMetadataField(key: string, value: any): void {
     this.metadata[key] = value;
   }
 
