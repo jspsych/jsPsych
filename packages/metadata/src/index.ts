@@ -1,5 +1,6 @@
 import { AuthorFields, AuthorsMap } from "./AuthorsMap";
 import { PluginCache } from "./PluginCache";
+import { saveTextToFile } from "./utils";
 import { VariableFields, VariablesMap } from "./VariablesMap";
 
 /**
@@ -60,7 +61,7 @@ export default class JsPsychMetadata {
    * @param {string} key - Metadata field name
    * @param {*} value - Data associated with the field
    */
-  setMetadataField(key: string, value: any): void {
+  private setMetadataField(key: string, value: any): void {
     this.metadata[key] = value;
   }
 
@@ -70,7 +71,7 @@ export default class JsPsychMetadata {
    * @param {string} key - Field name
    * @returns {*} - Data associated with the field
    */
-  getMetadataField(key: string): any {
+  private getMetadataField(key: string): any {
     return this.metadata[key];
   }
 
@@ -94,7 +95,7 @@ export default class JsPsychMetadata {
    *
    * @param {AuthorFields | string} author - All the required or possible fields associated with listing an author according to Psych-DS standards. Option as a string to define an author according only to name.
    */
-  setAuthor(fields: AuthorFields): void {
+  private setAuthor(fields: AuthorFields): void {
     this.authors.setAuthor(fields); // Assuming `authors` is an instance of the AuthorsMap class
   }
 
@@ -104,7 +105,7 @@ export default class JsPsychMetadata {
    * @param {string} name - Name of author to be used as key.
    * @returns {(AuthorFields | string | {})} - Object with author information. Empty object if not found.
    */
-  getAuthor(name: string): AuthorFields | string | {} {
+  private getAuthor(name: string): AuthorFields | string | {} {
     return this.authors.getAuthor(name);
   }
 
@@ -128,7 +129,7 @@ export default class JsPsychMetadata {
    *     privacy?: string;
    *   }} fields - Fields associated with the current Psych-DS standard.
    */
-  setVariable(variable: VariableFields): void {
+  private setVariable(variable: VariableFields): void {
     this.variables.setVariable(variable);
   }
 
@@ -139,11 +140,11 @@ export default class JsPsychMetadata {
    * @param {string} name - Name of variable to be accessed
    * @returns {{}} - Returns object of fields
    */
-  getVariable(name: string): {} {
+  private getVariable(name: string): {} {
     return this.variables.getVariable(name);
   }
 
-  containsVariable(name: string): boolean {
+  private containsVariable(name: string): boolean {
     return this.variables.containsVariable(name);
   }
 
@@ -155,7 +156,7 @@ export default class JsPsychMetadata {
    * @param {string} field_name - Name of field to be updated.
    * @param {(string | boolean | number | {})} added_value - Value to be used in the update.
    */
-  updateVariable(
+  private updateVariable(
     var_name: string,
     field_name: string,
     added_value: string | boolean | number | {}
@@ -168,7 +169,7 @@ export default class JsPsychMetadata {
    *
    * @param {string} var_name - Name of variable to be deleted.
    */
-  deleteVariable(var_name: string): void {
+  private deleteVariable(var_name: string): void {
     this.variables.deleteVariable(var_name);
   }
 
@@ -177,7 +178,7 @@ export default class JsPsychMetadata {
    *
    * @returns {string[]} - List of variable string names.
    */
-  getVariableNames(): string[] {
+  private getVariableNames(): string[] {
     return this.variables.getVariableNames();
   }
 
@@ -189,7 +190,6 @@ export default class JsPsychMetadata {
   displayMetadata(display_element) {
     const elementId = "jspsych-metadata-display";
     const metadata_string = JSON.stringify(this.getMetadata(), null, 2);
-    // const display_element = this.JsPsych.getDisplayElement();
     display_element.innerHTML += `<p id="jspsych-metadata-header">Metadata</p><pre id="${elementId}" class="jspsych-preformat"></pre>`;
     document.getElementById(elementId).textContent += metadata_string;
   }
@@ -198,19 +198,9 @@ export default class JsPsychMetadata {
    * Method that begins a download for the dataset_description.json at the end of experiment.
    * Allows you to download the metadat.
    */
-  saveAsJsonFile(): void {
-    const jsonString = JSON.stringify(this.getMetadata(), null, 2);
-    const blob = new Blob([jsonString], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "dataset_description.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    URL.revokeObjectURL(url);
+  localSave() {
+    let data_string = JSON.stringify(this.getMetadata());
+    saveTextToFile(data_string, "dataset_description.json");
   }
 
   /**
@@ -427,5 +417,11 @@ export default class JsPsychMetadata {
    */
   private async getPluginInfo(pluginType: string, variableName: string, version, extension?) {
     return this.pluginCache.getPluginInfo(pluginType, variableName, version, extension);
+  }
+
+  updateMetadata(metadata) {
+    for (const key in metadata) {
+      this.processMetadata(metadata, key);
+    }
   }
 }
