@@ -39,6 +39,11 @@ export class VariablesMap {
   private variables: { [key: string]: VariableFields };
 
   /**
+   * Flag that determines if the extension variables' default descriptions have been generated in the metadata.
+   **/
+  extensionDefaultFlag: boolean = false;
+
+  /**
    *  Creates the VariablesMap bycalling generateDefaultVariables() method to
    * generate the basic metadata common to every dataset_description.json file.
    *
@@ -46,6 +51,37 @@ export class VariablesMap {
    */
   constructor() {
     this.generateDefaultVariables();
+  }
+
+  generateDefaultExtensionVariables(): void {
+    if (this.extensionDefaultFlag) {
+      return;
+    }
+
+    const extension_type_var: VariableFields = {
+      "@type": "PropertyValue",
+      name: "extension_type",
+      description: {
+        default: "unknown",
+        jsPsych: "The name(s) of the extension(s) used in the trial.",
+      },
+      value: "string",
+    };
+    this.setVariable(extension_type_var);
+
+    const extension_version_var: VariableFields = {
+      "@type": "PropertyValue",
+      name: "extension_version",
+      description: {
+        default: "unknown",
+        jsPsych: "The version(s) of the extension(s) used in the trial.",
+      },
+      value: "numeric",
+    };
+
+    this.setVariable(extension_version_var);
+
+    this.extensionDefaultFlag = true;
   }
 
   /**
@@ -111,7 +147,12 @@ export class VariablesMap {
         variable["description"] = description[key];
       } else if (numKeys == 2) {
         delete description["default"]; // deletes default
-
+        // Delete the property if its value is "unknown"
+        for (const descKey in description as object) {
+          if (description[descKey] === "unknown") {
+            delete description[descKey];
+          }
+        }
         if (Object.keys(description).length == 1) {
           // error checking that it reduced to one key
           const key = Object.keys(description)[0];
@@ -120,6 +161,12 @@ export class VariablesMap {
       } else if (numKeys > 2) {
         // deletes default
         delete description["default"];
+        // Delete the property if its value is "unknown"
+        for (const descKey in description as object) {
+          if (description[descKey] === "unknown") {
+            delete description[descKey];
+          }
+        }
       }
 
       var_list.push(variable);

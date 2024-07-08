@@ -1,5 +1,7 @@
 export interface JsPsychExtensionInfo {
   name: string;
+  version: string;
+  data: Record<string, any>;
 }
 
 export interface JsPsychExtension {
