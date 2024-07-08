@@ -67,15 +67,6 @@ export class ExtensionManager {
       )
     );
 
-    const extensionInfo = trialExtensionsConfiguration.length
-      ? {
-          extension_type: results.map((result) => result.extension_type),
-          extension_version: results.map((result) => result.extension_version),
-        }
-      : {};
-
-    results.push(extensionInfo);
-
     return Object.assign({}, ...results);
   }
 }

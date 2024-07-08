@@ -320,13 +320,13 @@ export default class JsPsychMetadata {
       if (ignored_fields.has(variable)) this.updateFields(variable, value, typeof value);
       else {
         await this.generateMetadata(variable, value, pluginType, version);
-        if (extensionType) {
-          await Promise.all(
-            extensionType.map((ext, index) =>
-              this.generateMetadata(variable, value, ext, extensionVersion[index])
-            )
-          );
-        }
+        // if (extensionType) {
+        //   await Promise.all(
+        //     extensionType.map((ext, index) =>
+        //       this.generateMetadata(variable, value, ext, extensionVersion[index])
+        //     )
+        //   );
+        // }
       }
     }
   }
