@@ -15,10 +15,10 @@ export class PluginCache {
    * @returns {Promise<string|null>} The description of the plugin variable if found, otherwise null.
    * @throws Will throw an error if the fetch operation fails.
    */
-  async getPluginInfo(pluginType: string, variableName: string, version?) {
+  async getPluginInfo(pluginType: string, variableName: string, version, extension?) {
     // fetches if it doesn't exist
     if (!(pluginType in this.pluginFields)) {
-      const fields = await this.generatePluginFields(pluginType, version);
+      const fields = await this.generatePluginFields(pluginType, version, extension);
       this.pluginFields[pluginType] = fields;
     }
 
@@ -31,8 +31,8 @@ export class PluginCache {
       };
   }
 
-  private async generatePluginFields(pluginType: string, version?) {
-    const script = await this.fetchScript(pluginType, version);
+  private async generatePluginFields(pluginType: string, version, extension?) {
+    const script = await this.fetchScript(pluginType, version, extension);
 
     // parses if they exist
     if (script !== undefined && script !== null && script !== "")
@@ -42,9 +42,15 @@ export class PluginCache {
     }
   }
 
-  private async fetchScript(pluginType: string, version?) {
+  private async fetchScript(pluginType: string, version: string, extension?: boolean) {
     // implement logic here how to use version field
+    // match upon name (extension version) and name ->
     // const unpkgUrl = `https://unpkg.com/@jspsych/plugin-${pluginType}/src/index.ts`;
+    console.log(
+      "fetchScript parameters: pluginType (" + pluginType + "), version (",
+      version,
+      "), extension(" + extension + ")"
+    ); // console logging each fetch
     const unpkgUrl = `http://localhost:3000/plugin/${pluginType}/index.ts`;
 
     try {
@@ -57,7 +63,7 @@ export class PluginCache {
         pluginType,
         "with error",
         error,
-        "Note: if you are using a plugin not in the main JsPsych branch this will always fail."
+        "Note: if you are using a plugin not supported the main JsPsych branch this will always fail."
       );
       return undefined;
     }

@@ -308,6 +308,7 @@ export default class JsPsychMetadata {
     // variables can be thought of mapping of one column in a row
     const version = observation["version"] ? observation["version"] : null; // changed
     const pluginType = observation["trial_type"];
+
     const extensionType = observation["extension_type"]; // fix for non-list (single item extension)
     const extensionVersion = observation["extension_version"];
 
@@ -340,9 +341,9 @@ export default class JsPsychMetadata {
     }
   }
 
-  private async generateMetadata(variable, value, pluginType, version?) {
+  private async generateMetadata(variable, value, pluginType, version, extension?) {
     // probably should work in a call to the plugin here
-    const pluginInfo = await this.getPluginInfo(pluginType, variable, version);
+    const pluginInfo = await this.getPluginInfo(pluginType, variable, version, extension);
     const description = pluginInfo["description"];
     const new_description = description
       ? { [pluginType]: description }
@@ -442,7 +443,7 @@ export default class JsPsychMetadata {
    * @returns {Promise<string|null>} The description of the plugin variable if found, otherwise null.
    * @throws Will throw an error if the fetch operation fails.
    */
-  private async getPluginInfo(pluginType: string, variableName: string, version?) {
-    return this.pluginCache.getPluginInfo(pluginType, variableName, version);
+  private async getPluginInfo(pluginType: string, variableName: string, version, extension?) {
+    return this.pluginCache.getPluginInfo(pluginType, variableName, version, extension);
   }
 }
