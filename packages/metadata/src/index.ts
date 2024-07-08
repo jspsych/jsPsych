@@ -71,7 +71,7 @@ export default class JsPsychMetadata {
    * @param {string} key - Field name
    * @returns {*} - Data associated with the field
    */
-  private getMetadataField(key: string): any {
+  getMetadataField(key: string): any {
     return this.metadata[key];
   }
 
@@ -103,7 +103,7 @@ export default class JsPsychMetadata {
    *
    * @param {AuthorFields | string} author - All the required or possible fields associated with listing an author according to Psych-DS standards. Option as a string to define an author according only to name.
    */
-  private setAuthor(fields: AuthorFields): void {
+  setAuthor(fields: AuthorFields): void {
     this.authors.setAuthor(fields); // Assuming `authors` is an instance of the AuthorsMap class
   }
 
@@ -113,7 +113,7 @@ export default class JsPsychMetadata {
    * @param {string} name - Name of author to be used as key.
    * @returns {(AuthorFields | string | {})} - Object with author information. Empty object if not found.
    */
-  private getAuthor(name: string): AuthorFields | string | {} {
+  getAuthor(name: string): AuthorFields | string | {} {
     return this.authors.getAuthor(name);
   }
 
@@ -137,7 +137,7 @@ export default class JsPsychMetadata {
    *     privacy?: string;
    *   }} fields - Fields associated with the current Psych-DS standard.
    */
-  private setVariable(variable: VariableFields): void {
+  setVariable(variable: VariableFields): void {
     this.variables.setVariable(variable);
   }
 
@@ -148,11 +148,11 @@ export default class JsPsychMetadata {
    * @param {string} name - Name of variable to be accessed
    * @returns {{}} - Returns object of fields
    */
-  private getVariable(name: string): {} {
+  getVariable(name: string): {} {
     return this.variables.getVariable(name);
   }
 
-  private containsVariable(name: string): boolean {
+  containsVariable(name: string): boolean {
     return this.variables.containsVariable(name);
   }
 
@@ -164,7 +164,7 @@ export default class JsPsychMetadata {
    * @param {string} field_name - Name of field to be updated.
    * @param {(string | boolean | number | {})} added_value - Value to be used in the update.
    */
-  private updateVariable(
+  updateVariable(
     var_name: string,
     field_name: string,
     added_value: string | boolean | number | {}
@@ -177,7 +177,7 @@ export default class JsPsychMetadata {
    *
    * @param {string} var_name - Name of variable to be deleted.
    */
-  private deleteVariable(var_name: string): void {
+  deleteVariable(var_name: string): void {
     this.variables.deleteVariable(var_name);
   }
 
@@ -186,7 +186,7 @@ export default class JsPsychMetadata {
    *
    * @returns {string[]} - List of variable string names.
    */
-  private getVariableNames(): string[] {
+  getVariableNames(): string[] {
     return this.variables.getVariableNames();
   }
 
