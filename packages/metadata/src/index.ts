@@ -298,29 +298,32 @@ export default class JsPsychMetadata {
 
   private async generateObservation(observation) {
     // variables can be thought of mapping of one column in a row
+    const version = observation["version"] ? observation["version"] : null; // changed
     const pluginType = observation["trial_type"];
-    const extensionType = observation["extension_type"];
+    const extensionType = observation["extension_type"]; // fix for non-list (single item extension)
+    const extensionVersion = observation["extension_version"];
     const ignored_fields = new Set(["trial_type", "trial_index", "time_elapsed"]);
 
     for (const variable in observation) {
       const value = observation[variable];
-      // console.log("pluginType:", pluginType, "variable:", variable, "value:", value);
 
-      if (value === null) continue; // Why are we skipping null values?
+      if (value === null || value === undefined) continue; // Error checking
 
       if (ignored_fields.has(variable)) this.updateFields(variable, value, typeof value);
       else {
-        await this.generateMetadata(variable, value, pluginType);
+        await this.generateMetadata(variable, value, pluginType, version);
         extensionType
-          ? extensionType.forEach((ext) => this.generateMetadata(variable, value, ext))
+          ? extensionType.forEach((ext, index) =>
+              this.generateMetadata(variable, value, ext, extensionVersion[index])
+            ) // verify
           : console.log("No extensionType");
       }
     }
   }
 
-  private async generateMetadata(variable, value, pluginType) {
+  private async generateMetadata(variable, value, pluginType, version?) {
     // probably should work in a call to the plugin here
-    const pluginInfo = await this.getPluginInfo(pluginType, variable);
+    const pluginInfo = await this.getPluginInfo(pluginType, variable, version);
     const description = pluginInfo["description"];
     const new_description = description
       ? { [pluginType]: description }
@@ -420,7 +423,7 @@ export default class JsPsychMetadata {
    * @returns {Promise<string|null>} The description of the plugin variable if found, otherwise null.
    * @throws Will throw an error if the fetch operation fails.
    */
-  private async getPluginInfo(pluginType: string, variableName: string) {
-    return this.pluginCache.getPluginInfo(pluginType, variableName);
+  private async getPluginInfo(pluginType: string, variableName: string, version?) {
+    return this.pluginCache.getPluginInfo(pluginType, variableName, version);
   }
 }

@@ -15,10 +15,10 @@ export class PluginCache {
    * @returns {Promise<string|null>} The description of the plugin variable if found, otherwise null.
    * @throws Will throw an error if the fetch operation fails.
    */
-  async getPluginInfo(pluginType: string, variableName: string) {
+  async getPluginInfo(pluginType: string, variableName: string, version?) {
     // fetches if it doesn't exist
     if (!(pluginType in this.pluginFields)) {
-      const fields = await this.generatePluginFields(pluginType);
+      const fields = await this.generatePluginFields(pluginType, version);
       this.pluginFields[pluginType] = fields;
     }
 
@@ -31,8 +31,8 @@ export class PluginCache {
       };
   }
 
-  private async generatePluginFields(pluginType: string) {
-    const script = await this.fetchScript(pluginType);
+  private async generatePluginFields(pluginType: string, version?) {
+    const script = await this.fetchScript(pluginType, version);
 
     // parses if they exist
     if (script !== undefined && script !== null && script !== "")
@@ -42,7 +42,8 @@ export class PluginCache {
     }
   }
 
-  private async fetchScript(pluginType: string) {
+  private async fetchScript(pluginType: string, version?) {
+    // implement logic here how to use version field
     // const unpkgUrl = `https://unpkg.com/@jspsych/plugin-${pluginType}/src/index.ts`;
     const unpkgUrl = `http://localhost:3000/plugin/${pluginType}/index.ts`;
 
