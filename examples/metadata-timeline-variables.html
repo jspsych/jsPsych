@@ -5,17 +5,43 @@
     <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-image-keyboard-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-preload/dist/index.browser.js"></script>
+    <script src="../packages/metadata/dist/index.browser.js"></script>  
     <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
   </head>
   <body></body>
   <script>
 
+    const metadata_options = {
+      randomField: "this is a field",
+      author: {
+        "John": {
+          name: "John",
+          givenName: "Johnathan",
+        },
+      },
+      variables: {
+        "trial_type" : {
+          description: {
+            "chat-plugin": "this chat plugin allows you to talk to gpt!",
+          }
+        },
+        "trial_index": {
+          name: "index",
+        },
+      },
+    }
+
     var jsPsych = initJsPsych({
-      on_finish: function() {
-        jsPsych.data.displayData();
+      on_finish: async function() {      
+        await metadata.generate(jsPsych.data.get().json(), metadata_options);
+        jsPsych.data.displayData();  
+        metadata.displayMetadata(jsPsych.getDisplayElement());
       },
       default_iti: 250
     });
+
+    var metadata = new jsPsychMetadata(); // could declare with jsPsych to show the after
+
 
     // manually preload the image files, since they are passed to the image-keyboard-response stimulus parameter
     // through timeline variables, and therefore cannot be automatically preloaded
@@ -38,7 +64,7 @@
           type: jsPsychHtmlKeyboardResponse,
           choices: "NO_KEYS",
           stimulus: "<p style='text-align:center; font-size:80px;'>+</p>",
-          trial_duration: 500
+          trial_duration: 500,
         },
         {
           type: jsPsychImageKeyboardResponse,
