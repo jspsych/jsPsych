@@ -49,11 +49,31 @@ const info = {
 }
 ```
 
-The `version` field should imported from the package.json file by including an import statement in the top of the index.ts file. This lets the `version` field be automatically updated with each changeset. 
+The `version` field describes the version of the plugin used and then durin the experiment will be part of the generated data. This is used generate metadata and help maintain the Psych-DS standard. It should imported from the package.json file by including an import statement in the top of the index.ts file. This allows the `version` field be automatically updated with each changeset. 
+
+```javascript
+import { version } from '../package.json';
+
+const info = {
+  ...
+  version: version;
+  ...
+}
+```
+
+If you are not using a build environment and instead writing a plain JS file, you can manually enter the `version` as a string.
+
+```javascript
+const info = {
+  ...
+  version: "1.0.0";
+  ...
+}
+```
 
 The `parameters` property is an object containing all of the parameters for the plugin. Each parameter has a `type` and `default` property.
 
-The `data` field is similar to the `parameters` property, except it does not include a `default` property. Additionally, the `data` describes data that is only generated, and should be only used for data you generate not the default data. Any javadoc you include will be scraped as metadata if you are choosing to generate metadata. 
+The `data` field is similar to the `parameters` property, except it does not include a `default` property and instead describes the data generated. Additionally, this should be only used for data you choose to generate and not the default data. Any javadoc you include will be scraped as metadata. 
 
 ```js
 const info = {
@@ -69,7 +89,7 @@ const info = {
     }
   },
   data: {
-    /** This will become metadata describing response. */
+    /** This will become metadata describing "response". */
     response: {
       type: ParameterType.STRING,
     },
