@@ -142,9 +142,6 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
       }
 
       const after_response = (info: { key: string; rt: number }) => {
-        // kill any remaining setTimeout handlers
-        this.jsPsych.pluginAPI.clearAllTimeouts();
-
         var correct = false;
 
         var skey = trial.same_key;
@@ -169,8 +166,6 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
           trial_data["rt_stim1"] = first_stim_info.rt;
           trial_data["response_stim1"] = first_stim_info.key;
         }
-
-        display_element.innerHTML = "";
 
         this.jsPsych.finishTrial(trial_data);
       };

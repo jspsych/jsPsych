@@ -194,8 +194,6 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
     }
 
     const end_trial = () => {
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // save data
       var trialdata = {
         rt: response.rt,
@@ -203,8 +201,6 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
         slider_start: trial.slider_start,
         response: response.response,
       };
-
-      display_element.innerHTML = "";
 
       // next trial
       this.jsPsych.finishTrial(trialdata);

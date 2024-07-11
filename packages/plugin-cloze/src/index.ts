@@ -105,7 +105,6 @@ class ClozePlugin implements JsPsychPlugin<Info> {
           response: answers,
         };
 
-        display_element.innerHTML = "";
         this.jsPsych.finishTrial(trial_data);
       }
     };

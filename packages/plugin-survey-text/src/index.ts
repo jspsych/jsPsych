@@ -256,8 +256,6 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
         response: question_data,
       };
 
-      display_element.innerHTML = "";
-
       // next trial
       this.jsPsych.finishTrial(trialdata);
     });

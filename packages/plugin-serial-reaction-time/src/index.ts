@@ -133,9 +133,6 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
     };
 
     const endTrial = () => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // kill keyboard listeners
       this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
 
@@ -147,9 +144,6 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
         grid: trial.grid,
         target: trial.target,
       };
-
-      // clear the display
-      display_element.innerHTML = "";
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);

@@ -135,9 +135,6 @@ class CategorizeImagePlugin implements JsPsychPlugin<Info> {
 
     // create response function
     const after_response = (info: { key: string; rt: number }) => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // clear keyboard listener
       this.jsPsych.pluginAPI.cancelAllKeyboardResponses();
 
@@ -153,8 +150,6 @@ class CategorizeImagePlugin implements JsPsychPlugin<Info> {
         stimulus: trial.stimulus,
         response: info.key,
       };
-
-      display_element.innerHTML = "";
 
       var timeout = info.rt == null;
       doFeedback(correct, timeout);
@@ -178,7 +173,6 @@ class CategorizeImagePlugin implements JsPsychPlugin<Info> {
     }
 
     const endTrial = () => {
-      display_element.innerHTML = "";
       this.jsPsych.finishTrial(trial_data);
     };
 

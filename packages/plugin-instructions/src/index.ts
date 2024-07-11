@@ -225,8 +225,6 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
         this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboard_listener);
       }
 
-      display_element.innerHTML = "";
-
       var trial_data = {
         view_history: view_history,
         rt: Math.round(performance.now() - start_time),

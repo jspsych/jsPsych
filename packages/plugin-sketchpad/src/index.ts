@@ -709,7 +709,6 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
   }
 
   private end_trial(response = null) {
-    this.jsPsych.pluginAPI.clearAllTimeouts();
     this.jsPsych.pluginAPI.cancelAllKeyboardResponses();
     clearInterval(this.timer_interval);
 
@@ -725,8 +724,6 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
     if (this.params.save_strokes) {
       trial_data.strokes = this.strokes;
     }
-
-    this.display.innerHTML = "";
 
     document.querySelector("#sketchpad-styles").remove();
 

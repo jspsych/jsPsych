@@ -400,9 +400,6 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     // function to end trial when it is time
     const end_trial = () => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // stop the video file if it is playing
       // remove any remaining end event handlers
       display_element
@@ -420,9 +417,6 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
         slider_start: trial.slider_start,
         response: response.response,
       };
-
-      // clear the display
-      display_element.innerHTML = "";
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);

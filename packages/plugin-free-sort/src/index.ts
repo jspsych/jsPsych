@@ -474,8 +474,6 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
           rt: rt,
         };
 
-        // advance to next part
-        display_element.innerHTML = "";
         this.jsPsych.finishTrial(trial_data);
       }
     });

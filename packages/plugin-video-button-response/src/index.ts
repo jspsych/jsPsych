@@ -187,8 +187,6 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    display_element.innerHTML = "";
-
     // Setup stimulus
     const stimulusWrapper = document.createElement("div");
     display_element.appendChild(stimulusWrapper);
@@ -361,9 +359,6 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // function to end trial when it is time
     const end_trial = () => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // stop the video file if it is playing
       // remove any remaining end event handlers
       videoElement.pause();
@@ -375,9 +370,6 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
         stimulus: trial.stimulus,
         response: response.button,
       };
-
-      // clear the display
-      display_element.innerHTML = "";
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
