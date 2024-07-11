@@ -36,6 +36,8 @@
         await metadata.generate(jsPsych.data.get().json(), metadata_options);
         jsPsych.data.displayData();  
         metadata.displayMetadata(jsPsych.getDisplayElement());
+
+        // jsPsych.data.get().localSave('json','timeline-variables.json');
       },
       default_iti: 250
     });

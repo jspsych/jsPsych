@@ -1,0 +1,19 @@
+{
+  "randomField":"this is a field",
+  "author":{
+    "John":{
+      "name":"John",
+      "givenName":"Johnathan"
+    }
+  },
+  "variables":{
+    "trial_type":{
+      "description":{
+        "chat-plugin":"this chat plugin allows you to talk to gpt!"
+      }
+    },
+    "trial_index":{
+      "name":"index"
+    }
+  }
+}
