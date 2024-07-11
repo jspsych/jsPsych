@@ -112,6 +112,9 @@ export class Trial extends TimelineNode {
       result = await trialPromise;
     }
 
+    // The trial has finished, time to clean up.
+    this.cleanupTrial();
+
     return result;
   }
 
@@ -145,6 +148,14 @@ export class Trial extends TimelineNode {
         this.onLoad
       ),
     };
+  }
+
+  /**
+   * Cleanup the trial by removing the display element and removing event listeners
+   */
+  private cleanupTrial() {
+    this.dependencies.clearAllTimeouts();
+    this.dependencies.getDisplayElement().innerHTML = "";
   }
 
   /**
