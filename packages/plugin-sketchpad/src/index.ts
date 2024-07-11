@@ -1,7 +1,10 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "sketchpad",
+  version: version,
   parameters: {
     /**
      * The shape of the canvas element. Accepts `'rectangle'` or `'circle'`
@@ -11,14 +14,14 @@ const info = <const>{
       default: "rectangle",
     },
     /**
-     * Width of the canvas in pixels.
+     * Width of the canvas in pixels when `canvas_shape` is a `"rectangle"`.
      */
     canvas_width: {
       type: ParameterType.INT,
       default: 500,
     },
     /**
-     * Width of the canvas in pixels.
+     * Height of the canvas in pixels when `canvas_shape` is a `"rectangle"`.
      */
     canvas_height: {
       type: ParameterType.INT,
@@ -53,7 +56,7 @@ const info = <const>{
       default: null,
     },
     /**
-     * Background color of the canvas.
+     * Color of the canvas background. Note that a `background_image` will render on top of the color.
      */
     background_color: {
       type: ParameterType.STRING,
@@ -67,14 +70,14 @@ const info = <const>{
       default: 2,
     },
     /**
-     * The color of the stroke on the canvas
+     * The color of the stroke on the canvas.
      */
     stroke_color: {
       type: ParameterType.STRING,
       default: "#000000",
     },
     /**
-     * An array of colors to render as a palette of options for stroke colors.
+     * Array of colors to render as a palette of choices for stroke color. Clicking on the corresponding color button will change the stroke color.
      */
     stroke_color_palette: {
       type: ParameterType.STRING,
@@ -96,36 +99,38 @@ const info = <const>{
       default: "abovecanvas",
     },
     /**
-     * Whether to save the final image in the data as dataURL
+     * Whether to save the final image in the data as a base64 encoded data URL.
      */
     save_final_image: {
       type: ParameterType.BOOL,
       default: true,
     },
     /**
-     * Whether to save the set of strokes that generated the image
+     * Whether to save the individual stroke data that generated the final image.
      */
     save_strokes: {
       type: ParameterType.BOOL,
       default: true,
     },
     /**
-     * If this key is held down then it is like the mouse button being clicked for controlling
-     * the flow of the "ink".
+     * If this key is held down then it is like the mouse button being held down.
+     * The "ink" will flow when the button is held and stop when it is lifted.
+     * Pass in the string representation of the key, e.g., `'a'` for the A key
+     * or `' '` for the spacebar.
      */
     key_to_draw: {
       type: ParameterType.KEY,
       default: null,
     },
     /**
-     * Whether to show the button that ends the trial
+     * Whether to show the button that ends the trial.
      */
     show_finished_button: {
       type: ParameterType.BOOL,
       default: true,
     },
     /**
-     * The label for the button that ends the trial
+     * The label for the button that ends the trial.
      */
     finished_button_label: {
       type: ParameterType.STRING,
@@ -175,32 +180,79 @@ const info = <const>{
       default: "Redo",
     },
     /**
-     * Array of keys that will end the trial when pressed.
+     * This array contains the key(s) that the participant is allowed to press in order to end
+     * the trial. Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`,
+     * `'ArrowDown'`) - see [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values)
+     * and [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/)
+     * for more examples. Any key presses that are not listed in the array will be ignored. The default value of `"NO_KEYS"`
+     * means that no keys will be accepted as valid responses. Specifying `"ALL_KEYS"` will mean that all responses are allowed.
      */
     choices: {
       type: ParameterType.KEYS,
       default: "NO_KEYS",
     },
     /**
-     * Length of time before trial ends. If `null` the trial will not timeout.
+     * Length of time before the trial ends. If `null` the trial will continue indefinitely
+     * (until another way of ending the trial occurs).
      */
     trial_duration: {
       type: ParameterType.INT,
       default: null,
     },
     /**
-     * Whether to show a countdown timer for the remaining trial duration
+     * Whether to show a timer that counts down until the end of the trial when `trial_duration` is not `null`.
      */
     show_countdown_trial_duration: {
       type: ParameterType.BOOL,
       default: false,
     },
     /**
-     * The html for the countdown timer.
+     * The HTML to use for rendering the countdown timer. The element with `id="sketchpad-timer"`
+     * will have its content replaced by a countdown timer in the format `MM:SS`.
      */
     countdown_timer_html: {
       type: ParameterType.HTML_STRING,
       default: `<span id="sketchpad-timer"></span> remaining`,
+    },
+  },
+  data: {
+    /** The length of time from the start of the trial to the end of the trial. */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** If the trial was ended by clicking the finished button, then `"button"`. If the trial was ended by pressing a key, then the key that was pressed. If the trial timed out, then `null`. */
+    response: {
+      type: ParameterType.STRING,
+    },
+    /** If `save_final_image` is true, then this will contain the base64 encoded data URL for the image, in png format. */
+    png: {
+      type: ParameterType.STRING,
+    },
+    /** If `save_strokes` is true, then this will contain an array of stroke objects. Objects have an `action` property that is either `"start"`, `"move"`, or `"end"`. If `action` is `"start"` or `"move"` it will have an `x` and `y` property that report the coordinates of the action relative to the upper-left corner of the canvas. If `action` is `"start"` then the object will also have a `t` and `color` property, specifying the time of the action relative to the onset of the trial (ms) and the color of the stroke. If `action` is `"end"` then it will only have a `t` property. */
+    strokes: {
+      type: ParameterType.COMPLEX,
+      array: true,
+      parameters: {
+        action: {
+          type: ParameterType.STRING,
+        },
+        x: {
+          type: ParameterType.INT,
+          optional: true,
+        },
+        y: {
+          type: ParameterType.INT,
+          optional: true,
+        },
+        t: {
+          type: ParameterType.INT,
+          optional: true,
+        },
+        color: {
+          type: ParameterType.STRING,
+          optional: true,
+        },
+      },
     },
   },
 };
@@ -208,9 +260,20 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **sketchpad**
+ * This plugin creates an interactive canvas that the participant can draw on using their mouse or touchscreen.
+ * It can be used for sketching tasks, like asking the participant to draw a particular object.
+ * It can also be used for some image segmentation or annotation tasks by setting the `background_image` parameter to render an image on the canvas.
  *
- * jsPsych plugin for displaying a canvas stimulus and getting a slider response
+ * The plugin stores a [base 64 data URL representation](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) of the final image.
+ * This can be converted to an image file using [online tools](https://www.google.com/search?q=base64+image+decoder) or short programs in [R](https://stackoverflow.com/q/58604195/3726673), [python](https://stackoverflow.com/q/2323128/3726673), or another language of your choice.
+ * It also records all of the individual strokes that the participant made during the trial.
+ *
+ * !!! warning
+ *     This plugin generates **a lot** of data. Each trial can easily add 500kb+ of data to a final JSON output.
+ *     You can reduce the amount of data generated by turning off storage of the individual stroke data (`save_strokes: false`) or storage of the final image (`save_final_image: false`) if your use case doesn't require that information.
+ *     If you are going to be collecting a lot of data with this plugin you may want to save your data to your server after each trial and not wait until the end of the experiment to perform a single bulk upload.
+ *     You can do this by putting data saving code inside the [`on_data_update` event handler](../overview/events.md#on_data_update).
+ *
  *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/latest/plugins/sketchpad/ sketchpad plugin documentation on jspsych.org}

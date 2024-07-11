@@ -1,50 +1,81 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "canvas-keyboard-response",
+  version: version,
   parameters: {
-    /** The drawing function to apply to the canvas. Should take the canvas object as argument. */
+    /** The function to draw on the canvas. This function automatically takes a canvas element as its only
+     * argument, e.g. `function(c) {...}` or `function drawStim(c) {...}`, where `c` refers to the canvas element.
+     * Note that the stimulus function will still generally need to set the correct context itself, using a line
+     * like `let ctx = c.getContext("2d")`.
+     */
     stimulus: {
       type: ParameterType.FUNCTION,
-      pretty_name: "Stimulus",
       default: undefined,
     },
-    /** Array containing the key(s) the subject is allowed to press to respond to the stimulus. */
+    /** This array contains the key(s) that the participant is allowed to press in order to respond to the stimulus.
+     * Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) -
+     * see [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values)
+     * and [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/)
+     * for more examples. Any key presses that are not listed in the array will be ignored. The default value
+     * of `"ALL_KEYS"` means that all keys will be accepted as valid responses. Specifying `"NO_KEYS"` will mean
+     * that no responses are allowed.
+     */
     choices: {
       type: ParameterType.KEYS,
-      pretty_name: "Choices",
       default: "ALL_KEYS",
     },
-    /** Any content here will be displayed below the stimulus. */
+    /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention
+     * is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).
+     */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
-    /** How long to show the stimulus. */
+    /** How long to display the stimulus in milliseconds. The visibility CSS property of the stimulus will be set to
+     * `hidden` after this time has elapsed. If this is null, then the stimulus will remain visible until the trial ends.
+     */
     stimulus_duration: {
       type: ParameterType.INT,
-      pretty_name: "Stimulus duration",
       default: null,
     },
-    /** How long to show trial before it ends. */
+    /** How long to wait for the participant to make a response before ending the trial in milliseconds. If the
+     * participant fails to make a response before this timer is reached, the participant's response will be
+     * recorded as null for the trial and the trial will end. If the value of this parameter is null, then the
+     * trial will wait for a response indefinitely.
+     */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
     },
-    /** If true, trial will end when subject makes a response. */
+    /** If true, then the trial will end whenever the participant makes a response (assuming they make their
+     * response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will
+     * continue until the value for `trial_duration` is reached. You can use this parameter to force the participant
+     * to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
+     */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
     },
-    /** Array containing the height (first value) and width (second value) of the canvas element. */
+    /** Array that defines the size of the canvas element in pixels. First value is height, second value is width. */
     canvas_size: {
       type: ParameterType.INT,
       array: true,
-      pretty_name: "Canvas size",
       default: [500, 500],
+    },
+  },
+  data: {
+    /** Indicates which key the participant pressed. */
+    response: {
+      type: ParameterType.STRING,
+    },
+    /** The response time in milliseconds for the participant to make a response. The time is measured from
+     * when the stimulus first appears on the screen until the participant's response.
+     */
+    rt: {
+      type: ParameterType.INT,
     },
   },
 };
@@ -52,12 +83,14 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **canvas-keyboard-response**
- *
- * jsPsych plugin for displaying a canvas stimulus and getting a keyboard response
+ * This plugin can be used to draw a stimulus on a [HTML canvas element](https://www.w3schools.com/html/html5_canvas.asp) and
+ * record a keyboard response. The canvas stimulus can be useful for displaying dynamic, parametrically-defined graphics,
+ * and for controlling the positioning of multiple graphical elements (shapes, text, images). The stimulus can be
+ * displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically
+ * if the participant has failed to respond within a fixed length of time.
  *
  * @author Chris Jungerius (modified from Josh de Leeuw)
- * @see {@link https://www.jspsych.org/plugins/jspsych-canvas-keyboard-response/ canvas-keyboard-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/canvas-keyboard-response/ canvas-keyboard-response plugin documentation on jspsych.org}
  */
 class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;

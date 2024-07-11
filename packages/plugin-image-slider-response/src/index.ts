@@ -1,114 +1,131 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "image-slider-response",
+  version: version,
   parameters: {
-    /** The image to be displayed */
+    /** The path to the image file to be displayed. */
     stimulus: {
       type: ParameterType.IMAGE,
-      pretty_name: "Stimulus",
       default: undefined,
     },
-    /** Set the image height in pixels */
+    /** Set the height of the image in pixels. If left null (no value specified), then the image will display at its natural height. */
     stimulus_height: {
       type: ParameterType.INT,
-      pretty_name: "Image height",
       default: null,
     },
-    /** Set the image width in pixels */
+    /** Set the width of the image in pixels. If left null (no value specified), then the image will display at its natural width. */
     stimulus_width: {
       type: ParameterType.INT,
-      pretty_name: "Image width",
       default: null,
     },
-    /** Maintain the aspect ratio after setting width or height */
+    /** If setting *only* the width or *only* the height and this parameter is true, then the other dimension will be scaled
+     * to maintain the image's aspect ratio. */
     maintain_aspect_ratio: {
       type: ParameterType.BOOL,
-      pretty_name: "Maintain aspect ratio",
       default: true,
     },
     /** Sets the minimum value of the slider. */
     min: {
       type: ParameterType.INT,
-      pretty_name: "Min slider",
       default: 0,
     },
-    /** Sets the maximum value of the slider */
+    /** Sets the maximum value of the slider. */
     max: {
       type: ParameterType.INT,
-      pretty_name: "Max slider",
       default: 100,
     },
-    /** Sets the starting value of the slider */
+    /** Sets the starting value of the slider. */
     slider_start: {
       type: ParameterType.INT,
-      pretty_name: "Slider starting value",
       default: 50,
     },
-    /** Sets the step of the slider */
+    /** Sets the step of the slider. */
     step: {
       type: ParameterType.INT,
-      pretty_name: "Step",
       default: 1,
     },
-    /** Array containing the labels for the slider. Labels will be displayed at equidistant locations along the slider. */
+    /** abels displayed at equidistant locations on the slider. For example, two labels will be placed at the ends of the slider.
+     * Three labels would place two at the ends and one in the middle. Four will place two at the ends, and the other two will
+     * be at 33% and 67% of the slider width. */
     labels: {
-      type: ParameterType.HTML_STRING,
-      pretty_name: "Labels",
+      type: ParameterType.STRING,
       default: [],
       array: true,
     },
-    /** Width of the slider in pixels. */
+    /** Set the width of the slider in pixels. If left null, then the width will be equal to the widest element in the display. */
     slider_width: {
       type: ParameterType.INT,
-      pretty_name: "Slider width",
       default: null,
     },
-    /** Label of the button to advance. */
+    /** Label of the button to advance/submit. */
     button_label: {
       type: ParameterType.STRING,
-      pretty_name: "Button label",
       default: "Continue",
       array: false,
     },
-    /** If true, the participant will have to move the slider before continuing. */
+    /** If true, the participant must move the slider before clicking the continue button. */
     require_movement: {
       type: ParameterType.BOOL,
-      pretty_name: "Require movement",
       default: false,
     },
-    /** Any content here will be displayed below the slider. */
+    /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be
+     * used to provide a reminder about the action the participant is supposed to take (e.g., which key to press). */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
-    /** How long to show the stimulus. */
+    /** How long to show the stimulus for in milliseconds. If the value is null, then the stimulus will be shown until the participant
+     * makes a response. */
     stimulus_duration: {
       type: ParameterType.INT,
-      pretty_name: "Stimulus duration",
       default: null,
     },
-    /** How long to show the trial. */
+    /** How long to wait for the participant to make a response before ending the trial in milliseconds. If the participant
+     * fails to make a response before this timer is reached, the participant's response will be recorded as null for the trial
+     * and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely. */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
     },
-    /** If true, trial will end when user makes a response. */
+    /** If true, then the trial will end whenever the participant makes a response (assuming they make their response
+     * before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the
+     * value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to view a
+     * stimulus for a fixed amount of time, even if they respond before the time is complete. */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
     },
     /**
-     * If true, the image will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
-     * If false, the image will be shown via an img element.
+     * If true, the image will be drawn onto a canvas element. This prevents a blank screen (white flash) between
+     * consecutive image trials in some browsers, like Firefox and Edge.
+     * If false, the image will be shown via an img element, as in previous versions of jsPsych. If the stimulus is
+     * an **animated gif**, you must set this parameter to false, because the canvas rendering method will only present static images.
      */
     render_on_canvas: {
       type: ParameterType.BOOL,
-      pretty_name: "Render on canvas",
       default: true,
+    },
+  },
+  data: {
+    /** The path of the image that was displayed. */
+    stimulus: {
+      type: ParameterType.STRING,
+    },
+    /** The numeric value of the slider. */
+    response: {
+      type: ParameterType.INT,
+    },
+    /** The time in milliseconds for the participant to make a response. The time is measured from when the stimulus
+     * first appears on the screen until the participant's response. */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** The starting value of the slider. */
+    slider_start: {
+      type: ParameterType.INT,
     },
   },
 };
@@ -116,12 +133,14 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **image-slider-response**
+ * This plugin displays and image and allows the participant to respond by dragging a slider.
  *
- * jsPsych plugin for showing an image stimulus and getting a slider response
+ * Image files can be automatically preloaded by jsPsych using the [`preload` plugin](preload.md). However, if you are
+ * using timeline variables or another dynamic method to specify the image stimulus, you will need
+ * to [manually preload](../overview/media-preloading.md#manual-preloading) the images.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-image-slider-response/ image-slider-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/image-slider-response/ image-slider-response plugin documentation on jspsych.org}
  */
 class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;

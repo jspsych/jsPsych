@@ -38,32 +38,65 @@ The only requirement for the `trial` method is that it calls `jsPsych.finishTria
 
 ### static info
 
-The plugin's `info` property is an object with a `name` and `parameters` property. 
+The plugin's `info` property is an object with a `name`, `version`, `parameters`, and `data` property. 
 
 ```js
 const info = {
   name: 'my-awesome-plugin',
-  parameters: { }
+  version: version,
+  parameters: { },
+  data: { }
+}
+```
+
+The `version` field describes the version of the plugin used and then durin the experiment will be part of the generated data. This is used generate metadata and help maintain the Psych-DS standard. It should imported from the package.json file by including an import statement in the top of the index.ts file. This allows the `version` field be automatically updated with each changeset. 
+
+```javascript
+import { version } from '../package.json';
+
+const info = {
+  ...
+  version: version;
+  ...
+}
+```
+
+If you are not using a build environment and instead writing a plain JS file, you can manually enter the `version` as a string.
+
+```javascript
+const info = {
+  ...
+  version: "1.0.0";
+  ...
 }
 ```
 
 The `parameters` property is an object containing all of the parameters for the plugin. Each parameter has a `type` and `default` property.
+
+The `data` field is similar to the `parameters` property, except it does not include a `default` property and instead describes the data generated. Additionally, this should be only used for data you choose to generate and not the default data. Any javadoc you include will be scraped as metadata. 
 
 ```js
 const info = {
   name: 'my-awesome-plugin',
   parameters: { 
     image: {
-      type: jspsych.ParameterType.IMAGE,
+      type: ParameterType.IMAGE,
       default: undefined
     },
     image_duration: {
-      type: jspsych.ParameterType.INT,
+      type: ParameterType.INT,
       default: 500
     }
-  }
+  },
+  data: {
+    /** This will become metadata describing "response". */
+    response: {
+      type: ParameterType.STRING,
+    },
+  },
 }
 ```
+
 
 If the `default` value is `undefined` then a user must specify a value for this parameter when creating a trial using the plugin on the timeline. If they do not, then an error will be generated and shown in the console. If a `default` value is specified in `info` then that value will be used by the plugin unless the user overrides it by specifying that property.
 
@@ -74,6 +107,7 @@ The `info` object should be a `static` member of the class, as shown below.
 ```js
 const info = {
   name: 'my-awesome-plugin',
+  version: version,
   parameters: { 
     image: {
       type: jspsych.ParameterType.IMAGE,
@@ -84,6 +118,12 @@ const info = {
       default: 500
     }
   }
+  data: {
+    /** This will become metadata describing response. */
+    response: {
+      type: ParameterType.STRING,
+    },
+  },
 }
 
 class MyAwesomePlugin {

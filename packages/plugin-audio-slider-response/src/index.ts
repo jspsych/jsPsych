@@ -1,93 +1,118 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "audio-slider-response",
+  version: version,
   parameters: {
-    /** The audio file to be played. */
+    /** Audio file to be played. */
     stimulus: {
       type: ParameterType.AUDIO,
-      pretty_name: "Stimulus",
       default: undefined,
     },
     /** Sets the minimum value of the slider. */
     min: {
       type: ParameterType.INT,
-      pretty_name: "Min slider",
       default: 0,
     },
     /** Sets the maximum value of the slider */
     max: {
       type: ParameterType.INT,
-      pretty_name: "Max slider",
       default: 100,
     },
     /** Sets the starting value of the slider */
     slider_start: {
       type: ParameterType.INT,
-      pretty_name: "Slider starting value",
       default: 50,
     },
-    /** Sets the step of the slider */
+    /** Sets the step of the slider. This is the smallest amount by which the slider can change. */
     step: {
       type: ParameterType.INT,
-      pretty_name: "Step",
       default: 1,
     },
-    /** Array containing the labels for the slider. Labels will be displayed at equidistant locations along the slider. */
+    /** Labels displayed at equidistant locations on the slider. For example, two labels will be placed at the ends of the
+     * slider. Three labels would place two at the ends and one in the middle. Four will place two at the ends, and the
+     * other two will be at 33% and 67% of the slider width.
+     */
     labels: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Labels",
       default: [],
       array: true,
     },
-    /** Width of the slider in pixels. */
+    /** Set the width of the slider in pixels. If left null, then the width will be equal to the widest element in the display. */
     slider_width: {
       type: ParameterType.INT,
-      pretty_name: "Slider width",
       default: null,
     },
-    /** Label of the button to advance. */
+    /** Label of the button to end the trial. */
     button_label: {
       type: ParameterType.STRING,
-      pretty_name: "Button label",
       default: "Continue",
       array: false,
     },
-    /** If true, the participant will have to move the slider before continuing. */
+    /** If true, the participant must move the slider before clicking the continue button. */
     require_movement: {
       type: ParameterType.BOOL,
-      pretty_name: "Require movement",
       default: false,
     },
-    /** Any content here will be displayed below the slider. */
+    /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is
+     * that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).
+     */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
-    /** How long to show the trial. */
+    /** How long to wait for the participant to make a response before ending the trial in milliseconds. If
+     * the participant fails to make a response before this timer is reached, the participant's response will be
+     * recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial
+     * will wait for a response indefinitely.
+     */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
     },
-    /** If true, trial will end when user makes a response. */
+    /** If true, then the trial will end whenever the participant makes a response (assuming they make their response
+     * before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the
+     * value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to listen to
+     * the stimulus for a fixed amount of time, even if they respond before the time is complete.
+     */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
     },
     /** If true, then the trial will end as soon as the audio file finishes playing. */
     trial_ends_after_audio: {
       type: ParameterType.BOOL,
-      pretty_name: "Trial ends after audio",
       default: false,
     },
-    /** If true, then responses are allowed while the audio is playing. If false, then the audio must finish playing before a response is accepted. */
+    /** If true, then responses are allowed while the audio is playing. If false, then the audio must finish playing before
+     * the slider is enabled and the trial can end via the next button click. Once the audio has played all the way through,
+     * the slider is enabled and a response is allowed (including while the audio is being re-played via on-screen playback controls).
+     */
     response_allowed_while_playing: {
       type: ParameterType.BOOL,
-      pretty_name: "Response allowed while playing",
       default: true,
+    },
+  },
+  data: {
+    /** The numeric value of the slider. */
+    response: {
+      type: ParameterType.INT,
+    },
+    /** The time in milliseconds for the participant to make a response. The time is measured from when the stimulus first
+     * began playing until the participant's response.
+     */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** The path of the audio file that was played. */
+    stimulus: {
+      type: ParameterType.STRING,
+    },
+    /** The starting value of the slider. */
+    slider_start: {
+      type: ParameterType.INT,
     },
   },
 };
@@ -95,12 +120,19 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **audio-slider-response**
+ * This plugin plays an audio file and allows the participant to respond by dragging a slider.
  *
- * jsPsych plugin for playing audio and getting a slider response
+ * If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the
+ * playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of
+ * response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio.
  *
+ * Audio files can be automatically preloaded by jsPsych using the [`preload` plugin](preload.md). However, if you are using
+ * timeline variables or another dynamic method to specify the audio stimulus, then you will need
+ * to [manually preload](../overview/media-preloading.md#manual-preloading) the audio.
+ *
+ * The trial can end when the participant responds, or if the participant has failed to respond within a fixed length of time. You can also prevent the slider response from being made before the audio has finished playing.
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-audio-slider-response/ audio-slider-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/audio-slider-response/ audio-slider-response plugin documentation on jspsych.org}
  */
 class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;

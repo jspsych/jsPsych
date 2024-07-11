@@ -1,10 +1,13 @@
 import type WebGazerExtension from "@jspsych/extension-webgazer";
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "webgazer-init-camera",
+  version: version,
   parameters: {
-    /** Instruction text */
+    /** Instructions for the participant to follow. */
     instructions: {
       type: ParameterType.HTML_STRING,
       default: `
@@ -13,10 +16,18 @@ const info = <const>{
             <p>It is important that you try and keep your head reasonably still throughout the experiment, so please take a moment to adjust your setup to be comfortable.</p>
             <p>When your face is centered in the box and the box is green, you can click to continue.</p>`,
     },
-    /** Text for the button that participants click to end the trial. */
+    /** The text for the button that participants click to end the trial. */
     button_text: {
       type: ParameterType.STRING,
       default: "Continue",
+    },
+  },
+  data: {
+    /** The time it took for webgazer to initialize. This can be a long time in some situations, so this
+     * value is recorded for troubleshooting when participants are reporting difficulty.
+     */
+    load_time: {
+      type: ParameterType.INT,
     },
   },
 };
@@ -24,14 +35,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **webgazer-init-camera**
- *
- * jsPsych plugin for initializing the webcam and helping the participant center their face in the camera view.
- * Intended for use with the WebGazer eye-tracking extension.
+ * This plugin initializes the camera and helps the participant center their face in the camera view for
+ * using the the [WebGazer extension](../extensions/webgazer.md). For a narrative description of eye
+ * tracking with jsPsych, see the [eye tracking overview](../overview/eye-tracking.md).
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-webgazer-init-camera/ webgazer-init-camera plugin} and
- * {@link https://www.jspsych.org/overview/eye-tracking/ eye-tracking overview} documentation on jspsych.org
+ * @see {@link https://www.jspsych.org/latest/plugins/webgazer-init-camera/ webgazer-init-camera plugin} and
+ * {@link https://www.jspsych.org/latest/overview/eye-tracking/ eye-tracking overview} documentation on jspsych.org
  */
 class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
   static info = info;
