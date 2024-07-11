@@ -90,7 +90,7 @@ describe("#getKeyboardResponse", () => {
     });
 
     await pressKey("Enter");
-    expect(callback).toHaveBeenCalledWith("Enter");
+    expect(callback).toHaveBeenCalledWith({ key: "Enter", rt: expect.any(Number) });
   });
 
   describe("when case_sensitive_responses is false", () => {
