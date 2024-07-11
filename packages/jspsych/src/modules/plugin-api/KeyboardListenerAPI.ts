@@ -125,7 +125,7 @@ export class KeyboardListenerAPI {
           this.cancelKeyboardResponse(listener);
         }
 
-        callback_function({ key, rt });
+        callback_function({ key: e.key, rt });
       }
     };
 
