@@ -40,17 +40,17 @@ export class Trial extends TimelineNode {
     if (!("version" in this.pluginInfo) && !("data" in this.pluginInfo)) {
       console.warn(
         this.pluginInfo["name"],
-        "is missing the 'version' and 'data' fields. Please update plugin as 'version' and 'data' will be required in v9."
+        "is missing the 'version' and 'data' fields. Please update plugin as 'version' and 'data' will be required in v9. See https://www.jspsych.org/latest/developers/plugin-development/ for more details."
       );
     } else if (!("version" in this.pluginInfo)) {
       console.warn(
         this.pluginInfo["name"],
-        "is missing the 'version' field. Please update plugin as 'version' will be required in v9."
+        "is missing the 'version' field. Please update plugin as 'version' will be required in v9. See https://www.jspsych.org/latest/developers/plugin-development/ for more details."
       );
     } else if (!("data" in this.pluginInfo)) {
       console.warn(
         this.pluginInfo["name"],
-        "is missing the 'data' field. Please update plugin as 'data' will be required in v9."
+        "is missing the 'data' field. Please update plugin as 'data' will be required in v9. See https://www.jspsych.org/latest/developers/plugin-development/ for more details."
       );
     }
   }
