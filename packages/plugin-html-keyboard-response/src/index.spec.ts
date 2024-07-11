@@ -31,6 +31,7 @@ describe("html-keyboard-response", () => {
     );
 
     await pressKey("f");
+    expect(getHTML()).toBe("");
     await expectFinished();
   });
 
