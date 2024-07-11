@@ -76,7 +76,7 @@ test("if on_finish returns a Promise, wait for resolve before showing end messag
   const { getHTML, expectFinished, expectRunning } = await startTimeline(timeline, jsPsych);
 
   expect(getHTML()).toMatch("foo");
-  pressKey("a");
+  await pressKey("a");
   expect(getHTML()).not.toMatch("foo");
   expect(getHTML()).not.toMatch("bar");
 
