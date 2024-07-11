@@ -1,0 +1,22 @@
+import JsPsychMetadata from '../dist/index.js';
+import fs from 'fs';
+import path from 'path';
+
+const metadata = new JsPsychMetadata();
+
+const directoryPath = './test';
+
+fs.readdir(directoryPath, (err, files) => {
+  if (err) {
+    console.error('Error reading directory:', err);
+    return;
+  }
+
+  console.log(`Files in ${directoryPath}:`);
+  files.forEach(file => {
+    console.log(file);
+  });
+});
+
+
+console.log("metadata:", metadata.getMetadata());
