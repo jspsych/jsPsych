@@ -81,6 +81,18 @@ describe("#getKeyboardResponse", () => {
     await keyUp("a");
   });
 
+  test("should return the key in standard capitalization (issue #3325)", async () => {
+    const api = new KeyboardListenerAPI(getRootElement);
+
+    api.getKeyboardResponse({
+      callback_function: callback,
+      valid_responses: ["enter"],
+    });
+
+    await pressKey("Enter");
+    expect(callback).toHaveBeenCalledWith("Enter");
+  });
+
   describe("when case_sensitive_responses is false", () => {
     let api: KeyboardListenerAPI;
 
