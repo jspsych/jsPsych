@@ -166,6 +166,7 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     // draw
     let c = document.getElementById("jspsych-canvas-stimulus");
+    c.style.display = "block";
     trial.stimulus(c);
 
     var response = {

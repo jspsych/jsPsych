@@ -114,6 +114,7 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     // draw
     display_element.innerHTML = new_html;
     let c = document.getElementById("jspsych-canvas-stimulus");
+    c.style.display = "block";
     trial.stimulus(c);
     // store response
     var response = {
