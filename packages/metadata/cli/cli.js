@@ -1,53 +1,42 @@
-import fs from "fs";
 import path from "path";
 
 import JsPsychMetadata from "../dist/index.js";
+import { processData } from "./data.js";
 
 const metadata = new JsPsychMetadata();
-// console.log("arg 0", process.argv[0]);
-// console.log("arg 1", process.argv[1]);
-// console.log("arg 2", process.argv[2], "typeof", typeof process.argv[2]);
 
-const relativePath = process.argv[2] || "../../../backend/mockdata/"; // process.argv[2] |
-const directoryPath = path.resolve(process.cwd(), relativePath);
+const relativePath = process.argv[2];
 
-var metadata_options;
-
-if (process.argv[3]) {
-  const metadata_options_path = path.resolve(process.cwd(), process.argv[3]);
-
-  try {
-    const data = fs.readFileSync(metadata_options_path, "utf8"); // synchronous read
-    console.log("metadata options:", data); // log the raw data
-    metadata_options = JSON.parse(data); // parse the JSON data
-  } catch (error) {
-    console.error("Error reading or parsing metadata options:", error);
-  }
+if (!relativePath) {
+  console.error("Providing the path is a required argument");
+  process.exit(1);
 }
 
-const processData = async () => {
-  try {
-    const files = await fs.promises.readdir(directoryPath);
+const directoryPath = path.resolve(process.cwd(), relativePath);
 
-    for (const file of files) {
-      const filePath = path.join(directoryPath, file);
+const dataFiles = processData(metadata, directoryPath);
 
-      try {
-        const data = await fs.promises.readFile(filePath, "utf8");
+// process the metadata_options file
+// var metadata_options;
+// if (process.argv[3]) {
+//   const metadata_options_path = path.resolve(process.cwd(), process.argv[3]);
 
-        console.log(`Reading file: ${file}:`);
+//   try {
+//     const data = fs.readFileSync(metadata_options_path, "utf8"); // synchronous read
+//     console.log("metadata options:", data); // log the raw data
+//     metadata_options = JSON.parse(data); // parse the JSON data
+//     metadata.updateMetadata(metadata_options);
+//   } catch (error) {
+//     console.error("Error reading or parsing metadata options:", error);
+//   }
+// };
 
-        await metadata.generate(data, metadata_options);
-      } catch (err) {
-        console.error(`Error reading file ${file}:`, err);
-      }
-    }
-  } catch (err) {
-    console.error("Error reading directory:", err);
-  }
+// const generateFromData = async () => {
+//   try {
+//     console.log(`Reading file: ${file}:`);
 
-  await console.log(metadata.getMetadata());
-};
+//   } catch (err) {
+//     console.error("Error generating from data file:", data);
+//   }
 
-// Call the processFiles function
-processData();
+// }
