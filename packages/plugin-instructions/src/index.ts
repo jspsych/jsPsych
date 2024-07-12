@@ -1,68 +1,95 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { parameterPathArrayToString } from "jspsych/src/timeline/util";
+
+import { version } from "../package.json";
 
 const info = <const>{
   name: "instructions",
+  version: version,
   parameters: {
-    /** Each element of the array is the HTML-formatted content for a single page. */
+    /** Each element of the array is the content for a single page. Each page should be an HTML-formatted string.  */
     pages: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Pages",
       default: undefined,
       array: true,
     },
-    /** The key the subject can press in order to advance to the next page. */
+    /** This is the key that the participant can press in order to advance to the next page. This key should be
+     * specified as a string (e.g., `'a'`, `'ArrowLeft'`, `' '`, `'Enter'`). */
     key_forward: {
       type: ParameterType.KEY,
-      pretty_name: "Key forward",
       default: "ArrowRight",
     },
-    /** The key that the subject can press to return to the previous page. */
+    /** This is the key that the participant can press to return to the previous page. This key should be specified as a
+     * string (e.g., `'a'`, `'ArrowLeft'`, `' '`, `'Enter'`). */
     key_backward: {
       type: ParameterType.KEY,
-      pretty_name: "Key backward",
       default: "ArrowLeft",
     },
-    /** If true, the subject can return to the previous page of the instructions. */
+    /** If true, the participant can return to previous pages of the instructions. If false, they may only advace to the next page. */
     allow_backward: {
       type: ParameterType.BOOL,
-      pretty_name: "Allow backward",
       default: true,
     },
-    /** If true, the subject can use keyboard keys to navigate the pages. */
+    /** If `true`, the participant can use keyboard keys to navigate the pages. If `false`, they may not. */
     allow_keys: {
       type: ParameterType.BOOL,
-      pretty_name: "Allow keys",
       default: true,
     },
-    /** If true, then a "Previous" and "Next" button will be displayed beneath the instructions. */
+    /** If true, then a `Previous` and `Next` button will be displayed beneath the instructions. Participants can
+     * click the buttons to navigate. */
     show_clickable_nav: {
       type: ParameterType.BOOL,
-      pretty_name: "Show clickable nav",
       default: false,
     },
     /** If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons. */
     show_page_number: {
       type: ParameterType.BOOL,
-      pretty_name: "Show page number",
       default: false,
     },
-    /** The text that appears before x/y (current/total) pages displayed with show_page_number. */
+    /** The text that appears before x/y pages displayed when show_page_number is true.*/
     page_label: {
       type: ParameterType.STRING,
-      pretty_name: "Page label",
       default: "Page",
     },
     /** The text that appears on the button to go backwards. */
     button_label_previous: {
       type: ParameterType.STRING,
-      pretty_name: "Button label previous",
       default: "Previous",
     },
     /** The text that appears on the button to go forwards. */
     button_label_next: {
       type: ParameterType.STRING,
-      pretty_name: "Button label next",
       default: "Next",
+    },
+    /** The callback function when page changes */
+    on_page_change: {
+      type: ParameterType.FUNCTION,
+      pretty_name: "Page change callback",
+      default: function (current_page: number) {},
+    },
+  },
+  data: {
+    /** An array containing the order of pages the participant viewed (including when the participant returned to previous pages)
+     *  and the time spent viewing each page. Each object in the array represents a single page view,
+     * and contains keys called `page_index` (the page number, starting with 0) and `viewing_time`
+     * (duration of the page view). This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()`
+     * functions.
+     */
+    view_history: {
+      type: ParameterType.COMPLEX,
+      array: true,
+      parameters: {
+        page_index: {
+          type: ParameterType.INT,
+        },
+        viewing_time: {
+          type: ParameterType.INT,
+        },
+      },
+    },
+    /** The response time in milliseconds for the participant to view all of the pages. */
+    rt: {
+      type: ParameterType.INT,
     },
   },
 };
@@ -70,14 +97,12 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **instructions**
- *
- * jsPsych plugin to display text (including HTML-formatted strings) during the experiment.
- * Use it to show a set of pages that participants can move forward/backward through.
- * Page numbers can be displayed to help with navigation by setting show_page_number to true.
+ * This plugin is for showing instructions to the participant. It allows participants to navigate through multiple pages
+ * of instructions at their own pace, recording how long the participant spends on each page. Navigation can be done using
+ *  the mouse or keyboard. participants can be allowed to navigate forwards and backwards through pages, if desired.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-instructions/ instructions plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/instructions/ instructions plugin documentation on jspsych.org}
  */
 class InstructionsPlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -93,8 +118,7 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
 
     var last_page_update_time = start_time;
 
-    function btnListener(evt) {
-      evt.target.removeEventListener("click", btnListener);
+    function btnListener() {
       if (this.id === "jspsych-instructions-back") {
         back();
       } else if (this.id === "jspsych-instructions-next") {
@@ -143,12 +167,12 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
         if (current_page != 0 && trial.allow_backward) {
           display_element
             .querySelector("#jspsych-instructions-back")
-            .addEventListener("click", btnListener);
+            .addEventListener("click", btnListener, { once: true });
         }
 
         display_element
           .querySelector("#jspsych-instructions-next")
-          .addEventListener("click", btnListener);
+          .addEventListener("click", btnListener, { once: true });
       } else {
         if (trial.show_page_number && trial.pages.length > 1) {
           // page numbers for non-mouse navigation
@@ -169,6 +193,8 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
       } else {
         show_current_page();
       }
+
+      trial.on_page_change(current_page);
     }
 
     function back() {
@@ -177,6 +203,8 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
       current_page--;
 
       show_current_page();
+
+      trial.on_page_change(current_page);
     }
 
     function add_current_page_to_view_history() {

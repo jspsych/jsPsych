@@ -1,5 +1,23 @@
 # @jspsych/plugin-survey
 
+## 1.0.1
+
+### Patch Changes
+
+- [#3287](https://github.com/jspsych/jsPsych/pull/3287) [`54e04dc9`](https://github.com/jspsych/jsPsych/commit/54e04dc93f54a7a019db1fee4961dcc5e02b6fc0) Thanks [@becky-gilbert](https://github.com/becky-gilbert)! - This fixes the incorrect width for dropdown question options (#3286) and cleans up code/comments.
+
+## 1.0.0
+
+### Major Changes
+
+- [#3204](https://github.com/jspsych/jsPsych/pull/3204) [`6d99a71f`](https://github.com/jspsych/jsPsych/commit/6d99a71fb19365ba4a968aaa5025a6b7dbb23135) Thanks [@becky-gilbert](https://github.com/becky-gilbert)! - To take advantage of all of the SurveyJS features, we have re-written the survey plugin so that it now takes a SurveyJS-compatible JavaScript/JSON object ('survey_json') and/or a SurveyJS-compatible function ('survey_function') that manipulates a SurveyJS model. This is a breaking change. See the jsPsych Survey Plugin page for documentation and examples: https://www.jspsych.org/latest/plugins/survey/. More details about creating the SurveyJS JSON configuration and functions can be found on their website: https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#create-a-survey-model.
+
+## 0.2.2
+
+### Patch Changes
+
+- [#3184](https://github.com/jspsych/jsPsych/pull/3184) [`9acfa29c`](https://github.com/jspsych/jsPsych/commit/9acfa29c8db1d7a8816c53ac49651f15493f2cf4) Thanks [@bjoluc](https://github.com/bjoluc)! - Point to source maps via canonical unpkg URLs in NPM-published browser builds. This prevents 404 errors when using redirecting CDN URLs (as described in #3043).
+
 ## 0.2.1
 
 ### Patch Changes

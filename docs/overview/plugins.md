@@ -1,11 +1,11 @@
 # Plugins
 
 In jsPsych, plugins define the kinds of trials or events that should occur during the experiment. 
-Some plugins define very general events, like [displaying a set of instructions pages](../plugins/instructions/), [displaying an image and recording a keyboard response](../plugins/image-keyboard-response/), or [playing a sound file and recording a button response](../plugins/audio-button-response/). 
-Other plugins are more specific, like those that display particular kinds of stimuli (e.g., a [circular visual search array](../plugins/visual-search-circle/)), or run a specific version of particular kind of task (e.g., the [Implicit Association Test](../plugins/iat-image/)).
+Some plugins define very general events, like [displaying a set of instructions pages](../plugins/instructions.md), [displaying an image and recording a keyboard response](../plugins/image-keyboard-response.md), or [playing a sound file and recording a button response](../plugins/audio-button-response.md).
+Other plugins are more specific, like those that display particular kinds of stimuli (e.g., a [circular visual search array](../plugins/visual-search-circle.md)), or run a specific version of particular kind of task (e.g., the [Implicit Association Test](../plugins/iat-image.md)).
 Part of creating an experiment with jsPsych involves figuring out which plugins are needed to create the tasks you want your participants to perform.
 
-Plugins provide a structure for a particular trial or task, but often allow for significant customization and flexibility. For example, the [image-keyboard-response plugin](../plugins/image-keyboard-response/) defines a simple structure for showing an image and collecting a keyboard response. You can specify the what the stimulus is, what keys the participant is allowed to press, how long the stimulus should be on the screen, how long the participant has to respond, and so on. Many of these options have reasonable default values; even though the image plugin has many different parameters, you only *need* to specify the image stimulus in order to use it. Each plugin has its own documentation page, which describes what the plugin does, what options are available, and what kind of data it collects.
+Plugins provide a structure for a particular trial or task, but often allow for significant customization and flexibility. For example, the [image-keyboard-response plugin](../plugins/image-keyboard-response.md) defines a simple structure for showing an image and collecting a keyboard response. You can specify the what the stimulus is, what keys the participant is allowed to press, how long the stimulus should be on the screen, how long the participant has to respond, and so on. Many of these options have reasonable default values; even though the image plugin has many different parameters, you only *need* to specify the image stimulus in order to use it. Each plugin has its own documentation page, which describes what the plugin does, what options are available, and what kind of data it collects.
 
 ## Using a plugin
 
@@ -13,8 +13,8 @@ To use a plugin, you'll need to load the plugin's JavaScript file in your experi
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@7.3.3" type="text/javascript"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2" type="text/javascript"></script>
+  <script src="https://unpkg.com/jspsych@7.3.4" type="text/javascript"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.3" type="text/javascript"></script>
 </head>
 ```
 

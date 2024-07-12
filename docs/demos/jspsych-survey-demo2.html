@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8">
     <script src="docs-demo-timeline.js"></script>
-    <script src="https://unpkg.com/jspsych@7.3.3"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-survey@0.2.1"></script>
-    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" />
-    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.2.1/css/survey.css">
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <script src="../../packages/plugin-survey/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+    <link rel="stylesheet" href="../../packages/plugin-survey/css/survey.css">
     <link rel="stylesheet" href="docs-demo.css" type="text/css">
   </head>
   <body></body>
@@ -17,45 +17,60 @@
 
     const trial = {
       type: jsPsychSurvey,
-      pages: [
-        [
+      survey_json: {
+        showQuestionNumbers: false,
+        title: 'My questionnaire',
+        completeText: 'Done!',
+        pageNextText: 'Continue',
+        pagePrevText: 'Previous',
+        pages: [
           {
-            type: 'text',
-            prompt: "Where were you born?", 
-            placeholder: 'City, State, Country',
-            name: 'birthplace', 
-            required: true,
-          }, 
+            name: 'page1',
+            elements: [
+                {
+                  type: 'text',
+                  title: 'Where were you born?', 
+                  placeholder: 'City, State/Region, Country',
+                  name: 'birthplace', 
+                  size: 30,
+                  isRequired: true,
+                }, 
+                {
+                  type: 'text',
+                  title: 'How old are you?', 
+                  name: 'age', 
+                  isRequired: false,
+                  inputType: 'number',
+                  min: 0,
+                  max: 100,
+                  defaultValue: 0
+                }
+              ]
+          },
           {
-            type: 'text',
-            prompt: "How old are you?", 
-            name: 'age', 
-            textbox_columns: 5,
-            required: false,
-          }
-        ],
-        [
-          {
-            type: 'multi-choice',
-            prompt: "What's your favorite color?", 
-            options: ['blue','yellow','pink','teal','orange','lime green','other','none of these'],
-            name: 'FavColor', 
-          }, 
-          {
-            type: 'multi-select',
-            prompt: "Which of these animals do you like? Select all that apply.", 
-            options: ['lion','squirrel','badger','whale'],
-            option_reorder: 'random',
-            columns: 0,
-            name: 'AnimalLike', 
+            name: 'page2',
+            elements: [
+              {
+                type: 'radiogroup',
+                title: "What's your favorite color?", 
+                choices: ['Blue','Yellow','Pink','Teal','Orange','Lime green'],
+                showNoneItem: true,
+                showOtherItem: true,
+                colCount: 0,
+                name: 'FavColor',
+              }, 
+              {
+                type: 'checkbox',
+                title: 'Which of these animals do you like? Select all that apply.', 
+                choices: ['Lion','Squirrel','Badger','Whale', 'Turtle'],
+                choicesOrder: 'random',
+                colCount: 0,
+                name: 'FavAnimals', 
+              }
+            ]
           }
         ]
-      ],
-      title: 'My questionnaire',
-      button_label_next: 'Continue',
-      button_label_back: 'Previous',
-      button_label_finish: 'Submit',
-      show_question_numbers: 'onPage'
+      }
     };
 
     const timeline = [trial];

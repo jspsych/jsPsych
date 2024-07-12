@@ -101,7 +101,11 @@ describe("ExtensionManager", () => {
       const manager = new ExtensionManager(dependencies, [{ type: TestExtension }]);
 
       const onFinishCallback = jest.mocked(manager.extensions.test.on_finish);
-      onFinishCallback.mockReturnValue({ extension: "result" });
+      onFinishCallback.mockReturnValue({
+        extension_type: "test",
+        extension_version: "1.0",
+        extension: "result",
+      });
 
       let results = await manager.onFinish(undefined);
       expect(onFinishCallback).not.toHaveBeenCalled();
@@ -109,7 +113,11 @@ describe("ExtensionManager", () => {
 
       results = await manager.onFinish([{ type: TestExtension, params: { my: "option" } }]);
       expect(onFinishCallback).toHaveBeenCalledWith({ my: "option" });
-      expect(results).toEqual({ extension: "result" });
+      expect(results).toEqual({
+        extension_type: ["test"],
+        extension_version: ["1.0"],
+        extension: "result",
+      });
     });
   });
 });

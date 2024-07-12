@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <script src="docs-demo-timeline.js"></script>
+  <script src="https://unpkg.com/jspsych@7.3.4"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+  <script src="../../packages/plugin-survey/dist/index.browser.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css" />
+  <link rel="stylesheet" href="../../packages/plugin-survey/css/survey.css" />
+  <link rel="stylesheet" href="docs-demo.css" type="text/css" />
+  <style>
+    /* center the audio player and all image question types in the survey */
+    div.sd-question--image,
+    div.sd-question[data-name="audio-player"] {
+      text-align: center;
+    }
+
+    /* use 'data-name' to select any specific question by name */
+    div[data-name="audio-response"] {
+      text-align: center;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+
+<body></body>
+<script>
+
+  const jsPsych = initJsPsych();
+
+  // Embed HTML, images, videos and audio into the survey
+  const image_video_html_trial_info = {
+    pages: [{
+      elements: [{
+        type: "panel",
+        name: "html-img-panel",
+        description: "This panel contains an HTML element and an image element.",
+        elements: [{
+          type: "html",
+          name: "html",
+          html: "<div style='text-align: center; align-items: center; align-content: center; justify-content: center;'><p style='text-align: center; color: darkgreen; font-size: 2em;'>This demo shows how you can add <em>HTML</em>, <strong>images</strong>, and <sub>video</sub> to your jsPsych survey trial.</p></div>"
+        }, {
+          type: "image",
+          name: "monkey",
+          imageLink: "img/monkey.png",
+          altText: "Monkey",
+          imageWidth: 300
+        }]
+      }, {
+        type: "panel",
+        name: "video-panel",
+        description: "This panel contains a fun fish video.",
+        elements: [{
+          type: "image",
+          name: "jspsych-tutorial",
+          imageLink: "video/fish.mp4",
+          imageWidth: 700,
+          imageHeight: 350
+        }],
+      }]
+    }],
+    widthMode: "static",
+    width: 900,
+    completeText: 'Next'
+  };
+
+  const image_video_html_trial = {
+    type: jsPsychSurvey,
+    survey_json: image_video_html_trial_info
+  };
+
+  // Using images as response options
+  const image_choice_trial_info = {
+    elements: [{
+      type: "imagepicker",
+      name: "animals",
+      title: "Which animals would you like to see in real life?",
+      description: "Please select all that apply.",
+      choices: [{
+        value: "lion",
+        imageLink: "img/lion.png",
+        text: "Lion"
+      }, {
+        value: "monkey",
+        imageLink: "img/monkey.png",
+        text: "Monkey"
+      }, {
+        value: "elephant",
+        imageLink: "img/elephant.png",
+        text: "Elephant"
+      }],
+      showLabel: true,
+      multiSelect: true
+    }],
+    showQuestionNumbers: "off",
+    completeText: 'Next',
+  };
+
+  const image_choice_trial = {
+    type: jsPsychSurvey,
+    survey_json: image_choice_trial_info
+  };
+
+  // Add sound to an HTML element
+  // This also demonstrates response validation
+  const sound_trial_info = {
+    elements: [{
+      type: "html",
+      name: "audio-player",
+      html: "<audio controls><source src='sound/speech_red.mp3' type='audio/mp3'></audio>"
+    },
+    {
+      type: "text",
+      name: "audio-response",
+      title: "Please play the sound above and then type the word that you heard in the box below.",
+      description: "Try getting it wrong to see the response validation.",
+      required: true,
+      validators: [{
+        type: "regex",
+        text: "Oops, that's not correct. Try again!",
+        regex: "[rR]{1}[eE]{1}[dD]{1}"
+      }],
+    }],
+    completeText: "Check my response",
+    showQuestionNumbers: "off"
+  };
+
+  const sound_trial = {
+    type: jsPsychSurvey,
+    survey_json: sound_trial_info
+  }
+
+  const timeline = [image_video_html_trial, image_choice_trial, sound_trial];
+
+  if (typeof jsPsych !== "undefined") {
+    jsPsych.run(generateDocsDemoTimeline(timeline));
+  } else {
+    document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+  }
+</script>
+
+</html>

@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [18]
+        node: [18, 20]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js ${{ matrix.node }}
         uses: actions/setup-node@v3
@@ -38,13 +38,5 @@ jobs:
       - name: Build packages
         run: npm run build
 
-      # TODO setup linting
-      # - name: Lint
-      #   run: npm run lint
-
       - name: Run tests
         run: npm run test -- --ci --coverage --maxWorkers=2 --reporters=default --reporters=github-actions
-
-      # TODO setup codecov or coveralls
-      # - name: Upload coverage to Codecov
-      #   uses: codecov/codecov-action@v1

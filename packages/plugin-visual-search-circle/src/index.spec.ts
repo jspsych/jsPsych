@@ -28,6 +28,40 @@ describe("visual-search-circle", () => {
     await pressKey("a");
     await expectFinished();
 
+    expect(displayElement.querySelectorAll("img").length).toBe(0);
+
+    expect(getData().values()[0].correct).toBe(true);
+  });
+
+  it("wait when response_ends_trial is false", async () => {
+    const { displayElement, expectFinished, expectRunning, getData } = await startTimeline([
+      {
+        type: visualSearchCircle,
+        target: "target.png",
+        foil: "foil.png",
+        fixation_image: "fixation.png",
+        set_size: 4,
+        target_present: true,
+        target_present_key: "a",
+        target_absent_key: "b",
+        response_ends_trial: false,
+        trial_duration: 1500,
+      },
+    ]);
+
+    expect(displayElement.querySelectorAll("img").length).toBe(1);
+
+    jest.advanceTimersByTime(1000); // fixation duration
+
+    expect(displayElement.querySelectorAll("img").length).toBe(5);
+    pressKey("a");
+    await expectRunning();
+
+    jest.runAllTimers();
+    await expectFinished();
+
+    expect(displayElement.querySelectorAll("img").length).toBe(0);
+
     expect(getData().values()[0].correct).toBe(true);
   });
 });

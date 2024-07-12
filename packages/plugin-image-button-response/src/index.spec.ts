@@ -136,16 +136,43 @@ describe("image-button-response", () => {
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
   });
+
+  test("delay enable button", async () => {
+    const { getHTML, expectFinished } = await startTimeline([
+      {
+        type: imageButtonResponse,
+        stimulus: "../media/blue.png",
+        choices: ["button-choice"],
+        enable_button_after: 500,
+        render_on_canvas: false,
+      },
+    ]);
+
+    const btns = document.querySelectorAll(".jspsych-image-button-response-button button");
+
+    for (let i = 0; i < btns.length; i++) {
+      expect(btns[i].getAttribute("disabled")).toBe("disabled");
+    }
+
+    jest.advanceTimersByTime(500);
+
+    for (let i = 0; i < btns.length; i++) {
+      expect(btns[i].hasAttribute("disabled")).toBe(false);
+    }
+  });
 });
 
 describe("image-button-response simulation", () => {
   test("data mode works", async () => {
+    const ENABLE_BUTTON_AFTER = 2000;
+
     const timeline = [
       {
         type: imageButtonResponse,
         stimulus: "foo.png",
         choices: ["a", "b", "c"],
         render_on_canvas: false,
+        enable_button_after: ENABLE_BUTTON_AFTER,
       },
     ];
 
@@ -155,18 +182,21 @@ describe("image-button-response simulation", () => {
 
     const response = getData().values()[0].response;
 
-    expect(getData().values()[0].rt).toBeGreaterThan(0);
+    expect(getData().values()[0].rt).toBeGreaterThan(ENABLE_BUTTON_AFTER);
     expect(response).toBeGreaterThanOrEqual(0);
     expect(response).toBeLessThanOrEqual(2);
   });
 
   test("visual mode works", async () => {
+    const ENABLE_BUTTON_AFTER = 2000;
+
     const timeline = [
       {
         type: imageButtonResponse,
         stimulus: "foo.png",
         choices: ["a", "b", "c"],
         render_on_canvas: false,
+        enable_button_after: ENABLE_BUTTON_AFTER,
       },
     ];
 
@@ -183,7 +213,7 @@ describe("image-button-response simulation", () => {
 
     const response = getData().values()[0].response;
 
-    expect(getData().values()[0].rt).toBeGreaterThan(0);
+    expect(getData().values()[0].rt).toBeGreaterThan(ENABLE_BUTTON_AFTER);
     expect(response).toBeGreaterThanOrEqual(0);
     expect(response).toBeLessThanOrEqual(2);
   });

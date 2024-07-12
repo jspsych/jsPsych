@@ -1,78 +1,88 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "html-button-response",
+  version: version,
   parameters: {
-    /** The HTML string to be displayed */
+    /** The HTML content to be displayed. */
     stimulus: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Stimulus",
       default: undefined,
     },
-    /** Array containing the label(s) for the button(s). */
+    /** Labels for the buttons. Each different string in the array will generate a different button. */
     choices: {
       type: ParameterType.STRING,
-      pretty_name: "Choices",
       default: undefined,
       array: true,
     },
     /**
-     * A function that, given a choice and its index, returns the HTML string of that choice's
-     * button.
+     * A function that generates the HTML for each button in the `choices` array. The function gets the string and index of the item in the `choices` array and should return valid HTML. If you want to use different markup for each button, you can do that by using a conditional on either parameter. The default parameter returns a button element with the text label of the choice.
      */
     button_html: {
       type: ParameterType.FUNCTION,
-      pretty_name: "Button HTML",
       default: function (choice: string, choice_index: number) {
         return `<button class="jspsych-btn">${choice}</button>`;
       },
     },
-    /** Any content here will be displayed under the button(s). */
+    /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press). */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
-    /** How long to show the stimulus. */
+    /** How long to display the stimulus in milliseconds. The visibility CSS property of the stimulus will be set to `hidden` after this time has elapsed. If this is null, then the stimulus will remain visible until the trial ends. */
     stimulus_duration: {
       type: ParameterType.INT,
-      pretty_name: "Stimulus duration",
       default: null,
     },
-    /** How long to show the trial. */
+    /** ow long to wait for the participant to make a response before ending the trial in milliseconds. If the participant fails to make a response before this timer is reached, the participant's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, the trial will wait for a response indefinitely.  */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
     },
-    /** The CSS layout for the buttons. Options: 'flex' or 'grid'. */
+    /** Setting to `'grid'` will make the container element have the CSS property `display: grid` and enable the use of `grid_rows` and `grid_columns`. Setting to `'flex'` will make the container element have the CSS property `display: flex`. You can customize how the buttons are laid out by adding inline CSS in the `button_html` parameter. */
     button_layout: {
       type: ParameterType.STRING,
-      pretty_name: "Button layout",
       default: "grid",
     },
-    /** The number of grid rows when `button_layout` is "grid".
-     * Setting to `null` will infer the number of rows based on the
-     * number of columns and buttons.
+    /**
+     * The number of rows in the button grid. Only applicable when `button_layout` is set to `'grid'`. If null, the number of rows will be determined automatically based on the number of buttons and the number of columns.
      */
     grid_rows: {
       type: ParameterType.INT,
-      pretty_name: "Grid rows",
       default: 1,
     },
-    /** The number of grid columns when `button_layout` is "grid".
-     * Setting to `null` (default value) will infer the number of columns
-     * based on the number of rows and buttons. */
+    /**
+     * The number of columns in the button grid. Only applicable when `button_layout` is set to `'grid'`. If null, the number of columns will be determined automatically based on the number of buttons and the number of rows.
+     */
     grid_columns: {
       type: ParameterType.INT,
-      pretty_name: "Grid columns",
       default: null,
     },
-    /** If true, then trial will end when user responds. */
+    /** If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete. */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
+    },
+    /** How long the button will delay enabling in milliseconds. */
+    enable_button_after: {
+      type: ParameterType.INT,
+      default: 0,
+    },
+  },
+  data: {
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** Indicates which button the participant pressed. The first button in the `choices` array is 0, the second is 1, and so on. */
+    response: {
+      type: ParameterType.INT,
+    },
+    /** The HTML content that was displayed on the screen. */
+    stimulus: {
+      type: ParameterType.HTML_STRING,
     },
   },
 };
@@ -80,10 +90,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * html-button-response
- * jsPsych plugin for displaying a stimulus and getting a button response
+ * This plugin displays HTML content and records responses generated by button click. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the participant has failed to respond within a fixed length of time. The button itself can be customized using HTML formatting.
+ *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-html-button-response/ html-button-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/html-button-response/ html-button-response plugin documentation on jspsych.org}
  */
 class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -195,6 +205,20 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
       }, trial.stimulus_duration);
     }
 
+    // disable all the buttons and set a timeout that enables them after a specified delay if timing is set
+    if (trial.enable_button_after > 0) {
+      var btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].setAttribute("disabled", "disabled");
+      }
+      this.jsPsych.pluginAPI.setTimeout(() => {
+        var btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].removeAttribute("disabled");
+        }
+      }, trial.enable_button_after);
+    }
+
     // end trial if time limit is set
     if (trial.trial_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(end_trial, trial.trial_duration);
@@ -219,7 +243,9 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
     const default_data = {
       stimulus: trial.stimulus,
-      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+      rt:
+        this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true) +
+        trial.enable_button_after,
       response: this.jsPsych.randomization.randomInt(0, trial.choices.length - 1),
     };
 

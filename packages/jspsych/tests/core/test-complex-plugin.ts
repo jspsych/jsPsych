@@ -2,6 +2,7 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 const info = <const>{
   name: "test-complex-plugin",
+  version: "0.0.1",
   parameters: {
     blocks: {
       type: ParameterType.COMPLEX,
@@ -23,6 +24,7 @@ const info = <const>{
       },
     },
   },
+  data: {},
 };
 
 type Info = typeof info;

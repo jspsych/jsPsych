@@ -16,9 +16,14 @@
     "changeset": "changeset",
     "changeset:version": "changeset version && npm install && npm run update-unpkg-links && npm run update-plugin-versions",
     "changeset:publish": "npm run build && changeset publish",
-    "docs:deploy": "poetry install && poetry run mike deploy -u",
-    "docs:serve": "poetry install && poetry run mike serve"
+    "docs:deploy": "poetry install --no-root && poetry run mike deploy -u",
+    "docs:serve": "poetry install --no-root && poetry run mike serve"
   },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "packageManager": "npm@8.3.1",
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.7",
     "@changesets/cli": "^2.25.2",

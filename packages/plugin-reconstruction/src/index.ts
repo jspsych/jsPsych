@@ -1,43 +1,55 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { parameterPathArrayToString } from "jspsych/src/timeline/util";
+
+import { version } from "../package.json";
 
 const info = <const>{
   name: "reconstruction",
+  version: version,
   parameters: {
     /** A function with a single parameter that returns an HTML-formatted string representing the stimulus. */
     stim_function: {
       type: ParameterType.FUNCTION,
-      pretty_name: "Stimulus function",
       default: undefined,
     },
     /** The starting value of the stimulus parameter. */
     starting_value: {
       type: ParameterType.FLOAT,
-      pretty_name: "Starting value",
       default: 0.5,
     },
     /** The change in the stimulus parameter caused by pressing one of the modification keys. */
     step_size: {
       type: ParameterType.FLOAT,
-      pretty_name: "Step size",
       default: 0.05,
     },
     /** The key to press for increasing the parameter value. */
     key_increase: {
       type: ParameterType.KEY,
-      pretty_name: "Key increase",
       default: "h",
     },
     /** The key to press for decreasing the parameter value. */
     key_decrease: {
       type: ParameterType.KEY,
-      pretty_name: "Key decrease",
       default: "g",
     },
     /** The text that appears on the button to finish the trial. */
     button_label: {
       type: ParameterType.STRING,
-      pretty_name: "Button label",
       default: "Continue",
+    },
+  },
+  data: {
+    /** The starting value of the stimulus parameter. */
+    start_value: {
+      type: ParameterType.INT,
+    },
+    /** The final value of the stimulus parameter. */
+    final_value: {
+      type: ParameterType.INT,
+    },
+    /** The length of time, in milliseconds, that the trial lasted. */
+    rt: {
+      type: ParameterType.INT,
     },
   },
 };
@@ -45,12 +57,15 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **reconstruction**
+ * This plugin allows a participant to interact with a stimulus by modifying a parameter of the stimulus and observing
+ * the change in the stimulus in real-time.
  *
- * jsPsych plugin for a reconstruction task where the subject recreates a stimulus from memory
+ * The stimulus must be defined through a function that returns an HTML-formatted string. The function should take a
+ * single value, which is the parameter that can be modified by the participant. The value can only range from 0 to 1.
+ * See the example at the bottom of the page for a sample function.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-reconstruction/ reconstruction plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/reconstruction/ reconstruction plugin documentation on jspsych.org}
  */
 class ReconstructionPlugin implements JsPsychPlugin<Info> {
   static info = info;
