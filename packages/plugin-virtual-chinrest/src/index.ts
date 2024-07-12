@@ -498,9 +498,6 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
       // compute final data
       computeTransformation();
 
-      // clear the display
-      display_element.innerHTML = "";
-
       // finish the trial
       this.jsPsych.finishTrial(trial_data);
     };

@@ -280,8 +280,6 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
     };
 
     const end_trial = () => {
-      // clear timeout again when end_trial is called, to handle race condition with max_load_time
-      this.jsPsych.pluginAPI.clearAllTimeouts();
       var trial_data = {
         success: success,
         timeout: timeout,
@@ -289,8 +287,7 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
         failed_audio: failed_audio,
         failed_video: failed_video,
       };
-      // clear the display
-      display_element.innerHTML = "";
+
       this.jsPsych.finishTrial(trial_data);
     };
 

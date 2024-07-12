@@ -175,16 +175,12 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     const end_trial = () => {
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // save data
       var trialdata = {
         rt: response.rt,
         response: response.response,
         slider_start: trial.slider_start,
       };
-
-      display_element.innerHTML = "";
 
       // next trial
       this.jsPsych.finishTrial(trialdata);

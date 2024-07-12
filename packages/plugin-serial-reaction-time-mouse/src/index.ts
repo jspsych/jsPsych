@@ -177,9 +177,6 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
     }
 
     const endTrial = () => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // gather the data to store for the trial
       var trial_data = {
         rt: response.rt,
@@ -188,9 +185,6 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
         response: [parseInt(response.row, 10), parseInt(response.column, 10)],
         correct: response.row == trial.target[0] && response.column == trial.target[1],
       };
-
-      // clear the display
-      display_element.innerHTML = "";
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);

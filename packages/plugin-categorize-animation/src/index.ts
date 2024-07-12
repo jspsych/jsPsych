@@ -240,7 +240,6 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
 
     const endTrial = () => {
       clearInterval(animate_interval); // stop animation!
-      display_element.innerHTML = ""; // clear everything
       this.jsPsych.finishTrial(trial_data);
     };
 

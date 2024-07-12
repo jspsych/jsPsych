@@ -340,9 +340,6 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
     }
 
     const end_trial = () => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // stop the audio file if it is playing
       // remove end event listeners if they exist
       if (context !== null) {
@@ -361,8 +358,6 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
         slider_start: trial.slider_start,
         response: response.response,
       };
-
-      display_element.innerHTML = "";
 
       // next trial
       this.jsPsych.finishTrial(trialdata);

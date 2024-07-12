@@ -270,9 +270,6 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
     this.recorder.removeEventListener("start", this.start_event_handler);
     this.recorder.removeEventListener("stop", this.stop_event_handler);
 
-    // clear any remaining setTimeout handlers
-    this.jsPsych.pluginAPI.clearAllTimeouts();
-
     // gather the data to store for the trial
     var trial_data: any = {
       rt: this.rt,
@@ -285,9 +282,6 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
     } else {
       URL.revokeObjectURL(this.video_url);
     }
-
-    // clear the display
-    display_element.innerHTML = "";
 
     // move on to the next trial
     this.jsPsych.finishTrial(trial_data);

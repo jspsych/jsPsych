@@ -76,7 +76,6 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     this.run_trial(display_element, trial).then((id) => {
-      display_element.innerHTML = "";
       this.jsPsych.finishTrial({
         device_id: id,
       });

@@ -85,7 +85,6 @@ class MirrorCameraPlugin implements JsPsychPlugin<Info> {
   }
 
   finish(display_element: HTMLElement) {
-    display_element.innerHTML = "";
     this.jsPsych.finishTrial({
       rt: performance.now() - this.start_time,
     });

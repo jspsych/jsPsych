@@ -104,9 +104,6 @@ class ResizePlugin implements JsPsychPlugin<Info> {
       document.removeEventListener("mousemove", resizeevent);
       document.removeEventListener("mouseup", mouseupevent);
 
-      // clear the screen
-      display_element.innerHTML = "";
-
       // finishes trial
 
       var trial_data = {

@@ -61,16 +61,10 @@ class WebgazerInitCameraPlugin implements JsPsychPlugin<Info> {
       extension.pause();
       extension.hideVideo();
 
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // gather the data to store for the trial
       var trial_data = {
         load_time: load_time,
       };
-
-      // clear the display
-      display_element.innerHTML = "";
 
       document.querySelector("#webgazer-center-style").remove();
 

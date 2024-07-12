@@ -98,7 +98,6 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
             rt: Math.round(performance.now() - t0),
             url: trial.url,
           };
-          display_element.innerHTML = "";
           this.jsPsych.finishTrial(trial_data);
           trial_complete();
         };

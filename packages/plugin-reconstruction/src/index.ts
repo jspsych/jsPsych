@@ -91,8 +91,6 @@ class ReconstructionPlugin implements JsPsychPlugin<Info> {
         start_value: trial.starting_value,
       };
 
-      display_element.innerHTML = "";
-
       // next trial
       this.jsPsych.finishTrial(trial_data);
     };

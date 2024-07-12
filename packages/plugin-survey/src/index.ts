@@ -194,7 +194,6 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       }
 
       // clear display and reset flex on jspsych-content-wrapper
-      display_element.innerHTML = "";
       document.querySelector<HTMLElement>(".jspsych-content-wrapper").style.display = "flex";
 
       // finish trial and save data

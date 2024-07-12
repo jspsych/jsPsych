@@ -396,6 +396,8 @@ export class JsPsych {
     getDefaultIti: () => this.getInitSettings().default_iti,
 
     finishTrialPromise: this.finishTrialPromise,
+
+    clearAllTimeouts: () => this.pluginAPI.clearAllTimeouts(),
   };
 
   private extensionManagerDependencies: ExtensionManagerDependencies = {

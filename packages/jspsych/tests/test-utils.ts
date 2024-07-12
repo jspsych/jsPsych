@@ -38,6 +38,8 @@ export class TimelineNodeDependenciesMock implements TimelineNodeDependencies {
   getDefaultIti = jest.fn(() => 0);
 
   finishTrialPromise = new PromiseWrapper<TrialResult>();
+
+  clearAllTimeouts = jest.fn();
 }
 
 /**

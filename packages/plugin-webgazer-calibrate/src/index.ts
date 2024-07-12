@@ -178,14 +178,8 @@ class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
       extension.hidePredictions();
       extension.hideVideo();
 
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // gather the data to store for the trial
       var trial_data = {};
-
-      // clear the display
-      display_element.innerHTML = "";
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);

@@ -229,8 +229,6 @@ class SurveyLikertPlugin implements JsPsychPlugin<Info> {
         question_order: question_order,
       };
 
-      display_element.innerHTML = "";
-
       // next trial
       this.jsPsych.finishTrial(trial_data);
     });

@@ -229,9 +229,6 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
         response: { left: get_response("left"), right: get_response("right") },
       };
 
-      // clear the display
-      display_element.innerHTML = "";
-
       // next trial
       this.jsPsych.finishTrial(trial_data);
     });

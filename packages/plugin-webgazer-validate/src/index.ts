@@ -146,12 +146,6 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
     const end_trial = () => {
       extension.stopSampleInterval();
 
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
-      // clear the display
-      display_element.innerHTML = "";
-
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
     };

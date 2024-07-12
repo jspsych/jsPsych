@@ -264,7 +264,6 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
         response: question_data,
         question_order: question_order,
       };
-      display_element.innerHTML = "";
 
       // next trial
       this.jsPsych.finishTrial(trial_data);

@@ -221,6 +221,11 @@ export interface TimelineNodeDependencies {
    * is called.
    */
   finishTrialPromise: PromiseWrapper<TrialResult | void>;
+
+  /**
+   * Clear all of the timeouts
+   */
+  clearAllTimeouts: () => void;
 }
 
 export type TrialResult = Record<string, any>;

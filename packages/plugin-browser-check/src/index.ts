@@ -447,8 +447,6 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
   }
 
   private end_trial(feature_data) {
-    this.jsPsych.getDisplayElement().innerHTML = "";
-
     const trial_data = { ...Object.fromEntries(feature_data) };
 
     this.jsPsych.finishTrial(trial_data);
