@@ -226,18 +226,6 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     this.audio.play();
 
-    const enable_buttons_with_delay = (delay: number) => {
-      this.jsPsych.pluginAPI.setTimeout(enable_buttons_without_delay, delay);
-    };
-
-    function enable_buttons() {
-      if (trial.enable_button_after > 0) {
-        enable_buttons_with_delay(trial.enable_button_after);
-      } else {
-        enable_buttons_without_delay();
-      }
-    }
-
     return new Promise((resolve) => {
       this.trial_complete = resolve;
     });

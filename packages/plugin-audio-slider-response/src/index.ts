@@ -179,7 +179,6 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     return new Promise((resolve) => {
       this.trial_complete = resolve;
-      console.log("PROMISE");
     });
   }
 
@@ -194,7 +193,6 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
   }
 
   private setupTrial = () => {
-    console.log("SETUP TRIAL");
     // set up end event if trial needs it
     if (this.params.trial_ends_after_audio) {
       this.audio.addEventListener("ended", this.end_trial);
@@ -270,8 +268,6 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     this.display.innerHTML = html;
 
-    console.log("iinner", this.display.innerHTML);
-
     this.response = {
       rt: null,
       response: null,
@@ -340,8 +336,6 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
         this.end_trial();
       }, this.params.trial_duration);
     }
-
-    console.log("END SETUP TRIAL");
   };
 
   private end_trial = () => {

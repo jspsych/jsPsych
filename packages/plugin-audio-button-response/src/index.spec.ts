@@ -26,8 +26,6 @@ describe("audio-button-response", () => {
 
     expectRunning();
 
-    console.log(getHTML());
-
     clickTarget(displayElement.querySelector("button"));
 
     expectFinished();
