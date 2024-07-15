@@ -1,7 +1,7 @@
 import autoBind from "auto-bind";
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { AudioPlayer } from "../../jspsych/src/modules/plugin-api/AudioPlayer";
+import { AudioPlayerInterface } from "../../jspsych/src/modules/plugin-api/AudioPlayer";
 
 const info = <const>{
   name: "audio-keyboard-response",
@@ -63,7 +63,7 @@ type Info = typeof info;
  */
 class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
-  private audio: AudioPlayer;
+  private audio: AudioPlayerInterface;
   private params: TrialType<Info>;
   private display: HTMLElement;
   private response: { rt: number; key: string } = { rt: null, key: null };
@@ -79,7 +79,6 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       this.finish = resolve;
       this.params = trial;
       this.display = display_element;
-
       // load audio file
       this.audio = await this.jsPsych.pluginAPI.getAudioPlayer(trial.stimulus);
 
