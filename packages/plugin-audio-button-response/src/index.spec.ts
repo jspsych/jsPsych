@@ -15,7 +15,7 @@ beforeEach(() => {
 
 // skip this until we figure out how to mock the audio loading
 describe("audio-button-response", () => {
-  it.only("works with all defaults", async () => {
+  it.skip("works with all defaults", async () => {
     const { expectFinished, expectRunning, displayElement, getHTML } = await startTimeline([
       {
         type: audioButtonResponse,
