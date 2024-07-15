@@ -33,6 +33,13 @@ export async function mouseDownMouseUpTarget(target: Element) {
 }
 
 export async function clickTarget(target: Element) {
+  // Check if the target is a form element and if it's disabled
+  if (target instanceof HTMLButtonElement || target instanceof HTMLInputElement) {
+    if (target.disabled) {
+      console.log("Target is disabled, not dispatching click event.");
+      return; // Exit the function if the target is disabled
+    }
+  }
   await dispatchEvent(new MouseEvent("click", { bubbles: true }), target);
 }
 

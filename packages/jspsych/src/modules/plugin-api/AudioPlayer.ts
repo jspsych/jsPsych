@@ -3,7 +3,15 @@ export interface AudioPlayerOptions {
   audioContext?: AudioContext;
 }
 
-export class AudioPlayer {
+export interface AudioPlayerInterface {
+  load(): Promise<void>;
+  play(): void;
+  stop(): void;
+  addEventListener(eventName: string, callback: EventListenerOrEventListenerObject): void;
+  removeEventListener(eventName: string, callback: EventListenerOrEventListenerObject): void;
+}
+
+export class AudioPlayer implements AudioPlayerInterface {
   private audio: HTMLAudioElement | AudioBufferSourceNode;
   private audioContext: AudioContext | null;
   private useWebAudio: boolean;

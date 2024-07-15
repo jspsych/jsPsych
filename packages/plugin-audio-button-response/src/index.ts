@@ -1,4 +1,7 @@
+import autoBind from "auto-bind";
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+
+import { AudioPlayerInterface } from "../../jspsych/src/modules/plugin-api/AudioPlayer";
 
 const info = <const>{
   name: "audio-button-response",
@@ -98,196 +101,163 @@ type Info = typeof info;
  */
 class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
-  private audio;
-
+  private audio: AudioPlayerInterface;
+  private params: TrialType<Info>;
   private buttonElements: HTMLElement[] = [];
+  private display: HTMLElement;
+  private response: { rt: number; button: number } = { rt: null, button: null };
+  private context: AudioContext;
+  private startTime: number;
+  private trial_complete: (trial_data: { rt: number; stimulus: string; response: number }) => void;
 
-  constructor(private jsPsych: JsPsych) {}
+  constructor(private jsPsych: JsPsych) {
+    autoBind(this);
+  }
 
-  trial(display_element: HTMLElement, trial: TrialType<Info>, on_load: () => void) {
+  async trial(display_element: HTMLElement, trial: TrialType<Info>, on_load: () => void) {
     // hold the .resolve() function from the Promise that ends the trial
-    let trial_complete;
-
+    this.trial_complete;
+    this.params = trial;
+    this.display = display_element;
     // setup stimulus
-    var context = this.jsPsych.pluginAPI.audioContext();
-
-    // store response
-    var response = {
-      rt: null,
-      button: null,
-    };
-
-    // record webaudio context start time
-    var startTime;
+    this.context = this.jsPsych.pluginAPI.audioContext();
 
     // load audio file
-    this.jsPsych.pluginAPI
-      .getAudioBuffer(trial.stimulus)
-      .then((buffer) => {
-        if (context !== null) {
-          this.audio = context.createBufferSource();
-          this.audio.buffer = buffer;
-          this.audio.connect(context.destination);
-        } else {
-          this.audio = buffer;
-          this.audio.currentTime = 0;
-        }
-        setupTrial();
-      })
-      .catch((err) => {
-        console.error(
-          `Failed to load audio file "${trial.stimulus}". Try checking the file path. We recommend using the preload plugin to load audio files.`
+    this.audio = await this.jsPsych.pluginAPI.getAudioPlayer(trial.stimulus);
+
+    // set up end event if trial needs it
+    if (trial.trial_ends_after_audio) {
+      this.audio.addEventListener("ended", this.end_trial);
+    }
+
+    // enable buttons after audio ends if necessary
+    if (!trial.response_allowed_while_playing && !trial.trial_ends_after_audio) {
+      this.audio.addEventListener("ended", this.enable_buttons);
+    }
+
+    // record start time
+    this.startTime = performance.now();
+
+    // Display buttons
+    const buttonGroupElement = document.createElement("div");
+    buttonGroupElement.id = "jspsych-audio-button-response-btngroup";
+    if (trial.button_layout === "grid") {
+      buttonGroupElement.classList.add("jspsych-btn-group-grid");
+      if (trial.grid_rows === null && trial.grid_columns === null) {
+        throw new Error(
+          "You cannot set `grid_rows` to `null` without providing a value for `grid_columns`."
         );
-        console.error(err);
+      }
+      const n_cols =
+        trial.grid_columns === null
+          ? Math.ceil(trial.choices.length / trial.grid_rows)
+          : trial.grid_columns;
+      const n_rows =
+        trial.grid_rows === null
+          ? Math.ceil(trial.choices.length / trial.grid_columns)
+          : trial.grid_rows;
+      buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
+      buttonGroupElement.style.gridTemplateRows = `repeat(${n_rows}, 1fr)`;
+    } else if (trial.button_layout === "flex") {
+      buttonGroupElement.classList.add("jspsych-btn-group-flex");
+    }
+
+    for (const [choiceIndex, choice] of trial.choices.entries()) {
+      buttonGroupElement.insertAdjacentHTML("beforeend", trial.button_html(choice, choiceIndex));
+      const buttonElement = buttonGroupElement.lastChild as HTMLElement;
+      buttonElement.dataset.choice = choiceIndex.toString();
+      buttonElement.addEventListener("click", () => {
+        this.after_response(choiceIndex);
       });
+      this.buttonElements.push(buttonElement);
+    }
 
-    const setupTrial = () => {
-      // set up end event if trial needs it
-      if (trial.trial_ends_after_audio) {
-        this.audio.addEventListener("ended", end_trial);
-      }
+    display_element.appendChild(buttonGroupElement);
 
-      // enable buttons after audio ends if necessary
-      if (!trial.response_allowed_while_playing && !trial.trial_ends_after_audio) {
-        this.audio.addEventListener("ended", enable_buttons);
-      }
+    // Show prompt if there is one
+    if (trial.prompt !== null) {
+      display_element.insertAdjacentHTML("beforeend", trial.prompt);
+    }
 
-      // Display buttons
-      const buttonGroupElement = document.createElement("div");
-      buttonGroupElement.id = "jspsych-audio-button-response-btngroup";
-      if (trial.button_layout === "grid") {
-        buttonGroupElement.classList.add("jspsych-btn-group-grid");
-        if (trial.grid_rows === null && trial.grid_columns === null) {
-          throw new Error(
-            "You cannot set `grid_rows` to `null` without providing a value for `grid_columns`."
-          );
-        }
-        const n_cols =
-          trial.grid_columns === null
-            ? Math.ceil(trial.choices.length / trial.grid_rows)
-            : trial.grid_columns;
-        const n_rows =
-          trial.grid_rows === null
-            ? Math.ceil(trial.choices.length / trial.grid_columns)
-            : trial.grid_rows;
-        buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
-        buttonGroupElement.style.gridTemplateRows = `repeat(${n_rows}, 1fr)`;
-      } else if (trial.button_layout === "flex") {
-        buttonGroupElement.classList.add("jspsych-btn-group-flex");
-      }
+    if (!trial.response_allowed_while_playing) {
+      this.disable_buttons();
+    }
 
-      for (const [choiceIndex, choice] of trial.choices.entries()) {
-        buttonGroupElement.insertAdjacentHTML("beforeend", trial.button_html(choice, choiceIndex));
-        const buttonElement = buttonGroupElement.lastChild as HTMLElement;
-        buttonElement.dataset.choice = choiceIndex.toString();
-        buttonElement.addEventListener("click", () => {
-          after_response(choiceIndex);
-        });
-        this.buttonElements.push(buttonElement);
-      }
+    // end trial if time limit is set
+    if (trial.trial_duration !== null) {
+      this.jsPsych.pluginAPI.setTimeout(() => {
+        this.end_trial();
+      }, trial.trial_duration);
+    }
 
-      display_element.appendChild(buttonGroupElement);
+    on_load();
 
-      // Show prompt if there is one
-      if (trial.prompt !== null) {
-        display_element.insertAdjacentHTML("beforeend", trial.prompt);
-      }
-
-      if (!trial.response_allowed_while_playing) {
-        disable_buttons();
-      }
-
-      // start time
-      startTime = performance.now();
-
-      // start audio
-      if (context !== null) {
-        startTime = context.currentTime;
-        this.audio.start(startTime);
-      } else {
-        this.audio.play();
-      }
-
-      // end trial if time limit is set
-      if (trial.trial_duration !== null) {
-        this.jsPsych.pluginAPI.setTimeout(() => {
-          end_trial();
-        }, trial.trial_duration);
-      }
-
-      on_load();
-    };
-
-    // function to handle responses by the subject
-    const after_response = (choice) => {
-      // measure rt
-      var endTime = performance.now();
-      var rt = Math.round(endTime - startTime);
-      if (context !== null) {
-        endTime = context.currentTime;
-        rt = Math.round((endTime - startTime) * 1000);
-      }
-      response.button = parseInt(choice);
-      response.rt = rt;
-
-      // disable all the buttons after a response
-      disable_buttons();
-
-      if (trial.response_ends_trial) {
-        end_trial();
-      }
-    };
-
-    // function to end trial when it is time
-    const end_trial = () => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
-      // stop the audio file if it is playing
-      // remove end event listeners if they exist
-      if (context !== null) {
-        this.audio.stop();
-      } else {
-        this.audio.pause();
-      }
-
-      this.audio.removeEventListener("ended", end_trial);
-      this.audio.removeEventListener("ended", enable_buttons);
-
-      // gather the data to store for the trial
-      var trial_data = {
-        rt: response.rt,
-        stimulus: trial.stimulus,
-        response: response.button,
-      };
-
-      // clear the display
-      display_element.innerHTML = "";
-
-      // move on to the next trial
-      this.jsPsych.finishTrial(trial_data);
-
-      trial_complete();
-    };
-
-    const disable_buttons = () => {
-      for (const button of this.buttonElements) {
-        button.setAttribute("disabled", "disabled");
-      }
-    };
-
-    const enable_buttons = () => {
-      for (const button of this.buttonElements) {
-        button.removeAttribute("disabled");
-      }
-    };
+    this.audio.play();
 
     return new Promise((resolve) => {
-      trial_complete = resolve;
+      this.trial_complete = resolve;
     });
   }
 
-  simulate(
+  private disable_buttons = () => {
+    for (const button of this.buttonElements) {
+      button.setAttribute("disabled", "disabled");
+    }
+  };
+
+  private enable_buttons = () => {
+    for (const button of this.buttonElements) {
+      button.removeAttribute("disabled");
+    }
+  };
+
+  // function to handle responses by the subject
+  private after_response = (choice) => {
+    // measure rt
+    var endTime = performance.now();
+    var rt = Math.round(endTime - this.startTime);
+    if (this.context !== null) {
+      endTime = this.context.currentTime;
+      rt = Math.round((endTime - this.startTime) * 1000);
+    }
+    this.response.button = parseInt(choice);
+    this.response.rt = rt;
+
+    // disable all the buttons after a response
+    this.disable_buttons();
+
+    if (this.params.response_ends_trial) {
+      this.end_trial();
+    }
+  };
+
+  // method to end trial when it is time
+  private end_trial = () => {
+    // kill any remaining setTimeout handlers
+    this.jsPsych.pluginAPI.clearAllTimeouts();
+
+    // stop the audio file if it is playing
+    this.audio.stop();
+
+    // remove end event listeners if they exist
+    this.audio.removeEventListener("ended", this.end_trial);
+    this.audio.removeEventListener("ended", this.enable_buttons);
+
+    // gather the data to store for the trial
+    var trial_data = {
+      rt: this.response.rt,
+      stimulus: this.params.stimulus,
+      response: this.response.button,
+    };
+
+    // clear the display
+    this.display.innerHTML = "";
+
+    // move on to the next trial
+    this.trial_complete(trial_data);
+  };
+
+  async simulate(
     trial: TrialType<Info>,
     simulation_mode,
     simulation_options: any,
