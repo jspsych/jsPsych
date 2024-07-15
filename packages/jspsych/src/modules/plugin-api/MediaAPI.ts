@@ -62,7 +62,7 @@ export class MediaAPI {
     files,
     callback_complete = () => {},
     callback_load = (filepath: string) => {},
-    callback_error = (error: string) => {}
+    callback_error = (error) => {}
   ) {
     files = unique(files.flat());
 
