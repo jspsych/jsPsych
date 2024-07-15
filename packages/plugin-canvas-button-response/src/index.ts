@@ -1,85 +1,116 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "canvas-button-response",
+  version: version,
   parameters: {
-    /** The drawing function to apply to the canvas. Should take the canvas object as argument. */
+    /**
+     * The function to draw on the canvas. This function automatically takes a canvas element as its only argument,
+     * e.g. `function(c) {...}`  or `function drawStim(c) {...}`, where `c` refers to the canvas element. Note that
+     * the stimulus function will still generally need to set the correct context itself, using a line like
+     * `let ctx = c.getContext("2d")`.
+     */
     stimulus: {
       type: ParameterType.FUNCTION,
-      pretty_name: "Stimulus",
       default: undefined,
     },
-    /** Array containing the label(s) for the button(s). */
+    /** Labels for the buttons. Each different string in the array will generate a different button. */
     choices: {
       type: ParameterType.STRING,
-      pretty_name: "Choices",
       default: undefined,
       array: true,
     },
     /**
-     * A function that, given a choice and its index, returns the HTML string of that choice's
-     * button.
+     * ``(choice: string, choice_index: number)=>`<button class="jspsych-btn">${choice}</button>``; | A
+     * function that generates the HTML for each button in the `choices` array. The function gets the
+     * string and index of the item in the `choices` array and should return valid HTML. If you want
+     * to use different markup for each button, you can do that by using a conditional on either parameter.
+     * The default parameter returns a button element with the text label of the choice.
      */
     button_html: {
       type: ParameterType.FUNCTION,
-      pretty_name: "Button HTML",
       default: function (choice: string, choice_index: number) {
         return `<button class="jspsych-btn">${choice}</button>`;
       },
     },
-    /** Any content here will be displayed under the button. */
+    /** This string can contain HTML markup. Any content here will be displayed below the stimulus.
+     * The intention is that it can be used to provide a reminder about the action the participant is supposed
+     * to take (e.g., what question to answer).
+     */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
-    /** How long to hide the stimulus. */
+    /** How long to display the stimulus in milliseconds. The visibility CSS property of the stimulus will be
+     * set to `hidden` after this time has elapsed. If this is null, then the stimulus will remain visible until
+     * the trial ends.
+     */
     stimulus_duration: {
       type: ParameterType.INT,
-      pretty_name: "Stimulus duration",
       default: null,
     },
-    /** How long to show the trial. */
+    /** How long to wait for the participant to make a response before ending the trial in milliseconds.
+     * If the participant fails to make a response before this timer is reached, the participant's response
+     * will be recorded as null for the trial and the trial will end. If the value of this parameter is null,
+     * the trial will wait for a response indefinitely.
+     */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
     },
-    /** The CSS layout for the buttons. Options: 'flex' or 'grid'. */
+    /** Setting to `'grid'` will make the container element have the CSS property `display: grid` and enable
+     * the use of `grid_rows` and `grid_columns`. Setting to `'flex'` will make the container element have the
+     * CSS property `display: flex`. You can customize how the buttons are laid out by adding inline CSS in
+     * the `button_html` parameter.
+     */
     button_layout: {
       type: ParameterType.STRING,
-      pretty_name: "Button layout",
       default: "grid",
     },
-    /** The number of grid rows when `button_layout` is "grid".
-     * Setting to `null` will infer the number of rows based on the
-     * number of columns and buttons.
+    /**
+     * The number of rows in the button grid. Only applicable when `button_layout` is set to `'grid'`.
+     * If null, the number of rows will be determined automatically based on the number of buttons and the number of columns.
      */
     grid_rows: {
       type: ParameterType.INT,
-      pretty_name: "Grid rows",
       default: 1,
     },
-    /** The number of grid columns when `button_layout` is "grid".
-     * Setting to `null` (default value) will infer the number of columns
-     * based on the number of rows and buttons. */
+    /**
+     * The number of columns in the button grid. Only applicable when `button_layout` is set to `'grid'`.
+     * If null, the number of columns will be determined automatically based on the number of buttons and the number of rows.
+     */
     grid_columns: {
       type: ParameterType.INT,
-      pretty_name: "Grid columns",
       default: null,
     },
-    /** If true, then trial will end when user responds. */
+    /** If true, then the trial will end whenever the participant makes a response (assuming they make their response
+     * before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until
+     * the value for `trial_duration` is reached. You can use this parameter to force the participant to view a
+     * stimulus for a fixed amount of time, even if they respond before the time is complete.
+     */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
     },
-    /** Array containing the height (first value) and width (second value) of the canvas element. */
+    /** Array that defines the size of the canvas element in pixels. First value is height, second value is width. */
     canvas_size: {
       type: ParameterType.INT,
       array: true,
-      pretty_name: "Canvas size",
       default: [500, 500],
+    },
+  },
+  data: {
+    /** Indicates which button the participant pressed. The first button in the `choices` array is 0, the second is 1, and so on. */
+    response: {
+      type: ParameterType.INT,
+    },
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the
+     * stimulus first appears on the screen until the participant's response.
+     */
+    rt: {
+      type: ParameterType.INT,
     },
   },
 };
@@ -87,12 +118,15 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **canvas-button-response**
- *
- * jsPsych plugin for displaying a canvas stimulus and getting a button response
+ * This plugin can be used to draw a stimulus on a [HTML canvas element](https://www.w3schools.com/html/html5_canvas.asp), and record
+ * a button click response and response time. The canvas stimulus can be useful for displaying dynamic, parametrically-defined
+ * graphics, and for controlling the positioning of multiple graphical elements (shapes, text, images). The stimulus can be
+ * displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the
+ * participant has failed to respond within a fixed length of time. One or more button choices will be displayed under the canvas,
+ * and the button style can be customized using HTML formatting.
  *
  * @author Chris Jungerius (modified from Josh de Leeuw)
- * @see {@link https://www.jspsych.org/plugins/jspsych-canvas-button-response/ canvas-button-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/canvas-button-response/ canvas-button-response plugin documentation on jspsych.org}
  */
 class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -108,6 +142,7 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
     canvasElement.id = "jspsych-canvas-stimulus";
     canvasElement.height = trial.canvas_size[0];
     canvasElement.width = trial.canvas_size[1];
+    canvasElement.style.display = "block";
     stimulusElement.appendChild(canvasElement);
 
     display_element.appendChild(stimulusElement);
@@ -166,17 +201,11 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // function to end trial when it is time
     const end_trial = () => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // gather the data to store for the trial
       var trial_data = {
         rt: response.rt,
         response: response.button,
       };
-
-      // clear the display
-      display_element.innerHTML = "";
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);

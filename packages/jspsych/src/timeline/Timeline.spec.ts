@@ -292,6 +292,19 @@ describe("Timeline", () => {
       expect(onTimelineFinish).toHaveBeenCalledTimes(1);
     });
 
+    it("loop function ignores data from trials where `record_data` is false", async () => {
+      const loopFunction = jest.fn();
+      loopFunction.mockReturnValue(false);
+
+      const timeline = createTimeline({
+        timeline: [{ type: TestPlugin, record_data: false }, { type: TestPlugin }],
+        loop_function: loopFunction,
+      });
+
+      await timeline.run();
+      expect((loopFunction.mock.calls[0][0] as DataCollection).count()).toBe(1);
+    });
+
     describe("with timeline variables", () => {
       it("repeats all trials for each set of variables", async () => {
         const xValues = [];
@@ -862,6 +875,47 @@ describe("Timeline", () => {
       expect(snapshots.innerTimelineFinish).toBe(nestedTrial);
       expect(snapshots.outerTimelineFinish).toBe(nestedTrial);
       expect(timeline.getLatestNode()).toBe(nestedTrial);
+    });
+  });
+
+  describe("getActiveTimelineByName()", () => {
+    it("returns the timeline with the given name", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timeline = createTimeline({
+        timeline: [{ timeline: [{ type: TestPlugin }], name: "innerTimeline" }],
+        name: "outerTimeline",
+      });
+
+      timeline.run();
+
+      expect(timeline.getActiveTimelineByName("outerTimeline")).toBe(timeline);
+      expect(timeline.getActiveTimelineByName("innerTimeline")).toBe(
+        timeline.children[0] as Timeline
+      );
+    });
+
+    it("returns only active timelines", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timeline = createTimeline({
+        timeline: [
+          { type: TestPlugin },
+          { timeline: [{ type: TestPlugin }], name: "innerTimeline" },
+        ],
+        name: "outerTimeline",
+      });
+
+      timeline.run();
+
+      expect(timeline.getActiveTimelineByName("outerTimeline")).toBe(timeline);
+      expect(timeline.getActiveTimelineByName("innerTimeline")).toBeUndefined();
+
+      await TestPlugin.finishTrial();
+
+      expect(timeline.getActiveTimelineByName("innerTimeline")).toBe(
+        timeline.children[1] as Timeline
+      );
     });
   });
 });

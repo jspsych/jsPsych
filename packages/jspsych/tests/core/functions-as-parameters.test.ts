@@ -141,6 +141,7 @@ describe("nested parameters as functions", () => {
 
     const info = <const>{
       name: "function-test-plugin",
+      version: "0.0.1",
       parameters: {
         foo: {
           type: ParameterType.COMPLEX,
@@ -157,6 +158,7 @@ describe("nested parameters as functions", () => {
           },
         },
       },
+      data: {},
     };
 
     class FunctionTestPlugin implements JsPsychPlugin<typeof info> {

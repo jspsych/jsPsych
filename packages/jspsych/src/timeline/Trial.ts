@@ -36,6 +36,23 @@ export class Trial extends TimelineNode {
     this.trialObject = deepCopy(description);
     this.pluginClass = this.getParameterValue("type", { evaluateFunctions: false });
     this.pluginInfo = this.pluginClass["info"];
+
+    if (!("version" in this.pluginInfo) && !("data" in this.pluginInfo)) {
+      console.warn(
+        this.pluginInfo["name"],
+        "is missing the 'version' and 'data' fields. Please update plugin as 'version' and 'data' will be required in v9. See https://www.jspsych.org/latest/developers/plugin-development/ for more details."
+      );
+    } else if (!("version" in this.pluginInfo)) {
+      console.warn(
+        this.pluginInfo["name"],
+        "is missing the 'version' field. Please update plugin as 'version' will be required in v9. See https://www.jspsych.org/latest/developers/plugin-development/ for more details."
+      );
+    } else if (!("data" in this.pluginInfo)) {
+      console.warn(
+        this.pluginInfo["name"],
+        "is missing the 'data' field. Please update plugin as 'data' will be required in v9. See https://www.jspsych.org/latest/developers/plugin-development/ for more details."
+      );
+    }
   }
 
   public async run() {
@@ -95,6 +112,9 @@ export class Trial extends TimelineNode {
       result = await trialPromise;
     }
 
+    // The trial has finished, time to clean up.
+    this.cleanupTrial();
+
     return result;
   }
 
@@ -128,6 +148,14 @@ export class Trial extends TimelineNode {
         this.onLoad
       ),
     };
+  }
+
+  /**
+   * Cleanup the trial by removing the display element and removing event listeners
+   */
+  private cleanupTrial() {
+    this.dependencies.clearAllTimeouts();
+    this.dependencies.getDisplayElement().innerHTML = "";
   }
 
   /**
@@ -185,6 +213,7 @@ export class Trial extends TimelineNode {
       ...result,
       trial_type: this.pluginInfo.name,
       trial_index: this.index,
+      plugin_version: this.pluginInfo["version"] ? this.pluginInfo["version"] : null,
     };
 
     // Add timeline variables to the result according to the `save_timeline_variables` parameter
@@ -232,7 +261,7 @@ export class Trial extends TimelineNode {
     );
     Object.assign(this.result, extensionResults);
 
-    this.runParameterCallback("on_finish", this.getResult());
+    await Promise.resolve(this.runParameterCallback("on_finish", this.getResult()));
 
     this.dependencies.onTrialFinished(this);
   }
@@ -299,14 +328,16 @@ export class Trial extends TimelineNode {
   }
 
   /**
-   * Returns the result object of this trial or `undefined` if the result is not yet known.
+   * Returns the result object of this trial or `undefined` if the result is not yet known or the
+   * `record_data` trial parameter is `false`.
    */
   public getResult() {
-    return this.result;
+    return this.getParameterValue("record_data") === false ? undefined : this.result;
   }
 
   public getResults() {
-    return this.result ? [this.result] : [];
+    const result = this.getResult();
+    return result ? [result] : [];
   }
 
   /**
@@ -377,5 +408,12 @@ export class Trial extends TimelineNode {
 
   public getLatestNode() {
     return this;
+  }
+
+  public getActiveTimelineByName(name: string): Timeline | undefined {
+    // This returns undefined because the function is looking
+    // for a timeline. If we get to this point, then none
+    // of the parent nodes match the name.
+    return undefined;
   }
 }

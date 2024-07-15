@@ -1,45 +1,78 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "maxdiff",
+  version: version,
   parameters: {
-    /** Array containing the alternatives to be presented in the maxdiff table. */
+    /** An array of one or more alternatives of string type to fill the rows of the maxdiff table. If `required` is true,
+     * then the array must contain two or more alternatives, so that at least one can be selected for both the left
+     * and right columns.  */
     alternatives: {
       type: ParameterType.STRING,
-      pretty_name: "Alternatives",
       array: true,
       default: undefined,
     },
-    /** Array containing the labels to display for left and right response columns. */
+    /** An array with exactly two labels of string type to display as column headings (to the left and right of the
+     * alternatives) for responses on the criteria of interest. */
     labels: {
       type: ParameterType.STRING,
       array: true,
-      pretty_name: "Labels",
       default: undefined,
     },
-    /** If true, the order of the alternatives will be randomized. */
+    /** If true, the display order of `alternatives` is randomly determined at the start of the trial. */
     randomize_alternative_order: {
       type: ParameterType.BOOL,
-      pretty_name: "Randomize Alternative Order",
       default: false,
     },
-    /** String to display at top of the page. */
+    /** HTML formatted string to display at the top of the page above the maxdiff table. */
     preamble: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Preamble",
       default: "",
     },
     /** Label of the button to submit response. */
     button_label: {
       type: ParameterType.STRING,
-      pretty_name: "Button Label",
       default: "Continue",
     },
-    /** Makes answering the alternative required. */
+    /** If true, prevents the user from submitting the response and proceeding until a radio button in both the left and right response columns has been selected. */
     required: {
       type: ParameterType.BOOL,
-      pretty_name: "Required",
       default: false,
+    },
+  },
+  data: {
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the maxdiff table first
+     * appears on the screen until the participant's response. */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** An object with two keys, `left` and `right`, containing the labels (strings) corresponding to the left and right response
+     * columns. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions.  */
+    labels: {
+      type: ParameterType.COMPLEX,
+      parameters: {
+        left: {
+          type: ParameterType.STRING,
+        },
+        right: {
+          type: ParameterType.STRING,
+        },
+      },
+    },
+    /** An object with two keys, `left` and `right`, containing the alternatives selected on the left and right columns.
+     * This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. */
+    response: {
+      type: ParameterType.COMPLEX,
+      parameters: {
+        left: {
+          type: ParameterType.STRING,
+        },
+        right: {
+          type: ParameterType.STRING,
+        },
+      },
     },
   },
 };
@@ -47,12 +80,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **maxdiff**
- *
- * jsPsych plugin for maxdiff/conjoint analysis designs
+ * The maxdiff plugin displays a table with rows of alternatives to be selected for two mutually-exclusive categories,
+ * typically as 'most' or 'least' on a particular criteria (e.g. importance, preference, similarity). The participant
+ * responds by selecting one radio button corresponding to an alternative in both the left and right response columns.
+ * The same alternative cannot be endorsed on both the left and right response columns (e.g. 'most' and 'least') simultaneously.
  *
  * @author Angus Hughes
- * @see {@link https://www.jspsych.org/plugins/jspsych-maxdiff/ maxdiff plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/maxdiff/ maxdiff plugin documentation on jspsych.org}
  */
 class MaxdiffPlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -194,9 +228,6 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
         labels: { left: trial.labels[0], right: trial.labels[1] },
         response: { left: get_response("left"), right: get_response("right") },
       };
-
-      // clear the display
-      display_element.innerHTML = "";
 
       // next trial
       this.jsPsych.finishTrial(trial_data);

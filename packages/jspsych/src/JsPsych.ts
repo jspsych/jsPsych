@@ -70,7 +70,6 @@ export class JsPsych {
       on_interaction_data_update: () => {},
       on_close: () => {},
       use_webaudio: true,
-      exclusions: {},
       show_progress_bar: false,
       message_progress_bar: "Completion Progress",
       auto_update_progress_bar: true,
@@ -205,6 +204,18 @@ export class JsPsych {
     }
     if (currentTimeline instanceof Timeline) {
       currentTimeline.abort();
+    }
+  }
+
+  /**
+   * Aborts a named timeline. The timeline must be currently running in order to abort it.
+   *
+   * @param name The name of the timeline to abort. Timelines can be given names by setting the `name` parameter in the description of the timeline.
+   */
+  abortTimelineByName(name: string): void {
+    const timeline = this.timeline?.getActiveTimelineByName(name);
+    if (timeline) {
+      timeline.abort();
     }
   }
 
@@ -345,14 +356,20 @@ export class JsPsych {
     },
 
     onTrialResultAvailable: (trial: Trial) => {
-      trial.getResult().time_elapsed = this.getTotalTime();
-      this.data.write(trial);
+      const result = trial.getResult();
+      if (result) {
+        result.time_elapsed = this.getTotalTime();
+        this.data.write(trial);
+      }
     },
 
     onTrialFinished: (trial: Trial) => {
       const result = trial.getResult();
       this.options.on_trial_finish(result);
-      this.options.on_data_update(result);
+
+      if (result) {
+        this.options.on_data_update(result);
+      }
 
       if (this.progressBar && this.options.auto_update_progress_bar) {
         this.progressBar.progress = this.timeline.getNaiveProgress();
@@ -379,6 +396,8 @@ export class JsPsych {
     getDefaultIti: () => this.getInitSettings().default_iti,
 
     finishTrialPromise: this.finishTrialPromise,
+
+    clearAllTimeouts: () => this.pluginAPI.clearAllTimeouts(),
   };
 
   private extensionManagerDependencies: ExtensionManagerDependencies = {

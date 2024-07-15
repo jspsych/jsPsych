@@ -1,10 +1,13 @@
 import type WebGazerExtension from "@jspsych/extension-webgazer";
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "webgazer-calibrate",
+  version: version,
   parameters: {
-    /** An array of calibration points, where each element is an array cointaining the coordinates for one calibration point: [x,y] */
+    /** Array of points in `[x,y]` coordinates. Specified as a percentage of the screen width and height, from the left and top edge. The default grid is 9 points. */
     calibration_points: {
       type: ParameterType.INT, // TO DO: nested array, so different type?
       default: [
@@ -20,51 +23,57 @@ const info = <const>{
       ],
       array: true,
     },
-    /** What should the subject do in response to the calibration point presentation? Options are 'click' and 'view'. */
+    /** Can specify `click` to have participants click on calibration points or `view` to have participants passively watch calibration points.  */
     calibration_mode: {
       type: ParameterType.SELECT,
       options: ["click", "view"],
       default: "click",
     },
-    /** Size of the calibration points, in pixels */
+    /** Diameter of the calibration points in pixels. */
     point_size: {
       type: ParameterType.INT,
       default: 20,
     },
-    /** Number of repetitions per calibration point */
+    /** The number of times to repeat the sequence of calibration points. */
     repetitions_per_point: {
       type: ParameterType.INT,
       default: 1,
     },
-    /** Whether or not to randomize the calibration point order */
+    /** Whether to randomize the order of the calibration points. */
     randomize_calibration_order: {
       type: ParameterType.BOOL,
       default: false,
     },
-    /** If calibration_mode is view, then this is the delay before calibration after the point is shown */
+    /** If `calibration_mode` is set to `view`, then this is the delay before calibrating after showing a point.
+     * Gives the participant time to fixate on the new target before assuming that the participant is looking at the target. */
     time_to_saccade: {
       type: ParameterType.INT,
       default: 1000,
     },
-    /** If calibration_mode is view, then this is the length of time to show the point while calibrating */
+    /**
+     * If `calibration_mode` is set to `view`, then this is the length of time to show a point while calibrating. Note
+     * that if `click` calibration is used then the point will remain on the screen until clicked.
+     */
     time_per_point: {
       type: ParameterType.INT,
       default: 1000,
     },
+  },
+  data: {
+    // no data collected
   },
 };
 
 type Info = typeof info;
 
 /**
- * **webgazer-calibrate**
  *
- * jsPsych plugin for calibrating webcam eye gaze location estimation.
- * Intended for use with the WebGazer eye-tracking extension, after the webcam has been initialized with the `webgazer-init-camera` plugin.
+ * This plugin can be used to calibrate the [WebGazer extension](../extensions/webgazer.md). For a narrative
+ * description of eye tracking with jsPsych, see the [eye tracking overview](../overview/eye-tracking.md).
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-webgazer-calibrate/ webgazer-calibrate plugin} and
- * {@link https://www.jspsych.org/overview/eye-tracking/ eye-tracking overview} documentation on jspsych.org
+ * @see {@link https://www.jspsych.org/latest/plugins/webgazer-calibrate/ webgazer-calibrate plugin} and
+ * {@link https://www.jspsych.org/latest/overview/eye-tracking/ eye-tracking overview} documentation on jspsych.org
  */
 class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -169,14 +178,8 @@ class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
       extension.hidePredictions();
       extension.hideVideo();
 
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // gather the data to store for the trial
       var trial_data = {};
-
-      // clear the display
-      display_element.innerHTML = "";
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);

@@ -92,6 +92,22 @@ Version 8.x is more strict about this.
 Plugins should list all parameters in the `info` object.
 If a parameter is not listed, then timeline variables and function evaluation will not work for that parameter. The `save_trial_parameters` parameter will also not work for parameters that are not listed in the `info` object.
 
+## Plugin `version` and `data` properties
+
+We've added a `version` property to the `info` object for plugins.
+This property is a string that should be updated whenever a new version of the plugin is released.
+
+We've also added a `data` property to the `info` object for plugins.
+This property is an object that can contain a description of the types of data that the plugin will generate.
+
+Including these properties is not *required* for a plugin to work, but it is recommended.
+In version 8.x, jsPsych will throw a warning if a plugin is used that does not have a `version` or `data` property in the `info` object.
+In version 9.x, we plan to make this a requirement.
+
+## Changes to `finishTrial()`
+
+When a plugin calls `finishTrial()` or ends via a `return` statement, jsPsych will now automatically clear the display and clear any timeouts that are still pending. This change should only affect plugin developers. If you are using built-in plugins you should not notice any difference.
+
 ## Progress bar
 
 The automatic progress bar now updates after every trial, including trials in nested timelines. 

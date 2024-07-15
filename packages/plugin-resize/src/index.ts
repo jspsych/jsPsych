@@ -1,43 +1,53 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "resize",
+  version: version,
   parameters: {
-    /** The height of the item to be measured. */
+    /** The height of the item to be measured. Any units can be used
+     * as long as you are consistent with using the same units for
+     * all parameters. */
     item_height: {
       type: ParameterType.INT,
-      pretty_name: "Item height",
       default: 1,
     },
     /** The width of the item to be measured. */
     item_width: {
       type: ParameterType.INT,
-      pretty_name: "Item width",
       default: 1,
     },
     /** The content displayed below the resizable box and above the button. */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
     /** After the scaling factor is applied, this many pixels will equal one unit of measurement. */
     pixels_per_unit: {
       type: ParameterType.INT,
-      pretty_name: "Pixels per unit",
       default: 100,
     },
-    /** The initial size of the box, in pixels, along the larget dimension. */
+    /** The initial size of the box, in pixels, along the largest dimension.
+     * The aspect ratio will be set automatically to match the item width and height. */
     starting_size: {
       type: ParameterType.INT,
-      pretty_name: "Starting size",
       default: 100,
     },
     /** Label to display on the button to complete calibration. */
     button_label: {
       type: ParameterType.STRING,
-      pretty_name: "Button label",
       default: "Continue",
+    },
+  },
+  data: {
+    /** Final width of the resizable div container, in pixels. */
+    final_width_px: {
+      type: ParameterType.INT,
+    },
+    /** Scaling factor that will be applied to the div containing jsPsych content. */
+    scale_factor: {
+      type: ParameterType.FLOAT,
     },
   },
 };
@@ -45,12 +55,13 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **resize**
  *
- * jsPsych plugin for controlling the real world size of the display
+ * This plugin displays a resizable div container that allows the user to drag until the container is the same size as the
+ * item being measured. Once the user measures the item as close as possible, clicking the button sets a scaling factor
+ * for the div containing jsPsych content. This causes the stimuli that follow to have a known size, independent of monitor resolution.
  *
  * @author Steve Chao
- * @see {@link https://www.jspsych.org/plugins/jspsych-resize/ resize plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/resize/ resize plugin documentation on jspsych.org}
  */
 class ResizePlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -92,9 +103,6 @@ class ResizePlugin implements JsPsychPlugin<Info> {
       // clear document event listeners
       document.removeEventListener("mousemove", resizeevent);
       document.removeEventListener("mouseup", mouseupevent);
-
-      // clear the screen
-      display_element.innerHTML = "";
 
       // finishes trial
 

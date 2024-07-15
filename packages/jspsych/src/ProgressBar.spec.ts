@@ -44,5 +44,17 @@ describe("ProgressBar", () => {
         '"jsPsych.progressBar.progress must be a number between 0 and 1"'
       );
     });
+
+    it("should work when message is a function", () => {
+      // Override default container element and progress bar
+      containerElement = document.createElement("div");
+      progressBar = new ProgressBar(containerElement, (progress: number) => String(progress));
+      let messageSpan: HTMLSpanElement = containerElement.querySelector("span");
+
+      expect(messageSpan.innerHTML).toEqual("0");
+
+      progressBar.progress = 0.5;
+      expect(messageSpan.innerHTML).toEqual("0.5");
+    });
   });
 });

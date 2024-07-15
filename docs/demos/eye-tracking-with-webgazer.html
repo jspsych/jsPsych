@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://unpkg.com/jspsych@7.3.3"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.2"></script>
+    <script src="https://unpkg.com/jspsych@7.3.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.2.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@1.0.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@1.0.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.3"></script>
     <script src="js/webgazer/webgazer.js"></script>
-    <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.2"></script>
+    <script src="https://unpkg.com/@jspsych/extension-webgazer@1.0.3"></script>
     <link
       rel="stylesheet"
-      href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css"
+      href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css"
     />
     <link rel="stylesheet" href="docs-demo.css" type="text/css">
   </head>
@@ -121,7 +121,7 @@
       }
 
       var begin = {
-        type: jsPsychHtmKeyboardResponse,
+        type: jsPsychHtmlKeyboardResponse,
         stimulus: `<p>The next screen will show an image to demonstrate adding the webgazer extension to a trial.</p>
           <p>Just look at the image while eye tracking data is collected. The trial will end automatically.</p>
           <p>Press any key to start.</p>
@@ -142,7 +142,7 @@
       }
 
       var show_data = {
-        type: jsPsychHtmKeyboardResponse,
+        type: jsPsychHtmlKeyboardResponse,
         stimulus: function() {
           var trial_data = jsPsych.data.getLastTrialData().values();
           var trial_json = JSON.stringify(trial_data, null, 2);

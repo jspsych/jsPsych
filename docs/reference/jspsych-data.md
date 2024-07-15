@@ -253,7 +253,7 @@ Returns nothing.
 
 ### Description
 
-This method is used by `jsPsych.finishTrial` for writing data. You should probably not use it to add data. Instead use [jsPsych.data.addProperties](#addProperties).
+This method is used by `jsPsych.finishTrial` for writing data. You should probably not use it to add data. Instead use [jsPsych.data.addProperties](#jspsychdataaddproperties).
 
 ### Example
 

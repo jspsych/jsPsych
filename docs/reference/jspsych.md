@@ -24,9 +24,8 @@ The settings object can contain several parameters. None of the parameters are r
 | on_data_update             | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data (via a call to `jsPsych.finishTrial`, so this function runs every time a plugin stores new data. |
 | on_interaction_data_update | function | Function to execute every time a new interaction event occurs. Interaction events include clicking on a different window (blur), returning to the experiment window (focus), entering full screen mode (fullscreenenter), and exiting full screen mode (fullscreenexit). |
 | on_close                   | function | Function to execute when the user leaves the page. Can be used, for example, to save data before the page is closed. |
-| exclusions                 | object   | Specifies restrictions on the browser the participant can use to complete the experiment. See list of options below. *This feature is deprecated as of v7.1 and will be removed in v8.0. The [browser-check plugin](../plugins/browser-check.md) is an improved way to handle exclusions.* |
 | show_progress_bar          | boolean  | If `true`, then [a progress bar](../overview/progress-bar.md) is shown at the top of the page. Default is `false`. |
-| message_progress_bar       | string   | Message to display next to the progress bar. The default is 'Completion Progress'. |
+| message_progress_bar       | string or function   | Message to display next to the progress bar or a function that returns that message. The default is 'Completion Progress'. If `message_progress_bar` is a function, it receives one single argument which is the current progress, ranging from 0 to 1; the function gets called on every progress bar update automatically. |
 | auto_update_progress_bar   | boolean  | If true, then the progress bar at the top of the page will automatically update as every top-level timeline or trial is completed. |
 | use_webaudio               | boolean  | If false, then jsPsych will not attempt to use the WebAudio API for audio playback. Instead, HTML5 Audio objects will be used. The WebAudio API offers more precise control over the timing of audio events, and should be used when possible. The default value is `true`. |
 | default_iti                | numeric  | The default inter-trial interval in ms. The default value if none is specified is 0ms. |
@@ -35,14 +34,6 @@ The settings object can contain several parameters. None of the parameters are r
 | override_safe_mode         | boolean  | Running a jsPsych experiment directly in a web browser (e.g., by double clicking on a local HTML file) will load the page using the `file://` protocol. Some features of jsPsych don't work with this protocol. By default, when jsPsych detects that it's running on a page loaded via the `file://` protocol, it runs in _safe mode_, which automatically disables features that don't work in this context. Specifically, the use of Web Audio is disabled (audio will be played using HTML5 audio instead, even if `use_webaudio` is `true`) and video preloading is disabled. The `override_safe_mode` parameter defaults to `false`, but you can set it to `true` to force these features to operate under the `file://` protocol. In order for this to work, you will need to disable web security (CORS) features in your browser - this is safe to do if you know what you are doing. Note that this parameter has no effect when you are running the experiment on a web server, because the page will be loaded via the `http://` or `https://` protocol. |
 | case_sensitive_responses   | boolean  | If `true`, then jsPsych will make a distinction between uppercase and lowercase keys when evaluating keyboard responses, e.g. "A" (uppercase) will not be recognized as a valid response if the trial only accepts "a" (lowercase). If false, then jsPsych will not make a distinction between uppercase and lowercase keyboard responses, e.g. both "a" and "A" responses will be valid when the trial's key choice parameter is "a". Setting this parameter to false is useful if you want key responses to be treated the same way when CapsLock is turned on or the Shift key is held down. The default value is `false`. |
 extensions | array | Array containing information about one or more jsPsych extensions that are used during the experiment. Each extension should be specified as an object with `type` (required), which is the name of the extension, and `params` (optional), which is an object containing any parameter-value pairs to be passed to the extension's `initialize` function. Default value is an empty array. |
-
-Possible values for the exclusions parameter above.
-
-| Parameter  | Type    | Description                              |
-| ---------- | ------- | ---------------------------------------- |
-| min_width  | numeric | The minimum width of the browser window. If the width is below this value, a message will be displayed to the participant asking them to maximize their browser window. The experiment will sit on this page until the browser window is large enough. |
-| min_height | numeric | Same as above, but with height.          |
-| audio      | boolean | Set to true to require support for the WebAudio API (used by plugins that play audio files). |
 
 ### Return value
 
@@ -167,6 +158,74 @@ var trial = {
     }
   }
 }
+```
+
+---
+## jsPsych.abortTimelineByName
+
+```javascript
+jsPsych.abortTimelineByName()
+```
+
+### Parameters
+
+| Parameter       | Type     | Description                              |
+| --------------- | -------- | ---------------------------------------- |
+| name | string   | The name of the timeline to abort. |
+
+### Return value
+
+None.
+
+### Description
+
+Ends the currently active timeline that matches the `name` parameter. This can be used to control which level is aborted in a nested timeline structure.
+
+### Example
+
+#### Abort a procedure if an incorrect response is given.
+
+```javascript
+const fixation = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: '<p>+</p>',
+  choices: "NO_KEYS",
+  trial_duration: 1000
+}
+
+const test = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: jsPsych.timelineVariable('stimulus'),
+  choices: ['y', 'n'],
+  on_finish: function(data){
+    if(jsPsych.pluginAPI.compareKeys(data.response, "n")){
+      jsPsych.abortTimelineByName('memory_test');
+    }
+  }
+}
+
+const memoryResponseProcedure = {
+  timeline: [fixation, test]
+}
+
+// the variable `encode` is not shown, but imagine a trial that displays
+// some stimulus to remember.
+const memoryEncodeProcedure = {
+  timeline: [fixation, encode]
+}
+
+const memoryTestProcedure = {
+  timeline: [memoryEncodeProcedure, memoryResponseProcedure]
+  name: 'memory_test',
+  timeline_variables: [
+    {stimulus: 'image1.png'},
+    {stimulus: 'image2.png'},
+    {stimulus: 'image3.png'},
+    {stimulus: 'image4.png'}
+  ]
+}
+
+
 ```
 
 ---
@@ -619,7 +678,7 @@ jsPsych.setProgressBar(0.85);
 ## jsPsych.timelineVariable
 
 ```javascript
-jsPsych.timelineVariable(variable, call_immediate)
+jsPsych.timelineVariable(variable)
 ```
 
 ### Parameters

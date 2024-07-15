@@ -1,88 +1,114 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "iat-image",
+  version: version,
   parameters: {
-    /** The image to be displayed */
+    /** The stimulus to display. The path to an image. */
     stimulus: {
       type: ParameterType.IMAGE,
-      pretty_name: "Stimulus",
       default: undefined,
     },
-    /** Key press that is associated with the left category label. */
+    /** Key press that is associated with the `left_category_label`. */
     left_category_key: {
       type: ParameterType.KEY,
-      pretty_name: "Left category key",
       default: "e",
     },
-    /** Key press that is associated with the right category label. */
+    /** Key press that is associated with the `right_category_label`. */
     right_category_key: {
       type: ParameterType.KEY,
-      pretty_name: "Right category key",
       default: "i",
     },
-    /** The label that is associated with the stimulus. Aligned to the left side of page. */
+    /** An array that contains the words/labels associated with a certain stimulus. The labels are aligned to the left
+     * side of the page. */
     left_category_label: {
       type: ParameterType.STRING,
-      pretty_name: "Left category label",
       array: true,
       default: ["left"],
     },
-    /** The label that is associated with the stimulus. Aligned to the right side of the page. */
+    /** An array that contains the words/labels associated with a certain stimulus. The labels are aligned to the right
+     * side of the page. */
     right_category_label: {
       type: ParameterType.STRING,
-      pretty_name: "Right category label",
       array: true,
       default: ["right"],
     },
-    /** Array containing the key(s) that allow the user to advance to the next trial if their key press was incorrect. */
+    /** This array contains the characters the participant is allowed to press to move on to the next trial if their key
+     * press was incorrect and feedback was displayed. Can also have 'other key' as an option which will only allow the
+     * user to select the right key to move forward.  */
     key_to_move_forward: {
       type: ParameterType.KEYS,
-      pretty_name: "Key to move forward",
       default: "ALL_KEYS",
     },
-    /** If true, then html when wrong will be displayed when user makes an incorrect key press. */
+    /** If `true`, then `html_when_wrong` and `wrong_image_name` is required. If `false`, `trial_duration` is needed
+     *  and trial will continue automatically. */
     display_feedback: {
       type: ParameterType.BOOL,
-      pretty_name: "Display feedback",
       default: false,
     },
-    /** The HTML to display when a user presses the wrong key. */
+    /** The content to display when a user presses the wrong key. */
     html_when_wrong: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "HTML when wrong",
       default: '<span style="color: red; font-size: 80px">X</span>',
     },
-    /** Instructions shown at the bottom of the page. */
+    /** Instructions about making a wrong key press and whether another key press is needed to continue. */
     bottom_instructions: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Bottom instructions",
       default: "<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>",
     },
-    /** If true, in order to advance to the next trial after a wrong key press the user will be forced to press the correct key. */
+    /** If this is `true` and the user presses the wrong key then they have to press the other key to continue. An example
+     * would be two keys 'e' and 'i'. If the key associated with the stimulus is 'e' and key 'i' was pressed, then
+     * pressing 'e' is needed to continue the trial. When this is `true`, then parameter `key_to_move_forward`
+     * is not used. If this is `true` and the user presses the wrong key then they have to press the other key to
+     * continue. An example would be two keys 'e' and 'i'. If the key associated with the stimulus is 'e' and key
+     * 'i' was pressed, then pressing 'e' is needed to continue the trial. When this is `true`, then parameter
+     * `key_to_move_forward` is not used. */
     force_correct_key_press: {
       type: ParameterType.BOOL,
-      pretty_name: "Force correct key press",
       default: false,
     },
-    /** Stimulus will be associated with either "left" or "right". */
+    /** Either 'left' or 'right'. This indicates whether the stimulus is associated with the key press and
+     * category on the left or right side of the page (`left_category_key` or `right_category_key`). */
     stim_key_association: {
       type: ParameterType.SELECT,
-      pretty_name: "Stimulus key association",
       options: ["left", "right"],
       default: undefined,
     },
-    /** If true, trial will end when user makes a response. */
+    /** If true, then the trial will end whenever the participant makes a response (assuming they make their
+     * response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will
+     * continue until the value for `trial_duration` is reached. You can use this parameter to force the participant
+     * to view a stimulus for a fixed amount of time, even if they respond before the time is complete. */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
     },
-    /** How long to show the trial. */
+    /** How long to wait for the participant to make a response before ending the trial in milliseconds. If the
+     * participant fails to make a response before this timer is reached, the participant's response will be
+     * recorded as `null` for the trial and the trial will end. If the value of this parameter is `null`, then
+     * the trial will wait for a response indefinitely. */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
+    },
+  },
+  data: {
+    /** The path to the image file that the participant saw on this trial. */
+    stimulus: {
+      type: ParameterType.STRING,
+    },
+    /** Indicates which key the participant pressed. */
+    response: {
+      type: ParameterType.STRING,
+    },
+    /** Boolean indicating whether the user's key press was correct or incorrect for the given stimulus. */
+    correct: {
+      type: ParameterType.BOOL,
+    },
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response.  */
+    rt: {
+      type: ParameterType.INT,
     },
   },
 };
@@ -90,12 +116,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **iat-image**
- *
- * jsPsych plugin for running an IAT (Implicit Association Test) with an image stimulus
+ * This plugin runs a single trial of the [implicit association test (IAT)](https://implicit.harvard.edu/implicit/iatdetails.html), using an image as the stimulus.
  *
  * @author Kristin Diep
- * @see {@link https://www.jspsych.org/plugins/jspsych-iat-image/ iat-image plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/iat-image/ iat-image plugin documentation on jspsych.org}
  */
 class IatImagePlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -178,9 +202,6 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
 
     // function to end trial when it is time
     const end_trial = () => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // kill keyboard listeners
       if (typeof keyboardListener !== "undefined") {
         this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
@@ -193,9 +214,6 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
         response: response.key,
         correct: response.correct,
       };
-
-      // clears the display
-      display_element.innerHTML = "";
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <script src="../../jspsych/dist/index.browser.js"></script>
+  <script src="../dist/index.browser.js"></script>
+  <link rel="stylesheet" href="../../jspsych/css/jspsych.css" />
+  <link rel="stylesheet" href="../css/survey.css" />
+</head>
+
+<body></body>
+<script type="text/javascript">
+
+  const jsPsych = initJsPsych({
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+
+  // This example shows how to make some questions conditional on previous answers
+  // from the same survey trial.
+  const vegetables = {
+    pages: [{
+      title: "Example of conditional questions",
+      elements: [{
+        name: "vegetables-score",
+        title: "I like vegetables.",
+        description: "Choose 'neutral' to skip the conditional question, and any other option to see a conditional question.",
+        type: "radiogroup",
+        choices: [
+          { value: 1, text: "Strongly Disagree" },
+          { value: 2, text: "Disagree" },
+          { value: 3, text: "Neutral" },
+          { value: 4, text: "Agree" },
+          { value: 5, text: "Strongly Agree" }
+        ],
+        isRequired: true
+      }]
+    }, {
+      elements: [{
+        name: "vegetables-like",
+        title: "You like vegetables! Which one is your favorite?",
+        description: "(You can go back and change your earlier answer to see the other conditional questions)",
+        type: "comment",
+        visibleIf: "{vegetables-score} >= 4"
+      }, {
+        name: "vegetables-eat",
+        title: "On a scale of zero to ten, how likely are you to eat broccoli today?",
+        type: "rating",
+        rateMin: 0,
+        rateMax: 10
+      }],
+      visibleIf: "{vegetables-score} >= 4"
+    }, {
+      elements: [{
+        name: "vegetables-dislike",
+        description: "(You can go back and change your earlier answer to see the other conditional questions)",
+        title: "You don't like vegetables! Please explain why.",
+        type: "comment"
+      }],
+      visibleIf: "{vegetables-score} =< 2"
+    }],
+    showQuestionNumbers: "off",
+    completeText: "Next",
+    questionTitleLocation: "top"
+  };
+
+  const vegetables_trial = {
+    type: jsPsychSurvey,
+    survey_json: vegetables
+  };
+
+  jsPsych.run([vegetables_trial]);
+
+</script>
+
+</html>
