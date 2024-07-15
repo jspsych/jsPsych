@@ -330,7 +330,8 @@ Returns nothing.
 
 #### Description
 
-Method that belongs to the AudioPlayer class. Adds an event listener to the audio buffer held by the AudioPlayer class instance.
+Method that belongs to the AudioPlayer class. Adds an event listener to the media Element that corresponds to
+the AudioPlayer class instance.
 
 #### Example
 
@@ -361,7 +362,8 @@ Returns nothing.
 
 #### Description
 
-Method that belongs to the AudioPlayer class. Removes an event listener from the audio buffer held by the AudioPlayer class instance.
+Method that belongs to the AudioPlayer class. Removes an event listener from the media Element that corresponds to
+the AudioPlayer class instance.
 
 #### Example
 
