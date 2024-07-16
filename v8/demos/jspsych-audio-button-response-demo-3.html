@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@8.0.0"></script>
+    <!--<script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.0.0"></script>-->
+    <script src="../../packages/plugin-audio-button-response/dist/index.browser.js"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
+    <!--<link rel="stylesheet" href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" />-->
+    <link rel="stylesheet" href="../../packages/jspsych/css/jspsych.css" />
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    const timeline = [];
+
+    // sound source: https://www.videvo.net/sound-effect/lion-growl-angry-gene-pe931902/249942/
+    // images source: http://clipart-library.com/cartoon-animal-clipart.html
+    const images = ['img/lion.png', 'img/elephant.png', 'img/monkey.png']
+
+    const preload = {
+      type: jsPsychPreload,
+      auto_preload: true,
+      images: images
+    }
+
+    const trial = {
+    	type: jsPsychAudioButtonResponse,
+      stimulus: 'sound/telephone.mp3',
+      prompt: '<p>Which key was pressed first?</p>',
+      choices: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'],
+      button_layout: 'grid',
+      grid_rows: 4,
+      grid_columns: 3
+    }
+
+    timeline.push(trial);
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline, [preload]));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>

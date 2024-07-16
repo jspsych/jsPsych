@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@8.0.0"></script>
+    <!-- <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.0.0"></script> -->
+    <script src="../../packages/plugin-html-button-response/dist/index.browser.js"></script>
+    <!-- <link rel="stylesheet" href="https://unpkg.com/jspsych@8.0.0/css/jspsych.css" /> -->
+    <link rel="stylesheet" href="../../packages/jspsych/css/jspsych.css" />
+    <link rel="stylesheet" href="docs-demo.css" type="text/css">
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    const timeline = [];
+
+    const trial = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: `<div style="width: 600px">
+        <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+        <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+        <div style="width: 50px; height: 50px; background-color: green; display: inline-block"></div>
+        <div style="width: 50px; height: 50px; background-color: blue; display: inline-block"></div>
+        <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+        <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+        <div style="width: 50px; height: 50px; background-color: green; display: inline-block"></div>
+        <div style="width: 50px; height: 50px; background-color: blue; display: inline-block"></div>
+        <div style="width: 50px; height: 50px; background-color: red; display: inline-block"></div>
+        <div style="width: 50px; height: 50px; background-color: gray; display: inline-block"></div>
+      </div>`,
+      choices: ['red', 'green', 'blue'],
+      prompt: "<p>What color should the gray block be?</p>",
+      button_html: (choice) => `<div style="width: 80px; height: 80px; margin: 20px; background-color: ${choice}; cursor: pointer;"></div>`
+    };
+
+    timeline.push(trial);
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>
