@@ -167,9 +167,6 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
       this.audio.addEventListener("ended", this.enable_buttons);
     }
 
-    // record start time
-    this.startTime = performance.now();
-
     // Display buttons
     const buttonGroupElement = document.createElement("div");
     buttonGroupElement.id = "jspsych-audio-button-response-btngroup";
@@ -211,9 +208,17 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
       display_element.insertAdjacentHTML("beforeend", trial.prompt);
     }
 
-    if (!trial.response_allowed_while_playing) {
+    if (trial.response_allowed_while_playing) {
+      if (trial.enable_button_after > 0) {
+        this.disable_buttons();
+        this.enable_buttons();
+      }
+    } else {
       this.disable_buttons();
     }
+
+    // start time
+    this.startTime = performance.now();
 
     // end trial if time limit is set
     if (trial.trial_duration !== null) {
@@ -237,11 +242,23 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
     }
   };
 
-  private enable_buttons = () => {
+  private enable_buttons_without_delay = () => {
     for (const button of this.buttonElements) {
       button.removeAttribute("disabled");
     }
   };
+
+  private enable_buttons_with_delay = (delay: number) => {
+    this.jsPsych.pluginAPI.setTimeout(this.enable_buttons_without_delay, delay);
+  };
+
+  private enable_buttons() {
+    if (this.params.enable_button_after > 0) {
+      this.enable_buttons_with_delay(this.params.enable_button_after);
+    } else {
+      this.enable_buttons_without_delay();
+    }
+  }
 
   // function to handle responses by the subject
   private after_response = (choice) => {
@@ -265,9 +282,6 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
 
   // method to end trial when it is time
   private end_trial = () => {
-    // kill any remaining setTimeout handlers
-    this.jsPsych.pluginAPI.clearAllTimeouts();
-
     // stop the audio file if it is playing
     this.audio.stop();
 
@@ -281,9 +295,6 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
       stimulus: this.params.stimulus,
       response: this.response.button,
     };
-
-    // clear the display
-    this.display.innerHTML = "";
 
     // move on to the next trial
     this.trial_complete(trial_data);
