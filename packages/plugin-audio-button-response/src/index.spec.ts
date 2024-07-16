@@ -173,6 +173,89 @@ describe("audio-button-response", () => {
 
     await expectFinished();
   });
+  it("works when response_allowed_while_playing is true", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { expectFinished, expectRunning, displayElement } = await startTimeline(
+      [
+        {
+          type: audioButtonResponse,
+          stimulus: "foo.mp3",
+          choices: ["choice1"],
+          response_allowed_while_playing: true,
+        },
+      ],
+      jsPsych
+    );
+
+    await expectRunning();
+
+    clickTarget(displayElement.querySelector("button"));
+
+    await expectFinished();
+  });
+  it("does not allow reponses when response_allowed_while_playing is false and enable_button_after is set, until after set time", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { expectFinished, expectRunning, displayElement } = await startTimeline(
+      [
+        {
+          type: audioButtonResponse,
+          stimulus: "foo.mp3",
+          choices: ["choice1"],
+          response_allowed_while_playing: false,
+          enable_button_after: 1000,
+        },
+      ],
+      jsPsych
+    );
+
+    await expectRunning();
+
+    clickTarget(displayElement.querySelector("button"));
+
+    await expectRunning();
+
+    jest.advanceTimersByTime(1000);
+
+    clickTarget(displayElement.querySelector("button"));
+
+    await expectRunning();
+
+    jest.advanceTimersByTime(1000);
+
+    clickTarget(displayElement.querySelector("button"));
+
+    await expectFinished();
+  });
+  it("does not allow reponses when response_allowed_while_playing is true and enable_button_after is set, until after set time", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { expectFinished, expectRunning, displayElement } = await startTimeline(
+      [
+        {
+          type: audioButtonResponse,
+          stimulus: "foo.mp3",
+          choices: ["choice1"],
+          response_allowed_while_playing: true,
+          enable_button_after: 500,
+        },
+      ],
+      jsPsych
+    );
+
+    await expectRunning();
+
+    clickTarget(displayElement.querySelector("button"));
+
+    await expectRunning();
+
+    jest.advanceTimersByTime(500);
+
+    clickTarget(displayElement.querySelector("button"));
+
+    await expectFinished();
+  });
 
   test("enable buttons during audio playback", async () => {
     const timeline = [
@@ -190,7 +273,7 @@ describe("audio-button-response", () => {
       use_webaudio: false,
     });
 
-    const { getHTML, finished } = await startTimeline(timeline, jsPsych);
+    await startTimeline(timeline, jsPsych);
 
     const btns = document.querySelectorAll(".jspsych-html-button-response-button button");
 

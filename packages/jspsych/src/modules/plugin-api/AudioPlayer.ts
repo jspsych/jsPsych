@@ -13,6 +13,7 @@ export interface AudioPlayerInterface {
 
 export class AudioPlayer implements AudioPlayerInterface {
   private audio: HTMLAudioElement | AudioBufferSourceNode;
+  private webAudioBuffer: AudioBuffer;
   private audioContext: AudioContext | null;
   private useWebAudio: boolean;
   private src: string;
@@ -25,7 +26,7 @@ export class AudioPlayer implements AudioPlayerInterface {
 
   async load() {
     if (this.useWebAudio) {
-      this.audio = await this.preloadWebAudio(this.src);
+      this.webAudioBuffer = await this.preloadWebAudio(this.src);
     } else {
       this.audio = await this.preloadHTMLAudio(this.src);
     }
@@ -35,7 +36,9 @@ export class AudioPlayer implements AudioPlayerInterface {
     if (this.audio instanceof HTMLAudioElement) {
       this.audio.play();
     } else {
-      this.audio!.start();
+      // If audio is not HTMLAudioElement, it must be a WebAudio API object, so create a source node.
+      if (!this.audio) this.audio = this.getAudioSourceNode(this.webAudioBuffer);
+      this.audio.start();
     }
   }
 
@@ -45,25 +48,40 @@ export class AudioPlayer implements AudioPlayerInterface {
       this.audio.currentTime = 0;
     } else {
       this.audio!.stop();
+      // Regenerate source node for audio since the previous one is stopped and unusable.
+      this.audio = this.getAudioSourceNode(this.webAudioBuffer);
     }
   }
 
   addEventListener(eventName: string, callback: EventListenerOrEventListenerObject) {
+    // If WebAudio buffer exists but source node doesn't, create it.
+    if (!this.audio && this.webAudioBuffer)
+      this.audio = this.getAudioSourceNode(this.webAudioBuffer);
     this.audio.addEventListener(eventName, callback);
   }
 
   removeEventListener(eventName: string, callback: EventListenerOrEventListenerObject) {
+    // If WebAudio buffer exists but source node doesn't, create it.
+    if (!this.audio && this.webAudioBuffer)
+      this.audio = this.getAudioSourceNode(this.webAudioBuffer);
     this.audio.removeEventListener(eventName, callback);
   }
 
-  private async preloadWebAudio(src: string): Promise<AudioBufferSourceNode> {
+  private getAudioSourceNode(audioBuffer: AudioBuffer): AudioBufferSourceNode {
+    const source = this.audioContext!.createBufferSource();
+    source.buffer = audioBuffer;
+    source.connect(this.audioContext!.destination);
+    return source;
+  }
+
+  private async preloadWebAudio(src: string): Promise<AudioBuffer> {
     const buffer = await fetch(src);
     const arrayBuffer = await buffer.arrayBuffer();
     const audioBuffer = await this.audioContext!.decodeAudioData(arrayBuffer);
     const source = this.audioContext!.createBufferSource();
     source.buffer = audioBuffer;
     source.connect(this.audioContext!.destination);
-    return source;
+    return audioBuffer;
   }
 
   private async preloadHTMLAudio(src: string): Promise<HTMLAudioElement> {
