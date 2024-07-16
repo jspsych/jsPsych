@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/test-utils",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Test utility functions for jsPsych-related test cases",
   "type": "module",
   "main": "dist/index.cjs",
@@ -34,7 +34,7 @@
     "@types/jest": "*"
   },
   "devDependencies": {
-    "@jspsych/config": "^2.0.0",
-    "jspsych": "^7.3.4"
+    "@jspsych/config": "^3.0.0",
+    "jspsych": "^8.0.0"
   }
 }

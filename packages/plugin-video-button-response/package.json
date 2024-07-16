@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-video-button-response",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "jsPsych plugin for playing a video file and getting a button response",
   "type": "module",
   "main": "dist/index.cjs",
@@ -37,7 +37,7 @@
     "jspsych": ">=7.1.0"
   },
   "devDependencies": {
-    "@jspsych/config": "^2.0.0",
-    "@jspsych/test-utils": "^1.1.2"
+    "@jspsych/config": "^3.0.0",
+    "@jspsych/test-utils": "^1.2.0"
   }
 }

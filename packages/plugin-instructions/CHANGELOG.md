@@ -1,5 +1,17 @@
 # @jspsych/plugin-instructions
 
+## 2.0.0
+
+### Major Changes
+
+- [#3339](https://github.com/jspsych/jsPsych/pull/3339) [`74b4adc7`](https://github.com/jspsych/jsPsych/commit/74b4adc702747a62a201575a6aa95770eeddb1bb) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - `finishTrial()` now clears the display and any timeouts set with `pluginApi.setTimeout()`
+
+### Minor Changes
+
+- [#3326](https://github.com/jspsych/jsPsych/pull/3326) [`c5a0dbb1`](https://github.com/jspsych/jsPsych/commit/c5a0dbb17ead8e2b860c76fce7fea834f3b0ad09) Thanks [@vzhang03](https://github.com/vzhang03)! - Updated all plugins to implement new pluginInfo standard that contains version, data generated and new documentation style to match migration of docs to be integrated with the code and packages themselves"
+
+- [#3190](https://github.com/jspsych/jsPsych/pull/3190) [`2505411a`](https://github.com/jspsych/jsPsych/commit/2505411a065e0714e9b39a1aa850f72976cd391c) Thanks [@Shaobin-Jiang](https://github.com/Shaobin-Jiang)! - Add callback function when navigating through pages
+
 ## 1.1.4
 
 ### Patch Changes

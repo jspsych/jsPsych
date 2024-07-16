@@ -1,6 +1,6 @@
 # categorize-image
 
-Current version: 1.1.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-categorize-image/CHANGELOG.md).
+Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-categorize-image/CHANGELOG.md).
 
 The categorize image plugin shows an image object on the screen. The participant responds by pressing a key. Feedback indicating the correctness of the response is given.
 
@@ -42,7 +42,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-categorize-image@1.1.3"></script>
+<script src="https://unpkg.com/@jspsych/plugin-categorize-image@2.0.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

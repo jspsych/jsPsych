@@ -1,6 +1,6 @@
 # serial-reaction-time-mouse
 
-Current version: 1.1.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-serial-reaction-time-mouse/CHANGELOG.md).
+Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-serial-reaction-time-mouse/CHANGELOG.md).
 
 The serial reaction time mouse plugin implements a generalized version of the SRT task [(Nissen & Bullmer, 1987)](https://doi.org/10.1016%2F0010-0285%2887%2990002-8). Squares are displayed in a grid-based system on the screen, and one square changes color. The participant must click on the square that changes color.
 
@@ -38,7 +38,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-serial-reaction-time-mouse@1.1.3"></script>
+<script src="https://unpkg.com/@jspsych/plugin-serial-reaction-time-mouse@2.0.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

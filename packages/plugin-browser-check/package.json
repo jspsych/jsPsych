@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-browser-check",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "jsPsych plugin for checking browser features",
   "type": "module",
   "main": "dist/index.cjs",
@@ -37,8 +37,8 @@
     "jspsych": ">=7.1.0"
   },
   "devDependencies": {
-    "@jspsych/config": "^2.0.0",
-    "@jspsych/test-utils": "^1.1.2"
+    "@jspsych/config": "^3.0.0",
+    "@jspsych/test-utils": "^1.2.0"
   },
   "dependencies": {
     "detect-browser": "^5.2.1"

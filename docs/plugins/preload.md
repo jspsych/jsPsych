@@ -1,6 +1,6 @@
 # preload
 
-Current version: 1.1.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-preload/CHANGELOG.md).
+Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-preload/CHANGELOG.md).
 
 This plugin loads images, audio, and video files. It is used for loading files into the browser's memory before they are needed in the experiment, in order to improve stimulus and response timing, and avoid disruption to the experiment flow. We recommend using this plugin anytime you are loading media files, and especially when your experiment requires large and/or many media files. See the [Media Preloading page](../overview/media-preloading.md) for more information.
 
@@ -49,7 +49,7 @@ In `visual` simulation mode, the plugin will run the trial as if the experiment 
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-preload@1.1.3"></script>
+<script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

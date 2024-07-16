@@ -1,6 +1,6 @@
 # image-slider-response
 
-Current version: 1.1.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-image-slider-response/CHANGELOG.md).
+Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-image-slider-response/CHANGELOG.md).
 
 This plugin displays and image and allows the participant to respond by dragging a slider.
 
@@ -46,7 +46,7 @@ slider_start | numeric | The starting value of the slider.
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-image-slider-response@1.1.3"></script>
+<script src="https://unpkg.com/@jspsych/plugin-image-slider-response@2.0.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

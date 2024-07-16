@@ -1,5 +1,79 @@
 # jspsych
 
+## 8.0.0
+
+### Major Changes
+
+- [#2858](https://github.com/jspsych/jsPsych/pull/2858) [`b8001735`](https://github.com/jspsych/jsPsych/commit/b80017351cdc9d138d55dd870b3f94e9de03016d) Thanks [@bjoluc](https://github.com/bjoluc)! - Rewrite jsPsych's core logic. The following breaking changes have been made:
+
+  **Timeline Events**
+
+  - `conditional_function` is no longer executed on every iteration of a looping timeline, but only once before running the first trial of the timeline. If you rely on the old behavior, move your `conditional_function` into a nested timeline instead.
+  - `on_timeline_start` and `on_timeline_finish` are no longer invoked in every repetition of a timeline, but only at the beginning or at the end of the timeline, respectively. If you rely on the old behavior, move the `on_timeline_start` and `on_timeline_finish` callbacks into a nested timeline.
+
+  **Timeline Variables**
+
+  - The functionality of `jsPsych.timelineVariable()` has been explicitly split into two functions, `jsPsych.timelineVariable()` and `jsPsych.evaluateTimelineVariable()`. Use `jsPsych.timelineVariable()` to create a timeline variable placeholder and `jsPsych.evaluateTimelineVariable()` to retrieve a given timeline variable's current value.
+  - `jsPsych.evaluateTimelineVariable()` now throws an error if a variable is not found.
+  - `jsPsych.getAllTimelineVariables()` has been replaced by a trial-level `save_timeline_variables` parameter that can be used to include all or some timeline variables in a trial's result data.
+
+  **Parameter Handling**
+
+  - JsPsych will now throw an error when a non-array value is used for a trial parameter marked as `array: true` in the plugin's info object.
+  - Parameter functions and timeline variables are no longer automatically evaluated recursively throughout the whole trial object, but only for the parameters that a plugin specifies in its `info` object. Parameter functions and timeline variables in nested objects are only evaluated if the nested object's parameters are explicitly specified using the `nested` property in the parameter description.
+
+  **Progress Bar**
+
+  - `jsPsych.setProgressBar(x)` has been replaced by `jsPsych.progressBar.progress = x`
+  - `jsPsych.getProgressBarCompleted()` has been replaced by `jsPsych.progressBar.progress`
+  - The automatic progress bar updates after every trial now, including trials in nested timelines.
+
+  **Data Handling**
+
+  - Timeline nodes no longer have IDs. As a consequence, the `internal_node_id` trial result property and `jsPsych.data.getDataByTimelineNode()` have been removed.
+  - Unlike previously, the `save_trial_parameters` parameter can only be used to remove parameters that are specified in the plugin's info object. Other result properties will be left untouched.
+
+  **Miscellaneous Changes**
+
+  - `jsPsych.endExperiment()` and `jsPsych.endCurrentTimeline()` have been renamed to `jsPsych.abortExperiment()` and `jsPsych.abortCurrentTimeline()`, respectively.
+  - JsPsych now internally relies on the JavaScript event loop. This means automated tests have to `await` utility functions like `pressKey()` to process the event loop.
+  - The `jspsych` package no longer exports `universalPluginParameters` and the `UniversalPluginParameters` type.
+  - Interaction listeners are now removed when the experiment ends.
+
+- [#3166](https://github.com/jspsych/jsPsych/pull/3166) [`ce4333cc`](https://github.com/jspsych/jsPsych/commit/ce4333cc799e4489ed145baf84d7d6c522a61e08) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Removed the `exclusions` option from `initJsPsych()`. The recommended replacement for this functionality is the browser-check plugin.
+
+  Removed the `hardwareAPI` module from the pluginAPI. This was no longer being updated and the features were out of date.
+
+- [#3031](https://github.com/jspsych/jsPsych/pull/3031) [`f9eb17c3`](https://github.com/jspsych/jsPsych/commit/f9eb17c376d07003a30cd1aca42ca55e8d2b7488) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Changed the behavior of `DataColumn.mean()` to exclude `null` and `undefined` values from the calculation, as suggested in #2905
+
+- [#3342](https://github.com/jspsych/jsPsych/pull/3342) [`6717e00c`](https://github.com/jspsych/jsPsych/commit/6717e00c97f602a987a7511afa3182a74d43b5fb) Thanks [@Bankminer78](https://github.com/Bankminer78)! - Changed plugins to use AudioPlayer class; added tests using AudioPlayer mock; plugins now use AudioPlayerInterface.
+
+- [#3162](https://github.com/jspsych/jsPsych/pull/3162) [`3f359e55`](https://github.com/jspsych/jsPsych/commit/3f359e554baccd2d9e7f80d4fc5c174928611c7d) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Removed `max-width: 95%` CSS rule on the `.jspsych-content` `<div>`. This rule existed to address an old IE bug with flex layouts.
+
+- [#3339](https://github.com/jspsych/jsPsych/pull/3339) [`74b4adc7`](https://github.com/jspsych/jsPsych/commit/74b4adc702747a62a201575a6aa95770eeddb1bb) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - `finishTrial()` now clears the display and any timeouts set with `pluginApi.setTimeout()`
+
+### Minor Changes
+
+- [#3168](https://github.com/jspsych/jsPsych/pull/3168) [`7b1ae24f`](https://github.com/jspsych/jsPsych/commit/7b1ae24f4e726350e1aa4e7c6f842e4d4240c956) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Added `jsPsych.abortTimelineByName()`. This allows for aborting a specific active timeline by its `name` property. The `name` can be set in the description of the timline.
+
+- [#3326](https://github.com/jspsych/jsPsych/pull/3326) [`c5a0dbb1`](https://github.com/jspsych/jsPsych/commit/c5a0dbb17ead8e2b860c76fce7fea834f3b0ad09) Thanks [@vzhang03](https://github.com/vzhang03)! - Updated all plugins to implement new pluginInfo standard that contains version, data generated and new documentation style to match migration of docs to be integrated with the code and packages themselves"
+
+- [#3167](https://github.com/jspsych/jsPsych/pull/3167) [`6f9d01b2`](https://github.com/jspsych/jsPsych/commit/6f9d01b2ae0a35f38fadf78d8311cf501121681e) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Added `record_data` as a parameter available for any trial. Setting `record_data: false` will prevent data from being stored in the jsPsych data object for that trial.
+
+- [#3182](https://github.com/jspsych/jsPsych/pull/3182) [`3855b5d8`](https://github.com/jspsych/jsPsych/commit/3855b5d86def9b155ae1f478cce93e4e1fd09d62) Thanks [@bjoluc](https://github.com/bjoluc)! - Allow trial `on_finish` methods to be asynchronous, i.e. return a `Promise`. Prior to this, promises returned by `on_finish` were not awaited before proceeding with the next trial.
+
+- [#3201](https://github.com/jspsych/jsPsych/pull/3201) [`be7df303`](https://github.com/jspsych/jsPsych/commit/be7df30379c66a6786443cff2e503acbdc239901) Thanks [@Shaobin-Jiang](https://github.com/Shaobin-Jiang)! - Allow message_progress_bar to be a function
+
+### Patch Changes
+
+- [#3338](https://github.com/jspsych/jsPsych/pull/3338) [`7a4a4b83`](https://github.com/jspsych/jsPsych/commit/7a4a4b834e72109c31939347f53fa52026045c32) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - `getKeyboardResponse` now returns the `key` in the original case (e.g., "Enter" instead of "enter") for easier matching to standard key event documentation.
+
+- [#3152](https://github.com/jspsych/jsPsych/pull/3152) [`2852cda6`](https://github.com/jspsych/jsPsych/commit/2852cda642c6b1cfc0427049dfc6dfb321d9e27f) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Button plugins now support either `display: grid` or `display: flex` on the container element that hold the buttons. If the layout is `grid`, the number of rows and/or columns can be specified. The `margin_horizontal` and `margin_vertical` parameters have been removed from the button plugins. If you need control over the button CSS, you can add inline style to the button element using the `button_html` parameter.
+
+  jspsych.css has new layout classes to support this feature.
+
+- [#3242](https://github.com/jspsych/jsPsych/pull/3242) [`6aea52c3`](https://github.com/jspsych/jsPsych/commit/6aea52c3e211db82afae9b06bd0a345a19963216) Thanks [@Shaobin-Jiang](https://github.com/Shaobin-Jiang)! - Fix typo in randomInt error message
+
 ## 7.3.4
 
 ### Patch Changes

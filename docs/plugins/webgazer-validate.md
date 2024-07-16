@@ -1,6 +1,6 @@
 # webgazer-validate
 
-Current version: 1.0.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-webgazer-validate/CHANGELOG.md).
+Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-webgazer-validate/CHANGELOG.md).
 
 This plugin can be used to measure the accuracy and precision of gaze predictions made by the [WebGazer extension](../extensions/webgazer.md). For a narrative description of eye tracking with jsPsych, see the [eye tracking overview](../overview/eye-tracking.md). 
 
@@ -40,7 +40,7 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@1.0.3"></script>
+<script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@2.0.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
