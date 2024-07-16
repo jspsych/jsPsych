@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-webgazer-calibrate",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "",
   "type": "module",
   "main": "dist/index.cjs",
@@ -38,8 +38,8 @@
     "@jspsych/extension-webgazer": ">=1.0.0"
   },
   "devDependencies": {
-    "@jspsych/config": "^2.0.0",
+    "@jspsych/config": "^3.0.0",
     "@jspsych/extension-webgazer": "^1.0.2",
-    "@jspsych/test-utils": "^1.1.2"
+    "@jspsych/test-utils": "^1.2.0"
   }
 }

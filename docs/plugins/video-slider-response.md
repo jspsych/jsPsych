@@ -1,6 +1,6 @@
 # video-slider-response
 
-Current version: 1.1.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-video-slider-response/CHANGELOG.md).
+Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-video-slider-response/CHANGELOG.md).
 
 This plugin plays a video and allows the participant to respond by dragging a slider. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically when the participant responds, when the video file has finished playing, or if the participant has failed to respond within a fixed length of time. You can also prevent the slider response from being made before the video has finished playing.
 
@@ -58,7 +58,7 @@ This may change in a future version as we improve the simulation modes.
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-video-slider-response@1.1.3"></script>
+<script src="https://unpkg.com/@jspsych/plugin-video-slider-response@2.0.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

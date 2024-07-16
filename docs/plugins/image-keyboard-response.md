@@ -1,6 +1,6 @@
 # image-keyboard-response
 
-Current version: 1.1.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-image-keyboard-response/CHANGELOG.md).
+Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-image-keyboard-response/CHANGELOG.md).
 
 This plugin displays an image and records responses generated with the keyboard. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the participant has failed to respond within a fixed length of time.
 
@@ -38,7 +38,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@1.1.3"></script>
+<script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

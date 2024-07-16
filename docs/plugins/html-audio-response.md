@@ -1,6 +1,6 @@
 # html-audio-response
 
-Current version: 1.0.3. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-audio-response/CHANGELOG.md).
+Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-audio-response/CHANGELOG.md).
 
 This plugin displays HTML content and records audio from the participant via a microphone. 
 
@@ -63,7 +63,7 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-html-audio-response@1.0.3"></script>
+<script src="https://unpkg.com/@jspsych/plugin-html-audio-response@2.0.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

@@ -1,5 +1,13 @@
 # @jspsych/config
 
+## 3.0.0
+
+### Major Changes
+
+- [#2858](https://github.com/jspsych/jsPsych/pull/2858) [`76e75080`](https://github.com/jspsych/jsPsych/commit/76e75080247e936c6ae8a8227517fb95ce74974b) Thanks [@bjoluc](https://github.com/bjoluc)! - Activate TypeScript's `isolatedModules` flag in the root `tsconfig.json` file. If you are facing any TypeScript errors due to `isolatedModules`, please update your code according to the error messages.
+
+- [#2858](https://github.com/jspsych/jsPsych/pull/2858) [`810ed7a3`](https://github.com/jspsych/jsPsych/commit/810ed7a3d1d9181cf25a9cb11ddd37914cd97483) Thanks [@bjoluc](https://github.com/bjoluc)! - Migrate the build chain from TypeScript, Babel, and Terser to [esbuild](https://esbuild.github.io/). Babel and Terser are no longer included as dependencies and the Babel configuration at `@jspsych/config/babel` has been removed. The minified browser builds are only transpiled down to [ES2015](https://caniuse.com/es6) now.
+
 ## 2.0.2
 
 ### Patch Changes
