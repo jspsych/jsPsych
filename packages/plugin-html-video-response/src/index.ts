@@ -1,19 +1,26 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "html-video-response",
+  version: version,
   parameters: {
     /** The HTML string to be displayed */
     stimulus: {
       type: ParameterType.HTML_STRING,
       default: undefined,
     },
-    /** How long to show the stimulus. */
+    /** How long to display the stimulus in milliseconds. The visibility CSS property of the stimulus will be set to `hidden`
+     * after this time has elapsed. If this is null, then the stimulus will remain visible until the trial ends. */
     stimulus_duration: {
       type: ParameterType.INT,
       default: null,
     },
-    /** How long to show the trial. */
+    /** The maximum length of the recording, in milliseconds. The default value is intentionally set low because of the
+     * potential to accidentally record very large data files if left too high. You can set this to `null` to allow the
+     * participant to control the length of the recording via the done button, but be careful with this option as it can
+     * lead to crashing the browser if the participant waits too long to stop the recording. */
     recording_duration: {
       type: ParameterType.INT,
       default: 2000,
@@ -28,25 +35,49 @@ const info = <const>{
       type: ParameterType.STRING,
       default: "Continue",
     },
-    /** Label for the record again button (only used if allow_playback is true). */
+    /** The label for the record again button enabled when `allow_playback: true`.*/
     record_again_button_label: {
       type: ParameterType.STRING,
       default: "Record again",
     },
-    /** Label for the button to accept the video recording (only used if allow_playback is true). */
+    /** The label for the accept button enabled when `allow_playback: true`. */
     accept_button_label: {
       type: ParameterType.STRING,
       default: "Continue",
     },
-    /** Whether or not to allow the participant to playback the recording and either accept or re-record. */
+    /** Whether to allow the participant to listen to their recording and decide whether to rerecord or not. If `true`,
+     * then the participant will be shown an interface to play their recorded video and click one of two buttons to
+     * either accept the recording or rerecord. If rerecord is selected, then stimulus will be shown again, as if the
+     * trial is starting again from the beginning. */
     allow_playback: {
       type: ParameterType.BOOL,
       default: false,
     },
-    /** Whether or not to save the video URL to the trial data. */
+    /** If `true`, then an [Object URL](https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL) will be
+     * generated and stored for the recorded video. Only set this to `true` if you plan to reuse the recorded video
+     * later in the experiment, as it is a potentially memory-intensive feature. */
     save_video_url: {
       type: ParameterType.BOOL,
       default: false,
+    },
+  },
+  data: {
+    /** The time, since the onset of the stimulus, for the participant to click the done button. If the button is not clicked (or not enabled), then `rt` will be `null`. */
+    rt: {
+      type: ParameterType.INT,
+      default: null,
+    },
+    /** The HTML content that was displayed on the screen.*/
+    stimulus: {
+      type: ParameterType.HTML_STRING,
+    },
+    /** The base64-encoded video data. */
+    response: {
+      type: ParameterType.STRING,
+    },
+    /** A URL to a copy of the video data. */
+    video_url: {
+      type: ParameterType.STRING,
     },
   },
 };
@@ -54,10 +85,35 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * html-video-response
- * jsPsych plugin for displaying a stimulus and recording a video response through a camera
+ *
+ * This plugin displays HTML content and records video from the participant via a webcam.
+ *
+ * In order to get access to the camera, you need to use the [initialize-camera plugin](initialize-camera.md) on your timeline prior to using this plugin.
+ * Once access is granted for an experiment you do not need to get permission again.
+ *
+ * This plugin records video data in [base 64 format](https://developer.mozilla.org/en-US/docs/Glossary/Base64).
+ * This is a text-based representation of the video which can be coverted to various video formats using a variety of [online tools](https://www.google.com/search?q=base64+video+decoder) as well as in languages like python and R.
+ *
+ * **This plugin will generate a large amount of data, and you will need to be careful about how you handle this data.**
+ * Even a few seconds of video recording will add 10s of kB to jsPsych's data.
+ * Multiply this by a handful (or more) of trials, and the data objects will quickly get large.
+ * If you need to record a lot of video, either many trials worth or just a few trials with longer responses, we recommend that you save the data to your server immediately after the trial and delete the data in jsPsych's data object.
+ * See below for an example of how to do this.
+ *
+ * This plugin also provides the option to store the recorded video files as [Object URLs](https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL) via `save_video_url: true`.
+ * This will generate a URL that stores a copy of the recorded video, which can be used for subsequent playback during the experiment.
+ * See below for an example where the recorded video is used as the stimulus in a subsequent trial.
+ * This feature is turned off by default because it uses a relatively large amount of memory compared to most jsPsych features.
+ * If you are running an experiment where you need this feature and you are recording lots of video clips, you may want to manually revoke the URLs when you no longer need them using [`URL.revokeObjectURL(objectURL)`](https://developer.mozilla.org/en-US/docs/Web/API/URL/revokeObjectURL).
+ *
+ * !!! warning
+ *     When recording from a camera your experiment will need to be running over `https://` protocol.
+ * If you try to run the experiment locally using the `file://` protocol or over `http://` protocol you will not
+ * be able to access the camera because of
+ * [potential security problems](https://blog.mozilla.org/webrtc/camera-microphone-require-https-in-firefox-68/).
+ *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-html-video-response/ html-video-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/html-video-response/ html-video-response plugin documentation on jspsych.org}
  */
 class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -214,9 +270,6 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
     this.recorder.removeEventListener("start", this.start_event_handler);
     this.recorder.removeEventListener("stop", this.stop_event_handler);
 
-    // clear any remaining setTimeout handlers
-    this.jsPsych.pluginAPI.clearAllTimeouts();
-
     // gather the data to store for the trial
     var trial_data: any = {
       rt: this.rt,
@@ -229,9 +282,6 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
     } else {
       URL.revokeObjectURL(this.video_url);
     }
-
-    // clear the display
-    display_element.innerHTML = "";
 
     // move on to the next trial
     this.jsPsych.finishTrial(trial_data);

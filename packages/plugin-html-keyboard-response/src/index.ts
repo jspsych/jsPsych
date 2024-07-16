@@ -1,55 +1,83 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "html-keyboard-response",
+  version: version,
   parameters: {
     /**
-     * The HTML string to be displayed.
+     * The string to be displayed.
      */
     stimulus: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Stimulus",
       default: undefined,
     },
     /**
-     * Array containing the key(s) the subject is allowed to press to respond to the stimulus.
+     * This array contains the key(s) that the participant is allowed to press in order to respond
+     * to the stimulus. Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) - see
+     * {@link https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values this page}
+     * and
+     * {@link https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/ this page (event.key column)}
+     * for more examples. Any key presses that are not listed in the
+     * array will be ignored. The default value of `"ALL_KEYS"` means that all keys will be accepted as valid responses.
+     * Specifying `"NO_KEYS"` will mean that no responses are allowed.
      */
     choices: {
       type: ParameterType.KEYS,
-      pretty_name: "Choices",
       default: "ALL_KEYS",
     },
     /**
-     * Any content here will be displayed below the stimulus.
+     * This string can contain HTML markup. Any content here will be displayed below the stimulus.
+     * The intention is that it can be used to provide a reminder about the action the participant
+     * is supposed to take (e.g., which key to press).
      */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
     /**
-     * How long to show the stimulus.
+     * How long to display the stimulus in milliseconds. The visibility CSS property of the stimulus
+     * will be set to `hidden` after this time has elapsed. If this is null, then the stimulus will
+     * remain visible until the trial ends.
      */
     stimulus_duration: {
       type: ParameterType.INT,
-      pretty_name: "Stimulus duration",
       default: null,
     },
     /**
-     * How long to show trial before it ends.
+     * How long to wait for the participant to make a response before ending the trial in milliseconds.
+     * If the participant fails to make a response before this timer is reached, the participant's response
+     * will be recorded as null for the trial and the trial will end. If the value of this parameter is null,
+     * then the trial will wait for a response indefinitely.
      */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
     },
     /**
-     * If true, trial will end when subject makes a response.
+     * If true, then the trial will end whenever the participant makes a response (assuming they make their
+     * response before the cutoff specified by the trial_duration parameter). If false, then the trial will
+     * continue until the value for trial_duration is reached. You can set this parameter to false to force
+     * the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete.
      */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
+    },
+  },
+  data: {
+    /** Indicates which key the participant pressed. */
+    response: {
+      type: ParameterType.STRING,
+    },
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** The HTML content that was displayed on the screen. */
+    stimulus: {
+      type: ParameterType.STRING,
     },
   },
 };
@@ -57,16 +85,15 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **html-keyboard-response**
- *
- * jsPsych plugin for displaying a stimulus and getting a keyboard response
+ * This plugin displays HTML content and records responses generated with the keyboard.
+ * The stimulus can be displayed until a response is given, or for a pre-determined amount of time.
+ * The trial can be ended automatically if the participant has failed to respond within a fixed length of time.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-html-keyboard-response/ html-keyboard-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/html-keyboard-response/ html-keyboard-response plugin documentation on jspsych.org}
  */
 class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
-
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
@@ -88,9 +115,6 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     // function to end trial when it is time
     const end_trial = () => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // kill keyboard listeners
       if (typeof keyboardListener !== "undefined") {
         this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
@@ -102,9 +126,6 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         stimulus: trial.stimulus,
         response: response.key,
       };
-
-      // clear the display
-      display_element.innerHTML = "";
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);

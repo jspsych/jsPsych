@@ -30,7 +30,8 @@
     "url": "https://github.com/jspsych/jsPsych/issues"
   },
   "peerDependencies": {
-    "jspsych": ">=7.0.0"
+    "jspsych": ">=7.0.0",
+    "@types/jest": "*"
   },
   "devDependencies": {
     "@jspsych/config": "^2.0.0",

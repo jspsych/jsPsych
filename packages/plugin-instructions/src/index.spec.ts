@@ -16,10 +16,10 @@ describe("instructions plugin", () => {
 
     expect(getHTML()).toContain("page 1");
 
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toContain("page 2");
 
-    pressKey("a");
+    await pressKey("a");
     await expectFinished();
   });
 
@@ -35,13 +35,13 @@ describe("instructions plugin", () => {
 
     expect(getHTML()).toContain("page 1");
 
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toContain("page 2");
 
-    pressKey("ArrowLeft");
+    await pressKey("ArrowLeft");
     expect(getHTML()).toContain("page 2");
 
-    pressKey("a");
+    await pressKey("a");
     await expectFinished();
   });
 
@@ -54,14 +54,45 @@ describe("instructions plugin", () => {
       },
     ]);
 
-    pressKey("a");
-    pressKey("a");
+    await pressKey("a");
+    await pressKey("a");
 
     await expectFinished();
 
     var data = getData().values()[0].view_history;
     expect(data[0].page_index).toEqual(0);
     expect(data[1].page_index).toEqual(1);
+  });
+
+  test("forward and backward callback works", async () => {
+    let count = [0, 0, 0, 0];
+    const { expectFinished } = await startTimeline([
+      {
+        type: instructions,
+        pages: ["page 1", "page 2", "page 3"],
+        on_page_change: function (page_number: number) {
+          count[page_number]++;
+        },
+      },
+    ]);
+
+    // Go to second page; count[1]++
+    await pressKey("ArrowRight");
+
+    // Go to first page; count[0]++
+    await pressKey("ArrowLeft");
+
+    // Go to second page; count[1]++
+    await pressKey("ArrowRight");
+
+    // Go to last page; count[2]++
+    await pressKey("ArrowRight");
+
+    // Finish trial; count[3]++
+    await pressKey("ArrowRight");
+    await expectFinished();
+
+    expect(count).toEqual([1, 2, 1, 1]);
   });
 });
 

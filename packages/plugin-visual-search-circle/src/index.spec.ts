@@ -1,4 +1,4 @@
-import { pressKey, simulateTimeline, startTimeline } from "@jspsych/test-utils";
+import { flushPromises, pressKey, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
 import visualSearchCircle from ".";
 
@@ -22,9 +22,10 @@ describe("visual-search-circle", () => {
     expect(displayElement.querySelectorAll("img").length).toBe(1);
 
     jest.advanceTimersByTime(1000); // fixation duration
+    await flushPromises();
 
     expect(displayElement.querySelectorAll("img").length).toBe(5);
-    pressKey("a");
+    await pressKey("a");
     await expectFinished();
 
     expect(displayElement.querySelectorAll("img").length).toBe(0);

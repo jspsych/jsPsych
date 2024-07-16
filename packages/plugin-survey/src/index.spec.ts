@@ -60,7 +60,7 @@ describe("survey plugin", () => {
       'input[type="button"].jspsych-nav-complete'
     );
     expect(complete_button).not.toBeNull();
-    clickTarget(complete_button);
+    await clickTarget(complete_button);
     await expectFinished();
   });
 
@@ -105,7 +105,7 @@ describe("survey plugin", () => {
       'input[type="button"].jspsych-nav-complete'
     );
     expect(complete_button).not.toBeNull();
-    clickTarget(complete_button);
+    await clickTarget(complete_button);
     await expectFinished();
   });
 
@@ -140,7 +140,7 @@ describe("survey plugin", () => {
       'input[type="button"].jspsych-nav-complete'
     );
     expect(complete_button).not.toBeNull();
-    clickTarget(complete_button);
+    await clickTarget(complete_button);
     await expectFinished();
   });
 

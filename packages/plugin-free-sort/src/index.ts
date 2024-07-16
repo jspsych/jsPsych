@@ -1,71 +1,65 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
 import { inside_ellipse, make_arr, random_coordinate, shuffle } from "./utils";
+
+// import { parameterPathArrayToString } from "jspsych/src/timeline/util";
 
 const info = <const>{
   name: "free-sort",
+  version: version,
   parameters: {
-    /** Array of images to be displayed and sorted. */
+    /** Each element of this array is an image path. */
     stimuli: {
       type: ParameterType.IMAGE,
-      pretty_name: "Stimuli",
       default: undefined,
       array: true,
     },
-    /** Height of items in pixels. */
+    /** The height of the images in pixels. */
     stim_height: {
       type: ParameterType.INT,
-      pretty_name: "Stimulus height",
       default: 100,
     },
-    /** Width of items in pixels */
+    /** The width of the images in pixels. */
     stim_width: {
       type: ParameterType.INT,
-      pretty_name: "Stimulus width",
       default: 100,
     },
-    /** How much larger to make the stimulus while moving (1 = no scaling) */
+    /** How much larger to make the stimulus while moving (1 = no scaling). */
     scale_factor: {
       type: ParameterType.FLOAT,
-      pretty_name: "Stimulus scaling factor",
       default: 1.5,
     },
-    /** The height in pixels of the container that subjects can move the stimuli in. */
+    /** The height of the container that participants can move the stimuli in. Stimuli will be constrained to this area. */
     sort_area_height: {
       type: ParameterType.INT,
-      pretty_name: "Sort area height",
       default: 700,
     },
-    /** The width in pixels of the container that subjects can move the stimuli in. */
+    /** The width of the container that participants can move the stimuli in. Stimuli will be constrained to this area. */
     sort_area_width: {
       type: ParameterType.INT,
-      pretty_name: "Sort area width",
       default: 700,
     },
-    /** The shape of the sorting area */
+    /** The shape of the sorting area, can be "ellipse" or "square". */
     sort_area_shape: {
       type: ParameterType.SELECT,
-      pretty_name: "Sort area shape",
       options: ["square", "ellipse"],
       default: "ellipse",
     },
-    /** HTML to display above/below the sort area. It can be used to provide a reminder about the action the subject is supposed to take. */
+    /** This string can contain HTML markup. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).  */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: "",
     },
-    /** Indicates whether to show prompt "above" or "below" the sorting area. */
+    /** Indicates whether to show the prompt `"above"` or `"below"` the sorting area. */
     prompt_location: {
       type: ParameterType.SELECT,
-      pretty_name: "Prompt location",
       options: ["above", "below"],
       default: "above",
     },
     /** The text that appears on the button to continue to the next trial. */
     button_label: {
       type: ParameterType.STRING,
-      pretty_name: "Button label",
       default: "Continue",
     },
     /**
@@ -75,7 +69,6 @@ const info = <const>{
      */
     change_border_background_color: {
       type: ParameterType.BOOL,
-      pretty_name: "Change border background color",
       default: true,
     },
     /**
@@ -85,7 +78,6 @@ const info = <const>{
      */
     border_color_in: {
       type: ParameterType.STRING,
-      pretty_name: "Border color - in",
       default: "#a1d99b",
     },
     /**
@@ -94,13 +86,11 @@ const info = <const>{
      */
     border_color_out: {
       type: ParameterType.STRING,
-      pretty_name: "Border color - out",
       default: "#fc9272",
     },
     /** The width in pixels of the border around the sort area. If null, the border width defaults to 3% of the sort area height. */
     border_width: {
       type: ParameterType.INT,
-      pretty_name: "Border width",
       default: null,
     },
     /**
@@ -110,13 +100,11 @@ const info = <const>{
      * */
     counter_text_unfinished: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Counter text unfinished",
       default: "You still need to place %n% item%s% inside the sort area.",
     },
     /** Text that will take the place of the counter_text_unfinished text when all items have been moved inside the sort area. */
     counter_text_finished: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Counter text finished",
       default: "All items placed. Feel free to reposition items if necessary.",
     },
     /**
@@ -125,7 +113,6 @@ const info = <const>{
      */
     stim_starts_inside: {
       type: ParameterType.BOOL,
-      pretty_name: "Stim starts inside",
       default: false,
     },
     /**
@@ -134,8 +121,50 @@ const info = <const>{
      */
     column_spread_factor: {
       type: ParameterType.FLOAT,
-      pretty_name: "column spread factor",
       default: 1,
+    },
+  },
+  data: {
+    /**  An array containing objects representing the initial locations of all the stimuli in the sorting area. Each element in the array represents a stimulus, and has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions.  */
+    init_locations: {
+      type: ParameterType.STRING,
+      array: true,
+    },
+    /** An array containing objects representing all of the moves the participant made when sorting. Each object represents a move. Each element in the array has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location after the move. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. */
+    moves: {
+      type: ParameterType.COMPLEX,
+      array: true,
+      parameters: {
+        src: {
+          type: ParameterType.STRING,
+        },
+        x: {
+          type: ParameterType.INT,
+        },
+        y: {
+          type: ParameterType.INT,
+        },
+      },
+    },
+    /** An array containing objects representing the final locations of all the stimuli in the sorting area. Each element in the array represents a stimulus, and has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. */
+    final_locations: {
+      type: ParameterType.COMPLEX,
+      array: true,
+      parameters: {
+        src: {
+          type: ParameterType.STRING,
+        },
+        x: {
+          type: ParameterType.INT,
+        },
+        y: {
+          type: ParameterType.INT,
+        },
+      },
+    },
+    /** The response time in milliseconds for the participant to finish all sorting. */
+    rt: {
+      type: ParameterType.INT,
     },
   },
 };
@@ -143,12 +172,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **free-sort**
- *
- * jsPsych plugin for drag-and-drop sorting of a collection of images
+ * The free-sort plugin displays one or more images on the screen that the participant can interact with by clicking and dragging with a mouse, or touching and dragging with a touchscreen device. When the trial starts, the images can be positioned outside or inside the sort area. All images must be moved into the sorting area before the participant can click a button to end the trial. All of the moves that the participant performs are recorded, as well as the final positions of all images. This plugin could be useful when asking participants to position images based on similarity to one another, or to recall image spatial locations.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-free-sort/ free-sort plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/free-sort/ free-sort plugin documentation on jspsych.org}
  */
 class FreeSortPlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -447,8 +474,6 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
           rt: rt,
         };
 
-        // advance to next part
-        display_element.innerHTML = "";
         this.jsPsych.finishTrial(trial_data);
       }
     });

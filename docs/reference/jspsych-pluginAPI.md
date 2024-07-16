@@ -4,6 +4,7 @@ The pluginAPI module contains functions that are useful when developing plugins.
 
 ## Keyboard Input
 
+
 ### cancelAllKeyboardResponses
 
 ```javascript
@@ -217,7 +218,172 @@ var listener = jsPsych.pluginAPI.getKeyboardResponse({
 });
 ```
 
-## Media
+## Audio
+
+All audio-related functionality is handled by the AudioPlayer class.
+
+### getAudioPlayer
+
+```javascript
+jsPsych.pluginAPI.getAudioPlayer(filepath)
+```
+
+#### Return value
+
+Returns a Promise that resolves to an instance of an AudioPlayer class that holds the buffer of the audio file when it finishes loading.
+
+#### Description
+
+Gets an AudioPlayer class instance which has methods that can be used to play or stop audio that can be played with the WebAudio API or an audio object that can be played as HTML5 Audio. 
+
+It is strongly recommended that you preload audio files before calling this method. This method will load the files if they are not preloaded, but this may result in delays during the experiment as audio is downloaded.
+
+#### Examples
+
+##### HTML 5 Audio and WebAudio API
+
+```javascript
+const audio = await jsPsych.pluginAPI.getAudioPlayer('my-sound.mp3')
+
+audio.play()
+
+```
+
+See the `audio-keyboard-response` plugin for an example in a fuller context.
+
+---
+
+### play
+
+```javascript
+const audio = jsPsych.pluginAPI.getAudioPlayer(filepath)
+
+audio.play()
+```
+
+#### Return value
+
+Returns nothing.
+
+#### Description
+
+Method that belongs to the AudioPlayer class. Plays the audio loaded into the audio buffer of the AudioPlayer instance for a particular file. If the audio is a HTML5 audio object it plays it. If the audio is a Webaudio API object it starts it.
+
+#### Example
+
+##### HTML 5 Audio and WebAudio API
+
+```javascript
+const audio = await jsPsych.pluginAPI.getAudioPlayer('my-sound.mp3');
+
+audio.play();
+
+```
+
+See the `audio-keyboard-response` plugin for an example in a fuller context.
+
+---
+
+### stop
+
+```javascript
+const audio = jsPsych.pluginAPI.getAudioPlayer(filepath);
+
+audio.play();
+```
+
+#### Return value
+
+Returns nothing.
+
+#### Description
+
+Method that belongs to the AudioPlayer class. Stops the audio loaded into the audio buffer of the AudioPlayer instance for a particular file. If the audio is an HTML5 audio object it pauses it. If the audio is a Webaudio API object it stops it.
+
+#### Example
+
+##### HTML 5 Audio and WebAudio API
+
+```javascript
+const audio = await jsPsych.pluginAPI.getAudioPlayer('my-sound.mp3');
+
+audio.play();
+
+audio.stop();
+
+```
+
+See the `audio-keyboard-response` plugin for an example in a fuller context.
+
+---
+
+### addEventListener
+
+```javascript
+const audio = jsPsych.pluginAPI.getAudioPlayer(filepath);
+
+audio.addEventListener(eventName, callback);
+```
+
+#### Return value
+
+Returns nothing.
+
+#### Description
+
+Method that belongs to the AudioPlayer class. Adds an event listener to the media Element that corresponds to
+the AudioPlayer class instance.
+
+#### Example
+
+```javascript
+const audio = await jsPsych.pluginAPI.getAudioPlayer('my-sound.mp3');
+
+audio.play();
+
+audio.addEventListener('ended', end_trial());
+
+```
+
+See the `audio-keyboard-response` plugin for an example in a fuller context.
+
+---
+
+### removeEventListener
+
+```javascript
+const audio = jsPsych.pluginAPI.getAudioPlayer(filepath);
+
+audio.removeEventListener(eventName, callback);
+```
+
+#### Return value
+
+Returns nothing.
+
+#### Description
+
+Method that belongs to the AudioPlayer class. Removes an event listener from the media Element that corresponds to
+the AudioPlayer class instance.
+
+#### Example
+
+```javascript
+const audio = await jsPsych.pluginAPI.getAudioPlayer('my-sound.mp3');
+
+audio.play();
+
+audio.addEventListener('ended', end_trial());
+
+audio.removeEventListener('ended', end_trial());
+
+```
+
+See the `audio-keyboard-response` plugin for an example in a fuller context.
+
+---
+
+## Other Media
 
 ### getAudioBuffer
 

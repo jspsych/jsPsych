@@ -11,7 +11,7 @@ To change an element's style using inline CSS, you can set the element's "style"
 In the example below, the stimulus font size is set to 30px and the text color is set to red. These changes will _only_ be applied to this stimulus text in this specific trial.
 
 ```javascript
-var trial = {
+const trial = {
 	type: jsPsychHtmlKeyboardResponse,
 	stimulus: '<p style="font-size:30px;color:red;">hello world!</p>'
 }
@@ -20,14 +20,14 @@ var trial = {
 You can also use a [dynamic parameter](dynamic-parameters.md) to combine inline CSS and trial-specific variables. This allows you to easily apply the same inline CSS to multiple trials. Here's an example using a dynamic stimulus parameter and [timeline variables](timeline.md#timeline-variables):
 
 ```javascript
-var trial = {
+const trial = {
 	type: jsPsychHtmlKeyboardResponse,
 	stimulus: function() {
-        var stim = '<p style="font-size:30px;font-weight:bold;">'+jsPsych.timelineVariable('text')+'</p>';
+        const stim = `<p style="font-size:30px;font-weight:bold;">${jsPsych.evaluatetimelineVariable('text')}</p>`;
         return stim;
     }
 }
-var trial_procedure = {
+const trial_procedure = {
     timeline: [trial],
     timeline_variables: [
         {text: 'Welcome'},
@@ -146,7 +146,7 @@ You can use a static `css_classes` parameter value if you always want to apply t
   </style>
 </head>
 <script>
-var fixation = {
+const fixation = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '+',
     choices: "NO_KEYS",
@@ -185,7 +185,7 @@ In the example below, the CSS selector `.left-align #stimulus` selects the eleme
   </style>
 </head>
 <script>
-var trial_procedure = {
+const trial_procedure = {
     timeline: [{
         type: jsPsychHtmlKeyboardResponse,
         stimulus: '<p id="stimulus">This is the stimulus.</p>',
@@ -217,14 +217,16 @@ It's also possible to pass multiple class names to the `css_classes` parameter. 
   </style>
 </head>
 <script>
-var trial_procedure = {
+const trial_procedure = {
     timeline: [{
         type: jsPsychHtmlKeyboardResponse,
         stimulus: '<p id="stimulus">This is the stimulus.</p>',
         prompt: '<p>This text will not be affected by the CSS classes '+
             'because it does not have the "stimulus" ID.</p>',
         css_classes: jsPsych.timelineVariable('css_classes'),
-        data: {condition: jsPsych.timelineVariable('condition')}
+        data: {
+          condition: jsPsych.timelineVariable('condition')
+        }
     }],
     timeline_variables: [
         {css_classes: ['left-align','teal'], condition: 'left-teal'},

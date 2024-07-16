@@ -43,7 +43,8 @@
   "dependencies": {
     "auto-bind": "^4.0.0",
     "random-words": "^1.1.1",
-    "seedrandom": "^3.0.5"
+    "seedrandom": "^3.0.5",
+    "type-fest": "^2.9.0"
   },
   "devDependencies": {
     "@fontsource/open-sans": "4.5.3",
@@ -53,11 +54,11 @@
     "css-loader": "^6.6.0",
     "mini-css-extract-plugin": "^2.5.3",
     "npm-run-all": "^4.1.5",
+    "replace-in-file-webpack-plugin": "^1.0.6",
     "sass": "^1.43.5",
     "sass-loader": "^12.4.0",
     "webpack": "^5.76.0",
     "webpack-cli": "^4.9.2",
-    "webpack-remove-empty-scripts": "^0.7.2",
-    "replace-in-file-webpack-plugin": "^1.0.6"
+    "webpack-remove-empty-scripts": "^0.7.2"
   }
 }

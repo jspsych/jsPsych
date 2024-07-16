@@ -1,16 +1,6 @@
-/**
-Flatten the type output to improve type hints shown in editors.
-Borrowed from type-fest
-*/
-type Simplify<T> = { [KeyType in keyof T]: T[KeyType] };
+import { SetRequired } from "type-fest";
 
-/**
-Create a type that makes the given keys required. The remaining keys are kept as is.
-Borrowed from type-fest
-*/
-type SetRequired<BaseType, Keys extends keyof BaseType> = Simplify<
-  Omit<BaseType, Keys> & Required<Pick<BaseType, Keys>>
->;
+import { SimulationMode, SimulationOptions, TrialDescription, TrialResult } from "../timeline";
 
 /**
  * Parameter types for plugins
@@ -51,17 +41,19 @@ type ParameterTypeMap = {
   [ParameterType.TIMELINE]: any;
 };
 
-export interface ParameterInfo {
-  type: ParameterType;
+type PreloadParameterType = ParameterType.AUDIO | ParameterType.VIDEO | ParameterType.IMAGE;
+
+export type ParameterInfo = (
+  | { type: Exclude<ParameterType, ParameterType.COMPLEX | PreloadParameterType> }
+  | { type: ParameterType.COMPLEX; nested?: ParameterInfos }
+  | { type: PreloadParameterType; preload?: boolean }
+) & {
   array?: boolean;
   pretty_name?: string;
   default?: any;
-  preload?: boolean;
-}
+};
 
-export interface ParameterInfos {
-  [key: string]: ParameterInfo;
-}
+export type ParameterInfos = Record<string, ParameterInfo>;
 
 type InferredParameter<I extends ParameterInfo> = I["array"] extends true
   ? Array<ParameterTypeMap[I["type"]]>
@@ -123,7 +115,7 @@ export const universalPluginParameters = <const>{
   post_trial_gap: {
     type: ParameterType.INT,
     pretty_name: "Post trial gap",
-    default: null,
+    default: 0,
   },
   /**
    * A list of CSS classes to add to the jsPsych display element for the duration of this trial
@@ -131,14 +123,14 @@ export const universalPluginParameters = <const>{
   css_classes: {
     type: ParameterType.STRING,
     pretty_name: "Custom CSS classes",
-    default: null,
+    default: "",
   },
   /**
    * Options to control simulation mode for the trial.
    */
   simulation_options: {
     type: ParameterType.COMPLEX,
-    default: null,
+    default: {},
   },
 };
 
@@ -146,9 +138,9 @@ export type UniversalPluginParameters = InferredParameters<typeof universalPlugi
 
 export interface PluginInfo {
   name: string;
-  parameters: {
-    [key: string]: ParameterInfo;
-  };
+  version?: string;
+  parameters: ParameterInfos;
+  data?: ParameterInfos;
 }
 
 export interface JsPsychPlugin<I extends PluginInfo> {
@@ -156,10 +148,17 @@ export interface JsPsychPlugin<I extends PluginInfo> {
     display_element: HTMLElement,
     trial: TrialType<I>,
     on_load?: () => void
-  ): void | Promise<any>;
+  ): void | Promise<TrialResult | void>;
+
+  simulate?(
+    trial: TrialType<I>,
+    simulation_mode: SimulationMode,
+    simulation_options: SimulationOptions,
+    on_load?: () => void
+  ): void | Promise<TrialResult | void>;
 }
 
 export type TrialType<I extends PluginInfo> = InferredParameters<I["parameters"]> &
-  UniversalPluginParameters;
+  TrialDescription;
 
 export type PluginParameters<I extends PluginInfo> = InferredParameters<I["parameters"]>;

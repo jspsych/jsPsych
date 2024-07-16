@@ -1,15 +1,22 @@
 import { readFileSync } from "node:fs";
+import path from "path";
 
-import { DEFAULT_EXTENSIONS as babelDefaultExtensions } from "@babel/core";
-import { babel } from "@rollup/plugin-babel";
 import commonjs from "@rollup/plugin-commonjs";
-import json from "@rollup/plugin-json";
 import resolve from "@rollup/plugin-node-resolve";
-import replace from "@rollup/plugin-replace";
-import terser from "@rollup/plugin-terser";
 import { defineConfig } from "rollup";
-import typescript from "rollup-plugin-typescript2";
+import dts from "rollup-plugin-dts";
+import esbuild from "rollup-plugin-esbuild";
+import externals from "rollup-plugin-node-externals";
 import ts from "typescript";
+
+const getTsCompilerOptions = () => {
+  const cwd = process.cwd();
+  return ts.parseJsonConfigFileContent(
+    ts.readConfigFile(path.join(cwd, "tsconfig.json"), ts.sys.readFile).config,
+    ts.sys,
+    cwd
+  ).options;
+};
 
 const getPackageInfo = () => {
   const { name, version } = JSON.parse(readFileSync("./package.json"));
@@ -22,7 +29,7 @@ const makeConfig = ({
   iifeOutputOptions = {},
   isNodeOnlyBuild = false,
 }) => {
-  const source = "src/index";
+  const input = "src/index.ts";
   const destinationDirectory = "dist";
   const destination = `${destinationDirectory}/index`;
 
@@ -31,100 +38,94 @@ const makeConfig = ({
     ...outputOptions,
   };
 
-  const commonConfig = defineConfig({
-    input: `${source}.ts`,
-    plugins: [
-      resolve({ preferBuiltins: isNodeOnlyBuild }),
-      typescript({
-        typescript: ts,
-        tsconfigDefaults: {
-          exclude: ["./tests", "**/*.spec.ts", "**/*.test.ts", "./dist"],
-        },
-        tsconfigOverride: {
+  /** @type{import("rollup-plugin-esbuild").Options} */
+  const esBuildPluginOptions = {
+    loaders: { ".json": "json" },
+  };
+
+  /** @type{import("@rollup/plugin-commonjs").RollupCommonJSOptions} */
+  const commonjsPluginOptions = {
+    extensions: [".js", ".json"],
+  };
+
+  // Non-babel builds
+  const config = defineConfig([
+    // Type definitions (bundled as a single .d.ts file)
+    {
+      input,
+      output: [{ file: `${destination}.d.ts`, format: "es" }],
+      plugins: [
+        dts({
           compilerOptions: {
-            rootDir: "./src",
-            outDir: "./dist",
+            ...getTsCompilerOptions(),
+            noEmit: false,
             paths: {}, // Do not include files referenced via `paths`
           },
-        },
-      }),
-      json(),
-      commonjs(),
-    ],
-    ...globalOptions,
-  });
-
-  /** @type {import("rollup").OutputOptions} */
-  const output = [
-    {
-      // Build file to be used as an ES import
-      file: `${destination}.js`,
-      format: "esm",
-      ...outputOptions,
+        }),
+      ],
     },
-    {
-      // Build commonjs module (for tools that do not fully support ES6 modules)
-      file: `${destination}.cjs`,
-      format: "cjs",
-      ...outputOptions,
-    },
-  ];
 
-  let sourcemapBaseUrl;
+    // Module builds
+    {
+      ...globalOptions,
+      input,
+      plugins: [
+        externals(),
+        esbuild({ ...esBuildPluginOptions, target: "node18" }),
+        commonjs(commonjsPluginOptions),
+      ],
+      output: [
+        { file: `${destination}.js`, format: "esm", ...outputOptions },
+        { file: `${destination}.cjs`, format: "cjs", ...outputOptions },
+      ],
+    },
+  ]);
+
   if (!isNodeOnlyBuild) {
     // In builds that are published to NPM (potentially every CI build), point to sourcemaps via the
     // package's canonical unpkg URL
+    let sourcemapBaseUrl;
     if (process.env.CI) {
       const { name, version } = getPackageInfo();
       sourcemapBaseUrl = `https://unpkg.com/${name}@${version}/${destinationDirectory}/`;
     }
 
-    output.push({
-      // Build file to be used for tinkering in modern browsers
-      file: `${destination}.browser.js`,
-      format: "iife",
-      sourcemapBaseUrl,
-      ...outputOptions,
-      ...iifeOutputOptions,
-    });
-  }
-
-  // Non-babel builds
-  const config = defineConfig([{ ...commonConfig, output }]);
-
-  if (!isNodeOnlyBuild) {
-    // Babel build
+    // IIFE build for tinkering in modern browsers
     config.push({
-      ...commonConfig,
+      ...globalOptions,
+      input,
       plugins: [
-        // Import `regenerator-runtime` if requested:
-        replace({
-          values: {
-            "// __rollup-babel-import-regenerator-runtime__":
-              'import "regenerator-runtime/runtime.js";',
-          },
-          delimiters: ["", ""],
-          preventAssignment: true,
-        }),
-        ...commonConfig.plugins,
-        babel({
-          babelHelpers: "bundled",
-          extends: "@jspsych/config/babel",
-          // https://github.com/ezolenko/rollup-plugin-typescript2#rollupplugin-babel
-          extensions: [...babelDefaultExtensions, ".ts"],
-        }),
+        externals({ deps: false }),
+        resolve({ preferBuiltins: false }),
+        esbuild({ ...esBuildPluginOptions, target: "esnext" }),
+        commonjs(commonjsPluginOptions),
       ],
-      output: [
-        {
-          // Minified production build file
-          file: `${destination}.browser.min.js`,
-          format: "iife",
-          plugins: [terser()],
-          sourcemapBaseUrl,
-          ...outputOptions,
-          ...iifeOutputOptions,
-        },
+      output: {
+        file: `${destination}.browser.js`,
+        format: "iife",
+        sourcemapBaseUrl,
+        ...outputOptions,
+        ...iifeOutputOptions,
+      },
+    });
+
+    // Minified production IIFE build
+    config.push({
+      ...globalOptions,
+      input,
+      plugins: [
+        externals({ deps: false }),
+        resolve({ preferBuiltins: false }),
+        esbuild({ ...esBuildPluginOptions, target: "es2015", minify: true }),
+        commonjs(commonjsPluginOptions),
       ],
+      output: {
+        file: `${destination}.browser.min.js`,
+        format: "iife",
+        sourcemapBaseUrl,
+        ...outputOptions,
+        ...iifeOutputOptions,
+      },
     });
   }
 

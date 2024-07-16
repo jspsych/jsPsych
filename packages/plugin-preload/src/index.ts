@@ -1,28 +1,34 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "preload",
+  version: version,
   parameters: {
-    /** Whether or not to automatically preload any media files based on the timeline passed to jsPsych.run. */
+    /** If `true`, the plugin will preload any files that can be automatically preloaded based on the main experiment
+     * timeline that is passed to `jsPsych.run`. If `false`, any file(s) to be preloaded should be specified by passing
+     * a timeline array to the `trials` parameter and/or an array of file paths to the `images`, `audio`, and/or `video`
+     * parameters. Setting this parameter to `false` is useful when you plan to preload your files in smaller batches
+     * throughout the experiment. */
     auto_preload: {
       type: ParameterType.BOOL,
-      pretty_name: "Auto-preload",
       default: false,
     },
-    /** A timeline of trials to automatically preload. If one or more trial objects is provided in the timeline array, then the plugin will attempt to preload the media files used in the trial(s). */
+    /** An array containing one or more jsPsych trial or timeline objects. This parameter is useful when you want to
+     * automatically preload stimuli files from a specific subset of the experiment. See [Creating an Experiment:
+     * The Timeline](../overview/timeline.md) for information on constructing timelines. */
     trials: {
       type: ParameterType.TIMELINE,
-      pretty_name: "Trials",
       default: [],
     },
     /**
-     * Array with one or more image files to load. This parameter is often used in cases where media files cannot#
+     * Array with one or more image files to load. This parameter is often used in cases where media files cannot
      * be automatically preloaded based on the timeline, e.g. because the media files are passed into an image plugin/parameter with
      * timeline variables or dynamic parameters, or because the image is embedded in an HTML string.
      */
     images: {
       type: ParameterType.STRING,
-      pretty_name: "Images",
       default: [],
       array: true,
     },
@@ -33,7 +39,6 @@ const info = <const>{
      */
     audio: {
       type: ParameterType.STRING,
-      pretty_name: "Audio",
       default: [],
       array: true,
     },
@@ -44,20 +49,17 @@ const info = <const>{
      */
     video: {
       type: ParameterType.STRING,
-      pretty_name: "Video",
       default: [],
       array: true,
     },
-    /** HTML-formatted message to be shown above the progress bar while the files are loading. */
+    /** HTML-formatted message to show above the progress bar while the files are loading. If `null`, then no message is shown. */
     message: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Message",
       default: null,
     },
-    /** Whether or not to show the loading progress bar. */
+    /** If `true`, a progress bar will be shown while the files are loading. If `false`, no progress bar is shown. */
     show_progress_bar: {
       type: ParameterType.BOOL,
-      pretty_name: "Show progress bar",
       default: true,
     },
     /**
@@ -67,13 +69,11 @@ const info = <const>{
      */
     continue_after_error: {
       type: ParameterType.BOOL,
-      pretty_name: "Continue after error",
       default: false,
     },
-    /** Error message to show on the page in case of any loading errors. This parameter is only relevant when continue_after_error is false. */
+    /** HTML-formatted message to be shown on the page after loading fails or times out. Only applies when `continue_after_error` is `false`.*/
     error_message: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Error message",
       default: "The experiment failed to load.",
     },
     /**
@@ -82,7 +82,6 @@ const info = <const>{
      */
     show_detailed_errors: {
       type: ParameterType.BOOL,
-      pretty_name: "Show detailed errors",
       default: false,
     },
     /**
@@ -92,20 +91,47 @@ const info = <const>{
      */
     max_load_time: {
       type: ParameterType.INT,
-      pretty_name: "Max load time",
       default: null,
     },
     /** Function to be called after a file fails to load. The function takes the file name as its only argument. */
     on_error: {
       type: ParameterType.FUNCTION,
-      pretty_name: "On error",
       default: null,
     },
     /** Function to be called after a file loads successfully. The function takes the file name as its only argument. */
     on_success: {
       type: ParameterType.FUNCTION,
-      pretty_name: "On success",
       default: null,
+    },
+  },
+  data: {
+    /**  If `true`, then all files loaded successfully within the `max_load_time`. If `false`, then one or
+     * more file requests returned a failure and/or the file loading did not complete within the `max_load_time` duration.*/
+    success: {
+      type: ParameterType.BOOL,
+    },
+    /** If `true`, then the files did not finish loading within the `max_load_time` duration.
+     * If `false`, then the file loading did not timeout. Note that when the preload trial does not timeout
+     * (`timeout: false`), it is still possible for loading to fail (`success: false`). This happens if
+     * one or more files fails to load and all file requests trigger either a success or failure event before
+     * the `max_load_time` duration. */
+    timeout: {
+      type: ParameterType.BOOL,
+    },
+    /** One or more image file paths that produced a loading failure before the trial ended. */
+    failed_images: {
+      type: ParameterType.STRING,
+      array: true,
+    },
+    /** One or more audio file paths that produced a loading failure before the trial ended. */
+    failed_audio: {
+      type: ParameterType.STRING,
+      array: true,
+    },
+    /** One or more video file paths that produced a loading failure before the trial ended. */
+    failed_video: {
+      type: ParameterType.STRING,
+      array: true,
     },
   },
 };
@@ -113,12 +139,19 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **preload**
+ * This plugin loads images, audio, and video files. It is used for loading files into the browser's memory before they are
+ * needed in the experiment, in order to improve stimulus and response timing, and avoid disruption to the experiment flow.
+ * We recommend using this plugin anytime you are loading media files, and especially when your experiment requires large
+ * and/or many media files. See the [Media Preloading page](../overview/media-preloading.md) for more information.
  *
- * jsPsych plugin for preloading image, audio, and video files
+ * The preload trial will end as soon as all files have loaded successfully. The trial will end or stop with an error
+ * message when one of these two scenarios occurs (whichever comes first): (a) all files have not finished loading
+ * when the `max_load_time` duration is reached, or (b) all file requests have responded with either a load or fail
+ * event, and one or more files has failed to load. The `continue_after_error` parameter determines whether the trial
+ * will stop with an error message or end (allowing the experiment to continue) when preloading is not successful.
  *
  * @author Becky Gilbert
- * @see {@link https://www.jspsych.org/plugins/jspsych-preload/ preload plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/preload/ preload plugin documentation on jspsych.org}
  */
 class PreloadPlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -247,8 +280,6 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
     };
 
     const end_trial = () => {
-      // clear timeout again when end_trial is called, to handle race condition with max_load_time
-      this.jsPsych.pluginAPI.clearAllTimeouts();
       var trial_data = {
         success: success,
         timeout: timeout,
@@ -256,8 +287,7 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
         failed_audio: failed_audio,
         failed_video: failed_video,
       };
-      // clear the display
-      display_element.innerHTML = "";
+
       this.jsPsych.finishTrial(trial_data);
     };
 

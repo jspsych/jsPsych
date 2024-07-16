@@ -5,7 +5,7 @@ import imageButtonResponse from ".";
 jest.useFakeTimers();
 
 describe("image-button-response", () => {
-  test("displays image stimulus", async () => {
+  test("displays image stimulus and buttons", async () => {
     const { getHTML } = await startTimeline([
       {
         type: imageButtonResponse,
@@ -15,39 +15,31 @@ describe("image-button-response", () => {
       },
     ]);
 
-    expect(getHTML()).toContain('<img src="../media/blue.png"');
+    // expect(getHTML()).toContain('<img ');
+    expect(getHTML()).toMatchInlineSnapshot(
+      '"<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"><div id="jspsych-image-button-response-btngroup" class="jspsych-btn-group-grid" style="grid-template-columns: repeat(1, 1fr); grid-template-rows: repeat(1, 1fr);"><button class="jspsych-btn" data-choice="0">button-choice</button></div>"'
+    );
   });
 
-  test("display button labels", async () => {
-    const { getHTML } = await startTimeline([
-      {
-        type: imageButtonResponse,
-        stimulus: "../media/blue.png",
-        choices: ["button-choice1", "button-choice2"],
-        render_on_canvas: false,
-      },
-    ]);
+  it("respects the `button_html` parameter", async () => {
+    const buttonHtmlFn = jest.fn();
+    buttonHtmlFn.mockReturnValue("<button>something-unique</button>");
 
-    expect(getHTML()).toContain('<button class="jspsych-btn">button-choice1</button>');
-    expect(getHTML()).toContain('<button class="jspsych-btn">button-choice2</button>');
-  });
-
-  test("display button html", async () => {
     const { getHTML } = await startTimeline([
       {
         type: imageButtonResponse,
         stimulus: "../media/blue.png",
         choices: ["buttonChoice"],
-        button_html: '<button class="jspsych-custom-button">%choice%</button>',
-        render_on_canvas: false,
+        button_html: buttonHtmlFn,
       },
     ]);
 
-    expect(getHTML()).toContain('<button class="jspsych-custom-button">buttonChoice</button>');
+    expect(buttonHtmlFn).toHaveBeenCalledWith("buttonChoice", 0);
+    expect(getHTML()).toContain("something-unique");
   });
 
   test("display should clear after button click", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
+    const { getHTML, displayElement, expectFinished } = await startTimeline([
       {
         type: imageButtonResponse,
         stimulus: "../media/blue.png",
@@ -56,12 +48,9 @@ describe("image-button-response", () => {
       },
     ]);
 
-    expect(getHTML()).toContain(
-      '<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"'
-    );
-
-    clickTarget(document.querySelector("#jspsych-image-button-response-button-0"));
+    await clickTarget(displayElement.querySelector('[data-choice="0"]'));
     await expectFinished();
+    expect(getHTML()).toEqual("");
   });
 
   test("prompt should append below button", async () => {
@@ -75,9 +64,7 @@ describe("image-button-response", () => {
       },
     ]);
 
-    expect(getHTML()).toContain(
-      '<button class="jspsych-btn">button-choice</button></div></div><p>This is a prompt</p>'
-    );
+    expect(getHTML()).toContain("</button></div><p>This is a prompt</p>");
   });
 
   test("should hide stimulus if stimulus-duration is set", async () => {
@@ -94,9 +81,9 @@ describe("image-button-response", () => {
     const stimulusElement = displayElement.querySelector<HTMLElement>(
       "#jspsych-image-button-response-stimulus"
     );
-    expect(stimulusElement.style.visibility).toContain("");
+    expect(stimulusElement.style.visibility).toEqual("");
     jest.advanceTimersByTime(500);
-    expect(stimulusElement.style.visibility).toContain("hidden");
+    expect(stimulusElement.style.visibility).toEqual("hidden");
   });
 
   test("should end trial when trial duration is reached", async () => {
@@ -118,7 +105,7 @@ describe("image-button-response", () => {
   });
 
   test("should end trial when button is clicked", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
+    const { getHTML, expectFinished, displayElement } = await startTimeline([
       {
         type: imageButtonResponse,
         stimulus: "../media/blue.png",
@@ -128,11 +115,7 @@ describe("image-button-response", () => {
       },
     ]);
 
-    expect(getHTML()).toContain(
-      '<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"'
-    );
-
-    clickTarget(document.querySelector("#jspsych-image-button-response-button-0"));
+    await clickTarget(displayElement.querySelector('[data-choice="0"]'));
     await expectFinished();
   });
 

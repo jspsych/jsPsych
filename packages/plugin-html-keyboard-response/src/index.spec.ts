@@ -14,7 +14,7 @@ describe("html-keyboard-response", () => {
     ]);
 
     expect(getHTML()).toBe('<div id="jspsych-html-keyboard-response-stimulus">this is html</div>');
-    pressKey("a");
+    await pressKey("a");
     await expectFinished();
   });
 
@@ -30,7 +30,8 @@ describe("html-keyboard-response", () => {
       '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
     );
 
-    pressKey("f");
+    await pressKey("f");
+    expect(getHTML()).toBe("");
     await expectFinished();
   });
 
@@ -48,7 +49,7 @@ describe("html-keyboard-response", () => {
       '<div id="jspsych-html-keyboard-response-stimulus">this is html</div><div id="foo">this is a prompt</div>'
     );
 
-    pressKey("f");
+    await pressKey("f");
     await expectFinished();
   });
 
@@ -74,7 +75,7 @@ describe("html-keyboard-response", () => {
         .visibility
     ).toBe("hidden");
 
-    pressKey("f");
+    await pressKey("f");
     await expectFinished();
   });
 
@@ -107,7 +108,7 @@ describe("html-keyboard-response", () => {
       '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
     );
 
-    pressKey("f");
+    await pressKey("f");
     await expectFinished();
   });
 
@@ -125,7 +126,7 @@ describe("html-keyboard-response", () => {
       '<div id="jspsych-html-keyboard-response-stimulus">this is html</div>'
     );
 
-    pressKey("f");
+    await pressKey("f");
 
     expect(document.querySelector("#jspsych-html-keyboard-response-stimulus").className).toBe(
       " responded"

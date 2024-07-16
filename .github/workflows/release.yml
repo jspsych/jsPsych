@@ -35,10 +35,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-20-turbo-
 
+      - name: Check types
+        run: npm run tsc
+
       - name: Run tests
         run: npm run test -- --ci --maxWorkers=2
-        env:
-          NODE_OPTIONS: "--max-old-space-size=4096" # Increase heap size for jest
 
       - name: Create Release Pull Request or Publish Packages
         id: changesets

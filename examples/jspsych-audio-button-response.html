@@ -43,7 +43,7 @@
     stimulus: 'sound/speech_red.mp3',
     choices: ['#00ff00', '#0000ff', '#ff0000'],
     response_allowed_while_playing: false,
-    button_html: '<div style="background-color: %choice%; width:100px; height:100px;"></div>',
+    button_html: (choice) => `<div style="background-color: ${choice}; width:100px; height:100px;"></div>`,
     prompt: "<p>Which color was said?</p>"
   });
 

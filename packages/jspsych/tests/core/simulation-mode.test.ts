@@ -1,7 +1,7 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import { clickTarget, pressKey, simulateTimeline } from "@jspsych/test-utils";
+import { clickTarget, flushPromises, pressKey, simulateTimeline } from "@jspsych/test-utils";
 
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType, initJsPsych } from "../../src";
+import { JsPsych, ParameterType, initJsPsych } from "../../src";
 
 jest.useFakeTimers();
 
@@ -246,12 +246,14 @@ describe("data simulation mode", () => {
     class FakePlugin {
       static info = {
         name: "fake-plugin",
+        version: "0.0.1",
         parameters: {
           foo: {
             type: ParameterType.BOOL,
             default: true,
           },
         },
+        data: {},
       };
 
       constructor(private jsPsych: JsPsych) {}
@@ -306,7 +308,7 @@ describe("data simulation mode", () => {
     expect(getData().values()[2].rt).toBe(200);
   });
 
-  test("endExperiment() works in simulation mode", async () => {
+  test("abortExperiment() works in simulation mode", async () => {
     const jsPsych = initJsPsych();
 
     const timeline = [
@@ -314,7 +316,7 @@ describe("data simulation mode", () => {
         type: htmlKeyboardResponse,
         stimulus: "foo",
         on_finish: () => {
-          jsPsych.endExperiment("done");
+          jsPsych.abortExperiment("done");
         },
       },
       {
@@ -468,10 +470,17 @@ describe("data simulation mode", () => {
       },
     ];
 
-    const { expectRunning, expectFinished, getData } = await simulateTimeline(timeline, "visual", {
-      default: { data: { rt: 200 } },
-    });
+    const { jsPsych, expectRunning, expectFinished, getData } = await simulateTimeline(
+      timeline,
+      "visual",
+      {
+        default: { data: { rt: 200 } },
+      }
+    );
 
+    // Make the event loop tick for each simulated keyboard response
+    jest.runAllTimers();
+    await flushPromises();
     jest.runAllTimers();
 
     await expectFinished();
@@ -523,7 +532,7 @@ describe("data simulation mode", () => {
 
     expect(getHTML()).toContain("foo");
 
-    pressKey("a");
+    await pressKey("a");
 
     expect(getHTML()).toContain("bar");
 
@@ -571,7 +580,7 @@ describe("data simulation mode", () => {
 
     expect(getHTML()).toContain("foo");
 
-    pressKey("a"); // this is the user responding instead of letting the simulation handle it.
+    await pressKey("a"); // this is the user responding instead of letting the simulation handle it.
 
     expect(getHTML()).toContain("bar");
 
@@ -606,7 +615,7 @@ describe("data simulation mode", () => {
 
     expect(on_load).toHaveBeenCalled();
 
-    pressKey("a");
+    await pressKey("a");
 
     await expectFinished();
   });

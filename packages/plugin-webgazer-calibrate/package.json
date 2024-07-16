@@ -34,10 +34,12 @@
   },
   "homepage": "https://www.jspsych.org/latest/plugins/webgazer-calibrate",
   "peerDependencies": {
-    "jspsych": ">=7.0.0"
+    "jspsych": ">=7.0.0",
+    "@jspsych/extension-webgazer": ">=1.0.0"
   },
   "devDependencies": {
     "@jspsych/config": "^2.0.0",
+    "@jspsych/extension-webgazer": "^1.0.2",
     "@jspsych/test-utils": "^1.1.2"
   }
 }

@@ -24,9 +24,8 @@ The settings object can contain several parameters. None of the parameters are r
 | on_data_update             | function | Function to execute every time data is stored using the `jsPsych.data.write` method. All plugins use this method to save data (via a call to `jsPsych.finishTrial`, so this function runs every time a plugin stores new data. |
 | on_interaction_data_update | function | Function to execute every time a new interaction event occurs. Interaction events include clicking on a different window (blur), returning to the experiment window (focus), entering full screen mode (fullscreenenter), and exiting full screen mode (fullscreenexit). |
 | on_close                   | function | Function to execute when the user leaves the page. Can be used, for example, to save data before the page is closed. |
-| exclusions                 | object   | Specifies restrictions on the browser the participant can use to complete the experiment. See list of options below. *This feature is deprecated as of v7.1 and will be removed in v8.0. The [browser-check plugin](../plugins/browser-check.md) is an improved way to handle exclusions.* |
 | show_progress_bar          | boolean  | If `true`, then [a progress bar](../overview/progress-bar.md) is shown at the top of the page. Default is `false`. |
-| message_progress_bar       | string   | Message to display next to the progress bar. The default is 'Completion Progress'. |
+| message_progress_bar       | string or function   | Message to display next to the progress bar or a function that returns that message. The default is 'Completion Progress'. If `message_progress_bar` is a function, it receives one single argument which is the current progress, ranging from 0 to 1; the function gets called on every progress bar update automatically. |
 | auto_update_progress_bar   | boolean  | If true, then the progress bar at the top of the page will automatically update as every top-level timeline or trial is completed. |
 | use_webaudio               | boolean  | If false, then jsPsych will not attempt to use the WebAudio API for audio playback. Instead, HTML5 Audio objects will be used. The WebAudio API offers more precise control over the timing of audio events, and should be used when possible. The default value is `true`. |
 | default_iti                | numeric  | The default inter-trial interval in ms. The default value if none is specified is 0ms. |
@@ -35,14 +34,6 @@ The settings object can contain several parameters. None of the parameters are r
 | override_safe_mode         | boolean  | Running a jsPsych experiment directly in a web browser (e.g., by double clicking on a local HTML file) will load the page using the `file://` protocol. Some features of jsPsych don't work with this protocol. By default, when jsPsych detects that it's running on a page loaded via the `file://` protocol, it runs in _safe mode_, which automatically disables features that don't work in this context. Specifically, the use of Web Audio is disabled (audio will be played using HTML5 audio instead, even if `use_webaudio` is `true`) and video preloading is disabled. The `override_safe_mode` parameter defaults to `false`, but you can set it to `true` to force these features to operate under the `file://` protocol. In order for this to work, you will need to disable web security (CORS) features in your browser - this is safe to do if you know what you are doing. Note that this parameter has no effect when you are running the experiment on a web server, because the page will be loaded via the `http://` or `https://` protocol. |
 | case_sensitive_responses   | boolean  | If `true`, then jsPsych will make a distinction between uppercase and lowercase keys when evaluating keyboard responses, e.g. "A" (uppercase) will not be recognized as a valid response if the trial only accepts "a" (lowercase). If false, then jsPsych will not make a distinction between uppercase and lowercase keyboard responses, e.g. both "a" and "A" responses will be valid when the trial's key choice parameter is "a". Setting this parameter to false is useful if you want key responses to be treated the same way when CapsLock is turned on or the Shift key is held down. The default value is `false`. |
 extensions | array | Array containing information about one or more jsPsych extensions that are used during the experiment. Each extension should be specified as an object with `type` (required), which is the name of the extension, and `params` (optional), which is an object containing any parameter-value pairs to be passed to the extension's `initialize` function. Default value is an empty array. |
-
-Possible values for the exclusions parameter above.
-
-| Parameter  | Type    | Description                              |
-| ---------- | ------- | ---------------------------------------- |
-| min_width  | numeric | The minimum width of the browser window. If the width is below this value, a message will be displayed to the participant asking them to maximize their browser window. The experiment will sit on this page until the browser window is large enough. |
-| min_height | numeric | Same as above, but with height.          |
-| audio      | boolean | Set to true to require support for the WebAudio API (used by plugins that play audio files). |
 
 ### Return value
 
@@ -65,6 +56,177 @@ var jsPsych = initJsPsych({
 ```
 
 For more examples, see the HTML files in the [examples folder](https://github.com/jspsych/jsPsych/tree/main/examples).
+
+---
+## jsPsych.abortCurrentTimeline
+
+```javascript
+jsPsych.abortCurrentTimeline()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+None.
+
+### Description
+
+Ends the current timeline. If timelines are nested, then only the timeline that contains the current trial is ended.
+
+### Example
+
+#### Abort timeline if a particular key is pressed
+
+```javascript
+var jsPsych = initJsPsych({
+  on_finish: function() {
+    jsPsych.data.displayData();
+  }
+});
+
+var images = [
+  "img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif",
+  "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif",
+  "img/9.gif", "img/10.gif"
+];
+
+var trials = [];
+for (var i = 0; i < images.length; i++) {
+  trials.push({
+    stimulus: images[i]
+  });
+}
+
+var block = {
+  type: jsPsychImageKeyboardResponse,
+  choices: ['y', 'n'], 
+  prompt: '<p>Press "y" to Continue. Press "n" to end this node of the experiment.</p>',
+  on_finish: function(data) {
+    if (jsPsych.pluginAPI.compareKeys(data.response, 'n')) {
+      jsPsych.abortCurrentTimeline();
+    }
+  },
+  timeline: trials
+}
+
+var after_block = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: '<p>The next node</p>'
+}
+
+jsPsych.run([block, after_block]);
+```
+
+---
+## jsPsych.abortExperiment
+
+```javascript
+jsPsych.abortExperiment(message, data)
+```
+
+### Parameters
+
+| Parameter   | Type   | Description                              |
+| ----------- | ------ | ---------------------------------------- |
+| message | string | A message to display on the screen after the experiment is over. Can include HTML formatting. |
+| data | object | An optional object of key-value pairs to store as data in the final trial of the experiment. 
+
+### Return value
+
+None.
+
+### Description
+
+Ends the experiment, skipping all remaining trials. If the `on_finish` event handler for `jsPsych` returns a `Promise` then the `message` will not be displayed until the promise is resolved.
+
+### Example
+
+#### End the experiment if a particular response is given
+
+```javascript
+var trial = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: 'image1.jpg',
+  choices: ['y', 'n']
+  prompt: '<p>Press "y" to Continue. Press "n" to end the experiment</p>',
+  on_finish: function(data){
+    if(jsPsych.pluginAPI.compareKeys(data.response, "n")){
+      jsPsych.abortExperiment('The experiment was ended by pressing "n".');
+    }
+  }
+}
+```
+
+---
+## jsPsych.abortTimelineByName
+
+```javascript
+jsPsych.abortTimelineByName()
+```
+
+### Parameters
+
+| Parameter       | Type     | Description                              |
+| --------------- | -------- | ---------------------------------------- |
+| name | string   | The name of the timeline to abort. |
+
+### Return value
+
+None.
+
+### Description
+
+Ends the currently active timeline that matches the `name` parameter. This can be used to control which level is aborted in a nested timeline structure.
+
+### Example
+
+#### Abort a procedure if an incorrect response is given.
+
+```javascript
+const fixation = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: '<p>+</p>',
+  choices: "NO_KEYS",
+  trial_duration: 1000
+}
+
+const test = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: jsPsych.timelineVariable('stimulus'),
+  choices: ['y', 'n'],
+  on_finish: function(data){
+    if(jsPsych.pluginAPI.compareKeys(data.response, "n")){
+      jsPsych.abortTimelineByName('memory_test');
+    }
+  }
+}
+
+const memoryResponseProcedure = {
+  timeline: [fixation, test]
+}
+
+// the variable `encode` is not shown, but imagine a trial that displays
+// some stimulus to remember.
+const memoryEncodeProcedure = {
+  timeline: [fixation, encode]
+}
+
+const memoryTestProcedure = {
+  timeline: [memoryEncodeProcedure, memoryResponseProcedure]
+  name: 'memory_test',
+  timeline_variables: [
+    {stimulus: 'image1.png'},
+    {stimulus: 'image2.png'},
+    {stimulus: 'image3.png'},
+    {stimulus: 'image4.png'}
+  ]
+}
+
+
+```
 
 ---
 ## jsPsych.addNodeToEndOfTimeline
@@ -103,105 +265,48 @@ jsPsych.addNodeToEndOfTimeline(new_timeline)
 ```
 
 ---
-## jsPsych.endCurrentTimeline
+## jsPsych.evaluateTimelineVariable
 
-```javascript
-jsPsych.endCurrentTimeline()
+```js
+jsPsych.evaluateTimelineVariable(variable_name)
 ```
 
 ### Parameters
 
-None.
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| variable_name | string | The name of the variable to evaluate. |
 
 ### Return value
 
-None.
+Returns the current value of the corresponding timeline variable.
 
 ### Description
 
-Ends the current timeline. If timelines are nested, then only the timeline that contains the current trial is ended.
+Unlike `jsPsych.timelineVariable()`, `evaluateTimelineVariable()` immediately returns the current value of the timeline variable. 
+It should be used whenever you are in a context where immediate evaluation is appropriate. For example, if you referencing a 
+timeline variable within a function, immediate evaluation is usually correct.
 
-### Example
+### Examples
 
-#### End timeline if a particular key is pressed
+#### Invoking timeline variables immediately in a function
 
 ```javascript
-var jsPsych = initJsPsych({
-  on_finish: function() {
-    jsPsych.data.displayData();
-  }
-});
-
-var images = [
-  "img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif",
-  "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif",
-  "img/9.gif", "img/10.gif"
-];
-
-var trials = [];
-for (var i = 0; i < images.length; i++) {
-  trials.push({
-    stimulus: images[i]
-  });
-}
-
-var block = {
-  type: jsPsychImageKeyboardResponse,
-  choices: ['y', 'n'], 
-  prompt: '<p>Press "y" to Continue. Press "n" to end this node of the experiment.</p>',
-  on_finish: function(data) {
-    if (jsPsych.pluginAPI.compareKeys(data.response, 'n')) {
-      jsPsych.endCurrentTimeline();
-    }
-  },
-  timeline: trials
-}
-
-var after_block = {
+const trial = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: '<p>The next node</p>'
+  stimulus: function(){
+    return `<img style='width:100px; height:100px;' src='${jsPsych.evaluateTimelineVariable('image')}'></img>`;
+  }
 }
 
-jsPsych.run([block, after_block]);
-```
-
----
-## jsPsych.endExperiment
-
-```javascript
-jsPsych.endExperiment(end_message, data)
-```
-
-### Parameters
-
-| Parameter   | Type   | Description                              |
-| ----------- | ------ | ---------------------------------------- |
-| end_message | string | A message to display on the screen after the experiment is over. Can include HTML formatting. |
-| data | object | An optional object of key-value pairs to store as data in the final trial of the experiment. 
-
-### Return value
-
-None.
-
-### Description
-
-Ends the experiment, skipping all remaining trials. If the `on_finish` event handler for `jsPsych` returns a `Promise` then the `end_message` will not be displayed until the promise is resolved.
-
-### Example
-
-#### End the experiment if a particular response is given
-
-```javascript
-var trial = {
-  type: jsPsychImageKeyboardResponse,
-  stimulus: 'image1.jpg',
-  choices: ['y', 'n']
-  prompt: '<p>Press "y" to Continue. Press "n" to end the experiment</p>',
-  on_finish: function(data){
-    if(jsPsych.pluginAPI.compareKeys(data.response, "n")){
-      jsPsych.endExperiment('The experiment was ended by pressing "n".');
-    }
-  }
+const procedure = {
+  timeline: [trial],
+  timeline_variables: [
+    {image: 'face1.png'},
+    {image: 'face2.png'},
+    {image: 'face3.png'},
+    {image: 'face4.png'}
+  ]
 }
 ```
 
@@ -239,85 +344,6 @@ This method tells jsPsych that the current trial is over. It is used in all of t
 ```javascript
 // this code would be in a plugin
 jsPsych.finishTrial({correct_response: true});
-```
-
----
-## jsPsych.getAllTimelineVariables
-
-```javascript
-jsPsych.getAllTimelineVariables()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-Returns an object with all available timeline variables at this moment in the experiment, represented as `key: value` pairs.
-
-### Description
-
-This function can be used to get all the timeline variables at a particular moment in the experiment. Can be useful for annotating
-data, such as in the example below.
-
-### Example
-
-```javascript
-var trial = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: 'Just a demo',
-  on_finish: function(data){
-    // merge all timeline variables available at this trial into the data for this trial
-    Object.assign(data, jsPsych.getAllTimelineVariables())
-  }
-}
-```
-
----
-## jsPsych.getCurrentTimelineNodeID
-
-```javascript
-jsPsych.getCurrentTimelineNodeID()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-Returns the ID of the TimelineNode that is currently active.
-
-### Description
-
-Gets the ID of the active TimelineNode. The ID is a string that follows a specific format:
-
-* `"0.0"` is the ID of the first top-level TimelineNode
-* `"1.0"` is the ID of the second top-level TimelineNode
-* `"2.0"` is the ID of the third top-level TimelineNode, and so on...
-
-If a TimelineNode iterates multiple times (using the loop function, for example), then the iterations are indicated in the second number:
-
-* `"0.0"` is the ID of the first top-level TimelineNode during the first iteration
-* `"0.1"` is the ID of the first top-level TimelineNode during the second iteration
-* `"0.2"` is the ID of the first top-level TimelineNode during the third iteration, and so on...
-
-If TimelineNodes are nested in other TimelineNodes, then the hierarchical structure is shown with `"-"`:
-
-* `"0.0-1.0"` is the ID of the second TimelineNode on the timeline of the first top-level TimelineNode.
-* `"0.0-2.0"` is the ID of the third TimelineNode on the timeline of the first top-level TimelineNode, and so on...
-
-The rules about iterations apply throughout the hierarchical ID:
-
-* `"0.2-1.3"` is the ID of the second TimelineNode, executing for the fourth time, on the timeline of the first top-level TimelineNode, executing for the third time.
-
-
-### Example
-
-```javascript
-var id = jsPsych.getCurrentTimelineNodeID();
-console.log('The current TimelineNode ID is '+id);
 ```
 
 ---
@@ -652,7 +678,7 @@ jsPsych.setProgressBar(0.85);
 ## jsPsych.timelineVariable
 
 ```javascript
-jsPsych.timelineVariable(variable, call_immediate)
+jsPsych.timelineVariable(variable)
 ```
 
 ### Parameters
@@ -660,11 +686,10 @@ jsPsych.timelineVariable(variable, call_immediate)
 Parameter | Type | Description
 ----------|------|------------
 variable | string | Name of the timeline variable
-call_immediate | bool | This parameter is optional and can usually be omitted. It determines the return value of `jsPsych.timelineVariable`. If `true`, the function returns the _value_ of the current timeline variable. If `false`, the function returns _a function that returns the value_ of the current timeline variable. When `call_immediate` is omitted, the appropriate option is determined automatically based on the context in which this function is called. When `jsPsych.timelineVariable` is used as a parameter value, `call_immediate` will be `false`. This allows it to be used as a [dynamic trial parameter](../overview/dynamic-parameters.md). When `jsPsych.timelineVariable` is used inside of a function, `call_immediate` will be `true`. It is possible to explicitly set this option to `true` to force the function to immediately return the current value of the timeline variable.
 
 ### Return value
 
-Either a function that returns the value of the timeline variable, or the value of the timeline variable, depending on the context in which it is used. See `call_immediate` description above.
+Returns a placeholder object that jsPsych uses to evaluate the timeline variable when the trial runs.
 
 ### Description
 
@@ -672,54 +697,12 @@ Either a function that returns the value of the timeline variable, or the value 
 
 ### Examples
 
-#### Standard use as a parameter for a trial
+#### Use as a parameter for a trial
 
 ```javascript
 var trial = {
   type: jsPsychImageKeyboardResponse,
   stimulus: jsPsych.timelineVariable('image')
-}
-
-var procedure = {
-  timeline: [trial],
-  timeline_variables: [
-    {image: 'face1.png'},
-    {image: 'face2.png'},
-    {image: 'face3.png'},
-    {image: 'face4.png'}
-  ]
-}
-```
-
-#### Invoking immediately in a function
-
-```javascript
-var trial = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: function(){
-    return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image')+"'></img>";
-  }
-}
-
-var procedure = {
-  timeline: [trial],
-  timeline_variables: [
-    {image: 'face1.png'},
-    {image: 'face2.png'},
-    {image: 'face3.png'},
-    {image: 'face4.png'}
-  ]
-}
-```
-
-Prior to jsPsych v6.3.0, the `call_immediate` parameter must be set to `true` when `jsPsych.timelineVariable` is called from within a function, such as a [dynamic parameter](../overview/dynamic-parameters.md):
-
-```javascript
-var trial = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: function(){
-    return "<img style='width:100px; height:100px;' src='"+jsPsych.timelineVariable('image', true)+"'></img>";
-  }
 }
 
 var procedure = {

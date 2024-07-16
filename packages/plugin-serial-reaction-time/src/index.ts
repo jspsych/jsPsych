@@ -1,83 +1,101 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "serial-reaction-time",
+  version: version,
   parameters: {
-    /** This nested array represents the grid of boxes shown on the screen, where each inner array is a row, and each entry in the inner array is a column. */
+    /** This array represents the grid of boxes shown on the screen. Each inner array represents a single row. The entries in the inner arrays represent the columns. If an entry is `1` then a square will be drawn at that location on the grid. If an entry is `0` then the corresponding location on the grid will be empty. Thus, by mixing `1`s and `0`s it is possible to create many different grid-based arrangements. */
     grid: {
       type: ParameterType.BOOL, // TO DO: BOOL doesn't seem like the right type here. INT? Also, is this always a nested array?
-      pretty_name: "Grid",
       array: true,
       default: [[1, 1, 1, 1]],
     },
     /** The location of the target. The array should be the [row, column] of the target. */
     target: {
       type: ParameterType.INT,
-      pretty_name: "Target",
       array: true,
       default: undefined,
     },
-    /** Nested array with dimensions that match the grid. Each entry in this array is the key that should be pressed for that corresponding location in the grid. */
+    /** The dimensions of this array must match the dimensions of `grid`. Each entry in this array is the key that should be pressed for that corresponding location in the grid. Entries can be left blank if there is no key associated with that location of the grid.  */
     choices: {
       type: ParameterType.KEYS, // TO DO: always a nested array, so I think ParameterType.KEYS and array: true is ok here?
-      pretty_name: "Choices",
       array: true,
       default: [["3", "5", "7", "9"]],
     },
     /** The width and height in pixels of each square in the grid. */
     grid_square_size: {
       type: ParameterType.INT,
-      pretty_name: "Grid square size",
       default: 100,
     },
     /** The color of the target square. */
     target_color: {
       type: ParameterType.STRING,
-      pretty_name: "Target color",
       default: "#999",
     },
-    /** If true, trial ends when user makes a response */
+    /** If true, the trial ends after a key press. Feedback is displayed if `show_response_feedback` is true. */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
     },
-    /** The number of milliseconds to display the grid before the target changes color. */
+    /** The number of milliseconds to display the grid *before* the target changes color. */
     pre_target_duration: {
       type: ParameterType.INT,
-      pretty_name: "Pre-target duration",
       default: 0,
     },
-    /** How long to show the trial. */
+    /** The maximum length of time of the trial, not including feedback. */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
     },
     /** If true, show feedback indicating where the user responded and whether it was correct. */
     show_response_feedback: {
       type: ParameterType.BOOL,
-      pretty_name: "Show response feedback",
       default: false,
     },
     /** The length of time in milliseconds to show the feedback. */
     feedback_duration: {
       type: ParameterType.INT,
-      pretty_name: "Feedback duration",
       default: 200,
     },
     /** If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds. */
     fade_duration: {
       type: ParameterType.INT,
-      pretty_name: "Fade duration",
       default: null,
     },
-    /** Any content here will be displayed below the stimulus. */
+    /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which keys to press). */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
       no_function: false,
+    },
+  },
+  data: {
+    /** The representation of the grid. This will be encoded as a JSON string when data is saved using
+     * the `.json()` or `.csv()` functions.  */
+    grid: {
+      type: ParameterType.COMPLEX,
+      array: true,
+    },
+    /** The representation of the target location on the grid. This will be encoded
+     * as a JSON string when data is saved using the `.json()` or `.csv()` functions */
+    target: {
+      type: ParameterType.COMPLEX,
+      array: true,
+    },
+    /** Indicates which key the participant pressed. */
+    response: {
+      type: ParameterType.STRING,
+      array: true,
+    },
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the second stimulus first appears on the screen until the participant's response. */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** `true` if the participant's response matched the target.  */
+    correct: {
+      type: ParameterType.BOOL,
     },
   },
 };
@@ -85,12 +103,14 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **serial-reaction-time**
- *
- * jsPsych plugin for running a serial reaction time task with keypress responses
+ * The serial reaction time plugin implements a generalized version of the SRT task
+ * [(Nissen & Bullemer, 1987)](https://doi.org/10.1016%2F0010-0285%2887%2990002-8).
+ * Squares are displayed in a grid-based system on the screen, and one square changes color.
+ * The participant presses a key that corresponds to the darkened key. Feedback is optionally displayed,
+ * showing the participant which square the key they pressed matches.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-serial-reaction-time/ serial-reaction-time plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/serial-reaction-time/ serial-reaction-time plugin documentation on jspsych.org}
  */
 class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -113,9 +133,6 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
     };
 
     const endTrial = () => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // kill keyboard listeners
       this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
 
@@ -127,9 +144,6 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
         grid: trial.grid,
         target: trial.target,
       };
-
-      // clear the display
-      display_element.innerHTML = "";
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);

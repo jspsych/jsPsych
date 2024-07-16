@@ -30,7 +30,7 @@ describe("survey-likert plugin", () => {
     selectInput("Q3", "3").checked = true;
     selectInput("Q4", "4").checked = true;
 
-    clickTarget(document.querySelector("#jspsych-survey-likert-next"));
+    await clickTarget(document.querySelector("#jspsych-survey-likert-next"));
 
     await expectFinished();
 

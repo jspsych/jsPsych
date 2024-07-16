@@ -1,93 +1,120 @@
+import autoBind from "auto-bind";
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+
+import { AudioPlayerInterface } from "../../jspsych/src/modules/plugin-api/AudioPlayer";
+import { version } from "../package.json";
 
 const info = <const>{
   name: "audio-slider-response",
+  version: version,
   parameters: {
-    /** The audio file to be played. */
+    /** Audio file to be played. */
     stimulus: {
       type: ParameterType.AUDIO,
-      pretty_name: "Stimulus",
       default: undefined,
     },
     /** Sets the minimum value of the slider. */
     min: {
       type: ParameterType.INT,
-      pretty_name: "Min slider",
       default: 0,
     },
     /** Sets the maximum value of the slider */
     max: {
       type: ParameterType.INT,
-      pretty_name: "Max slider",
       default: 100,
     },
     /** Sets the starting value of the slider */
     slider_start: {
       type: ParameterType.INT,
-      pretty_name: "Slider starting value",
       default: 50,
     },
-    /** Sets the step of the slider */
+    /** Sets the step of the slider. This is the smallest amount by which the slider can change. */
     step: {
       type: ParameterType.INT,
-      pretty_name: "Step",
       default: 1,
     },
-    /** Array containing the labels for the slider. Labels will be displayed at equidistant locations along the slider. */
+    /** Labels displayed at equidistant locations on the slider. For example, two labels will be placed at the ends of the
+     * slider. Three labels would place two at the ends and one in the middle. Four will place two at the ends, and the
+     * other two will be at 33% and 67% of the slider width.
+     */
     labels: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Labels",
       default: [],
       array: true,
     },
-    /** Width of the slider in pixels. */
+    /** Set the width of the slider in pixels. If left null, then the width will be equal to the widest element in the display. */
     slider_width: {
       type: ParameterType.INT,
-      pretty_name: "Slider width",
       default: null,
     },
-    /** Label of the button to advance. */
+    /** Label of the button to end the trial. */
     button_label: {
       type: ParameterType.STRING,
-      pretty_name: "Button label",
       default: "Continue",
       array: false,
     },
-    /** If true, the participant will have to move the slider before continuing. */
+    /** If true, the participant must move the slider before clicking the continue button. */
     require_movement: {
       type: ParameterType.BOOL,
-      pretty_name: "Require movement",
       default: false,
     },
-    /** Any content here will be displayed below the slider. */
+    /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is
+     * that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).
+     */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
-    /** How long to show the trial. */
+    /** How long to wait for the participant to make a response before ending the trial in milliseconds. If
+     * the participant fails to make a response before this timer is reached, the participant's response will be
+     * recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial
+     * will wait for a response indefinitely.
+     */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
     },
-    /** If true, trial will end when user makes a response. */
+    /** If true, then the trial will end whenever the participant makes a response (assuming they make their response
+     * before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the
+     * value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to listen to
+     * the stimulus for a fixed amount of time, even if they respond before the time is complete.
+     */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
     },
     /** If true, then the trial will end as soon as the audio file finishes playing. */
     trial_ends_after_audio: {
       type: ParameterType.BOOL,
-      pretty_name: "Trial ends after audio",
       default: false,
     },
-    /** If true, then responses are allowed while the audio is playing. If false, then the audio must finish playing before a response is accepted. */
+    /** If true, then responses are allowed while the audio is playing. If false, then the audio must finish playing before
+     * the slider is enabled and the trial can end via the next button click. Once the audio has played all the way through,
+     * the slider is enabled and a response is allowed (including while the audio is being re-played via on-screen playback controls).
+     */
     response_allowed_while_playing: {
       type: ParameterType.BOOL,
-      pretty_name: "Response allowed while playing",
       default: true,
+    },
+  },
+  data: {
+    /** The numeric value of the slider. */
+    response: {
+      type: ParameterType.INT,
+    },
+    /** The time in milliseconds for the participant to make a response. The time is measured from when the stimulus first
+     * began playing until the participant's response.
+     */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** The path of the audio file that was played. */
+    stimulus: {
+      type: ParameterType.STRING,
+    },
+    /** The starting value of the slider. */
+    slider_start: {
+      type: ParameterType.INT,
     },
   },
 };
@@ -95,253 +122,246 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **audio-slider-response**
+ * This plugin plays an audio file and allows the participant to respond by dragging a slider.
  *
- * jsPsych plugin for playing audio and getting a slider response
+ * If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the
+ * playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of
+ * response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio.
  *
+ * Audio files can be automatically preloaded by jsPsych using the [`preload` plugin](preload.md). However, if you are using
+ * timeline variables or another dynamic method to specify the audio stimulus, then you will need
+ * to [manually preload](../overview/media-preloading.md#manual-preloading) the audio.
+ *
+ * The trial can end when the participant responds, or if the participant has failed to respond within a fixed length of time. You can also prevent the slider response from being made before the audio has finished playing.
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-audio-slider-response/ audio-slider-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/audio-slider-response/ audio-slider-response plugin documentation on jspsych.org}
  */
 class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
-  private audio;
+  private audio: AudioPlayerInterface;
+  private context: AudioContext;
+  private params: TrialType<Info>;
+  private display: HTMLElement;
+  private response: { rt: number; response: number } = { rt: null, response: null };
+  private startTime: number;
+  private half_thumb_width: number;
+  private trial_complete: (trial_data: {
+    rt: number;
+    slider_start: number;
+    response: number;
+  }) => void;
 
-  constructor(private jsPsych: JsPsych) {}
+  constructor(private jsPsych: JsPsych) {
+    autoBind(this);
+  }
 
-  trial(display_element: HTMLElement, trial: TrialType<Info>, on_load: () => void) {
-    // hold the .resolve() function from the Promise that ends the trial
-    let trial_complete;
-
+  async trial(display_element: HTMLElement, trial: TrialType<Info>, on_load: () => void) {
+    // record webaudio context start time
+    this.startTime;
+    this.params = trial;
+    this.display = display_element;
+    // for storing data related to response
+    this.response;
     // half of the thumb width value from jspsych.css, used to adjust the label positions
-    var half_thumb_width = 7.5;
+    this.half_thumb_width = 7.5;
+    // hold the .resolve() function from the Promise that ends the trial
+    this.trial_complete;
 
     // setup stimulus
-    var context = this.jsPsych.pluginAPI.audioContext();
-
-    // record webaudio context start time
-    var startTime;
-
-    // for storing data related to response
-    var response;
+    this.context = this.jsPsych.pluginAPI.audioContext();
 
     // load audio file
-    this.jsPsych.pluginAPI
-      .getAudioBuffer(trial.stimulus)
-      .then((buffer) => {
-        if (context !== null) {
-          this.audio = context.createBufferSource();
-          this.audio.buffer = buffer;
-          this.audio.connect(context.destination);
-        } else {
-          this.audio = buffer;
-          this.audio.currentTime = 0;
-        }
-        setupTrial();
-      })
-      .catch((err) => {
-        console.error(
-          `Failed to load audio file "${trial.stimulus}". Try checking the file path. We recommend using the preload plugin to load audio files.`
-        );
-        console.error(err);
-      });
+    this.audio = await this.jsPsych.pluginAPI.getAudioPlayer(trial.stimulus);
 
-    const setupTrial = () => {
-      // set up end event if trial needs it
-      if (trial.trial_ends_after_audio) {
-        this.audio.addEventListener("ended", end_trial);
-      }
+    this.setupTrial();
 
-      // enable slider after audio ends if necessary
-      if (!trial.response_allowed_while_playing && !trial.trial_ends_after_audio) {
-        this.audio.addEventListener("ended", enable_slider);
-      }
-
-      var html = '<div id="jspsych-audio-slider-response-wrapper" style="margin: 100px 0px;">';
-      html +=
-        '<div class="jspsych-audio-slider-response-container" style="position:relative; margin: 0 auto 3em auto; width:';
-      if (trial.slider_width !== null) {
-        html += trial.slider_width + "px;";
-      } else {
-        html += "auto;";
-      }
-      html += '">';
-      html +=
-        '<input type="range" class="jspsych-slider" value="' +
-        trial.slider_start +
-        '" min="' +
-        trial.min +
-        '" max="' +
-        trial.max +
-        '" step="' +
-        trial.step +
-        '" id="jspsych-audio-slider-response-response"';
-      if (!trial.response_allowed_while_playing) {
-        html += " disabled";
-      }
-      html += "></input><div>";
-      for (var j = 0; j < trial.labels.length; j++) {
-        var label_width_perc = 100 / (trial.labels.length - 1);
-        var percent_of_range = j * (100 / (trial.labels.length - 1));
-        var percent_dist_from_center = ((percent_of_range - 50) / 50) * 100;
-        var offset = (percent_dist_from_center * half_thumb_width) / 100;
-        html +=
-          '<div style="border: 1px solid transparent; display: inline-block; position: absolute; ' +
-          "left:calc(" +
-          percent_of_range +
-          "% - (" +
-          label_width_perc +
-          "% / 2) - " +
-          offset +
-          "px); text-align: center; width: " +
-          label_width_perc +
-          '%;">';
-        html += '<span style="text-align: center; font-size: 80%;">' + trial.labels[j] + "</span>";
-        html += "</div>";
-      }
-      html += "</div>";
-      html += "</div>";
-      html += "</div>";
-
-      if (trial.prompt !== null) {
-        html += trial.prompt;
-      }
-
-      // add submit button
-      var next_disabled_attribute = "";
-      if (trial.require_movement || !trial.response_allowed_while_playing) {
-        next_disabled_attribute = "disabled";
-      }
-      html +=
-        '<button id="jspsych-audio-slider-response-next" class="jspsych-btn" ' +
-        next_disabled_attribute +
-        ">" +
-        trial.button_label +
-        "</button>";
-
-      display_element.innerHTML = html;
-
-      response = {
-        rt: null,
-        response: null,
-      };
-
-      if (!trial.response_allowed_while_playing) {
-        display_element.querySelector<HTMLInputElement>(
-          "#jspsych-audio-slider-response-response"
-        ).disabled = true;
-        display_element.querySelector<HTMLInputElement>(
-          "#jspsych-audio-slider-response-next"
-        ).disabled = true;
-      }
-
-      if (trial.require_movement) {
-        const enable_button = () => {
-          display_element.querySelector<HTMLInputElement>(
-            "#jspsych-audio-slider-response-next"
-          ).disabled = false;
-        };
-
-        display_element
-          .querySelector("#jspsych-audio-slider-response-response")
-          .addEventListener("mousedown", enable_button);
-
-        display_element
-          .querySelector("#jspsych-audio-slider-response-response")
-          .addEventListener("touchstart", enable_button);
-
-        display_element
-          .querySelector("#jspsych-audio-slider-response-response")
-          .addEventListener("change", enable_button);
-      }
-
-      display_element
-        .querySelector("#jspsych-audio-slider-response-next")
-        .addEventListener("click", () => {
-          // measure response time
-          var endTime = performance.now();
-          var rt = Math.round(endTime - startTime);
-          if (context !== null) {
-            endTime = context.currentTime;
-            rt = Math.round((endTime - startTime) * 1000);
-          }
-          response.rt = rt;
-          response.response = display_element.querySelector<HTMLInputElement>(
-            "#jspsych-audio-slider-response-response"
-          ).valueAsNumber;
-
-          if (trial.response_ends_trial) {
-            end_trial();
-          } else {
-            display_element.querySelector<HTMLInputElement>(
-              "#jspsych-audio-slider-response-next"
-            ).disabled = true;
-          }
-        });
-
-      startTime = performance.now();
-      // start audio
-      if (context !== null) {
-        startTime = context.currentTime;
-        this.audio.start(startTime);
-      } else {
-        this.audio.play();
-      }
-
-      // end trial if trial_duration is set
-      if (trial.trial_duration !== null) {
-        this.jsPsych.pluginAPI.setTimeout(() => {
-          end_trial();
-        }, trial.trial_duration);
-      }
-
-      on_load();
-    };
-
-    // function to enable slider after audio ends
-    function enable_slider() {
-      document.querySelector<HTMLInputElement>("#jspsych-audio-slider-response-response").disabled =
-        false;
-      if (!trial.require_movement) {
-        document.querySelector<HTMLButtonElement>("#jspsych-audio-slider-response-next").disabled =
-          false;
-      }
-    }
-
-    const end_trial = () => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
-      // stop the audio file if it is playing
-      // remove end event listeners if they exist
-      if (context !== null) {
-        this.audio.stop();
-      } else {
-        this.audio.pause();
-      }
-
-      this.audio.removeEventListener("ended", end_trial);
-      this.audio.removeEventListener("ended", enable_slider);
-
-      // save data
-      var trialdata = {
-        rt: response.rt,
-        stimulus: trial.stimulus,
-        slider_start: trial.slider_start,
-        response: response.response,
-      };
-
-      display_element.innerHTML = "";
-
-      // next trial
-      this.jsPsych.finishTrial(trialdata);
-
-      trial_complete();
-    };
+    on_load();
 
     return new Promise((resolve) => {
-      trial_complete = resolve;
+      this.trial_complete = resolve;
     });
   }
+
+  // to enable slider after audio ends
+  private enable_slider() {
+    document.querySelector<HTMLInputElement>("#jspsych-audio-slider-response-response").disabled =
+      false;
+    if (!this.params.require_movement) {
+      document.querySelector<HTMLButtonElement>("#jspsych-audio-slider-response-next").disabled =
+        false;
+    }
+  }
+
+  private setupTrial = () => {
+    // set up end event if trial needs it
+    if (this.params.trial_ends_after_audio) {
+      this.audio.addEventListener("ended", this.end_trial);
+    }
+
+    // enable slider after audio ends if necessary
+    if (!this.params.response_allowed_while_playing && !this.params.trial_ends_after_audio) {
+      this.audio.addEventListener("ended", this.enable_slider);
+    }
+
+    var html = '<div id="jspsych-audio-slider-response-wrapper" style="margin: 100px 0px;">';
+    html +=
+      '<div class="jspsych-audio-slider-response-container" style="position:relative; margin: 0 auto 3em auto; width:';
+    if (this.params.slider_width !== null) {
+      html += this.params.slider_width + "px;";
+    } else {
+      html += "auto;";
+    }
+    html += '">';
+    html +=
+      '<input type="range" class="jspsych-slider" value="' +
+      this.params.slider_start +
+      '" min="' +
+      this.params.min +
+      '" max="' +
+      this.params.max +
+      '" step="' +
+      this.params.step +
+      '" id="jspsych-audio-slider-response-response"';
+    if (!this.params.response_allowed_while_playing) {
+      html += " disabled";
+    }
+    html += "></input><div>";
+    for (var j = 0; j < this.params.labels.length; j++) {
+      var label_width_perc = 100 / (this.params.labels.length - 1);
+      var percent_of_range = j * (100 / (this.params.labels.length - 1));
+      var percent_dist_from_center = ((percent_of_range - 50) / 50) * 100;
+      var offset = (percent_dist_from_center * this.half_thumb_width) / 100;
+      html +=
+        '<div style="border: 1px solid transparent; display: inline-block; position: absolute; ' +
+        "left:calc(" +
+        percent_of_range +
+        "% - (" +
+        label_width_perc +
+        "% / 2) - " +
+        offset +
+        "px); text-align: center; width: " +
+        label_width_perc +
+        '%;">';
+      html +=
+        '<span style="text-align: center; font-size: 80%;">' + this.params.labels[j] + "</span>";
+      html += "</div>";
+    }
+    html += "</div>";
+    html += "</div>";
+    html += "</div>";
+
+    if (this.params.prompt !== null) {
+      html += this.params.prompt;
+    }
+
+    // add submit button
+    var next_disabled_attribute = "";
+    if (this.params.require_movement || !this.params.response_allowed_while_playing) {
+      next_disabled_attribute = "disabled";
+    }
+    html +=
+      '<button id="jspsych-audio-slider-response-next" class="jspsych-btn" ' +
+      next_disabled_attribute +
+      ">" +
+      this.params.button_label +
+      "</button>";
+
+    this.display.innerHTML = html;
+
+    this.response = {
+      rt: null,
+      response: null,
+    };
+
+    if (!this.params.response_allowed_while_playing) {
+      this.display.querySelector<HTMLInputElement>(
+        "#jspsych-audio-slider-response-response"
+      ).disabled = true;
+      this.display.querySelector<HTMLInputElement>("#jspsych-audio-slider-response-next").disabled =
+        true;
+    }
+
+    if (this.params.require_movement) {
+      const enable_button = () => {
+        this.display.querySelector<HTMLInputElement>(
+          "#jspsych-audio-slider-response-next"
+        ).disabled = false;
+      };
+
+      this.display
+        .querySelector("#jspsych-audio-slider-response-response")
+        .addEventListener("mousedown", enable_button);
+
+      this.display
+        .querySelector("#jspsych-audio-slider-response-response")
+        .addEventListener("touchstart", enable_button);
+
+      this.display
+        .querySelector("#jspsych-audio-slider-response-response")
+        .addEventListener("change", enable_button);
+    }
+
+    this.display
+      .querySelector("#jspsych-audio-slider-response-next")
+      .addEventListener("click", () => {
+        // measure response time
+        var endTime = performance.now();
+        var rt = Math.round(endTime - this.startTime);
+        if (this.context !== null) {
+          endTime = this.context.currentTime;
+          rt = Math.round((endTime - this.startTime) * 1000);
+        }
+        this.response.rt = rt;
+        this.response.response = this.display.querySelector<HTMLInputElement>(
+          "#jspsych-audio-slider-response-response"
+        ).valueAsNumber;
+
+        if (this.params.response_ends_trial) {
+          this.end_trial();
+        } else {
+          this.display.querySelector<HTMLInputElement>(
+            "#jspsych-audio-slider-response-next"
+          ).disabled = true;
+        }
+      });
+
+    this.startTime = performance.now();
+
+    // start audio
+    this.audio.play();
+
+    // end trial if trial_duration is set
+    if (this.params.trial_duration !== null) {
+      this.jsPsych.pluginAPI.setTimeout(() => {
+        this.end_trial();
+      }, this.params.trial_duration);
+    }
+  };
+
+  private end_trial = () => {
+    // kill any remaining setTimeout handlers
+    this.jsPsych.pluginAPI.clearAllTimeouts();
+
+    // stop the audio file if it is playing
+    this.audio.stop();
+
+    // remove end event listeners if they exist
+    this.audio.removeEventListener("ended", this.end_trial);
+    this.audio.removeEventListener("ended", this.enable_slider);
+
+    // save data
+    var trialdata = {
+      rt: this.response.rt,
+      stimulus: this.params.stimulus,
+      slider_start: this.params.slider_start,
+      response: this.response.response,
+    };
+
+    this.display.innerHTML = "";
+
+    // next trial
+    this.trial_complete(trialdata);
+  };
 
   simulate(
     trial: TrialType<Info>,

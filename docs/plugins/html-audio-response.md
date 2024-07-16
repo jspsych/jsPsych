@@ -159,7 +159,7 @@ import htmlAudioResponse from '@jspsych/plugin-html-audio-response';
             },
             prompt: '<p>Click the object the matches the spoken name.</p>',
             choices: ['img/9.gif','img/10.gif','img/11.gif','img/12.gif'],
-            button_html: '<img src="%choice%" style="width:100px; padding: 20px;"></img>'
+            button_html: (choice) => `<img src=${choice} style="width:100px; padding: 20px;"></img>`
         }
         ```
 

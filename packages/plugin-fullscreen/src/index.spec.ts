@@ -20,7 +20,7 @@ describe("fullscreen plugin", () => {
     ]);
 
     expect(document.documentElement.requestFullscreen).not.toHaveBeenCalled();
-    clickTarget(document.querySelector("#jspsych-fullscreen-btn"));
+    await clickTarget(document.querySelector("#jspsych-fullscreen-btn"));
     expect(document.documentElement.requestFullscreen).toHaveBeenCalled();
   });
 

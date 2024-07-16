@@ -61,6 +61,8 @@ There is also a set of parameters that can be specified for any plugin:
 | on_load        | function | `function(){ return; }` | A callback function to execute when the trial has loaded, which typically happens after the initial display of the plugin has loaded. See [the Event-Related Callbacks page](../overview/events.md) for more details. |
 | css_classes    | string   | null                    | A list of CSS classes to add to the jsPsych display element for the duration of this trial. This allows you to create custom formatting rules (CSS classes) that are only applied to specific trials. For more information and examples, see the [Controlling Visual Appearance page](../overview/style.md) and the "css-classes-parameter.html" file in the jsPsych examples folder. |
 | save_trial_parameters | object | `{}` | An object containing any trial parameters that should or should not be saved to the trial data. Each key is the name of a trial parameter, and its value should be `true` or `false`, depending on whether or not its value should be saved to the data. If the parameter is a function that returns the parameter value, then the value that is returned will be saved to the data. If the parameter is always expected to be a function (e.g., an event-related callback function), then the function itself will be saved as a string. For more examples, see the "save-trial-parameters.html" file in the jsPsych examples folder. |
+| save_timeline_variables | boolean or array | `false` | If set to `true`, then all timeline variables will have their current value recorded to the data for this trial. If set to an array, then any variables listed in the array will be saved.
+| record_data | boolean | `true` | If set to `false`, then the data for this trial will not be recorded. |
 
 ### The data parameter
 
@@ -230,7 +232,7 @@ var trial = {
 ```
 
 !!! note 
-    You cannot remove the `internal_node_id` and `trial_index` values from the trial data, because these are used internally by jsPsych.
+    You cannot remove the `trial_index` value from the trial data.
 
 ## Data collected by all plugins
 
@@ -243,7 +245,6 @@ In addition to the data collected by a plugin, there is a default set of data th
 | trial_type       | string  | The name of the plugin used to run the trial. |
 | trial_index      | numeric | The index of the current trial across the whole experiment. |
 | time_elapsed     | numeric | The number of milliseconds between the start of the experiment and when the trial ended. |
-| internal_node_id | string  | A string identifier for the current TimelineNode. |
 
 ## Creating a new plugin
 
