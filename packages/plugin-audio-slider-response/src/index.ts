@@ -156,8 +156,6 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
   }
 
   async trial(display_element: HTMLElement, trial: TrialType<Info>, on_load: () => void) {
-    // record webaudio context start time
-    this.startTime;
     this.params = trial;
     this.display = display_element;
     // for storing data related to response
@@ -325,7 +323,12 @@ class AudioSliderResponsePlugin implements JsPsychPlugin<Info> {
         }
       });
 
+    //record start time
     this.startTime = performance.now();
+    // record webaudio context start time
+    if (this.context !== null) {
+      this.startTime = this.context.currentTime;
+    }
 
     // start audio
     this.audio.play();
