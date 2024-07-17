@@ -38,6 +38,9 @@ jobs:
       - name: Check types
         run: npm run tsc
 
+      - name: Build packages
+        run: npm run build
+
       - name: Run tests
         run: npm run test -- --ci --maxWorkers=2
 
