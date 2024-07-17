@@ -58,10 +58,18 @@ class RecordVideoExtension implements JsPsychExtension {
 
       if (!this.currentTrialData.record_video_data) {
         this.onUpdateCallback = () => {
-          resolve(this.currentTrialData);
+          resolve({
+            extension_type: "record-video",
+            extension_version: version,
+            ...this.currentTrialData,
+          });
         };
       } else {
-        resolve(this.currentTrialData);
+        resolve({
+          extension_type: "record-video",
+          extension_version: version,
+          ...this.currentTrialData,
+        });
       }
     });
   };
