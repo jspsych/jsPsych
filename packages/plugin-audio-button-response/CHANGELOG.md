@@ -1,5 +1,11 @@
 # @jspsych/plugin-audio-button-response
 
+## 2.0.1
+
+### Patch Changes
+
+- [#3348](https://github.com/jspsych/jsPsych/pull/3348) [`5552e48b`](https://github.com/jspsych/jsPsych/commit/5552e48b4bd0961c0dcb7dea31b7218e22e10de2) Thanks [@Bankminer78](https://github.com/Bankminer78)! - Fixed negative response times being recorded by ensuring if the AudioContext object exists, startTime is recorded with respect to that.
+
 ## 2.0.0
 
 ### Major Changes
