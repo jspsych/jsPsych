@@ -147,8 +147,6 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
   }
 
   async trial(display_element: HTMLElement, trial: TrialType<Info>, on_load: () => void) {
-    // hold the .resolve() function from the Promise that ends the trial
-    this.trial_complete;
     this.params = trial;
     this.display = display_element;
     // setup stimulus
@@ -217,9 +215,6 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
       this.disable_buttons();
     }
 
-    // start time
-    this.startTime = performance.now();
-
     // end trial if time limit is set
     if (trial.trial_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
@@ -229,9 +224,17 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     on_load();
 
+    // start time
+    this.startTime = performance.now();
+    if (this.context !== null) {
+      this.startTime = this.context.currentTime;
+    }
+
+    // start audio
     this.audio.play();
 
     return new Promise((resolve) => {
+      // hold the .resolve() function from the Promise that ends the trial
       this.trial_complete = resolve;
     });
   }
