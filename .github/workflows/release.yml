@@ -107,7 +107,7 @@ jobs:
               console.log(`Uploading dist archive release asset for ${release.tag_name}`);
 
               // https://octokit.github.io/rest.js/v20#repos-upload-release-asset
-              await github.repos.uploadReleaseAsset({
+              await github.rest.repos.uploadReleaseAsset({
                 owner,
                 repo,
                 release_id: release.id,
