@@ -155,8 +155,6 @@ class MouseTrackingExtension implements JsPsychExtension {
     }
 
     return {
-      extension_type: "mouse-tracking",
-      extension_version: version,
       mouse_tracking_data: this.currentTrialData,
       mouse_tracking_targets: Object.fromEntries(this.currentTrialTargets.entries()),
     };

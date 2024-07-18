@@ -40,9 +40,28 @@ export class ExtensionManager {
 
   public async initializeExtensions() {
     await Promise.all(
-      this.extensionsConfiguration.map(({ type, params = {} }) =>
-        this.getExtensionInstanceByClass(type).initialize(params)
-      )
+      this.extensionsConfiguration.map(({ type, params = {} }) => {
+        this.getExtensionInstanceByClass(type).initialize(params);
+
+        const extensionInfo = type["info"] as JsPsychExtensionInfo;
+
+        if (!("version" in extensionInfo) && !("data" in extensionInfo)) {
+          console.warn(
+            extensionInfo["name"],
+            "is missing the 'version' and 'data' fields. Please update extension as 'version' and 'data' will be required in v9. See https://www.jspsych.org/latest/developers/extension-development/ for more details."
+          );
+        } else if (!("version" in extensionInfo)) {
+          console.warn(
+            extensionInfo["name"],
+            "is missing the 'version' field. Please update extension as 'version' will be required in v9. See https://www.jspsych.org/latest/developers/extension-development/ for more details."
+          );
+        } else if (!("data" in extensionInfo)) {
+          console.warn(
+            extensionInfo["name"],
+            "is missing the 'data' field. Please update extension as 'data' will be required in v9. See https://www.jspsych.org/latest/developers/extension-development/ for more details."
+          );
+        }
+      })
     );
   }
 
@@ -67,14 +86,14 @@ export class ExtensionManager {
       )
     );
 
-    const extensionInfo = trialExtensionsConfiguration.length
+    const extensionInfos = trialExtensionsConfiguration.length
       ? {
-          extension_type: results.map((result) => result.extension_type),
-          extension_version: results.map((result) => result.extension_version),
+          extension_type: trialExtensionsConfiguration.map(({ type }) => type["info"].name),
+          extension_version: trialExtensionsConfiguration.map(({ type }) => type["info"].version),
         }
       : {};
 
-    results.push(extensionInfo);
+    results.push(extensionInfos);
 
     return Object.assign({}, ...results);
   }
