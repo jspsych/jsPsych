@@ -3,6 +3,8 @@ import { JsPsych, JsPsychExtension } from "../../src";
 export class TestExtension implements JsPsychExtension {
   static info = {
     name: "test",
+    version: "0.0.1",
+    data: {},
   };
 
   constructor(private jsPsych: JsPsych) {}
