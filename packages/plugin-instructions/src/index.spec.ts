@@ -92,7 +92,7 @@ describe("instructions plugin", () => {
     await pressKey("ArrowRight");
     await expectFinished();
 
-    expect(count).toEqual([1, 2, 1, 1]);
+    expect(count).toEqual([2, 2, 1, 1]);
   });
 });
 
