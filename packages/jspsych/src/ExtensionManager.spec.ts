@@ -102,8 +102,6 @@ describe("ExtensionManager", () => {
 
       const onFinishCallback = jest.mocked(manager.extensions.test.on_finish);
       onFinishCallback.mockReturnValue({
-        extension_type: "test",
-        extension_version: "1.0",
         extension: "result",
       });
 
@@ -115,7 +113,7 @@ describe("ExtensionManager", () => {
       expect(onFinishCallback).toHaveBeenCalledWith({ my: "option" });
       expect(results).toEqual({
         extension_type: ["test"],
-        extension_version: ["1.0"],
+        extension_version: ["0.0.1"],
         extension: "result",
       });
     });
