@@ -1,5 +1,11 @@
 # @jspsych/extension-mouse-tracking
 
+## 1.1.0
+
+### Minor Changes
+
+- [#3352](https://github.com/jspsych/jsPsych/pull/3352) [`b94d961f`](https://github.com/jspsych/jsPsych/commit/b94d961f9b29516d58ee826835d73c9e5dbf9a6d) Thanks [@Bankminer78](https://github.com/Bankminer78)! - Extensions now return an extension_type and extension_version when returning data (metadata purposes).
+
 ## 1.0.3
 
 ### Patch Changes

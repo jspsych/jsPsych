@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/extension-mouse-tracking",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "jsPsych extension for mouse tracking",
   "type": "module",
   "main": "dist/index.cjs",
