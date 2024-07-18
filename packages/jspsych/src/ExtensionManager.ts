@@ -93,7 +93,7 @@ export class ExtensionManager {
         }
       : {};
 
-    results.push(extensionInfos);
+    results.unshift(extensionInfos);
 
     return Object.assign({}, ...results);
   }
