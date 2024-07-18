@@ -255,6 +255,7 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
     };
 
     show_current_page();
+    trial.on_page_change(0);
 
     if (trial.allow_keys) {
       var keyboard_listener = this.jsPsych.pluginAPI.getKeyboardResponse({
