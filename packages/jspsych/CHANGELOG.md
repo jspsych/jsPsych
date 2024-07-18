@@ -1,5 +1,11 @@
 # jspsych
 
+## 8.0.1
+
+### Patch Changes
+
+- [#3352](https://github.com/jspsych/jsPsych/pull/3352) [`07835730`](https://github.com/jspsych/jsPsych/commit/078357306c20736a71bda3cf6e7755466a372edc) Thanks [@Bankminer78](https://github.com/Bankminer78)! - ExtensionManager correctly uses extension instantiation data to produce version and type, and warns users if fields are missing.
+
 ## 8.0.0
 
 ### Major Changes
