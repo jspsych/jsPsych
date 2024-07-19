@@ -20,7 +20,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | button_label_next     | string   | 'Next'        | The text that appears on the button to go forwards. |
 | show_page_number      | boolean  | false         | If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons. |
 | page_label            | string   | 'Page'        | The text that appears before x/y pages displayed when show_page_number is true. |
-| on_page_change  | function | ``function (current_page) {}`` | The function that is called upon trial start and every time the page changes afterwards. This function receives a single argument `current_page`, which is the index of the current page **after page change**, and starts at `0`. The function is also called when going forward from the last page, i.e., finishing the trial. |
+| on_page_change  | function | ``function (current_page) {}`` | The function that is called upon trial start and every time the page changes afterwards. This function receives two arguments: `current_page`, which is the index of the current page **after page change**, and `from_page`, which is the index of the previous page the subject has been viewing. Both parameters start at `0`. The function is also called when going forward from the last page, i.e., finishing the trial. |
 
 ## Data Generated
 
