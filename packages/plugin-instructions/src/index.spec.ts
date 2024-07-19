@@ -65,13 +65,17 @@ describe("instructions plugin", () => {
   });
 
   test("forward and backward callback works", async () => {
-    let count = [0, 0, 0, 0];
+    let count = [0, 0, 0];
+    let from = [];
     const { expectFinished } = await startTimeline([
       {
         type: instructions,
         pages: ["page 1", "page 2", "page 3"],
-        on_page_change: function (page_number: number) {
-          count[page_number]++;
+        on_page_change: function (page_number: number | null, from_page: number | null) {
+          if (page_number != null) {
+            count[page_number]++;
+          }
+          from.push(from_page);
         },
       },
     ]);
@@ -88,11 +92,12 @@ describe("instructions plugin", () => {
     // Go to last page; count[2]++
     await pressKey("ArrowRight");
 
-    // Finish trial; count[3]++
+    // Finish trial
     await pressKey("ArrowRight");
     await expectFinished();
 
-    expect(count).toEqual([2, 2, 1, 1]);
+    expect(count).toEqual([2, 2, 1]);
+    expect(from).toEqual([null, 0, 1, 0, 1, 2]);
   });
 });
 
