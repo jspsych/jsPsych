@@ -65,7 +65,7 @@ const info = <const>{
     on_page_change: {
       type: ParameterType.FUNCTION,
       pretty_name: "Page change callback",
-      default: function (current_page: number) {},
+      default: function (current_page: number | null, from_page: number | null) {},
     },
   },
   data: {
@@ -194,7 +194,7 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
         show_current_page();
       }
 
-      trial.on_page_change(current_page);
+      trial.on_page_change(current_page >= trial.pages.length ? null : current_page, current_page - 1);
     }
 
     function back() {
@@ -204,7 +204,7 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
 
       show_current_page();
 
-      trial.on_page_change(current_page);
+      trial.on_page_change(current_page, current_page + 1);
     }
 
     function add_current_page_to_view_history() {
@@ -255,7 +255,7 @@ class InstructionsPlugin implements JsPsychPlugin<Info> {
     };
 
     show_current_page();
-    trial.on_page_change(0);
+    trial.on_page_change(0, null);
 
     if (trial.allow_keys) {
       var keyboard_listener = this.jsPsych.pluginAPI.getKeyboardResponse({
