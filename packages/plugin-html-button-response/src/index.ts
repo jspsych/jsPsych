@@ -201,12 +201,12 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // disable all the buttons and set a timeout that enables them after a specified delay if timing is set
     if (trial.enable_button_after > 0) {
-      var btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+      var btns = document.querySelectorAll("#jspsych-html-button-response-btngroup button");
       for (var i = 0; i < btns.length; i++) {
         btns[i].setAttribute("disabled", "disabled");
       }
       this.jsPsych.pluginAPI.setTimeout(() => {
-        var btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+        var btns = document.querySelectorAll("#jspsych-html-button-response-btngroup button");
         for (var i = 0; i < btns.length; i++) {
           btns[i].removeAttribute("disabled");
         }
