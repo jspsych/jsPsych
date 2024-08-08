@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-maxdiff",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "a jspsych plugin for maxdiff/conjoint analysis designs",
   "type": "module",
   "main": "dist/index.cjs",
