@@ -409,11 +409,11 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
       });
     }
 
-    this.sketchpad.addEventListener("pointerdown", this.start_draw);
-    this.sketchpad.addEventListener("pointermove", this.move_draw);
-    this.sketchpad.addEventListener("pointerup", this.end_draw);
-    this.sketchpad.addEventListener("pointerleave", this.end_draw);
-    this.sketchpad.addEventListener("pointercancel", this.end_draw);
+    this.sketchpad.addEventListener("pointerdown", this.start_draw.bind(this));
+    this.sketchpad.addEventListener("pointermove", this.move_draw.bind(this));
+    this.sketchpad.addEventListener("pointerup", this.end_draw.bind(this));
+    this.sketchpad.addEventListener("pointerleave", this.end_draw.bind(this));
+    this.sketchpad.addEventListener("pointercancel", this.end_draw.bind(this));
 
     if (this.params.key_to_draw !== null) {
       document.addEventListener("keydown", (e) => {
@@ -452,16 +452,22 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
     }
 
     if (this.params.show_undo_button) {
-      this.display.querySelector("#sketchpad-undo").addEventListener("click", this.undo);
+      this.display.querySelector("#sketchpad-undo").addEventListener("click", this.undo.bind(this));
       if (this.params.show_redo_button) {
-        this.display.querySelector("#sketchpad-redo").addEventListener("click", this.redo);
+        this.display
+          .querySelector("#sketchpad-redo")
+          .addEventListener("click", this.redo.bind(this));
       }
     }
     if (this.params.show_clear_button) {
-      this.display.querySelector("#sketchpad-clear").addEventListener("click", this.clear);
+      this.display
+        .querySelector("#sketchpad-clear")
+        .addEventListener("click", this.clear.bind(this));
     }
 
-    const color_btns = Array.from(this.display.querySelectorAll(".sketchpad-color-select"));
+    const color_btns = Array.prototype.slice.call(
+      this.display.querySelectorAll(".sketchpad-color-select")
+    );
     for (const btn of color_btns) {
       btn.addEventListener("click", (e) => {
         const target = e.target as HTMLButtonElement;
