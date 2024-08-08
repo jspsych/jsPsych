@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-sketchpad",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "jsPsych plugin for sketching a response",
   "type": "module",
   "main": "dist/index.cjs",

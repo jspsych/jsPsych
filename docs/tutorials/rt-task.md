@@ -25,9 +25,9 @@ Start by setting up a new HTML file with jsPsych, the html-keyboard-response plu
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@8.0.1"></script>
+    <script src="https://unpkg.com/jspsych@8.0.2"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
-    <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
@@ -87,9 +87,9 @@ After each step in the tutorial you can view the complete code up to that point 
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@8.0.1"></script>
+        <script src="https://unpkg.com/jspsych@8.0.2"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
-        <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -166,9 +166,9 @@ timeline.push(instructions);
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@8.0.1"></script>
+        <script src="https://unpkg.com/jspsych@8.0.2"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
-        <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -223,10 +223,10 @@ We need to start by loading this plugin by adding a `<script>` tag to the docume
 ```html hl_lines="5"
 <head>
   <title>My experiment</title>
-  <script src="https://unpkg.com/jspsych@8.0.1"></script>
+  <script src="https://unpkg.com/jspsych@8.0.2"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
   <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
-  <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+  <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
 </head>
 ```
 
@@ -261,10 +261,10 @@ timeline.push(blue_trial, orange_trial);
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@8.0.1"></script>
+        <script src="https://unpkg.com/jspsych@8.0.2"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
-        <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -339,11 +339,11 @@ First we need to add the preload plugin to our `<head>` section.
 ```html hl_lines="6"
 <head>
   <title>My experiment</title>
-  <script src="https://unpkg.com/jspsych@8.0.1"></script>
+  <script src="https://unpkg.com/jspsych@8.0.2"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
   <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
   <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
-  <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+  <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
 </head>
 ```
 
@@ -370,11 +370,11 @@ timeline.push(preload);
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@8.0.1"></script>
+        <script src="https://unpkg.com/jspsych@8.0.2"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
-        <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -503,11 +503,11 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@8.0.1"></script>
+        <script src="https://unpkg.com/jspsych@8.0.2"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
-        <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -626,11 +626,11 @@ var test_procedure = {
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@8.0.1"></script>
+        <script src="https://unpkg.com/jspsych@8.0.2"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
-        <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -738,11 +738,11 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@8.0.1"></script>
+        <script src="https://unpkg.com/jspsych@8.0.2"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
-        <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -847,11 +847,11 @@ var jsPsych = initJsPsych({
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@8.0.1"></script>
+        <script src="https://unpkg.com/jspsych@8.0.2"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
-        <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -1004,11 +1004,11 @@ var fixation = {
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@8.0.1"></script>
+        <script src="https://unpkg.com/jspsych@8.0.2"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
-        <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -1145,11 +1145,11 @@ The `data.response` value is a string representation of the key the participant 
     <html>
       <head>
         <title>My experiment</title>
-        <script src="https://unpkg.com/jspsych@8.0.1"></script>
+        <script src="https://unpkg.com/jspsych@8.0.2"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
-        <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
       </head>
       <body></body>
       <script>
@@ -1295,11 +1295,11 @@ This code is available in the `/examples` folder in the jsPsych release download
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@8.0.1"></script>
+    <script src="https://unpkg.com/jspsych@8.0.2"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
-    <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
