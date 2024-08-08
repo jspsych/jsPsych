@@ -185,12 +185,12 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
           // check response
           if (trial.required) {
             // Now check if one of both left and right have been enabled to allow submission
-            var left_checked = Array.from(document.getElementsByName("left")).some(
-              (c: HTMLInputElement) => c.checked
-            );
-            var right_checked = Array.from(document.getElementsByName("right")).some(
-              (c: HTMLInputElement) => c.checked
-            );
+            var left_checked = Array.prototype.slice
+              .call(document.getElementsByName("left"))
+              .some((c: HTMLInputElement) => c.checked);
+            var right_checked = Array.prototype.slice
+              .call(document.getElementsByName("right"))
+              .some((c: HTMLInputElement) => c.checked);
             if (left_checked && right_checked) {
               (document.getElementById("jspsych-maxdiff-next") as HTMLInputElement).disabled =
                 false;

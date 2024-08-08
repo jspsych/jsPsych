@@ -348,7 +348,7 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
     let cur_in = false;
 
     // draggable items
-    const draggables = Array.from(
+    const draggables = Array.prototype.slice.call(
       display_element.querySelectorAll<HTMLImageElement>(".jspsych-free-sort-draggable")
     );
 
