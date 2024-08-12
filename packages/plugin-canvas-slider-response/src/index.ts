@@ -79,6 +79,11 @@ const info = <const>{
       array: true,
       default: [500, 500],
     },
+    /** If true, the slider's value will be displayed in real time below the slider. */
+    value_display: {
+      type: ParameterType.BOOL,
+      default: false,
+    },
   },
   data: {
     /** The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. */
@@ -132,7 +137,13 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
       trial.max +
       '" step="' +
       trial.step +
-      '" style="width: 100%;" id="jspsych-canvas-slider-response-response"></input>';
+      '" style="width: 100%;" id="jspsych-canvas-slider-response-response"> ';
+    if (trial.value_display) {
+        html += 'oninput="this.nextElementSibling.value = this.value"></input>';
+        html += "<output>" + trial.slider_start + "</output>";
+    }else{
+        html += "></input>";
+    }
     html += "<div>";
     for (var j = 0; j < trial.labels.length; j++) {
       var width = 100 / (trial.labels.length - 1);
