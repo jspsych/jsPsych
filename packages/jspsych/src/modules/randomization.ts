@@ -12,7 +12,7 @@ export function setSeed(seed: string = Math.random().toString()) {
   return seed;
 }
 
-export function repeat(array, repetitions, unpack = false) {
+export function repeat(array: any, repetitions: any, unpack = false) {
   const arr_isArray = Array.isArray(array);
   const rep_isArray = Array.isArray(repetitions);
 
@@ -77,7 +77,7 @@ export function repeat(array, repetitions, unpack = false) {
   return out;
 }
 
-export function shuffle(array: Array<any>) {
+export function shuffle<T>(array: Array<T>) {
   if (!Array.isArray(array)) {
     console.error("Argument to shuffle() must be an array.");
   }
@@ -101,7 +101,7 @@ export function shuffle(array: Array<any>) {
   return copy_array;
 }
 
-export function shuffleNoRepeats(arr: Array<any>, equalityTest: (a: any, b: any) => boolean) {
+export function shuffleNoRepeats<T>(arr: Array<T>, equalityTest: (a: T, b: T) => boolean) {
   if (!Array.isArray(arr)) {
     console.error("First argument to shuffleNoRepeats() must be an array.");
   }
@@ -143,7 +143,10 @@ export function shuffleNoRepeats(arr: Array<any>, equalityTest: (a: any, b: any)
   return random_shuffle;
 }
 
-export function shuffleAlternateGroups(arr_groups, random_group_order = false) {
+export function shuffleAlternateGroups<T extends any[]>(
+  arr_groups: Array<T>,
+  random_group_order = false
+) {
   const n_groups = arr_groups.length;
   if (n_groups == 1) {
     console.warn(
@@ -178,7 +181,7 @@ export function shuffleAlternateGroups(arr_groups, random_group_order = false) {
   return out;
 }
 
-export function sampleWithoutReplacement(arr, size) {
+export function sampleWithoutReplacement<T>(arr: Array<T>, size: number) {
   if (!Array.isArray(arr)) {
     console.error("First argument to sampleWithoutReplacement() must be an array");
   }
@@ -189,7 +192,7 @@ export function sampleWithoutReplacement(arr, size) {
   return shuffle(arr).slice(0, size);
 }
 
-export function sampleWithReplacement(arr, size, weights?) {
+export function sampleWithReplacement<T>(arr: Array<T>, size: number, weights?: number[]) {
   if (!Array.isArray(arr)) {
     console.error("First argument to sampleWithReplacement() must be an array");
   }
@@ -301,6 +304,17 @@ export function sampleExGaussian(
   return s;
 }
 
+type RandomWordsOptions = {
+  min?: number;
+  max?: number;
+  exactly?: number;
+  maxLength?: number;
+  wordsPerString?: number;
+  seperator?: string;
+  formatter?: (word: string, index: number) => string;
+  join?: string;
+};
+
 /**
  * Generate one or more random words.
  *
@@ -311,8 +325,11 @@ export function sampleExGaussian(
  *
  * @returns An array of words or a single string, depending on parameter choices.
  */
-export function randomWords(opts) {
-  return rw(opts);
+export function randomWords<T extends RandomWordsOptions>(
+  opts: T
+): T extends { join: string } ? string : string[] {
+  // there is a type incompatibility here because `random-words` uses overloads rather than generics
+  return rw(opts) as any;
 }
 
 // Box-Muller transformation for a random sample from normal distribution with mean = 0, std = 1
@@ -325,8 +342,8 @@ function randn_bm() {
   return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 }
 
-function unpackArray(array) {
-  const out = {};
+function unpackArray(array: object[]) {
+  const out: Record<string, any> = {};
 
   for (const x of array) {
     for (const key of Object.keys(x)) {
