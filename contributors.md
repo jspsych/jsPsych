@@ -64,4 +64,4 @@ The following people have contributed to the development of jsPsych by writing c
 * Reto Wyss - https://github.com/retowyss
 * Shaobin Jiang - https://github.com/Shaobin-Jiang
 * Haotian Tu - https://github.com/thtTNT
-
+* Joshua Unrau - https://github.com/joshunrau
