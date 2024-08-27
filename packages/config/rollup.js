@@ -27,6 +27,7 @@ const makeConfig = ({
   outputOptions = {},
   globalOptions = {},
   iifeOutputOptions = {},
+  plugins = [],
   isNodeOnlyBuild = false,
 }) => {
   const input = "src/index.ts";
@@ -70,6 +71,7 @@ const makeConfig = ({
       ...globalOptions,
       input,
       plugins: [
+        ...plugins,
         externals(),
         esbuild({ ...esBuildPluginOptions, target: "node18" }),
         commonjs(commonjsPluginOptions),
@@ -95,6 +97,7 @@ const makeConfig = ({
       ...globalOptions,
       input,
       plugins: [
+        ...plugins,
         externals({ deps: false }),
         resolve({ preferBuiltins: false }),
         esbuild({ ...esBuildPluginOptions, target: "esnext" }),
@@ -114,6 +117,7 @@ const makeConfig = ({
       ...globalOptions,
       input,
       plugins: [
+        ...plugins,
         externals({ deps: false }),
         resolve({ preferBuiltins: false }),
         esbuild({ ...esBuildPluginOptions, target: "es2015", minify: true }),
@@ -144,6 +148,7 @@ export const makeRollupConfig = (iifeName) =>
     outputOptions: {
       exports: "default",
       globals: { jspsych: "jsPsychModule" },
+      plugins: [cffToJsonPlugin()],
     },
     globalOptions: { external: ["jspsych"] },
     iifeOutputOptions: { name: iifeName },

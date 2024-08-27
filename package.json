@@ -51,5 +51,9 @@
     "projects": [
       "<rootDir>/packages/*/jest.config.cjs"
     ]
+  },
+  "dependencies": {
+    "@citation-js/core": "^0.7.14",
+    "@citation-js/plugin-software-formats": "^0.6.1"
   }
 }
