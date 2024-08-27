@@ -9,6 +9,8 @@ import esbuild from "rollup-plugin-esbuild";
 import externals from "rollup-plugin-node-externals";
 import ts from "typescript";
 
+import cffToJsonPlugin from "./rollup-plugin-build-citation";
+
 const getTsCompilerOptions = () => {
   const cwd = process.cwd();
   return ts.parseJsonConfigFileContent(
