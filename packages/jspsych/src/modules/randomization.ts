@@ -315,6 +315,10 @@ type RandomWordsOptions = {
   join?: string;
 };
 
+type RandomWordsResult<T extends RandomWordsOptions> = T extends { join: string }
+  ? string
+  : string[];
+
 /**
  * Generate one or more random words.
  *
@@ -325,11 +329,9 @@ type RandomWordsOptions = {
  *
  * @returns An array of words or a single string, depending on parameter choices.
  */
-export function randomWords<T extends RandomWordsOptions>(
-  opts: T
-): T extends { join: string } ? string : string[] {
+export function randomWords<T extends RandomWordsOptions>(opts: T) {
   // there is a type incompatibility here because `random-words` uses overloads rather than generics
-  return rw(opts) as any;
+  return rw(opts) as RandomWordsResult<T>;
 }
 
 // Box-Muller transformation for a random sample from normal distribution with mean = 0, std = 1
