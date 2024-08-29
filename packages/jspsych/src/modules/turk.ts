@@ -41,7 +41,7 @@ export function turkInfo(): turkInformation {
   };
 
   const param = function (url, name) {
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    name = name.replace(/[[]/, "\\[").replace(/[\]]/, "\\]");
     const regexS = "[\\?&]" + name + "=([^&#]*)";
     const regex = new RegExp(regexS);
     const results = regex.exec(url);
