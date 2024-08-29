@@ -30,7 +30,7 @@ describe("ProgressBar", () => {
 
     it("errors if an invalid progress value is provided", () => {
       expect(() => {
-        // @ts-expect-error
+        // @ts-expect-error - progressBar.progress is typed as a a number, but should handle the case of a string
         progressBar.progress = "0";
       }).toThrowErrorMatchingInlineSnapshot(
         '"jsPsych.progressBar.progress must be a number between 0 and 1"'

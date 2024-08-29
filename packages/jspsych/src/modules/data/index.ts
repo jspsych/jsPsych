@@ -127,11 +127,11 @@ export class JsPsychData {
     },
     fullscreenchange: () => {
       this.addInteractionRecord(
-        // @ts-expect-error
+        // @ts-expect-error - legacy code
         document.isFullScreen ||
-          // @ts-expect-error
+          // @ts-expect-error - legacy code
           document.webkitIsFullScreen ||
-          // @ts-expect-error
+          // @ts-expect-error - legacy code
           document.mozIsFullScreen ||
           document.fullscreenElement
           ? "fullscreenenter"

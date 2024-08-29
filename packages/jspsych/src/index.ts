@@ -3,17 +3,6 @@
 import { JsPsych } from "./JsPsych";
 import { MigrationError } from "./migration";
 
-// temporary patch for Safari
-if (
-  typeof window !== "undefined" &&
-  Object.hasOwn(window, "webkitAudioContext") &&
-  !Object.hasOwn(window, "AudioContext")
-) {
-  // @ts-expect-error
-  window.AudioContext = webkitAudioContext;
-}
-// end patch
-
 // The following function provides a uniform interface to initialize jsPsych, no matter whether a
 // browser supports ES6 classes or not (and whether the ES6 build or the Babel build is used).
 /**
