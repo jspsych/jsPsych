@@ -27,7 +27,8 @@
     "build:styles": "webpack-cli",
     "build": "run-p build:js build:styles",
     "build:watch": "run-p \"build:js -- --watch\" \"build:styles watch\"",
-    "prepack": "cp ../../README.md ."
+    "prepack": "cp ../../README.md .",
+    "lint": "eslint src"
   },
   "repository": {
     "type": "git",
