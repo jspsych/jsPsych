@@ -410,7 +410,7 @@ export class Trial extends TimelineNode {
     return this;
   }
 
-  public getActiveTimelineByName(name: string): Timeline | undefined {
+  public getActiveTimelineByName(_name: string): Timeline | undefined {
     // This returns undefined because the function is looking
     // for a timeline. If we get to this point, then none
     // of the parent nodes match the name.

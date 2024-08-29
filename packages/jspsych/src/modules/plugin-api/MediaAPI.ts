@@ -9,6 +9,9 @@ const preloadParameterTypes = <const>[
 ];
 type PreloadType = typeof preloadParameterTypes[number];
 
+type CallbackLoad = (filepath: string) => void;
+type CallbackError = (callback_error: any) => void;
+
 export class MediaAPI {
   constructor(public useWebaudio: boolean) {
     if (
@@ -61,8 +64,8 @@ export class MediaAPI {
   preloadAudio(
     files,
     callback_complete = () => {},
-    callback_load = (filepath: string) => {},
-    callback_error = (error) => {}
+    callback_load: CallbackLoad = () => {},
+    callback_error: CallbackError = () => {}
   ) {
     files = unique(files.flat());
 
@@ -105,8 +108,8 @@ export class MediaAPI {
   preloadImages(
     images,
     callback_complete = () => {},
-    callback_load = (filepath) => {},
-    callback_error = (error_msg) => {}
+    callback_load: CallbackLoad = () => {},
+    callback_error: CallbackError = () => {}
   ) {
     // flatten the images array
     images = unique(images.flat());
@@ -143,8 +146,8 @@ export class MediaAPI {
   preloadVideo(
     videos,
     callback_complete = () => {},
-    callback_load = (filepath) => {},
-    callback_error = (error_msg) => {}
+    callback_load: CallbackLoad = () => {},
+    callback_error: CallbackError = () => {}
   ) {
     // flatten the video array
     videos = unique(videos.flat());
@@ -181,7 +184,7 @@ export class MediaAPI {
         }
         callback_error({ source: video, error: err });
       };
-      request.onloadend = (e) => {
+      request.onloadend = () => {
         if (request.status == 404) {
           callback_error({ source: video, error: "404" });
         }
