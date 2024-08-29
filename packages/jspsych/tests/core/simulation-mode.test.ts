@@ -193,8 +193,6 @@ describe("data simulation mode", () => {
   });
 
   test("Simulation options can be a function that evals at run time", async () => {
-    const jsPsych = initJsPsych();
-
     const timeline = [
       {
         type: htmlKeyboardResponse,
@@ -217,8 +215,6 @@ describe("data simulation mode", () => {
   });
 
   test("Simulation options can be a function that evals to a string at run time", async () => {
-    const jsPsych = initJsPsych();
-
     const timeline = [
       {
         type: htmlKeyboardResponse,
@@ -265,8 +261,6 @@ describe("data simulation mode", () => {
         });
       }
     }
-
-    const jsPsych = initJsPsych();
 
     const timeline = [
       {
@@ -470,13 +464,9 @@ describe("data simulation mode", () => {
       },
     ];
 
-    const { jsPsych, expectRunning, expectFinished, getData } = await simulateTimeline(
-      timeline,
-      "visual",
-      {
-        default: { data: { rt: 200 } },
-      }
-    );
+    const { expectFinished, getData } = await simulateTimeline(timeline, "visual", {
+      default: { data: { rt: 200 } },
+    });
 
     // Make the event loop tick for each simulated keyboard response
     jest.runAllTimers();

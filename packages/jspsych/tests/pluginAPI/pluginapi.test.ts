@@ -190,12 +190,12 @@ describe("#getKeyboardResponse", () => {
     const callback_1 = jest.fn();
     const callback_2 = jest.fn();
     const api = new KeyboardListenerAPI(getRootElement);
-    const listener_1 = api.getKeyboardResponse({
+    api.getKeyboardResponse({
       callback_function: callback_1,
       valid_responses: ["a"],
       persist: true,
     });
-    const listener_2 = api.getKeyboardResponse({
+    api.getKeyboardResponse({
       callback_function: callback_2,
       persist: false,
     });
