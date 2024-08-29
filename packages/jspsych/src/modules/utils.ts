@@ -19,7 +19,7 @@ export function deepCopy(obj) {
   } else if (typeof obj === "object" && obj !== null) {
     out = {};
     for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.hasOwn(obj, key)) {
         out[key] = deepCopy(obj[key]);
       }
     }
@@ -37,8 +37,8 @@ export function deepCopy(obj) {
 export function deepMerge(obj1: any, obj2: any): any {
   const merged = {};
   for (const key in obj1) {
-    if (obj1.hasOwnProperty(key)) {
-      if (typeof obj1[key] === "object" && obj2.hasOwnProperty(key)) {
+    if (Object.hasOwn(obj1, key)) {
+      if (typeof obj1[key] === "object" && Object.hasOwn(obj2, key)) {
         merged[key] = deepMerge(obj1[key], obj2[key]);
       } else {
         merged[key] = obj1[key];
@@ -46,8 +46,8 @@ export function deepMerge(obj1: any, obj2: any): any {
     }
   }
   for (const key in obj2) {
-    if (obj2.hasOwnProperty(key)) {
-      if (!merged.hasOwnProperty(key)) {
+    if (Object.hasOwn(obj2, key)) {
+      if (!Object.hasOwn(merged, key)) {
         merged[key] = obj2[key];
       } else if (typeof obj2[key] === "object") {
         merged[key] = deepMerge(merged[key], obj2[key]);

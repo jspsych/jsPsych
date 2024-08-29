@@ -231,7 +231,10 @@ export class Timeline extends TimelineNode {
   }
 
   public evaluateTimelineVariable(variable: TimelineVariable) {
-    if (this.currentTimelineVariables?.hasOwnProperty(variable.name)) {
+    if (
+      this.currentTimelineVariables &&
+      Object.hasOwn(this.currentTimelineVariables, variable.name)
+    ) {
       return this.currentTimelineVariables[variable.name];
     }
     throw new Error(`Timeline variable ${variable.name} not found.`);

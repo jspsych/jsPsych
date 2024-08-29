@@ -83,7 +83,7 @@ export function submitToTurk(data) {
   form.action = turkSubmitTo + "/mturk/externalSubmit?assignmentId=" + assignmentId;
 
   for (const key in data) {
-    if (data.hasOwnProperty(key)) {
+    if (Object.hasOwn(data, key)) {
       const hiddenField = document.createElement("input");
       hiddenField.type = "hidden";
       hiddenField.name = key;

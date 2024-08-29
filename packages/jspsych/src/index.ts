@@ -6,8 +6,8 @@ import { MigrationError } from "./migration";
 // temporary patch for Safari
 if (
   typeof window !== "undefined" &&
-  window.hasOwnProperty("webkitAudioContext") &&
-  !window.hasOwnProperty("AudioContext")
+  Object.hasOwn(window, "webkitAudioContext") &&
+  !Object.hasOwn(window, "AudioContext")
 ) {
   // @ts-expect-error
   window.AudioContext = webkitAudioContext;
