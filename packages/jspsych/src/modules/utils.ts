@@ -35,7 +35,7 @@ export function deepCopy(obj) {
  * @param obj2 Object to merge
  */
 export function deepMerge(obj1: any, obj2: any): any {
-  let merged = {};
+  const merged = {};
   for (const key in obj1) {
     if (obj1.hasOwnProperty(key)) {
       if (typeof obj1[key] === "object" && obj2.hasOwnProperty(key)) {

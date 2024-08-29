@@ -3,7 +3,7 @@ const actual = jest.requireActual("../AudioPlayer");
 export const mockStop = jest.fn();
 
 export const AudioPlayer = jest.fn().mockImplementation(() => {
-  let eventHandlers = {};
+  const eventHandlers = {};
 
   const mockInstance = Object.create(actual.AudioPlayer.prototype);
 

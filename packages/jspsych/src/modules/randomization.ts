@@ -31,7 +31,7 @@ export function repeat(array: any, repetitions: any, unpack = false) {
     // if repetitions is not an array, but array is, then we
     // repeat repetitions for each entry in array
     if (!rep_isArray) {
-      let reps = [];
+      const reps = [];
       for (let i = 0; i < array.length; i++) {
         reps.push(repetitions);
       }
@@ -43,7 +43,7 @@ export function repeat(array: any, repetitions: any, unpack = false) {
         );
         // throw warning if repetitions is too short, use first rep ONLY.
         if (repetitions.length < array.length) {
-          let reps = [];
+          const reps = [];
           for (let i = 0; i < array.length; i++) {
             reps.push(repetitions);
           }
@@ -57,7 +57,7 @@ export function repeat(array: any, repetitions: any, unpack = false) {
   }
 
   // should be clear at this point to assume that array and repetitions are arrays with == length
-  let allsamples = [];
+  const allsamples = [];
   for (let i = 0; i < array.length; i++) {
     for (let j = 0; j < repetitions[i]; j++) {
       if (array[i] == null || typeof array[i] != "object") {
@@ -337,8 +337,8 @@ export function randomWords<T extends RandomWordsOptions>(opts: T) {
 // Box-Muller transformation for a random sample from normal distribution with mean = 0, std = 1
 // https://stackoverflow.com/a/36481059/3726673
 function randn_bm() {
-  var u = 0,
-    v = 0;
+  let u = 0;
+  let v = 0;
   while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
   while (v === 0) v = Math.random();
   return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);

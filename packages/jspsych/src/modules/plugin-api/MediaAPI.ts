@@ -114,7 +114,7 @@ export class MediaAPI {
     // flatten the images array
     images = unique(images.flat());
 
-    var n_loaded = 0;
+    let n_loaded = 0;
 
     if (images.length === 0) {
       callback_complete();
