@@ -9,7 +9,7 @@ import esbuild from "rollup-plugin-esbuild";
 import externals from "rollup-plugin-node-externals";
 import ts from "typescript";
 
-import cffToJsonPlugin from "./rollup-plugin-build-citation";
+import cffToJsonPlugin from "./rollup-plugin-build-citation.js";
 
 const getTsCompilerOptions = () => {
   const cwd = process.cwd();

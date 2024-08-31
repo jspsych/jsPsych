@@ -1,8 +1,3 @@
-import "@citation-js/plugin-software-formats";
-
-import fs from "fs";
-import path from "path";
-
 import { Cite } from "@citation-js/core";
 import autoBind from "auto-bind";
 // To work with citations
@@ -14,7 +9,6 @@ import { JsPsychData, JsPsychDataDependencies } from "./modules/data";
 import { JsPsychExtension } from "./modules/extensions";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin } from "./modules/plugins";
-import { PluginInfo } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";

@@ -1,44 +1,55 @@
-const fs = require("node:fs");
-const path = require("path");
-require("@citation-js/plugin-software-formats");
-const { Cite } = require("@citation-js/core");
+import "@citation-js/plugin-software-formats";
 
-function cffToJsonPlugin(options = {}) {
+import fs from "node:fs";
+import { extname } from "path";
+
+import { Cite } from "@citation-js/core";
+import { createFilter } from "@rollup/pluginutils";
+import MagicString from "magic-string";
+
+export default function cffToJsonPlugin() {
+  const options = { include: ["**/index*"], exclude: [], sourcemap: false };
+  let filter = createFilter(options.include, options.exclude);
+
+  const citationCff = fs.readFileSync("./CITATION.cff", "utf-8").toString();
+  const citationJson = () => {
+    try {
+      return JSON.stringify(
+        Cite(citationCff).format("data", {
+          format: "object",
+          lang: "en-us",
+        }),
+        null,
+        2
+      );
+    } catch (error) {
+      this.error(`Error building citation from CITATION.cff: ${error.message}`);
+    }
+  };
+
   return {
     name: "rollup-plugin-cff-to-json",
     version: "1.0.0",
-
-    generateBundle() {
-      const srcDir = options.srcDir || __dirname;
-      const indexFilePath = path.join(srcDir, "index.js"); // Assume index.js is in src
-
-      const updateCitations = (indexFilePath, citationJson) => {
-        let fileContent = fs.readFileSync(indexFilePath, "utf-8");
-        fileContent = fileContent.replace(/`{citationJson}`/g, citationJson);
-        fs.writeFileSync(indexFilePath, fileContent, "utf-8");
-      };
-
-      const templateDir = path.dirname(srcDir);
-      const cffFilePath = path.join(templateDir, "CITATION.cff"); // Assume CITATION.cff is top level
-
-      try {
-        let cffCitation = fs.readFileSync(cffFilePath, "utf-8").toString();
-        Cite.async(cffCitation).then((data) => {
-          const citationJson = JSON.stringify(
-            data.format("data", {
-              format: "object",
-              lang: "en-US",
-            }),
-            null,
-            2
-          );
-          updateCitations(indexFilePath, citationJson);
-        });
-      } catch (error) {
-        this.error(`Error building citation from CITATION.cff: ${error.message}`);
+    transform: function (code, id) {
+      //console.log(typeof id);
+      console.log(options.include);
+      console.log(id);
+      console.log(filter(id));
+      if (!filter(id) || (extname(id) !== ".js" && extname(id) !== ".ts")) return;
+      console.log("transforming: " + id);
+      const magicString = new MagicString(code);
+      const targetString = "citation: []";
+      const citationString = "citation: " + citationJson();
+      const startIndex = code.indexOf(targetString);
+      if (startIndex !== -1) {
+        magicString.overwrite(startIndex, startIndex + targetString.length, citationString);
+      } else {
+        this.error(`Error replacing citation string in ${id}`);
       }
+
+      return {
+        code: magicString.toString(),
+      };
     },
   };
 }
-
-module.exports = cffToJsonPlugin;
