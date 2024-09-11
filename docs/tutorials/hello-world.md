@@ -45,7 +45,7 @@ To use jsPsych, add a `<script>` tag to load the library. We'll load the library
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@8.0.1"></script>
+    <script src="https://unpkg.com/jspsych@8.0.2"></script>
   </head>
   <body></body>
 </html>
@@ -60,8 +60,8 @@ You may also want to import the jsPsych stylesheet, which applies a basic set of
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@8.0.1"></script>
-    <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@8.0.2"></script>
+    <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
 </html>
@@ -76,8 +76,8 @@ To add JavaScript code directly to the webpage we need to add a pair of `<script
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@8.0.1"></script>
-    <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@8.0.2"></script>
+    <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
@@ -92,8 +92,8 @@ To initialize jsPsych we use the `initJsPsych()` function and assign the output 
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@8.0.1"></script>
-    <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@8.0.2"></script>
+    <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
@@ -111,9 +111,9 @@ For this demo we want to show some text on the screen. This is exactly what the 
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@8.0.1"></script>
+    <script src="https://unpkg.com/jspsych@8.0.2"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
-    <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
@@ -129,9 +129,9 @@ Once the plugin is loaded we can create a trial using the plugin. To declare a t
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@8.0.1"></script>
+    <script src="https://unpkg.com/jspsych@8.0.2"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
-    <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>
@@ -154,9 +154,9 @@ Now that we have the trial defined we need to tell jsPsych to run an experiment 
 <html>
   <head>
     <title>My experiment</title>
-    <script src="https://unpkg.com/jspsych@8.0.1"></script>
+    <script src="https://unpkg.com/jspsych@8.0.2"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
-    <link href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <link href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css" rel="stylesheet" type="text/css" />
   </head>
   <body></body>
   <script>

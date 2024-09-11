@@ -1,5 +1,11 @@
 # @jspsych/plugin-free-sort
 
+## 2.0.1
+
+### Patch Changes
+
+- [#3368](https://github.com/jspsych/jsPsych/pull/3368) [`115a3b3d`](https://github.com/jspsych/jsPsych/commit/115a3b3d539b44df91503c58f2eba72c98679c29) Thanks [@Max-Lovell](https://github.com/Max-Lovell)! - Remove uses of Array.from() to improve Qualtrics compatibility
+
 ## 2.0.0
 
 ### Major Changes

@@ -1,6 +1,6 @@
 {
   "name": "jspsych",
-  "version": "8.0.1",
+  "version": "8.0.2",
   "description": "Behavioral experiments in a browser",
   "type": "module",
   "main": "dist/index.cjs",
