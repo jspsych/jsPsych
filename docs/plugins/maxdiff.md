@@ -1,6 +1,6 @@
 # maxdiff
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-maxdiff/CHANGELOG.md).
+Current version: 2.0.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-maxdiff/CHANGELOG.md).
 
 The maxdiff plugin displays a table with rows of alternatives to be selected for two mutually-exclusive categories, typically as 'most' or 'least' on a particular criteria (e.g. importance, preference, similarity). The participant responds by selecting one radio button corresponding to an alternative in both the left and right response columns. The same alternative cannot be endorsed on both the left and right response columns (e.g. 'most' and 'least') simultaneously.
 
@@ -33,7 +33,7 @@ response | object | An object with two keys, `left` and `right`, containing the 
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-maxdiff@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-maxdiff@2.0.1"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

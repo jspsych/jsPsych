@@ -1,5 +1,11 @@
 # @jspsych/plugin-sketchpad
 
+## 2.0.1
+
+### Patch Changes
+
+- [#3368](https://github.com/jspsych/jsPsych/pull/3368) [`4b080ca4`](https://github.com/jspsych/jsPsych/commit/4b080ca4c5060fa085da31d101606f60f6cd5448) Thanks [@Max-Lovell](https://github.com/Max-Lovell)! - Fixed broken event handlers in the sketchpad plugin.
+
 ## 2.0.0
 
 ### Major Changes

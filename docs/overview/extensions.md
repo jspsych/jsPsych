@@ -8,7 +8,7 @@ To use an extension in an experiment, you'll load the extension file via a `<scr
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@8.0.1"></script>
+  <script src="https://unpkg.com/jspsych@8.0.2"></script>
   <script src="https://unpkg.com/@jspsych/extension-example@1.0.0"></script>
 </head>
 ```

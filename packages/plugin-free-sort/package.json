@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-free-sort",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "jsPsych plugin for drag-and-drop sorting of a collection of images",
   "type": "module",
   "main": "dist/index.cjs",

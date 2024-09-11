@@ -86,9 +86,9 @@ In the example below, the default font size is set to 25px throughout the experi
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@8.0.1"></script>
+  <script src="https://unpkg.com/jspsych@8.0.2"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css">
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css">
   <style> 
     .jspsych-display-element {
       font-size: 25px;
@@ -105,9 +105,9 @@ This example shows how to add a custom CSS file in addition to the styles provid
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@8.0.1"></script>
+  <script src="https://unpkg.com/jspsych@8.0.2"></script>
   <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.0.0"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css">
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css">
   <link rel="stylesheet" href="my_experiment_style.css">
 </head>
 ```
@@ -138,9 +138,9 @@ You can use a static `css_classes` parameter value if you always want to apply t
 
 ```html
  <head>
-  <script src="https://unpkg.com/jspsych@8.0.1"></script>
+  <script src="https://unpkg.com/jspsych@8.0.2"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css">
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css">
   <style> 
     .fixation {font-size: 90px; font-weight: bold; color: gray;}
   </style>
@@ -176,9 +176,9 @@ In the example below, the CSS selector `.left-align #stimulus` selects the eleme
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@8.0.1"></script>
+  <script src="https://unpkg.com/jspsych@8.0.2"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css">
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css">
   <style> 
     .left-align #stimulus {text-align: left; width: 600px;}
     .right-align #stimulus {text-align: right; width: 600px;}
@@ -206,9 +206,9 @@ It's also possible to pass multiple class names to the `css_classes` parameter. 
 
 ```html
 <head>
-  <script src="https://unpkg.com/jspsych@8.0.1"></script>
+  <script src="https://unpkg.com/jspsych@8.0.2"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.0.0"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych@8.0.1/css/jspsych.css">
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@8.0.2/css/jspsych.css">
   <style> 
     .left-align #stimulus {text-align: left; width: 600px;}
     .right-align #stimulus {text-align: right; width: 600px;}
