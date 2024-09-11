@@ -40,7 +40,7 @@
     "@sucrase/jest-plugin": "3.0.0",
     "@types/gulp": "4.0.17",
     "@types/jest": "29.5.8",
-    "alias-hq": "6.2.3",
+    "alias-hq": "6.2.4",
     "canvas": "^2.11.2",
     "esbuild": "0.23.1",
     "gulp": "5.0.0",
