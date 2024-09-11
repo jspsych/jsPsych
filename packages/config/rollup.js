@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "path";
 
 import commonjs from "@rollup/plugin-commonjs";
+import json from "@rollup/plugin-json";
 import resolve from "@rollup/plugin-node-resolve";
 import { defineConfig } from "rollup";
 import dts from "rollup-plugin-dts";
@@ -29,7 +30,7 @@ const makeConfig = ({
   outputOptions = {},
   globalOptions = {},
   iifeOutputOptions = {},
-  plugins = [],
+  additionalPlugins = [],
   isNodeOnlyBuild = false,
 }) => {
   const input = "src/index.ts";
@@ -43,7 +44,7 @@ const makeConfig = ({
 
   /** @type{import("rollup-plugin-esbuild").Options} */
   const esBuildPluginOptions = {
-    loaders: { ".json": "json" },
+    //loaders: { ".json": "json" },
   };
 
   /** @type{import("@rollup/plugin-commonjs").RollupCommonJSOptions} */
@@ -73,8 +74,9 @@ const makeConfig = ({
       ...globalOptions,
       input,
       plugins: [
-        ...plugins,
+        ...additionalPlugins,
         externals(),
+        json(),
         esbuild({ ...esBuildPluginOptions, target: "node18" }),
         commonjs(commonjsPluginOptions),
       ],
@@ -99,11 +101,12 @@ const makeConfig = ({
       ...globalOptions,
       input,
       plugins: [
-        ...plugins,
+        ...additionalPlugins,
         externals({ deps: false }),
         resolve({ preferBuiltins: false }),
-        esbuild({ ...esBuildPluginOptions, target: "esnext" }),
+        json(),
         commonjs(commonjsPluginOptions),
+        esbuild({ ...esBuildPluginOptions, target: "esnext" }),
       ],
       output: {
         file: `${destination}.browser.js`,
@@ -119,9 +122,10 @@ const makeConfig = ({
       ...globalOptions,
       input,
       plugins: [
-        ...plugins,
+        ...additionalPlugins,
         externals({ deps: false }),
         resolve({ preferBuiltins: false }),
+        json(),
         esbuild({ ...esBuildPluginOptions, target: "es2015", minify: true }),
         commonjs(commonjsPluginOptions),
       ],
@@ -150,7 +154,7 @@ export const makeRollupConfig = (iifeName) =>
     outputOptions: {
       exports: "default",
       globals: { jspsych: "jsPsychModule" },
-      plugins: [cffToJsonPlugin()],
+      additionalPlugins: [cffToJsonPlugin()],
     },
     globalOptions: { external: ["jspsych"] },
     iifeOutputOptions: { name: iifeName },
