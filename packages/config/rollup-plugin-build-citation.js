@@ -11,45 +11,53 @@ export default function cffToJsonPlugin() {
   const options = { include: ["**/index*"], exclude: [], sourcemap: false };
   let filter = createFilter(options.include, options.exclude);
 
-  const citationCff = fs.readFileSync("./CITATION.cff", "utf-8").toString();
-  const citationJson = () => {
-    try {
-      return JSON.stringify(
-        Cite(citationCff).format("data", {
-          format: "object",
-          lang: "en-us",
-        }),
-        null,
-        2
-      );
-    } catch (error) {
-      this.error(`Error building citation from CITATION.cff: ${error.message}`);
-    }
-  };
-
   return {
     name: "rollup-plugin-cff-to-json",
     version: "1.0.0",
     transform: function (code, id) {
-      console.log("citation plugin called");
-      console.log(options.include);
-      console.log(id);
-      console.log(filter(id));
       if (!filter(id) || (extname(id) !== ".js" && extname(id) !== ".ts")) return;
-      console.log("transforming: " + id);
       const magicString = new MagicString(code);
       const targetString = "citation: []";
-      const citationString = "citation: " + citationJson();
+
+      // Try to find CITATION.cff file
+      const citationCff = (() => {
+        try {
+          fs.readFileSync("./CITATION.cff", "utf-8").toString();
+        } catch (error) {
+          console.log(`Error finding CITATION.cff: ${error.message}`);
+          return null;
+        }
+      })();
+
+      // Try to convert CITATION.cff to JSON
+      const citationJson = (() => {
+        if (!citationCff) return null;
+        try {
+          return JSON.stringify(
+            Cite(citationCff).format("data", {
+              format: "object",
+              lang: "en-us",
+            }),
+            null,
+            2
+          );
+        } catch (error) {
+          console.log(`Error building citation from CITATION.cff: ${error.message}`);
+          return null;
+        }
+      })();
+
+      // Replace target string with citation JSON
+      if (!citationJson) return { code: code };
+      const citationString = "citation: " + citationJson;
       const startIndex = code.indexOf(targetString);
       if (startIndex !== -1) {
         magicString.overwrite(startIndex, startIndex + targetString.length, citationString);
+        return { code: magicString.toString() };
       } else {
         this.error(`Error replacing citation string in ${id}`);
+        return { code: code };
       }
-
-      return {
-        code: magicString.toString(),
-      };
     },
   };
 }
