@@ -31,7 +31,7 @@ export default function cffToJsonPlugin() {
     name: "rollup-plugin-cff-to-json",
     version: "1.0.0",
     transform: function (code, id) {
-      //console.log(typeof id);
+      console.log("citation plugin called");
       console.log(options.include);
       console.log(id);
       console.log(filter(id));

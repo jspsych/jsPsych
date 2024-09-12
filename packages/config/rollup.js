@@ -154,8 +154,8 @@ export const makeRollupConfig = (iifeName) =>
     outputOptions: {
       exports: "default",
       globals: { jspsych: "jsPsychModule" },
-      additionalPlugins: [cffToJsonPlugin()],
     },
+    additionalPlugins: [cffToJsonPlugin()],
     globalOptions: { external: ["jspsych"] },
     iifeOutputOptions: { name: iifeName },
   });
