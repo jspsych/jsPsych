@@ -22,7 +22,7 @@ export default function cffToJsonPlugin() {
       // Try to find CITATION.cff file
       const citationCff = (() => {
         try {
-          fs.readFileSync("./CITATION.cff", "utf-8").toString();
+          return fs.readFileSync("./CITATION.cff", "utf-8").toString();
         } catch (error) {
           console.log(`Error finding CITATION.cff: ${error.message}`);
           return null;
@@ -42,13 +42,15 @@ export default function cffToJsonPlugin() {
             2
           );
         } catch (error) {
-          console.log(`Error building citation from CITATION.cff: ${error.message}`);
+          console.log(`Error converting CITATION.cff to JSON: ${error.message}`);
           return null;
         }
       })();
 
       // Replace target string with citation JSON
-      if (!citationJson) return { code: code };
+      if (!citationJson) {
+        return { code: code };
+      }
       const citationString = "citation: " + citationJson;
       const startIndex = code.indexOf(targetString);
       if (startIndex !== -1) {
