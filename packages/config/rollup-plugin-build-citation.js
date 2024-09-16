@@ -17,7 +17,6 @@ export default function cffToJsonPlugin() {
     transform: function (code, id) {
       if (!filter(id) || (extname(id) !== ".js" && extname(id) !== ".ts")) return;
       const magicString = new MagicString(code);
-      const targetString = "citation: []";
 
       // Try to find CITATION.cff file
       const citationCff = (() => {
@@ -33,27 +32,55 @@ export default function cffToJsonPlugin() {
       const citationJson = (() => {
         if (!citationCff) return null;
         try {
-          return JSON.stringify(
-            Cite(citationCff).format("data", {
-              format: "object",
-              lang: "en-us",
-            }),
-            null,
-            2
-          );
+          return Cite(citationCff).format("data", {
+            format: "object",
+            lang: "en-us",
+          });
         } catch (error) {
           console.log(`Error converting CITATION.cff to JSON: ${error.message}`);
           return null;
         }
       })();
 
-      // Replace target string with citation JSON
-      if (!citationJson) {
+      // Try to convert CITATION.cff to APA string
+      const citationApa = (() => {
+        try {
+          return Cite(citationJson).format("data", {
+            format: "html",
+            template: "citation-apa",
+            lang: "en-us",
+          });
+        } catch (error) {
+          console.log(`Error converting CITATION.cff to APA string: ${error.message}`);
+          return null;
+        }
+      })();
+
+      // Try to convert CITATION.cff to bibtex string
+      const citationBibtex = (() => {
+        if (!citationJson) return null;
+        try {
+          let bibtexCitation = Cite(citationJson).format("data", {
+            format: "html",
+            template: "citation-bibtex",
+            lang: "en-us",
+          });
+          return bibtexCitation;
+        } catch (error) {
+          console.log(`Error converting CITATION.cff to bibtex string: ${error.message}`);
+          return null;
+        }
+      })();
+
+      // Replace target string with citation APA and bibtex strings
+      if (!citationApa && !citationBibtex) {
         return { code: code };
       }
-      const citationString = "citation: " + citationJson;
+      const citationString = `citation: { "apa": "${citationApa}", "bibtex": "${citationBibtex}" }`;
+      const targetString = "citation: []";
       const startIndex = code.indexOf(targetString);
       if (startIndex !== -1) {
+        console.log(citationApa);
         magicString.overwrite(startIndex, startIndex + targetString.length, citationString);
         return { code: magicString.toString() };
       } else {

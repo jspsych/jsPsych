@@ -1,4 +1,3 @@
-import { Cite } from "@citation-js/core";
 import autoBind from "auto-bind";
 // To work with citations
 import { Class } from "type-fest";
@@ -267,19 +266,8 @@ export class JsPsych {
     format: "apa" | "bibtex"
   ) {
     plugins.map((plugin) => {
-      let pluginCite = Cite(plugin["info"].citation);
-      let apaCitation = pluginCite.format("data", {
-        format: "string",
-        template: "citation-apa",
-        lang: "en-us",
-      });
-      let bibtexCitation = pluginCite.format("data", {
-        format: "string",
-        template: "citation-bibtex",
-        lang: "en-us",
-      });
-      console.log(apaCitation);
-      console.log(bibtexCitation);
+      let pluginCitation = plugin["info"].citation;
+      console.log(format == "apa" ? pluginCitation.apa : pluginCitation.bibtex);
     });
   }
 
