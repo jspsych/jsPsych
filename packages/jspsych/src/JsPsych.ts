@@ -1,9 +1,13 @@
 import autoBind from "auto-bind";
+// To work with citations
+import { Class } from "type-fest";
 
 import { version } from "../package.json";
 import { ExtensionManager, ExtensionManagerDependencies } from "./ExtensionManager";
 import { JsPsychData, JsPsychDataDependencies } from "./modules/data";
+import { JsPsychExtension } from "./modules/extensions";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
+import { JsPsychPlugin } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
@@ -255,6 +259,16 @@ export class JsPsych {
 
   getTimeline() {
     return this.timeline?.description.timeline;
+  }
+
+  getCitations(
+    plugins: Array<Class<JsPsychPlugin<any>> | JsPsychExtension>,
+    format: "apa" | "bibtex"
+  ) {
+    plugins.map((plugin) => {
+      let pluginCitation = plugin["info"].citation;
+      console.log(format == "apa" ? pluginCitation.apa : pluginCitation.bibtex);
+    });
   }
 
   get extensions() {
