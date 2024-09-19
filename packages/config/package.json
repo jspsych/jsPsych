@@ -66,5 +66,8 @@
       "jscodeshift": "0.16.1",
       "inquirer": "10.1.6"
     }
+  },
+  "devDependencies": {
+    "yaml": "^2.5.1"
   }
 }

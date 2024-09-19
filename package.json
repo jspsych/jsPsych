@@ -55,6 +55,8 @@
   "dependencies": {
     "@citation-js/core": "^0.7.14",
     "@citation-js/plugin-software-formats": "^0.6.1",
+    "@citation-js/plugin-bibtex": "^0.7.14",
+    "@citation-js/plugin-csl": "^0.7.14",
     "symlink": "^2.1.0"
   }
 }
