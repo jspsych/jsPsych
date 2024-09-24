@@ -163,9 +163,9 @@ const face_name_procedure = {
 
 ### Using timeline variables in a function
 
-Continung the example from the previous section, what if we wanted to show the name with the face, combining the two variables together? 
+Continuing the example from the previous section, what if we wanted to show the name with the face, combining the two variables together? 
 To do this, we can use a [dynamic parameter](dynamic-parameters.md) (a function) to create an HTML-string that uses both variables in a single parameter.
-However, because we are getting the value of a timeline variable in a function, we need to use `jsPsych.evaluateTimelineVariable()` instead of `jsPsych.timelineVariable()`. `.evaluateTimelineVariable()` immediately gets the value of the variable when it is called, while `.timelineVariable()` creates a placeholder that jsPsych evaluates at the appropriate time during the execution of the experiment.
+However, because we are getting the value of a timeline variable in a function, we need to use `jsPsych.evaluateTimelineVariable()` instead of `jsPsych.timelineVariable()`. Calling `.evaluateTimelineVariable()` immediately gets the value of the variable, while `.timelineVariable()` creates a placeholder that jsPsych evaluates at the appropriate time during the execution of the experiment.
 The value of the `stimulus` parameter will be a function that returns an HTML string that contains both the image and the name. 
 
 ```javascript
@@ -227,7 +227,7 @@ There are also sampling methods that can be used to select a set of trials from 
 Sampling is declared by creating a `sample` parameter. 
 The `sample` parameter is given an object of arguments. 
 The `type` parameter in this object controls the type of sampling that is done. 
-Valid values for `type` are 
+Valid values for `type` are:
 
 * `"with-replacement"`: Sample `size` items from the timeline variables with the possibility of choosing the same item multiple time.
 * `"without-replacement"`: Sample `size` items from timeline variables, with each item being selected a maximum of 1 time.
