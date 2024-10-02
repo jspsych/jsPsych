@@ -10,7 +10,7 @@ As of version 7.0, plugins are [JavaScript Classes](https://developer.mozilla.or
 
 ### Templates
 
-Plugins can be written in either plain JavaScript or in TypeScript. Template files for both [JavaScript](https://github.com/jspsych/jspsych-contrib/blob/main/packages/plugin-template/index.js) and [TypeScript](https://github.com/jspsych/jspsych-contrib/blob/main/packages/plugin-template-ts/src/index.ts) are available in the [jspsych-contrib repository](https://github.com/jspsych/jspsych-contrib/).
+Plugins can be written in either plain JavaScript or in TypeScript. Template files for both [JavaScript](https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-js/src/index.js) and [TypeScript](https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-ts/src/index.ts) are available in the [jspsych-contrib repository](https://github.com/jspsych/jspsych-contrib/).
 
 ## Plugin components
 
