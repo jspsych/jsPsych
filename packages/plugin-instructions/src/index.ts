@@ -1,5 +1,4 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
-import { parameterPathArrayToString } from "jspsych/src/timeline/util";
 
 import { version } from "../package.json";
 

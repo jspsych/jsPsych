@@ -106,7 +106,7 @@ describe("Trial", () => {
         await trial1.run();
         expect(trial1.getResult()).toEqual(expect.objectContaining({ my: "result" }));
 
-        TestPlugin.trial = async (display_element, trial, on_load) => {
+        TestPlugin.trial = async (_display_element, _trial, on_load) => {
           on_load();
           dependencies.finishTrialPromise.resolve({ finishTrial: "result" });
           return { my: "result" };

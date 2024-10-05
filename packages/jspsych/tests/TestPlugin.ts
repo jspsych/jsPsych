@@ -1,5 +1,5 @@
 import { flushPromises } from "@jspsych/test-utils";
-import { JsPsych, JsPsychPlugin, TrialType } from "jspsych";
+import { JsPsychPlugin, TrialType } from "jspsych";
 
 import { ParameterInfos } from "../src/modules/plugins";
 import { SimulationMode, SimulationOptions, TrialResult } from "../src/timeline";
@@ -88,7 +88,7 @@ class TestPlugin implements JsPsychPlugin<typeof testPluginInfo> {
     TestPlugin.setImmediateFinishTrialMode();
   }
 
-  constructor(private jsPsych: JsPsych) {}
+  constructor() {}
 
   trial = jest.fn(TestPlugin.trial);
   simulate = jest.fn(TestPlugin.simulate);

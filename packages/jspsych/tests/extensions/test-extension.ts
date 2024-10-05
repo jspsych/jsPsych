@@ -1,4 +1,4 @@
-import { JsPsych, JsPsychExtension } from "../../src";
+import { JsPsychExtension } from "../../src";
 
 export class TestExtension implements JsPsychExtension {
   static info = {
@@ -7,7 +7,7 @@ export class TestExtension implements JsPsychExtension {
     data: {},
   };
 
-  constructor(private jsPsych: JsPsych) {}
+  constructor() {}
 
   // required, will be called at initJsPsych
   // should return a Promise
