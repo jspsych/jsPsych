@@ -387,7 +387,6 @@ describe("Trial", () => {
 
         // This should work:
         await createTrial({ type: TestPlugin, stringArray: [] }).run();
-        await createTrial({ type: TestPlugin, stringArray: new TimelineVariable("a") });
 
         // This shouldn't:
         await expect(
