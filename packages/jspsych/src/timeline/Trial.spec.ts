@@ -436,6 +436,8 @@ describe("Trial", () => {
                 return TestPlugin;
               case "x":
                 return "foo";
+              case "y":
+                return ["foo", "bar"];
               default:
                 return undefined;
             }
@@ -444,17 +446,19 @@ describe("Trial", () => {
         const trial = createTrial({
           type: new TimelineVariable("t"),
           requiredString: new TimelineVariable("x"),
+          stringArray: new TimelineVariable("y"),
           requiredComplexNested: { requiredChild: () => new TimelineVariable("x") },
           requiredComplexNestedArray: [{ requiredChild: () => new TimelineVariable("x") }],
         });
 
         await trial.run();
 
-        // The `x` timeline variables should have been replaced with `foo`
+        // The `x` and `y` timeline variables should have been evaluated
         expect(trial.pluginInstance.trial).toHaveBeenCalledWith(
           expect.anything(),
           expect.objectContaining({
             requiredString: "foo",
+            stringArray: ["foo", "bar"],
             requiredComplexNested: expect.objectContaining({ requiredChild: "foo" }),
             requiredComplexNestedArray: [expect.objectContaining({ requiredChild: "foo" })],
           }),
