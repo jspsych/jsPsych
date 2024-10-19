@@ -6,7 +6,5 @@
       // map jspsych-contrib package imports directly to their source files
       "@jspsych-contrib/*": ["../*/src"]
     },
-    // allow json resolving to automatically pull package.json info
-    "resolveJsonModule": true
   }
 }
