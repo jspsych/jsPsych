@@ -2,6 +2,9 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 import { version } from "../package.json";
 
+declare const __APACITATION__: string;
+declare const __BIBTEXCITATION__: string;
+
 const info = <const>{
   name: "html-keyboard-response",
   version: version,
@@ -79,6 +82,10 @@ const info = <const>{
     stimulus: {
       type: ParameterType.STRING,
     },
+  },
+  citation: {
+    apa: __APACITATION__,
+    bibtex: __BIBTEXCITATION__,
   },
 };
 

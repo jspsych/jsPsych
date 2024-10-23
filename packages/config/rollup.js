@@ -9,6 +9,8 @@ import esbuild from "rollup-plugin-esbuild";
 import externals from "rollup-plugin-node-externals";
 import ts from "typescript";
 
+import generateCitation from "./generateCitation.js";
+
 const getTsCompilerOptions = () => {
   const cwd = process.cwd();
   return ts.parseJsonConfigFileContent(
@@ -38,10 +40,18 @@ const makeConfig = ({
     ...outputOptions,
   };
 
+  const citationData = generateCitation();
+
   /** @type{import("rollup-plugin-esbuild").Options} */
   const esBuildPluginOptions = {
+    define: {
+      __APACITATION__: JSON.stringify(citationData.apa),
+      __BIBTEXCITATION__: JSON.stringify(citationData.bibtex),
+    },
     loaders: { ".json": "json" },
   };
+
+  console.log("esBuildPluginOptions", esBuildPluginOptions);
 
   /** @type{import("@rollup/plugin-commonjs").RollupCommonJSOptions} */
   const commonjsPluginOptions = {
@@ -164,8 +174,10 @@ export const makeCoreRollupConfig = () =>
 /**
  * Returns the rollup configuration for Node.js-only packages
  */
-export const makeNodeRollupConfig = () =>
-  makeConfig({
+export const makeNodeRollupConfig = () => {
+  console.log("jspsych Roll up config called");
+  return makeConfig({
     globalOptions: { external: ["jspsych"] },
     isNodeOnlyBuild: true,
   });
+};
