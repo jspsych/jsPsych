@@ -10,7 +10,7 @@ import esbuild from "rollup-plugin-esbuild";
 import externals from "rollup-plugin-node-externals";
 import ts from "typescript";
 
-import cffToJsonPlugin from "./rollup-plugin-build-citation.js";
+import generateCitation from "./generateCitation.js";
 
 const getTsCompilerOptions = () => {
   const cwd = process.cwd();
@@ -30,12 +30,12 @@ const makeConfig = ({
   outputOptions = {},
   globalOptions = {},
   iifeOutputOptions = {},
-  additionalPlugins = [],
   isNodeOnlyBuild = false,
 }) => {
   const input = "src/index.ts";
   const destinationDirectory = "dist";
   const destination = `${destinationDirectory}/index`;
+  const citationData = JSON.parse(fs.readFileSync("citation-data.json", "utf-8"));
 
   outputOptions = {
     sourcemap: true,
@@ -44,7 +44,10 @@ const makeConfig = ({
 
   /** @type{import("rollup-plugin-esbuild").Options} */
   const esBuildPluginOptions = {
-    //loaders: { ".json": "json" },
+    define: {
+      __APACITATION__: citationData.apa,
+      __BIBTEXCITATION__: citationData.bibtex,
+    },
   };
 
   /** @type{import("@rollup/plugin-commonjs").RollupCommonJSOptions} */
@@ -74,7 +77,6 @@ const makeConfig = ({
       ...globalOptions,
       input,
       plugins: [
-        ...additionalPlugins,
         externals(),
         json(),
         esbuild({ ...esBuildPluginOptions, target: "node18" }),
@@ -101,7 +103,6 @@ const makeConfig = ({
       ...globalOptions,
       input,
       plugins: [
-        ...additionalPlugins,
         externals({ deps: false }),
         resolve({ preferBuiltins: false }),
         json(),
@@ -122,7 +123,6 @@ const makeConfig = ({
       ...globalOptions,
       input,
       plugins: [
-        ...additionalPlugins,
         externals({ deps: false }),
         resolve({ preferBuiltins: false }),
         json(),
@@ -155,7 +155,6 @@ export const makeRollupConfig = (iifeName) =>
       exports: "default",
       globals: { jspsych: "jsPsychModule" },
     },
-    additionalPlugins: [cffToJsonPlugin()],
     globalOptions: { external: ["jspsych"] },
     iifeOutputOptions: { name: iifeName },
   });
@@ -175,8 +174,10 @@ export const makeCoreRollupConfig = () =>
 /**
  * Returns the rollup configuration for Node.js-only packages
  */
-export const makeNodeRollupConfig = () =>
-  makeConfig({
+export const makeNodeRollupConfig = () => {
+  console.log("jspsych Roll up config called");
+  return makeConfig({
     globalOptions: { external: ["jspsych"] },
     isNodeOnlyBuild: true,
   });
+};

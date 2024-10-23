@@ -7,6 +7,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
+    "prebuild": "node generateCitation.js",
     "build": "turbo run build",
     "build:archive": "gulp createCoreDistArchive",
     "update-unpkg-links": "gulp updateUnpkgLinks",
@@ -54,9 +55,10 @@
   },
   "dependencies": {
     "@citation-js/core": "^0.7.14",
-    "@citation-js/plugin-software-formats": "^0.6.1",
     "@citation-js/plugin-bibtex": "^0.7.14",
     "@citation-js/plugin-csl": "^0.7.14",
+    "@citation-js/plugin-software-formats": "^0.6.1",
+    "link": "^2.1.1",
     "symlink": "^2.1.0"
   }
 }

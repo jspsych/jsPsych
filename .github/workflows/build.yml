@@ -35,6 +35,9 @@ jobs:
       - name: Check types
         run: npm run tsc
 
+      - name: Prebuild citation
+        run: npm run prebuild
+
       - name: Build packages
         run: npm run build
 
