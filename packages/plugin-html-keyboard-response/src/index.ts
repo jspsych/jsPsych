@@ -2,8 +2,8 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 import { version } from "../package.json";
 
-let __APACITATION__ = "";
-let __BIBTEXCITATION__ = "";
+declare const __APACITATION__: string;
+declare const __BIBTEXCITATION__: string;
 
 const info = <const>{
   name: "html-keyboard-response",

@@ -2,7 +2,6 @@ import { readFileSync } from "node:fs";
 import path from "path";
 
 import commonjs from "@rollup/plugin-commonjs";
-import json from "@rollup/plugin-json";
 import resolve from "@rollup/plugin-node-resolve";
 import { defineConfig } from "rollup";
 import dts from "rollup-plugin-dts";
@@ -52,6 +51,8 @@ const makeConfig = ({
     loaders: { ".json": "json" },
   };
 
+  console.log("esBuildPluginOptions", esBuildPluginOptions);
+
   /** @type{import("@rollup/plugin-commonjs").RollupCommonJSOptions} */
   const commonjsPluginOptions = {
     extensions: [".js", ".json"],
@@ -80,7 +81,6 @@ const makeConfig = ({
       input,
       plugins: [
         externals(),
-        json(),
         esbuild({ ...esBuildPluginOptions, target: "node18" }),
         commonjs(commonjsPluginOptions),
       ],
@@ -107,8 +107,8 @@ const makeConfig = ({
       plugins: [
         externals({ deps: false }),
         resolve({ preferBuiltins: false }),
-        commonjs(commonjsPluginOptions),
         esbuild({ ...esBuildPluginOptions, target: "esnext" }),
+        commonjs(commonjsPluginOptions),
       ],
       output: {
         file: `${destination}.browser.js`,
@@ -126,7 +126,6 @@ const makeConfig = ({
       plugins: [
         externals({ deps: false }),
         resolve({ preferBuiltins: false }),
-        json(),
         esbuild({ ...esBuildPluginOptions, target: "es2015", minify: true }),
         commonjs(commonjsPluginOptions),
       ],
