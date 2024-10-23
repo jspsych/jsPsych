@@ -49,6 +49,7 @@ const makeConfig = ({
       __APACITATION__: JSON.stringify(citationData.apa),
       __BIBTEXCITATION__: JSON.stringify(citationData.bibtex),
     },
+    loaders: { ".json": "json" },
   };
 
   /** @type{import("@rollup/plugin-commonjs").RollupCommonJSOptions} */
@@ -106,7 +107,6 @@ const makeConfig = ({
       plugins: [
         externals({ deps: false }),
         resolve({ preferBuiltins: false }),
-        json(),
         commonjs(commonjsPluginOptions),
         esbuild({ ...esBuildPluginOptions, target: "esnext" }),
       ],

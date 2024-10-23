@@ -29,7 +29,7 @@ export default function generateCitation() {
   })();
 
   if (!citationCff) {
-    return JSON.stringify({ apa: "", bibtex: "" });
+    return { apa: "", bibtex: "" };
   }
 
   // Try to convert CITATION.cff to APA string
