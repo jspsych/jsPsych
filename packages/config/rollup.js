@@ -41,11 +41,13 @@ const makeConfig = ({
     ...outputOptions,
   };
 
+  const citationData = generateCitation();
+
   /** @type{import("rollup-plugin-esbuild").Options} */
   const esBuildPluginOptions = {
     define: {
-      __APACITATION__: generateCitation().apa,
-      __BIBTEXCITATION__: generateCitation().bibtex,
+      __APACITATION__: JSON.stringify(citationData.apa),
+      __BIBTEXCITATION__: JSON.stringify(citationData.bibtex),
     },
   };
 

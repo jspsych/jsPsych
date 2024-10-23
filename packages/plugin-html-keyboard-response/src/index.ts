@@ -2,6 +2,9 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 import { version } from "../package.json";
 
+let __APACITATION__ = "";
+let __BIBTEXCITATION__ = "";
+
 const info = <const>{
   name: "html-keyboard-response",
   version: version,
@@ -80,7 +83,10 @@ const info = <const>{
       type: ParameterType.STRING,
     },
   },
-  citation: [],
+  citation: {
+    apa: __APACITATION__,
+    bibtex: __BIBTEXCITATION__,
+  },
 };
 
 type Info = typeof info;

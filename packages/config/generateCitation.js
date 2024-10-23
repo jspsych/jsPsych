@@ -37,11 +37,12 @@ export default function generateCitation() {
     try {
       const apaCite = new Cite(citationCff);
       apaCite["data"] = preferredCitation ? apaCite["data"].slice(1) : apaCite["data"];
-      return (citationApa = apaCite.format("bibliography", {
+      const citationApa = apaCite.format("bibliography", {
         format: "text",
         template: "apa",
         lang: "en-us",
-      }));
+      });
+      return citationApa;
     } catch (error) {
       console.log(`Error converting CITATION.cff to APA string: ${error.message}`);
       return "";
@@ -53,11 +54,12 @@ export default function generateCitation() {
     try {
       const bibtexCite = new Cite(citationCff);
       bibtexCite["data"] = preferredCitation ? bibtexCite["data"].slice(1) : bibtexCite["data"];
-      return (citationBibtex = bibtexCite.format("bibtex", {
+      const citationBibtex = bibtexCite.format("bibtex", {
         format: "text",
         template: "bibtex",
         lang: "en-us",
-      }));
+      });
+      return citationBibtex;
     } catch (error) {
       console.log(`Error converting CITATION.cff to bibtex string: ${error.message}`);
       return null;
@@ -70,5 +72,5 @@ export default function generateCitation() {
     bibtex: citationBibtex.replace(/\n/g, " "),
   };
 
-  return JSON.stringify(citationData);
+  return citationData;
 }
