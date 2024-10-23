@@ -2,7 +2,6 @@ import { readFileSync } from "node:fs";
 import path from "path";
 
 import commonjs from "@rollup/plugin-commonjs";
-import json from "@rollup/plugin-json";
 import resolve from "@rollup/plugin-node-resolve";
 import { defineConfig } from "rollup";
 import dts from "rollup-plugin-dts";
@@ -45,11 +44,16 @@ const makeConfig = ({
 
   /** @type{import("rollup-plugin-esbuild").Options} */
   const esBuildPluginOptions = {
+    loaders: { ".json": "json" },
     define: {
-      __APACITATION__: JSON.stringify(citationData.apa),
-      __BIBTEXCITATION__: JSON.stringify(citationData.bibtex),
+      // __APACITATION__: `'${JSON.stringify(citationData.apa)}'`,
+      // __BIBTEXCITATION__: `'${JSON.stringify(citationData.bibtex)}'`,
+      __APACITATION__: '"hello"',
+      __BIBTEXCITATION__: '"world"',
     },
   };
+
+  console.log("esBuildPluginOptions", esBuildPluginOptions);
 
   /** @type{import("@rollup/plugin-commonjs").RollupCommonJSOptions} */
   const commonjsPluginOptions = {
@@ -79,7 +83,6 @@ const makeConfig = ({
       input,
       plugins: [
         externals(),
-        json(),
         esbuild({ ...esBuildPluginOptions, target: "node18" }),
         commonjs(commonjsPluginOptions),
       ],
@@ -106,9 +109,8 @@ const makeConfig = ({
       plugins: [
         externals({ deps: false }),
         resolve({ preferBuiltins: false }),
-        json(),
-        commonjs(commonjsPluginOptions),
         esbuild({ ...esBuildPluginOptions, target: "esnext" }),
+        commonjs(commonjsPluginOptions),
       ],
       output: {
         file: `${destination}.browser.js`,
@@ -126,7 +128,6 @@ const makeConfig = ({
       plugins: [
         externals({ deps: false }),
         resolve({ preferBuiltins: false }),
-        json(),
         esbuild({ ...esBuildPluginOptions, target: "es2015", minify: true }),
         commonjs(commonjsPluginOptions),
       ],
