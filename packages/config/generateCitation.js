@@ -72,9 +72,3 @@ export default function generateCitation() {
 
   return JSON.stringify(citationData);
 }
-
-// Execute and write to file
-const citationData = generateCitationData();
-fs.writeFileSync("citation-data.json", citationData);
-
-console.log("Citation data generated and saved to citation-data.json");

@@ -35,7 +35,6 @@ const makeConfig = ({
   const input = "src/index.ts";
   const destinationDirectory = "dist";
   const destination = `${destinationDirectory}/index`;
-  const citationData = JSON.parse(fs.readFileSync("citation-data.json", "utf-8"));
 
   outputOptions = {
     sourcemap: true,
@@ -45,8 +44,8 @@ const makeConfig = ({
   /** @type{import("rollup-plugin-esbuild").Options} */
   const esBuildPluginOptions = {
     define: {
-      __APACITATION__: citationData.apa,
-      __BIBTEXCITATION__: citationData.bibtex,
+      __APACITATION__: generateCitation().apa,
+      __BIBTEXCITATION__: generateCitation().bibtex,
     },
   };
 

@@ -7,7 +7,6 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
-    "prebuild": "node generateCitation.js",
     "build": "turbo run build",
     "build:archive": "gulp createCoreDistArchive",
     "update-unpkg-links": "gulp updateUnpkgLinks",
