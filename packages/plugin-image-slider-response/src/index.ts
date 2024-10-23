@@ -108,6 +108,11 @@ const info = <const>{
       type: ParameterType.BOOL,
       default: true,
     },
+    /** If true, the slider's value will be displayed in real time below the slider. */
+    value_display: {
+      type: ParameterType.BOOL,
+      default: true,
+    },
   },
   data: {
     /** The path of the image that was displayed. */
@@ -222,7 +227,13 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
         trial.max +
         '" step="' +
         trial.step +
-        '" id="jspsych-image-slider-response-response"></input>';
+        '" id="jspsych-image-slider-response-response" ';
+      if (trial.value_display) {
+        html += 'oninput="this.nextElementSibling.value = this.value"></input>';
+        html += "<output>" + trial.slider_start + "</output>";
+      } else {
+        html += "></input>";
+      }
       html += "<div>";
       for (var j = 0; j < trial.labels.length; j++) {
         var label_width_perc = 100 / (trial.labels.length - 1);
