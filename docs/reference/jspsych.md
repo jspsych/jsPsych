@@ -150,7 +150,7 @@ Ends the experiment, skipping all remaining trials. If the `on_finish` event han
 var trial = {
   type: jsPsychImageKeyboardResponse,
   stimulus: 'image1.jpg',
-  choices: ['y', 'n']
+  choices: ['y', 'n'],
   prompt: '<p>Press "y" to Continue. Press "n" to end the experiment</p>',
   on_finish: function(data){
     if(jsPsych.pluginAPI.compareKeys(data.response, "n")){
