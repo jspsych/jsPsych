@@ -17,7 +17,6 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "isolatedModules": true, // required by Sucrase
-    // required for automatic package versioning and needed for transitive imports of jspsych)
-    "resolveJsonModule": true,
+    "resolveJsonModule": true, // required for automatic package versioning and needed for transitive imports of jspsych
   }
 }
