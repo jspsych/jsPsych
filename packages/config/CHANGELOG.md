@@ -1,5 +1,11 @@
 # @jspsych/config
 
+## 3.0.1
+
+### Patch Changes
+
+- [#3401](https://github.com/jspsych/jsPsych/pull/3401) [`db7bcf82`](https://github.com/jspsych/jsPsych/commit/db7bcf82f6491ac8d02c7c4cf89e42d4ddcde1d9) Thanks [@jadeddelta](https://github.com/jadeddelta)! - allow JSON resolution in contrib repository for usage of package.json in versioning
+
 ## 3.0.0
 
 ### Major Changes

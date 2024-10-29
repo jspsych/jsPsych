@@ -1,6 +1,6 @@
 {
   "name": "jspsych",
-  "version": "8.0.2",
+  "version": "8.0.3",
   "description": "Behavioral experiments in a browser",
   "type": "module",
   "main": "dist/index.cjs",
@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@fontsource/open-sans": "4.5.3",
-    "@jspsych/config": "^3.0.0",
+    "@jspsych/config": "^3.0.1",
     "@types/dom-mediacapture-record": "^1.0.11",
     "base64-inline-loader": "^2.0.1",
     "css-loader": "^6.6.0",
