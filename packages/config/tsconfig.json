@@ -16,6 +16,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "isolatedModules": true // required by Sucrase
+    "isolatedModules": true, // required by Sucrase
+    "resolveJsonModule": true, // required for automatic package versioning and needed for transitive imports of jspsych
   }
 }

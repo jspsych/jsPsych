@@ -7,7 +7,5 @@
       "jspsych": ["../jspsych/src"],
       "@jspsych/*": ["../*/src"]
     },
-    // allow resolving json modules in tests (needed for transitive imports of jspsych)
-    "resolveJsonModule": true
   }
 }
