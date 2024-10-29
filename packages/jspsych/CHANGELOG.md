@@ -1,5 +1,11 @@
 # jspsych
 
+## 8.0.3
+
+### Patch Changes
+
+- [#3384](https://github.com/jspsych/jsPsych/pull/3384) [`860bbaf1`](https://github.com/jspsych/jsPsych/commit/860bbaf1c1995ee531f7b459749ad736099d4e57) Thanks [@joshunrau](https://github.com/joshunrau)! - Improve type definitions for randomization module
+
 ## 8.0.2
 
 ### Patch Changes
