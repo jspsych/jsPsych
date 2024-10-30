@@ -16,14 +16,13 @@ export default function generateCitation() {
       const rawCff = fs.readFileSync("./CITATION.cff", "utf-8").toString();
       const cffData = yaml.parse(rawCff);
       if (cffData["preferred-citation"]) {
-        console.log("Found 'preferred-citation' in CITATION.cff");
         preferredCitation = true;
-      } else {
-        console.log("No 'preferred-citation' found in CITATION.cff");
       }
       return yaml.stringify(rawCff);
     } catch (error) {
-      console.log(`Error finding CITATION.cff: ${error.message}`);
+      console.log(
+        `No CITATION.cff file found: ${error.message}. If you would like to include a citation, please create a CITATION.cff file in the root of your repository.`
+      );
       return null;
     }
   })();
@@ -61,7 +60,7 @@ export default function generateCitation() {
       });
       return citationBibtex;
     } catch (error) {
-      console.log(`Error converting CITATION.cff to bibtex string: ${error.message}`);
+      console.log(`Error converting CITATION.cff to BibTex string: ${error.message}`);
       return null;
     }
   })();

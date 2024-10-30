@@ -45,10 +45,6 @@ const makeConfig = ({
 
   /** @type{import("rollup-plugin-esbuild").Options} */
   const esBuildPluginOptions = {
-    // define: {
-    //   __APACITATION_: JSON.stringify(citationData.apa),
-    //   __BIBTEXCITATION__: JSON.stringify(citationData.bibtex),
-    // },
     loaders: { ".json": "json" },
   };
 
