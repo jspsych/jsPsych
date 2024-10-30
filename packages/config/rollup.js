@@ -42,7 +42,6 @@ const makeConfig = ({
   };
 
   const citationData = generateCitation();
-  console.log(JSON.stringify(citationData.apa));
 
   /** @type{import("rollup-plugin-esbuild").Options} */
   const esBuildPluginOptions = {
@@ -193,7 +192,6 @@ export const makeCoreRollupConfig = () =>
  * Returns the rollup configuration for Node.js-only packages
  */
 export const makeNodeRollupConfig = () => {
-  console.log("jspsych Roll up config called");
   return makeConfig({
     globalOptions: { external: ["jspsych"] },
     isNodeOnlyBuild: true,

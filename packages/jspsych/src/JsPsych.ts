@@ -267,7 +267,6 @@ export class JsPsych {
   ) {
     plugins.map((plugin) => {
       let pluginCitation = plugin["info"].citation;
-      console.log(format == "apa" ? pluginCitation.apa : pluginCitation.bibtex);
     });
   }
 
