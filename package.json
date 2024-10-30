@@ -51,13 +51,5 @@
     "projects": [
       "<rootDir>/packages/*/jest.config.cjs"
     ]
-  },
-  "dependencies": {
-    "@citation-js/core": "^0.7.14",
-    "@citation-js/plugin-bibtex": "^0.7.14",
-    "@citation-js/plugin-csl": "^0.7.14",
-    "@citation-js/plugin-software-formats": "^0.6.1",
-    "link": "^2.1.1",
-    "symlink": "^2.1.0"
   }
 }
