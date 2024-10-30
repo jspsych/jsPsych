@@ -1,5 +1,29 @@
 # @jspsych/plugin-instructions
 
+## 2.0.0
+
+### Major Changes
+
+- [#3339](https://github.com/jspsych/jsPsych/pull/3339) [`74b4adc7`](https://github.com/jspsych/jsPsych/commit/74b4adc702747a62a201575a6aa95770eeddb1bb) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - `finishTrial()` now clears the display and any timeouts set with `pluginApi.setTimeout()`
+
+### Minor Changes
+
+- [#3326](https://github.com/jspsych/jsPsych/pull/3326) [`c5a0dbb1`](https://github.com/jspsych/jsPsych/commit/c5a0dbb17ead8e2b860c76fce7fea834f3b0ad09) Thanks [@vzhang03](https://github.com/vzhang03)! - Updated all plugins to implement new pluginInfo standard that contains version, data generated and new documentation style to match migration of docs to be integrated with the code and packages themselves"
+
+- [#3190](https://github.com/jspsych/jsPsych/pull/3190) [`2505411a`](https://github.com/jspsych/jsPsych/commit/2505411a065e0714e9b39a1aa850f72976cd391c) Thanks [@Shaobin-Jiang](https://github.com/Shaobin-Jiang)! - Add callback function when navigating through pages
+
+## 1.1.4
+
+### Patch Changes
+
+- [#3184](https://github.com/jspsych/jsPsych/pull/3184) [`9acfa29c`](https://github.com/jspsych/jsPsych/commit/9acfa29c8db1d7a8816c53ac49651f15493f2cf4) Thanks [@bjoluc](https://github.com/bjoluc)! - Point to source maps via canonical unpkg URLs in NPM-published browser builds. This prevents 404 errors when using redirecting CDN URLs (as described in #3043).
+
+## 1.1.3
+
+### Patch Changes
+
+- [#3039](https://github.com/jspsych/jsPsych/pull/3039) [`347bbb55`](https://github.com/jspsych/jsPsych/commit/347bbb557c4cf954e471e8d66188db0b28e364be) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Fix simulation mode behavior so that setting RT and/or view_history correctly sets the other parameter
+
 ## 1.1.2
 
 ### Patch Changes

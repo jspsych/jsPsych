@@ -1,6 +1,6 @@
 # survey-text
 
-Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-text/CHANGELOG.md).
+Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-text/CHANGELOG.md).
 
 The survey-text plugin displays a set of questions with free response text fields. The participant types in answers.
 
@@ -31,7 +31,7 @@ question_order | array | An array with the order of questions. For example `[2,0
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-text@2.0.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

@@ -5,7 +5,7 @@ import htmlButtonResponse from ".";
 jest.useFakeTimers();
 
 describe("html-button-response", () => {
-  test("displays html stimulus", async () => {
+  it("displays html stimulus and buttons", async () => {
     const { getHTML } = await startTimeline([
       {
         type: htmlButtonResponse,
@@ -14,53 +14,26 @@ describe("html-button-response", () => {
       },
     ]);
 
-    expect(getHTML()).toContain(
-      '<div id="jspsych-html-button-response-stimulus">this is html</div>'
+    expect(getHTML()).toMatchInlineSnapshot(
+      '"<div id="jspsych-html-button-response-stimulus">this is html</div><div id="jspsych-html-button-response-btngroup" class="jspsych-btn-group-grid" style="grid-template-columns: repeat(1, 1fr); grid-template-rows: repeat(1, 1fr);"><button class="jspsych-btn" data-choice="0">button-choice</button></div>"'
     );
   });
 
-  test("display button labels", async () => {
-    const { getHTML } = await startTimeline([
-      {
-        type: htmlButtonResponse,
-        stimulus: "this is html",
-        choices: ["button-choice1", "button-choice2"],
-      },
-    ]);
+  it("respects the `button_html` parameter", async () => {
+    const buttonHtmlFn = jest.fn();
+    buttonHtmlFn.mockReturnValue("<button>something-unique</button>");
 
-    expect(getHTML()).toContain('<button class="jspsych-btn">button-choice1</button>');
-    expect(getHTML()).toContain('<button class="jspsych-btn">button-choice2</button>');
-  });
-
-  test("display button html", async () => {
     const { getHTML } = await startTimeline([
       {
         type: htmlButtonResponse,
         stimulus: "this is html",
         choices: ["buttonChoice"],
-        button_html: '<button class="jspsych-custom-button">%choice%</button>',
+        button_html: buttonHtmlFn,
       },
     ]);
 
-    expect(getHTML()).toContain('<button class="jspsych-custom-button">buttonChoice</button>');
-  });
-
-  test("display should clear after button click", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
-      {
-        type: htmlButtonResponse,
-        stimulus: "this is html",
-        choices: ["button-choice"],
-      },
-    ]);
-
-    expect(getHTML()).toContain(
-      '<div id="jspsych-html-button-response-stimulus">this is html</div>'
-    );
-
-    clickTarget(document.querySelector("#jspsych-html-button-response-button-0"));
-
-    await expectFinished();
+    expect(buttonHtmlFn).toHaveBeenCalledWith("buttonChoice", 0);
+    expect(getHTML()).toContain("something-unique");
   });
 
   test("prompt should append below button", async () => {
@@ -73,12 +46,26 @@ describe("html-button-response", () => {
       },
     ]);
 
-    expect(getHTML()).toContain(
-      '<button class="jspsych-btn">button-choice</button></div></div><p>this is a prompt</p>'
-    );
+    expect(getHTML()).toContain("</button></div><p>this is a prompt</p>");
   });
 
-  test("should hide stimulus if stimulus-duration is set", async () => {
+  it("should clear the display after the button has been clicked", async () => {
+    const { getHTML, expectFinished, displayElement } = await startTimeline([
+      {
+        type: htmlButtonResponse,
+        stimulus: "this is html",
+        choices: ["button-choice"],
+      },
+    ]);
+
+    await clickTarget(displayElement.querySelector('[data-choice="0"]'));
+
+    await expectFinished();
+
+    expect(getHTML()).toEqual("");
+  });
+
+  it("should hide stimulus if stimulus-duration is set", async () => {
     const { displayElement } = await startTimeline([
       {
         type: htmlButtonResponse,
@@ -98,7 +85,7 @@ describe("html-button-response", () => {
     expect(stimulusElement.style.visibility).toBe("hidden");
   });
 
-  test("should end trial when trial duration is reached", async () => {
+  it("should end trial when trial duration is reached", async () => {
     const { getHTML, expectFinished } = await startTimeline([
       {
         type: htmlButtonResponse,
@@ -116,8 +103,8 @@ describe("html-button-response", () => {
     await expectFinished();
   });
 
-  test("should end trial when button is clicked", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
+  it("should end trial when button is clicked", async () => {
+    const { getHTML, expectFinished, displayElement } = await startTimeline([
       {
         type: htmlButtonResponse,
         stimulus: "this is html",
@@ -130,12 +117,12 @@ describe("html-button-response", () => {
       '<div id="jspsych-html-button-response-stimulus">this is html</div>'
     );
 
-    clickTarget(document.querySelector("#jspsych-html-button-response-button-0"));
+    await clickTarget(displayElement.querySelector('[data-choice="0"]'));
     await expectFinished();
   });
 
   test("class should have responded when button is clicked", async () => {
-    const { getHTML } = await startTimeline([
+    const { getHTML, displayElement } = await startTimeline([
       {
         type: htmlButtonResponse,
         stimulus: "this is html",
@@ -148,20 +135,46 @@ describe("html-button-response", () => {
       '<div id="jspsych-html-button-response-stimulus">this is html</div>'
     );
 
-    clickTarget(document.querySelector("#jspsych-html-button-response-button-0"));
-    expect(document.querySelector("#jspsych-html-button-response-stimulus").className).toBe(
-      " responded"
-    );
+    await clickTarget(displayElement.querySelector('[data-choice="0"]'));
+    expect(
+      displayElement.querySelector("#jspsych-html-button-response-stimulus").classList
+    ).toContain("responded");
+  });
+
+  test("buttons should be disabled first and then enabled after enable_button_after is set", async () => {
+    const { getHTML } = await startTimeline([
+      {
+        type: htmlButtonResponse,
+        stimulus: "this is html",
+        choices: ["button-choice"],
+        enable_button_after: 500,
+      },
+    ]);
+
+    const btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+
+    for (let i = 0; i < btns.length; i++) {
+      expect(btns[i].getAttribute("disabled")).toBe("disabled");
+    }
+
+    jest.advanceTimersByTime(500);
+
+    for (let i = 0; i < btns.length; i++) {
+      expect(btns[i].hasAttribute("disabled")).toBe(false);
+    }
   });
 });
 
 describe("html-button-response simulation", () => {
   test("data mode works", async () => {
+    const ENABLE_BUTTON_AFTER = 2000;
+
     const timeline = [
       {
         type: htmlButtonResponse,
         stimulus: "foo",
         choices: ["a", "b", "c"],
+        enable_button_after: ENABLE_BUTTON_AFTER,
       },
     ];
 
@@ -171,17 +184,20 @@ describe("html-button-response simulation", () => {
 
     const response = getData().values()[0].response;
 
-    expect(getData().values()[0].rt).toBeGreaterThan(0);
+    expect(getData().values()[0].rt).toBeGreaterThan(ENABLE_BUTTON_AFTER);
     expect(response).toBeGreaterThanOrEqual(0);
     expect(response).toBeLessThanOrEqual(2);
   });
 
   test("visual mode works", async () => {
+    const ENABLE_BUTTON_AFTER = 2000;
+
     const timeline = [
       {
         type: htmlButtonResponse,
         stimulus: "foo",
         choices: ["a", "b", "c"],
+        enable_button_after: ENABLE_BUTTON_AFTER,
       },
     ];
 
@@ -200,7 +216,7 @@ describe("html-button-response simulation", () => {
 
     const response = getData().values()[0].response;
 
-    expect(getData().values()[0].rt).toBeGreaterThan(0);
+    expect(getData().values()[0].rt).toBeGreaterThan(ENABLE_BUTTON_AFTER);
     expect(response).toBeGreaterThanOrEqual(0);
     expect(response).toBeLessThanOrEqual(2);
   });

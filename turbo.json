@@ -1,14 +1,10 @@
 {
-  "baseBranch": "origin/main",
-  "npmClient": "npm",
+  "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "dist/**"
-      ]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "css/**"],
+      "outputMode": "new-only"
     },
     "tsc": {
       "outputs": []

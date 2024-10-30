@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8">
     <script src="docs-demo-timeline.js"></script>
-    <script src="https://unpkg.com/jspsych@7.3.1"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-survey@0.2.1"></script>
-    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" />
-    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@0.2.1/css/survey.css">
+    <script src="https://unpkg.com/jspsych@8.0.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.0.0"></script>
+    <script src="../../packages/plugin-survey/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@8.0.3/css/jspsych.css" />
+    <link rel="stylesheet" href="../../packages/plugin-survey/css/survey.css">
     <link rel="stylesheet" href="docs-demo.css" type="text/css">
   </head>
   <body></body>
@@ -15,53 +15,71 @@
 
     const jsPsych = initJsPsych();
 
-    const question_info = [
-      {
-        'fruit': 'apples',
-        'Q1_prompt': 'Do you like apples?', 
-        'Q1_type': 'regular'
-      },
-      {
-        'fruit': 'bananas',
-        'Q1_prompt': 'Do you NOT like bananas?', 
-        'Q1_type': 'reverse'
-      },
-    ];
-
-    const survey = {
-      type: jsPsychSurvey,
-      pages:[
-        [
+        // values that change across survey trials - each object represents a single trial
+        const question_variables = [
           {
-            type: 'multi-choice',
-            prompt: jsPsych.timelineVariable('Q1_prompt'),
-            options: ['Yes', 'No'],
-            name: 'Q1'
+            'fruit': 'apples',
+            'Q1_prompt': 'Do you like apples?', 
+            'Q1_type': 'regular',
+            'Q2_word': 'like'
           },
           {
-            type: 'text',
-            prompt: function() {
-              return `What's your favorite thing about ${jsPsych.timelineVariable('fruit')}?`;
-            },
-            name: 'Q2'
-          }
-        ]
-      ],
-      data: {
-        'Q1_prompt': jsPsych.timelineVariable('Q1_prompt'),
-        'Q1_type': jsPsych.timelineVariable('Q1_type'),
-        'fruit': jsPsych.timelineVariable('fruit')                                                        
-      },
-      button_label_finish: 'Continue'                
-    };
+            'fruit': 'pears',
+            'Q1_prompt': 'Do you like pears?', 
+            'Q1_type': 'regular',
+            'Q2_word': 'like'
+          },
+          {
+            'fruit': 'bananas',
+            'Q1_prompt': 'Do you NOT like bananas?', 
+            'Q1_type': 'reverse',
+            'Q2_word': 'hate'
+          },
+        ];
 
-    const survey_procedure = {
-      timeline: [survey],
-      timeline_variables: question_info,
-      randomize_order: true
-    };
+        // create an array to store all of our survey trials so that we can easily randomize their order
+        survey_trials = [];
 
-    const timeline = [survey_procedure];
+        // construct the survey trials dynamically using an array of question-specific information
+        for (let i=0; i<question_variables.length; i++) {
+
+          // set up the survey JSON for this trial
+          // any question-specific variables come from the appropriate object in the question_variables array
+          let survey_json = {
+            showQuestionNumbers: false,
+            title: 'Dynamically constructing survey trials.',
+            completeText: 'Next >>',
+            elements: [
+              {
+                type: 'radiogroup',
+                title: question_variables[i].Q1_prompt,
+                choices: ['Yes', 'No'],
+                name: 'Q1'
+              },
+              {
+                type: 'text',
+                title: 'What do you '+question_variables[i].Q2_word+' most about '+question_variables[i].fruit+'?',
+                name: 'Q2'
+              }
+            ]
+          };
+          
+          // set up a survey trial object using the JSON we've just created for this question, 
+          // and add the trial object to the survey trials array
+          survey_trials.push({
+            type: jsPsychSurvey,
+            survey_json: survey_json,
+            data: {
+              'Q1_prompt': question_variables[i].Q1_prompt,
+              'Q1_type': question_variables[i].Q1_type,
+              'Q2_word': question_variables[i].Q2_word,
+              'fruit': question_variables[i].fruit                                                        
+            }  
+          });
+
+        }
+
+    const timeline = jsPsych.randomization.shuffle(survey_trials);
 
     if (typeof jsPsych !== "undefined") {
       jsPsych.run(generateDocsDemoTimeline(timeline));

@@ -4,6 +4,8 @@ Participants in an online experiment have the freedom to multitask while perform
 
 Each time the user leaves the experiment window, returns to the experiment window, exits full screen mode, or enters full screen mode, the event is recorded in the interaction data. Each event has the following structure.
 
+Event recording stops when the experiment ends.
+
 ```javascript
 {
   event: 'focus', // 'focus' or 'blur' or 'fullscreenenter' or 'fullscreenexit'

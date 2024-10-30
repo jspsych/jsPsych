@@ -4,6 +4,7 @@ The pluginAPI module contains functions that are useful when developing plugins.
 
 ## Keyboard Input
 
+
 ### cancelAllKeyboardResponses
 
 ```javascript
@@ -157,12 +158,13 @@ The method accepts an object of parameter values (see example below). The valid 
 Parameter | Type | Description
 ----------|------|------------
 callback_function | function | The function to execute whenever a valid keyboard response is generated.
-valid_responses | array | An array of key codes or character strings representing valid responses. Responses not on the list will be ignored. An empty array indicates that all responses are acceptable.
+valid_responses | array | An array of key codes or character strings representing valid responses. Responses not on the list will be ignored. An empty array indicates that no response is acceptable.
 rt_method | string | Indicates which method of recording time to use. The `'performance'` method uses calls to `performance.now()`, which is the standard way of measuring timing in jsPsych. It is [supported by up-to-date versions of all the major browsers](http://caniuse.com/#search=performance). The `audio` method is used in conjuction with an `audio_context` (set as an additional parameter). This uses the clock time of the `audio_context` when audio stimuli are being played.
 audio_context | AudioContext object | The AudioContext of the audio file that is being played.
 audio_context_start_time | numeric | The scheduled time of the sound file in the AudioContext. This will be used as the start time.
 allow_held_key | boolean | If `true`, then responses will be registered from keys that are being held down. If `false`, then a held key can only register a response the first time that `getKeyboardResponse` is called for that key. For example, if a participant holds down the `A` key before the experiment starts, then the first time `getKeyboardResponse` is called, the `A` will register as a key press. However, any future calls to `getKeyboardResponse` will not register the `A` until the participant releases the key and presses it again.
 persist | boolean | If false, then the keyboard listener will only trigger the first time a valid key is pressed. If true, then it will trigger every time a valid key is pressed until it is explicitly cancelled by `jsPsych.pluginAPI.cancelKeyboardResponse` or `jsPsych.pluginAPI.cancelAllKeyboardResponses`.
+minimum_valid_rt | number | The minimum valid response time for key presses. Any key press response time that is less than this value will be treated as invalid and ignored.
 
 #### Return value
 
@@ -216,7 +218,172 @@ var listener = jsPsych.pluginAPI.getKeyboardResponse({
 });
 ```
 
-## Media
+## Audio
+
+All audio-related functionality is handled by the AudioPlayer class.
+
+### getAudioPlayer
+
+```javascript
+jsPsych.pluginAPI.getAudioPlayer(filepath)
+```
+
+#### Return value
+
+Returns a Promise that resolves to an instance of an AudioPlayer class that holds the buffer of the audio file when it finishes loading.
+
+#### Description
+
+Gets an AudioPlayer class instance which has methods that can be used to play or stop audio that can be played with the WebAudio API or an audio object that can be played as HTML5 Audio. 
+
+It is strongly recommended that you preload audio files before calling this method. This method will load the files if they are not preloaded, but this may result in delays during the experiment as audio is downloaded.
+
+#### Examples
+
+##### HTML 5 Audio and WebAudio API
+
+```javascript
+const audio = await jsPsych.pluginAPI.getAudioPlayer('my-sound.mp3')
+
+audio.play()
+
+```
+
+See the `audio-keyboard-response` plugin for an example in a fuller context.
+
+---
+
+### play
+
+```javascript
+const audio = jsPsych.pluginAPI.getAudioPlayer(filepath)
+
+audio.play()
+```
+
+#### Return value
+
+Returns nothing.
+
+#### Description
+
+Method that belongs to the AudioPlayer class. Plays the audio loaded into the audio buffer of the AudioPlayer instance for a particular file. If the audio is a HTML5 audio object it plays it. If the audio is a Webaudio API object it starts it.
+
+#### Example
+
+##### HTML 5 Audio and WebAudio API
+
+```javascript
+const audio = await jsPsych.pluginAPI.getAudioPlayer('my-sound.mp3');
+
+audio.play();
+
+```
+
+See the `audio-keyboard-response` plugin for an example in a fuller context.
+
+---
+
+### stop
+
+```javascript
+const audio = jsPsych.pluginAPI.getAudioPlayer(filepath);
+
+audio.play();
+```
+
+#### Return value
+
+Returns nothing.
+
+#### Description
+
+Method that belongs to the AudioPlayer class. Stops the audio loaded into the audio buffer of the AudioPlayer instance for a particular file. If the audio is an HTML5 audio object it pauses it. If the audio is a Webaudio API object it stops it.
+
+#### Example
+
+##### HTML 5 Audio and WebAudio API
+
+```javascript
+const audio = await jsPsych.pluginAPI.getAudioPlayer('my-sound.mp3');
+
+audio.play();
+
+audio.stop();
+
+```
+
+See the `audio-keyboard-response` plugin for an example in a fuller context.
+
+---
+
+### addEventListener
+
+```javascript
+const audio = jsPsych.pluginAPI.getAudioPlayer(filepath);
+
+audio.addEventListener(eventName, callback);
+```
+
+#### Return value
+
+Returns nothing.
+
+#### Description
+
+Method that belongs to the AudioPlayer class. Adds an event listener to the media Element that corresponds to
+the AudioPlayer class instance.
+
+#### Example
+
+```javascript
+const audio = await jsPsych.pluginAPI.getAudioPlayer('my-sound.mp3');
+
+audio.play();
+
+audio.addEventListener('ended', end_trial());
+
+```
+
+See the `audio-keyboard-response` plugin for an example in a fuller context.
+
+---
+
+### removeEventListener
+
+```javascript
+const audio = jsPsych.pluginAPI.getAudioPlayer(filepath);
+
+audio.removeEventListener(eventName, callback);
+```
+
+#### Return value
+
+Returns nothing.
+
+#### Description
+
+Method that belongs to the AudioPlayer class. Removes an event listener from the media Element that corresponds to
+the AudioPlayer class instance.
+
+#### Example
+
+```javascript
+const audio = await jsPsych.pluginAPI.getAudioPlayer('my-sound.mp3');
+
+audio.play();
+
+audio.addEventListener('ended', end_trial());
+
+audio.removeEventListener('ended', end_trial());
+
+```
+
+See the `audio-keyboard-response` plugin for an example in a fuller context.
+
+---
+
+## Other Media
 
 ### getAudioBuffer
 
@@ -325,6 +492,33 @@ jsPsych.pluginAPI.getAutoPreloadList(timeline);
 
 ---
 
+### getCameraRecorder
+
+```javascript
+jsPsych.pluginAPI.getCameraRecorder()
+```
+
+#### Parameters
+
+None
+
+#### Return value
+
+A `MediaRecorder` object connected to the `MediaStream` for the active camera.
+
+#### Description
+
+Provides access to the `MediaRecorder` created by [initializeCameraRecorder()](#initializecamerarecorder).
+If no camera recorder exists, it returns `null`.
+
+#### Example
+
+```javascript
+const recorder = jsPsych.pluginAPI.getCameraRecorder();
+```
+
+---
+
 ### getMicrophoneRecorder
 
 ```javascript
@@ -348,6 +542,40 @@ If no microphone recorder exists, it returns `null`.
 
 ```javascript
 const recorder = jsPsych.pluginAPI.getMicrophoneRecorder();
+```
+
+---
+
+### initializeCameraRecorder
+
+```javascript
+jsPsych.pluginAPI.initializeCameraRecorder(stream)
+```
+
+#### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+stream | `MediaStream` | The `MediaStream` object from an active camera device.
+opts | `MediaRecorderOptions` | The `MediaRecorderOptions` for the recorder. See [MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/MediaRecorder) for details about these options.
+
+#### Return value
+
+None.
+
+#### Description
+
+Generates a `MediaRecorder` object from provided `MediaStream` and stores this for access via [getCameraRecorder()](#getcamerarecorder).
+
+#### Example
+
+```javascript
+const stream = await navigator.mediaDevices.getUserMedia({
+  audio: true,
+  video: { width: 1280, height: 720 }, // request a certain resolution
+});
+
+jsPsych.pluginAPI.initializeCameraRecorder(stream);
 ```
 
 ---

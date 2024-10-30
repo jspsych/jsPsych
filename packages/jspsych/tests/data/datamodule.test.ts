@@ -8,7 +8,7 @@ describe("Basic data recording", () => {
     const { getData } = await startTimeline([{ type: htmlKeyboardResponse, stimulus: "hello" }]);
 
     // click through first trial
-    pressKey("a");
+    await pressKey("a");
     // check if data contains rt
     expect(getData().select("rt").count()).toBe(1);
   });
@@ -21,11 +21,11 @@ describe("#addProperties", () => {
     ]);
 
     // click through first trial
-    pressKey("a");
+    await pressKey("a");
     // check if data contains testprop
-    expect(getData().select("testprop").count()).toBe(0);
+    expect(getData().values()[0]).not.toHaveProperty("testprop");
     jsPsych.data.addProperties({ testprop: 1 });
-    expect(getData().select("testprop").count()).toBe(1);
+    expect(getData().values()[0]).toHaveProperty("testprop");
   });
 });
 
@@ -46,10 +46,9 @@ describe("#addDataToLastTrial", () => {
     );
 
     // click through first trial
-    pressKey("a");
+    await pressKey("a");
     // check data structure
-    expect(getData().select("testA").values[0]).toBe(1);
-    expect(getData().select("testB").values[0]).toBe(2);
+    expect(getData().values()[0]).toEqual(expect.objectContaining({ testA: 1, testB: 2 }));
   });
 });
 
@@ -65,9 +64,9 @@ describe("#getLastTrialData", () => {
     );
 
     // click through first trial
-    pressKey("a");
+    await pressKey("a");
     // click through second trial
-    pressKey("a");
+    await pressKey("a");
     // check data structure
     expect(jsPsych.data.getLastTrialData().select("trial_index").values[0]).toBe(1);
   });
@@ -92,7 +91,7 @@ describe("#getLastTimelineData", () => {
 
     // click through all four trials
     for (let i = 0; i < 4; i++) {
-      pressKey("a");
+      await pressKey("a");
     }
     // check data structure
     expect(jsPsych.data.getLastTimelineData().count()).toBe(2);
@@ -103,23 +102,17 @@ describe("#getLastTimelineData", () => {
 
 describe("#displayData", () => {
   test("should display in json format", async () => {
-    const { jsPsych, getHTML } = await startTimeline([
+    const { jsPsych, getHTML, getData } = await startTimeline([
       { type: htmlKeyboardResponse, stimulus: "hello" },
     ]);
 
     // click through first trial
-    pressKey("a");
-    // overwrite data with custom data
-    const data = [
-      { col1: 1, col2: 2 },
-      { col1: 3, col2: 4 },
-    ];
-    jsPsych.data._customInsert(data);
+    await pressKey("a");
     // display data in json format
     jsPsych.data.displayData("json");
     // check display element HTML
     expect(getHTML()).toBe(
-      '<pre id="jspsych-data-display">' + JSON.stringify(data, null, "\t") + "</pre>"
+      '<pre id="jspsych-data-display">' + JSON.stringify(getData().values(), null, "\t") + "</pre>"
     );
   });
   test("should display in csv format", async () => {
@@ -128,18 +121,17 @@ describe("#displayData", () => {
     ]);
 
     // click through first trial
-    pressKey("a");
+    await pressKey("a");
     // overwrite data with custom data
     const data = [
       { col1: 1, col2: 2 },
       { col1: 3, col2: 4 },
     ];
-    jsPsych.data._customInsert(data);
     // display data in json format
     jsPsych.data.displayData("csv");
     // check display element HTML
-    expect(getHTML()).toBe(
-      '<pre id="jspsych-data-display">"col1","col2"\r\n"1","2"\r\n"3","4"\r\n</pre>'
+    expect(getHTML()).toMatch(
+      /<pre id="jspsych-data-display">"rt","stimulus","response","trial_type","trial_index","plugin_version","time_elapsed"\r\n"[\d]+","hello","a","html-keyboard-response","0","[\d.]+","[\d]+"\r\n<\/pre>/
     );
   });
 });

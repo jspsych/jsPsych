@@ -26,7 +26,7 @@ describe("The css_classes parameter for trials", () => {
     ]);
 
     expect(displayElement.classList).toContain("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(displayElement.classList).not.toContain("foo");
   });
 
@@ -44,7 +44,7 @@ describe("The css_classes parameter for trials", () => {
     ]);
 
     expect(displayElement.classList).toContain("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(displayElement.classList).not.toContain("foo");
   });
 
@@ -58,7 +58,7 @@ describe("The css_classes parameter for trials", () => {
     ]);
 
     expect(displayElement.classList).toContain("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(displayElement.classList).not.toContain("foo");
   });
 
@@ -81,7 +81,7 @@ describe("The css_classes parameter for trials", () => {
     );
 
     expect(displayElement.classList).toContain("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(displayElement.classList).not.toContain("foo");
   });
 });

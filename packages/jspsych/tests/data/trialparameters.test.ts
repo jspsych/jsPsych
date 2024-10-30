@@ -16,7 +16,7 @@ describe("Trial parameters in the data", () => {
       },
     ]);
 
-    pressKey(" ");
+    await pressKey(" ");
 
     const data = getData().values()[0];
     expect(data.choices).not.toBeUndefined();
@@ -34,29 +34,10 @@ describe("Trial parameters in the data", () => {
       },
     ]);
 
-    pressKey(" ");
+    await pressKey(" ");
 
     const data = getData().values()[0];
     expect(data.stimulus).toBeUndefined();
-  });
-
-  test("For compatibility with data access functions, internal_node_id and trial_index cannot be removed", async () => {
-    const { getData } = await startTimeline([
-      {
-        type: htmlKeyboardResponse,
-        stimulus: "<p>foo</p>",
-        save_trial_parameters: {
-          internal_node_id: false,
-          trial_index: false,
-        },
-      },
-    ]);
-
-    pressKey(" ");
-
-    const data = getData().values()[0];
-    expect(data.internal_node_id).not.toBeUndefined();
-    expect(data.trial_index).not.toBeUndefined();
   });
 
   test("Invalid parameter names throw a warning in the console", async () => {
@@ -67,15 +48,17 @@ describe("Trial parameters in the data", () => {
         type: htmlKeyboardResponse,
         stimulus: "<p>foo</p>",
         save_trial_parameters: {
+          trial_type: false,
+          trial_index: false,
           foo: true,
           bar: false,
         },
       },
     ]);
 
-    pressKey(" ");
+    await pressKey(" ");
 
-    expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledTimes(4);
     spy.mockRestore();
   });
 
@@ -92,7 +75,7 @@ describe("Trial parameters in the data", () => {
       },
     ]);
 
-    clickTarget(document.querySelector("#jspsych-survey-text-next"));
+    await clickTarget(document.querySelector("#jspsych-survey-text-next"));
 
     const data = getData().values()[0];
     expect(data.questions[0].prompt).toBe(questions[0].prompt);
@@ -124,7 +107,7 @@ describe("Trial parameters in the data", () => {
       },
     ]);
 
-    clickTarget(document.querySelector("button"));
+    await clickTarget(document.querySelector("button"));
 
     expect(getData().values()[0].stim_function).toBe(sample_function.toString());
   });
@@ -141,7 +124,7 @@ describe("Trial parameters in the data", () => {
       },
     ]);
 
-    pressKey(" ");
+    await pressKey(" ");
 
     expect(getData().values()[0].trial_duration).toBe(1000);
   });

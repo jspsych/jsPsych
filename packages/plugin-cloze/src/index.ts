@@ -1,30 +1,29 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "cloze",
+  version: version,
   parameters: {
-    /** The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. %solution%). For multiple answers, type them with a slash (i.e. %1/2/3%). */
+    /** The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. % correct solution %). */
     text: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Cloze text",
       default: undefined,
     },
     /** Text of the button participants have to press for finishing the cloze test. */
     button_text: {
       type: ParameterType.STRING,
-      pretty_name: "Button text",
       default: "OK",
     },
-    /** Boolean value indicating if the answers given by participants should be compared against a correct solution given in the text (between % signs) after the button was clicked. */
+    /** Boolean value indicating if the answers given by participants should be compared against a correct solution given in the text (between % signs) after the button was clicked. If ```true```, answers are checked and in case of differences, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. If ```false```, no checks are performed and the trial automatically ends when clicking the button. */
     check_answers: {
       type: ParameterType.BOOL,
-      pretty_name: "Check answers",
       default: false,
     },
-    /** Boolean value indicating if the participant may leave answers blank. */
+    /** Boolean value indicating if the answers given by participants should be checked for completion after the button was clicked. If ```true```, answers are not checked for completion and blank answers are allowed. The trial will then automatically finish upon the clicking the button. If ```false```, answers are checked for completion, and in case there are some fields with missing answers, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. */
     allow_blanks: {
       type: ParameterType.BOOL,
-      pretty_name: "Allow blanks",
       default: true,
     },
     /** Boolean value indicating if the solutions checker must be case sensitive. */
@@ -36,8 +35,14 @@ const info = <const>{
     /** Function called if either the check_answers is set to TRUE or the allow_blanks is set to FALSE and there is a discrepancy between the set answers and the answers provide or if all input fields aren't filled out, respectively. */
     mistake_fn: {
       type: ParameterType.FUNCTION,
-      pretty_name: "Mistake function",
-      default: () => { },
+      default: () => {},
+    },
+  },
+  data: {
+    /** Answers the partcipant gave. */
+    response: {
+      type: ParameterType.STRING,
+      array: true,
     },
   },
 };
@@ -45,17 +50,15 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **cloze**
- *
- * jsPsych plugin for displaying a cloze test and checking participants answers against a correct solution
+ * This plugin displays a text with certain words omitted. Participants are asked to replace the missing items. Responses are recorded when clicking a button. Responses can be evaluated and a function is called in case of either differences or incomplete answers, making it possible to inform participants about mistakes before proceeding.
  *
  * @author Philipp Sprengholz
- * @see {@link https://www.jspsych.org/plugins/jspsych-cloze/ cloze plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/cloze/ cloze plugin documentation on jspsych.org}
  */
 class ClozePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) { }
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var html = '<div class="cloze">';
@@ -110,7 +113,6 @@ class ClozePlugin implements JsPsychPlugin<Info> {
           response: answers,
         };
 
-        display_element.innerHTML = "";
         this.jsPsych.finishTrial(trial_data);
       }
     };

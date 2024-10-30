@@ -31,8 +31,8 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.snippets
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 repo_url: 'https://github.com/jspsych/jsPsych'
 repo_name: 'jspsych/jspsych'
 edit_uri: edit/main/docs
@@ -59,6 +59,7 @@ nav:
   - 'Media Preloading': 'overview/media-preloading.md'
   - 'Fullscreen Experiments': 'overview/fullscreen.md'
   - 'Eye Tracking': 'overview/eye-tracking.md'
+  - 'Building Surveys': 'overview/building-surveys.md'
   - 'Exclude Participants Based on Browser Features': 'overview/exclude-browser.md'
   - 'Automatic Progress Bar': 'overview/progress-bar.md'
   - 'Integrating with Prolific': 'overview/prolific.md'
@@ -140,6 +141,7 @@ nav:
 - Support:
   - 'Getting Help': 'support/support.md'
   - 'Migrating from 6.x to 7.x': 'support/migration-v7.md'
+  - 'Migrating from 7.x to 8.x': 'support/migration-v8.md'
 - About:
   - 'About jsPsych': 'about/about.md'
   - 'License': 'about/license.md'

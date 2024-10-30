@@ -28,7 +28,7 @@ describe("same-different-image", () => {
 
     expect(getHTML()).toMatch("visibility: hidden");
 
-    pressKey("q"); // same_key
+    await pressKey("q"); // same_key
     await expectFinished();
 
     expect(getData().values()[0].correct).toBe(true);

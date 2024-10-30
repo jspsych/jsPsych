@@ -7,37 +7,38 @@ jsPsych can show a progress bar at the top of the experiment page indicating the
 To show the progress bar, set the `show_progress_bar` option in `initJsPsych` to `true`:
 
 ```javascript
-var jsPsych = initJsPsych({
+const jsPsych = initJsPsych({
 	show_progress_bar: true
 });
 ```
 
-The progress bar updates after every node on the top-level timeline updates. This avoids distracting updates in the middle of trials that are composed of multiple plugins, or confusing updates due to looping or conditional structures that may or may not execute depending on the actions of the participant. This also allows some flexibility for the programmer; by nesting timelines in a deliberate manner, the timing of progress bar updates can be controlled.
+The progress bar automatically updates after every trial.
 
 ## Manual Control
 
-The progress bar can also be manually controlled using the function `jsPsych.setProgressBar()`. This function takes a numeric value between 0 and 1, representing the proportion of the progress bar to fill.
+The progress bar can also be manually controlled by setting `jsPsych.progressBar.progress`. The value of `jsPsych.progressBar.progress` should be a number between 0 and 1. For example, to set the progress bar to 85% full, you would do this:
+
 
 ```js
-var trial = {
+const trial = {
 	type: jsPsychHtmlKeyboardResponse,
 	stimulus: 'Almost done...',
 	on_finish: function(){
-		jsPsych.setProgressBar(0.85); // set progress bar to 85% full.
+		jsPsych.progressBar.progress = 0.85; // set progress bar to 85% full.
 	}
 }
 ```
 
-You can also get the current value of the progress bar with `jsPsych.getProgressBarCompleted()`.
+You can also get the current value of the progress bar as `jsPsych.progressBar.progress`
 
 ```js
-var proportion_complete = jsPsych.getProgressBarCompleted();
+const proportion_complete = jsPsych.progressBar.progress;
 ```
 
 If you are going to use manual progress bar control, you may want to disable the automatic progress bar updates by setting the `auto_update_progress_bar` property in `initJsPsych()` to `false`.
 
 ```js
-var jsPsych = initJsPsych({
+const jsPsych = initJsPsych({
 	show_progress_bar: true,
 	auto_update_progress_bar: false
 });
@@ -46,39 +47,39 @@ var jsPsych = initJsPsych({
 Here's a complete example showing how to use these functions and `initJsPsych()` settings to manually update the progress bar:
 
 ```js
-var jsPsych = initJsPsych({
+const jsPsych = initJsPsych({
     show_progress_bar: true,
     auto_update_progress_bar: false
 });
 
-var n_trials = 5;
+const n_trials = 5;
 
-var start = {
+const start = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: 'Press any key to start!',
     on_start: function() {
         // set progress bar to 0 at the start of experiment
-        jsPsych.setProgressBar(0);
+        jsPsych.progressBar.progress = 0
     }
 };
 
-var trial = {
+const trial = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: 'This is a trial!',
     on_finish: function() {
         // at the end of each trial, update the progress bar
         // based on the current value and the proportion to update for each trial
-        var curr_progress_bar_value = jsPsych.getProgressBarCompleted();
-        jsPsych.setProgressBar(curr_progress_bar_value + (1/n_trials));
+        var curr_progress_bar_value = jsPsych.progressBar.progress;
+        jsPsych.progressBar.progress = curr_progress_bar_value + (1/n_trials)
     }
 };
 
-var trials = {
+const trials = {
     timeline: [trial],
     repetitions: n_trials
 };
 
-var done = {
+const done = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: 'Done!'
 };
@@ -92,7 +93,7 @@ By default, jsPsych adds the text "Completion Progress" to the left of the progr
 
 ```js
 // support for different spoken languages
-var jsPsych = initJsPsych({
+const jsPsych = initJsPsych({
     show_progress_bar: true,
     message_progress_bar: 'Porcentaje completo'
 });
@@ -100,7 +101,7 @@ var jsPsych = initJsPsych({
 
 ```js
 // no message
-var jsPsych = initJsPsych({
+const jsPsych = initJsPsych({
     show_progress_bar: true,
     message_progress_bar: ''
 });
