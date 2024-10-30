@@ -3,6 +3,7 @@ import path from "path";
 
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
+import replace from "@rollup/plugin-replace";
 import { defineConfig } from "rollup";
 import dts from "rollup-plugin-dts";
 import esbuild from "rollup-plugin-esbuild";
@@ -41,17 +42,16 @@ const makeConfig = ({
   };
 
   const citationData = generateCitation();
+  console.log(JSON.stringify(citationData.apa));
 
   /** @type{import("rollup-plugin-esbuild").Options} */
   const esBuildPluginOptions = {
-    define: {
-      __APACITATION__: JSON.stringify(citationData.apa),
-      __BIBTEXCITATION__: JSON.stringify(citationData.bibtex),
-    },
+    // define: {
+    //   __APACITATION_: JSON.stringify(citationData.apa),
+    //   __BIBTEXCITATION__: JSON.stringify(citationData.bibtex),
+    // },
     loaders: { ".json": "json" },
   };
-
-  console.log("esBuildPluginOptions", esBuildPluginOptions);
 
   /** @type{import("@rollup/plugin-commonjs").RollupCommonJSOptions} */
   const commonjsPluginOptions = {
@@ -81,6 +81,12 @@ const makeConfig = ({
       input,
       plugins: [
         externals(),
+        replace({
+          values: {
+            __APACITATION__: citationData.apa,
+            __BIBTEXCITATION__: citationData.bibtex,
+          },
+        }),
         esbuild({ ...esBuildPluginOptions, target: "node18" }),
         commonjs(commonjsPluginOptions),
       ],
@@ -106,6 +112,12 @@ const makeConfig = ({
       input,
       plugins: [
         externals({ deps: false }),
+        replace({
+          values: {
+            __APACITATION__: citationData.apa,
+            __BIBTEXCITATION__: citationData.bibtex,
+          },
+        }),
         resolve({ preferBuiltins: false }),
         esbuild({ ...esBuildPluginOptions, target: "esnext" }),
         commonjs(commonjsPluginOptions),
@@ -125,6 +137,12 @@ const makeConfig = ({
       input,
       plugins: [
         externals({ deps: false }),
+        replace({
+          values: {
+            __APACITATION__: citationData.apa,
+            __BIBTEXCITATION__: citationData.bibtex,
+          },
+        }),
         resolve({ preferBuiltins: false }),
         esbuild({ ...esBuildPluginOptions, target: "es2015", minify: true }),
         commonjs(commonjsPluginOptions),
