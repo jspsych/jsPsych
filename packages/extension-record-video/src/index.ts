@@ -16,6 +16,7 @@ class RecordVideoExtension implements JsPsychExtension {
         type: ParameterType.STRING,
       },
     },
+    citations: "__CITATIONS__",
   };
 
   constructor(private jsPsych: JsPsych) {

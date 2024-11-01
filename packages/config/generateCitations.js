@@ -3,8 +3,10 @@ import "@citation-js/plugin-software-formats";
 import "@citation-js/plugin-csl";
 
 import fs from "node:fs";
+import path from "node:path";
 
 import { Cite } from "@citation-js/core";
+import appRootPath from "app-root-path";
 import yaml from "yaml";
 
 /**
@@ -18,18 +20,24 @@ export default function generateCitations() {
 
   // Try to find CITATION.cff file and look for preferred-citation
   const citationCff = (() => {
+    let rawCff;
     try {
-      const rawCff = fs.readFileSync("./CITATION.cff", "utf-8").toString();
+      rawCff = fs.readFileSync("./CITATION.cff", "utf-8").toString();
       const cffData = yaml.parse(rawCff);
       if (cffData["preferred-citation"]) {
         preferredCitation = true;
       }
       return yaml.stringify(rawCff);
     } catch (error) {
-      console.log(
-        `No CITATION.cff file found: ${error.message}. If you would like to include a citation, please create a CITATION.cff file in the root of your repository.`
-      );
-      return null;
+      try {
+        rawCff = fs.readFileSync(path.join(appRootPath.path, "CITATION.cff"), "utf-8").toString();
+        return yaml.stringify(rawCff);
+      } catch (error) {
+        console.warn(
+          `No CITATION.cff file found: ${error.message}. If you would like to include a citation, please create a CITATION.cff file in the root of your repository.`
+        );
+        return null;
+      }
     }
   })();
 

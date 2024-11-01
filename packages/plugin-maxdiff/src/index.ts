@@ -75,6 +75,7 @@ const info = <const>{
       },
     },
   },
+  citations: "__CITATIONS__",
 };
 
 type Info = typeof info;

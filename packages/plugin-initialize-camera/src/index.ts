@@ -48,6 +48,7 @@ const info = <const>{
       type: ParameterType.STRING,
     },
   },
+  citations: "__CITATIONS__",
 };
 
 type Info = typeof info;

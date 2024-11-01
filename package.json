@@ -28,7 +28,7 @@
     "@changesets/changelog-github": "^0.4.7",
     "@changesets/cli": "^2.25.2",
     "@jspsych/config": "^3.0.0",
-    "husky": "^8.0.2",
+    "husky": "^8.0.3",
     "import-sort-style-module": "^6.0.0",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",

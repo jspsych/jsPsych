@@ -110,6 +110,7 @@ const info = <const>{
       array: true,
     },
   },
+  citations: "__CITATIONS__",
 };
 
 type Info = typeof info;

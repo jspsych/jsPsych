@@ -27,6 +27,7 @@ const info = <const>{
       default: undefined,
     },
   },
+  citations: "__CITATIONS__",
 };
 
 type Info = typeof info;

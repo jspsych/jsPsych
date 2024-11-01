@@ -124,6 +124,7 @@ const info = <const>{
       type: ParameterType.INT,
     },
   },
+  citations: "__CITATIONS__",
 };
 
 type Info = typeof info;

@@ -98,6 +98,7 @@ const info = <const>{
       type: ParameterType.BOOL,
     },
   },
+  citations: "__CITATIONS__",
 };
 
 type Info = typeof info;

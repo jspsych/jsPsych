@@ -91,6 +91,7 @@ class WebGazerExtension implements JsPsychExtension {
         },
       },
     },
+    citations: "__CITATIONS__",
   };
 
   constructor(private jsPsych: JsPsych) {}

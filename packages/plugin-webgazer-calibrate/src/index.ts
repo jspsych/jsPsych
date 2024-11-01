@@ -62,6 +62,7 @@ const info = <const>{
   data: {
     // no data collected
   },
+  citations: "__CITATIONS__",
 };
 
 type Info = typeof info;

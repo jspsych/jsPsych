@@ -164,6 +164,7 @@ const info = <const>{
       type: ParameterType.FLOAT,
     },
   },
+  citations: "__CITATIONS__",
 };
 
 type Info = typeof info;
