@@ -7,7 +7,13 @@ import fs from "node:fs";
 import { Cite } from "@citation-js/core";
 import yaml from "yaml";
 
-export default function generateCitation() {
+/**
+ * Generate citation data from CITATION.cff file
+ * Currently supported formats: APA, BibTeX
+ *
+ * @returns {Object} - Object containing APA and BibTeX formatted citation data
+ */
+export default function generateCitations() {
   let preferredCitation = false;
 
   // Try to find CITATION.cff file and look for preferred-citation
@@ -31,7 +37,7 @@ export default function generateCitation() {
     return { apa: "", bibtex: "" };
   }
 
-  // Try to convert CITATION.cff to APA string
+  // Convert CITATION.cff to APA string
   const citationApa = (() => {
     try {
       const apaCite = new Cite(citationCff);
@@ -48,7 +54,7 @@ export default function generateCitation() {
     }
   })();
 
-  // Try to convert CITATION.cff to bibtex string
+  // Convert CITATION.cff to BibTeX string
   const citationBibtex = (() => {
     try {
       const bibtexCite = new Cite(citationCff);
@@ -60,7 +66,7 @@ export default function generateCitation() {
       });
       return citationBibtex;
     } catch (error) {
-      console.log(`Error converting CITATION.cff to BibTex string: ${error.message}`);
+      console.log(`Error converting CITATION.cff to BibTeX string: ${error.message}`);
       return null;
     }
   })();

@@ -1,6 +1,6 @@
 import { Class } from "type-fest";
 
-import { TestExtension } from "../tests/extensions/test-extension";
+import { TestExtension } from "../tests/extensions/TestExtension";
 import { ExtensionManager, ExtensionManagerDependencies } from "./ExtensionManager";
 import { JsPsych } from "./JsPsych";
 import { JsPsychExtension } from "./modules/extensions";

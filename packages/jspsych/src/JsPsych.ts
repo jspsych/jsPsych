@@ -262,12 +262,28 @@ export class JsPsych {
   }
 
   getCitations(
-    plugins: Array<Class<JsPsychPlugin<any>> | JsPsychExtension>,
-    format: "apa" | "bibtex"
+    plugins: Array<Class<JsPsychPlugin<any>> | Class<JsPsychExtension>>,
+    format?: string
   ) {
-    plugins.map((plugin) => {
-      let pluginCitation = plugin["info"].citation;
-    });
+    format = format ? format.toLowerCase() : "apa";
+    // Check if plugins is an array
+    if (!Array.isArray(plugins)) {
+      throw new Error("Expected array of plugins/extensions");
+    }
+    // Check if array is empty
+    else if (plugins.length == 0) {
+      console.warn("No plugins/extensions provided");
+      return;
+    }
+    // Check if format is supported
+    else if (!Object.keys(plugins[0]["info"].citations).includes(format)) {
+      throw new Error("Unsupported citation format");
+    } else {
+      plugins.map((plugin) => {
+        let pluginCitations = plugin["info"].citations;
+        console.log(format == "apa" ? `${pluginCitations.apa}` : `${pluginCitations.bibtex}`);
+      });
+    }
   }
 
   get extensions() {

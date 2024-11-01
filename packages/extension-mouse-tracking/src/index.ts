@@ -95,6 +95,7 @@ class MouseTrackingExtension implements JsPsychExtension {
         },
       },
     },
+    citations: "__CITATIONS__",
   };
 
   constructor(private jsPsych: JsPsych) {}

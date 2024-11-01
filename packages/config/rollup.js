@@ -3,14 +3,14 @@ import path from "path";
 
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
-import replace from "@rollup/plugin-replace";
 import { defineConfig } from "rollup";
 import dts from "rollup-plugin-dts";
 import esbuild from "rollup-plugin-esbuild";
+import modify from "rollup-plugin-modify";
 import externals from "rollup-plugin-node-externals";
 import ts from "typescript";
 
-import generateCitation from "./generateCitation.js";
+import generateCitations from "./generateCitations.js";
 
 const getTsCompilerOptions = () => {
   const cwd = process.cwd();
@@ -41,7 +41,7 @@ const makeConfig = ({
     ...outputOptions,
   };
 
-  const citationData = generateCitation();
+  const citationData = generateCitations();
 
   /** @type{import("rollup-plugin-esbuild").Options} */
   const esBuildPluginOptions = {
@@ -76,11 +76,9 @@ const makeConfig = ({
       input,
       plugins: [
         externals(),
-        replace({
-          values: {
-            __APACITATION__: citationData.apa,
-            __BIBTEXCITATION__: citationData.bibtex,
-          },
+        modify({
+          find: /'__CITATIONS__'/g,
+          replace: JSON.stringify(citationData, null, 2),
         }),
         esbuild({ ...esBuildPluginOptions, target: "node18" }),
         commonjs(commonjsPluginOptions),
@@ -107,11 +105,9 @@ const makeConfig = ({
       input,
       plugins: [
         externals({ deps: false }),
-        replace({
-          values: {
-            __APACITATION__: citationData.apa,
-            __BIBTEXCITATION__: citationData.bibtex,
-          },
+        modify({
+          find: /'__CITATIONS__'/g,
+          replace: JSON.stringify(citationData, null, 2),
         }),
         resolve({ preferBuiltins: false }),
         esbuild({ ...esBuildPluginOptions, target: "esnext" }),
@@ -132,11 +128,9 @@ const makeConfig = ({
       input,
       plugins: [
         externals({ deps: false }),
-        replace({
-          values: {
-            __APACITATION__: citationData.apa,
-            __BIBTEXCITATION__: citationData.bibtex,
-          },
+        modify({
+          find: /'__CITATIONS__'/g,
+          replace: JSON.stringify(citationData, null, 2),
         }),
         resolve({ preferBuiltins: false }),
         esbuild({ ...esBuildPluginOptions, target: "es2015", minify: true }),

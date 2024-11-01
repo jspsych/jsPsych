@@ -2,7 +2,7 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import { pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { JsPsych, initJsPsych } from "../../src";
-import { TestExtension } from "./test-extension";
+import { TestExtension } from "./TestExtension";
 
 jest.useFakeTimers();
 
