@@ -58,6 +58,23 @@ describe("Timeline", () => {
       expect((children[1] as Timeline).children.map((child) => child.index)).toEqual([1, 2]);
     });
 
+    it("respects dynamically added child node descriptions", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timelineDescription: TimelineArray = [{ type: TestPlugin }];
+      const timeline = createTimeline(timelineDescription);
+
+      const runPromise = timeline.run();
+      expect(timeline.children.length).toEqual(1);
+
+      timelineDescription.push({ timeline: [{ type: TestPlugin }] });
+      await TestPlugin.finishTrial();
+      await TestPlugin.finishTrial();
+      await runPromise;
+
+      expect(timeline.children.length).toEqual(2);
+    });
+
     describe("with `pause()` and `resume()` calls`", () => {
       beforeEach(() => {
         TestPlugin.setManualFinishTrialMode();
@@ -84,12 +101,9 @@ describe("Timeline", () => {
 
         await TestPlugin.finishTrial();
         expect(timeline.children[1].getStatus()).toBe(TimelineNodeStatus.COMPLETED);
-        expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.PENDING);
 
-        // Resolving the next trial promise shouldn't continue the experiment since no trial should be running.
-        await TestPlugin.finishTrial();
-
-        expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.PENDING);
+        // The timeline is paused, so it shouldn't have instantiated the next child node yet.
+        expect(timeline.children.length).toEqual(2);
 
         timeline.resume();
         await flushPromises();
