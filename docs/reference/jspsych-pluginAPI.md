@@ -289,7 +289,7 @@ See the `audio-keyboard-response` plugin for an example in a fuller context.
 ```javascript
 const audio = jsPsych.pluginAPI.getAudioPlayer(filepath);
 
-audio.play();
+audio.stop();
 ```
 
 #### Return value
@@ -298,7 +298,7 @@ Returns nothing.
 
 #### Description
 
-Method that belongs to the AudioPlayer class. Stops the audio loaded into the audio buffer of the AudioPlayer instance for a particular file. If the audio is an HTML5 audio object it pauses it. If the audio is a Webaudio API object it stops it.
+Method that belongs to the AudioPlayer class. Stops the audio loaded into the audio buffer of the AudioPlayer instance for a particular file. If the audio is an HTML5 audio object it pauses it. If the audio is a Webaudio API object it stops it. This will regenerate the audio player, allowing you to call the `play()` method upon it again.
 
 #### Example
 
@@ -310,7 +310,6 @@ const audio = await jsPsych.pluginAPI.getAudioPlayer('my-sound.mp3');
 audio.play();
 
 audio.stop();
-
 ```
 
 See the `audio-keyboard-response` plugin for an example in a fuller context.
