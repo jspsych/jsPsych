@@ -80,8 +80,8 @@ describe("Timeline", () => {
 
       const timelineDescription: TimelineArray = [
         { type: TestPlugin },
-        { type: TestPlugin },
         { timeline: [{ type: TestPlugin }] },
+        { type: TestPlugin },
       ];
       const timeline = createTimeline(timelineDescription);
 
@@ -94,7 +94,7 @@ describe("Timeline", () => {
       await runPromise;
 
       expect(timeline.children.length).toEqual(2);
-      expect(timeline.children).toEqual([expect.any(Trial), expect.any(Trial)]);
+      expect(timeline.children).toEqual([expect.any(Trial), expect.any(Timeline)]);
     });
 
     it("respects dynamically removed first child node descriptions", async () => {
