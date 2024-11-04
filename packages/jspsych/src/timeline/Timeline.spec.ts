@@ -75,6 +75,72 @@ describe("Timeline", () => {
       expect(timeline.children.length).toEqual(2);
     });
 
+    it("respects dynamically removed end child node descriptions", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timelineDescription: TimelineArray = [
+        { type: TestPlugin },
+        { type: TestPlugin },
+        { timeline: [{ type: TestPlugin }] },
+      ];
+      const timeline = createTimeline(timelineDescription);
+
+      const runPromise = timeline.run();
+      expect(timeline.children.length).toEqual(1); // Only the first child is instantiated because they are incrementally instantiated now
+
+      timelineDescription.pop();
+      await TestPlugin.finishTrial();
+      await TestPlugin.finishTrial();
+      await runPromise;
+
+      expect(timeline.children.length).toEqual(2);
+      expect(timeline.children).toEqual([expect.any(Trial), expect.any(Trial)]);
+    });
+
+    it("respects dynamically removed first child node descriptions", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timelineDescription: TimelineArray = [
+        { type: TestPlugin },
+        { timeline: [{ type: TestPlugin }] },
+        { type: TestPlugin },
+      ];
+      const timeline = createTimeline(timelineDescription);
+
+      const runPromise = timeline.run();
+      expect(timeline.children.length).toEqual(1);
+
+      timelineDescription.shift();
+      await TestPlugin.finishTrial();
+      await TestPlugin.finishTrial();
+      await runPromise;
+
+      expect(timeline.children.length).toEqual(2);
+      expect(timeline.children).toEqual([expect.any(Timeline), expect.any(Trial)]);
+    });
+
+    it("respects dynamically removed middle child node descriptions", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timelineDescription: TimelineArray = [
+        { type: TestPlugin },
+        { timeline: [{ type: TestPlugin }] },
+        { type: TestPlugin },
+      ];
+      const timeline = createTimeline(timelineDescription);
+
+      const runPromise = timeline.run();
+      expect(timeline.children.length).toEqual(1);
+
+      timelineDescription.splice(1, 1);
+      await TestPlugin.finishTrial();
+      await TestPlugin.finishTrial();
+      await runPromise;
+
+      expect(timeline.children.length).toEqual(2);
+      expect(timeline.children).toEqual([expect.any(Trial), expect.any(Trial)]);
+    });
+
     describe("with `pause()` and `resume()` calls`", () => {
       beforeEach(() => {
         TestPlugin.setManualFinishTrialMode();
