@@ -2,7 +2,8 @@
 
 Version 8.x of jsPsych focused on a complete rewrite of the core library to enable new features and make it easier to maintain.
 Most of the changes in version 8.x are behind the scenes.
-However, there are some breaking changes that you will need to address in your experiment code in order to upgrade to v8.x.
+However, there are some breaking changes that you will need to address in your experiment code in order to upgrade to v8.x. 
+If you are a plugin developer, there are also some special considerations below to factor in when developing your plugins or modifying existing ones.
 
 This guide is aimed at upgrades from version 7.x to 8.x. 
 If you are using version 6.x or earlier, please follow the [migration guide for v7.x](./migration-v7.md) before trying to upgrade to v8.x.
@@ -85,6 +86,9 @@ const trial = {
 The `button_html` parameter can also support different HTML for each button. 
 See the [plugin documentation](https://www.jspsych.org/latest/plugins/html-button-response/index.html) for more details.
 
+For plugin developers: if you are writing a plugin and updating parameters to use functions, 
+make sure to mock these functions in Jest to ensure tests can still run.
+
 ## Plugin parameter handling
 
 In version 7.x, a plugin could omit parameters from the `info` object and jsPsych would still evaluate these parameters appropriately in most cases. 
@@ -103,6 +107,49 @@ This property is an object that can contain a description of the types of data t
 Including these properties is not *required* for a plugin to work, but it is recommended.
 In version 8.x, jsPsych will throw a warning if a plugin is used that does not have a `version` or `data` property in the `info` object.
 In version 9.x, we plan to make this a requirement.
+
+## Changes to the `AudioPlayer` class
+
+In version 7.x, jsPsych's `pluginAPI` class exposed WebAudio and HTML5 audio APIs through `getAudioBuffer()`. However, this required different implementations done by the developer to account for each API. 
+In version 8.x, we've removed this in favor of `getAudioPlayer()`, which handles both API choices under the hood. 
+
+This change only effects plugin developers. If you want to update to use the new `getAudioPlayer()`, it is recommend that you call this new method using the `await` syntax, which requires an asyncrhonous `trial` function:
+```js
+const audio = await jsPsych.pluginAPI.getAudioPlayer('my-sound.mp3');
+```
+
+If you'd like to still use the `.then()` syntax to resolve the Promise generated, you may update it as such:
+
+Version 7.x:
+```js
+this.jsPsych.pluginAPI
+      .getAudioBuffer('my-audio.mp3')
+      .then((audio) => {
+        // call play on audio if HTML5 audio API, create and connect buffer if WebAudio API
+      })
+      .catch((err) =>{
+        // handle error
+      });
+```
+
+Version 8.x:
+```js
+this.jsPsych.pluginAPI
+      .getAudioPlayer('my-audio.mp3')
+      .then((player) => {
+        // no need to create and connect buffer, can just directly call functions on player
+      })
+      .catch((err) => {
+        // handle error
+      })
+```
+
+Along with this, the `start()` and `pause()` functions were removed from the `AudioPlayer` class. 
+You can still call `stop()` upon an audio ending in order to regenerate the `AudioPlayer`, and be able
+to call `play()` on it again. 
+
+For a general guide on implementation, the `audio-button-response` plugin uses the `await` syntax
+to handle playing audio.
 
 ## Changes to `finishTrial()`
 
