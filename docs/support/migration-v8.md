@@ -83,7 +83,7 @@ const trial = {
 ```
 
 The `button_html` parameter can also support different HTML for each button. 
-See the [plugin documentation](https://www.jspsych.org/plugins/jspsych-html-button-response/) for more details.
+See the [plugin documentation](https://www.jspsych.org/latest/plugins/html-button-response/index.html) for more details.
 
 ## Plugin parameter handling
 

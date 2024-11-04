@@ -400,6 +400,8 @@ var el = jsPsych.getDisplayElement();
 // hide the jsPsych display
 el.style.visibility = 'hidden';
 ```
+
+
 ---
 
 ## jsPsych.getInitSettings
