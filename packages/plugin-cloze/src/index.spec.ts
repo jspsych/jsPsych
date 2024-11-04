@@ -8,6 +8,11 @@ const getInputElementById = (id: string) => document.getElementById(id) as HTMLI
 
 const clickFinishButton = () => clickTarget(document.querySelector("#finish_cloze_button"));
 
+// reset DOM
+beforeEach(() => {
+  document.body.innerHTML = "";
+});
+
 describe("cloze", () => {
   test("displays cloze", async () => {
     const { getHTML, expectFinished } = await startTimeline([
@@ -197,6 +202,25 @@ describe("cloze", () => {
 
     getInputElementById("input0").value = "cloze";
     await clickFinishButton();
+    await expectFinished();
+  });
+
+  test.skip("calls mistake function on button click when answers are checked and do not belong to a multiple answer blank", async () => {
+    const mistakeFn = jest.fn();
+
+    const { expectFinished } = await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze/jspsych% text.",
+        check_answers: true,
+        mistake_fn: mistakeFn,
+      },
+    ]);
+
+    getInputElementById("input0").value = "not fitting in answer";
+    await clickFinishButton();
+    expect(mistakeFn).toHaveBeenCalled();
+
     await expectFinished();
   });
 

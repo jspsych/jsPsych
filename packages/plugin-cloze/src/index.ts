@@ -6,7 +6,12 @@ const info = <const>{
   name: "cloze",
   version: version,
   parameters: {
-    /** The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. % correct solution %). */
+    /** 
+     * The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by 
+     * input fields. If there is a correct answer you want the system to check against, it must be typed
+     * between the two percentage signs (i.e. % correct solution %). If you would like to input multiple
+     * solutions, type a slash between each responses (i.e. %1/2/3%).
+     */
     text: {
       type: ParameterType.HTML_STRING,
       default: undefined,
@@ -16,12 +21,25 @@ const info = <const>{
       type: ParameterType.STRING,
       default: "OK",
     },
-    /** Boolean value indicating if the answers given by participants should be compared against a correct solution given in the text (between % signs) after the button was clicked. If ```true```, answers are checked and in case of differences, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. If ```false```, no checks are performed and the trial automatically ends when clicking the button. */
+    /** 
+     * Boolean value indicating if the answers given by participants should be compared
+     * against a correct solution given in `text` after the submit button was clicked. 
+     * If ```true```, answers are checked and in case of differences, the ```mistake_fn``` 
+     * is called. In this case, the trial does not automatically finish. If ```false```, 
+     * no checks are performed and the trial ends when clicking the submit button. 
+     */
     check_answers: {
       type: ParameterType.BOOL,
       default: false,
     },
-    /** Boolean value indicating if the answers given by participants should be checked for completion after the button was clicked. If ```true```, answers are not checked for completion and blank answers are allowed. The trial will then automatically finish upon the clicking the button. If ```false```, answers are checked for completion, and in case there are some fields with missing answers, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. */
+    /** 
+     * Boolean value indicating if the answers given by participants should be checked for
+     * completion after the button was clicked. If ```true```, answers are not checked for
+     * completion and blank answers are allowed. The trial will then automatically finish 
+     * upon the clicking the button. If ```false```, answers are checked for completion, 
+     * and in case there are some fields with missing answers, the ```mistake_fn``` is called. 
+     * In this case, the trial does not automatically finish. 
+     */
     allow_blanks: {
       type: ParameterType.BOOL,
       default: true,
@@ -32,14 +50,18 @@ const info = <const>{
       pretty_name: "Case sensitivity",
       default: true,
     },
-    /** Function called if either the check_answers is set to TRUE or the allow_blanks is set to FALSE and there is a discrepancy between the set answers and the answers provide or if all input fields aren't filled out, respectively. */
+    /** 
+     * Function called if either `check_answers` is `true` or `allow_blanks` is `false` 
+     * and there is a discrepancy between the set answers and the answers provided, or 
+     * if all input fields aren't filled out, respectively. 
+     */
     mistake_fn: {
       type: ParameterType.FUNCTION,
       default: () => {},
     },
   },
   data: {
-    /** Answers the partcipant gave. */
+    /** Answers the participant gave. */
     response: {
       type: ParameterType.STRING,
       array: true,
@@ -81,7 +103,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
     display_element.innerHTML = html;
 
     const check = () => {
-      var answers: String[] = [];
+      var answers: string[] = [];
       var answers_correct = true;
       var answers_filled = true;
 
@@ -126,8 +148,8 @@ class ClozePlugin implements JsPsychPlugin<Info> {
     (display_element.querySelector("#input0") as HTMLElement).focus();
   }
 
-  private getSolutions(text: string, case_sensitive: boolean) {
-    const solutions: String[][] = [];
+  private getSolutions(text: string, case_sensitive: boolean): string[][] {
+    const solutions: string[][] = [];
     const elements = text.split("%");
 
     for (let i = 1; i < elements.length; i += 2) {
@@ -156,12 +178,13 @@ class ClozePlugin implements JsPsychPlugin<Info> {
 
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
     const solutions = this.getSolutions(trial.text, trial.case_sensitivity);
-    const responses = [];
+    const responses: string[] = [];
     for (const wordList of solutions) {
       if (wordList.includes("")) {
-        responses.push(this.jsPsych.randomization.randomWords({ exactly: 1 }));
+        var word = this.jsPsych.randomization.randomWords({ exactly: 1 });
+        responses.push(word[0]);
       } else {
-        responses.push(wordList);
+        responses.push(wordList[Math.floor(Math.random() * wordList.length)]);
       }
     }
 
@@ -179,8 +202,6 @@ class ClozePlugin implements JsPsychPlugin<Info> {
   private simulate_data_only(trial: TrialType<Info>, simulation_options) {
     const data = this.create_simulation_data(trial, simulation_options);
 
-    data.response = data.response[0];
-
     this.jsPsych.finishTrial(data);
   }
 
@@ -195,9 +216,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
     const inputs = display_element.querySelectorAll('input[type="text"]');
     let rt = this.jsPsych.randomization.sampleExGaussian(750, 200, 0.01, true);
     for (let i = 0; i < data.response.length; i++) {
-      let res = data.response[i][Math.floor(Math.random() * data.response[i].length)];
-
-      this.jsPsych.pluginAPI.fillTextInput(inputs[i] as HTMLInputElement, res, rt);
+      this.jsPsych.pluginAPI.fillTextInput(inputs[i] as HTMLInputElement, data.response[i], rt);
       rt += this.jsPsych.randomization.sampleExGaussian(750, 200, 0.01, true);
     }
     this.jsPsych.pluginAPI.clickTarget(display_element.querySelector("#finish_cloze_button"), rt);
