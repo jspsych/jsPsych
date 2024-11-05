@@ -119,6 +119,30 @@ describe("Timeline", () => {
       expect(timeline.children).toEqual([expect.any(Trial), expect.any(Trial)]);
     });
 
+    it("dynamically remove first node after running it", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timelineDescription: TimelineArray = [
+        { type: TestPlugin, data: { I: 0 } },
+        { timeline: [{ type: TestPlugin, data: { I: 1 } }] },
+        { type: TestPlugin, data: { I: 2 } },
+        { type: TestPlugin, data: { I: 3 } },
+      ];
+      const timeline = createTimeline(timelineDescription);
+
+      const runPromise = timeline.run();
+      await TestPlugin.finishTrial();
+      timelineDescription.shift();
+      await TestPlugin.finishTrial();
+      await TestPlugin.finishTrial();
+      await runPromise;
+
+      expect(timeline.children.length).toEqual(3);
+      expect(timeline.children[0].getDataParameter().I).toEqual(0);
+      expect(timeline.children[1].description.timeline[0]).toHaveProperty("data.I", 1);
+      expect(timeline.children[2].getDataParameter().I).toEqual(3);
+    });
+
     describe("with `pause()` and `resume()` calls`", () => {
       beforeEach(() => {
         TestPlugin.setManualFinishTrialMode();
