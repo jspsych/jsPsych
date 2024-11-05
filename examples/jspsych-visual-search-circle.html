@@ -51,15 +51,27 @@
       timeline: [trial_1, trial_2, trial_3]
     };
 
-    // example using arbitrary image array
+    // example putting the first location at 90 degrees (right of the fixation)
     var trial_4 = {
+      type: jsPsychVisualSearchCircle,
+      target: 'img/backwardN.gif',
+      foil: 'img/normalN.gif',
+      fixation_image: 'img/fixation.gif',
+      target_present: true,
+      set_size: 3,
+      randomize_item_locations: false,
+      location_first_item: 90
+    };
+
+    // example using arbitrary image array
+    var trial_5 = {
       type: jsPsychVisualSearchCircle,
       stimuli: ['img/backwardN.gif', 'img/normalN.gif', 'img/1.gif', 'img/2.gif', 'img/3.gif'],
       fixation_image: 'img/fixation.gif',
       target_present: true
     };
 
-    jsPsych.run([preload_images, intro, trials, trial_4]);
+    jsPsych.run([preload_images, intro, trials, trial_4, trial_5]);
 
   </script>
 </html>

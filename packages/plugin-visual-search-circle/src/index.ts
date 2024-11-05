@@ -106,7 +106,10 @@ const info = <const>{
       pretty_name: "Randomize item locations",
       default: true,
     },
-    /** If `randomize_item_locations` is `false`, the location of the first item on the circle, in degrees. */
+    /** 
+     * If `randomize_item_locations` is `false`, the location of the first item on the circle, in degrees.
+     * 0 degrees is above the fixation, and moving clockwise in the positive direction.
+    */
     location_first_item: {
       type: ParameterType.INT,
       pretty_name: "Location first item",
@@ -152,7 +155,7 @@ type Info = typeof info;
 /**
  * This plugin presents a customizable visual-search task modelled after [Wang, Cavanagh, & Green (1994)](http://dx.doi.org/10.3758/BF03206946).
  * The participant indicates whether or not a target is present among a set of distractors. The stimuli are displayed in a circle, evenly-spaced,
- * equidistant from a fixation point. Here is an example using normal and backward Ns:
+ * equidistant from a fixation point. 
  *
  * @author Josh de Leeuw
  * @see {@link https://www.jspsych.org/latest/plugins/visual-search-circle/ visual-search-circle plugin documentation on jspsych.org}
@@ -287,10 +290,6 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
           end_trial();
         }, trial.trial_duration);
       }
-
-      function clear_display() {
-        display_element.innerHTML = "";
-      }
     };
   }
 
@@ -315,8 +314,9 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
     var hstimw = stimw / 2;
 
     var display_locs = [];
-    var random_offset = Math.floor(Math.random() * 360);
-    var offset = trial.randomize_item_locations ? random_offset : trial.location_first_item;
+    var offset = trial.randomize_item_locations 
+      ? Math.floor(Math.random() * 360)
+      : trial.location_first_item - 180; // makes it so 0 is up, moving clockwise
     for (var i = 0; i < n_locs; i++) {
       display_locs.push([
         Math.floor(paper_size / 2 + this.cosd(offset + i * (360 / n_locs)) * radi - hstimw),
