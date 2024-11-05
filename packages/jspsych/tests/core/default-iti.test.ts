@@ -1,6 +1,5 @@
-import { jest } from "@jest/globals";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
-import { pressKey, startTimeline } from "@jspsych/test-utils";
+import { flushPromises, pressKey, startTimeline } from "@jspsych/test-utils";
 
 jest.useFakeTimers();
 
@@ -18,7 +17,7 @@ describe("default iti parameter", () => {
     ]);
 
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toMatch("bar");
   });
 
@@ -38,9 +37,10 @@ describe("default iti parameter", () => {
     );
 
     expect(getHTML()).toMatch("foo");
+    await pressKey("a");
     expect(getHTML()).not.toMatch("bar");
-    pressKey("a");
     jest.advanceTimersByTime(100);
+    await flushPromises();
     expect(getHTML()).toMatch("bar");
   });
 });

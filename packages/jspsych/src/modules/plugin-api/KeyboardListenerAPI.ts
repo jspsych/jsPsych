@@ -48,7 +48,7 @@ export class KeyboardListenerAPI {
   private rootKeydownListener(e: KeyboardEvent) {
     // Iterate over a static copy of the listeners set because listeners might add other listeners
     // that we do not want to be included in the loop
-    for (const listener of Array.from(this.listeners)) {
+    for (const listener of [...this.listeners]) {
       listener(e);
     }
     this.heldKeys.add(this.toLowerCaseIfInsensitive(e.key));
@@ -125,7 +125,7 @@ export class KeyboardListenerAPI {
           this.cancelKeyboardResponse(listener);
         }
 
-        callback_function({ key, rt });
+        callback_function({ key: e.key, rt });
       }
     };
 

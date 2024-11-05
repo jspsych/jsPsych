@@ -1,6 +1,6 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import htmlSliderResponse from "@jspsych/plugin-html-slider-response";
-import { pressKey, startTimeline } from "@jspsych/test-utils";
+import { flushPromises, pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { initJsPsych } from "../../src";
 
@@ -20,7 +20,7 @@ describe("on_finish (trial)", () => {
       },
     ]);
 
-    pressKey("a");
+    await pressKey("a");
     expect(key_data).toBe("a");
   });
 
@@ -35,7 +35,7 @@ describe("on_finish (trial)", () => {
       },
     ]);
 
-    pressKey("a");
+    await pressKey("a");
     expect(getData().values()[0].response).toBe(1);
   });
 });
@@ -54,7 +54,7 @@ describe("on_start (trial)", () => {
       },
     ]);
 
-    pressKey("a");
+    await pressKey("a");
     expect(stimulus).toBe("hello");
   });
 
@@ -80,7 +80,7 @@ describe("on_start (trial)", () => {
       jsPsych
     );
 
-    pressKey("a");
+    await pressKey("a");
     expect(d).toBe("hello");
   });
 });
@@ -104,7 +104,7 @@ describe("on_trial_finish (experiment level)", () => {
       jsPsych
     );
 
-    pressKey("a");
+    await pressKey("a");
     expect(key).toBe("a");
   });
 
@@ -124,7 +124,7 @@ describe("on_trial_finish (experiment level)", () => {
       jsPsych
     );
 
-    pressKey("a");
+    await pressKey("a");
     expect(getData().values()[0].write).toBe(true);
   });
 });
@@ -148,7 +148,7 @@ describe("on_data_update", () => {
       jsPsych
     );
 
-    pressKey("a");
+    await pressKey("a");
     expect(key).toBe("a");
   });
 
@@ -174,7 +174,10 @@ describe("on_data_update", () => {
       jsPsych
     );
 
-    jest.advanceTimersByTime(20);
+    jest.advanceTimersByTime(10);
+    await flushPromises();
+    jest.advanceTimersByTime(10);
+    await flushPromises();
 
     expect(onDataUpdateFn).toHaveBeenNthCalledWith(1, expect.objectContaining({ response: null }));
     expect(onDataUpdateFn).toHaveBeenNthCalledWith(
@@ -204,7 +207,7 @@ describe("on_data_update", () => {
       jsPsych
     );
 
-    pressKey("a");
+    await pressKey("a");
     expect(trialLevel).toBe(true);
   });
 
@@ -229,7 +232,7 @@ describe("on_data_update", () => {
       jsPsych
     );
 
-    pressKey("a");
+    await pressKey("a");
     expect(experimentLevel).toBe(true);
   });
 });
@@ -253,7 +256,7 @@ describe("on_trial_start", () => {
       jsPsych
     );
 
-    pressKey("a");
+    await pressKey("a");
     expect(text).toBe("hello");
   });
 
@@ -274,7 +277,7 @@ describe("on_trial_start", () => {
     );
 
     expect(getHTML()).toMatch("goodbye");
-    pressKey("a");
+    await pressKey("a");
   });
 });
 
@@ -302,11 +305,11 @@ describe("on_timeline_finish", () => {
       },
     ]);
 
-    pressKey("a");
+    await pressKey("a");
     expect(onFinishFunction).not.toHaveBeenCalled();
-    pressKey("a");
+    await pressKey("a");
     expect(onFinishFunction).not.toHaveBeenCalled();
-    pressKey("a");
+    await pressKey("a");
     expect(onFinishFunction).toHaveBeenCalledTimes(1);
   });
 
@@ -326,66 +329,9 @@ describe("on_timeline_finish", () => {
       },
     ]);
 
-    pressKey("a");
-    pressKey("a");
+    await pressKey("a");
+    await pressKey("a");
     expect(onFinishFunction).toHaveBeenCalledTimes(1);
-  });
-
-  test("should fire on every repetition", async () => {
-    const onFinishFunction = jest.fn();
-
-    await startTimeline([
-      {
-        timeline: [
-          {
-            type: htmlKeyboardResponse,
-            stimulus: "foo",
-          },
-        ],
-        on_timeline_finish: onFinishFunction,
-        repetitions: 2,
-      },
-    ]);
-
-    pressKey("a");
-    pressKey("a");
-    expect(onFinishFunction).toHaveBeenCalledTimes(2);
-  });
-
-  test("should fire before a loop function", async () => {
-    const callback = jest.fn().mockImplementation((str) => str);
-    let count = 0;
-
-    await startTimeline([
-      {
-        timeline: [
-          {
-            type: htmlKeyboardResponse,
-            stimulus: "foo",
-          },
-        ],
-        on_timeline_finish: () => {
-          callback("finish");
-        },
-        loop_function: () => {
-          callback("loop");
-          count++;
-          if (count == 2) {
-            return false;
-          } else {
-            return true;
-          }
-        },
-      },
-    ]);
-
-    pressKey("a");
-    pressKey("a");
-    expect(callback).toHaveBeenCalledTimes(4);
-    expect(callback.mock.calls[0][0]).toBe("finish");
-    expect(callback.mock.calls[1][0]).toBe("loop");
-    expect(callback.mock.calls[2][0]).toBe("finish");
-    expect(callback.mock.calls[3][0]).toBe("loop");
   });
 });
 
@@ -414,9 +360,9 @@ describe("on_timeline_start", () => {
     ]);
 
     expect(onStartFunction).toHaveBeenCalledTimes(1);
-    pressKey("a");
-    pressKey("a");
-    pressKey("a");
+    await pressKey("a");
+    await pressKey("a");
+    await pressKey("a");
     expect(onStartFunction).toHaveBeenCalledTimes(1);
   });
 
@@ -437,31 +383,9 @@ describe("on_timeline_start", () => {
     ]);
 
     expect(onStartFunction).toHaveBeenCalledTimes(1);
-    pressKey("a");
-    pressKey("a");
+    await pressKey("a");
+    await pressKey("a");
     expect(onStartFunction).toHaveBeenCalledTimes(1);
-  });
-
-  test("should fire on every repetition", async () => {
-    const onStartFunction = jest.fn();
-
-    await startTimeline([
-      {
-        timeline: [
-          {
-            type: htmlKeyboardResponse,
-            stimulus: "foo",
-          },
-        ],
-        on_timeline_start: onStartFunction,
-        repetitions: 2,
-      },
-    ]);
-
-    expect(onStartFunction).toHaveBeenCalledTimes(1);
-    pressKey("a");
-    pressKey("a");
-    expect(onStartFunction).toHaveBeenCalledTimes(2);
   });
 
   test("should fire after a conditional function", async () => {
@@ -488,6 +412,6 @@ describe("on_timeline_start", () => {
     expect(callback).toHaveBeenCalledTimes(2);
     expect(callback.mock.calls[0][0]).toBe("conditional");
     expect(callback.mock.calls[1][0]).toBe("start");
-    pressKey("a");
+    await pressKey("a");
   });
 });

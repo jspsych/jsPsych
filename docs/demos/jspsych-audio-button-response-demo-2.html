@@ -2,11 +2,11 @@
 <html>
   <head>
     <script src="docs-demo-timeline.js"></script>
-    <script src="https://unpkg.com/jspsych@7.3.1"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@1.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.2"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-preload@1.1.2"></script>
-    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.1/css/jspsych.css" />
+    <script src="https://unpkg.com/jspsych@8.0.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.0.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@8.0.3/css/jspsych.css" />
   </head>
   <body></body>
   <script>
@@ -30,7 +30,7 @@
     	stimulus: 'sound/roar.mp3',
     	choices: images,
     	prompt: "<p>Which animal made the sound?</p>",
-    	button_html: '<img src="%choice%" />'
+    	button_html: (choice)=>`<img style="cursor: pointer; margin: 10px;" src="${choice}" />`
     };
 
     timeline.push(trial);

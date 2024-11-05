@@ -1,63 +1,88 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "html-button-response",
+  version: version,
   parameters: {
-    /** The HTML string to be displayed */
+    /** The HTML content to be displayed. */
     stimulus: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Stimulus",
       default: undefined,
     },
-    /** Array containing the label(s) for the button(s). */
+    /** Labels for the buttons. Each different string in the array will generate a different button. */
     choices: {
       type: ParameterType.STRING,
-      pretty_name: "Choices",
       default: undefined,
       array: true,
     },
-    /** The HTML for creating button. Can create own style. Use the "%choice%" string to indicate where the label from the choices parameter should be inserted. */
+    /**
+     * A function that generates the HTML for each button in the `choices` array. The function gets the string and index of the item in the `choices` array and should return valid HTML. If you want to use different markup for each button, you can do that by using a conditional on either parameter. The default parameter returns a button element with the text label of the choice.
+     */
     button_html: {
-      type: ParameterType.HTML_STRING,
-      pretty_name: "Button HTML",
-      default: '<button class="jspsych-btn">%choice%</button>',
-      array: true,
+      type: ParameterType.FUNCTION,
+      default: function (choice: string, choice_index: number) {
+        return `<button class="jspsych-btn">${choice}</button>`;
+      },
     },
-    /** Any content here will be displayed under the button(s). */
+    /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press). */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
-    /** How long to show the stimulus. */
+    /** How long to display the stimulus in milliseconds. The visibility CSS property of the stimulus will be set to `hidden` after this time has elapsed. If this is null, then the stimulus will remain visible until the trial ends. */
     stimulus_duration: {
       type: ParameterType.INT,
-      pretty_name: "Stimulus duration",
       default: null,
     },
-    /** How long to show the trial. */
+    /** ow long to wait for the participant to make a response before ending the trial in milliseconds. If the participant fails to make a response before this timer is reached, the participant's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, the trial will wait for a response indefinitely.  */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
     },
-    /** The vertical margin of the button. */
-    margin_vertical: {
+    /** Setting to `'grid'` will make the container element have the CSS property `display: grid` and enable the use of `grid_rows` and `grid_columns`. Setting to `'flex'` will make the container element have the CSS property `display: flex`. You can customize how the buttons are laid out by adding inline CSS in the `button_html` parameter. */
+    button_layout: {
       type: ParameterType.STRING,
-      pretty_name: "Margin vertical",
-      default: "0px",
+      default: "grid",
     },
-    /** The horizontal margin of the button. */
-    margin_horizontal: {
-      type: ParameterType.STRING,
-      pretty_name: "Margin horizontal",
-      default: "8px",
+    /**
+     * The number of rows in the button grid. Only applicable when `button_layout` is set to `'grid'`. If null, the number of rows will be determined automatically based on the number of buttons and the number of columns.
+     */
+    grid_rows: {
+      type: ParameterType.INT,
+      default: 1,
     },
-    /** If true, then trial will end when user responds. */
+    /**
+     * The number of columns in the button grid. Only applicable when `button_layout` is set to `'grid'`. If null, the number of columns will be determined automatically based on the number of buttons and the number of rows.
+     */
+    grid_columns: {
+      type: ParameterType.INT,
+      default: null,
+    },
+    /** If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete. */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
+    },
+    /** How long the button will delay enabling in milliseconds. */
+    enable_button_after: {
+      type: ParameterType.INT,
+      default: 0,
+    },
+  },
+  data: {
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** Indicates which button the participant pressed. The first button in the `choices` array is 0, the second is 1, and so on. */
+    response: {
+      type: ParameterType.INT,
+    },
+    /** The HTML content that was displayed on the screen. */
+    stimulus: {
+      type: ParameterType.HTML_STRING,
     },
   },
 };
@@ -65,10 +90,10 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * html-button-response
- * jsPsych plugin for displaying a stimulus and getting a button response
+ * This plugin displays HTML content and records responses generated by button click. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the participant has failed to respond within a fixed length of time. The button itself can be customized using HTML formatting.
+ *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-html-button-response/ html-button-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/html-button-response/ html-button-response plugin documentation on jspsych.org}
  */
 class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -76,61 +101,55 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    // display stimulus
-    var html = '<div id="jspsych-html-button-response-stimulus">' + trial.stimulus + "</div>";
+    // Display stimulus
+    const stimulusElement = document.createElement("div");
+    stimulusElement.id = "jspsych-html-button-response-stimulus";
+    stimulusElement.innerHTML = trial.stimulus;
 
-    //display buttons
-    var buttons = [];
-    if (Array.isArray(trial.button_html)) {
-      if (trial.button_html.length == trial.choices.length) {
-        buttons = trial.button_html;
-      } else {
-        console.error(
-          "Error in html-button-response plugin. The length of the button_html array does not equal the length of the choices array"
+    display_element.appendChild(stimulusElement);
+
+    // Display buttons
+    const buttonGroupElement = document.createElement("div");
+    buttonGroupElement.id = "jspsych-html-button-response-btngroup";
+    if (trial.button_layout === "grid") {
+      buttonGroupElement.classList.add("jspsych-btn-group-grid");
+      if (trial.grid_rows === null && trial.grid_columns === null) {
+        throw new Error(
+          "You cannot set `grid_rows` to `null` without providing a value for `grid_columns`."
         );
       }
-    } else {
-      for (var i = 0; i < trial.choices.length; i++) {
-        buttons.push(trial.button_html);
-      }
+      const n_cols =
+        trial.grid_columns === null
+          ? Math.ceil(trial.choices.length / trial.grid_rows)
+          : trial.grid_columns;
+      const n_rows =
+        trial.grid_rows === null
+          ? Math.ceil(trial.choices.length / trial.grid_columns)
+          : trial.grid_rows;
+      buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
+      buttonGroupElement.style.gridTemplateRows = `repeat(${n_rows}, 1fr)`;
+    } else if (trial.button_layout === "flex") {
+      buttonGroupElement.classList.add("jspsych-btn-group-flex");
     }
-    html += '<div id="jspsych-html-button-response-btngroup">';
-    for (var i = 0; i < trial.choices.length; i++) {
-      var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
-      html +=
-        '<div class="jspsych-html-button-response-button" style="display: inline-block; margin:' +
-        trial.margin_vertical +
-        " " +
-        trial.margin_horizontal +
-        '" id="jspsych-html-button-response-button-' +
-        i +
-        '" data-choice="' +
-        i +
-        '">' +
-        str +
-        "</div>";
-    }
-    html += "</div>";
 
-    //show prompt if there is one
-    if (trial.prompt !== null) {
-      html += trial.prompt;
+    for (const [choiceIndex, choice] of trial.choices.entries()) {
+      buttonGroupElement.insertAdjacentHTML("beforeend", trial.button_html(choice, choiceIndex));
+      const buttonElement = buttonGroupElement.lastChild as HTMLElement;
+      buttonElement.dataset.choice = choiceIndex.toString();
+      buttonElement.addEventListener("click", () => {
+        after_response(choiceIndex);
+      });
     }
-    display_element.innerHTML = html;
+
+    display_element.appendChild(buttonGroupElement);
+
+    // Show prompt if there is one
+    if (trial.prompt !== null) {
+      display_element.insertAdjacentHTML("beforeend", trial.prompt);
+    }
 
     // start time
     var start_time = performance.now();
-
-    // add event listeners to buttons
-    for (var i = 0; i < trial.choices.length; i++) {
-      display_element
-        .querySelector("#jspsych-html-button-response-button-" + i)
-        .addEventListener("click", (e) => {
-          var btn_el = e.currentTarget as HTMLButtonElement;
-          var choice = btn_el.getAttribute("data-choice"); // don't use dataset for jsdom compatibility
-          after_response(choice);
-        });
-    }
 
     // store response
     var response = {
@@ -140,18 +159,12 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // function to end trial when it is time
     const end_trial = () => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // gather the data to store for the trial
       var trial_data = {
         rt: response.rt,
         stimulus: trial.stimulus,
         response: response.button,
       };
-
-      // clear the display
-      display_element.innerHTML = "";
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
@@ -167,14 +180,11 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.querySelector("#jspsych-html-button-response-stimulus").className +=
-        " responded";
+      stimulusElement.classList.add("responded");
 
       // disable all the buttons after a response
-      var btns = document.querySelectorAll(".jspsych-html-button-response-button button");
-      for (var i = 0; i < btns.length; i++) {
-        //btns[i].removeEventListener('click');
-        btns[i].setAttribute("disabled", "disabled");
+      for (const button of buttonGroupElement.children) {
+        button.setAttribute("disabled", "disabled");
       }
 
       if (trial.response_ends_trial) {
@@ -185,10 +195,22 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
     // hide image if timing is set
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
-        display_element.querySelector<HTMLElement>(
-          "#jspsych-html-button-response-stimulus"
-        ).style.visibility = "hidden";
+        stimulusElement.style.visibility = "hidden";
       }, trial.stimulus_duration);
+    }
+
+    // disable all the buttons and set a timeout that enables them after a specified delay if timing is set
+    if (trial.enable_button_after > 0) {
+      var btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].setAttribute("disabled", "disabled");
+      }
+      this.jsPsych.pluginAPI.setTimeout(() => {
+        var btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].removeAttribute("disabled");
+        }
+      }, trial.enable_button_after);
     }
 
     // end trial if time limit is set
@@ -215,7 +237,9 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
     const default_data = {
       stimulus: trial.stimulus,
-      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+      rt:
+        this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true) +
+        trial.enable_button_after,
       response: this.jsPsych.randomization.randomInt(0, trial.choices.length - 1),
     };
 
@@ -242,7 +266,9 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     if (data.rt !== null) {
       this.jsPsych.pluginAPI.clickTarget(
-        display_element.querySelector(`div[data-choice="${data.response}"] button`),
+        display_element.querySelector(
+          `#jspsych-html-button-response-btngroup [data-choice="${data.response}"]`
+        ),
         data.rt
       );
     }

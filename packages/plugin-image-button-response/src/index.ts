@@ -1,90 +1,127 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "image-button-response",
+  version: version,
   parameters: {
-    /** The image to be displayed */
+    /** The path of the image file to be displayed. */
     stimulus: {
       type: ParameterType.IMAGE,
-      pretty_name: "Stimulus",
       default: undefined,
     },
-    /** Set the image height in pixels */
+    /** Set the height of the image in pixels. If left null (no value specified), then the image will display at its natural height. */
     stimulus_height: {
       type: ParameterType.INT,
-      pretty_name: "Image height",
       default: null,
     },
-    /** Set the image width in pixels */
+    /** Set the width of the image in pixels. If left null (no value specified), then the image will display at its natural width. */
     stimulus_width: {
       type: ParameterType.INT,
-      pretty_name: "Image width",
       default: null,
     },
-    /** Maintain the aspect ratio after setting width or height */
+    /** If setting *only* the width or *only* the height and this parameter is true, then the other dimension will be
+     * scaled to maintain the image's aspect ratio.  */
     maintain_aspect_ratio: {
       type: ParameterType.BOOL,
-      pretty_name: "Maintain aspect ratio",
       default: true,
     },
-    /** Array containing the label(s) for the button(s). */
+    /** Labels for the buttons. Each different string in the array will generate a different button. */
     choices: {
       type: ParameterType.STRING,
-      pretty_name: "Choices",
       default: undefined,
       array: true,
     },
-    /** The HTML for creating button. Can create own style. Use the "%choice%" string to indicate where the label from the choices parameter should be inserted. */
+    /**
+     * ``(choice: string, choice_index: number)=>`<button class="jspsych-btn">${choice}</button>``; | A function that
+     * generates the HTML for each button in the `choices` array. The function gets the string and index of the item in
+     * the `choices` array and should return valid HTML. If you want to use different markup for each button, you can do
+     * that by using a conditional on either parameter. The default parameter returns a button element with the text
+     * label of the choice.
+     */
     button_html: {
-      type: ParameterType.HTML_STRING,
-      pretty_name: "Button HTML",
-      default: '<button class="jspsych-btn">%choice%</button>',
-      array: true,
+      type: ParameterType.FUNCTION,
+      default: function (choice: string, choice_index: number) {
+        return `<button class="jspsych-btn">${choice}</button>`;
+      },
     },
-    /** Any content here will be displayed under the button. */
+    /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that
+     * it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press). */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
-    /** How long to show the stimulus. */
+    /** How long to show the stimulus for in milliseconds. If the value is null, then the stimulus will be shown until
+     * the participant makes a response. */
     stimulus_duration: {
       type: ParameterType.INT,
-      pretty_name: "Stimulus duration",
       default: null,
     },
-    /** How long to show the trial. */
+    /** How long to wait for the participant to make a response before ending the trial in milliseconds. If the participant
+     * fails to make a response before this timer is reached, the participant's response will be recorded as null for the
+     * trial and the trial will end. If the value of this parameter is null, the trial will wait for a response indefinitely. */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
     },
-    /** The vertical margin of the button. */
-    margin_vertical: {
+    /** Setting to `'grid'` will make the container element have the CSS property `display: grid` and enable the use of
+     * `grid_rows` and `grid_columns`. Setting to `'flex'` will make the container element have the CSS property
+     * `display: flex`. You can customize how the buttons are laid out by adding inline CSS in the `button_html` parameter.  */
+    button_layout: {
       type: ParameterType.STRING,
-      pretty_name: "Margin vertical",
-      default: "0px",
+      default: "grid",
     },
-    /** The horizontal margin of the button. */
-    margin_horizontal: {
-      type: ParameterType.STRING,
-      pretty_name: "Margin horizontal",
-      default: "8px",
+    /**
+     * The number of rows in the button grid. Only applicable when `button_layout` is set to `'grid'`. If null, the
+     *  number of rows will be determined automatically based on the number of buttons and the number of columns.
+     */
+    grid_rows: {
+      type: ParameterType.INT,
+      default: 1,
     },
-    /** If true, then trial will end when user responds. */
+    /**
+     * The number of columns in the button grid. Only applicable when `button_layout` is set to `'grid'`. If null, the
+     * number of columns will be determined automatically based on the number of buttons and the number of rows.
+     */
+    grid_columns: {
+      type: ParameterType.INT,
+      default: null,
+    },
+    /** If true, then the trial will end whenever the participant makes a response (assuming they make their response
+     * before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until
+     * the value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to
+     * view a stimulus for a fixed amount of time, even if they respond before the time is complete. */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
     },
     /**
-     * If true, the image will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
-     * If false, the image will be shown via an img element.
+     * If true, the image will be drawn onto a canvas element. This prevents a blank screen (white flash) between consecutive image trials in some browsers, like Firefox and Edge.
+     * If false, the image will be shown via an img element, as in previous versions of jsPsych. If the stimulus is an **animated gif**, you must set this parameter to false, because the canvas rendering method will only present static images.
      */
     render_on_canvas: {
       type: ParameterType.BOOL,
-      pretty_name: "Render on canvas",
       default: true,
+    },
+    /** How long the button will delay enabling in milliseconds. */
+    enable_button_after: {
+      type: ParameterType.INT,
+      default: 0,
+    },
+  },
+  data: {
+    /** The path of the image that was displayed. */
+    stimulus: {
+      type: ParameterType.STRING,
+    },
+    /** Indicates which button the participant pressed. The first button in the `choices` array is 0, the second is 1, and so on.  */
+    response: {
+      type: ParameterType.INT,
+    },
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. */
+    rt: {
+      type: ParameterType.INT,
     },
   },
 };
@@ -92,12 +129,16 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **image-button-response**
+ * This plugin displays an image and records responses generated with a button click. The stimulus can be displayed until
+ * a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the participant
+ * has failed to respond within a fixed length of time. The button itself can be customized using HTML formatting.
  *
- * jsPsych plugin for displaying an image stimulus and getting a button response
+ * Image files can be automatically preloaded by jsPsych using the [`preload` plugin](preload.md). However, if you
+ * are using timeline variables or another dynamic method to specify the image stimulus, you will need to
+ * [manually preload](../overview/media-preloading.md#manual-preloading) the images.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-image-button-response/ image-button-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/image-button-response/ image-button-response plugin documentation on jspsych.org}
  */
 class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -105,185 +146,121 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    var height, width;
-    var html;
-    if (trial.render_on_canvas) {
-      var image_drawn = false;
-      // first clear the display element (because the render_on_canvas method appends to display_element instead of overwriting it with .innerHTML)
-      if (display_element.hasChildNodes()) {
-        // can't loop through child list because the list will be modified by .removeChild()
-        while (display_element.firstChild) {
-          display_element.removeChild(display_element.firstChild);
-        }
-      }
-      // create canvas element and image
-      var canvas = document.createElement("canvas");
-      canvas.id = "jspsych-image-button-response-stimulus";
-      canvas.style.margin = "0";
-      canvas.style.padding = "0";
-      var ctx = canvas.getContext("2d");
-      var img = new Image();
-      img.onload = () => {
-        // if image wasn't preloaded, then it will need to be drawn whenever it finishes loading
-        if (!image_drawn) {
-          getHeightWidth(); // only possible to get width/height after image loads
-          ctx.drawImage(img, 0, 0, width, height);
-        }
-      };
-      img.src = trial.stimulus;
-      // get/set image height and width - this can only be done after image loads because uses image's naturalWidth/naturalHeight properties
-      const getHeightWidth = () => {
-        if (trial.stimulus_height !== null) {
-          height = trial.stimulus_height;
-          if (trial.stimulus_width == null && trial.maintain_aspect_ratio) {
-            width = img.naturalWidth * (trial.stimulus_height / img.naturalHeight);
-          }
-        } else {
-          height = img.naturalHeight;
-        }
-        if (trial.stimulus_width !== null) {
-          width = trial.stimulus_width;
-          if (trial.stimulus_height == null && trial.maintain_aspect_ratio) {
-            height = img.naturalHeight * (trial.stimulus_width / img.naturalWidth);
-          }
-        } else if (!(trial.stimulus_height !== null && trial.maintain_aspect_ratio)) {
-          // if stimulus width is null, only use the image's natural width if the width value wasn't set
-          // in the if statement above, based on a specified height and maintain_aspect_ratio = true
-          width = img.naturalWidth;
-        }
-        canvas.height = height;
-        canvas.width = width;
-      };
-      getHeightWidth(); // call now, in case image loads immediately (is cached)
-      // create buttons
-      var buttons = [];
-      if (Array.isArray(trial.button_html)) {
-        if (trial.button_html.length == trial.choices.length) {
-          buttons = trial.button_html;
-        } else {
-          console.error(
-            "Error in image-button-response plugin. The length of the button_html array does not equal the length of the choices array"
-          );
-        }
-      } else {
-        for (var i = 0; i < trial.choices.length; i++) {
-          buttons.push(trial.button_html);
-        }
-      }
-      var btngroup_div = document.createElement("div");
-      btngroup_div.id = "jspsych-image-button-response-btngroup";
-      html = "";
-      for (var i = 0; i < trial.choices.length; i++) {
-        var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
-        html +=
-          '<div class="jspsych-image-button-response-button" style="display: inline-block; margin:' +
-          trial.margin_vertical +
-          " " +
-          trial.margin_horizontal +
-          '" id="jspsych-image-button-response-button-' +
-          i +
-          '" data-choice="' +
-          i +
-          '">' +
-          str +
-          "</div>";
-      }
-      btngroup_div.innerHTML = html;
-      // add canvas to screen and draw image
-      display_element.insertBefore(canvas, null);
-      if (img.complete && Number.isFinite(width) && Number.isFinite(height)) {
-        // if image has loaded and width/height have been set, then draw it now
-        // (don't rely on img onload function to draw image when image is in the cache, because that causes a delay in the image presentation)
-        ctx.drawImage(img, 0, 0, width, height);
-        image_drawn = true;
-      }
-      // add buttons to screen
-      display_element.insertBefore(btngroup_div, canvas.nextElementSibling);
-      // add prompt if there is one
-      if (trial.prompt !== null) {
-        display_element.insertAdjacentHTML("beforeend", trial.prompt);
-      }
-    } else {
-      // display stimulus as an image element
-      html = '<img src="' + trial.stimulus + '" id="jspsych-image-button-response-stimulus">';
-      //display buttons
-      var buttons = [];
-      if (Array.isArray(trial.button_html)) {
-        if (trial.button_html.length == trial.choices.length) {
-          buttons = trial.button_html;
-        } else {
-          console.error(
-            "Error in image-button-response plugin. The length of the button_html array does not equal the length of the choices array"
-          );
-        }
-      } else {
-        for (var i = 0; i < trial.choices.length; i++) {
-          buttons.push(trial.button_html);
-        }
-      }
-      html += '<div id="jspsych-image-button-response-btngroup">';
-
-      for (var i = 0; i < trial.choices.length; i++) {
-        var str = buttons[i].replace(/%choice%/g, trial.choices[i]);
-        html +=
-          '<div class="jspsych-image-button-response-button" style="display: inline-block; margin:' +
-          trial.margin_vertical +
-          " " +
-          trial.margin_horizontal +
-          '" id="jspsych-image-button-response-button-' +
-          i +
-          '" data-choice="' +
-          i +
-          '">' +
-          str +
-          "</div>";
-      }
-      html += "</div>";
-      // add prompt
-      if (trial.prompt !== null) {
-        html += trial.prompt;
-      }
-      // update the page content
-      display_element.innerHTML = html;
-
-      // set image dimensions after image has loaded (so that we have access to naturalHeight/naturalWidth)
-      var img = display_element.querySelector(
-        "#jspsych-image-button-response-stimulus"
-      ) as HTMLImageElement;
+    const calculateImageDimensions = (image: HTMLImageElement): [number, number] => {
+      let width: number, height: number;
+      // calculate image height and width - this can only be done after image loads because it uses
+      // the image's naturalWidth/naturalHeight properties
       if (trial.stimulus_height !== null) {
         height = trial.stimulus_height;
         if (trial.stimulus_width == null && trial.maintain_aspect_ratio) {
-          width = img.naturalWidth * (trial.stimulus_height / img.naturalHeight);
+          width = image.naturalWidth * (trial.stimulus_height / image.naturalHeight);
         }
       } else {
-        height = img.naturalHeight;
+        height = image.naturalHeight;
       }
       if (trial.stimulus_width !== null) {
         width = trial.stimulus_width;
         if (trial.stimulus_height == null && trial.maintain_aspect_ratio) {
-          height = img.naturalHeight * (trial.stimulus_width / img.naturalWidth);
+          height = image.naturalHeight * (trial.stimulus_width / image.naturalWidth);
         }
       } else if (!(trial.stimulus_height !== null && trial.maintain_aspect_ratio)) {
         // if stimulus width is null, only use the image's natural width if the width value wasn't set
         // in the if statement above, based on a specified height and maintain_aspect_ratio = true
-        width = img.naturalWidth;
+        width = image.naturalWidth;
       }
-      img.style.height = height.toString() + "px";
-      img.style.width = width.toString() + "px";
+
+      return [width, height];
+    };
+
+    display_element.innerHTML = "";
+    let stimulusElement: HTMLCanvasElement | HTMLImageElement;
+    let canvas: HTMLCanvasElement;
+
+    const image = trial.render_on_canvas ? new Image() : document.createElement("img");
+
+    if (trial.render_on_canvas) {
+      canvas = document.createElement("canvas");
+      canvas.style.margin = "0";
+      canvas.style.padding = "0";
+      stimulusElement = canvas;
+    } else {
+      stimulusElement = image;
+    }
+
+    const drawImage = () => {
+      const [width, height] = calculateImageDimensions(image);
+      if (trial.render_on_canvas) {
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(image, 0, 0, width, height);
+      } else {
+        image.style.width = `${width}px`;
+        image.style.height = `${height}px`;
+      }
+    };
+
+    let hasImageBeenDrawn = false;
+
+    // if image wasn't preloaded, then it will need to be drawn whenever it finishes loading
+    image.onload = () => {
+      if (!hasImageBeenDrawn) {
+        drawImage();
+      }
+    };
+
+    image.src = trial.stimulus;
+    if (image.complete && image.naturalWidth !== 0) {
+      // if image has loaded then draw it now (don't rely on img onload function to draw image
+      // when image is in the cache, because that causes a delay in the image presentation)
+      drawImage();
+      hasImageBeenDrawn = true;
+    }
+
+    stimulusElement.id = "jspsych-image-button-response-stimulus";
+    display_element.appendChild(stimulusElement);
+
+    // Display buttons
+    const buttonGroupElement = document.createElement("div");
+    buttonGroupElement.id = "jspsych-image-button-response-btngroup";
+    if (trial.button_layout === "grid") {
+      buttonGroupElement.classList.add("jspsych-btn-group-grid");
+      if (trial.grid_rows === null && trial.grid_columns === null) {
+        throw new Error(
+          "You cannot set `grid_rows` to `null` without providing a value for `grid_columns`."
+        );
+      }
+      const n_cols =
+        trial.grid_columns === null
+          ? Math.ceil(trial.choices.length / trial.grid_rows)
+          : trial.grid_columns;
+      const n_rows =
+        trial.grid_rows === null
+          ? Math.ceil(trial.choices.length / trial.grid_columns)
+          : trial.grid_rows;
+      buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
+      buttonGroupElement.style.gridTemplateRows = `repeat(${n_rows}, 1fr)`;
+    } else if (trial.button_layout === "flex") {
+      buttonGroupElement.classList.add("jspsych-btn-group-flex");
+    }
+
+    for (const [choiceIndex, choice] of trial.choices.entries()) {
+      buttonGroupElement.insertAdjacentHTML("beforeend", trial.button_html(choice, choiceIndex));
+      const buttonElement = buttonGroupElement.lastChild as HTMLElement;
+      buttonElement.dataset.choice = choiceIndex.toString();
+      buttonElement.addEventListener("click", () => {
+        after_response(choiceIndex);
+      });
+    }
+
+    display_element.appendChild(buttonGroupElement);
+
+    // Show prompt if there is one
+    if (trial.prompt !== null) {
+      display_element.insertAdjacentHTML("beforeend", trial.prompt);
     }
 
     // start timing
     var start_time = performance.now();
-
-    for (var i = 0; i < trial.choices.length; i++) {
-      display_element
-        .querySelector("#jspsych-image-button-response-button-" + i)
-        .addEventListener("click", (e) => {
-          var btn_el = e.currentTarget as HTMLButtonElement;
-          var choice = btn_el.getAttribute("data-choice"); // don't use dataset for jsdom compatibility
-          after_response(choice);
-        });
-    }
 
     // store response
     var response = {
@@ -293,18 +270,12 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // function to end trial when it is time
     const end_trial = () => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // gather the data to store for the trial
       var trial_data = {
         rt: response.rt,
         stimulus: trial.stimulus,
         response: response.button,
       };
-
-      // clear the display
-      display_element.innerHTML = "";
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);
@@ -320,14 +291,11 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.querySelector("#jspsych-image-button-response-stimulus").className +=
-        " responded";
+      stimulusElement.classList.add("responded");
 
       // disable all the buttons after a response
-      var btns = document.querySelectorAll(".jspsych-image-button-response-button button");
-      for (var i = 0; i < btns.length; i++) {
-        //btns[i].removeEventListener('click');
-        btns[i].setAttribute("disabled", "disabled");
+      for (const button of buttonGroupElement.children) {
+        button.setAttribute("disabled", "disabled");
       }
 
       if (trial.response_ends_trial) {
@@ -335,12 +303,32 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
       }
     }
 
+    function enable_buttons() {
+      var btns = document.querySelectorAll(".jspsych-image-button-response-button button");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].removeAttribute("disabled");
+      }
+    }
+
+    function disable_buttons() {
+      var btns = document.querySelectorAll(".jspsych-image-button-response-button button");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].setAttribute("disabled", "disabled");
+      }
+    }
+
+    // set timer of button delay
+    if (trial.enable_button_after > 0) {
+      disable_buttons();
+      this.jsPsych.pluginAPI.setTimeout(() => {
+        enable_buttons();
+      }, trial.enable_button_after);
+    }
+
     // hide image if timing is set
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
-        display_element.querySelector<HTMLElement>(
-          "#jspsych-image-button-response-stimulus"
-        ).style.visibility = "hidden";
+        stimulusElement.style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
 
@@ -374,7 +362,9 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
     const default_data = {
       stimulus: trial.stimulus,
-      rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
+      rt:
+        this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true) +
+        trial.enable_button_after,
       response: this.jsPsych.randomization.randomInt(0, trial.choices.length - 1),
     };
 
@@ -401,7 +391,9 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     if (data.rt !== null) {
       this.jsPsych.pluginAPI.clickTarget(
-        display_element.querySelector(`div[data-choice="${data.response}"] button`),
+        display_element.querySelector(
+          `#jspsych-image-button-response-btngroup [data-choice="${data.response}"]`
+        ),
         data.rt
       );
     }

@@ -5,7 +5,7 @@
     <script src="../packages/plugin-video-button-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-html-button-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-preload/dist/index.browser.js"></script>
-    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
   </head>
   <body></body>
   <script>
@@ -17,7 +17,7 @@
     });
 
     // preloading videos only works when the file is running on a server
-    // if you run this experiment by opening the file directly in the browser, 
+    // if you run this experiment by opening the file directly in the browser,
     // then video preloading will be disabled to prevent CORS errors
     var preload = {
       type: jsPsychPreload,
@@ -52,7 +52,9 @@
       type: jsPsychVideoButtonResponse,
       stimulus: ['video/sample_video.mp4'],
       choices: ['😄','😁','🥱','😣','🤯'],
-      button_html: '<div style="font-size:40px;">%choice%</div>',
+      button_html: function (choice) {
+        return '<span style="font-size:40px;">' + choice + '</span>';
+      },
       margin_vertical: '10px',
       margin_horizontal: '8px',
       prompt: '<p>Click the emoji that best represents your reaction to the video</p><p>When the video stops, click a button to end the trial.</p><p>Response buttons are disabled while the video is playing.</p>',
@@ -62,7 +64,21 @@
       response_allowed_while_playing: false
     };
 
-    jsPsych.run([preload, pre_trial, trial_1, trial_2]);
+    var trial_3 = {
+      type: jsPsychVideoButtonResponse,
+      stimulus: ['video/sample_video.mp4'],
+      choices: ['😄','😁','🥱','😣','🤯'],
+      button_html: '<div style="font-size:40px;">%choice%</div>',
+      margin_vertical: '10px',
+      margin_horizontal: '8px',
+      prompt: '<p>Click the emoji that best represents your reaction to the video</p><p>Click a button to end the trial.</p><p>Response buttons are disabled for the first 2 seconds of playing.</p>',
+      width: 600,
+      autoplay: true,
+      response_ends_trial: true,
+      response_allowed_while_playing: true,
+      enable_button_after: 2000
+    }
 
+    jsPsych.run([preload, pre_trial, trial_1, trial_2, trial_3]);
   </script>
 </html>

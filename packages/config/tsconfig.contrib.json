@@ -5,6 +5,6 @@
     "paths": {
       // map jspsych-contrib package imports directly to their source files
       "@jspsych-contrib/*": ["../*/src"]
-    }
+    },
   }
 }

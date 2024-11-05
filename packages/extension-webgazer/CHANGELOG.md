@@ -1,5 +1,17 @@
 # @jspsych/extension-webgazer
 
+## 1.1.0
+
+### Minor Changes
+
+- [#3352](https://github.com/jspsych/jsPsych/pull/3352) [`b94d961f`](https://github.com/jspsych/jsPsych/commit/b94d961f9b29516d58ee826835d73c9e5dbf9a6d) Thanks [@Bankminer78](https://github.com/Bankminer78)! - Extensions now return an extension_type and extension_version when returning data (metadata purposes).
+
+## 1.0.3
+
+### Patch Changes
+
+- [#3184](https://github.com/jspsych/jsPsych/pull/3184) [`9acfa29c`](https://github.com/jspsych/jsPsych/commit/9acfa29c8db1d7a8816c53ac49651f15493f2cf4) Thanks [@bjoluc](https://github.com/bjoluc)! - Point to source maps via canonical unpkg URLs in NPM-published browser builds. This prevents 404 errors when using redirecting CDN URLs (as described in #3043).
+
 ## 1.0.2
 
 ### Patch Changes

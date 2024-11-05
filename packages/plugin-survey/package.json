@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-survey",
-  "version": "0.2.1",
+  "version": "2.0.0",
   "description": "A jsPsych plugin for complex surveys",
   "type": "module",
   "main": "dist/index.cjs",
@@ -34,7 +34,7 @@
     "url": "git+https://github.com/jspsych/jsPsych.git",
     "directory": "packages/plugin-survey"
   },
-  "author": "",
+  "author": "Becky Gilbert",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jspsych/jsPsych/issues"
@@ -44,13 +44,13 @@
     "jspsych": ">=7.0.0"
   },
   "devDependencies": {
-    "@jspsych/config": "^1.3.0",
-    "@jspsych/test-utils": "^1.1.2",
+    "@jspsych/config": "^3.0.0",
+    "@jspsych/test-utils": "^1.2.0",
     "npm-run-all": "^4.1.5",
     "sass": "^1.43.5"
   },
   "dependencies": {
-    "knockout": "3.5.1",
-    "survey-knockout": "1.9.30"
+    "survey-core": "^1.9.138",
+    "survey-knockout-ui": "^1.9.139"
   }
 }

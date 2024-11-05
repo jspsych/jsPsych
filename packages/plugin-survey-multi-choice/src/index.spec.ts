@@ -32,7 +32,7 @@ describe("survey-multi-choice plugin", () => {
     getInputElement(3, "d").checked = true;
     getInputElement(4, "e").checked = true;
 
-    clickTarget(document.querySelector("#jspsych-survey-multi-choice-next"));
+    await clickTarget(document.querySelector("#jspsych-survey-multi-choice-next"));
 
     await expectFinished();
 

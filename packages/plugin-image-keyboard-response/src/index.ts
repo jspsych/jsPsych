@@ -1,70 +1,91 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "image-keyboard-response",
+  version: version,
   parameters: {
-    /** The image to be displayed */
+    /** The path of the image file to be displayed. */
     stimulus: {
       type: ParameterType.IMAGE,
-      pretty_name: "Stimulus",
       default: undefined,
     },
-    /** Set the image height in pixels */
+    /** Set the height of the image in pixels. If left null (no value specified), then the image will display at its natural height. */
     stimulus_height: {
       type: ParameterType.INT,
-      pretty_name: "Image height",
       default: null,
     },
-    /** Set the image width in pixels */
+    /** Set the width of the image in pixels. If left null (no value specified), then the image will display at its natural width. */
     stimulus_width: {
       type: ParameterType.INT,
-      pretty_name: "Image width",
       default: null,
     },
-    /** Maintain the aspect ratio after setting width or height */
+    /** If setting *only* the width or *only* the height and this parameter is true, then the other dimension will be scaled
+     * to maintain the image's aspect ratio. */
     maintain_aspect_ratio: {
       type: ParameterType.BOOL,
-      pretty_name: "Maintain aspect ratio",
       default: true,
     },
-    /** Array containing the key(s) the subject is allowed to press to respond to the stimulus. */
+    /**his array contains the key(s) that the participant is allowed to press in order to respond to the stimulus. Keys should
+     * be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) - see
+     * [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) and
+     * [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/)
+     * for more examples. Any key presses that are not listed in the array will be ignored. The default value of `"ALL_KEYS"`
+     * means that all keys will be accepted as valid responses. Specifying `"NO_KEYS"` will mean that no responses are allowed. */
     choices: {
       type: ParameterType.KEYS,
-      pretty_name: "Choices",
       default: "ALL_KEYS",
     },
-    /** Any content here will be displayed below the stimulus. */
+    /**This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can
+     * be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press). */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
-    /** How long to show the stimulus. */
+    /** How long to show the stimulus for in milliseconds. If the value is `null`, then the stimulus will be shown until the
+     * participant makes a response. */
     stimulus_duration: {
       type: ParameterType.INT,
-      pretty_name: "Stimulus duration",
       default: null,
     },
-    /** How long to show trial before it ends */
+    /** How long to wait for the participant to make a response before ending the trial in milliseconds. If the participant
+     * fails to make a response before this timer is reached, the participant's response will be recorded as null for the
+     * trial and the trial will end. If the value of this parameter is `null`, then the trial will wait for a response indefinitely. */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
     },
-    /** If true, trial will end when subject makes a response. */
+    /** If true, then the trial will end whenever the participant makes a response (assuming they make their response before
+     * the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for
+     * `trial_duration` is reached. You can set this parameter to `false` to force the participant to view a stimulus for a
+     * fixed amount of time, even if they respond before the time is complete.  */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
     },
     /**
-     * If true, the image will be drawn onto a canvas element (prevents blank screen between consecutive images in some browsers).
-     * If false, the image will be shown via an img element.
+     * If `true`, the image will be drawn onto a canvas element. This prevents a blank screen (white flash) between consecutive image trials in some browsers, like Firefox and Edge.
+     * If `false`, the image will be shown via an img element, as in previous versions of jsPsych. If the stimulus is an **animated gif**, you must set this parameter to false, because the canvas rendering method will only present static images.
      */
     render_on_canvas: {
       type: ParameterType.BOOL,
-      pretty_name: "Render on canvas",
       default: true,
+    },
+  },
+  data: {
+    /** The path of the image that was displayed. */
+    stimulus: {
+      type: ParameterType.STRING,
+    },
+    /**  Indicates which key the participant pressed. */
+    response: {
+      type: ParameterType.STRING,
+    },
+    /** The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus
+     * first appears on the screen until the participant's response. */
+    rt: {
+      type: ParameterType.INT,
     },
   },
 };
@@ -72,12 +93,16 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **image-keyboard-response**
+ * This plugin displays an image and records responses generated with the keyboard. The stimulus can be displayed until a
+ * response is given, or for a pre-determined amount of time. The trial can be ended automatically if the participant has
+ * failed to respond within a fixed length of time.
  *
- * jsPsych plugin for displaying an image stimulus and getting a keyboard response
+ * Image files can be automatically preloaded by jsPsych using the [`preload` plugin](preload.md). However, if you are using
+ * timeline variables or another dynamic method to specify the image stimulus, you will need to
+ * [manually preload](../overview/media-preloading.md#manual-preloading) the images.
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-image-keyboard-response/ image-keyboard-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/image-keyboard-response/ image-keyboard-response plugin documentation on jspsych.org}
  */
 class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -190,9 +215,6 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     // function to end trial when it is time
     const end_trial = () => {
-      // kill any remaining setTimeout handlers
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // kill keyboard listeners
       if (typeof keyboardListener !== "undefined") {
         this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
@@ -204,9 +226,6 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         stimulus: trial.stimulus,
         response: response.key,
       };
-
-      // clear the display
-      display_element.innerHTML = "";
 
       // move on to the next trial
       this.jsPsych.finishTrial(trial_data);

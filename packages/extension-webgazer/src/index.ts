@@ -1,4 +1,6 @@
-import { JsPsych, JsPsychExtension, JsPsychExtensionInfo } from "jspsych";
+import { JsPsych, JsPsychExtension, JsPsychExtensionInfo, ParameterType } from "jspsych";
+
+import { version } from "../package.json";
 
 // we have to add webgazer to the global window object because webgazer attaches itself to
 // the window when it loads
@@ -39,9 +41,56 @@ interface OnStartParameters {
   targets: Array<string>;
 }
 
+/**
+ * https://www.jspsych.org/latest/extensions/webgazer/
+ */
 class WebGazerExtension implements JsPsychExtension {
   static info: JsPsychExtensionInfo = {
     name: "webgazer",
+    version: version,
+    data: {
+      /** An array of objects containing gaze data for the trial. Each object has an `x`, a `y`, and a `t` property. The `x` and
+       * `y` properties specify the gaze location in pixels and `t` specifies the time in milliseconds since the start of the trial.
+       */
+      webgazer_data: {
+        type: ParameterType.INT,
+        array: true,
+      },
+      /** An object contain the pixel coordinates of elements on the screen specified by the `.targets` parameter. Each key in this
+       * object will be a `selector` property, containing the CSS selector string used to find the element. The object corresponding
+       * to each key will contain `x` and `y` properties specifying the top-left corner of the object, `width` and `height` values,
+       * plus `top`, `bottom`, `left`, and `right` parameters which specify the [bounding rectangle](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) of the element.
+       */
+      webgazer_targets: {
+        type: ParameterType.COMPLEX,
+        nested: {
+          x: {
+            type: ParameterType.INT,
+          },
+          y: {
+            type: ParameterType.INT,
+          },
+          width: {
+            type: ParameterType.INT,
+          },
+          height: {
+            type: ParameterType.INT,
+          },
+          top: {
+            type: ParameterType.INT,
+          },
+          bottom: {
+            type: ParameterType.INT,
+          },
+          left: {
+            type: ParameterType.INT,
+          },
+          right: {
+            type: ParameterType.INT,
+          },
+        },
+      },
+    },
   };
 
   constructor(private jsPsych: JsPsych) {}

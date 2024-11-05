@@ -1,37 +1,51 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "initialize-camera",
+  version: version,
   parameters: {
-    /** Message to display with the selection box */
+    /** The message to display when the user is presented with a dropdown list of available devices. */
     device_select_message: {
       type: ParameterType.HTML_STRING,
       default: `<p>Please select the camera you would like to use.</p>`,
     },
-    /** Label to use for the button that confirms selection */
+    /** The label for the select button. */
     button_label: {
       type: ParameterType.STRING,
       default: "Use this camera",
     },
-    /** Set to `true` to include audio in the recording */
+    /** Set to `true` to include an audio track in the recordings. */
     include_audio: {
       type: ParameterType.BOOL,
       default: false,
     },
-    /** Desired width of the camera stream */
+    /** Request a specific width for the recording. This is not a guarantee that this width will be used, as it
+     * depends on the capabilities of the participant's device. Learn more about `MediaRecorder` constraints
+     * [here](https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API/Constraints#requesting_a_specific_value_for_a_setting). */
     width: {
       type: ParameterType.INT,
       default: null,
     },
-    /** Desired height of the camera stream */
+    /** Request a specific height for the recording. This is not a guarantee that this height will be used, as it
+     * depends on the capabilities of the participant's device. Learn more about `MediaRecorder` constraints
+     * [here](https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API/Constraints#requesting_a_specific_value_for_a_setting). */
     height: {
       type: ParameterType.INT,
       default: null,
     },
-    /** MIME type of the recording. Set as a full string, e.g., 'video/webm; codecs="vp8, vorbis"'. */
+    /** Set this to use a specific [MIME type](https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/mimeType) for the
+     * recording. Set the entire type, e.g., `'video/mp4; codecs="avc1.424028, mp4a.40.2"'`. */
     mime_type: {
       type: ParameterType.STRING,
       default: null,
+    },
+  },
+  data: {
+    /** The [device ID](https://developer.mozilla.org/en-US/docs/Web/API/MediaDeviceInfo/deviceId) of the selected camera. */
+    device_id: {
+      type: ParameterType.STRING,
     },
   },
 };
@@ -39,12 +53,21 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **initialize-camera**
+ * This plugin asks the participant to grant permission to access a camera.
+ * If multiple cameras are connected to the participant's device, then it allows the participant to pick which device to use.
+ * Once access is granted for an experiment you do not need to get permission again.
  *
- * jsPsych plugin for getting permission to initialize a camera and setting properties of the recording.
+ * Once the camera is selected with this plugin it can be accessed with
+ * [`jsPsych.pluginAPI.getCameraRecorder()`](../reference/jspsych-pluginAPI.md#getcamerarecorder).
+ *
+ * !!! warning
+ *     When recording from a camera your experiment will need to be running over `https://` protocol. If you try to
+ *  run the experiment locally using the `file://` protocol or over `http://` protocol you will not be able to access
+ * the microphone because of [potential security problems](https://blog.mozilla.org/webrtc/camera-microphone-require-https-in-firefox-68/).
+ *
  *
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-initialize-camera/ initialize-camera plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/initialize-camera/ initialize-camera plugin documentation on jspsych.org}
  */
 class InitializeCameraPlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -53,7 +76,6 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     this.run_trial(display_element, trial).then((id) => {
-      display_element.innerHTML = "";
       this.jsPsych.finishTrial({
         device_id: id,
       });

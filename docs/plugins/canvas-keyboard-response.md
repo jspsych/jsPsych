@@ -1,6 +1,6 @@
 # canvas-keyboard-response
 
-Current version: 1.1.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-canvas-keyboard-response/CHANGELOG.md).
+Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-canvas-keyboard-response/CHANGELOG.md).
 
 This plugin can be used to draw a stimulus on a [HTML canvas element](https://www.w3schools.com/html/html5_canvas.asp) and record a keyboard response. The canvas stimulus can be useful for displaying dynamic, parametrically-defined graphics, and for controlling the positioning of multiple graphical elements (shapes, text, images). The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the participant has failed to respond within a fixed length of time.
 
@@ -34,7 +34,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@1.1.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@2.0.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-sketchpad",
-  "version": "1.0.3",
+  "version": "2.0.1",
   "description": "jsPsych plugin for sketching a response",
   "type": "module",
   "main": "dist/index.cjs",
@@ -37,7 +37,7 @@
     "jspsych": ">=7.1.0"
   },
   "devDependencies": {
-    "@jspsych/config": "^1.3.0",
-    "@jspsych/test-utils": "^1.1.2"
+    "@jspsych/config": "^3.0.0",
+    "@jspsych/test-utils": "^1.2.0"
   }
 }

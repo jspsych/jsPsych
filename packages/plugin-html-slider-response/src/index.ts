@@ -1,87 +1,95 @@
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+import { version } from "../package.json";
+
 const info = <const>{
   name: "html-slider-response",
+  version: version,
   parameters: {
     /** The HTML string to be displayed */
     stimulus: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Stimulus",
       default: undefined,
     },
     /** Sets the minimum value of the slider. */
     min: {
       type: ParameterType.INT,
-      pretty_name: "Min slider",
       default: 0,
     },
     /** Sets the maximum value of the slider */
     max: {
       type: ParameterType.INT,
-      pretty_name: "Max slider",
       default: 100,
     },
     /** Sets the starting value of the slider */
     slider_start: {
       type: ParameterType.INT,
-      pretty_name: "Slider starting value",
       default: 50,
     },
-    /** Sets the step of the slider */
+    /** Sets the step of the slider. This is the smallest amount by which the slider can change. */
     step: {
       type: ParameterType.INT,
-      pretty_name: "Step",
       default: 1,
     },
-    /** Array containing the labels for the slider. Labels will be displayed at equidistant locations along the slider. */
+    /** Labels displayed at equidistant locations on the slider. For example, two labels will be placed at the ends of the slider. Three labels would place two at the ends and one in the middle. Four will place two at the ends, and the other two will be at 33% and 67% of the slider width. */
     labels: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Labels",
       default: [],
       array: true,
     },
-    /** Width of the slider in pixels. */
+    /** Set the width of the slider in pixels. If left null, then the width will be equal to the widest element in the display. */
     slider_width: {
       type: ParameterType.INT,
-      pretty_name: "Slider width",
       default: null,
     },
-    /** Label of the button to advance. */
+    /** Label of the button to end the trial. */
     button_label: {
       type: ParameterType.STRING,
-      pretty_name: "Button label",
       default: "Continue",
       array: false,
     },
-    /** If true, the participant will have to move the slider before continuing. */
+    /** If true, the participant must move the slider before clicking the continue button. */
     require_movement: {
       type: ParameterType.BOOL,
-      pretty_name: "Require movement",
       default: false,
     },
-    /** Any content here will be displayed below the slider. */
+    /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press). */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
       default: null,
     },
-    /** How long to show the stimulus. */
+    /** How long to display the stimulus in milliseconds. The visibility CSS property of the stimulus will be set to `hidden` after this time has elapsed. If this is null, then the stimulus will remain visible until the trial ends. */
     stimulus_duration: {
       type: ParameterType.INT,
-      pretty_name: "Stimulus duration",
       default: null,
     },
-    /** How long to show the trial. */
+    /** How long to wait for the participant to make a response before ending the trial in milliseconds. If the participant fails to make a response before this timer is reached, the participant's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely. */
     trial_duration: {
       type: ParameterType.INT,
-      pretty_name: "Trial duration",
       default: null,
     },
-    /** If true, trial will end when user makes a response. */
+    /** If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete. */
     response_ends_trial: {
       type: ParameterType.BOOL,
-      pretty_name: "Response ends trial",
       default: true,
+    },
+  },
+  data: {
+    /** The time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. */
+    rt: {
+      type: ParameterType.INT,
+    },
+    /** The numeric value of the slider. */
+    response: {
+      type: ParameterType.INT,
+    },
+    /** The HTML content that was displayed on the screen. */
+    stimulus: {
+      type: ParameterType.HTML_STRING,
+    },
+    /** The starting value of the slider. */
+    slider_start: {
+      type: ParameterType.INT,
     },
   },
 };
@@ -89,12 +97,9 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **html-slider-response**
- *
- * jsPsych plugin for showing an HTML stimulus and collecting a slider response
- *
+ * This plugin displays HTML content and allows the participant to respond by dragging a slider.
  * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/plugins/jspsych-html-slider-response/ html-slider-response plugin documentation on jspsych.org}
+ * @see {@link https://www.jspsych.org/latest/plugins/html-slider-response/ html-slider-response plugin documentation on jspsych.org}
  */
 class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
   static info = info;
@@ -189,8 +194,6 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
     }
 
     const end_trial = () => {
-      this.jsPsych.pluginAPI.clearAllTimeouts();
-
       // save data
       var trialdata = {
         rt: response.rt,
@@ -198,8 +201,6 @@ class HtmlSliderResponsePlugin implements JsPsychPlugin<Info> {
         slider_start: trial.slider_start,
         response: response.response,
       };
-
-      display_element.innerHTML = "";
 
       // next trial
       this.jsPsych.finishTrial(trialdata);
