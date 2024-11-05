@@ -139,7 +139,8 @@ describe("Timeline", () => {
 
       expect(timeline.children.length).toEqual(3);
       expect(timeline.children[0].getDataParameter().I).toEqual(0);
-      expect(timeline.children[1].description.timeline[0]).toHaveProperty("data.I", 1);
+      const secondChildDescription = timeline.children[1].description as TimelineDescription;
+      expect(secondChildDescription["timeline"][0]).toHaveProperty("data.I", 1);
       expect(timeline.children[2].getDataParameter().I).toEqual(3);
     });
 
