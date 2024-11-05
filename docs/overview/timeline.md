@@ -1,24 +1,3 @@
-- [Creating an Experiment: The Timeline](#creating-an-experiment-the-timeline)
-	- [A single trial](#a-single-trial)
-	- [Multiple trials](#multiple-trials)
-	- [Nested timelines](#nested-timelines)
-	- [Timeline variables](#timeline-variables)
-		- [Using timeline variables in a function](#using-timeline-variables-in-a-function)
-		- [Random orders of trials](#random-orders-of-trials)
-		- [Sampling methods](#sampling-methods)
-			- [Sampling with replacement](#sampling-with-replacement)
-			- [Sampling with replacement, unequal probabilities](#sampling-with-replacement-unequal-probabilities)
-			- [Sampling without replacement](#sampling-without-replacement)
-			- [Repeating each trial a fixed number of times in a random order](#repeating-each-trial-a-fixed-number-of-times-in-a-random-order)
-			- [Alternating groups](#alternating-groups)
-			- [Custom sampling function](#custom-sampling-function)
-	- [Repeating a set of trials](#repeating-a-set-of-trials)
-	- [Looping timelines](#looping-timelines)
-	- [Conditional timelines](#conditional-timelines)
-	- [Modifying timelines at runtime](#modifying-timelines-at-runtime)
-		- [Exception cases for adding/removing timeline nodes dynamically](#exception-cases-for-addingremoving-timeline-nodes-dynamically)
-	- [Timeline start and finish functions](#timeline-start-and-finish-functions)
-  
 # Creating an Experiment: The Timeline
 
 To create an experiment using jsPsych, you need to specify a timeline that describes the structure of the experiment. The timeline is an ordered set of trials. You must create the timeline before launching the experiment. Most of the code you will write for an experiment will be code to create the timeline. This page walks through the creation of timelines, including very basic examples and more advanced features.
