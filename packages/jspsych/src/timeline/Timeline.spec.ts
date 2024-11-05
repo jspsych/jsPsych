@@ -75,6 +75,40 @@ describe("Timeline", () => {
       expect(timeline.children.length).toEqual(2);
     });
 
+    it("respects dynamically added child node descriptions at the start", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timelineDescription: TimelineArray = [{ type: TestPlugin }];
+      const timeline = createTimeline(timelineDescription);
+
+      const runPromise = timeline.run();
+      expect(timeline.children.length).toEqual(1);
+
+      timelineDescription.splice(0, 0, { timeline: [{ type: TestPlugin }] });
+      await TestPlugin.finishTrial();
+      await TestPlugin.finishTrial();
+      await runPromise;
+
+      expect(timeline.children.length).toEqual(2);
+    });
+
+    it("dynamically added child node descriptions before a node after it has been run", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timelineDescription: TimelineArray = [{ type: TestPlugin }];
+      const timeline = createTimeline(timelineDescription);
+
+      const runPromise = timeline.run();
+      expect(timeline.children.length).toEqual(1);
+
+      await TestPlugin.finishTrial();
+      timelineDescription.splice(0, 0, { timeline: [{ type: TestPlugin }] });
+      await TestPlugin.finishTrial();
+      await runPromise;
+
+      expect(timeline.children.length).toEqual(1);
+    });
+
     it("respects dynamically removed end child node descriptions", async () => {
       TestPlugin.setManualFinishTrialMode();
 

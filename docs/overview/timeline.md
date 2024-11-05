@@ -1,3 +1,24 @@
+- [Creating an Experiment: The Timeline](#creating-an-experiment-the-timeline)
+	- [A single trial](#a-single-trial)
+	- [Multiple trials](#multiple-trials)
+	- [Nested timelines](#nested-timelines)
+	- [Timeline variables](#timeline-variables)
+		- [Using timeline variables in a function](#using-timeline-variables-in-a-function)
+		- [Random orders of trials](#random-orders-of-trials)
+		- [Sampling methods](#sampling-methods)
+			- [Sampling with replacement](#sampling-with-replacement)
+			- [Sampling with replacement, unequal probabilities](#sampling-with-replacement-unequal-probabilities)
+			- [Sampling without replacement](#sampling-without-replacement)
+			- [Repeating each trial a fixed number of times in a random order](#repeating-each-trial-a-fixed-number-of-times-in-a-random-order)
+			- [Alternating groups](#alternating-groups)
+			- [Custom sampling function](#custom-sampling-function)
+	- [Repeating a set of trials](#repeating-a-set-of-trials)
+	- [Looping timelines](#looping-timelines)
+	- [Conditional timelines](#conditional-timelines)
+	- [Modifying timelines at runtime](#modifying-timelines-at-runtime)
+		- [Exception cases for adding/removing timeline nodes dynamically](#exception-cases-for-addingremoving-timeline-nodes-dynamically)
+	- [Timeline start and finish functions](#timeline-start-and-finish-functions)
+  
 # Creating an Experiment: The Timeline
 
 To create an experiment using jsPsych, you need to specify a timeline that describes the structure of the experiment. The timeline is an ordered set of trials. You must create the timeline before launching the experiment. Most of the code you will write for an experiment will be code to create the timeline. This page walks through the creation of timelines, including very basic examples and more advanced features.
@@ -466,6 +487,90 @@ const after_if_trial = {
 
 jsPsych.run([pre_if_trial, if_node, after_if_trial]);
 ```
+
+## Modifying timelines at runtime
+
+Although this functionality can also be achieved through a combination of the `conditional_function` and the use of dynamic variables in the `stimulus` parameter, our timeline implementation allows you to dynamically insert or remove trials and nested timelines during runtime. For example, you may have a branching point in your experiment where the participant is given 4 choices, each leading to a different timeline: 
+
+```javascript
+const jspsych = initJsPsych();
+let timeline = [];
+
+const welcome_trial = {
+	type: jsPsychHtmlKeyboardResponse,
+	stimulus: 'Welcome!'
+}
+
+const choice_trial = {
+	type: jsPsychHtmlKeyboardResponse,
+	stimulus: 'Press 1 if you are a new participant. Press 2 for inquiries about an existing experiment run. Press 3 for Spanish. Press 4 to see the welcome page and these options again (in case of stupidity-induced blindness). Press 5 to exit.'
+}
+
+const start_node = {
+	timeline: [welcome_trial, choice_trial],
+	loop_function: function(data){
+		if(jsPsych.pluginAPI.compareKeys(data.values()[0].response, '4')){
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+timeline.push(start_node);
+```
+This would be trickier to implement with the `conditional_function` since it can only handle 2 branches -- case when `True` or case when `False`. Instead, you can modify the timeline by dynamically adding or removing nodes according to the chosen condition at the end of the choice trial:
+
+```javascript
+const b1_t1 = {...};
+const b1_t2 = {...};
+const b1_t3 = {...};
+// So on and so forth
+const b3_t3 = {...};
+
+const branch_1 = [b1_t1, b1_t2, b1_t3];
+const branch_2 = [b2_t1, b2_t2, b2_t3];
+const branch_3 = [b3_t1, b3_t2, b3_t3];
+
+const choice_confirm_trial = {
+	type: jsPsychHtmlKeyboardResponse,
+	stimulus: () => {
+		const choice = jsPsych.data.get().last(1).values()[0];
+		return `You have chosen ${choice}.`
+	}
+	on_finish: () => {
+		switch(choice) {
+			case 1:
+				timeline.push(branch_1);
+				break;
+			case 2:
+				timeline.push(branch_2);
+				break;
+			case 3:
+				timeline.push(branch_3);
+				break;
+			case 5:
+				timeline.pop();
+				break;
+			default:
+				break;
+		}
+	}
+}
+
+const end_trial = {
+	type: jsPsychHtmlKeyboardResponse,
+	stimulus: 'End of experiment.'
+}
+
+timeline.push(choice_confirm_trial, end_trial);
+```
+During runtime, choices 1, 2 and 3 will dynamically add a different (nested) timeline, `branch_1`, `branch_2` and `branch_3` respectively, to the end of the main timeline. Choice 4 is caught at `start_node`, where the `loop_function` will resolve to `True` and repeat the welcome and choice trials. Finally, choice 5 removes the `end_trial` that was pushed to the timeline before runtime.
+
+### Exception cases for adding/removing timeline nodes dynamically
+Adding or removing timeline nodes work as expected when the addition/removal occurs at a future point in the timeline relative to the current executing node, but not if it occurs before the current node. The example above works as expected becaues all added/removed nodes occur at the end of the timeline via `push()` and `pop()`, but if the branches were inserted at a point in the timeline that has already been executed, e.g. `timeline.splice(0, 0, branch_1)`, then `branch_1` will not be executed.
+
+In the case of a looping timeline, adding a timeline node at a point before the current node will cause the current node to be executed again. For example, `start_node` is currently a looping timeline of this form `welcome`->`choice`. If we added an `on_finish` function to `choice_trial` that adds a timeline node to the start of the timeline, e.g. `hello`->`welcome`->`choice`, the `choice` trial will appear again as the next trial immediately after (and cause an infinite loop!). Similarly, if we tried to remove the `hello` trial from a looping timeline of the form `hello`->`welcome`->`choice` while executing the `welcome` trial, the `choice` trial will not be executed.
 
 ## Timeline start and finish functions
 
