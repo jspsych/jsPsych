@@ -18,7 +18,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 device_select_message | html string | `<p>Please select the microphone you would like to use.</p>` | The message to display when the user is presented with a dropdown list of available devices.
-button_label | sting | 'Use this microphone.' | The label for the select button.
+button_label | string | 'Use this microphone.' | The label for the select button.
 
 
 ## Data Generated
