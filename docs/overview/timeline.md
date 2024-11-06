@@ -504,7 +504,7 @@ const branch_3 = [b3_t1, b3_t2, b3_t3];
 
 const choice_trial = {
 	type: jsPsychHtmlKeyboardResponse,
-	stimulus: 'Press 1 if you are a new participant. Press 2 for inquiries about an existing experiment run. Press 3 for Spanish.',
+	stimulus: 'Press 1 for English. Press 2 for Mandarin. Press 3 for Spanish.',
 	choices: ['1','2','3'],
 	on_finish: (data) => {
 		switch(data.response) {
@@ -531,7 +531,7 @@ You can also remove upcoming timeline nodes from the timeline at runtime. To dem
 ```javascript
 const choice_trial = {
 	type: jsPsychHtmlKeyboardResponse,
-	stimulus: 'Press 1 if you are a new participant. Press 2 for inquiries about an existing experiment run. Press 3 for Spanish. Press 4 to exit.',
+	stimulus: 'Press 1 for English. Press 2 for Mandarin. Press 3 for Spanish. Press 4 to exit.',
 	choices: ['1','2','3', '4'],
 	on_finish: (data) => {
 		switch(data.response) {
