@@ -469,7 +469,10 @@ jsPsych.run([pre_if_trial, if_node, after_if_trial]);
 
 ## Modifying timelines at runtime
 
-Although this functionality can also be achieved through a combination of the `conditional_function` and the use of dynamic variables in the `stimulus` parameter, our timeline implementation allows you to dynamically insert or remove trials and nested timelines during runtime. For example, you may have a branching point in your experiment where the participant is given 4 choices, each leading to a different timeline: 
+Although this functionality can also be achieved through a combination of the `conditional_function` and the use of dynamic variables in the `stimulus` parameter, our timeline implementation allows you to dynamically insert or remove trials and nested timelines during runtime.
+
+### Inserting timeline nodes at runtime
+For example, you may have a branching point in your experiment where the participant is given 3 choices, each leading to a different timeline: 
 
 ```javascript
 const jspsych = initJsPsych();
@@ -482,23 +485,11 @@ const welcome_trial = {
 
 const choice_trial = {
 	type: jsPsychHtmlKeyboardResponse,
-	stimulus: 'Press 1 if you are a new participant. Press 2 for inquiries about an existing experiment run. Press 3 for Spanish. Press 4 to see the welcome page and these options again (in case of stupidity-induced blindness). Press 5 to exit.'
+	stimulus: 'Press 1 if you are a new participant. Press 2 for inquiries about an existing experiment run. Press 3 for Spanish.',
+	choices: ['1','2','3']
 }
-
-const start_node = {
-	timeline: [welcome_trial, choice_trial],
-	loop_function: function(data){
-		if(jsPsych.pluginAPI.compareKeys(data.values()[0].response, '4')){
-			return true;
-		} else {
-			return false;
-		}
-	}
-}
-
-timeline.push(start_node);
 ```
-This would be trickier to implement with the `conditional_function` since it can only handle 2 branches -- case when `True` or case when `False`. Instead, you can modify the timeline by dynamically adding or removing nodes according to the chosen condition at the end of the choice trial:
+This would be trickier to implement with the `conditional_function` since it can only handle 2 branches -- case when `True` or case when `False`. Instead, you can modify the timeline by modifying `choice_trial` to dynamically adding a timeline at the end of the choice trial according to the chosen condition:
 
 ```javascript
 const b1_t1 = {...};
@@ -511,45 +502,68 @@ const branch_1 = [b1_t1, b1_t2, b1_t3];
 const branch_2 = [b2_t1, b2_t2, b2_t3];
 const branch_3 = [b3_t1, b3_t2, b3_t3];
 
-const choice_confirm_trial = {
+const choice_trial = {
 	type: jsPsychHtmlKeyboardResponse,
-	stimulus: () => {
-		const choice = jsPsych.data.get().last(1).values()[0];
-		return `You have chosen ${choice}.`
-	}
-	on_finish: () => {
-		switch(choice) {
-			case 1:
+	stimulus: 'Press 1 if you are a new participant. Press 2 for inquiries about an existing experiment run. Press 3 for Spanish.',
+	choices: ['1','2','3'],
+	on_finish: (data) => {
+		switch(data.response) {
+			case '1':
 				timeline.push(branch_1);
 				break;
-			case 2:
+			case '2':
 				timeline.push(branch_2);
 				break;
-			case 3:
+			case '3':
 				timeline.push(branch_3);
 				break;
-			case 5:
-				timeline.pop();
+		}
+	}
+}
+timeline.push(start_trial, choice_trial);
+```
+During runtime, choices 1, 2 and 3 will dynamically add a different (nested) timeline, `branch_1`, `branch_2` and `branch_3` respectively, to the end of the main timeline.
+
+### Removing timeline nodes at runtime
+
+You can also remove upcoming timeline nodes from the timeline at runtime. To demonstrate this, we can modify the above example by adding a 4th choice and extra trial at the end of the timeline:
+
+```javascript
+const choice_trial = {
+	type: jsPsychHtmlKeyboardResponse,
+	stimulus: 'Press 1 if you are a new participant. Press 2 for inquiries about an existing experiment run. Press 3 for Spanish. Press 4 to exit.',
+	choices: ['1','2','3', '4'],
+	on_finish: (data) => {
+		switch(data.response) {
+			case '1':
+				timeline.push(branch_1);
 				break;
-			default:
+			case '2':
+				timeline.push(branch_2);
+				break;
+			case '3':
+				timeline.push(branch_3);
+				break;
+			case '4':
+				timeline.pop();
 				break;
 		}
 	}
 }
 
 const end_trial = {
-	type: jsPsychHtmlKeyboardResponse,
-	stimulus: 'End of experiment.'
+	type: JsPsychHtmlKeyboardResponse,
+	stimulus: 'End of experiment'
 }
 
-timeline.push(choice_confirm_trial, end_trial);
+timeline.push(start_trial, choice_trial, end_trial)
 ```
-During runtime, choices 1, 2 and 3 will dynamically add a different (nested) timeline, `branch_1`, `branch_2` and `branch_3` respectively, to the end of the main timeline. Choice 4 is caught at `start_node`, where the `loop_function` will resolve to `True` and repeat the welcome and choice trials. Finally, choice 5 removes the `end_trial` that was pushed to the timeline before runtime.
+Now, if 1, 2 or 3 were chosen during runtime, the `end_trial` will run after the dynamically added timeline corresponding to the choice has been run; but if 4 was chosen, `end_trial` will be removed at runtime, and the timeline will terminate.
 
 ### Exception cases for adding/removing timeline nodes dynamically
 Adding or removing timeline nodes work as expected when the addition/removal occurs at a future point in the timeline relative to the current executing node, but not if it occurs before the current node. The example above works as expected becaues all added/removed nodes occur at the end of the timeline via `push()` and `pop()`, but if the branches were inserted at a point in the timeline that has already been executed, e.g. `timeline.splice(0, 0, branch_1)`, then `branch_1` will not be executed.
 
-In the case of a looping timeline, adding a timeline node at a point before the current node will cause the current node to be executed again. For example, `start_node` is currently a looping timeline of this form `welcome`->`choice`. If we added an `on_finish` function to `choice_trial` that adds a timeline node to the start of the timeline, e.g. `hello`->`welcome`->`choice`, the `choice` trial will appear again as the next trial immediately after (and cause an infinite loop!). Similarly, if we tried to remove the `hello` trial from a looping timeline of the form `hello`->`welcome`->`choice` while executing the `welcome` trial, the `choice` trial will not be executed.
+In the case of a looping timeline, adding a timeline node at a point before the current node will cause the current node to be executed again; and removing a timeline node at a point before the current node will cause the next node to be skipped.
 
 ## Timeline start and finish functions
 
