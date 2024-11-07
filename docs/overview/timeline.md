@@ -469,9 +469,9 @@ jsPsych.run([pre_if_trial, if_node, after_if_trial]);
 
 ## Modifying timelines at runtime
 
-Although this functionality can also be achieved through a combination of the `conditional_function` and the use of dynamic variables in the `stimulus` parameter, our timeline implementation allows you to dynamically insert or remove trials and nested timelines during runtime.
+Although this functionality can also be achieved through a combination of the `conditional_function` and the use of dynamic variables in the `stimulus` parameter, our timeline implementation allows you to dynamically add or remove trials and nested timelines during runtime.
 
-### Inserting timeline nodes at runtime
+### Adding timeline nodes at runtime
 For example, you may have a branching point in your experiment where the participant is given 3 choices, each leading to a different timeline: 
 
 ```javascript
@@ -564,7 +564,7 @@ main_timeline.push(part1_trial, choice_trial, part2_timeline)
 Now, if 1, 2 or 3 were chosen during runtime, `part2_timeline` will run after the dynamically added timeline corresponding to the choice (`english_branch` | `mandarin_branch` | `spanish_branch`) has been run; but if 4 was chosen, `part2_timeline` will be removed at runtime, and `main_timeline` will terminate.
 
 ### Exception cases for adding/removing timeline nodes dynamically
-Adding or removing timeline nodes work as expected when the addition/removal occurs at a future point in the timeline relative to the current executing node, but not if it occurs before the current node. The example above works as expected becaues all the node(s) added (`english_branch` | `mandarin_branch` | `spanish_branch`) or removed (`part2_timeline`) occur at the end of the timeline via `push()` and `pop()`. If a node was inserted at a point in the timeline that has already been executed, it will not be executed:
+Adding or removing timeline nodes work as expected when the addition/removal occurs at a future point in the timeline relative to the current executing node, but not if it occurs before the current node. The example above works as expected becaues all the node(s) added (`english_branch` | `mandarin_branch` | `spanish_branch`) or removed (`part2_timeline`) occur at the end of the timeline via `push()` and `pop()`. If a node was added at a point in the timeline that has already been executed, it will not be executed:
 
 ```javascript
 const choice_trial = {
@@ -584,9 +584,10 @@ const choice_trial = {
 
 main_timeline.push(part1_trial, choice_trial);
 ```
-In the above implementation of `choice_trial`, choice 1 adds `english_branch` to the start of `main_timeline`, such that `main_timeline = [english_branch, part1_trial, choice_trial]`, but because the execution of `main_timeline` is past the first node at this point in runtime, the newly added `english_branch` will not be executed. Similarly, modifying `case '1'` in `choice_trial` to remove `part1_trial` will not change any behavior in the timeline.
+In the above implementation of `choice_trial`, choice 1 adds `english_branch` at the start of `main_timeline`, such that `main_timeline = [english_branch, part1_trial, choice_trial]`, but because the execution of `main_timeline` is past the first node at this point in runtime, the newly added `english_branch` will not be executed. Similarly, modifying `case '1'` in `choice_trial` to remove `part1_trial` will not change any behavior in the timeline.
 
-<strong>DON'T DO THIS:</strong> In the case of a looping timeline, adding a timeline node at a point before the current node will cause the current node to be executed again; and removing a timeline node at a point before the current node will cause the next node to be skipped.
+!!! danger "Dynamically adding/removing nodes in a  looping timeline"
+In the case of a looping timeline, adding a timeline node at a point before the current node will cause the current node to be executed again; and removing a timeline node at a point before the current node will cause the next node to be skipped.
 
 ## Timeline start and finish functions
 
