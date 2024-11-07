@@ -476,11 +476,11 @@ For example, you may have a branching point in your experiment where the partici
 
 ```javascript
 const jspsych = initJsPsych();
-let timeline = [];
+let main_timeline = [];
 
-const welcome_trial = {
+const part1_trial = {
 	type: jsPsychHtmlKeyboardResponse,
-	stimulus: 'Welcome!'
+	stimulus: 'Part 1'
 }
 
 const choice_trial = {
@@ -492,15 +492,15 @@ const choice_trial = {
 This would be trickier to implement with the `conditional_function` since it can only handle 2 branches -- case when `True` or case when `False`. Instead, you can modify the timeline by modifying `choice_trial` to dynamically adding a timeline at the end of the choice trial according to the chosen condition:
 
 ```javascript
-const b1_t1 = {...};
-const b1_t2 = {...};
-const b1_t3 = {...};
+const english_trial1 = {...};
+const english_trial2 = {...};
+const english_trial3 = {...};
 // So on and so forth
-const b3_t3 = {...};
+const spanish_trial3 = {...};
 
-const branch_1 = [b1_t1, b1_t2, b1_t3];
-const branch_2 = [b2_t1, b2_t2, b2_t3];
-const branch_3 = [b3_t1, b3_t2, b3_t3];
+const english_branch = [b1_t1, b1_t2, b1_t3];
+const mandarin_branch = [b2_t1, b2_t2, b2_t3];
+const spanish_branch = [b3_t1, b3_t2, b3_t3];
 
 const choice_trial = {
 	type: jsPsychHtmlKeyboardResponse,
@@ -509,24 +509,24 @@ const choice_trial = {
 	on_finish: (data) => {
 		switch(data.response) {
 			case '1':
-				timeline.push(branch_1);
+				main_timeline.push(english_branch);
 				break;
 			case '2':
-				timeline.push(branch_2);
+				main_timeline.push(mandarin_branch);
 				break;
 			case '3':
-				timeline.push(branch_3);
+				main_timeline.push(spanish_branch);
 				break;
 		}
 	}
 }
-timeline.push(start_trial, choice_trial);
+main_timeline.push(part1_trial, choice_trial);
 ```
-During runtime, choices 1, 2 and 3 will dynamically add a different (nested) timeline, `branch_1`, `branch_2` and `branch_3` respectively, to the end of the main timeline.
+During runtime, choices 1, 2 and 3 will dynamically add a different (nested) timeline, `english_branch`, `mandarin_branch` and `spanish_branch` respectively, to the end of the `main_timeline`.
 
 ### Removing timeline nodes at runtime
 
-You can also remove upcoming timeline nodes from the timeline at runtime. To demonstrate this, we can modify the above example by adding a 4th choice and extra trial at the end of the timeline:
+You can also remove upcoming timeline nodes from a timeline at runtime. To demonstrate this, we can modify the above example by adding a 4th choice to `choice_trial` and another (nested) timeline to the tail of `main_timeline`:
 
 ```javascript
 const choice_trial = {
@@ -536,34 +536,57 @@ const choice_trial = {
 	on_finish: (data) => {
 		switch(data.response) {
 			case '1':
-				timeline.push(branch_1);
+				main_timeline.push(english_branch);
 				break;
 			case '2':
-				timeline.push(branch_2);
+				main_timeline.push(mandarin_branch);
 				break;
 			case '3':
-				timeline.push(branch_3);
+				main_timeline.push(spanish_branch);
 				break;
 			case '4':
-				timeline.pop();
+				main_timeline.pop();
 				break;
 		}
 	}
 }
 
-const end_trial = {
-	type: JsPsychHtmlKeyboardResponse,
-	stimulus: 'End of experiment'
-}
+const part2_timeline = [
+	{
+		type: JsPsychHtmlKeyboardResponse,
+		stimulus: 'Part 2'
+	}
+	// ...the rest of the part 2 trials
+]
 
-timeline.push(start_trial, choice_trial, end_trial)
+main_timeline.push(part1_trial, choice_trial, part2_timeline)
 ```
-Now, if 1, 2 or 3 were chosen during runtime, the `end_trial` will run after the dynamically added timeline corresponding to the choice has been run; but if 4 was chosen, `end_trial` will be removed at runtime, and the timeline will terminate.
+Now, if 1, 2 or 3 were chosen during runtime, `part2_timeline` will run after the dynamically added timeline corresponding to the choice (`english_branch` | `mandarin_branch` | `spanish_branch`) has been run; but if 4 was chosen, `part2_timeline` will be removed at runtime, and `main_timeline` will terminate.
 
 ### Exception cases for adding/removing timeline nodes dynamically
-Adding or removing timeline nodes work as expected when the addition/removal occurs at a future point in the timeline relative to the current executing node, but not if it occurs before the current node. The example above works as expected becaues all added/removed nodes occur at the end of the timeline via `push()` and `pop()`, but if the branches were inserted at a point in the timeline that has already been executed, e.g. `timeline.splice(0, 0, branch_1)`, then `branch_1` will not be executed.
+Adding or removing timeline nodes work as expected when the addition/removal occurs at a future point in the timeline relative to the current executing node, but not if it occurs before the current node. The example above works as expected becaues all the node(s) added (`english_branch` | `mandarin_branch` | `spanish_branch`) or removed (`part2_timeline`) occur at the end of the timeline via `push()` and `pop()`. If a node was inserted at a point in the timeline that has already been executed, it will not be executed:
 
-In the case of a looping timeline, adding a timeline node at a point before the current node will cause the current node to be executed again; and removing a timeline node at a point before the current node will cause the next node to be skipped.
+```javascript
+const choice_trial = {
+	type: jsPsychHtmlKeyboardResponse,
+	stimulus: 'Press 1 for English. Press 2 for Mandarin. Press 3 for Spanish. Press 4 to exit.',
+	choices: ['1','2','3', '4'],
+	on_finish: (data) => {
+		switch(data.response) {
+			case '1':
+				main_timeline.splice(0,0,english_branch); // Adds english_branch to the start of main_timeline
+				break;
+			case '2':
+				main_timeline.push(mandarin_branch);
+				break;
+			
+			...
+
+main_timeline.push(part1_trial, choice_trial);
+```
+In the above implementation of `choice_trial`, choice 1 adds `english_branch` to the start of `main_timeline`, such that `main_timeline = [english_branch, part1_trial, choice_trial]`, but because the execution of `main_timeline` is past the first node at this point in runtime, the newly added `english_branch` will not be executed. Similarly, modifying `case '1'` in `choice_trial` to remove `part1_trial` will not change any behavior in the timeline.
+
+<strong>DON'T DO THIS:</strong> In the case of a looping timeline, adding a timeline node at a point before the current node will cause the current node to be executed again; and removing a timeline node at a point before the current node will cause the next node to be skipped.
 
 ## Timeline start and finish functions
 
