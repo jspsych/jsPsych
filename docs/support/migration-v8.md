@@ -113,7 +113,7 @@ In version 9.x, we plan to make this a requirement.
 In version 7.x, jsPsych's `pluginAPI` class exposed WebAudio and HTML5 audio APIs through `getAudioBuffer()`. However, this required different implementations done by the developer to account for each API. 
 In version 8.x, we've removed this in favor of `getAudioPlayer()`, which handles both API choices under the hood. 
 
-This change only effects plugin developers. If you want to update to use the new `getAudioPlayer()`, it is recommend that you call this new method using the `await` syntax, which requires an asyncrhonous `trial` function:
+This change only effects plugin developers. If you want to update to use the new `getAudioPlayer()`, it is recommend that you call this new method using the `await` syntax, which requires an asynchronous `trial` function:
 ```js
 const audio = await jsPsych.pluginAPI.getAudioPlayer('my-sound.mp3');
 ```
