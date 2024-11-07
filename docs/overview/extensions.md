@@ -1,6 +1,6 @@
 # Extensions
 
-Extensions are jsPsych modules that can interface with any plugin to extend the functionality of the plugin. A canonical example of an extension is eye tracking. An eye tracking extension allows a plugin to gather gaze data and add it to the plugin's data object.
+In jsPsych, extensions allow one to extend the functionality of various plugins, giving individual plugins the ability to collect more data, display additional stimuli, and more. A canonical example of an extension is [eye tracking](../extensions/webgazer.md), which allow plugins to gather gaze data and add it to the their respective data objects. For a full list of extensions directly included in the jsPsych release, see [here](../extensions/list-of-extensions.md).
 
 ## Using an Extension
 
@@ -16,7 +16,7 @@ To use an extension in an experiment, you'll load the extension file via a `<scr
 ```js
 initJsPsych({
   extensions: [
-    {type: jsPsychExtensionExample, params: {...} }
+    { type: jsPsychExtensionExample, params: {...} }
   ]
 })
 ```
@@ -26,16 +26,10 @@ To enable an extension during a trial, add the extension to the `extensions` lis
 ```js
 var trial = {
   extensions: [
-    {type: jsPsychExtensionExample, params: {...} }
+    { type: jsPsychExtensionExample, params: {...} }
   ]
 }
 ```
-
-## List of Extensions
-
-Extension | Description
------- | -----------
-[jspsych&#8209;ext&#8209;webgazer.js](../extensions/webgazer.md) | Enables eye tracking using the [WebGazer](https://webgazer.cs.brown.edu/) library.
 
 ## Writing an Extension
 

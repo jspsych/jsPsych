@@ -66,7 +66,7 @@ let trial = {
   extensions: [
     {type: myAwesomeExtension, params: {demo: 'value'}}
   ]
-});
+};
 
 //... extension code ...//
 class MyAwesomeExtension {
@@ -91,7 +91,7 @@ let trial = {
   extensions: [
     {type: myAwesomeExtension, params: {demo: 'value'}}
   ]
-});
+};
 
 //... extension code ...//
 class MyAwesomeExtension {
@@ -122,7 +122,7 @@ let trial = {
   on_finish: (data) => {
     console.log(data.awesome); // will output 'value'.
   }
-});
+};
 
 //... extension code ...//
 class MyAwesomeExtension {
@@ -168,9 +168,11 @@ The `version` field describes the version of the extension used and then durin t
 
 The `data` field is an object containing all of the `data` generated for the plugin. Each 'data' object has a `type` and `default` property. Additionally, this should be only used for data you choose to generate. Any jsdoc (comments included in the /** */ tags) you include will be scraped as metadata if you are choosing to generate metadata. This scraped metadata will also be used to create the JsPsych documentation.
 
+For more information on the various types of parameters one can include in their data field, see [here](./plugin-development.md#parameter-types).
+
 ### Optional methods
 
-The extension can also include any additional methods that are necessary for interacting with it. See the [webgazer extension](../extensions/webgazer.md) for an example.
+The extension can also include any additional methods that are necessary for interacting with it. See the [WebGazer extension](../extensions/webgazer.md) for an example.
 
 ## Advice for writing extensions
 
