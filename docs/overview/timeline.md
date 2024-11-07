@@ -586,7 +586,7 @@ main_timeline.push(part1_trial, choice_trial);
 ```
 In the above implementation of `choice_trial`, choice 1 adds `english_branch` at the start of `main_timeline`, such that `main_timeline = [english_branch, part1_trial, choice_trial]`, but because the execution of `main_timeline` is past the first node at this point in runtime, the newly added `english_branch` will not be executed. Similarly, modifying `case '1'` in `choice_trial` to remove `part1_trial` will not change any behavior in the timeline.
 
-!!! danger "Dynamically adding/removing nodes in a  looping timeline"
+!!! danger
 In the case of a looping timeline, adding a timeline node at a point before the current node will cause the current node to be executed again; and removing a timeline node at a point before the current node will cause the next node to be skipped.
 
 ## Timeline start and finish functions
