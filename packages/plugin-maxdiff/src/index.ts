@@ -52,7 +52,7 @@ const info = <const>{
      * columns. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions.  */
     labels: {
       type: ParameterType.COMPLEX,
-      parameters: {
+      nested: {
         left: {
           type: ParameterType.STRING,
         },
@@ -65,7 +65,7 @@ const info = <const>{
      * This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. */
     response: {
       type: ParameterType.COMPLEX,
-      parameters: {
+      nested: {
         left: {
           type: ParameterType.STRING,
         },

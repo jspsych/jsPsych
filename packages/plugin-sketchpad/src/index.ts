@@ -232,7 +232,7 @@ const info = <const>{
     strokes: {
       type: ParameterType.COMPLEX,
       array: true,
-      parameters: {
+      nested: {
         action: {
           type: ParameterType.STRING,
         },
