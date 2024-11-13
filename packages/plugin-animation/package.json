@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-animation",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "jsPsych plugin for showing animations and recording keyboard responses",
   "type": "module",
   "main": "dist/index.cjs",
