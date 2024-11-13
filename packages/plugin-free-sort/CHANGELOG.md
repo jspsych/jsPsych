@@ -1,5 +1,11 @@
 # @jspsych/plugin-free-sort
 
+## 2.0.2
+
+### Patch Changes
+
+- [#3432](https://github.com/jspsych/jsPsych/pull/3432) [`484300c4`](https://github.com/jspsych/jsPsych/commit/484300c49a8f8c54de705b2fb7b7739ac648f9f2) Thanks [@jadeddelta](https://github.com/jadeddelta)! - fix data values with `COMPLEX` type to use proper metadata syntax
+
 ## 2.0.1
 
 ### Patch Changes
