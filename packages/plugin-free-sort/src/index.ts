@@ -134,7 +134,7 @@ const info = <const>{
     moves: {
       type: ParameterType.COMPLEX,
       array: true,
-      parameters: {
+      nested: {
         src: {
           type: ParameterType.STRING,
         },
@@ -150,7 +150,7 @@ const info = <const>{
     final_locations: {
       type: ParameterType.COMPLEX,
       array: true,
-      parameters: {
+      nested: {
         src: {
           type: ParameterType.STRING,
         },

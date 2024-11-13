@@ -78,7 +78,7 @@ const info = <const>{
     view_history: {
       type: ParameterType.COMPLEX,
       array: true,
-      parameters: {
+      nested: {
         page_index: {
           type: ParameterType.INT,
         },

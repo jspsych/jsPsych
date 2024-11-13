@@ -65,7 +65,7 @@ const info = <const>{
     animation_sequence: {
       type: ParameterType.COMPLEX,
       array: true,
-      parameters: {
+      nested: {
         stimulus: {
           type: ParameterType.STRING,
         },
@@ -83,7 +83,7 @@ const info = <const>{
     response: {
       type: ParameterType.COMPLEX,
       array: true,
-      parameters: {
+      nested: {
         stimulus: {
           type: ParameterType.STRING,
         },
