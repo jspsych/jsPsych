@@ -298,7 +298,7 @@ Returns nothing.
 
 #### Description
 
-Method that belongs to the AudioPlayer class. Stops the audio loaded into the audio buffer of the AudioPlayer instance for a particular file. If the audio is an HTML5 audio object it pauses it. If the audio is a Webaudio API object it stops it. This will regenerate the audio player, allowing you to call the `play()` method upon it again.
+Method that belongs to the AudioPlayer class. Stops the audio loaded into the audio buffer of the AudioPlayer instance for a particular file. If the audio is an HTML5 audio object it pauses it. If the audio is a WebAudio API object it stops it. This will regenerate the audio player, allowing you to call the `play()` method upon it again.
 
 #### Example
 

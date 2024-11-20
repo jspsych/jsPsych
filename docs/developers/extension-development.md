@@ -168,7 +168,7 @@ The `version` field describes the version of the extension used and then durin t
 
 The `data` field is an object containing all of the `data` generated for the plugin. Each 'data' object has a `type` and `default` property. Additionally, this should be only used for data you choose to generate. Any jsdoc (comments included in the /** */ tags) you include will be scraped as metadata if you are choosing to generate metadata. This scraped metadata will also be used to create the JsPsych documentation.
 
-For more information on the various types of parameters one can include in their data field, see [here](./plugin-development.md#parameter-types).
+For more information on the various types of parameters one can include in their data field, see our [documentation on `ParameterType`s](./plugin-development.md#parameter-types).
 
 ### Optional methods
 

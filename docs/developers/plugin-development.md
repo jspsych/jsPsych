@@ -61,9 +61,9 @@ const info = {
 }
 ```
 
-??? info "Custom Build Environments"
+??? info "Automatic versioning with custom build environments"
 
-    If you are using a custom build environment that imports its own `tsconfig.json` file that does not extend jsPsych's, but you want to use this syntax, you must add `"resolveJsonModule": true` to the config's `compilerOptions` object.
+    If you are using a custom build environment that imports its own `tsconfig.json` file that does not extend jsPsych's, and you want to use this automatic versioning syntax, you must add `"resolveJsonModule": true` to the config's `compilerOptions` object.
 
 If you are not using a build environment that supports `import` and `package.json` (such as writing a plain JS file), you can manually enter the `version` as a string.
 
@@ -169,7 +169,7 @@ MyAwesomePlugin.info = info;
 
 #### Parameter Types
 
-jsPsych currently has support for the following parameters:
+jsPsych currently has support for the following parameter types:
 
 | Type Name | Description | Example |
 | --------- | ----------- | ------- |

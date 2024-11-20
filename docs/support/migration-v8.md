@@ -86,9 +86,6 @@ const trial = {
 The `button_html` parameter can also support different HTML for each button. 
 See the [plugin documentation](https://www.jspsych.org/latest/plugins/html-button-response/index.html) for more details.
 
-For plugin developers: if you are writing a plugin and updating parameters to use functions, 
-make sure to mock these functions in Jest to ensure tests can still run.
-
 ## Plugin parameter handling
 
 In version 7.x, a plugin could omit parameters from the `info` object and jsPsych would still evaluate these parameters appropriately in most cases. 
@@ -113,7 +110,7 @@ In version 9.x, we plan to make this a requirement.
 In version 7.x, jsPsych's `pluginAPI` class exposed WebAudio and HTML5 audio APIs through `getAudioBuffer()`. However, this required different implementations done by the developer to account for each API. 
 In version 8.x, we've removed this in favor of `getAudioPlayer()`, which handles both API choices under the hood. 
 
-This change only effects plugin developers. If you want to update to use the new `getAudioPlayer()`, it is recommend that you call this new method using the `await` syntax, which requires an asynchronous `trial` function:
+This change only affects plugin developers. If you want to update to use the new `getAudioPlayer()`, it is recommend that you call this new method using the `await` syntax, which requires an asynchronous `trial` function:
 ```js
 const audio = await jsPsych.pluginAPI.getAudioPlayer('my-sound.mp3');
 ```
@@ -148,7 +145,7 @@ Along with this, the `start()` and `pause()` functions were removed from the `Au
 You can still call `stop()` upon an audio ending in order to regenerate the `AudioPlayer`, and be able
 to call `play()` on it again. 
 
-For a general guide on implementation, the `audio-button-response` plugin uses the `await` syntax
+For a general guide on implementation, the [`audio-button-response`](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-button-response/src/index.ts) plugin uses the `await` syntax
 to handle playing audio.
 
 ## Changes to `finishTrial()`
