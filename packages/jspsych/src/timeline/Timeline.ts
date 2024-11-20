@@ -75,7 +75,9 @@ export class Timeline extends TimelineNode {
           for (const timelineVariableIndex of timelineVariableOrder) {
             this.setCurrentTimelineVariablesByIndex(timelineVariableIndex);
 
-            for (const childNode of this.instantiateChildNodes()) {
+            for (const childNodeDescription of this.description.timeline) {
+              const childNode = this.instantiateChildNode(childNodeDescription);
+
               const previousChild = this.currentChild;
               this.currentChild = childNode;
               childNode.index = previousChild
@@ -151,14 +153,15 @@ export class Timeline extends TimelineNode {
     }
   }
 
-  private instantiateChildNodes() {
-    const newChildNodes = this.description.timeline.map((childDescription) => {
-      return isTimelineDescription(childDescription)
-        ? new Timeline(this.dependencies, childDescription, this)
-        : new Trial(this.dependencies, childDescription, this);
-    });
-    this.children.push(...newChildNodes);
-    return newChildNodes;
+  private instantiateChildNode(
+    childDescription: TimelineDescription | TimelineArray | TrialDescription
+  ) {
+    const newChildNode = isTimelineDescription(childDescription)
+      ? new Timeline(this.dependencies, childDescription, this)
+      : new Trial(this.dependencies, childDescription, this);
+
+    this.children.push(newChildNode);
+    return newChildNode;
   }
 
   private currentTimelineVariables: Record<string, any>;
