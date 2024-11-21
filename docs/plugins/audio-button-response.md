@@ -37,6 +37,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | -------------- | ------- | ---------------------------------------- |
 | rt             | numeric | The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first began playing until the participant's response. |
 | response       | numeric | Indicates which button the participant pressed. The first button in the `choices` array is 0, the second is 1, and so on. |
+| stimulus       | string  | Path to the audio file that played during the trial. |
 
 ## Simulation Mode
 
