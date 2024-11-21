@@ -120,10 +120,12 @@ type Info = typeof info;
 class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {}
+  constructor(private jsPsych: JsPsych) { }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    var plugin_id_name = "jspsych-survey-multi-choice";
+
+    const plugin_id_name = "jspsych-survey-multi-choice";
+    const trial_form_id = `${plugin_id_name}_form`;
 
     var html = "";
 
@@ -148,9 +150,9 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
 
     // form element
     if (trial.autocomplete) {
-      html += '<form id="jspsych-survey-multi-choice-form">';
+      html += `<form id="${trial_form_id}">`;
     } else {
-      html += '<form id="jspsych-survey-multi-choice-form" autocomplete="off">';
+      html += `<form id="${trial_form_id}" autocomplete="off">`;
     }
     // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
     // so that the data are always associated with the same question regardless of order
@@ -233,7 +235,7 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
     // render
     display_element.innerHTML = html;
 
-    document.querySelector("form").addEventListener("submit", (event) => {
+    document.querySelector(`form#${trial_form_id}`).addEventListener("submit", (event) => {
       event.preventDefault();
       // measure response time
       var endTime = performance.now();
