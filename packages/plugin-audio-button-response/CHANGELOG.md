@@ -1,5 +1,11 @@
 # @jspsych/plugin-audio-button-response
 
+## 2.0.2
+
+### Patch Changes
+
+- [#3443](https://github.com/jspsych/jsPsych/pull/3443) [`13731787`](https://github.com/jspsych/jsPsych/commit/137317878e88cf5d934f0010f4dd1cf68d8ae8e7) Thanks [@jadeddelta](https://github.com/jadeddelta)! - annotate missing stimulus data field
+
 ## 2.0.1
 
 ### Patch Changes
