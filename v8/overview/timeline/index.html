@@ -601,6 +601,48 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#modifying-timelines-at-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modifying timelines at runtime
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modifying timelines at runtime">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-timeline-nodes-at-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding timeline nodes at runtime
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removing-timeline-nodes-at-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      Removing timeline nodes at runtime
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exception-cases-for-addingremoving-timeline-nodes-dynamically" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exception cases for adding/removing timeline nodes dynamically
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#timeline-start-and-finish-functions" class="md-nav__link">
     <span class="md-ellipsis">
       Timeline start and finish functions
@@ -3013,6 +3055,48 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#modifying-timelines-at-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modifying timelines at runtime
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Modifying timelines at runtime">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-timeline-nodes-at-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adding timeline nodes at runtime
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#removing-timeline-nodes-at-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      Removing timeline nodes at runtime
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exception-cases-for-addingremoving-timeline-nodes-dynamically" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exception cases for adding/removing timeline nodes dynamically
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#timeline-start-and-finish-functions" class="md-nav__link">
     <span class="md-ellipsis">
       Timeline start and finish functions
@@ -3423,6 +3507,115 @@ The conditional function is evaluated whenever jsPsych is about to run the first
 
 <span class="nx">jsPsych</span><span class="p">.</span><span class="nx">run</span><span class="p">([</span><span class="nx">pre_if_trial</span><span class="p">,</span><span class="w"> </span><span class="nx">if_node</span><span class="p">,</span><span class="w"> </span><span class="nx">after_if_trial</span><span class="p">]);</span>
 </code></pre></div>
+<h2 id="modifying-timelines-at-runtime">Modifying timelines at runtime<a class="headerlink" href="#modifying-timelines-at-runtime" title="Permanent link">&para;</a></h2>
+<p>Although this functionality can also be achieved through a combination of the <code>conditional_function</code> and the use of dynamic variables in the <code>stimulus</code> parameter, our timeline implementation allows you to dynamically add or remove trials and nested timelines during runtime.</p>
+<h3 id="adding-timeline-nodes-at-runtime">Adding timeline nodes at runtime<a class="headerlink" href="#adding-timeline-nodes-at-runtime" title="Permanent link">&para;</a></h3>
+<p>For example, you may have a branching point in your experiment where the participant is given 3 choices, each leading to a different timeline: </p>
+<p><div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">jspsych</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">initJsPsych</span><span class="p">();</span>
+<span class="kd">let</span><span class="w"> </span><span class="nx">main_timeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">part1_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Part 1&#39;</span>
+<span class="p">}</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">choice_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Press 1 if you are a new participant. Press 2 for inquiries about an existing experiment run. Press 3 for Spanish.&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+This would be trickier to implement with the <code>conditional_function</code> since it can only handle 2 branches -- case when <code>True</code> or case when <code>False</code>. Instead, you can modify the timeline by modifying <code>choice_trial</code> to dynamically adding a timeline at the end of the choice trial according to the chosen condition:</p>
+<p><div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">english_trial1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{...};</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">english_trial2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{...};</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">english_trial3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{...};</span>
+<span class="c1">// So on and so forth</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">spanish_trial3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{...};</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">english_branch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nx">b1_t1</span><span class="p">,</span><span class="w"> </span><span class="nx">b1_t2</span><span class="p">,</span><span class="w"> </span><span class="nx">b1_t3</span><span class="p">];</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">mandarin_branch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nx">b2_t1</span><span class="p">,</span><span class="w"> </span><span class="nx">b2_t2</span><span class="p">,</span><span class="w"> </span><span class="nx">b2_t3</span><span class="p">];</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">spanish_branch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="nx">b3_t1</span><span class="p">,</span><span class="w"> </span><span class="nx">b3_t2</span><span class="p">,</span><span class="w"> </span><span class="nx">b3_t3</span><span class="p">];</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">choice_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Press 1 for English. Press 2 for Mandarin. Press 3 for Spanish.&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">],</span>
+<span class="w">    </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">switch</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;1&#39;</span><span class="o">:</span>
+<span class="w">                </span><span class="nx">main_timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">english_branch</span><span class="p">);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;2&#39;</span><span class="o">:</span>
+<span class="w">                </span><span class="nx">main_timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">mandarin_branch</span><span class="p">);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="o">:</span>
+<span class="w">                </span><span class="nx">main_timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">spanish_branch</span><span class="p">);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="nx">main_timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">part1_trial</span><span class="p">,</span><span class="w"> </span><span class="nx">choice_trial</span><span class="p">);</span>
+</code></pre></div>
+During runtime, choices 1, 2 and 3 will dynamically add a different (nested) timeline, <code>english_branch</code>, <code>mandarin_branch</code> and <code>spanish_branch</code> respectively, to the end of the <code>main_timeline</code>.</p>
+<h3 id="removing-timeline-nodes-at-runtime">Removing timeline nodes at runtime<a class="headerlink" href="#removing-timeline-nodes-at-runtime" title="Permanent link">&para;</a></h3>
+<p>You can also remove upcoming timeline nodes from a timeline at runtime. To demonstrate this, we can modify the above example by adding a 4th choice to <code>choice_trial</code> and another (nested) timeline to the tail of <code>main_timeline</code>:</p>
+<p><div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">choice_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Press 1 for English. Press 2 for Mandarin. Press 3 for Spanish. Press 4 to exit.&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;4&#39;</span><span class="p">],</span>
+<span class="w">    </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">switch</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;1&#39;</span><span class="o">:</span>
+<span class="w">                </span><span class="nx">main_timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">english_branch</span><span class="p">);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;2&#39;</span><span class="o">:</span>
+<span class="w">                </span><span class="nx">main_timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">mandarin_branch</span><span class="p">);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="o">:</span>
+<span class="w">                </span><span class="nx">main_timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">spanish_branch</span><span class="p">);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;4&#39;</span><span class="o">:</span>
+<span class="w">                </span><span class="nx">main_timeline</span><span class="p">.</span><span class="nx">pop</span><span class="p">();</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="nx">part2_timeline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">JsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Part 2&#39;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// ...the rest of the part 2 trials</span>
+<span class="p">]</span>
+
+<span class="nx">main_timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">part1_trial</span><span class="p">,</span><span class="w"> </span><span class="nx">choice_trial</span><span class="p">,</span><span class="w"> </span><span class="nx">part2_timeline</span><span class="p">)</span>
+</code></pre></div>
+Now, if 1, 2 or 3 were chosen during runtime, <code>part2_timeline</code> will run after the dynamically added timeline corresponding to the choice (<code>english_branch</code> | <code>mandarin_branch</code> | <code>spanish_branch</code>) has been run; but if 4 was chosen, <code>part2_timeline</code> will be removed at runtime, and <code>main_timeline</code> will terminate.</p>
+<h3 id="exception-cases-for-addingremoving-timeline-nodes-dynamically">Exception cases for adding/removing timeline nodes dynamically<a class="headerlink" href="#exception-cases-for-addingremoving-timeline-nodes-dynamically" title="Permanent link">&para;</a></h3>
+<p>Adding or removing timeline nodes work as expected when the addition/removal occurs at a future point in the timeline relative to the current executing node, but not if it occurs before the current node. The example above works as expected becaues all the node(s) added (<code>english_branch</code> | <code>mandarin_branch</code> | <code>spanish_branch</code>) or removed (<code>part2_timeline</code>) occur at the end of the timeline via <code>push()</code> and <code>pop()</code>. If a node was added at a point in the timeline that has already been executed, it will not be executed:</p>
+<p><div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">choice_trial</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychHtmlKeyboardResponse</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;Press 1 for English. Press 2 for Mandarin. Press 3 for Spanish. Press 4 to exit.&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;4&#39;</span><span class="p">],</span>
+<span class="w">    </span><span class="nx">on_finish</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">switch</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;1&#39;</span><span class="o">:</span>
+<span class="w">                </span><span class="nx">main_timeline</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mf">0</span><span class="p">,</span><span class="mf">0</span><span class="p">,</span><span class="nx">english_branch</span><span class="p">);</span><span class="w"> </span><span class="c1">// Adds english_branch to the start of main_timeline</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+<span class="w">            </span><span class="k">case</span><span class="w"> </span><span class="s1">&#39;2&#39;</span><span class="o">:</span>
+<span class="w">                </span><span class="nx">main_timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">mandarin_branch</span><span class="p">);</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+
+<span class="w">            </span><span class="p">...</span>
+
+<span class="nx">main_timeline</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">part1_trial</span><span class="p">,</span><span class="w"> </span><span class="nx">choice_trial</span><span class="p">);</span>
+</code></pre></div>
+In the above implementation of <code>choice_trial</code>, choice 1 adds <code>english_branch</code> at the start of <code>main_timeline</code>, such that <code>main_timeline = [english_branch, part1_trial, choice_trial]</code>, but because the execution of <code>main_timeline</code> is past the first node at this point in runtime, the newly added <code>english_branch</code> will not be executed. Similarly, modifying <code>case '1'</code> in <code>choice_trial</code> to remove <code>part1_trial</code> will not change any behavior in the timeline.</p>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+</div>
+<p>In the case of a looping timeline, adding a timeline node at a point before the current node will cause the current node to be executed again; and removing a timeline node at a point before the current node will cause the next node to be skipped.</p>
 <h2 id="timeline-start-and-finish-functions">Timeline start and finish functions<a class="headerlink" href="#timeline-start-and-finish-functions" title="Permanent link">&para;</a></h2>
 <p>You can run a custom function at the start and end of a timeline node using the <code>on_timeline_start</code> and <code>on_timeline_finish</code> callback function parameters. These are functions that will run when the timeline starts and ends, respectively. </p>
 <div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
