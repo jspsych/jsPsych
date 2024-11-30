@@ -19,5 +19,6 @@ module.exports.makePackageConfig = (dirname) => {
       name: packageBaseName,
       color: packageBaseName === "jspsych" ? "white" : "cyanBright",
     },
+    setupFilesAfterEnv: ["../config/jest.setup.js"],
   };
 };
