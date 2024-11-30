@@ -250,23 +250,6 @@ const info = {
 }
 ```
 
-For more complicated scenarios, typically when handling data generated from an arbitrary function or user input, where we have a general idea of what data type it could produce, we may also specify multiple types of data. As an example, if we know we'll get either some number (integer or float) or a string from a field, we can specify it as such:
-
-```js
-const info = {
-  // ...
-  data: {
-    /** The response given by the user. */
-    response: {
-      type: 
-        ParameterType.INT | 
-        ParameterType.FLOAT |
-        ParameterType.STRING
-    }
-  }
-}
-```
-
 ## Plugin functionality
 
 Inside the `.trial()` method you can do pretty much anything that you want, including modifying the DOM, setting up event listeners, and making asynchronous requests. In this section we'll highlight a few common things that you might want to do as examples.
