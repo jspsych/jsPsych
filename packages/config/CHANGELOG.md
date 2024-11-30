@@ -1,5 +1,11 @@
 # @jspsych/config
 
+## 3.1.0
+
+### Minor Changes
+
+- [#3435](https://github.com/jspsych/jsPsych/pull/3435) [`3de5aad4`](https://github.com/jspsych/jsPsych/commit/3de5aad43b538be56a3957be5beb6e9910b74267) Thanks [@jadeddelta](https://github.com/jadeddelta)! - update to force the dom to clear after each individual test
+
 ## 3.0.1
 
 ### Patch Changes
