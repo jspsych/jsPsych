@@ -89,7 +89,7 @@ describe("sampling", () => {
 
   test("fixed repetitions method produces random order", async () => {
     const jsPsych = initJsPsych();
-    const seed = jsPsych.randomization.setSeed("jspsych");
+    jsPsych.randomization.setSeed("jspsych");
 
     const { expectFinished } = await startTimeline(
       [

@@ -122,11 +122,6 @@ describe("#displayData", () => {
 
     // click through first trial
     await pressKey("a");
-    // overwrite data with custom data
-    const data = [
-      { col1: 1, col2: 2 },
-      { col1: 3, col2: 4 },
-    ];
     // display data in json format
     jsPsych.data.displayData("csv");
     // check display element HTML

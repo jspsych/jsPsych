@@ -30,7 +30,7 @@ describe("ProgressBar", () => {
 
     it("errors if an invalid progress value is provided", () => {
       expect(() => {
-        // @ts-expect-error
+        // @ts-expect-error - progressBar.progress is typed as a a number, but should handle the case of a string
         progressBar.progress = "0";
       }).toThrowErrorMatchingInlineSnapshot(
         '"jsPsych.progressBar.progress must be a number between 0 and 1"'
@@ -49,7 +49,7 @@ describe("ProgressBar", () => {
       // Override default container element and progress bar
       containerElement = document.createElement("div");
       progressBar = new ProgressBar(containerElement, (progress: number) => String(progress));
-      let messageSpan: HTMLSpanElement = containerElement.querySelector("span");
+      const messageSpan: HTMLSpanElement = containerElement.querySelector("span");
 
       expect(messageSpan.innerHTML).toEqual("0");
 

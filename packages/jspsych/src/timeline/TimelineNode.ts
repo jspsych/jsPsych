@@ -131,7 +131,8 @@ export abstract class TimelineNode {
       parameterPath = [parameterPath];
     }
 
-    let { doesPathExist, value: result } = this.parameterValueCache.lookup(parameterPath);
+    const { doesPathExist, value } = this.parameterValueCache.lookup(parameterPath);
+    let result = value;
     if (!doesPathExist && recursive && this.parent) {
       result = this.parent.getParameterValue(parameterPath, options);
     }
