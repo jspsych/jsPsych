@@ -46,20 +46,7 @@ const info = <const>{
   data: {
     /** An object containing the response to each question. The object will have a separate key (identifier) for each question. If the `name` parameter is defined for the question (recommended), then the response object will use the value of `name` as the key for each question. If any questions do not have a name parameter, their keys will named automatically, with the first unnamed question recorded as `question1`, the second as `question2`, and so on. The response type will depend on the question type. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. */
     response: {
-      type: ParameterType.COMPLEX,
-      nested: {
-        identifier: {
-          type: ParameterType.STRING,
-        },
-        response: {
-          type:
-            ParameterType.STRING |
-            ParameterType.INT |
-            ParameterType.FLOAT |
-            ParameterType.BOOL |
-            ParameterType.OBJECT,
-        },
-      },
+      type: ParameterType.OBJECT,
     },
     /** The response time in milliseconds for the participant to make a response. The time is measured from when the questions first appear on the screen until the participant's response(s) are submitted. */
     rt: {
