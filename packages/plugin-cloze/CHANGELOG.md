@@ -1,5 +1,11 @@
 # @jspsych/plugin-cloze
 
+## 2.1.0
+
+### Minor Changes
+
+- [#2846](https://github.com/jspsych/jsPsych/pull/2846) [`703b7243`](https://github.com/jspsych/jsPsych/commit/703b724376ec66c09967ac6e1bb87ecce6b33b74) Thanks [@jadeddelta](https://github.com/jadeddelta)! - adds support for multiple correct answers, case sensitivity, and autofocus.
+
 ## 2.0.0
 
 ### Major Changes
