@@ -59,6 +59,14 @@ const info = <const>{
       type: ParameterType.FUNCTION,
       default: () => {},
     },
+    /**
+     * Boolean value indicating if the first input field should be focused when the trial starts.
+     * Enabled by default, but may be disabled especially if participants are using screen readers.
+     */
+    autofocus: {
+      type: ParameterType.BOOL,
+      default: true,
+    }
   },
   data: {
     /** Answers the participant gave. */
@@ -145,7 +153,8 @@ class ClozePlugin implements JsPsychPlugin<Info> {
       "</button>";
     display_element.querySelector("#finish_cloze_button").addEventListener("click", check);
 
-    (display_element.querySelector("#input0") as HTMLElement).focus();
+    if (trial.autofocus)
+      (display_element.querySelector("#input0") as HTMLElement).focus();
   }
 
   private getSolutions(text: string, case_sensitive: boolean): string[][] {

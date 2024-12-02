@@ -8,11 +8,6 @@ const getInputElementById = (id: string) => document.getElementById(id) as HTMLI
 
 const clickFinishButton = () => clickTarget(document.querySelector("#finish_cloze_button"));
 
-// reset DOM
-beforeEach(() => {
-  document.body.innerHTML = "";
-});
-
 describe("cloze", () => {
   test("displays cloze", async () => {
     const { getHTML, expectFinished } = await startTimeline([
@@ -205,7 +200,7 @@ describe("cloze", () => {
     await expectFinished();
   });
 
-  test.skip("calls mistake function on button click when answers are checked and do not belong to a multiple answer blank", async () => {
+  test("calls mistake function on button click when answers are checked and do not belong to a multiple answer blank", async () => {
     const mistakeFn = jest.fn();
 
     const { expectFinished } = await startTimeline([
@@ -221,6 +216,8 @@ describe("cloze", () => {
     await clickFinishButton();
     expect(mistakeFn).toHaveBeenCalled();
 
+    getInputElementById("input0").value = "cloze";
+    await clickFinishButton();
     await expectFinished();
   });
 

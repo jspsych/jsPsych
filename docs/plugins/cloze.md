@@ -16,6 +16,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | allow_blanks  | boolean  | true               | Boolean value indicating if the answers given by participants should be checked for completion after the button was clicked. If ```true```, answers are not checked for completion and blank answers are allowed. The trial will then automatically finish upon the clicking the button. If ```false```, answers are checked for completion, and in case there are some fields with missing answers, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. |
 | case_sensitivity | boolean  | true            | Boolean value indicating if the answers given by participants should also be checked to have the right case along with correctness. If set to ```false```, case is disregarded and participants may type in whatever case they please. | 
 | mistake_fn    | function | ```function(){}``` | Function called if ```check_answers``` is set to ```true``` and there is a difference between the participant's answers and the correct solution provided in the text, or if ```allow_blanks``` is set to ```false``` and there is at least one field with a blank answer. |
+| autofocus     | boolean  | true               | Boolean value indicating if the first input field should be focused when the trial starts. Enabled by default, but may be disabled especially if participants are using screen readers. |
 
 ## Data Generated
 

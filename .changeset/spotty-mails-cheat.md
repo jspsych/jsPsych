@@ -2,4 +2,4 @@
 "@jspsych/plugin-cloze": minor
 ---
 
-adds support for multiple correct answers and case sensitivity
+adds support for multiple correct answers, case sensitivity, and autofocus.
