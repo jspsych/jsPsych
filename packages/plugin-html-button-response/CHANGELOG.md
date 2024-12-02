@@ -1,5 +1,11 @@
 # @jspsych/plugin-html-button-response
 
+## 2.0.1
+
+### Patch Changes
+
+- [#3364](https://github.com/jspsych/jsPsych/pull/3364) [`cb0d13e0`](https://github.com/jspsych/jsPsych/commit/cb0d13e0f38f88b1d8d8f5b43be854d6a70147f1) Thanks [@levigoldberg](https://github.com/levigoldberg)! - Change broken selection in enable_button_after parameter
+
 ## 2.0.0
 
 ### Major Changes

@@ -35,7 +35,7 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.0.1"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
