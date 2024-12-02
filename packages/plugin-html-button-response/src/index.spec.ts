@@ -4,10 +4,6 @@ import htmlButtonResponse from ".";
 
 jest.useFakeTimers();
 
-beforeEach(() => {
-  document.body.innerHTML = "";
-});
-
 describe("html-button-response", () => {
   it("displays html stimulus and buttons", async () => {
     const { getHTML } = await startTimeline([
