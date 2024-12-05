@@ -61,7 +61,7 @@ Citations help us demonstrate that this library is used and valued, which allows
 ## Contributors
 
 jsPsych is open source project with [numerous contributors](https://github.com/jspsych/jsPsych/graphs/contributors). 
-The project is currently managed by the core team of Josh de Leeuw ([@jodeleeuw](https://github.com/jodeleeuw)), Becky Gilbert ([@becky-gilbert](https://github.com/becky-gilbert)), Björn Luchterhandt ([@bjoluc](https://github.com/bjoluc)), and Jade ([@jadedelta]).
+The project is currently managed by the core team of Josh de Leeuw ([@jodeleeuw](https://github.com/jodeleeuw)), Becky Gilbert ([@becky-gilbert](https://github.com/becky-gilbert)), Björn Luchterhandt ([@bjoluc](https://github.com/bjoluc)), and Jade ([@jadedelta](https://github.com/jadedelta)).
 
 jsPsych was created by [Josh de Leeuw](https://www.vassar.edu/faculty/jdeleeuw).
 
