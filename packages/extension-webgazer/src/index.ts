@@ -1,6 +1,6 @@
-import { JsPsych, JsPsychExtension, JsPsychExtensionInfo, ParameterType } from "jspsych";
+import { JsPsych, JsPsychExtension, JsPsychExtensionInfo, ParameterType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 // we have to add webgazer to the global window object because webgazer attaches itself to
 // the window when it loads
@@ -46,7 +46,7 @@ interface OnStartParameters {
  */
 class WebGazerExtension implements JsPsychExtension {
   static info: JsPsychExtensionInfo = {
-    name: "webgazer",
+    name: 'webgazer',
     version: version,
     data: {
       /** An array of objects containing gaze data for the trial. Each object has an `x`, a `y`, and a `t` property. The `x` and
@@ -91,7 +91,7 @@ class WebGazerExtension implements JsPsychExtension {
         },
       },
     },
-    citations: "__CITATIONS__",
+    citations: '__CITATIONS__',
   };
 
   constructor(private jsPsych: JsPsych) {}
@@ -127,13 +127,13 @@ class WebGazerExtension implements JsPsychExtension {
     this.domObserver = new MutationObserver(this.mutationObserverCallback);
 
     return new Promise((resolve, reject) => {
-      if (typeof webgazer === "undefined") {
+      if (typeof webgazer === 'undefined') {
         if (window.webgazer) {
           this.webgazer = window.webgazer;
         } else {
           reject(
             new Error(
-              "Webgazer extension failed to initialize. webgazer.js not loaded. Load webgazer.js before calling initJsPsych()"
+              'Webgazer extension failed to initialize. webgazer.js not loaded. Load webgazer.js before calling initJsPsych()'
             )
           );
         }
@@ -219,9 +219,9 @@ class WebGazerExtension implements JsPsychExtension {
 
   start = () => {
     return new Promise<void>((resolve, reject) => {
-      if (typeof this.webgazer == "undefined") {
+      if (typeof this.webgazer == 'undefined') {
         const error =
-          "Failed to start webgazer. Things to check: Is webgazer.js loaded? Is the webgazer extension included in initJsPsych?";
+          'Failed to start webgazer. Things to check: Is webgazer.js loaded? Is the webgazer extension included in initJsPsych?';
         console.error(error);
         reject(error);
       }
@@ -288,8 +288,8 @@ class WebGazerExtension implements JsPsychExtension {
   pause = () => {
     this.webgazer.pause();
     // sometimes gaze dot will show and freeze after pause?
-    if (document.querySelector("#webgazerGazeDot")) {
-      document.querySelector<HTMLElement>("#webgazerGazeDot").style.display = "none";
+    if (document.querySelector('#webgazerGazeDot')) {
+      document.querySelector<HTMLElement>('#webgazerGazeDot').style.display = 'none';
     }
   };
 
@@ -306,16 +306,16 @@ class WebGazerExtension implements JsPsychExtension {
   };
 
   calibratePoint = (x: number, y: number) => {
-    this.webgazer.recordScreenPosition(x, y, "click");
+    this.webgazer.recordScreenPosition(x, y, 'click');
   };
 
   setRegressionType = (regression_type) => {
-    var valid_regression_models = ["ridge", "weightedRidge", "threadedRidge"];
+    var valid_regression_models = ['ridge', 'weightedRidge', 'threadedRidge'];
     if (valid_regression_models.includes(regression_type)) {
       this.webgazer.setRegression(regression_type);
     } else {
       console.warn(
-        "Invalid regression_type parameter for webgazer.setRegressionType. Valid options are ridge, weightedRidge, and threadedRidge."
+        'Invalid regression_type parameter for webgazer.setRegressionType. Valid options are ridge, weightedRidge, and threadedRidge.'
       );
     }
   };

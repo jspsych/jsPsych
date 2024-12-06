@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "serial-reaction-time-mouse",
+  name: 'serial-reaction-time-mouse',
   version: version,
   parameters: {
     /** This array represents the grid of boxes shown on the screen. Each inner array represents a single row. The entries in the inner arrays represent the columns. If an entry is `1` then a square will be drawn at that location on the grid. If an entry is `0` then the corresponding location on the grid will be empty. Thus, by mixing `1`s and `0`s it is possible to create many different grid-based arrangements. */
@@ -26,7 +26,7 @@ const info = <const>{
     /** The color of the target square. */
     target_color: {
       type: ParameterType.STRING,
-      default: "#999",
+      default: '#999',
     },
     /** If true, the trial ends after a key press. Feedback is displayed if `show_response_feedback` is true. */
     response_ends_trial: {
@@ -88,7 +88,7 @@ const info = <const>{
       type: ParameterType.BOOL,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -120,22 +120,22 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
       if (!trial.allow_nontarget_responses) {
         resp_targets = [
           display_element.querySelector(
-            "#jspsych-serial-reaction-time-stimulus-cell-" + trial.target[0] + "-" + trial.target[1]
+            '#jspsych-serial-reaction-time-stimulus-cell-' + trial.target[0] + '-' + trial.target[1]
           ),
         ];
       } else {
         resp_targets = display_element.querySelectorAll(
-          ".jspsych-serial-reaction-time-stimulus-cell"
+          '.jspsych-serial-reaction-time-stimulus-cell'
         );
       }
       for (var i = 0; i < resp_targets.length; i++) {
-        resp_targets[i].addEventListener("mousedown", (e) => {
+        resp_targets[i].addEventListener('mousedown', (e) => {
           if (startTime == -1) {
             return;
           } else {
             var info = <any>{};
-            info.row = e.currentTarget.getAttribute("data-row");
-            info.column = e.currentTarget.getAttribute("data-column");
+            info.row = e.currentTarget.getAttribute('data-row');
+            info.column = e.currentTarget.getAttribute('data-column');
             info.rt = Math.round(performance.now() - startTime);
             after_response(info);
           }
@@ -146,14 +146,14 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
 
       if (trial.fade_duration == null) {
         display_element.querySelector<HTMLElement>(
-          "#jspsych-serial-reaction-time-stimulus-cell-" + trial.target[0] + "-" + trial.target[1]
+          '#jspsych-serial-reaction-time-stimulus-cell-' + trial.target[0] + '-' + trial.target[1]
         ).style.backgroundColor = trial.target_color;
       } else {
         display_element.querySelector<HTMLElement>(
-          "#jspsych-serial-reaction-time-stimulus-cell-" + trial.target[0] + "-" + trial.target[1]
-        ).style.transition = "background-color " + trial.fade_duration;
+          '#jspsych-serial-reaction-time-stimulus-cell-' + trial.target[0] + '-' + trial.target[1]
+        ).style.transition = 'background-color ' + trial.fade_duration;
         display_element.querySelector<HTMLElement>(
-          "#jspsych-serial-reaction-time-stimulus-cell-" + trial.target[0] + "-" + trial.target[1]
+          '#jspsych-serial-reaction-time-stimulus-cell-' + trial.target[0] + '-' + trial.target[1]
         ).style.backgroundColor = trial.target_color;
       }
 
@@ -174,7 +174,7 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
 
     //show prompt if there is one
     if (trial.prompt !== null) {
-      display_element.insertAdjacentHTML("beforeend", trial.prompt);
+      display_element.insertAdjacentHTML('beforeend', trial.prompt);
     }
 
     const endTrial = () => {
@@ -211,43 +211,43 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
       stimulus +=
         "<div class='jspsych-serial-reaction-time-stimulus-row' style='display:table-row;'>";
       for (var j = 0; j < grid[i].length; j++) {
-        var classname = "jspsych-serial-reaction-time-stimulus-cell";
+        var classname = 'jspsych-serial-reaction-time-stimulus-cell';
 
         stimulus +=
           "<div class='" +
           classname +
           "' id='jspsych-serial-reaction-time-stimulus-cell-" +
           i +
-          "-" +
+          '-' +
           j +
           "' " +
-          "data-row=" +
+          'data-row=' +
           i +
-          " data-column=" +
+          ' data-column=' +
           j +
-          " " +
+          ' ' +
           "style='width:" +
           square_size +
-          "px; height:" +
+          'px; height:' +
           square_size +
-          "px; display:table-cell; vertical-align:middle; text-align: center; cursor: pointer; font-size:" +
+          'px; display:table-cell; vertical-align:middle; text-align: center; cursor: pointer; font-size:' +
           square_size / 2 +
-          "px;";
+          'px;';
         if (grid[i][j] == 1) {
-          stimulus += "border: 2px solid black;";
+          stimulus += 'border: 2px solid black;';
         }
-        if (typeof target !== "undefined" && target[0] == i && target[1] == j) {
-          stimulus += "background-color: " + target_color + ";";
+        if (typeof target !== 'undefined' && target[0] == i && target[1] == j) {
+          stimulus += 'background-color: ' + target_color + ';';
         }
         stimulus += "'>";
-        if (typeof labels !== "undefined" && labels[i][j] !== false) {
+        if (typeof labels !== 'undefined' && labels[i][j] !== false) {
           stimulus += labels[i][j];
         }
-        stimulus += "</div>";
+        stimulus += '</div>';
       }
-      stimulus += "</div>";
+      stimulus += '</div>';
     }
-    stimulus += "</div>";
+    stimulus += '</div>';
 
     return stimulus;
   }
@@ -258,11 +258,11 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }

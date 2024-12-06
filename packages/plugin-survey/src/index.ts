@@ -1,11 +1,11 @@
 // import SurveyJS dependencies: survey-core and survey-knockout-ui (UI theme): https://surveyjs.io/documentation/surveyjs-architecture#surveyjs-packages
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
-import * as SurveyJS from "survey-knockout-ui";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import * as SurveyJS from 'survey-knockout-ui';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "survey",
+  name: 'survey',
   version: version,
   parameters: {
     /**
@@ -66,7 +66,7 @@ const info = <const>{
       type: ParameterType.INT,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -80,20 +80,20 @@ type Info = typeof info;
 // (4) in survey.scss, use the jspsych class name as the selector and add/modify the rule
 
 const jsPsychSurveyCssClassMap = {
-  body: "jspsych-body",
-  bodyContainer: "jspsych-body-container",
+  body: 'jspsych-body',
+  bodyContainer: 'jspsych-body-container',
   question: {
-    content: "jspsych-question-content",
-    mainRoot: "jspsych-question-root",
+    content: 'jspsych-question-content',
+    mainRoot: 'jspsych-question-root',
   },
   page: {
-    root: "jspsych-page",
+    root: 'jspsych-page',
   },
-  footer: "jspsych-footer",
+  footer: 'jspsych-footer',
   navigation: {
-    complete: "jspsych-nav-complete",
+    complete: 'jspsych-nav-complete',
   },
-  rowMultiple: "jspsych-row-multiple",
+  rowMultiple: 'jspsych-row-multiple',
 };
 
 /**
@@ -133,39 +133,39 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
 
     survey.applyTheme({
       cssVariables: {
-        "--sjs-general-backcolor": "rgba(255, 255, 255, 1)",
-        "--sjs-general-backcolor-dim": "rgba(255, 255, 255, 1)", // panel background color
-        "--sjs-general-backcolor-dim-light": "rgba(249, 249, 249, 1)", // input element background, including single next or previous buttons
-        "--sjs-general-forecolor": "rgba(0, 0, 0, 0.91)",
-        "--sjs-general-forecolor-light": "rgba(0, 0, 0, 0.45)",
-        "--sjs-general-dim-forecolor": "rgba(0, 0, 0, 0.91)",
-        "--sjs-general-dim-forecolor-light": "rgba(0, 0, 0, 0.45)",
-        "--sjs-primary-backcolor": "#474747", // title, selected input border, next/submit button background, previous button text color
-        "--sjs-primary-backcolor-light": "rgba(0, 0, 0, 0.1)",
-        "--sjs-primary-backcolor-dark": "#000000", // next/submit button hover backgound
-        "--sjs-primary-forecolor": "rgba(255, 255, 255, 1)", // next/submit button text color
-        "--sjs-primary-forecolor-light": "rgba(255, 255, 255, 0.25)",
+        '--sjs-general-backcolor': 'rgba(255, 255, 255, 1)',
+        '--sjs-general-backcolor-dim': 'rgba(255, 255, 255, 1)', // panel background color
+        '--sjs-general-backcolor-dim-light': 'rgba(249, 249, 249, 1)', // input element background, including single next or previous buttons
+        '--sjs-general-forecolor': 'rgba(0, 0, 0, 0.91)',
+        '--sjs-general-forecolor-light': 'rgba(0, 0, 0, 0.45)',
+        '--sjs-general-dim-forecolor': 'rgba(0, 0, 0, 0.91)',
+        '--sjs-general-dim-forecolor-light': 'rgba(0, 0, 0, 0.45)',
+        '--sjs-primary-backcolor': '#474747', // title, selected input border, next/submit button background, previous button text color
+        '--sjs-primary-backcolor-light': 'rgba(0, 0, 0, 0.1)',
+        '--sjs-primary-backcolor-dark': '#000000', // next/submit button hover backgound
+        '--sjs-primary-forecolor': 'rgba(255, 255, 255, 1)', // next/submit button text color
+        '--sjs-primary-forecolor-light': 'rgba(255, 255, 255, 0.25)',
         // all shadow and border variables below affect the question/panel borders
-        "--sjs-shadow-small": "0px 0px 0px 1px rgba(0, 0, 0, 0.15)",
-        "--sjs-shadow-small-reset": "0px 0px 0px 0px rgba(0, 0, 0, 0.15)",
-        "--sjs-shadow-medium": "0px 0px 0px 1px rgba(0, 0, 0, 0.1)",
-        "--sjs-shadow-large": "0px 8px 16px 0px rgba(0, 0, 0, 0.05)",
-        "--sjs-shadow-inner-reset": "0px 0px 0px 0px rgba(0, 0, 0, 0.15)",
-        "--sjs-border-light": "rgba(0, 0, 0, 0.15)",
-        "--sjs-border-default": "rgba(0, 0, 0, 0.15)",
-        "--sjs-border-inside": " rgba(0, 0, 0, 0.16)",
+        '--sjs-shadow-small': '0px 0px 0px 1px rgba(0, 0, 0, 0.15)',
+        '--sjs-shadow-small-reset': '0px 0px 0px 0px rgba(0, 0, 0, 0.15)',
+        '--sjs-shadow-medium': '0px 0px 0px 1px rgba(0, 0, 0, 0.1)',
+        '--sjs-shadow-large': '0px 8px 16px 0px rgba(0, 0, 0, 0.05)',
+        '--sjs-shadow-inner-reset': '0px 0px 0px 0px rgba(0, 0, 0, 0.15)',
+        '--sjs-border-light': 'rgba(0, 0, 0, 0.15)',
+        '--sjs-border-default': 'rgba(0, 0, 0, 0.15)',
+        '--sjs-border-inside': ' rgba(0, 0, 0, 0.16)',
       },
-      themeName: "plain",
-      colorPalette: "light",
+      themeName: 'plain',
+      colorPalette: 'light',
       isPanelless: false,
     });
   }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // check for empty JSON and no survey function
-    if (JSON.stringify(trial.survey_json) === "{}" && trial.survey_function === null) {
+    if (JSON.stringify(trial.survey_json) === '{}' && trial.survey_function === null) {
       console.error(
-        "Survey plugin warning: you must define the survey using a non-empty JSON object and/or a survey function."
+        'Survey plugin warning: you must define the survey using a non-empty JSON object and/or a survey function.'
       );
     }
     this.survey = new SurveyJS.Survey(trial.survey_json);
@@ -195,7 +195,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       }
 
       // clear display and reset flex on jspsych-content-wrapper
-      document.querySelector<HTMLElement>(".jspsych-content-wrapper").style.display = "flex";
+      document.querySelector<HTMLElement>('.jspsych-content-wrapper').style.display = 'flex';
 
       // finish trial and save data
       this.jsPsych.finishTrial({
@@ -205,7 +205,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     });
 
     // remove flex display from jspsych-content-wrapper to get formatting to work
-    document.querySelector<HTMLElement>(".jspsych-content-wrapper").style.display = "block";
+    document.querySelector<HTMLElement>('.jspsych-content-wrapper').style.display = 'block';
 
     this.survey.render(display_element);
 

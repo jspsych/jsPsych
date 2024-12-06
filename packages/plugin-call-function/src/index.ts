@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "call-function",
+  name: 'call-function',
   version: version,
   parameters: {
     /** The function to call. */
@@ -27,7 +27,7 @@ const info = <const>{
       default: undefined,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;

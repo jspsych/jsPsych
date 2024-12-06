@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "canvas-keyboard-response",
+  name: 'canvas-keyboard-response',
   version: version,
   parameters: {
     /** The function to draw on the canvas. This function automatically takes a canvas element as its only
@@ -25,7 +25,7 @@ const info = <const>{
      */
     choices: {
       type: ParameterType.KEYS,
-      default: "ALL_KEYS",
+      default: 'ALL_KEYS',
     },
     /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention
      * is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).
@@ -78,7 +78,7 @@ const info = <const>{
       type: ParameterType.INT,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -106,7 +106,7 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       '" width="' +
       trial.canvas_size[1] +
       '"></canvas>' +
-      "</div>";
+      '</div>';
     // add prompt
     if (trial.prompt !== null) {
       new_html += trial.prompt;
@@ -114,8 +114,8 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
     // draw
     display_element.innerHTML = new_html;
-    let c = document.getElementById("jspsych-canvas-stimulus");
-    c.style.display = "block";
+    let c = document.getElementById('jspsych-canvas-stimulus');
+    c.style.display = 'block';
     trial.stimulus(c);
     // store response
     var response = {
@@ -126,7 +126,7 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     // function to end trial when it is time
     const end_trial = () => {
       // kill keyboard listeners
-      if (typeof keyboardListener !== "undefined") {
+      if (typeof keyboardListener !== 'undefined') {
         this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
       }
 
@@ -144,8 +144,8 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     var after_response = (info) => {
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.querySelector("#jspsych-canvas-keyboard-response-stimulus").className +=
-        " responded";
+      display_element.querySelector('#jspsych-canvas-keyboard-response-stimulus').className +=
+        ' responded';
 
       // only record the first response
       if (response.key == null) {
@@ -158,11 +158,11 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // start the response listener
-    if (trial.choices != "NO_KEYS") {
+    if (trial.choices != 'NO_KEYS') {
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,
-        rt_method: "performance",
+        rt_method: 'performance',
         persist: false,
         allow_held_key: false,
       });
@@ -172,8 +172,8 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
-          "#jspsych-canvas-keyboard-response-stimulus"
-        ).style.visibility = "hidden";
+          '#jspsych-canvas-keyboard-response-stimulus'
+        ).style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
 
@@ -191,11 +191,11 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }

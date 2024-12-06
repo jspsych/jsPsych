@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "html-keyboard-response",
+  name: 'html-keyboard-response',
   version: version,
   parameters: {
     /**
@@ -25,7 +25,7 @@ const info = <const>{
      */
     choices: {
       type: ParameterType.KEYS,
-      default: "ALL_KEYS",
+      default: 'ALL_KEYS',
     },
     /**
      * This string can contain HTML markup. Any content here will be displayed below the stimulus.
@@ -80,7 +80,7 @@ const info = <const>{
       type: ParameterType.STRING,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -98,7 +98,7 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    var new_html = '<div id="jspsych-html-keyboard-response-stimulus">' + trial.stimulus + "</div>";
+    var new_html = '<div id="jspsych-html-keyboard-response-stimulus">' + trial.stimulus + '</div>';
 
     // add prompt
     if (trial.prompt !== null) {
@@ -117,7 +117,7 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     // function to end trial when it is time
     const end_trial = () => {
       // kill keyboard listeners
-      if (typeof keyboardListener !== "undefined") {
+      if (typeof keyboardListener !== 'undefined') {
         this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
       }
 
@@ -136,8 +136,8 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     var after_response = (info) => {
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.querySelector("#jspsych-html-keyboard-response-stimulus").className +=
-        " responded";
+      display_element.querySelector('#jspsych-html-keyboard-response-stimulus').className +=
+        ' responded';
 
       // only record the first response
       if (response.key == null) {
@@ -150,11 +150,11 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // start the response listener
-    if (trial.choices != "NO_KEYS") {
+    if (trial.choices != 'NO_KEYS') {
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,
-        rt_method: "performance",
+        rt_method: 'performance',
         persist: false,
         allow_held_key: false,
       });
@@ -164,8 +164,8 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
-          "#jspsych-html-keyboard-response-stimulus"
-        ).style.visibility = "hidden";
+          '#jspsych-html-keyboard-response-stimulus'
+        ).style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
 
@@ -181,11 +181,11 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }

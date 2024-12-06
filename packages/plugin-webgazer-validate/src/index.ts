@@ -1,10 +1,10 @@
-import type WebGazerExtension from "@jspsych/extension-webgazer";
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import type WebGazerExtension from '@jspsych/extension-webgazer';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "webgazer-validate",
+  name: 'webgazer-validate',
   version: version,
   parameters: {
     /** Array of points in [x,y] coordinates */
@@ -29,8 +29,8 @@ const info = <const>{
      */
     validation_point_coordinates: {
       type: ParameterType.SELECT,
-      default: "percent",
-      options: ["percent", "center-offset-pixels"],
+      default: 'percent',
+      options: ['percent', 'center-offset-pixels'],
     },
     /** Tolerance around validation point in pixels */
     roi_radius: {
@@ -103,7 +103,7 @@ const info = <const>{
       array: true,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -137,7 +137,7 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
 
     display_element.innerHTML = html;
 
-    var wg_container = display_element.querySelector("#webgazer-validate-container");
+    var wg_container = display_element.querySelector('#webgazer-validate-container');
 
     var points_completed = -1;
     var val_points = null;
@@ -155,7 +155,7 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
       var pt_html = drawValidationPoint(pt[0], pt[1]);
       wg_container.innerHTML = pt_html;
 
-      var pt_dom = wg_container.querySelector(".validation-point");
+      var pt_dom = wg_container.querySelector('.validation-point');
 
       var br = pt_dom.getBoundingClientRect();
       var x = br.left + br.width / 2;
@@ -215,7 +215,7 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
     };
 
     const show_validation_data = () => {
-      var html = "";
+      var html = '';
       for (var i = 0; i < trial.validation_points.length; i++) {
         html += drawValidationPoint(trial.validation_points[i][0], trial.validation_points[i][1]);
         html += drawCircle(
@@ -238,7 +238,7 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
       html +=
         '<button id="cont" style="position:absolute; top: 50%; left:calc(50% - 50px); width: 100px;" class="jspsych-btn">Continue</btn>';
       wg_container.innerHTML = html;
-      wg_container.querySelector("#cont").addEventListener("click", () => {
+      wg_container.querySelector('#cont').addEventListener('click', () => {
         extension.pause();
         end_trial();
       });
@@ -265,10 +265,10 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
 
     // @ts-expect-error
     function drawValidationPoint(x, y) {
-      if (trial.validation_point_coordinates == "percent") {
+      if (trial.validation_point_coordinates == 'percent') {
         return drawValidationPoint_PercentMode(x, y);
       }
-      if (trial.validation_point_coordinates == "center-offset-pixels") {
+      if (trial.validation_point_coordinates == 'center-offset-pixels') {
         return drawValidationPoint_CenterOffsetMode(x, y);
       }
     }
@@ -289,10 +289,10 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
 
     // @ts-expect-error
     function drawCircle(target_x, target_y, dx, dy, r) {
-      if (trial.validation_point_coordinates == "percent") {
+      if (trial.validation_point_coordinates == 'percent') {
         return drawCircle_PercentMode(target_x, target_y, dx, dy, r);
       }
-      if (trial.validation_point_coordinates == "center-offset-pixels") {
+      if (trial.validation_point_coordinates == 'center-offset-pixels') {
         return drawCircle_CenterOffsetMode(target_x, target_y, dx, dy, r);
       }
     }
@@ -321,23 +321,23 @@ class WebgazerValidatePlugin implements JsPsychPlugin<Info> {
 
     // @ts-expect-error
     function drawRawDataPoint(target_x, target_y, dx, dy) {
-      if (trial.validation_point_coordinates == "percent") {
+      if (trial.validation_point_coordinates == 'percent') {
         return drawRawDataPoint_PercentMode(target_x, target_y, dx, dy);
       }
-      if (trial.validation_point_coordinates == "center-offset-pixels") {
+      if (trial.validation_point_coordinates == 'center-offset-pixels') {
         return drawRawDataPoint_CenterOffsetMode(target_x, target_y, dx, dy);
       }
     }
 
     function drawRawDataPoint_PercentMode(target_x, target_y, dx, dy) {
-      var color = Math.sqrt(dx * dx + dy * dy) <= trial.roi_radius ? "#afa" : "#faa";
+      var color = Math.sqrt(dx * dx + dy * dy) <= trial.roi_radius ? '#afa' : '#faa';
       return `<div class="raw-data-point" style="width:5px; height:5px; border-radius:5px; background-color: ${color}; opacity:0.8; position: absolute; left:calc(${target_x}% + ${
         dx - 2
       }px); top:calc(${target_y}% + ${dy - 2}px);"></div>`;
     }
 
     function drawRawDataPoint_CenterOffsetMode(target_x, target_y, dx, dy) {
-      var color = Math.sqrt(dx * dx + dy * dy) <= trial.roi_radius ? "#afa" : "#faa";
+      var color = Math.sqrt(dx * dx + dy * dy) <= trial.roi_radius ? '#afa' : '#faa';
       return `<div class="raw-data-point" style="width:5px; height:5px; border-radius:5px; background-color: ${color}; opacity:0.8; position: absolute; left:calc(50% + ${target_x}px + ${
         dx - 2
       }px); top:calc(50% + ${target_y}px + ${dy - 2}px);"></div>`;

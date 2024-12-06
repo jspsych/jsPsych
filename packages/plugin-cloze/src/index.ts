@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "cloze",
+  name: 'cloze',
   version: version,
   parameters: {
     /** The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. % correct solution %). */
@@ -14,7 +14,7 @@ const info = <const>{
     /** Text of the button participants have to press for finishing the cloze test. */
     button_text: {
       type: ParameterType.STRING,
-      default: "OK",
+      default: 'OK',
     },
     /** Boolean value indicating if the answers given by participants should be compared against a correct solution given in the text (between % signs) after the button was clicked. If ```true```, answers are checked and in case of differences, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. If ```false```, no checks are performed and the trial automatically ends when clicking the button. */
     check_answers: {
@@ -39,7 +39,7 @@ const info = <const>{
       array: true,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -58,7 +58,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var html = '<div class="cloze">';
     // odd elements are text, even elements are the blanks
-    var elements = trial.text.split("%");
+    var elements = trial.text.split('%');
     const solutions = this.getSolutions(trial.text);
 
     let solution_counter = 0;
@@ -71,7 +71,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
       }
     }
 
-    html += "</div>";
+    html += '</div>';
 
     display_element.innerHTML = html;
 
@@ -81,19 +81,19 @@ class ClozePlugin implements JsPsychPlugin<Info> {
       var answers_filled = true;
 
       for (var i = 0; i < solutions.length; i++) {
-        var field = document.getElementById("input" + i) as HTMLInputElement;
+        var field = document.getElementById('input' + i) as HTMLInputElement;
         answers.push(field.value.trim());
 
         if (trial.check_answers) {
           if (answers[i] !== solutions[i]) {
-            field.style.color = "red";
+            field.style.color = 'red';
             answers_correct = false;
           } else {
-            field.style.color = "black";
+            field.style.color = 'black';
           }
         }
         if (!trial.allow_blanks) {
-          if (answers[i] === "") {
+          if (answers[i] === '') {
             answers_filled = false;
           }
         }
@@ -113,13 +113,13 @@ class ClozePlugin implements JsPsychPlugin<Info> {
     display_element.innerHTML +=
       '<br><button class="jspsych-html-button-response-button" type="button" id="finish_cloze_button">' +
       trial.button_text +
-      "</button>";
-    display_element.querySelector("#finish_cloze_button").addEventListener("click", check);
+      '</button>';
+    display_element.querySelector('#finish_cloze_button').addEventListener('click', check);
   }
 
   private getSolutions(text: string) {
     const solutions = [];
-    const elements = text.split("%");
+    const elements = text.split('%');
     for (let i = 0; i < elements.length; i++) {
       if (i % 2 == 1) {
         solutions.push(elements[i].trim());
@@ -135,11 +135,11 @@ class ClozePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -148,7 +148,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
     const solutions = this.getSolutions(trial.text);
     const responses = [];
     for (const word of solutions) {
-      if (word == "") {
+      if (word == '') {
         responses.push(this.jsPsych.randomization.randomWords({ exactly: 1 }));
       } else {
         responses.push(word);
@@ -186,7 +186,7 @@ class ClozePlugin implements JsPsychPlugin<Info> {
       this.jsPsych.pluginAPI.fillTextInput(inputs[i] as HTMLInputElement, data.response[i], rt);
       rt += this.jsPsych.randomization.sampleExGaussian(750, 200, 0.01, true);
     }
-    this.jsPsych.pluginAPI.clickTarget(display_element.querySelector("#finish_cloze_button"), rt);
+    this.jsPsych.pluginAPI.clickTarget(display_element.querySelector('#finish_cloze_button'), rt);
   }
 }
 

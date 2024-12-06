@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "external-html",
+  name: 'external-html',
   version: version,
   parameters: {
     /** The URL of the page to display. */
@@ -34,7 +34,7 @@ const info = <const>{
     /** If `true`, then scripts on the remote page will be executed. */
     execute_script: {
       type: ParameterType.BOOL,
-      pretty_name: "Execute scripts",
+      pretty_name: 'Execute scripts',
       default: false,
     },
   },
@@ -48,7 +48,7 @@ const info = <const>{
       type: ParameterType.INT,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -70,7 +70,7 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
 
     var url = trial.url;
     if (trial.force_refresh) {
-      url = trial.url + "?t=" + performance.now();
+      url = trial.url + '?t=' + performance.now();
     }
 
     fetch(url)
@@ -93,7 +93,7 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
             return;
           }
           if (trial.cont_key) {
-            display_element.removeEventListener("keydown", key_listener);
+            display_element.removeEventListener('keydown', key_listener);
           }
           var trial_data = {
             rt: Math.round(performance.now() - t0),
@@ -108,9 +108,9 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
         if (trial.execute_script) {
           // changed for..of getElementsByTagName("script") here to for i loop due to TS error:
           // Type 'HTMLCollectionOf<HTMLScriptElement>' must have a '[Symbol.iterator]()' method that returns an iterator.ts(2488)
-          var all_scripts = display_element.getElementsByTagName("script");
+          var all_scripts = display_element.getElementsByTagName('script');
           for (var i = 0; i < all_scripts.length; i++) {
-            const relocatedScript = document.createElement("script");
+            const relocatedScript = document.createElement('script');
             const curr_script = all_scripts[i];
             relocatedScript.text = curr_script.text;
             curr_script.parentNode.replaceChild(relocatedScript, curr_script);
@@ -118,11 +118,11 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
         }
 
         if (trial.cont_btn) {
-          display_element.querySelector("#" + trial.cont_btn).addEventListener("click", finish);
+          display_element.querySelector('#' + trial.cont_btn).addEventListener('click', finish);
         }
 
         if (trial.cont_key) {
-          display_element.addEventListener("keydown", key_listener);
+          display_element.addEventListener('keydown', key_listener);
         }
       })
       .catch((err) => {
@@ -160,11 +160,11 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -199,7 +199,7 @@ class ExternalHtmlPlugin implements JsPsychPlugin<Info> {
         this.jsPsych.pluginAPI.pressKey(trial.cont_key, data.rt);
       } else if (trial.cont_btn) {
         this.jsPsych.pluginAPI.clickTarget(
-          display_element.querySelector("#" + trial.cont_btn),
+          display_element.querySelector('#' + trial.cont_btn),
           data.rt
         );
       }

@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "animation",
+  name: 'animation',
   version: version,
   parameters: {
     /** Each element of the array is a path to an image file. */
@@ -38,7 +38,7 @@ const info = <const>{
      * means that all keys will be accepted as valid responses. Specifying `"NO_KEYS"` will mean that no responses are allowed. */
     choices: {
       type: ParameterType.KEYS,
-      default: "ALL_KEYS",
+      default: 'ALL_KEYS',
     },
     /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that
      * it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key(s) to press). */
@@ -96,7 +96,7 @@ const info = <const>{
       },
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -120,7 +120,7 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
     var startTime = performance.now();
     var animation_sequence = [];
     var responses = [];
-    var current_stim = "";
+    var current_stim = '';
 
     if (trial.render_on_canvas) {
       // first clear the display element (because the render_on_canvas method appends to display_element instead of overwriting it with .innerHTML)
@@ -130,12 +130,12 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
           display_element.removeChild(display_element.firstChild);
         }
       }
-      var canvas = document.createElement("canvas");
-      canvas.id = "jspsych-animation-image";
-      canvas.style.margin = "0";
-      canvas.style.padding = "0";
+      var canvas = document.createElement('canvas');
+      canvas.id = 'jspsych-animation-image';
+      canvas.style.margin = '0';
+      canvas.style.padding = '0';
       display_element.insertBefore(canvas, null);
-      var ctx = canvas.getContext("2d");
+      var ctx = canvas.getContext('2d');
     }
 
     const endTrial = () => {
@@ -152,7 +152,7 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
     var animate_interval = setInterval(() => {
       var showImage = true;
       if (!trial.render_on_canvas) {
-        display_element.innerHTML = ""; // clear everything
+        display_element.innerHTML = ''; // clear everything
       }
       animate_frame++;
       if (animate_frame == trial.stimuli.length) {
@@ -171,15 +171,15 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
 
     const show_next_frame = () => {
       if (trial.render_on_canvas) {
-        display_element.querySelector<HTMLElement>("#jspsych-animation-image").style.visibility =
-          "visible";
+        display_element.querySelector<HTMLElement>('#jspsych-animation-image').style.visibility =
+          'visible';
         var img = new Image();
         img.src = trial.stimuli[animate_frame];
         canvas.height = img.naturalHeight;
         canvas.width = img.naturalWidth;
         ctx.drawImage(img, 0, 0);
         if (trial.prompt !== null && animate_frame == 0 && reps == 0) {
-          display_element.insertAdjacentHTML("beforeend", trial.prompt);
+          display_element.insertAdjacentHTML('beforeend', trial.prompt);
         }
       } else {
         // show image
@@ -199,12 +199,12 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
 
       if (trial.frame_isi > 0) {
         this.jsPsych.pluginAPI.setTimeout(() => {
-          display_element.querySelector<HTMLElement>("#jspsych-animation-image").style.visibility =
-            "hidden";
-          current_stim = "blank";
+          display_element.querySelector<HTMLElement>('#jspsych-animation-image').style.visibility =
+            'hidden';
+          current_stim = 'blank';
           // record when blank image was shown
           animation_sequence.push({
-            stimulus: "blank",
+            stimulus: 'blank',
             time: Math.round(performance.now() - startTime),
           });
         }, trial.frame_time);
@@ -220,7 +220,7 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.querySelector("#jspsych-animation-image").className += " responded";
+      display_element.querySelector('#jspsych-animation-image').className += ' responded';
     };
 
     // hold the jspsych response listener object in memory
@@ -229,7 +229,7 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
     var response_listener = this.jsPsych.pluginAPI.getKeyboardResponse({
       callback_function: after_response,
       valid_responses: trial.choices,
-      rt_method: "performance",
+      rt_method: 'performance',
       persist: true,
       allow_held_key: false,
     });
@@ -244,11 +244,11 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -276,14 +276,14 @@ class AnimationPlugin implements JsPsychPlugin<Info> {
         t += trial.frame_time;
         if (trial.frame_isi > 0) {
           fake_animation_sequence.push({
-            stimulus: "blank",
+            stimulus: 'blank',
             time: t,
           });
           if (check_if_fake_response_generated()) {
             fake_responses.push({
               key_press: this.jsPsych.pluginAPI.getValidKey(trial.choices),
               rt: t + this.jsPsych.randomization.randomInt(0, trial.frame_isi - 1),
-              current_stim: "blank",
+              current_stim: 'blank',
             });
           }
           t += trial.frame_isi;

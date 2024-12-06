@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "initialize-microphone",
+  name: 'initialize-microphone',
   version: version,
   parameters: {
     /** The message to display when the user is presented with a dropdown list of available devices. */
@@ -14,7 +14,7 @@ const info = <const>{
     /** The label for the select button. */
     button_label: {
       type: ParameterType.STRING,
-      default: "Use this microphone",
+      default: 'Use this microphone',
     },
   },
   data: {
@@ -23,7 +23,7 @@ const info = <const>{
       type: ParameterType.STRING,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -94,8 +94,8 @@ class InitializeMicrophonePlugin implements JsPsychPlugin<Info> {
 
   private waitForSelection(display_element) {
     return new Promise((resolve) => {
-      display_element.querySelector("#btn-select-mic").addEventListener("click", () => {
-        const mic = display_element.querySelector("#which-mic").value;
+      display_element.querySelector('#btn-select-mic').addEventListener('click', () => {
+        const mic = display_element.querySelector('#which-mic').value;
         resolve(mic);
       });
     });
@@ -105,7 +105,7 @@ class InitializeMicrophonePlugin implements JsPsychPlugin<Info> {
     navigator.mediaDevices.enumerateDevices().then((devices) => {
       const mics = devices.filter(
         (d) =>
-          d.kind === "audioinput" && d.deviceId !== "default" && d.deviceId !== "communications"
+          d.kind === 'audioinput' && d.deviceId !== 'default' && d.deviceId !== 'communications'
       );
 
       // remove entries with duplicate groupID
@@ -114,14 +114,14 @@ class InitializeMicrophonePlugin implements JsPsychPlugin<Info> {
       );
 
       // reset the list by clearing all current options
-      display_element.querySelector("#which-mic").innerHTML = "";
+      display_element.querySelector('#which-mic').innerHTML = '';
 
       unique_mics.forEach((d) => {
-        let el = document.createElement("option");
+        let el = document.createElement('option');
         el.value = d.deviceId;
         el.innerHTML = d.label;
 
-        display_element.querySelector("#which-mic").appendChild(el);
+        display_element.querySelector('#which-mic').appendChild(el);
       });
     });
   }

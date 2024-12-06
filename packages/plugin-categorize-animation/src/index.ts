@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "categorize-animation",
+  name: 'categorize-animation',
   version: version,
   parameters: {
     /** Each element of the array is a path to an image file. */
@@ -20,7 +20,7 @@ const info = <const>{
     /** This array contains the key(s) that the participant is allowed to press in order to respond to the stimulus. Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) - see [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) and [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/) for more examples. Any key presses that are not listed in the array will be ignored. The default value of `"ALL_KEYS"` means that all keys will be accepted as valid responses. Specifying `"NO_KEYS"` will mean that no responses are allowed. */
     choices: {
       type: ParameterType.KEYS,
-      default: "ALL_KEYS",
+      default: 'ALL_KEYS',
     },
     /** A text label that describes the correct answer. Used in conjunction with the `correct_text` and `incorrect_text` parameters. */
     text_answer: {
@@ -30,12 +30,12 @@ const info = <const>{
     /** String to show when the correct answer is given. Can contain HTML formatting. The special string `%ANS%` can be used within the string. If present, the plugin will put the `text_answer` for the trial in place of the %ANS% string (see example below). */
     correct_text: {
       type: ParameterType.HTML_STRING,
-      default: "Correct.",
+      default: 'Correct.',
     },
     /** String to show when the wrong answer is given. Can contain HTML formatting. The special string `%ANS%` can be used within the string. If present, the plugin will put the `text_answer` for the trial in place of the %ANS% string (see example below). */
     incorrect_text: {
       type: ParameterType.HTML_STRING,
-      default: "Wrong.",
+      default: 'Wrong.',
     },
     /** How long to display each image (in milliseconds). */
     frame_time: {
@@ -90,7 +90,7 @@ const info = <const>{
       type: ParameterType.BOOL,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -124,20 +124,20 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
           display_element.removeChild(display_element.firstChild);
         }
       }
-      var canvas = document.createElement("canvas");
-      canvas.id = "jspsych-categorize-animation-stimulus";
-      canvas.style.margin = "0";
-      canvas.style.padding = "0";
+      var canvas = document.createElement('canvas');
+      canvas.id = 'jspsych-categorize-animation-stimulus';
+      canvas.style.margin = '0';
+      canvas.style.padding = '0';
       display_element.insertBefore(canvas, null);
-      var ctx = canvas.getContext("2d");
+      var ctx = canvas.getContext('2d');
       if (trial.prompt !== null) {
-        var prompt_div = document.createElement("div");
-        prompt_div.id = "jspsych-categorize-animation-prompt";
-        prompt_div.style.visibility = "hidden";
+        var prompt_div = document.createElement('div');
+        prompt_div.id = 'jspsych-categorize-animation-prompt';
+        prompt_div.style.visibility = 'hidden';
         prompt_div.innerHTML = trial.prompt;
         display_element.insertBefore(prompt_div, canvas.nextElementSibling);
       }
-      var feedback_div = document.createElement("div");
+      var feedback_div = document.createElement('div');
       display_element.insertBefore(feedback_div, display_element.nextElementSibling);
     }
 
@@ -145,8 +145,8 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
       if (showAnimation) {
         if (trial.render_on_canvas) {
           display_element.querySelector<HTMLElement>(
-            "#jspsych-categorize-animation-stimulus"
-          ).style.visibility = "visible";
+            '#jspsych-categorize-animation-stimulus'
+          ).style.visibility = 'visible';
           var img = new Image();
           img.src = trial.stimuli[animate_frame];
           canvas.height = img.naturalHeight;
@@ -164,7 +164,7 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
         // in here if the user can respond before the animation is done
         if (trial.prompt !== null) {
           if (trial.render_on_canvas) {
-            prompt_div.style.visibility = "visible";
+            prompt_div.style.visibility = 'visible';
           } else {
             display_element.innerHTML += trial.prompt;
           }
@@ -180,7 +180,7 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
         if (!showAnimation) {
           if (trial.prompt !== null) {
             if (trial.render_on_canvas) {
-              prompt_div.style.visibility = "visible";
+              prompt_div.style.visibility = 'visible';
             } else {
               display_element.innerHTML += trial.prompt;
             }
@@ -193,11 +193,11 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
         // user has responded if we get here.
 
         // show feedback
-        var feedback_text = "";
+        var feedback_text = '';
         if (correct) {
-          feedback_text = trial.correct_text.replace("%ANS%", trial.text_answer);
+          feedback_text = trial.correct_text.replace('%ANS%', trial.text_answer);
         } else {
-          feedback_text = trial.incorrect_text.replace("%ANS%", trial.text_answer);
+          feedback_text = trial.incorrect_text.replace('%ANS%', trial.text_answer);
         }
         if (trial.render_on_canvas) {
           if (trial.prompt !== null) {
@@ -221,7 +221,7 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
     // show animation
     var animate_interval = setInterval(() => {
       if (!trial.render_on_canvas) {
-        display_element.innerHTML = ""; // clear everything
+        display_element.innerHTML = ''; // clear everything
       }
       animate_frame++;
       if (animate_frame == trial.stimuli.length) {
@@ -275,7 +275,7 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
     keyboard_listener = this.jsPsych.pluginAPI.getKeyboardResponse({
       callback_function: after_response,
       valid_responses: trial.choices,
-      rt_method: "performance",
+      rt_method: 'performance',
       persist: true,
       allow_held_key: false,
     });
@@ -287,11 +287,11 @@ class CategorizeAnimationPlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }

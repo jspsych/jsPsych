@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "same-different-image",
+  name: 'same-different-image',
   version: version,
   parameters: {
     /** A pair of stimuli, represented as an array with two entries,
@@ -17,18 +17,18 @@ const info = <const>{
     /** Either `'same'` or `'different'`. */
     answer: {
       type: ParameterType.SELECT,
-      options: ["same", "different"],
+      options: ['same', 'different'],
       default: undefined,
     },
     /** The key that subjects should press to indicate that the two stimuli are the same. */
     same_key: {
       type: ParameterType.KEY,
-      default: "q",
+      default: 'q',
     },
     /** The key that subjects should press to indicate that the two stimuli are different. */
     different_key: {
       type: ParameterType.KEY,
-      default: "p",
+      default: 'p',
     },
     /** How long to show the first stimulus for in milliseconds. If the value of this parameter is null then the stimulus will be shown until the participant presses any key. */
     first_stim_duration: {
@@ -78,7 +78,7 @@ const info = <const>{
       type: ParameterType.STRING,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -99,7 +99,7 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     const showBlankScreen = () => {
-      display_element.innerHTML = "";
+      display_element.innerHTML = '';
 
       this.jsPsych.pluginAPI.setTimeout(showSecondStim, trial.gap_duration);
     };
@@ -117,8 +117,8 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
       };
       this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: afterKeyboardResponse,
-        valid_responses: "ALL_KEYS",
-        rt_method: "performance",
+        valid_responses: 'ALL_KEYS',
+        rt_method: 'performance',
         persist: false,
         allow_held_key: false,
       });
@@ -137,8 +137,8 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
       if (trial.second_stim_duration > 0) {
         this.jsPsych.pluginAPI.setTimeout(() => {
           display_element.querySelector<HTMLElement>(
-            ".jspsych-same-different-stimulus"
-          ).style.visibility = "hidden";
+            '.jspsych-same-different-stimulus'
+          ).style.visibility = 'hidden';
         }, trial.second_stim_duration);
       }
 
@@ -148,11 +148,11 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
         var skey = trial.same_key;
         var dkey = trial.different_key;
 
-        if (this.jsPsych.pluginAPI.compareKeys(info.key, skey) && trial.answer == "same") {
+        if (this.jsPsych.pluginAPI.compareKeys(info.key, skey) && trial.answer == 'same') {
           correct = true;
         }
 
-        if (this.jsPsych.pluginAPI.compareKeys(info.key, dkey) && trial.answer == "different") {
+        if (this.jsPsych.pluginAPI.compareKeys(info.key, dkey) && trial.answer == 'different') {
           correct = true;
         }
 
@@ -164,8 +164,8 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
           response: info.key,
         };
         if (first_stim_info) {
-          trial_data["rt_stim1"] = first_stim_info.rt;
-          trial_data["response_stim1"] = first_stim_info.key;
+          trial_data['rt_stim1'] = first_stim_info.rt;
+          trial_data['response_stim1'] = first_stim_info.key;
         }
 
         this.jsPsych.finishTrial(trial_data);
@@ -174,7 +174,7 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
       this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: [trial.same_key, trial.different_key],
-        rt_method: "performance",
+        rt_method: 'performance',
         persist: false,
         allow_held_key: false,
       });
@@ -187,11 +187,11 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -203,7 +203,7 @@ class SameDifferentImagePlugin implements JsPsychPlugin<Info> {
       stimuli: trial.stimuli,
       response: key,
       answer: trial.answer,
-      correct: trial.answer == "same" ? key == trial.same_key : key == trial.different_key,
+      correct: trial.answer == 'same' ? key == trial.same_key : key == trial.different_key,
       rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
     };
 

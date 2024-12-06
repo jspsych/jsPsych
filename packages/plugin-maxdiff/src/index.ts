@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "maxdiff",
+  name: 'maxdiff',
   version: version,
   parameters: {
     /** An array of one or more alternatives of string type to fill the rows of the maxdiff table. If `required` is true,
@@ -29,12 +29,12 @@ const info = <const>{
     /** HTML formatted string to display at the top of the page above the maxdiff table. */
     preamble: {
       type: ParameterType.HTML_STRING,
-      default: "",
+      default: '',
     },
     /** Label of the button to submit response. */
     button_label: {
       type: ParameterType.STRING,
-      default: "Continue",
+      default: 'Continue',
     },
     /** If true, prevents the user from submitting the response and proceeding until a radio button in both the left and right response columns has been selected. */
     required: {
@@ -75,7 +75,7 @@ const info = <const>{
       },
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -95,22 +95,22 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    var html = "";
+    var html = '';
     // inject CSS for trial
     html += '<style id="jspsych-maxdiff-css">';
     html +=
-      ".jspsych-maxdiff-statement {display:block; font-size: 16px; padding-top: 40px; margin-bottom:10px;}" +
-      "table.jspsych-maxdiff-table {border-collapse: collapse; padding: 15px; margin-left: auto; margin-right: auto;}" +
-      "table.jspsych-maxdiff-table td, th {border-bottom: 1px solid #dddddd; text-align: center; padding: 8px;}" +
-      "table.jspsych-maxdiff-table tr:nth-child(even) {background-color: #dddddd;}";
-    html += "</style>";
+      '.jspsych-maxdiff-statement {display:block; font-size: 16px; padding-top: 40px; margin-bottom:10px;}' +
+      'table.jspsych-maxdiff-table {border-collapse: collapse; padding: 15px; margin-left: auto; margin-right: auto;}' +
+      'table.jspsych-maxdiff-table td, th {border-bottom: 1px solid #dddddd; text-align: center; padding: 8px;}' +
+      'table.jspsych-maxdiff-table tr:nth-child(even) {background-color: #dddddd;}';
+    html += '</style>';
 
     // show preamble text
     if (trial.preamble !== null) {
       html +=
         '<div id="jspsych-maxdiff-preamble" class="jspsych-maxdiff-preamble">' +
         trial.preamble +
-        "</div>";
+        '</div>';
     }
     html += '<form id="jspsych-maxdiff-form">';
 
@@ -131,7 +131,7 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
       trial.labels[0] +
       '</th><th></th><th id="jspsych-maxdiff-right-label">' +
       trial.labels[1] +
-      "</th></tr>";
+      '</th></tr>';
 
     // construct each row of the maxdiff table
     for (var i = 0; i < trial.alternatives.length; i++) {
@@ -142,61 +142,61 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
         i.toString() +
         '" type="radio" name="left" data-name = ' +
         alternative_order[i].toString() +
-        " /><br></td>";
+        ' /><br></td>';
       maxdiff_table +=
-        '<td id="jspsych-maxdiff-alternative-' + i.toString() + '">' + alternative + "</td>";
+        '<td id="jspsych-maxdiff-alternative-' + i.toString() + '">' + alternative + '</td>';
       maxdiff_table +=
         '<td><input class= "jspsych-maxdiff-alt-' +
         i.toString() +
         '" type="radio" name="right" data-name = ' +
         alternative_order[i].toString() +
-        " /><br></td></tr>";
+        ' /><br></td></tr>';
     }
-    maxdiff_table += "</table><br><br>";
+    maxdiff_table += '</table><br><br>';
     html += maxdiff_table;
 
     // add submit button
-    var enable_submit = trial.required == true ? 'disabled = "disabled"' : "";
+    var enable_submit = trial.required == true ? 'disabled = "disabled"' : '';
     html +=
       '<input type="submit" id="jspsych-maxdiff-next" class="jspsych-maxdiff jspsych-btn" ' +
       enable_submit +
       ' value="' +
       trial.button_label +
       '"></input>';
-    html += "</form>";
+    html += '</form>';
 
     display_element.innerHTML = html;
 
     // function to control responses
     // first checks that the same alternative cannot be endorsed in the left and right columns simultaneously.
     // then enables the submit button if the trial is required.
-    const left_right = ["left", "right"];
+    const left_right = ['left', 'right'];
     left_right.forEach((p) => {
       // Get all elements either 'left' or 'right'
       document.getElementsByName(p).forEach((alt) => {
-        alt.addEventListener("click", () => {
+        alt.addEventListener('click', () => {
           // Find the opposite (if left, then right & vice versa) identified by the class (jspsych-maxdiff-alt-1, 2, etc)
-          var op = alt["name"] == "left" ? "right" : "left";
+          var op = alt['name'] == 'left' ? 'right' : 'left';
           var n = document.getElementsByClassName(alt.className).namedItem(op);
           // If it's checked, uncheck it.
-          if (n["checked"]) {
-            n["checked"] = false;
+          if (n['checked']) {
+            n['checked'] = false;
           }
 
           // check response
           if (trial.required) {
             // Now check if one of both left and right have been enabled to allow submission
             var left_checked = Array.prototype.slice
-              .call(document.getElementsByName("left"))
+              .call(document.getElementsByName('left'))
               .some((c: HTMLInputElement) => c.checked);
             var right_checked = Array.prototype.slice
-              .call(document.getElementsByName("right"))
+              .call(document.getElementsByName('right'))
               .some((c: HTMLInputElement) => c.checked);
             if (left_checked && right_checked) {
-              (document.getElementById("jspsych-maxdiff-next") as HTMLInputElement).disabled =
+              (document.getElementById('jspsych-maxdiff-next') as HTMLInputElement).disabled =
                 false;
             } else {
-              (document.getElementById("jspsych-maxdiff-next") as HTMLInputElement).disabled = true;
+              (document.getElementById('jspsych-maxdiff-next') as HTMLInputElement).disabled = true;
             }
           }
         });
@@ -205,7 +205,7 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
 
     // Get the data once the submit button is clicked
     // Get the data once the submit button is clicked
-    display_element.querySelector("#jspsych-maxdiff-form").addEventListener("submit", (e) => {
+    display_element.querySelector('#jspsych-maxdiff-form').addEventListener('submit', (e) => {
       e.preventDefault();
 
       // measure response time
@@ -218,7 +218,7 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
         if (col === undefined) {
           return null;
         } else {
-          var i = parseInt(col.getAttribute("data-name"));
+          var i = parseInt(col.getAttribute('data-name'));
           return trial.alternatives[i];
         }
       }
@@ -227,7 +227,7 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
       var trial_data = {
         rt: response_time,
         labels: { left: trial.labels[0], right: trial.labels[1] },
-        response: { left: get_response("left"), right: get_response("right") },
+        response: { left: get_response('left'), right: get_response('right') },
       };
 
       // next trial
@@ -243,11 +243,11 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -303,7 +303,7 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
     load_callback();
 
     //@ts-ignore something about symbol iterators?
-    const list = [...display_element.querySelectorAll("[id^=jspsych-maxdiff-alternative]")].map(
+    const list = [...display_element.querySelectorAll('[id^=jspsych-maxdiff-alternative]')].map(
       (x) => {
         return x.innerHTML;
       }
@@ -326,7 +326,7 @@ class MaxdiffPlugin implements JsPsychPlugin<Info> {
     }
 
     this.jsPsych.pluginAPI.clickTarget(
-      display_element.querySelector("#jspsych-maxdiff-next"),
+      display_element.querySelector('#jspsych-maxdiff-next'),
       data.rt
     );
   }

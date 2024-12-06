@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "survey-text",
+  name: 'survey-text',
   version: version,
   parameters: {
     /**
@@ -31,7 +31,7 @@ const info = <const>{
         /** Placeholder text in the response text box. */
         placeholder: {
           type: ParameterType.STRING,
-          default: "",
+          default: '',
         },
         /** The number of rows for the response text box. */
         rows: {
@@ -51,7 +51,7 @@ const info = <const>{
         /** Name of the question in the trial data. If no name is given, the questions are named Q0, Q1, etc. */
         name: {
           type: ParameterType.STRING,
-          default: "",
+          default: '',
         },
       },
     },
@@ -72,7 +72,7 @@ const info = <const>{
     /** Label of the button to submit responses. */
     button_label: {
       type: ParameterType.STRING,
-      default: "Continue",
+      default: 'Continue',
     },
     /** Setting this to true will enable browser auto-complete or auto-fill for the form. */
     autocomplete: {
@@ -108,7 +108,7 @@ const info = <const>{
       array: true,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -127,28 +127,28 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     for (var i = 0; i < trial.questions.length; i++) {
-      if (typeof trial.questions[i].rows == "undefined") {
+      if (typeof trial.questions[i].rows == 'undefined') {
         trial.questions[i].rows = 1;
       }
     }
     for (var i = 0; i < trial.questions.length; i++) {
-      if (typeof trial.questions[i].columns == "undefined") {
+      if (typeof trial.questions[i].columns == 'undefined') {
         trial.questions[i].columns = 40;
       }
     }
     for (var i = 0; i < trial.questions.length; i++) {
-      if (typeof trial.questions[i].value == "undefined") {
-        trial.questions[i].value = "";
+      if (typeof trial.questions[i].value == 'undefined') {
+        trial.questions[i].value = '';
       }
     }
 
-    var html = "";
+    var html = '';
     // show preamble text
     if (trial.preamble !== null) {
       html +=
         '<div id="jspsych-survey-text-preamble" class="jspsych-survey-text-preamble">' +
         trial.preamble +
-        "</div>";
+        '</div>';
     }
     // start form
     if (trial.autocomplete) {
@@ -173,9 +173,9 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
         '<div id="jspsych-survey-text-' +
         question_index +
         '" class="jspsych-survey-text-question" style="margin: 2em 0em;">';
-      html += '<p class="jspsych-survey-text">' + question.prompt + "</p>";
-      var autofocus = i == 0 ? "autofocus" : "";
-      var req = question.required ? "required" : "";
+      html += '<p class="jspsych-survey-text">' + question.prompt + '</p>';
+      var autofocus = i == 0 ? 'autofocus' : '';
+      var req = question.required ? 'required' : '';
       if (question.rows == 1) {
         html +=
           '<input type="text" id="input-' +
@@ -188,7 +188,7 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
           question.columns +
           '" ' +
           autofocus +
-          " " +
+          ' ' +
           req +
           ' placeholder="' +
           question.placeholder +
@@ -207,13 +207,13 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
           question.rows +
           '" ' +
           autofocus +
-          " " +
+          ' ' +
           req +
           ' placeholder="' +
           question.placeholder +
           '"></textarea>';
       }
-      html += "</div>";
+      html += '</div>';
     }
 
     // add submit button
@@ -222,13 +222,13 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
       trial.button_label +
       '"></input>';
 
-    html += "</form>";
+    html += '</form>';
     display_element.innerHTML = html;
 
     // backup in case autofocus doesn't work
-    display_element.querySelector<HTMLInputElement>("#input-" + question_order[0]).focus();
+    display_element.querySelector<HTMLInputElement>('#input-' + question_order[0]).focus();
 
-    display_element.querySelector("#jspsych-survey-text-form").addEventListener("submit", (e) => {
+    display_element.querySelector('#jspsych-survey-text-form').addEventListener('submit', (e) => {
       e.preventDefault();
       // measure response time
       var endTime = performance.now();
@@ -238,13 +238,13 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
       var question_data = {};
 
       for (var index = 0; index < trial.questions.length; index++) {
-        var id = "Q" + index;
+        var id = 'Q' + index;
         var q_element = document
-          .querySelector("#jspsych-survey-text-" + index)
-          .querySelector("textarea, input") as HTMLInputElement;
+          .querySelector('#jspsych-survey-text-' + index)
+          .querySelector('textarea, input') as HTMLInputElement;
         var val = q_element.value;
-        var name = q_element.attributes["data-name"].value;
-        if (name == "") {
+        var name = q_element.attributes['data-name'].value;
+        if (name == '') {
           name = id;
         }
         var obje = {};
@@ -270,11 +270,11 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -291,7 +291,7 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
           : this.jsPsych.randomization.randomInt(1, 10) * q.rows;
       question_data[name] = this.jsPsych.randomization.randomWords({
         exactly: ans_words,
-        join: " ",
+        join: ' ',
       });
       rt += this.jsPsych.randomization.sampleExGaussian(2000, 400, 0.004, true);
     }
@@ -334,7 +334,7 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
     }
 
     this.jsPsych.pluginAPI.clickTarget(
-      display_element.querySelector("#jspsych-survey-text-next"),
+      display_element.querySelector('#jspsych-survey-text-next'),
       data.rt
     );
   }

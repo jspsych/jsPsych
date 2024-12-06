@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "canvas-slider-response",
+  name: 'canvas-slider-response',
   version: version,
   parameters: {
     /** The function to draw on the canvas. This function automatically takes a canvas element as its only argument, e.g. `function(c) {...}` or `function drawStim(c) {...}`, where `c` refers to the canvas element. Note that the stimulus function will still generally need to set the correct context itself, using a line like `let ctx = c.getContext("2d")`. */
@@ -45,7 +45,7 @@ const info = <const>{
     /** Label of the button to end the trial. */
     button_label: {
       type: ParameterType.STRING,
-      default: "Continue",
+      default: 'Continue',
       array: false,
     },
     /** If true, the participant must click the slider before clicking the continue button. */
@@ -90,7 +90,7 @@ const info = <const>{
       type: ParameterType.STRING,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -115,13 +115,13 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
       '" width="' +
       trial.canvas_size[1] +
       '"></canvas>' +
-      "</div>";
+      '</div>';
     html +=
       '<div class="jspsych-canvas-slider-response-container" style="position:relative; margin: 0 auto 3em auto; width:';
     if (trial.slider_width !== null) {
-      html += trial.slider_width + "px;";
+      html += trial.slider_width + 'px;';
     } else {
-      html += trial.canvas_size[1] + "px;";
+      html += trial.canvas_size[1] + 'px;';
     }
     html += '">';
     html +=
@@ -134,22 +134,22 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
       '" step="' +
       trial.step +
       '" style="width: 100%;" id="jspsych-canvas-slider-response-response"></input>';
-    html += "<div>";
+    html += '<div>';
     for (var j = 0; j < trial.labels.length; j++) {
       var width = 100 / (trial.labels.length - 1);
       var left_offset = j * (100 / (trial.labels.length - 1)) - width / 2;
       html +=
         '<div style="display: inline-block; position: absolute; left:' +
         left_offset +
-        "%; text-align: center; width: " +
+        '%; text-align: center; width: ' +
         width +
         '%;">';
-      html += '<span style="text-align: center; font-size: 80%;">' + trial.labels[j] + "</span>";
-      html += "</div>";
+      html += '<span style="text-align: center; font-size: 80%;">' + trial.labels[j] + '</span>';
+      html += '</div>';
     }
-    html += "</div>";
-    html += "</div>";
-    html += "</div>";
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
 
     if (trial.prompt !== null) {
       html += trial.prompt;
@@ -158,16 +158,16 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
     // add submit button
     html +=
       '<button id="jspsych-canvas-slider-response-next" class="jspsych-btn" ' +
-      (trial.require_movement ? "disabled" : "") +
-      ">" +
+      (trial.require_movement ? 'disabled' : '') +
+      '>' +
       trial.button_label +
-      "</button>";
+      '</button>';
 
     display_element.innerHTML = html;
 
     // draw
-    let c = document.getElementById("jspsych-canvas-stimulus");
-    c.style.display = "block";
+    let c = document.getElementById('jspsych-canvas-stimulus');
+    c.style.display = 'block';
     trial.stimulus(c);
 
     var response = {
@@ -190,38 +190,38 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
     if (trial.require_movement) {
       const enable_button = () => {
         display_element.querySelector<HTMLInputElement>(
-          "#jspsych-canvas-slider-response-next"
+          '#jspsych-canvas-slider-response-next'
         ).disabled = false;
       };
 
       display_element
-        .querySelector("#jspsych-canvas-slider-response-response")
-        .addEventListener("mousedown", enable_button);
+        .querySelector('#jspsych-canvas-slider-response-response')
+        .addEventListener('mousedown', enable_button);
 
       display_element
-        .querySelector("#jspsych-canvas-slider-response-response")
-        .addEventListener("touchstart", enable_button);
+        .querySelector('#jspsych-canvas-slider-response-response')
+        .addEventListener('touchstart', enable_button);
 
       display_element
-        .querySelector("#jspsych-canvas-slider-response-response")
-        .addEventListener("change", enable_button);
+        .querySelector('#jspsych-canvas-slider-response-response')
+        .addEventListener('change', enable_button);
     }
 
     display_element
-      .querySelector("#jspsych-canvas-slider-response-next")
-      .addEventListener("click", () => {
+      .querySelector('#jspsych-canvas-slider-response-next')
+      .addEventListener('click', () => {
         // measure response time
         var endTime = performance.now();
         response.rt = Math.round(endTime - startTime);
         response.response = display_element.querySelector<HTMLInputElement>(
-          "#jspsych-canvas-slider-response-response"
+          '#jspsych-canvas-slider-response-response'
         ).valueAsNumber;
 
         if (trial.response_ends_trial) {
           end_trial();
         } else {
           display_element.querySelector<HTMLInputElement>(
-            "#jspsych-canvas-slider-response-next"
+            '#jspsych-canvas-slider-response-next'
           ).disabled = true;
         }
       });
@@ -229,8 +229,8 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
-          "#jspsych-canvas-slider-response-stimulus"
-        ).style.visibility = "hidden";
+          '#jspsych-canvas-slider-response-stimulus'
+        ).style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
 
@@ -248,11 +248,11 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -292,7 +292,7 @@ class CanvasSliderResponsePlugin implements JsPsychPlugin<Info> {
         el.valueAsNumber = data.response;
       }, data.rt / 2);
 
-      this.jsPsych.pluginAPI.clickTarget(display_element.querySelector("button"), data.rt);
+      this.jsPsych.pluginAPI.clickTarget(display_element.querySelector('button'), data.rt);
     }
   }
 }

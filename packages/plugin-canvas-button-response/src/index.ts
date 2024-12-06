@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "canvas-button-response",
+  name: 'canvas-button-response',
   version: version,
   parameters: {
     /**
@@ -67,7 +67,7 @@ const info = <const>{
      */
     button_layout: {
       type: ParameterType.STRING,
-      default: "grid",
+      default: 'grid',
     },
     /**
      * The number of rows in the button grid. Only applicable when `button_layout` is set to `'grid'`.
@@ -113,7 +113,7 @@ const info = <const>{
       type: ParameterType.INT,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -136,26 +136,26 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // Create canvas
-    const stimulusElement = document.createElement("div");
-    stimulusElement.id = "jspsych-canvas-button-response-stimulus";
+    const stimulusElement = document.createElement('div');
+    stimulusElement.id = 'jspsych-canvas-button-response-stimulus';
 
-    const canvasElement = document.createElement("canvas");
-    canvasElement.id = "jspsych-canvas-stimulus";
+    const canvasElement = document.createElement('canvas');
+    canvasElement.id = 'jspsych-canvas-stimulus';
     canvasElement.height = trial.canvas_size[0];
     canvasElement.width = trial.canvas_size[1];
-    canvasElement.style.display = "block";
+    canvasElement.style.display = 'block';
     stimulusElement.appendChild(canvasElement);
 
     display_element.appendChild(stimulusElement);
 
     // Display buttons
-    const buttonGroupElement = document.createElement("div");
-    buttonGroupElement.id = "jspsych-canvas-button-response-btngroup";
-    if (trial.button_layout === "grid") {
-      buttonGroupElement.classList.add("jspsych-btn-group-grid");
+    const buttonGroupElement = document.createElement('div');
+    buttonGroupElement.id = 'jspsych-canvas-button-response-btngroup';
+    if (trial.button_layout === 'grid') {
+      buttonGroupElement.classList.add('jspsych-btn-group-grid');
       if (trial.grid_rows === null && trial.grid_columns === null) {
         throw new Error(
-          "You cannot set `grid_rows` to `null` without providing a value for `grid_columns`."
+          'You cannot set `grid_rows` to `null` without providing a value for `grid_columns`.'
         );
       }
       const n_cols =
@@ -168,15 +168,15 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
           : trial.grid_rows;
       buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
       buttonGroupElement.style.gridTemplateRows = `repeat(${n_rows}, 1fr)`;
-    } else if (trial.button_layout === "flex") {
-      buttonGroupElement.classList.add("jspsych-btn-group-flex");
+    } else if (trial.button_layout === 'flex') {
+      buttonGroupElement.classList.add('jspsych-btn-group-flex');
     }
 
     for (const [choiceIndex, choice] of trial.choices.entries()) {
-      buttonGroupElement.insertAdjacentHTML("beforeend", trial.button_html(choice, choiceIndex));
+      buttonGroupElement.insertAdjacentHTML('beforeend', trial.button_html(choice, choiceIndex));
       const buttonElement = buttonGroupElement.lastChild as HTMLElement;
       buttonElement.dataset.choice = choiceIndex.toString();
-      buttonElement.addEventListener("click", () => {
+      buttonElement.addEventListener('click', () => {
         after_response(choiceIndex);
       });
     }
@@ -185,7 +185,7 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // Show prompt if there is one
     if (trial.prompt !== null) {
-      display_element.insertAdjacentHTML("beforeend", trial.prompt);
+      display_element.insertAdjacentHTML('beforeend', trial.prompt);
     }
 
     //draw
@@ -222,11 +222,11 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      stimulusElement.classList.add("responded");
+      stimulusElement.classList.add('responded');
 
       // disable all the buttons after a response
       for (const button of buttonGroupElement.children) {
-        button.setAttribute("disabled", "disabled");
+        button.setAttribute('disabled', 'disabled');
       }
 
       if (trial.response_ends_trial) {
@@ -237,7 +237,7 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
     // hide image if timing is set
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
-        stimulusElement.style.visibility = "hidden";
+        stimulusElement.style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
 
@@ -255,11 +255,11 @@ class CanvasButtonResponsePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }

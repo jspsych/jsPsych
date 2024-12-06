@@ -1,10 +1,10 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
-import { parameterPathArrayToString } from "jspsych/src/timeline/util";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { parameterPathArrayToString } from 'jspsych/src/timeline/util';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "reconstruction",
+  name: 'reconstruction',
   version: version,
   parameters: {
     /** A function with a single parameter that returns an HTML-formatted string representing the stimulus. */
@@ -25,17 +25,17 @@ const info = <const>{
     /** The key to press for increasing the parameter value. */
     key_increase: {
       type: ParameterType.KEY,
-      default: "h",
+      default: 'h',
     },
     /** The key to press for decreasing the parameter value. */
     key_decrease: {
       type: ParameterType.KEY,
-      default: "g",
+      default: 'g',
     },
     /** The text that appears on the button to finish the trial. */
     button_label: {
       type: ParameterType.STRING,
-      default: "Continue",
+      default: 'Continue',
     },
   },
   data: {
@@ -52,7 +52,7 @@ const info = <const>{
       type: ParameterType.INT,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -100,17 +100,17 @@ class ReconstructionPlugin implements JsPsychPlugin<Info> {
       //console.log(param);
 
       display_element.innerHTML =
-        '<div id="jspsych-reconstruction-stim-container">' + trial.stim_function(param) + "</div>";
+        '<div id="jspsych-reconstruction-stim-container">' + trial.stim_function(param) + '</div>';
 
       // add submit button
       display_element.innerHTML +=
         '<button id="jspsych-reconstruction-next" class="jspsych-btn jspsych-reconstruction">' +
         trial.button_label +
-        "</button>";
+        '</button>';
 
       display_element
-        .querySelector("#jspsych-reconstruction-next")
-        .addEventListener("click", endTrial);
+        .querySelector('#jspsych-reconstruction-next')
+        .addEventListener('click', endTrial);
     };
 
     // set-up key listeners
@@ -136,7 +136,7 @@ class ReconstructionPlugin implements JsPsychPlugin<Info> {
     var key_listener = this.jsPsych.pluginAPI.getKeyboardResponse({
       callback_function: after_response,
       valid_responses: [trial.key_increase, trial.key_decrease],
-      rt_method: "performance",
+      rt_method: 'performance',
       persist: true,
       allow_held_key: true,
     });
@@ -153,11 +153,11 @@ class ReconstructionPlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -207,7 +207,7 @@ class ReconstructionPlugin implements JsPsychPlugin<Info> {
     }
 
     this.jsPsych.pluginAPI.clickTarget(
-      display_element.querySelector("#jspsych-reconstruction-next"),
+      display_element.querySelector('#jspsych-reconstruction-next'),
       data.rt
     );
   }

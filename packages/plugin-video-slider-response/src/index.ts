@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "video-slider-response",
+  name: 'video-slider-response',
   version: version,
   parameters: {
     /** An array of file paths to the video. You can specify multiple formats of the same video (e.g., .mp4, .ogg, .webm)
@@ -26,12 +26,12 @@ const info = <const>{
     /** The width of the video in pixels. */
     width: {
       type: ParameterType.INT,
-      default: "",
+      default: '',
     },
     /** The height of the video display in pixels. */
     height: {
       type: ParameterType.INT,
-      default: "",
+      default: '',
     },
     /** If true, the video will begin playing as soon as it has loaded. */
     autoplay: {
@@ -100,7 +100,7 @@ const info = <const>{
     /** Label of the button to end the trial. */
     button_label: {
       type: ParameterType.STRING,
-      default: "Continue",
+      default: 'Continue',
     },
     /** If true, the participant must move the slider before clicking the continue button. */
     require_movement: {
@@ -164,7 +164,7 @@ const info = <const>{
       type: ParameterType.FLOAT,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -212,45 +212,45 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
     if (trial.autoplay && trial.start == null) {
       // if autoplay is true and the start time is specified, then the video will start automatically
       // via the play() method, rather than the autoplay attribute, to prevent showing the first frame
-      video_html += " autoplay ";
+      video_html += ' autoplay ';
     }
     if (trial.controls) {
-      video_html += " controls ";
+      video_html += ' controls ';
     }
     if (trial.start !== null) {
       // hide video element when page loads if the start time is specified,
       // to prevent the video element from showing the first frame
       video_html += ' style="visibility: hidden;"';
     }
-    video_html += ">";
+    video_html += '>';
 
     var video_preload_blob = this.jsPsych.pluginAPI.getVideoBuffer(trial.stimulus[0]);
     if (!video_preload_blob) {
       for (var i = 0; i < trial.stimulus.length; i++) {
         var file_name = trial.stimulus[i];
-        if (file_name.indexOf("?") > -1) {
-          file_name = file_name.substring(0, file_name.indexOf("?"));
+        if (file_name.indexOf('?') > -1) {
+          file_name = file_name.substring(0, file_name.indexOf('?'));
         }
-        var type = file_name.substr(file_name.lastIndexOf(".") + 1);
+        var type = file_name.substr(file_name.lastIndexOf('.') + 1);
         type = type.toLowerCase();
-        if (type == "mov") {
+        if (type == 'mov') {
           console.warn(
-            "Warning: video-slider-response plugin does not reliably support .mov files."
+            'Warning: video-slider-response plugin does not reliably support .mov files.'
           );
         }
         video_html += '<source src="' + file_name + '" type="video/' + type + '">';
       }
     }
-    video_html += "</video>";
+    video_html += '</video>';
 
     var html = '<div id="jspsych-video-slider-response-wrapper" style="margin: 100px 0px;">';
-    html += '<div id="jspsych-video-slider-response-stimulus">' + video_html + "</div>";
+    html += '<div id="jspsych-video-slider-response-stimulus">' + video_html + '</div>';
     html +=
       '<div class="jspsych-video-slider-response-container" style="position:relative; margin: 0 auto 3em auto; width:';
     if (trial.slider_width !== null) {
-      html += trial.slider_width + "px;";
+      html += trial.slider_width + 'px;';
     } else {
-      html += "auto;";
+      html += 'auto;';
     }
     html += '">';
     html +=
@@ -264,9 +264,9 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
       trial.step +
       '" id="jspsych-video-slider-response-response"';
     if (!trial.response_allowed_while_playing) {
-      html += " disabled";
+      html += ' disabled';
     }
-    html += "></input><div>";
+    html += '></input><div>';
     for (var j = 0; j < trial.labels.length; j++) {
       var label_width_perc = 100 / (trial.labels.length - 1);
       var percent_of_range = j * (100 / (trial.labels.length - 1));
@@ -274,43 +274,43 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
       var offset = (percent_dist_from_center * half_thumb_width) / 100;
       html +=
         '<div style="border: 1px solid transparent; display: inline-block; position: absolute; ' +
-        "left:calc(" +
+        'left:calc(' +
         percent_of_range +
-        "% - (" +
+        '% - (' +
         label_width_perc +
-        "% / 2) - " +
+        '% / 2) - ' +
         offset +
-        "px); text-align: center; width: " +
+        'px); text-align: center; width: ' +
         label_width_perc +
         '%;">';
-      html += '<span style="text-align: center; font-size: 80%;">' + trial.labels[j] + "</span>";
-      html += "</div>";
+      html += '<span style="text-align: center; font-size: 80%;">' + trial.labels[j] + '</span>';
+      html += '</div>';
     }
-    html += "</div>";
-    html += "</div>";
-    html += "</div>";
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
 
     // add prompt if there is one
     if (trial.prompt !== null) {
-      html += "<div>" + trial.prompt + "</div>";
+      html += '<div>' + trial.prompt + '</div>';
     }
 
     // add submit button
-    var next_disabled_attribute = "";
+    var next_disabled_attribute = '';
     if (trial.require_movement || !trial.response_allowed_while_playing) {
-      next_disabled_attribute = "disabled";
+      next_disabled_attribute = 'disabled';
     }
     html +=
       '<button id="jspsych-video-slider-response-next" class="jspsych-btn" ' +
       next_disabled_attribute +
-      ">" +
+      '>' +
       trial.button_label +
-      "</button>";
+      '</button>';
 
     display_element.innerHTML = html;
 
     var video_element = display_element.querySelector<HTMLVideoElement>(
-      "#jspsych-video-slider-response-stimulus-video"
+      '#jspsych-video-slider-response-stimulus-video'
     );
 
     if (video_preload_blob) {
@@ -332,7 +332,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
     if (trial.start !== null) {
       video_element.pause();
       video_element.onseeked = () => {
-        video_element.style.visibility = "visible";
+        video_element.style.visibility = 'visible';
         video_element.muted = false;
         if (trial.autoplay) {
           video_element.play();
@@ -353,7 +353,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
 
     let stopped = false;
     if (trial.stop !== null) {
-      video_element.addEventListener("timeupdate", (e) => {
+      video_element.addEventListener('timeupdate', (e) => {
         var currenttime = video_element.currentTime;
         if (currenttime >= trial.stop) {
           video_element.pause();
@@ -374,21 +374,21 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
     if (trial.require_movement) {
       const enable_button = () => {
         display_element.querySelector<HTMLInputElement>(
-          "#jspsych-video-slider-response-next"
+          '#jspsych-video-slider-response-next'
         ).disabled = false;
       };
 
       display_element
-        .querySelector("#jspsych-video-slider-response-response")
-        .addEventListener("mousedown", enable_button);
+        .querySelector('#jspsych-video-slider-response-response')
+        .addEventListener('mousedown', enable_button);
 
       display_element
-        .querySelector("#jspsych-video-slider-response-response")
-        .addEventListener("touchstart", enable_button);
+        .querySelector('#jspsych-video-slider-response-response')
+        .addEventListener('touchstart', enable_button);
 
       display_element
-        .querySelector("#jspsych-video-slider-response-response")
-        .addEventListener("change", enable_button);
+        .querySelector('#jspsych-video-slider-response-response')
+        .addEventListener('change', enable_button);
     }
 
     var startTime = performance.now();
@@ -404,10 +404,10 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
       // stop the video file if it is playing
       // remove any remaining end event handlers
       display_element
-        .querySelector<HTMLVideoElement>("#jspsych-video-slider-response-stimulus-video")
+        .querySelector<HTMLVideoElement>('#jspsych-video-slider-response-stimulus-video')
         .pause();
       display_element.querySelector<HTMLVideoElement>(
-        "#jspsych-video-slider-response-stimulus-video"
+        '#jspsych-video-slider-response-stimulus-video'
       ).onended = () => {};
 
       // gather the data to store for the trial
@@ -424,20 +424,20 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     display_element
-      .querySelector("#jspsych-video-slider-response-next")
-      .addEventListener("click", () => {
+      .querySelector('#jspsych-video-slider-response-next')
+      .addEventListener('click', () => {
         // measure response time
         var endTime = performance.now();
         response.rt = Math.round(endTime - startTime);
         response.response = display_element.querySelector<HTMLInputElement>(
-          "#jspsych-video-slider-response-response"
+          '#jspsych-video-slider-response-response'
         ).valueAsNumber;
 
         if (trial.response_ends_trial) {
           end_trial();
         } else {
           display_element.querySelector<HTMLButtonElement>(
-            "#jspsych-video-slider-response-next"
+            '#jspsych-video-slider-response-next'
           ).disabled = true;
         }
       });
@@ -445,11 +445,11 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
     // function to enable slider after video ends
     function enable_slider() {
       (
-        document.querySelector("#jspsych-video-slider-response-response") as HTMLInputElement
+        document.querySelector('#jspsych-video-slider-response-response') as HTMLInputElement
       ).disabled = false;
       if (!trial.require_movement) {
         (
-          document.querySelector("#jspsych-video-slider-response-next") as HTMLInputElement
+          document.querySelector('#jspsych-video-slider-response-next') as HTMLInputElement
         ).disabled = false;
       }
     }
@@ -466,11 +466,11 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -506,7 +506,7 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
     load_callback();
 
     const video_element = display_element.querySelector<HTMLVideoElement>(
-      "#jspsych-video-button-response-stimulus"
+      '#jspsych-video-button-response-stimulus'
     );
 
     const respond = () => {
@@ -518,12 +518,12 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
           el.valueAsNumber = data.response;
         }, data.rt / 2);
 
-        this.jsPsych.pluginAPI.clickTarget(display_element.querySelector("button"), data.rt);
+        this.jsPsych.pluginAPI.clickTarget(display_element.querySelector('button'), data.rt);
       }
     };
 
     if (!trial.response_allowed_while_playing) {
-      video_element.addEventListener("ended", respond);
+      video_element.addEventListener('ended', respond);
     } else {
       respond();
     }

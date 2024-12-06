@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "initialize-camera",
+  name: 'initialize-camera',
   version: version,
   parameters: {
     /** The message to display when the user is presented with a dropdown list of available devices. */
@@ -14,7 +14,7 @@ const info = <const>{
     /** The label for the select button. */
     button_label: {
       type: ParameterType.STRING,
-      default: "Use this camera",
+      default: 'Use this camera',
     },
     /** Set to `true` to include an audio track in the recordings. */
     include_audio: {
@@ -48,7 +48,7 @@ const info = <const>{
       type: ParameterType.STRING,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -139,8 +139,8 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
 
   private waitForSelection(display_element) {
     return new Promise((resolve) => {
-      display_element.querySelector("#btn-select-camera").addEventListener("click", () => {
-        const camera = display_element.querySelector("#which-camera").value;
+      display_element.querySelector('#btn-select-camera').addEventListener('click', () => {
+        const camera = display_element.querySelector('#which-camera').value;
         resolve(camera);
       });
     });
@@ -150,7 +150,7 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
     navigator.mediaDevices.enumerateDevices().then((devices) => {
       const cams = devices.filter(
         (d) =>
-          d.kind === "videoinput" && d.deviceId !== "default" && d.deviceId !== "communications"
+          d.kind === 'videoinput' && d.deviceId !== 'default' && d.deviceId !== 'communications'
       );
 
       // remove entries with duplicate groupID
@@ -159,14 +159,14 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
       );
 
       // reset the list by clearing all current options
-      display_element.querySelector("#which-camera").innerHTML = "";
+      display_element.querySelector('#which-camera').innerHTML = '';
 
       unique_cameras.forEach((d) => {
-        let el = document.createElement("option");
+        let el = document.createElement('option');
         el.value = d.deviceId;
         el.innerHTML = d.label;
 
-        display_element.querySelector("#which-camera").appendChild(el);
+        display_element.querySelector('#which-camera').appendChild(el);
       });
     });
   }

@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "visual-search-circle",
+  name: 'visual-search-circle',
   version: version,
   parameters: {
     /**
@@ -81,12 +81,12 @@ const info = <const>{
     /** The key to press if the target is present in the search array. */
     target_present_key: {
       type: ParameterType.KEY,
-      default: "j",
+      default: 'j',
     },
     /** The key to press if the target is not present in the search array. */
     target_absent_key: {
       type: ParameterType.KEY,
-      default: "f",
+      default: 'f',
     },
     /** The maximum amount of time the participant is allowed to search before the trial will continue. A value
      * of null will allow the participant to search indefinitely.
@@ -133,7 +133,7 @@ const info = <const>{
       array: true,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -167,10 +167,10 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
     display_element.innerHTML +=
       '<div id="jspsych-visual-search-circle-container" style="position: relative; width:' +
       paper_size +
-      "px; height:" +
+      'px; height:' +
       paper_size +
       'px"></div>';
-    var paper = display_element.querySelector("#jspsych-visual-search-circle-container");
+    var paper = display_element.querySelector('#jspsych-visual-search-circle-container');
 
     const show_fixation = () => {
       // show fixation
@@ -180,11 +180,11 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
         trial.fixation_image +
         "' style='position: absolute; top:" +
         fix_loc[0] +
-        "px; left:" +
+        'px; left:' +
         fix_loc[1] +
-        "px; width:" +
+        'px; width:' +
         trial.fixation_size[0] +
-        "px; height:" +
+        'px; height:' +
         trial.fixation_size[1] +
         "px;'></img>";
 
@@ -227,11 +227,11 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
           to_present[i] +
           "' style='position: absolute; top:" +
           display_locs[i][0] +
-          "px; left:" +
+          'px; left:' +
           display_locs[i][1] +
-          "px; width:" +
+          'px; width:' +
           trial.target_size[0] +
-          "px; height:" +
+          'px; height:' +
           trial.target_size[1] +
           "px;'></img>";
       }
@@ -262,7 +262,7 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
       const key_listener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: valid_keys,
-        rt_method: "performance",
+        rt_method: 'performance',
         persist: false,
         allow_held_key: false,
       });
@@ -278,7 +278,7 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
       }
 
       function clear_display() {
-        display_element.innerHTML = "";
+        display_element.innerHTML = '';
       }
     };
   }
@@ -331,7 +331,7 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
       to_present = trial.stimuli;
     } else {
       console.error(
-        "Error in visual-search-circle plugin: you must specify an array of images via the stimuli parameter OR specify the target, foil and set_size parameters."
+        'Error in visual-search-circle plugin: you must specify an array of images via the stimuli parameter OR specify the target, foil and set_size parameters.'
       );
     }
     return to_present;
@@ -351,11 +351,11 @@ class VisualSearchCirclePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }

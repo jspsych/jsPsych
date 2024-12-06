@@ -1,11 +1,11 @@
-import autoBind from "auto-bind";
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import autoBind from 'auto-bind';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { AudioPlayerInterface } from "../../jspsych/src/modules/plugin-api/AudioPlayer";
-import { version } from "../package.json";
+import { AudioPlayerInterface } from '../../jspsych/src/modules/plugin-api/AudioPlayer';
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "audio-keyboard-response",
+  name: 'audio-keyboard-response',
   version: version,
   parameters: {
     /** The audio file to be played. */
@@ -22,14 +22,14 @@ const info = <const>{
      */
     choices: {
       type: ParameterType.KEYS,
-      default: "ALL_KEYS",
+      default: 'ALL_KEYS',
     },
     /** This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that
      * it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).
      */
     prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: "Prompt",
+      pretty_name: 'Prompt',
       default: null,
     },
     /** How long to wait for the participant to make a response before ending the trial in milliseconds. If the
@@ -53,7 +53,7 @@ const info = <const>{
     /** If true, then the trial will end as soon as the audio file finishes playing. */
     trial_ends_after_audio: {
       type: ParameterType.BOOL,
-      pretty_name: "Trial ends after audio",
+      pretty_name: 'Trial ends after audio',
       default: false,
     },
     /** If true, then responses are allowed while the audio is playing. If false, then the audio must finish
@@ -82,7 +82,7 @@ const info = <const>{
       type: ParameterType.STRING,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -127,7 +127,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
       // set up end event if trial needs it
       if (trial.trial_ends_after_audio) {
-        this.audio.addEventListener("ended", this.end_trial);
+        this.audio.addEventListener('ended', this.end_trial);
       }
 
       // show prompt if there is one
@@ -144,7 +144,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       if (trial.response_allowed_while_playing) {
         this.setup_keyboard_listener();
       } else if (!trial.trial_ends_after_audio) {
-        this.audio.addEventListener("ended", this.setup_keyboard_listener);
+        this.audio.addEventListener('ended', this.setup_keyboard_listener);
       }
 
       // end trial if time limit is set
@@ -169,8 +169,8 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     this.audio.stop();
 
     // remove end event listeners if they exist
-    this.audio.removeEventListener("ended", this.end_trial);
-    this.audio.removeEventListener("ended", this.setup_keyboard_listener);
+    this.audio.removeEventListener('ended', this.end_trial);
+    this.audio.removeEventListener('ended', this.setup_keyboard_listener);
 
     // kill keyboard listeners
     this.jsPsych.pluginAPI.cancelAllKeyboardResponses();
@@ -183,7 +183,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // clear the display
-    this.display.innerHTML = "";
+    this.display.innerHTML = '';
 
     // move on to the next trial
     this.finish(trial_data);
@@ -202,7 +202,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: this.after_response,
         valid_responses: this.params.choices,
-        rt_method: "audio",
+        rt_method: 'audio',
         persist: false,
         allow_held_key: false,
         audio_context: this.jsPsych.pluginAPI.audioContext(),
@@ -212,7 +212,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: this.after_response,
         valid_responses: this.params.choices,
-        rt_method: "performance",
+        rt_method: 'performance',
         persist: false,
         allow_held_key: false,
       });
@@ -225,11 +225,11 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       return this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       return this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -258,7 +258,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     const result = await this.trial(display_element, trial, () => {
       load_callback();
       if (!trial.response_allowed_while_playing) {
-        this.audio.addEventListener("ended", respond);
+        this.audio.addEventListener('ended', respond);
       } else {
         respond();
       }

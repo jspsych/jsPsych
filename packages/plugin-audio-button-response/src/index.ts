@@ -1,11 +1,11 @@
-import autoBind from "auto-bind";
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import autoBind from 'auto-bind';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { AudioPlayerInterface } from "../../jspsych/src/modules/plugin-api/AudioPlayer";
-import { version } from "../package.json";
+import { AudioPlayerInterface } from '../../jspsych/src/modules/plugin-api/AudioPlayer';
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "audio-button-response",
+  name: 'audio-button-response',
   version: version,
   parameters: {
     /** Path to audio file to be played. */
@@ -52,7 +52,7 @@ const info = <const>{
      */
     button_layout: {
       type: ParameterType.STRING,
-      default: "grid",
+      default: 'grid',
     },
     /** The number of rows in the button grid. Only applicable when `button_layout` is set to `'grid'`. If null, the
      * number of rows will be determined automatically based on the number of buttons and the number of columns.
@@ -110,7 +110,7 @@ const info = <const>{
       type: ParameterType.INT,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -158,22 +158,22 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // set up end event if trial needs it
     if (trial.trial_ends_after_audio) {
-      this.audio.addEventListener("ended", this.end_trial);
+      this.audio.addEventListener('ended', this.end_trial);
     }
 
     // enable buttons after audio ends if necessary
     if (!trial.response_allowed_while_playing && !trial.trial_ends_after_audio) {
-      this.audio.addEventListener("ended", this.enable_buttons);
+      this.audio.addEventListener('ended', this.enable_buttons);
     }
 
     // Display buttons
-    const buttonGroupElement = document.createElement("div");
-    buttonGroupElement.id = "jspsych-audio-button-response-btngroup";
-    if (trial.button_layout === "grid") {
-      buttonGroupElement.classList.add("jspsych-btn-group-grid");
+    const buttonGroupElement = document.createElement('div');
+    buttonGroupElement.id = 'jspsych-audio-button-response-btngroup';
+    if (trial.button_layout === 'grid') {
+      buttonGroupElement.classList.add('jspsych-btn-group-grid');
       if (trial.grid_rows === null && trial.grid_columns === null) {
         throw new Error(
-          "You cannot set `grid_rows` to `null` without providing a value for `grid_columns`."
+          'You cannot set `grid_rows` to `null` without providing a value for `grid_columns`.'
         );
       }
       const n_cols =
@@ -186,15 +186,15 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
           : trial.grid_rows;
       buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
       buttonGroupElement.style.gridTemplateRows = `repeat(${n_rows}, 1fr)`;
-    } else if (trial.button_layout === "flex") {
-      buttonGroupElement.classList.add("jspsych-btn-group-flex");
+    } else if (trial.button_layout === 'flex') {
+      buttonGroupElement.classList.add('jspsych-btn-group-flex');
     }
 
     for (const [choiceIndex, choice] of trial.choices.entries()) {
-      buttonGroupElement.insertAdjacentHTML("beforeend", trial.button_html(choice, choiceIndex));
+      buttonGroupElement.insertAdjacentHTML('beforeend', trial.button_html(choice, choiceIndex));
       const buttonElement = buttonGroupElement.lastChild as HTMLElement;
       buttonElement.dataset.choice = choiceIndex.toString();
-      buttonElement.addEventListener("click", () => {
+      buttonElement.addEventListener('click', () => {
         this.after_response(choiceIndex);
       });
       this.buttonElements.push(buttonElement);
@@ -204,7 +204,7 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // Show prompt if there is one
     if (trial.prompt !== null) {
-      display_element.insertAdjacentHTML("beforeend", trial.prompt);
+      display_element.insertAdjacentHTML('beforeend', trial.prompt);
     }
 
     if (trial.response_allowed_while_playing) {
@@ -242,13 +242,13 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
 
   private disable_buttons = () => {
     for (const button of this.buttonElements) {
-      button.setAttribute("disabled", "disabled");
+      button.setAttribute('disabled', 'disabled');
     }
   };
 
   private enable_buttons_without_delay = () => {
     for (const button of this.buttonElements) {
-      button.removeAttribute("disabled");
+      button.removeAttribute('disabled');
     }
   };
 
@@ -290,8 +290,8 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
     this.audio.stop();
 
     // remove end event listeners if they exist
-    this.audio.removeEventListener("ended", this.end_trial);
-    this.audio.removeEventListener("ended", this.enable_buttons);
+    this.audio.removeEventListener('ended', this.end_trial);
+    this.audio.removeEventListener('ended', this.enable_buttons);
 
     // gather the data to store for the trial
     var trial_data = {
@@ -310,11 +310,11 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -360,7 +360,7 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
     this.trial(display_element, trial, () => {
       load_callback();
       if (!trial.response_allowed_while_playing) {
-        this.audio.addEventListener("ended", respond);
+        this.audio.addEventListener('ended', respond);
       } else {
         respond();
       }

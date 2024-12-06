@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "sketchpad",
+  name: 'sketchpad',
   version: version,
   parameters: {
     /**
@@ -11,7 +11,7 @@ const info = <const>{
      */
     canvas_shape: {
       type: ParameterType.STRING,
-      default: "rectangle",
+      default: 'rectangle',
     },
     /**
      * Width of the canvas in pixels when `canvas_shape` is a `"rectangle"`.
@@ -46,7 +46,7 @@ const info = <const>{
      */
     canvas_border_color: {
       type: ParameterType.STRING,
-      default: "#000",
+      default: '#000',
     },
     /**
      * Path to an image to render as the background of the canvas.
@@ -60,7 +60,7 @@ const info = <const>{
      */
     background_color: {
       type: ParameterType.STRING,
-      default: "#ffffff",
+      default: '#ffffff',
     },
     /**
      * The width of the strokes on the canvas.
@@ -74,7 +74,7 @@ const info = <const>{
      */
     stroke_color: {
       type: ParameterType.STRING,
-      default: "#000000",
+      default: '#000000',
     },
     /**
      * Array of colors to render as a palette of choices for stroke color. Clicking on the corresponding color button will change the stroke color.
@@ -96,7 +96,7 @@ const info = <const>{
      */
     prompt_location: {
       type: ParameterType.STRING,
-      default: "abovecanvas",
+      default: 'abovecanvas',
     },
     /**
      * Whether to save the final image in the data as a base64 encoded data URL.
@@ -134,7 +134,7 @@ const info = <const>{
      */
     finished_button_label: {
       type: ParameterType.STRING,
-      default: "Finished",
+      default: 'Finished',
     },
     /**
      * Whether to show the button that clears the entire drawing.
@@ -148,7 +148,7 @@ const info = <const>{
      */
     clear_button_label: {
       type: ParameterType.STRING,
-      default: "Clear",
+      default: 'Clear',
     },
     /**
      * Whether to show the button that enables an undo action.
@@ -162,7 +162,7 @@ const info = <const>{
      */
     undo_button_label: {
       type: ParameterType.STRING,
-      default: "Undo",
+      default: 'Undo',
     },
     /**
      * Whether to show the button that enables an redo action. `show_undo_button` must also
@@ -177,7 +177,7 @@ const info = <const>{
      */
     redo_button_label: {
       type: ParameterType.STRING,
-      default: "Redo",
+      default: 'Redo',
     },
     /**
      * This array contains the key(s) that the participant is allowed to press in order to end
@@ -189,7 +189,7 @@ const info = <const>{
      */
     choices: {
       type: ParameterType.KEYS,
-      default: "NO_KEYS",
+      default: 'NO_KEYS',
     },
     /**
      * Length of time before the trial ends. If `null` the trial will continue indefinitely
@@ -255,7 +255,7 @@ const info = <const>{
       },
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -325,14 +325,14 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
     this.add_css();
 
     let canvas_html;
-    if (this.params.canvas_shape == "rectangle") {
+    if (this.params.canvas_shape == 'rectangle') {
       canvas_html = `
         <canvas id="sketchpad-canvas" 
         width="${this.params.canvas_width}" 
         height="${this.params.canvas_height}" 
         class="sketchpad-rectangle"></canvas>
       `;
-    } else if (this.params.canvas_shape == "circle") {
+    } else if (this.params.canvas_shape == 'circle') {
       canvas_html = `
         <canvas id="sketchpad-canvas" 
         width="${this.params.canvas_diameter}" 
@@ -368,25 +368,25 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
 
     canvas_html += sketchpad_controls;
 
-    let finish_button_html = "";
+    let finish_button_html = '';
     if (this.params.show_finished_button) {
       finish_button_html = `<p id="finish-btn"><button class="jspsych-btn" id="sketchpad-end">${this.params.finished_button_label}</button></p>`;
     }
 
-    let timer_html = "";
+    let timer_html = '';
     if (this.params.show_countdown_trial_duration && this.params.trial_duration) {
       timer_html = `<p id="countdown-timer">${this.params.countdown_timer_html}</p>`;
     }
 
     let display_html;
     if (this.params.prompt !== null) {
-      if (this.params.prompt_location == "abovecanvas") {
+      if (this.params.prompt_location == 'abovecanvas') {
         display_html = this.params.prompt + timer_html + canvas_html + finish_button_html;
       }
-      if (this.params.prompt_location == "belowcanvas") {
+      if (this.params.prompt_location == 'belowcanvas') {
         display_html = timer_html + canvas_html + this.params.prompt + finish_button_html;
       }
-      if (this.params.prompt_location == "belowbutton") {
+      if (this.params.prompt_location == 'belowbutton') {
         display_html = timer_html + canvas_html + finish_button_html + this.params.prompt;
       }
     } else {
@@ -395,29 +395,29 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
 
     this.display.innerHTML = display_html;
 
-    this.sketchpad = this.display.querySelector("#sketchpad-canvas");
-    this.ctx = this.sketchpad.getContext("2d");
+    this.sketchpad = this.display.querySelector('#sketchpad-canvas');
+    this.ctx = this.sketchpad.getContext('2d');
   }
 
   private setup_event_listeners() {
-    document.addEventListener("pointermove", (e) => {
+    document.addEventListener('pointermove', (e) => {
       this.mouse_position = { x: e.clientX, y: e.clientY };
     });
 
     if (this.params.show_finished_button) {
-      this.display.querySelector("#sketchpad-end").addEventListener("click", () => {
-        this.end_trial("button");
+      this.display.querySelector('#sketchpad-end').addEventListener('click', () => {
+        this.end_trial('button');
       });
     }
 
-    this.sketchpad.addEventListener("pointerdown", this.start_draw.bind(this));
-    this.sketchpad.addEventListener("pointermove", this.move_draw.bind(this));
-    this.sketchpad.addEventListener("pointerup", this.end_draw.bind(this));
-    this.sketchpad.addEventListener("pointerleave", this.end_draw.bind(this));
-    this.sketchpad.addEventListener("pointercancel", this.end_draw.bind(this));
+    this.sketchpad.addEventListener('pointerdown', this.start_draw.bind(this));
+    this.sketchpad.addEventListener('pointermove', this.move_draw.bind(this));
+    this.sketchpad.addEventListener('pointerup', this.end_draw.bind(this));
+    this.sketchpad.addEventListener('pointerleave', this.end_draw.bind(this));
+    this.sketchpad.addEventListener('pointercancel', this.end_draw.bind(this));
 
     if (this.params.key_to_draw !== null) {
-      document.addEventListener("keydown", (e) => {
+      document.addEventListener('keydown', (e) => {
         if (e.key == this.params.key_to_draw && !this.is_drawing && !this.draw_key_held) {
           this.draw_key_held = true;
           if (
@@ -425,7 +425,7 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
             this.sketchpad
           ) {
             this.sketchpad.dispatchEvent(
-              new PointerEvent("pointerdown", {
+              new PointerEvent('pointerdown', {
                 clientX: this.mouse_position.x,
                 clientY: this.mouse_position.y,
               })
@@ -434,7 +434,7 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
         }
       });
 
-      document.addEventListener("keyup", (e) => {
+      document.addEventListener('keyup', (e) => {
         if (e.key == this.params.key_to_draw) {
           this.draw_key_held = false;
           if (
@@ -442,7 +442,7 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
             this.sketchpad
           ) {
             this.sketchpad.dispatchEvent(
-              new PointerEvent("pointerup", {
+              new PointerEvent('pointerup', {
                 clientX: this.mouse_position.x,
                 clientY: this.mouse_position.y,
               })
@@ -453,26 +453,26 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
     }
 
     if (this.params.show_undo_button) {
-      this.display.querySelector("#sketchpad-undo").addEventListener("click", this.undo.bind(this));
+      this.display.querySelector('#sketchpad-undo').addEventListener('click', this.undo.bind(this));
       if (this.params.show_redo_button) {
         this.display
-          .querySelector("#sketchpad-redo")
-          .addEventListener("click", this.redo.bind(this));
+          .querySelector('#sketchpad-redo')
+          .addEventListener('click', this.redo.bind(this));
       }
     }
     if (this.params.show_clear_button) {
       this.display
-        .querySelector("#sketchpad-clear")
-        .addEventListener("click", this.clear.bind(this));
+        .querySelector('#sketchpad-clear')
+        .addEventListener('click', this.clear.bind(this));
     }
 
     const color_btns = Array.prototype.slice.call(
-      this.display.querySelectorAll(".sketchpad-color-select")
+      this.display.querySelectorAll('.sketchpad-color-select')
     );
     for (const btn of color_btns) {
-      btn.addEventListener("click", (e) => {
+      btn.addEventListener('click', (e) => {
         const target = e.target as HTMLButtonElement;
-        this.current_stroke_color = target.getAttribute("data-color");
+        this.current_stroke_color = target.getAttribute('data-color');
       });
     }
 
@@ -485,13 +485,13 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
   }
 
   private add_css() {
-    document.querySelector("head").insertAdjacentHTML(
-      "beforeend",
+    document.querySelector('head').insertAdjacentHTML(
+      'beforeend',
       `<style id="sketchpad-styles">
         #sketchpad-controls {
           line-height: 1; 
           width:${
-            this.params.canvas_shape == "rectangle"
+            this.params.canvas_shape == 'rectangle'
               ? this.params.canvas_width + this.params.canvas_border_width * 2
               : this.params.canvas_diameter + this.params.canvas_border_width * 2
           }px; 
@@ -521,7 +521,7 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
         }
         #countdown-timer {
           width:${
-            this.params.canvas_shape == "rectangle"
+            this.params.canvas_shape == 'rectangle'
               ? this.params.canvas_width + this.params.canvas_border_width * 2
               : this.params.canvas_diameter + this.params.canvas_border_width * 2
           }px; 
@@ -535,10 +535,10 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
 
   private add_background_color() {
     this.ctx.fillStyle = this.params.background_color;
-    if (this.params.canvas_shape == "rectangle") {
+    if (this.params.canvas_shape == 'rectangle') {
       this.ctx.fillRect(0, 0, this.params.canvas_width, this.params.canvas_height);
     }
-    if (this.params.canvas_shape == "circle") {
+    if (this.params.canvas_shape == 'circle') {
       this.ctx.fillRect(0, 0, this.params.canvas_diameter, this.params.canvas_diameter);
     }
   }
@@ -570,14 +570,14 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
     this.ctx.beginPath();
     this.ctx.moveTo(x, y);
     this.ctx.strokeStyle = this.current_stroke_color;
-    this.ctx.lineJoin = "round";
+    this.ctx.lineJoin = 'round';
     this.ctx.lineWidth = this.params.stroke_width;
     this.stroke = [];
     this.stroke.push({
       x: x,
       y: y,
       color: this.current_stroke_color,
-      action: "start",
+      action: 'start',
       t: Math.round(performance.now() - this.start_time),
     });
 
@@ -594,7 +594,7 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
       this.stroke.push({
         x: x,
         y: y,
-        action: "move",
+        action: 'move',
       });
     }
   }
@@ -602,7 +602,7 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
   private end_draw(e) {
     if (this.is_drawing) {
       this.stroke.push({
-        action: "end",
+        action: 'end',
         t: Math.round(performance.now() - this.start_time),
       });
       this.strokes.push(this.stroke);
@@ -620,14 +620,14 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
     }
     for (const stroke of this.strokes) {
       for (const m of stroke) {
-        if (m.action == "start") {
+        if (m.action == 'start') {
           this.ctx.beginPath();
           this.ctx.moveTo(m.x, m.y);
           this.ctx.strokeStyle = m.color;
-          this.ctx.lineJoin = "round";
+          this.ctx.lineJoin = 'round';
           this.ctx.lineWidth = this.params.stroke_width;
         }
-        if (m.action == "move") {
+        if (m.action == 'move') {
           this.ctx.lineTo(m.x, m.y);
           this.ctx.stroke();
         }
@@ -664,19 +664,19 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
 
   private set_undo_btn_state(enabled: boolean) {
     if (this.params.show_undo_button) {
-      (this.display.querySelector("#sketchpad-undo") as HTMLButtonElement).disabled = !enabled;
+      (this.display.querySelector('#sketchpad-undo') as HTMLButtonElement).disabled = !enabled;
     }
   }
 
   private set_redo_btn_state(enabled: boolean) {
     if (this.params.show_undo_button && this.params.show_redo_button) {
-      (this.display.querySelector("#sketchpad-redo") as HTMLButtonElement).disabled = !enabled;
+      (this.display.querySelector('#sketchpad-redo') as HTMLButtonElement).disabled = !enabled;
     }
   }
 
   private set_clear_btn_state(enabled: boolean) {
     if (this.params.show_clear_button) {
-      (this.display.querySelector("#sketchpad-clear") as HTMLButtonElement).disabled = !enabled;
+      (this.display.querySelector('#sketchpad-clear') as HTMLButtonElement).disabled = !enabled;
     }
   }
 
@@ -695,8 +695,8 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
             minutes++;
           }
           const minutes_str = minutes.toString();
-          const seconds_str = seconds.toString().padStart(2, "0");
-          const timer_span = this.display.querySelector("#sketchpad-timer");
+          const seconds_str = seconds.toString().padStart(2, '0');
+          const timer_span = this.display.querySelector('#sketchpad-timer');
           if (timer_span) {
             timer_span.innerHTML = `${minutes_str}:${seconds_str}`;
           }
@@ -732,7 +732,7 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
       trial_data.strokes = this.strokes;
     }
 
-    document.querySelector("#sketchpad-styles").remove();
+    document.querySelector('#sketchpad-styles').remove();
 
     this.jsPsych.finishTrial(trial_data);
 

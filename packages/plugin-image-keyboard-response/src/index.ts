@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
 
-import { version } from "../package.json";
+import { version } from '../package.json';
 
 const info = <const>{
-  name: "image-keyboard-response",
+  name: 'image-keyboard-response',
   version: version,
   parameters: {
     /** The path of the image file to be displayed. */
@@ -35,7 +35,7 @@ const info = <const>{
      * means that all keys will be accepted as valid responses. Specifying `"NO_KEYS"` will mean that no responses are allowed. */
     choices: {
       type: ParameterType.KEYS,
-      default: "ALL_KEYS",
+      default: 'ALL_KEYS',
     },
     /**This string can contain HTML markup. Any content here will be displayed below the stimulus. The intention is that it can
      * be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press). */
@@ -88,7 +88,7 @@ const info = <const>{
       type: ParameterType.INT,
     },
   },
-  citations: "__CITATIONS__",
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
@@ -122,11 +122,11 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         }
       }
       // create canvas element and image
-      var canvas = document.createElement("canvas");
-      canvas.id = "jspsych-image-keyboard-response-stimulus";
-      canvas.style.margin = "0";
-      canvas.style.padding = "0";
-      var ctx = canvas.getContext("2d");
+      var canvas = document.createElement('canvas');
+      canvas.id = 'jspsych-image-keyboard-response-stimulus';
+      canvas.style.margin = '0';
+      canvas.style.padding = '0';
+      var ctx = canvas.getContext('2d');
       var img = new Image();
       img.onload = () => {
         // if image wasn't preloaded, then it will need to be drawn whenever it finishes loading
@@ -170,7 +170,7 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       }
       // add prompt if there is one
       if (trial.prompt !== null) {
-        display_element.insertAdjacentHTML("beforeend", trial.prompt);
+        display_element.insertAdjacentHTML('beforeend', trial.prompt);
       }
     } else {
       // display stimulus as an image element
@@ -184,7 +184,7 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
       // set image dimensions after image has loaded (so that we have access to naturalHeight/naturalWidth)
       var img = display_element.querySelector(
-        "#jspsych-image-keyboard-response-stimulus"
+        '#jspsych-image-keyboard-response-stimulus'
       ) as HTMLImageElement;
       if (trial.stimulus_height !== null) {
         height = trial.stimulus_height;
@@ -204,8 +204,8 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         // in the if statement above, based on a specified height and maintain_aspect_ratio = true
         width = img.naturalWidth;
       }
-      img.style.height = height.toString() + "px";
-      img.style.width = width.toString() + "px";
+      img.style.height = height.toString() + 'px';
+      img.style.width = width.toString() + 'px';
     }
 
     // store response
@@ -217,7 +217,7 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     // function to end trial when it is time
     const end_trial = () => {
       // kill keyboard listeners
-      if (typeof keyboardListener !== "undefined") {
+      if (typeof keyboardListener !== 'undefined') {
         this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
       }
 
@@ -236,8 +236,8 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     var after_response = (info) => {
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.querySelector("#jspsych-image-keyboard-response-stimulus").className +=
-        " responded";
+      display_element.querySelector('#jspsych-image-keyboard-response-stimulus').className +=
+        ' responded';
 
       // only record the first response
       if (response.key == null) {
@@ -250,11 +250,11 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     // start the response listener
-    if (trial.choices != "NO_KEYS") {
+    if (trial.choices != 'NO_KEYS') {
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: trial.choices,
-        rt_method: "performance",
+        rt_method: 'performance',
         persist: false,
         allow_held_key: false,
       });
@@ -264,8 +264,8 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
-          "#jspsych-image-keyboard-response-stimulus"
-        ).style.visibility = "hidden";
+          '#jspsych-image-keyboard-response-stimulus'
+        ).style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
 
@@ -276,7 +276,7 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       }, trial.trial_duration);
     } else if (trial.response_ends_trial === false) {
       console.warn(
-        "The experiment may be deadlocked. Try setting a trial duration or set response_ends_trial to true."
+        'The experiment may be deadlocked. Try setting a trial duration or set response_ends_trial to true.'
       );
     }
   }
@@ -287,11 +287,11 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == "data-only") {
+    if (simulation_mode == 'data-only') {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == "visual") {
+    if (simulation_mode == 'visual') {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
