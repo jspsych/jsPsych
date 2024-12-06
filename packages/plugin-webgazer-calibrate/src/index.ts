@@ -1,10 +1,10 @@
-import type WebGazerExtension from '@jspsych/extension-webgazer';
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import type WebGazerExtension from "@jspsych/extension-webgazer";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'webgazer-calibrate',
+  name: "webgazer-calibrate",
   version: version,
   parameters: {
     /** Array of points in `[x,y]` coordinates. Specified as a percentage of the screen width and height, from the left and top edge. The default grid is 9 points. */
@@ -26,8 +26,8 @@ const info = <const>{
     /** Can specify `click` to have participants click on calibration points or `view` to have participants passively watch calibration points.  */
     calibration_mode: {
       type: ParameterType.SELECT,
-      options: ['click', 'view'],
-      default: 'click',
+      options: ["click", "view"],
+      default: "click",
     },
     /** Diameter of the calibration points in pixels. */
     point_size: {
@@ -62,6 +62,7 @@ const info = <const>{
   data: {
     // no data collected
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -90,7 +91,7 @@ class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
 
     display_element.innerHTML = html;
 
-    var wg_container = display_element.querySelector('#webgazer-calibrate-container');
+    var wg_container = display_element.querySelector("#webgazer-calibrate-container");
 
     var reps_completed = 0;
     var points_completed = -1;
@@ -108,7 +109,7 @@ class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
 
     const calibrate = () => {
       extension.resume();
-      if (trial.calibration_mode == 'click') {
+      if (trial.calibration_mode == "click") {
         extension.startMouseCalibration();
       }
       next_calibration_round();
@@ -133,16 +134,16 @@ class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
       var pt_html = `<div id="calibration-point" style="width:${trial.point_size}px; height:${trial.point_size}px; border-radius:${trial.point_size}px; border: 1px solid #000; background-color: #333; position: absolute; left:${pt[0]}%; top:${pt[1]}%;"></div>`;
       wg_container.innerHTML = pt_html;
 
-      var pt_dom = wg_container.querySelector<HTMLElement>('#calibration-point');
+      var pt_dom = wg_container.querySelector<HTMLElement>("#calibration-point");
 
-      if (trial.calibration_mode == 'click') {
-        pt_dom.style.cursor = 'pointer';
-        pt_dom.addEventListener('click', () => {
+      if (trial.calibration_mode == "click") {
+        pt_dom.style.cursor = "pointer";
+        pt_dom.addEventListener("click", () => {
           next_calibration_point();
         });
       }
 
-      if (trial.calibration_mode == 'view') {
+      if (trial.calibration_mode == "view") {
         var br = pt_dom.getBoundingClientRect();
         var x = br.left + br.width / 2;
         var y = br.top + br.height / 2;
@@ -166,10 +167,10 @@ class WebgazerCalibratePlugin implements JsPsychPlugin<Info> {
     };
 
     const calibration_done = () => {
-      if (trial.calibration_mode == 'click') {
+      if (trial.calibration_mode == "click") {
         extension.stopMouseCalibration();
       }
-      wg_container.innerHTML = '';
+      wg_container.innerHTML = "";
       end_trial();
     };
 

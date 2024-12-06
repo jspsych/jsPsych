@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'survey-multi-select',
+  name: "survey-multi-select",
   version: version,
   parameters: {
     /**
@@ -46,7 +46,7 @@ const info = <const>{
         /** Name of the question in the trial data. If no name is given, the questions are named Q0, Q1, etc. */
         name: {
           type: ParameterType.STRING,
-          default: '',
+          default: "",
         },
       },
     },
@@ -67,12 +67,12 @@ const info = <const>{
     /** Label of the button to submit responses. */
     button_label: {
       type: ParameterType.STRING,
-      default: 'Continue',
+      default: "Continue",
     },
     /** 'You must choose at least one response for this question' | Message to display if required response is not given. */
     required_message: {
       type: ParameterType.STRING,
-      default: 'You must choose at least one response for this question',
+      default: "You must choose at least one response for this question",
     },
     /** This determines whether or not all of the input elements on the page should allow autocomplete.
      * Setting this to true will enable autocomplete or auto-fill for the form. */
@@ -110,6 +110,7 @@ const info = <const>{
       array: true,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -127,30 +128,30 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    var plugin_id_name = 'jspsych-survey-multi-select';
-    var plugin_id_selector = '#' + plugin_id_name;
-    const _join = (...args: Array<string | number>) => args.join('-');
+    var plugin_id_name = "jspsych-survey-multi-select";
+    var plugin_id_selector = "#" + plugin_id_name;
+    const _join = (...args: Array<string | number>) => args.join("-");
 
     // inject CSS for trial
     var cssstr =
-      '.jspsych-survey-multi-select-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }' +
-      '.jspsych-survey-multi-select-text span.required {color: darkred;}' +
-      '.jspsych-survey-multi-select-horizontal .jspsych-survey-multi-select-text {  text-align: center;}' +
-      '.jspsych-survey-multi-select-option { line-height: 2; }' +
-      '.jspsych-survey-multi-select-horizontal .jspsych-survey-multi-select-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}' +
+      ".jspsych-survey-multi-select-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }" +
+      ".jspsych-survey-multi-select-text span.required {color: darkred;}" +
+      ".jspsych-survey-multi-select-horizontal .jspsych-survey-multi-select-text {  text-align: center;}" +
+      ".jspsych-survey-multi-select-option { line-height: 2; }" +
+      ".jspsych-survey-multi-select-horizontal .jspsych-survey-multi-select-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}" +
       "label.jspsych-survey-multi-select-text input[type='checkbox'] {margin-right: 1em;}";
     display_element.innerHTML =
-      '<style id="jspsych-survey-multi-select-css">' + cssstr + '</style>';
+      '<style id="jspsych-survey-multi-select-css">' + cssstr + "</style>";
 
     // form element
-    var trial_form_id = _join(plugin_id_name, 'form');
+    var trial_form_id = _join(plugin_id_name, "form");
     display_element.innerHTML += '<form id="' + trial_form_id + '"></form>';
-    var trial_form = display_element.querySelector<HTMLFormElement>('#' + trial_form_id);
+    var trial_form = display_element.querySelector<HTMLFormElement>("#" + trial_form_id);
     if (!trial.autocomplete) {
-      trial_form.setAttribute('autocomplete', 'off');
+      trial_form.setAttribute("autocomplete", "off");
     }
     // show preamble text
-    var preamble_id_name = _join(plugin_id_name, 'preamble');
+    var preamble_id_name = _join(plugin_id_name, "preamble");
     if (trial.preamble !== null) {
       trial_form.innerHTML +=
         '<div id="' +
@@ -159,7 +160,7 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
         preamble_id_name +
         '">' +
         trial.preamble +
-        '</div>';
+        "</div>";
     }
     // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
     // so that the data are always associated with the same question regardless of order
@@ -175,9 +176,9 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
       var question = trial.questions[question_order[i]];
       var question_id = question_order[i];
       // create question container
-      var question_classes = [_join(plugin_id_name, 'question')];
+      var question_classes = [_join(plugin_id_name, "question")];
       if (question.horizontal) {
-        question_classes.push(_join(plugin_id_name, 'horizontal'));
+        question_classes.push(_join(plugin_id_name, "horizontal"));
       }
 
       trial_form.innerHTML +=
@@ -186,7 +187,7 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
         '" data-name="' +
         question.name +
         '" class="' +
-        question_classes.join(' ') +
+        question_classes.join(" ") +
         '"></div>';
 
       var question_selector = _join(plugin_id_selector, question_id);
@@ -197,31 +198,31 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
         plugin_id_name +
         '-text survey-multi-select">' +
         question.prompt +
-        '</p>';
+        "</p>";
 
       // create option check boxes
       for (var j = 0; j < question.options.length; j++) {
-        var option_id_name = _join(plugin_id_name, 'option', question_id, j);
+        var option_id_name = _join(plugin_id_name, "option", question_id, j);
 
         // add check box container
         display_element.querySelector(question_selector).innerHTML +=
-          '<div id="' + option_id_name + '" class="' + _join(plugin_id_name, 'option') + '"></div>';
+          '<div id="' + option_id_name + '" class="' + _join(plugin_id_name, "option") + '"></div>';
 
         // add label and question text
         var form = document.getElementById(option_id_name);
-        var input_name = _join(plugin_id_name, 'response', question_id);
-        var input_id = _join(plugin_id_name, 'response', question_id, j);
-        var label = document.createElement('label');
-        label.setAttribute('class', plugin_id_name + '-text');
+        var input_name = _join(plugin_id_name, "response", question_id);
+        var input_id = _join(plugin_id_name, "response", question_id, j);
+        var label = document.createElement("label");
+        label.setAttribute("class", plugin_id_name + "-text");
         label.innerHTML = question.options[j];
-        label.setAttribute('for', input_id);
+        label.setAttribute("for", input_id);
 
         // create checkboxes
-        var input = document.createElement('input');
-        input.setAttribute('type', 'checkbox');
-        input.setAttribute('name', input_name);
-        input.setAttribute('id', input_id);
-        input.setAttribute('value', question.options[j]);
+        var input = document.createElement("input");
+        input.setAttribute("type", "checkbox");
+        input.setAttribute("name", input_name);
+        input.setAttribute("id", input_id);
+        input.setAttribute("value", question.options[j]);
         form.appendChild(label);
         label.insertBefore(input, label.firstChild);
       }
@@ -235,34 +236,34 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
       plugin_id_name +
       ' jspsych-btn">' +
       trial.button_label +
-      '</button>';
+      "</button>";
 
     // validation check on the data first for custom validation handling
     // then submit the form
     display_element
-      .querySelector('#jspsych-survey-multi-select-next')
-      .addEventListener('click', () => {
+      .querySelector("#jspsych-survey-multi-select-next")
+      .addEventListener("click", () => {
         for (var i = 0; i < trial.questions.length; i++) {
           if (trial.questions[i].required) {
             if (
               display_element.querySelector(
-                '#jspsych-survey-multi-select-' + i + ' input:checked'
+                "#jspsych-survey-multi-select-" + i + " input:checked"
               ) == null
             ) {
               display_element
-                .querySelector<HTMLInputElement>('#jspsych-survey-multi-select-' + i + ' input')
+                .querySelector<HTMLInputElement>("#jspsych-survey-multi-select-" + i + " input")
                 .setCustomValidity(trial.required_message);
             } else {
               display_element
-                .querySelector<HTMLInputElement>('#jspsych-survey-multi-select-' + i + ' input')
-                .setCustomValidity('');
+                .querySelector<HTMLInputElement>("#jspsych-survey-multi-select-" + i + " input")
+                .setCustomValidity("");
             }
           }
         }
         trial_form.reportValidity();
       });
 
-    trial_form.addEventListener('submit', (event) => {
+    trial_form.addEventListener("submit", (event) => {
       event.preventDefault();
       // measure response time
       var endTime = performance.now();
@@ -272,18 +273,18 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
       var question_data = {};
       var has_response = [];
       for (var index = 0; index < trial.questions.length; index++) {
-        var match = display_element.querySelector('#jspsych-survey-multi-select-' + index);
+        var match = display_element.querySelector("#jspsych-survey-multi-select-" + index);
         var val = [];
-        var inputboxes = match.querySelectorAll<HTMLInputElement>('input[type=checkbox]:checked');
+        var inputboxes = match.querySelectorAll<HTMLInputElement>("input[type=checkbox]:checked");
         for (var j = 0; j < inputboxes.length; j++) {
           var currentChecked = inputboxes[j];
           val.push(currentChecked.value);
         }
-        var id = 'Q' + index;
+        var id = "Q" + index;
         var obje = {};
         var name = id;
-        if (match.attributes['data-name'].value !== '') {
-          name = match.attributes['data-name'].value;
+        if (match.attributes["data-name"].value !== "") {
+          name = match.attributes["data-name"].value;
         }
         obje[name] = val;
         Object.assign(question_data, obje);
@@ -314,11 +315,11 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == 'data-only') {
+    if (simulation_mode == "data-only") {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == 'visual') {
+    if (simulation_mode == "visual") {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -382,7 +383,7 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
     }
 
     this.jsPsych.pluginAPI.clickTarget(
-      display_element.querySelector('#jspsych-survey-multi-select-next'),
+      display_element.querySelector("#jspsych-survey-multi-select-next"),
       data.rt
     );
   }

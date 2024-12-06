@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'virtual-chinrest',
+  name: "virtual-chinrest",
   version: version,
   parameters: {
     /**
@@ -12,8 +12,8 @@ const info = <const>{
      */
     resize_units: {
       type: ParameterType.SELECT,
-      options: ['none', 'cm', 'inch', 'deg'],
-      default: 'none',
+      options: ["none", "cm", "inch", "deg"],
+      default: "none",
     },
     /**
      * After the scaling factor is applied, this many pixels will equal one unit of measurement, where
@@ -44,7 +44,7 @@ const info = <const>{
     /** Content of the button displayed below the card stimulus during the resizing phase. */
     adjustment_button_prompt: {
       type: ParameterType.HTML_STRING,
-      default: 'Click here when the image is the correct size',
+      default: "Click here when the image is the correct size",
     },
     /** Path of the item to be presented in the card stimulus during the resizing phase. If `null` then no
      * image is shown, and a solid color background is used instead. _An example image is available in
@@ -78,7 +78,7 @@ const info = <const>{
     /** This string can contain HTML markup. Any content here will be displayed **above the blindspot task**. */
     blindspot_prompt: {
       type: ParameterType.HTML_STRING,
-      pretty_name: 'Blindspot prompt',
+      pretty_name: "Blindspot prompt",
       default: `
           <p>Now we will quickly measure how far away you are sitting.</p>
           <div style="text-align: left">
@@ -101,7 +101,7 @@ const info = <const>{
     /** Text accompanying the remaining measurements counter that appears below the blindspot task. */
     blindspot_measurements_prompt: {
       type: ParameterType.HTML_STRING,
-      default: 'Remaining measurements: ',
+      default: "Remaining measurements: ",
     },
     /** Estimated viewing distance data displayed after blindspot task. If `"none"` is given, viewing distance will not be reported to the participant. The HTML `span` element with `id = distance-estimate` returns the distance. */
     viewing_distance_report: {
@@ -112,12 +112,12 @@ const info = <const>{
     /** Text for the button on the viewing distance report page to re-do the viewing distance estimate. If the participant click this button, the blindspot task starts again. */
     redo_measurement_button_label: {
       type: ParameterType.HTML_STRING,
-      default: 'No, that is not close. Try again.',
+      default: "No, that is not close. Try again.",
     },
     /** Text for the button on the viewing distance report page that can be clicked to accept the viewing distance estimate. */
     blindspot_done_prompt: {
       type: ParameterType.HTML_STRING,
-      default: 'Yes',
+      default: "Yes",
     },
   },
   data: {
@@ -170,6 +170,7 @@ const info = <const>{
       type: ParameterType.FLOAT,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -227,10 +228,10 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
     /** check parameter compatibility */
     if (
       !(trial.blindspot_reps > 0) &&
-      (trial.resize_units == 'deg' || trial.resize_units == 'degrees')
+      (trial.resize_units == "deg" || trial.resize_units == "degrees")
     ) {
       console.error(
-        'Blindspot repetitions set to 0, so resizing to degrees of visual angle is not possible!'
+        "Blindspot repetitions set to 0, so resizing to degrees of visual angle is not possible!"
       );
       return;
     }
@@ -261,7 +262,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
         <div id="page-size">
           <div id="item" style="border: none; height: ${start_div_height}px; width: ${start_div_width}px; margin: 5px auto; background-color: #ddd; position: relative; ${
       trial.item_path === null
-        ? ''
+        ? ""
         : `background-image: url(${trial.item_path}); background-size: 100% auto; background-repeat: no-repeat;`
     }">
             <div id="jspsych-resize-handle" style="cursor: nwse-resize; background-color: none; width: ${adjust_size}px; height: ${adjust_size}px; border: 5px solid red; border-left: 0; border-top: 0; position: absolute; bottom: 0; right: 0;">
@@ -304,18 +305,18 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
     startResizePhase();
 
     function startResizePhase() {
-      display_element.querySelector('#content').innerHTML = pagesize_content;
+      display_element.querySelector("#content").innerHTML = pagesize_content;
 
       // Event listeners for mouse-based resize
       let dragging = false;
       let origin_x, origin_y;
       let cx, cy;
-      const scale_div = display_element.querySelector<HTMLElement>('#item');
+      const scale_div = display_element.querySelector<HTMLElement>("#item");
 
       function mouseupevent() {
         dragging = false;
       }
-      document.addEventListener('mouseup', mouseupevent);
+      document.addEventListener("mouseup", mouseupevent);
 
       function mousedownevent(e) {
         e.preventDefault();
@@ -326,8 +327,8 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
         cy = parseInt(scale_div.style.height);
       }
       display_element
-        .querySelector('#jspsych-resize-handle')
-        .addEventListener('mousedown', mousedownevent);
+        .querySelector("#jspsych-resize-handle")
+        .addEventListener("mousedown", mousedownevent);
 
       function resizeevent(e) {
         if (dragging) {
@@ -335,27 +336,27 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
           let dy = e.pageY - origin_y;
 
           if (Math.abs(dx) >= Math.abs(dy)) {
-            scale_div.style.width = Math.round(Math.max(20, cx + dx * 2)) + 'px';
-            scale_div.style.height = Math.round(Math.max(20, cx + dx * 2) / aspect_ratio) + 'px';
+            scale_div.style.width = Math.round(Math.max(20, cx + dx * 2)) + "px";
+            scale_div.style.height = Math.round(Math.max(20, cx + dx * 2) / aspect_ratio) + "px";
           } else {
-            scale_div.style.height = Math.round(Math.max(20, cy + dy * 2)) + 'px';
-            scale_div.style.width = Math.round(aspect_ratio * Math.max(20, cy + dy * 2)) + 'px';
+            scale_div.style.height = Math.round(Math.max(20, cy + dy * 2)) + "px";
+            scale_div.style.width = Math.round(aspect_ratio * Math.max(20, cy + dy * 2)) + "px";
           }
         }
       }
-      display_element.addEventListener('mousemove', resizeevent);
+      display_element.addEventListener("mousemove", resizeevent);
 
       display_element
-        .querySelector('#end_resize_phase')
-        .addEventListener('click', finishResizePhase);
+        .querySelector("#end_resize_phase")
+        .addEventListener("click", finishResizePhase);
     }
 
     function finishResizePhase() {
       // add item width info to data
-      const item_width_px = document.querySelector('#item').getBoundingClientRect().width;
-      trial_data['item_width_px'] = Math.round(item_width_px);
+      const item_width_px = document.querySelector("#item").getBoundingClientRect().width;
+      trial_data["item_width_px"] = Math.round(item_width_px);
       const px2mm = convertPixelsToMM(item_width_px);
-      trial_data['px2mm'] = accurateRound(px2mm, 2);
+      trial_data["px2mm"] = accurateRound(px2mm, 2);
       // check what to do next
       if (trial.blindspot_reps > 0) {
         startBlindSpotPhase();
@@ -371,8 +372,8 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
         slider_clck: false,
       };
       // add the content to the page
-      display_element.querySelector('#content').innerHTML = blindspot_content;
-      this.container = display_element.querySelector('#svgDiv');
+      display_element.querySelector("#content").innerHTML = blindspot_content;
+      this.container = display_element.querySelector("#svgDiv");
 
       // draw the ball and fixation square
       drawBall();
@@ -389,8 +390,8 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
       // wait for a spacebar to begin the animations
       this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: startBall,
-        valid_responses: [' '],
-        rt_method: 'performance',
+        valid_responses: [" "],
+        rt_method: "performance",
         allow_held_key: false,
         persist: false,
       });
@@ -399,8 +400,8 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
     const startBall = () => {
       this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: recordPosition,
-        valid_responses: [' '],
-        rt_method: 'performance',
+        valid_responses: [" "],
+        rt_method: "performance",
         allow_held_key: false,
         persist: false,
       });
@@ -412,20 +413,20 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
       const angle = 13.5;
 
       // calculate average ball position
-      const sum = blindspot_config_data['ball_pos'].reduce((a, b) => a + b, 0);
-      const ballPosLen = blindspot_config_data['ball_pos'].length;
-      blindspot_config_data['avg_ball_pos'] = accurateRound(sum / ballPosLen, 2);
+      const sum = blindspot_config_data["ball_pos"].reduce((a, b) => a + b, 0);
+      const ballPosLen = blindspot_config_data["ball_pos"].length;
+      blindspot_config_data["avg_ball_pos"] = accurateRound(sum / ballPosLen, 2);
 
       // calculate distance between avg ball position and square
       const ball_sqr_distance =
-        (blindspot_config_data['square_pos'] - blindspot_config_data['avg_ball_pos']) /
-        trial_data['px2mm'];
+        (blindspot_config_data["square_pos"] - blindspot_config_data["avg_ball_pos"]) /
+        trial_data["px2mm"];
 
       // calculate viewing distance in mm
       const viewDistance = ball_sqr_distance / Math.tan(deg_to_radians(angle));
-      trial_data['view_dist_mm'] = accurateRound(viewDistance, 2);
+      trial_data["view_dist_mm"] = accurateRound(viewDistance, 2);
 
-      if (trial.viewing_distance_report == 'none') {
+      if (trial.viewing_distance_report == "none") {
         endTrial();
       } else {
         showReport();
@@ -434,44 +435,44 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
 
     function showReport() {
       // Display data
-      display_element.querySelector('#content').innerHTML = report_content;
-      display_element.querySelector('#distance-estimate').innerHTML = `
-          ${Math.round(trial_data['view_dist_mm'] / 10)} cm (${Math.round(
-        trial_data['view_dist_mm'] * 0.0393701
+      display_element.querySelector("#content").innerHTML = report_content;
+      display_element.querySelector("#distance-estimate").innerHTML = `
+          ${Math.round(trial_data["view_dist_mm"] / 10)} cm (${Math.round(
+        trial_data["view_dist_mm"] * 0.0393701
       )} inches)
         `;
 
       display_element
-        .querySelector('#redo_blindspot')
-        .addEventListener('click', startBlindSpotPhase);
-      display_element.querySelector('#proceed').addEventListener('click', endTrial);
+        .querySelector("#redo_blindspot")
+        .addEventListener("click", startBlindSpotPhase);
+      display_element.querySelector("#proceed").addEventListener("click", endTrial);
     }
 
     function computeTransformation() {
       trial_data.item_width_deg =
-        (2 * Math.atan(trial_data['item_width_mm'] / 2 / trial_data['view_dist_mm']) * 180) /
+        (2 * Math.atan(trial_data["item_width_mm"] / 2 / trial_data["view_dist_mm"]) * 180) /
         Math.PI;
-      trial_data.px2deg = trial_data['item_width_px'] / trial_data.item_width_deg; // size of item in pixels divided by size of item in degrees of visual angle
+      trial_data.px2deg = trial_data["item_width_px"] / trial_data.item_width_deg; // size of item in pixels divided by size of item in degrees of visual angle
 
       let px2unit_scr = 0;
       switch (trial.resize_units) {
-        case 'cm':
-        case 'centimeters':
-          px2unit_scr = trial_data['px2mm'] * 10; // pixels per centimeter
+        case "cm":
+        case "centimeters":
+          px2unit_scr = trial_data["px2mm"] * 10; // pixels per centimeter
           break;
-        case 'inch':
-        case 'inches':
-          px2unit_scr = trial_data['px2mm'] * 25.4; // pixels per inch
+        case "inch":
+        case "inches":
+          px2unit_scr = trial_data["px2mm"] * 25.4; // pixels per inch
           break;
-        case 'deg':
-        case 'degrees':
-          px2unit_scr = trial_data['px2deg']; // pixels per degree of visual angle
+        case "deg":
+        case "degrees":
+          px2unit_scr = trial_data["px2deg"]; // pixels per degree of visual angle
           break;
       }
       if (px2unit_scr > 0) {
         // scale the window
         let scale_factor = px2unit_scr / trial.pixels_per_unit;
-        document.getElementById('jspsych-content').style.transform = 'scale(' + scale_factor + ')';
+        document.getElementById("jspsych-content").style.transform = "scale(" + scale_factor + ")";
         // pixels have been scaled, so pixels per degree, pixels per mm and pixels per item_width needs to be updated
         trial_data.px2deg = trial_data.px2deg / scale_factor;
         trial_data.px2mm = trial_data.px2mm / scale_factor;
@@ -509,8 +510,8 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
         <div id="virtual-chinrest-square" style="position: absolute; background-color: #000; width: ${this.ball_size}px; height: ${this.ball_size}px;"></div>
       `;
 
-      const ball: HTMLElement = this.container.querySelector('#virtual-chinrest-circle');
-      const square: HTMLElement = this.container.querySelector('#virtual-chinrest-square');
+      const ball: HTMLElement = this.container.querySelector("#virtual-chinrest-circle");
+      const square: HTMLElement = this.container.querySelector("#virtual-chinrest-square");
 
       const rectX = this.container.getBoundingClientRect().width - this.ball_size;
       const ballX = rectX * 0.85; // define where the ball is
@@ -520,7 +521,7 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
 
       this.ball = ball;
 
-      blindspot_config_data['square_pos'] = accurateRound(getElementCenter(square).x, 2);
+      blindspot_config_data["square_pos"] = accurateRound(getElementCenter(square).x, 2);
     };
 
     const animateBall = () => {
@@ -534,12 +535,12 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
     const recordPosition = () => {
       cancelAnimationFrame(this.ball_animation_frame_id);
 
-      blindspot_config_data['ball_pos'].push(accurateRound(getElementCenter(this.ball).x, 2));
+      blindspot_config_data["ball_pos"].push(accurateRound(getElementCenter(this.ball).x, 2));
 
       //counter and stop
       this.reps_remaining--;
 
-      (document.querySelector('#click') as HTMLDivElement).textContent = Math.max(
+      (document.querySelector("#click") as HTMLDivElement).textContent = Math.max(
         this.reps_remaining,
         0
       ).toString();
@@ -552,12 +553,12 @@ class VirtualChinrestPlugin implements JsPsychPlugin<Info> {
     };
 
     function convertPixelsToMM(item_width_px) {
-      const px2mm = item_width_px / trial_data['item_width_mm'];
+      const px2mm = item_width_px / trial_data["item_width_mm"];
       return px2mm;
     }
 
     function accurateRound(value, decimals) {
-      return Number(Math.round(Number(value + 'e' + decimals)) + 'e-' + decimals);
+      return Number(Math.round(Number(value + "e" + decimals)) + "e-" + decimals);
     }
 
     function getElementCenter(el: HTMLElement) {

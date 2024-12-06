@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'fullscreen',
+  name: "fullscreen",
   version: version,
   parameters: {
     /** A value of `true` causes the experiment to enter fullscreen mode. A value of `false` causes the browser to exit fullscreen mode. */
@@ -16,13 +16,13 @@ const info = <const>{
     message: {
       type: ParameterType.HTML_STRING,
       default:
-        '<p>The experiment will switch to full screen mode when you press the button below</p>',
+        "<p>The experiment will switch to full screen mode when you press the button below</p>",
       array: false,
     },
     /** The text that appears on the button to enter fullscreen mode. */
     button_label: {
       type: ParameterType.STRING,
-      default: 'Continue',
+      default: "Continue",
       array: false,
     },
     /** The length of time to delay after entering fullscreen mode before ending the trial. This can be useful because entering fullscreen is jarring and most browsers display some kind of message that the browser has entered fullscreen mode. */
@@ -37,15 +37,16 @@ const info = <const>{
     success: {
       type: ParameterType.BOOL,
       default: null,
-      description: 'True if the user entered fullscreen mode, false if not.',
+      description: "True if the user entered fullscreen mode, false if not.",
     },
     /** Response time to click the button that launches fullscreen mode */
     rt: {
       type: ParameterType.INT,
       default: null,
-      description: 'Time in milliseconds until the user entered fullscreen mode.',
+      description: "Time in milliseconds until the user entered fullscreen mode.",
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -69,7 +70,7 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // check if keys are allowed in fullscreen mode
-    var keyboardNotAllowed = typeof Element !== 'undefined' && 'ALLOW_KEYBOARD_INPUT' in Element;
+    var keyboardNotAllowed = typeof Element !== "undefined" && "ALLOW_KEYBOARD_INPUT" in Element;
     if (keyboardNotAllowed) {
       // This is Safari, and keyboard events will be disabled. Don't allow fullscreen here.
       // do something else?
@@ -89,7 +90,7 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
       ${trial.message}
       <button id="jspsych-fullscreen-btn" class="jspsych-btn">${trial.button_label}</button>
     `;
-    display_element.querySelector('#jspsych-fullscreen-btn').addEventListener('click', () => {
+    display_element.querySelector("#jspsych-fullscreen-btn").addEventListener("click", () => {
       this.rt = Math.round(performance.now() - this.start_time);
       this.enterFullScreen();
       this.endTrial(display_element, true, trial);
@@ -98,7 +99,7 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
   }
 
   private endTrial(display_element, success, trial) {
-    display_element.innerHTML = '';
+    display_element.innerHTML = "";
 
     this.jsPsych.pluginAPI.setTimeout(() => {
       var trial_data = {
@@ -114,29 +115,29 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
     var element = document.documentElement;
     if (element.requestFullscreen) {
       element.requestFullscreen();
-    } else if (element['mozRequestFullScreen']) {
-      element['mozRequestFullScreen']();
-    } else if (element['webkitRequestFullscreen']) {
-      element['webkitRequestFullscreen']();
-    } else if (element['msRequestFullscreen']) {
-      element['msRequestFullscreen']();
+    } else if (element["mozRequestFullScreen"]) {
+      element["mozRequestFullScreen"]();
+    } else if (element["webkitRequestFullscreen"]) {
+      element["webkitRequestFullscreen"]();
+    } else if (element["msRequestFullscreen"]) {
+      element["msRequestFullscreen"]();
     }
   }
 
   private exitFullScreen() {
     if (
       document.fullscreenElement ||
-      document['mozFullScreenElement'] ||
-      document['webkitFullscreenElement']
+      document["mozFullScreenElement"] ||
+      document["webkitFullscreenElement"]
     ) {
       if (document.exitFullscreen) {
         document.exitFullscreen();
-      } else if (document['msExitFullscreen']) {
-        document['msExitFullscreen']();
-      } else if (document['mozCancelFullScreen']) {
-        document['mozCancelFullScreen']();
-      } else if (document['webkitExitFullscreen']) {
-        document['webkitExitFullscreen']();
+      } else if (document["msExitFullscreen"]) {
+        document["msExitFullscreen"]();
+      } else if (document["mozCancelFullScreen"]) {
+        document["mozCancelFullScreen"]();
+      } else if (document["webkitExitFullscreen"]) {
+        document["webkitExitFullscreen"]();
       }
     }
   }
@@ -147,11 +148,11 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == 'data-only') {
+    if (simulation_mode == "data-only") {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == 'visual') {
+    if (simulation_mode == "visual") {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -186,7 +187,7 @@ class FullscreenPlugin implements JsPsychPlugin<Info> {
       this.trial(display_element, trial);
       load_callback();
       this.jsPsych.pluginAPI.clickTarget(
-        display_element.querySelector('#jspsych-fullscreen-btn'),
+        display_element.querySelector("#jspsych-fullscreen-btn"),
         data.rt
       );
     }

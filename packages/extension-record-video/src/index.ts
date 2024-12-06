@@ -1,14 +1,14 @@
-import autoBind from 'auto-bind';
-import { JsPsych, JsPsychExtension, JsPsychExtensionInfo, ParameterType } from 'jspsych';
+import autoBind from "auto-bind";
+import { JsPsych, JsPsychExtension, JsPsychExtensionInfo, ParameterType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 /**
  * https://www.jspsych.org/latest/extensions/record-video/
  */
 class RecordVideoExtension implements JsPsychExtension {
   static info: JsPsychExtensionInfo = {
-    name: 'record-video',
+    name: "record-video",
     version: version,
     data: {
       /** [Base 64 encoded](https://developer.mozilla.org/en-US/docs/Glossary/Base64) representation of the video data. */
@@ -16,6 +16,7 @@ class RecordVideoExtension implements JsPsychExtension {
         type: ParameterType.STRING,
       },
     },
+    // prettier-ignore
     citations: '__CITATIONS__',
   };
 
@@ -40,12 +41,12 @@ class RecordVideoExtension implements JsPsychExtension {
 
     if (!this.recorder) {
       console.warn(
-        'The record-video extension is trying to start but the camera is not initialized. Do you need to run the initialize-camera plugin?'
+        "The record-video extension is trying to start but the camera is not initialized. Do you need to run the initialize-camera plugin?"
       );
       return;
     }
 
-    this.recorder.addEventListener('dataavailable', this.handleOnDataAvailable);
+    this.recorder.addEventListener("dataavailable", this.handleOnDataAvailable);
   };
 
   on_load = () => {
@@ -69,7 +70,7 @@ class RecordVideoExtension implements JsPsychExtension {
 
   private handleOnDataAvailable(event) {
     if (event.data.size > 0) {
-      console.log('chunks added');
+      console.log("chunks added");
       this.recordedChunks.push(event.data);
       if (this.trialComplete) {
         this.updateData();
@@ -82,8 +83,8 @@ class RecordVideoExtension implements JsPsychExtension {
       type: this.recorder.mimeType,
     });
     const reader = new FileReader();
-    reader.addEventListener('load', () => {
-      const base64 = (reader.result as string).split(',')[1];
+    reader.addEventListener("load", () => {
+      const base64 = (reader.result as string).split(",")[1];
       this.currentTrialData.record_video_data = base64;
       if (this.onUpdateCallback) {
         this.onUpdateCallback();

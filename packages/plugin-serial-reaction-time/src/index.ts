@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'serial-reaction-time',
+  name: "serial-reaction-time",
   version: version,
   parameters: {
     /** This array represents the grid of boxes shown on the screen. Each inner array represents a single row. The entries in the inner arrays represent the columns. If an entry is `1` then a square will be drawn at that location on the grid. If an entry is `0` then the corresponding location on the grid will be empty. Thus, by mixing `1`s and `0`s it is possible to create many different grid-based arrangements. */
@@ -22,7 +22,7 @@ const info = <const>{
     choices: {
       type: ParameterType.KEYS, // TO DO: always a nested array, so I think ParameterType.KEYS and array: true is ok here?
       array: true,
-      default: [['3', '5', '7', '9']],
+      default: [["3", "5", "7", "9"]],
     },
     /** The width and height in pixels of each square in the grid. */
     grid_square_size: {
@@ -32,7 +32,7 @@ const info = <const>{
     /** The color of the target square. */
     target_color: {
       type: ParameterType.STRING,
-      default: '#999',
+      default: "#999",
     },
     /** If true, the trial ends after a key press. Feedback is displayed if `show_response_feedback` is true. */
     response_ends_trial: {
@@ -98,6 +98,7 @@ const info = <const>{
       type: ParameterType.BOOL,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -121,8 +122,8 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // create a flattened version of the choices array
     var flat_choices = trial.choices.flat();
-    while (flat_choices.indexOf('') > -1) {
-      flat_choices.splice(flat_choices.indexOf(''), 1);
+    while (flat_choices.indexOf("") > -1) {
+      flat_choices.splice(flat_choices.indexOf(""), 1);
     }
 
     var keyboardListener: any;
@@ -154,17 +155,17 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
       if (response.rt == null || trial.show_response_feedback == false) {
         endTrial();
       } else {
-        var color = response.correct ? '#0f0' : '#f00';
+        var color = response.correct ? "#0f0" : "#f00";
         display_element.querySelector<HTMLElement>(
-          '#jspsych-serial-reaction-time-stimulus-cell-' +
+          "#jspsych-serial-reaction-time-stimulus-cell-" +
             response.responseLoc[0] +
-            '-' +
+            "-" +
             response.responseLoc[1]
-        ).style.transition = '';
+        ).style.transition = "";
         display_element.querySelector<HTMLElement>(
-          '#jspsych-serial-reaction-time-stimulus-cell-' +
+          "#jspsych-serial-reaction-time-stimulus-cell-" +
             response.responseLoc[0] +
-            '-' +
+            "-" +
             response.responseLoc[1]
         ).style.backgroundColor = color;
         this.jsPsych.pluginAPI.setTimeout(endTrial, trial.feedback_duration);
@@ -202,14 +203,14 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
     const showTarget = () => {
       if (trial.fade_duration == null) {
         display_element.querySelector<HTMLElement>(
-          '#jspsych-serial-reaction-time-stimulus-cell-' + trial.target[0] + '-' + trial.target[1]
+          "#jspsych-serial-reaction-time-stimulus-cell-" + trial.target[0] + "-" + trial.target[1]
         ).style.backgroundColor = trial.target_color;
       } else {
         display_element.querySelector<HTMLElement>(
-          '#jspsych-serial-reaction-time-stimulus-cell-' + trial.target[0] + '-' + trial.target[1]
-        ).style.transition = 'background-color ' + trial.fade_duration;
+          "#jspsych-serial-reaction-time-stimulus-cell-" + trial.target[0] + "-" + trial.target[1]
+        ).style.transition = "background-color " + trial.fade_duration;
         display_element.querySelector<HTMLElement>(
-          '#jspsych-serial-reaction-time-stimulus-cell-' + trial.target[0] + '-' + trial.target[1]
+          "#jspsych-serial-reaction-time-stimulus-cell-" + trial.target[0] + "-" + trial.target[1]
         ).style.backgroundColor = trial.target_color;
       }
 
@@ -259,31 +260,31 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
         stimulus +=
           "<div class='jspsych-serial-reaction-time-stimulus-cell' id='jspsych-serial-reaction-time-stimulus-cell-" +
           i +
-          '-' +
+          "-" +
           j +
           "' " +
           "style='width:" +
           square_size +
-          'px; height:' +
+          "px; height:" +
           square_size +
-          'px; display:table-cell; vertical-align:middle; text-align: center; font-size:' +
+          "px; display:table-cell; vertical-align:middle; text-align: center; font-size:" +
           square_size / 2 +
-          'px;';
+          "px;";
         if (grid[i][j] == 1) {
-          stimulus += 'border: 2px solid black;';
+          stimulus += "border: 2px solid black;";
         }
-        if (typeof target !== 'undefined' && target[0] == i && target[1] == j) {
-          stimulus += 'background-color: ' + target_color + ';';
+        if (typeof target !== "undefined" && target[0] == i && target[1] == j) {
+          stimulus += "background-color: " + target_color + ";";
         }
         stimulus += "'>";
-        if (typeof labels !== 'undefined' && labels[i][j] !== false) {
+        if (typeof labels !== "undefined" && labels[i][j] !== false) {
           stimulus += labels[i][j];
         }
-        stimulus += '</div>';
+        stimulus += "</div>";
       }
-      stimulus += '</div>';
+      stimulus += "</div>";
     }
-    stimulus += '</div>';
+    stimulus += "</div>";
 
     return stimulus;
   };
@@ -294,11 +295,11 @@ class SerialReactionTimePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == 'data-only') {
+    if (simulation_mode == "data-only") {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == 'visual') {
+    if (simulation_mode == "visual") {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }

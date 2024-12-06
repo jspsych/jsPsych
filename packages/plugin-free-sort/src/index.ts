@@ -1,12 +1,12 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
-import { inside_ellipse, make_arr, random_coordinate, shuffle } from './utils';
+import { version } from "../package.json";
+import { inside_ellipse, make_arr, random_coordinate, shuffle } from "./utils";
 
 // import { parameterPathArrayToString } from "jspsych/src/timeline/util";
 
 const info = <const>{
-  name: 'free-sort',
+  name: "free-sort",
   version: version,
   parameters: {
     /** Each element of this array is an image path. */
@@ -43,24 +43,24 @@ const info = <const>{
     /** The shape of the sorting area, can be "ellipse" or "square". */
     sort_area_shape: {
       type: ParameterType.SELECT,
-      options: ['square', 'ellipse'],
-      default: 'ellipse',
+      options: ["square", "ellipse"],
+      default: "ellipse",
     },
     /** This string can contain HTML markup. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).  */
     prompt: {
       type: ParameterType.HTML_STRING,
-      default: '',
+      default: "",
     },
     /** Indicates whether to show the prompt `"above"` or `"below"` the sorting area. */
     prompt_location: {
       type: ParameterType.SELECT,
-      options: ['above', 'below'],
-      default: 'above',
+      options: ["above", "below"],
+      default: "above",
     },
     /** The text that appears on the button to continue to the next trial. */
     button_label: {
       type: ParameterType.STRING,
-      default: 'Continue',
+      default: "Continue",
     },
     /**
      * If true, the sort area border color will change while items are being moved in and out of the sort area,
@@ -78,7 +78,7 @@ const info = <const>{
      */
     border_color_in: {
       type: ParameterType.STRING,
-      default: '#a1d99b',
+      default: "#a1d99b",
     },
     /**
      * If change_border_background_color is true, this will be the color of the sort area border
@@ -86,7 +86,7 @@ const info = <const>{
      */
     border_color_out: {
       type: ParameterType.STRING,
-      default: '#fc9272',
+      default: "#fc9272",
     },
     /** The width in pixels of the border around the sort area. If null, the border width defaults to 3% of the sort area height. */
     border_width: {
@@ -100,12 +100,12 @@ const info = <const>{
      * */
     counter_text_unfinished: {
       type: ParameterType.HTML_STRING,
-      default: 'You still need to place %n% item%s% inside the sort area.',
+      default: "You still need to place %n% item%s% inside the sort area.",
     },
     /** Text that will take the place of the counter_text_unfinished text when all items have been moved inside the sort area. */
     counter_text_finished: {
       type: ParameterType.HTML_STRING,
-      default: 'All items placed. Feel free to reposition items if necessary.',
+      default: "All items placed. Feel free to reposition items if necessary.",
     },
     /**
      * If false, the images will be positioned to the left and right of the sort area when the trial loads.
@@ -167,6 +167,7 @@ const info = <const>{
       type: ParameterType.INT,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -192,7 +193,7 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
     var stimuli = trial.stimuli;
 
     if (trial.change_border_background_color == false) {
-      border_color_out = '#000000';
+      border_color_out = "#000000";
     }
 
     if (trial.border_width == null) {
@@ -200,32 +201,32 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
     }
 
     let html =
-      '<div ' +
+      "<div " +
       'id="jspsych-free-sort-arena" ' +
       'class="jspsych-free-sort-arena" ' +
       'style="position: relative; width:' +
       trial.sort_area_width +
-      'px; height:' +
+      "px; height:" +
       trial.sort_area_height +
       'px; margin: auto;"</div>';
 
     // another div for border
     html +=
-      '<div ' +
+      "<div " +
       'id="jspsych-free-sort-border" ' +
       'class="jspsych-free-sort-border" ' +
       'style="position: relative; width:' +
       trial.sort_area_width * 0.94 +
-      'px; height:' +
+      "px; height:" +
       trial.sort_area_height * 0.94 +
-      'px; ' +
-      'border:' +
+      "px; " +
+      "border:" +
       border_width +
-      'px solid ' +
+      "px solid " +
       border_color_out +
-      '; margin: auto; line-height: 0em; ';
+      "; margin: auto; line-height: 0em; ";
 
-    if (trial.sort_area_shape == 'ellipse') {
+    if (trial.sort_area_shape == "ellipse") {
       html += 'webkit-border-radius: 50%; moz-border-radius: 50%; border-radius: 50%"></div>';
     } else {
       html += 'webkit-border-radius: 0%; moz-border-radius: 0%; border-radius: 0%"></div>';
@@ -237,10 +238,10 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
       trial.prompt +
       '<p id="jspsych-free-sort-counter" style="display: inline-block;">' +
       get_counter_text(stimuli.length) +
-      '</p></div>';
+      "</p></div>";
 
     // position prompt above or below
-    if (trial.prompt_location == 'below') {
+    if (trial.prompt_location == "below") {
       html += html_text;
     } else {
       html = html_text + html;
@@ -250,7 +251,7 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
       '<div><button id="jspsych-free-sort-done-btn" class="jspsych-btn" ' +
       'style="margin-top: 5px; margin-bottom: 15px; visibility: hidden;">' +
       trial.button_label +
-      '</button></div>';
+      "</button></div>";
 
     display_element.innerHTML = html;
 
@@ -310,8 +311,8 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
         }
       }
 
-      display_element.querySelector('#jspsych-free-sort-arena').innerHTML +=
-        '<img ' +
+      display_element.querySelector("#jspsych-free-sort-arena").innerHTML +=
+        "<img " +
         'src="' +
         stimuli[i] +
         '" ' +
@@ -325,14 +326,14 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
         '" ' +
         'style="position: absolute; cursor: move; width:' +
         trial.stim_width +
-        'px; height:' +
+        "px; height:" +
         trial.stim_height +
-        'px; top:' +
+        "px; top:" +
         coords.y +
-        'px; left:' +
+        "px; left:" +
         coords.x +
         'px;">' +
-        '</img>';
+        "</img>";
 
       init_locations.push({
         src: stimuli[i],
@@ -350,12 +351,12 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
 
     // draggable items
     const draggables = Array.prototype.slice.call(
-      display_element.querySelectorAll<HTMLImageElement>('.jspsych-free-sort-draggable')
+      display_element.querySelectorAll<HTMLImageElement>(".jspsych-free-sort-draggable")
     );
 
     // button (will show when all items are inside) and border (will change color)
-    const border: HTMLElement = display_element.querySelector('#jspsych-free-sort-border');
-    const button: HTMLButtonElement = display_element.querySelector('#jspsych-free-sort-done-btn');
+    const border: HTMLElement = display_element.querySelector("#jspsych-free-sort-border");
+    const button: HTMLButtonElement = display_element.querySelector("#jspsych-free-sort-done-btn");
 
     // when trial starts, modify text and border/background if all items are inside (stim_starts_inside: true)
     if (inside.some(Boolean) && trial.change_border_background_color) {
@@ -365,16 +366,16 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
       if (trial.change_border_background_color) {
         border.style.background = trial.border_color_in;
       }
-      button.style.visibility = 'visible';
-      display_element.querySelector('#jspsych-free-sort-counter').innerHTML =
+      button.style.visibility = "visible";
+      display_element.querySelector("#jspsych-free-sort-counter").innerHTML =
         trial.counter_text_finished;
     }
 
     for (const draggable of draggables) {
-      draggable.addEventListener('pointerdown', function ({ clientX: pageX, clientY: pageY }) {
+      draggable.addEventListener("pointerdown", function ({ clientX: pageX, clientY: pageY }) {
         let x = pageX - this.offsetLeft;
         let y = pageY - this.offsetTop - window.scrollY;
-        this.style.transform = 'scale(' + trial.scale_factor + ',' + trial.scale_factor + ')';
+        this.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
 
         const on_pointer_move = ({ clientX, clientY }: PointerEvent) => {
           cur_in = inside_ellipse(
@@ -384,32 +385,32 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
             trial.sort_area_height * 0.5 - trial.stim_height * 0.5,
             trial.sort_area_width * 0.5,
             trial.sort_area_height * 0.5,
-            trial.sort_area_shape == 'square'
+            trial.sort_area_shape == "square"
           );
           this.style.top =
             Math.min(
               trial.sort_area_height - trial.stim_height * 0.5,
               Math.max(-trial.stim_height * 0.5, clientY - y)
-            ) + 'px';
+            ) + "px";
           this.style.left =
             Math.min(
               trial.sort_area_width * 1.5 - trial.stim_width,
               Math.max(-trial.sort_area_width * 0.5, clientX - x)
-            ) + 'px';
+            ) + "px";
 
           // modify border while items is being moved
           if (trial.change_border_background_color) {
             if (cur_in) {
               border.style.borderColor = trial.border_color_in;
-              border.style.background = 'None';
+              border.style.background = "None";
             } else {
               border.style.borderColor = border_color_out;
-              border.style.background = 'None';
+              border.style.background = "None";
             }
           }
 
           // replace in overall array, grab index from item id
-          var elem_number = parseInt(this.id.split('jspsych-free-sort-draggable-')[1], 10);
+          var elem_number = parseInt(this.id.split("jspsych-free-sort-draggable-")[1], 10);
           inside.splice(elem_number, 1, cur_in);
 
           // modify text and background if all items are inside
@@ -417,27 +418,27 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
             if (trial.change_border_background_color) {
               border.style.background = trial.border_color_in;
             }
-            button.style.visibility = 'visible';
-            display_element.querySelector('#jspsych-free-sort-counter').innerHTML =
+            button.style.visibility = "visible";
+            display_element.querySelector("#jspsych-free-sort-counter").innerHTML =
               trial.counter_text_finished;
           } else {
-            border.style.background = 'none';
-            button.style.visibility = 'hidden';
-            display_element.querySelector('#jspsych-free-sort-counter').innerHTML =
+            border.style.background = "none";
+            button.style.visibility = "hidden";
+            display_element.querySelector("#jspsych-free-sort-counter").innerHTML =
               get_counter_text(inside.length - inside.filter(Boolean).length);
           }
         };
-        document.addEventListener('pointermove', on_pointer_move);
+        document.addEventListener("pointermove", on_pointer_move);
 
         const on_pointer_up = (e) => {
-          document.removeEventListener('pointermove', on_pointer_move);
-          this.style.transform = 'scale(1, 1)';
+          document.removeEventListener("pointermove", on_pointer_move);
+          this.style.transform = "scale(1, 1)";
           if (trial.change_border_background_color) {
             if (inside.every(Boolean)) {
               border.style.background = trial.border_color_in;
               border.style.borderColor = trial.border_color_in;
             } else {
-              border.style.background = 'none';
+              border.style.background = "none";
               border.style.borderColor = border_color_out;
             }
           }
@@ -446,18 +447,18 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
             x: this.offsetLeft,
             y: this.offsetTop,
           });
-          document.removeEventListener('pointerup', on_pointer_up);
+          document.removeEventListener("pointerup", on_pointer_up);
         };
-        document.addEventListener('pointerup', on_pointer_up);
+        document.addEventListener("pointerup", on_pointer_up);
       });
     }
 
-    display_element.querySelector('#jspsych-free-sort-done-btn').addEventListener('click', () => {
+    display_element.querySelector("#jspsych-free-sort-done-btn").addEventListener("click", () => {
       if (inside.every(Boolean)) {
         const end_time = performance.now();
         const rt = Math.round(end_time - start_time);
         // gather data
-        const items = display_element.querySelectorAll<HTMLElement>('.jspsych-free-sort-draggable');
+        const items = display_element.querySelectorAll<HTMLElement>(".jspsych-free-sort-draggable");
         // get final position of all items
         let final_locations = [];
         for (let i = 0; i < items.length; i++) {
@@ -480,16 +481,16 @@ class FreeSortPlugin implements JsPsychPlugin<Info> {
     });
 
     function get_counter_text(n: number) {
-      var text_out = '';
-      var text_bits = trial.counter_text_unfinished.split('%');
+      var text_out = "";
+      var text_bits = trial.counter_text_unfinished.split("%");
       for (var i = 0; i < text_bits.length; i++) {
         if (i % 2 === 0) {
           text_out += text_bits[i];
         } else {
-          if (text_bits[i] == 'n') {
+          if (text_bits[i] == "n") {
             text_out += n.toString();
-          } else if (text_bits[i] == 's' && n > 1) {
-            text_out += 's';
+          } else if (text_bits[i] == "s" && n > 1) {
+            text_out += "s";
           }
         }
       }

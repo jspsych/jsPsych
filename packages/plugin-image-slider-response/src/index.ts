@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'image-slider-response',
+  name: "image-slider-response",
   version: version,
   parameters: {
     /** The path to the image file to be displayed. */
@@ -63,7 +63,7 @@ const info = <const>{
     /** Label of the button to advance/submit. */
     button_label: {
       type: ParameterType.STRING,
-      default: 'Continue',
+      default: "Continue",
       array: false,
     },
     /** If true, the participant must move the slider before clicking the continue button. */
@@ -128,6 +128,7 @@ const info = <const>{
       type: ParameterType.INT,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -164,14 +165,14 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
         }
       }
       // create wrapper div, canvas element and image
-      var content_wrapper = document.createElement('div');
-      content_wrapper.id = 'jspsych-image-slider-response-wrapper';
-      content_wrapper.style.margin = '100px 0px';
-      var canvas = document.createElement('canvas');
-      canvas.id = 'jspsych-image-slider-response-stimulus';
-      canvas.style.margin = '0';
-      canvas.style.padding = '0';
-      var ctx = canvas.getContext('2d');
+      var content_wrapper = document.createElement("div");
+      content_wrapper.id = "jspsych-image-slider-response-wrapper";
+      content_wrapper.style.margin = "100px 0px";
+      var canvas = document.createElement("canvas");
+      canvas.id = "jspsych-image-slider-response-stimulus";
+      canvas.style.margin = "0";
+      canvas.style.padding = "0";
+      var ctx = canvas.getContext("2d");
       var img = new Image();
       img.onload = () => {
         // if image wasn't preloaded, then it will need to be drawn whenever it finishes loading
@@ -206,12 +207,12 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
       };
       getHeightWidth(); // call now, in case image loads immediately (is cached)
       // create container with slider and labels
-      var slider_container = document.createElement('div');
-      slider_container.classList.add('jspsych-image-slider-response-container');
-      slider_container.style.position = 'relative';
-      slider_container.style.margin = '0 auto 3em auto';
+      var slider_container = document.createElement("div");
+      slider_container.classList.add("jspsych-image-slider-response-container");
+      slider_container.style.position = "relative";
+      slider_container.style.margin = "0 auto 3em auto";
       if (trial.slider_width !== null) {
-        slider_container.style.width = trial.slider_width.toString() + 'px';
+        slider_container.style.width = trial.slider_width.toString() + "px";
       }
       // create html string with slider and labels, and add to slider container
       html =
@@ -224,7 +225,7 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
         '" step="' +
         trial.step +
         '" id="jspsych-image-slider-response-response"></input>';
-      html += '<div>';
+      html += "<div>";
       for (var j = 0; j < trial.labels.length; j++) {
         var label_width_perc = 100 / (trial.labels.length - 1);
         var percent_of_range = j * (100 / (trial.labels.length - 1));
@@ -232,19 +233,19 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
         var offset = (percent_dist_from_center * half_thumb_width) / 100;
         html +=
           '<div style="border: 1px solid transparent; display: inline-block; position: absolute; ' +
-          'left:calc(' +
+          "left:calc(" +
           percent_of_range +
-          '% - (' +
+          "% - (" +
           label_width_perc +
-          '% / 2) - ' +
+          "% / 2) - " +
           offset +
-          'px); text-align: center; width: ' +
+          "px); text-align: center; width: " +
           label_width_perc +
           '%;">';
-        html += '<span style="text-align: center; font-size: 80%;">' + trial.labels[j] + '</span>';
-        html += '</div>';
+        html += '<span style="text-align: center; font-size: 80%;">' + trial.labels[j] + "</span>";
+        html += "</div>";
       }
-      html += '</div>';
+      html += "</div>";
       slider_container.innerHTML = html;
       // add canvas and slider to content wrapper div
       content_wrapper.insertBefore(canvas, content_wrapper.firstElementChild);
@@ -259,12 +260,12 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
       }
       // add prompt if there is one
       if (trial.prompt !== null) {
-        display_element.insertAdjacentHTML('beforeend', trial.prompt);
+        display_element.insertAdjacentHTML("beforeend", trial.prompt);
       }
       // add submit button
-      var submit_btn = document.createElement('button') as HTMLButtonElement;
-      submit_btn.id = 'jspsych-image-slider-response-next';
-      submit_btn.classList.add('jspsych-btn');
+      var submit_btn = document.createElement("button") as HTMLButtonElement;
+      submit_btn.id = "jspsych-image-slider-response-next";
+      submit_btn.classList.add("jspsych-btn");
       submit_btn.disabled = trial.require_movement ? true : false;
       submit_btn.innerHTML = trial.button_label;
       display_element.insertBefore(submit_btn, display_element.nextElementSibling);
@@ -273,25 +274,25 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
       html += '<div id="jspsych-image-slider-response-stimulus">';
       html += '<img src="' + trial.stimulus + '" style="';
       if (trial.stimulus_height !== null) {
-        html += 'height:' + trial.stimulus_height + 'px; ';
+        html += "height:" + trial.stimulus_height + "px; ";
         if (trial.stimulus_width == null && trial.maintain_aspect_ratio) {
-          html += 'width: auto; ';
+          html += "width: auto; ";
         }
       }
       if (trial.stimulus_width !== null) {
-        html += 'width:' + trial.stimulus_width + 'px; ';
+        html += "width:" + trial.stimulus_width + "px; ";
         if (trial.stimulus_height == null && trial.maintain_aspect_ratio) {
-          html += 'height: auto; ';
+          html += "height: auto; ";
         }
       }
       html += '"></img>';
-      html += '</div>';
+      html += "</div>";
       html +=
         '<div class="jspsych-image-slider-response-container" style="position:relative; margin: 0 auto 3em auto; width:';
       if (trial.slider_width !== null) {
-        html += trial.slider_width + 'px;';
+        html += trial.slider_width + "px;";
       } else {
-        html += 'auto;';
+        html += "auto;";
       }
       html += '">';
       html +=
@@ -304,7 +305,7 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
         '" step="' +
         trial.step +
         '" id="jspsych-image-slider-response-response"></input>';
-      html += '<div>';
+      html += "<div>";
       for (var j = 0; j < trial.labels.length; j++) {
         var label_width_perc = 100 / (trial.labels.length - 1);
         var percent_of_range = j * (100 / (trial.labels.length - 1));
@@ -312,21 +313,21 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
         var offset = (percent_dist_from_center * half_thumb_width) / 100;
         html +=
           '<div style="border: 1px solid transparent; display: inline-block; position: absolute; ' +
-          'left:calc(' +
+          "left:calc(" +
           percent_of_range +
-          '% - (' +
+          "% - (" +
           label_width_perc +
-          '% / 2) - ' +
+          "% / 2) - " +
           offset +
-          'px); text-align: center; width: ' +
+          "px); text-align: center; width: " +
           label_width_perc +
           '%;">';
-        html += '<span style="text-align: center; font-size: 80%;">' + trial.labels[j] + '</span>';
-        html += '</div>';
+        html += '<span style="text-align: center; font-size: 80%;">' + trial.labels[j] + "</span>";
+        html += "</div>";
       }
-      html += '</div>';
-      html += '</div>';
-      html += '</div>';
+      html += "</div>";
+      html += "</div>";
+      html += "</div>";
 
       if (trial.prompt !== null) {
         html += trial.prompt;
@@ -335,15 +336,15 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
       // add submit button
       html +=
         '<button id="jspsych-image-slider-response-next" class="jspsych-btn" ' +
-        (trial.require_movement ? 'disabled' : '') +
-        '>' +
+        (trial.require_movement ? "disabled" : "") +
+        ">" +
         trial.button_label +
-        '</button>';
+        "</button>";
 
       display_element.innerHTML = html;
 
       // set image dimensions after image has loaded (so that we have access to naturalHeight/naturalWidth)
-      var img = display_element.querySelector('img') as HTMLImageElement;
+      var img = display_element.querySelector("img") as HTMLImageElement;
       if (trial.stimulus_height !== null) {
         height = trial.stimulus_height;
         if (trial.stimulus_width == null && trial.maintain_aspect_ratio) {
@@ -362,8 +363,8 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
         // in the if statement above, based on a specified height and maintain_aspect_ratio = true
         width = img.naturalWidth;
       }
-      img.style.height = height.toString() + 'px';
-      img.style.width = width.toString() + 'px';
+      img.style.height = height.toString() + "px";
+      img.style.width = width.toString() + "px";
     }
 
     var response = {
@@ -374,21 +375,21 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
     if (trial.require_movement) {
       const enable_button = () => {
         display_element.querySelector<HTMLInputElement>(
-          '#jspsych-image-slider-response-next'
+          "#jspsych-image-slider-response-next"
         ).disabled = false;
       };
 
       display_element
-        .querySelector('#jspsych-image-slider-response-response')
-        .addEventListener('mousedown', enable_button);
+        .querySelector("#jspsych-image-slider-response-response")
+        .addEventListener("mousedown", enable_button);
 
       display_element
-        .querySelector('#jspsych-image-slider-response-response')
-        .addEventListener('touchstart', enable_button);
+        .querySelector("#jspsych-image-slider-response-response")
+        .addEventListener("touchstart", enable_button);
 
       display_element
-        .querySelector('#jspsych-image-slider-response-response')
-        .addEventListener('change', enable_button);
+        .querySelector("#jspsych-image-slider-response-response")
+        .addEventListener("change", enable_button);
     }
 
     const end_trial = () => {
@@ -405,20 +406,20 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     display_element
-      .querySelector('#jspsych-image-slider-response-next')
-      .addEventListener('click', () => {
+      .querySelector("#jspsych-image-slider-response-next")
+      .addEventListener("click", () => {
         // measure response time
         var endTime = performance.now();
         response.rt = Math.round(endTime - startTime);
         response.response = display_element.querySelector<HTMLInputElement>(
-          '#jspsych-image-slider-response-response'
+          "#jspsych-image-slider-response-response"
         ).valueAsNumber;
 
         if (trial.response_ends_trial) {
           end_trial();
         } else {
           display_element.querySelector<HTMLButtonElement>(
-            '#jspsych-image-slider-response-next'
+            "#jspsych-image-slider-response-next"
           ).disabled = true;
         }
       });
@@ -426,8 +427,8 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
-          '#jspsych-image-slider-response-stimulus'
-        ).style.visibility = 'hidden';
+          "#jspsych-image-slider-response-stimulus"
+        ).style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
 
@@ -447,11 +448,11 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == 'data-only') {
+    if (simulation_mode == "data-only") {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == 'visual') {
+    if (simulation_mode == "visual") {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -493,7 +494,7 @@ class ImageSliderResponsePlugin implements JsPsychPlugin<Info> {
         el.valueAsNumber = data.response;
       }, data.rt / 2);
 
-      this.jsPsych.pluginAPI.clickTarget(display_element.querySelector('button'), data.rt);
+      this.jsPsych.pluginAPI.clickTarget(display_element.querySelector("button"), data.rt);
     }
   }
 }

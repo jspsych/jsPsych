@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'mirror-camera',
+  name: "mirror-camera",
   version: version,
   parameters: {
     /** HTML-formatted content to display below the camera feed. */
@@ -14,7 +14,7 @@ const info = <const>{
     /** The label of the button to advance to the next trial. */
     button_label: {
       type: ParameterType.STRING,
-      default: 'Continue',
+      default: "Continue",
     },
     /** The height of the video playback element. If left `null` then it will match the size of the recording. */
     height: {
@@ -38,6 +38,7 @@ const info = <const>{
       type: ParameterType.INT,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -67,18 +68,18 @@ class MirrorCameraPlugin implements JsPsychPlugin<Info> {
 
     display_element.innerHTML = `
       <video autoplay playsinline id="jspsych-mirror-camera-video" width="${
-        trial.width ? trial.width : 'auto'
-      }" height="${trial.height ? trial.height : 'auto'}" ${
-      trial.mirror_camera ? 'style="transform: rotateY(180deg);"' : ''
+        trial.width ? trial.width : "auto"
+      }" height="${trial.height ? trial.height : "auto"}" ${
+      trial.mirror_camera ? 'style="transform: rotateY(180deg);"' : ""
     }></video>
-      ${trial.prompt ? `<div id="jspsych-mirror-camera-prompt">${trial.prompt}</div>` : ''}
+      ${trial.prompt ? `<div id="jspsych-mirror-camera-prompt">${trial.prompt}</div>` : ""}
       <p><button class="jspsych-btn" id="btn-continue">${trial.button_label}</button></p>
     `;
 
-    (display_element.querySelector('#jspsych-mirror-camera-video') as HTMLVideoElement).srcObject =
+    (display_element.querySelector("#jspsych-mirror-camera-video") as HTMLVideoElement).srcObject =
       this.stream;
 
-    display_element.querySelector('#btn-continue').addEventListener('click', () => {
+    display_element.querySelector("#btn-continue").addEventListener("click", () => {
       this.finish(display_element);
     });
 

@@ -77,6 +77,7 @@ const makeConfig = ({
       plugins: [
         externals(),
         modify({
+          // prettier-ignore
           find: /'__CITATIONS__'/g,
           replace: JSON.stringify(citationData, null, 2),
         }),

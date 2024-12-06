@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'iat-image',
+  name: "iat-image",
   version: version,
   parameters: {
     /** The stimulus to display. The path to an image. */
@@ -14,33 +14,33 @@ const info = <const>{
     /** Key press that is associated with the `left_category_label`. */
     left_category_key: {
       type: ParameterType.KEY,
-      default: 'e',
+      default: "e",
     },
     /** Key press that is associated with the `right_category_label`. */
     right_category_key: {
       type: ParameterType.KEY,
-      default: 'i',
+      default: "i",
     },
     /** An array that contains the words/labels associated with a certain stimulus. The labels are aligned to the left
      * side of the page. */
     left_category_label: {
       type: ParameterType.STRING,
       array: true,
-      default: ['left'],
+      default: ["left"],
     },
     /** An array that contains the words/labels associated with a certain stimulus. The labels are aligned to the right
      * side of the page. */
     right_category_label: {
       type: ParameterType.STRING,
       array: true,
-      default: ['right'],
+      default: ["right"],
     },
     /** This array contains the characters the participant is allowed to press to move on to the next trial if their key
      * press was incorrect and feedback was displayed. Can also have 'other key' as an option which will only allow the
      * user to select the right key to move forward.  */
     key_to_move_forward: {
       type: ParameterType.KEYS,
-      default: 'ALL_KEYS',
+      default: "ALL_KEYS",
     },
     /** If `true`, then `html_when_wrong` and `wrong_image_name` is required. If `false`, `trial_duration` is needed
      *  and trial will continue automatically. */
@@ -56,7 +56,7 @@ const info = <const>{
     /** Instructions about making a wrong key press and whether another key press is needed to continue. */
     bottom_instructions: {
       type: ParameterType.HTML_STRING,
-      default: '<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>',
+      default: "<p>If you press the wrong key, a red X will appear. Press any key to continue.</p>",
     },
     /** If this is `true` and the user presses the wrong key then they have to press the other key to continue. An example
      * would be two keys 'e' and 'i'. If the key associated with the stimulus is 'e' and key 'i' was pressed, then
@@ -73,7 +73,7 @@ const info = <const>{
      * category on the left or right side of the page (`left_category_key` or `right_category_key`). */
     stim_key_association: {
       type: ParameterType.SELECT,
-      options: ['left', 'right'],
+      options: ["left", "right"],
       default: undefined,
     },
     /** If true, then the trial will end whenever the participant makes a response (assuming they make their
@@ -111,6 +111,7 @@ const info = <const>{
       type: ParameterType.INT,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -128,7 +129,7 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    var html_str = '';
+    var html_str = "";
 
     html_str +=
       "<div style='position: absolute; height: 20%; width: 100%; margin-left: auto; margin-right: auto; top: 42%; left: 0; right: 0'><img src='" +
@@ -139,42 +140,42 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
 
     if (trial.left_category_label.length == 1) {
       html_str +=
-        '<p>Press ' +
+        "<p>Press " +
         trial.left_category_key +
-        ' for:<br> ' +
+        " for:<br> " +
         trial.left_category_label[0].bold() +
-        '</p></div>';
+        "</p></div>";
     } else {
       html_str +=
-        '<p>Press ' +
+        "<p>Press " +
         trial.left_category_key +
-        ' for:<br> ' +
+        " for:<br> " +
         trial.left_category_label[0].bold() +
-        '<br>' +
-        'or<br>' +
+        "<br>" +
+        "or<br>" +
         trial.left_category_label[1].bold() +
-        '</p></div>';
+        "</p></div>";
     }
 
     html_str += "<div id='trial_right_align' style='position: absolute; top: 18%; right: 20%'>";
 
     if (trial.right_category_label.length == 1) {
       html_str +=
-        '<p>Press ' +
+        "<p>Press " +
         trial.right_category_key +
-        ' for:<br> ' +
+        " for:<br> " +
         trial.right_category_label[0].bold() +
-        '</p></div>';
+        "</p></div>";
     } else {
       html_str +=
-        '<p>Press ' +
+        "<p>Press " +
         trial.right_category_key +
-        ' for:<br> ' +
+        " for:<br> " +
         trial.right_category_label[0].bold() +
-        '<br>' +
-        'or<br>' +
+        "<br>" +
+        "or<br>" +
         trial.right_category_label[1].bold() +
-        '</p></div>';
+        "</p></div>";
     }
 
     html_str +=
@@ -184,13 +185,13 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
       html_str +=
         "<div id='wrongImgContainer' style='visibility: hidden; position: absolute; top: -75px; margin-left: auto; margin-right: auto; left: 0; right: 0'><p>" +
         trial.html_when_wrong +
-        '</p></div>';
-      html_str += '<div>' + trial.bottom_instructions + '</div>';
+        "</p></div>";
+      html_str += "<div>" + trial.bottom_instructions + "</div>";
     } else {
-      html_str += '<div>' + trial.bottom_instructions + '</div>';
+      html_str += "<div>" + trial.bottom_instructions + "</div>";
     }
 
-    html_str += '</div>';
+    html_str += "</div>";
 
     display_element.innerHTML = html_str;
 
@@ -204,7 +205,7 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
     // function to end trial when it is time
     const end_trial = () => {
       // kill keyboard listeners
-      if (typeof keyboardListener !== 'undefined') {
+      if (typeof keyboardListener !== "undefined") {
         this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
       }
 
@@ -225,10 +226,10 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
 
     // function to handle responses by the subject
     const after_response = (info: { key: string; rt: number }) => {
-      var wImg = document.getElementById('wrongImgContainer');
+      var wImg = document.getElementById("wrongImgContainer");
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      display_element.querySelector('#jspsych-iat-stim').className += ' responded';
+      display_element.querySelector("#jspsych-iat-stim").className += " responded";
 
       // only record the first response
       if (response.key == null) {
@@ -236,7 +237,7 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
         response.rt = info.rt;
       }
 
-      if (trial.stim_key_association == 'right') {
+      if (trial.stim_key_association == "right") {
         if (
           response.rt !== null &&
           this.jsPsych.pluginAPI.compareKeys(response.key, rightKeyCode)
@@ -248,10 +249,10 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
         } else {
           response.correct = false;
           if (!trial.response_ends_trial && trial.display_feedback == true) {
-            wImg.style.visibility = 'visible';
+            wImg.style.visibility = "visible";
           }
           if (trial.response_ends_trial && trial.display_feedback == true) {
-            wImg.style.visibility = 'visible';
+            wImg.style.visibility = "visible";
             if (trial.force_correct_key_press) {
               var keyListener = this.jsPsych.pluginAPI.getKeyboardResponse({
                 callback_function: end_trial,
@@ -268,7 +269,7 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
           } else if (!trial.response_ends_trial && trial.display_feedback != true) {
           }
         }
-      } else if (trial.stim_key_association == 'left') {
+      } else if (trial.stim_key_association == "left") {
         if (response.rt !== null && this.jsPsych.pluginAPI.compareKeys(response.key, leftKeyCode)) {
           response.correct = true;
           if (trial.response_ends_trial) {
@@ -277,10 +278,10 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
         } else {
           response.correct = false;
           if (!trial.response_ends_trial && trial.display_feedback == true) {
-            wImg.style.visibility = 'visible';
+            wImg.style.visibility = "visible";
           }
           if (trial.response_ends_trial && trial.display_feedback == true) {
-            wImg.style.visibility = 'visible';
+            wImg.style.visibility = "visible";
             if (trial.force_correct_key_press) {
               var keyListener = this.jsPsych.pluginAPI.getKeyboardResponse({
                 callback_function: end_trial,
@@ -301,11 +302,11 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
     };
 
     // start the response listener
-    if (trial.left_category_key != 'NO_KEYS' && trial.right_category_key != 'NO_KEYS') {
+    if (trial.left_category_key != "NO_KEYS" && trial.right_category_key != "NO_KEYS") {
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
         callback_function: after_response,
         valid_responses: [trial.left_category_key, trial.right_category_key],
-        rt_method: 'performance',
+        rt_method: "performance",
         persist: false,
         allow_held_key: false,
       });
@@ -325,11 +326,11 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == 'data-only') {
+    if (simulation_mode == "data-only") {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == 'visual') {
+    if (simulation_mode == "visual") {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -340,7 +341,7 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
       trial.right_category_key,
     ]);
     const correct =
-      trial.stim_key_association == 'left'
+      trial.stim_key_association == "left"
         ? key == trial.left_category_key
         : key == trial.right_category_key;
 
@@ -381,7 +382,7 @@ class IatImagePlugin implements JsPsychPlugin<Info> {
     if (trial.force_correct_key_press) {
       if (!data.correct) {
         this.jsPsych.pluginAPI.pressKey(
-          trial.stim_key_association == 'left' ? trial.left_category_key : trial.right_category_key,
+          trial.stim_key_association == "left" ? trial.left_category_key : trial.right_category_key,
           cont_rt + this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true)
         );
       }

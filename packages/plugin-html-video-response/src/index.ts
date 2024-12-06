@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'html-video-response',
+  name: "html-video-response",
   version: version,
   parameters: {
     /** The HTML string to be displayed */
@@ -33,17 +33,17 @@ const info = <const>{
     /** Label for the done (stop recording) button. Only used if show_done_button is true. */
     done_button_label: {
       type: ParameterType.STRING,
-      default: 'Continue',
+      default: "Continue",
     },
     /** The label for the record again button enabled when `allow_playback: true`.*/
     record_again_button_label: {
       type: ParameterType.STRING,
-      default: 'Record again',
+      default: "Record again",
     },
     /** The label for the accept button enabled when `allow_playback: true`. */
     accept_button_label: {
       type: ParameterType.STRING,
-      default: 'Continue',
+      default: "Continue",
     },
     /** Whether to allow the participant to listen to their recording and decide whether to rerecord or not. If `true`,
      * then the participant will be shown an interface to play their recorded video and click one of two buttons to
@@ -80,6 +80,7 @@ const info = <const>{
       type: ParameterType.STRING,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -151,16 +152,16 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
   }
 
   private hideStimulus(display_element: HTMLElement) {
-    const el: HTMLElement = display_element.querySelector('#jspsych-html-video-response-stimulus');
+    const el: HTMLElement = display_element.querySelector("#jspsych-html-video-response-stimulus");
     if (el) {
-      el.style.visibility = 'hidden';
+      el.style.visibility = "hidden";
     }
   }
 
   private addButtonEvent(display_element, trial) {
-    const btn = display_element.querySelector('#finish-trial');
+    const btn = display_element.querySelector("#finish-trial");
     if (btn) {
-      btn.addEventListener('click', () => {
+      btn.addEventListener("click", () => {
         const end_time = performance.now();
         this.rt = Math.round(end_time - this.stimulus_start_time);
         this.stopRecording().then(() => {
@@ -185,8 +186,8 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
       const data = new Blob(this.recorded_data_chunks, { type: this.recorder.mimeType });
       this.video_url = URL.createObjectURL(data);
       const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        const base64 = (reader.result as string).split(',')[1];
+      reader.addEventListener("load", () => {
+        const base64 = (reader.result as string).split(",")[1];
         this.response = base64;
         this.load_resolver();
       });
@@ -213,7 +214,7 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
         this.jsPsych.pluginAPI.setTimeout(() => {
           // this check is necessary for cases where the
           // done_button is clicked before the timer expires
-          if (this.recorder.state !== 'inactive') {
+          if (this.recorder.state !== "inactive") {
             this.stopRecording().then(() => {
               if (trial.allow_playback) {
                 this.showPlaybackControls(display_element, trial);
@@ -226,11 +227,11 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
       }
     };
 
-    this.recorder.addEventListener('dataavailable', this.data_available_handler);
+    this.recorder.addEventListener("dataavailable", this.data_available_handler);
 
-    this.recorder.addEventListener('stop', this.stop_event_handler);
+    this.recorder.addEventListener("stop", this.stop_event_handler);
 
-    this.recorder.addEventListener('start', this.start_event_handler);
+    this.recorder.addEventListener("start", this.start_event_handler);
   }
 
   private startRecording() {
@@ -251,12 +252,12 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
       <button id="continue" class="jspsych-btn">${trial.accept_button_label}</button>
     `;
 
-    display_element.querySelector('#record-again').addEventListener('click', () => {
+    display_element.querySelector("#record-again").addEventListener("click", () => {
       // release object url to save memory
       URL.revokeObjectURL(this.video_url);
       this.startRecording();
     });
-    display_element.querySelector('#continue').addEventListener('click', () => {
+    display_element.querySelector("#continue").addEventListener("click", () => {
       this.endTrial(display_element, trial);
     });
 
@@ -267,9 +268,9 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
   private endTrial(display_element, trial) {
     // clear recordering event handler
 
-    this.recorder.removeEventListener('dataavailable', this.data_available_handler);
-    this.recorder.removeEventListener('start', this.start_event_handler);
-    this.recorder.removeEventListener('stop', this.stop_event_handler);
+    this.recorder.removeEventListener("dataavailable", this.data_available_handler);
+    this.recorder.removeEventListener("start", this.start_event_handler);
+    this.recorder.removeEventListener("stop", this.stop_event_handler);
 
     // gather the data to store for the trial
     var trial_data: any = {

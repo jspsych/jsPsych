@@ -36,8 +36,7 @@
     "turbo": "^1.6.3"
   },
   "prettier": {
-    "printWidth": 100,
-    "singleQuote": true
+    "printWidth": 100
   },
   "importSort": {
     ".ts, .js, .mjs, .cjs": {

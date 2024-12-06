@@ -1,6 +1,6 @@
-import { JsPsych, JsPsychExtension, JsPsychExtensionInfo, ParameterType } from 'jspsych';
+import { JsPsych, JsPsychExtension, JsPsychExtensionInfo, ParameterType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 interface InitializeParameters {
   /**
@@ -31,7 +31,7 @@ interface OnStartParameters {
  */
 class MouseTrackingExtension implements JsPsychExtension {
   static info: JsPsychExtensionInfo = {
-    name: 'mouse-tracking',
+    name: "mouse-tracking",
     version: version,
     data: {
       /**
@@ -95,6 +95,7 @@ class MouseTrackingExtension implements JsPsychExtension {
         },
       },
     },
+    // prettier-ignore
     citations: '__CITATIONS__',
   };
 
@@ -121,7 +122,7 @@ class MouseTrackingExtension implements JsPsychExtension {
     this.currentTrialTargets = new Map();
     this.currentTrialSelectors = params.targets || [];
     this.lastSampleTime = null;
-    this.eventsToTrack = params.events || ['mousemove'];
+    this.eventsToTrack = params.events || ["mousemove"];
 
     this.domObserver.observe(this.jsPsych.getDisplayElement(), { childList: true });
   };
@@ -131,28 +132,28 @@ class MouseTrackingExtension implements JsPsychExtension {
     this.currentTrialStartTime = performance.now();
 
     // start data collection
-    if (this.eventsToTrack.includes('mousemove')) {
-      window.addEventListener('mousemove', this.mouseMoveEventHandler);
+    if (this.eventsToTrack.includes("mousemove")) {
+      window.addEventListener("mousemove", this.mouseMoveEventHandler);
     }
-    if (this.eventsToTrack.includes('mousedown')) {
-      window.addEventListener('mousedown', this.mouseDownEventHandler);
+    if (this.eventsToTrack.includes("mousedown")) {
+      window.addEventListener("mousedown", this.mouseDownEventHandler);
     }
-    if (this.eventsToTrack.includes('mouseup')) {
-      window.addEventListener('mouseup', this.mouseUpEventHandler);
+    if (this.eventsToTrack.includes("mouseup")) {
+      window.addEventListener("mouseup", this.mouseUpEventHandler);
     }
   };
 
   on_finish = () => {
     this.domObserver.disconnect();
 
-    if (this.eventsToTrack.includes('mousemove')) {
-      window.removeEventListener('mousemove', this.mouseMoveEventHandler);
+    if (this.eventsToTrack.includes("mousemove")) {
+      window.removeEventListener("mousemove", this.mouseMoveEventHandler);
     }
-    if (this.eventsToTrack.includes('mousedown')) {
-      window.removeEventListener('mousedown', this.mouseDownEventHandler);
+    if (this.eventsToTrack.includes("mousedown")) {
+      window.removeEventListener("mousedown", this.mouseDownEventHandler);
     }
-    if (this.eventsToTrack.includes('mouseup')) {
-      window.removeEventListener('mouseup', this.mouseUpEventHandler);
+    if (this.eventsToTrack.includes("mouseup")) {
+      window.removeEventListener("mouseup", this.mouseUpEventHandler);
     }
 
     return {
@@ -170,7 +171,7 @@ class MouseTrackingExtension implements JsPsychExtension {
       event_time - this.lastSampleTime >= this.minimumSampleTime
     ) {
       this.lastSampleTime = event_time;
-      this.currentTrialData.push({ x, y, t, event: 'mousemove' });
+      this.currentTrialData.push({ x, y, t, event: "mousemove" });
     }
   };
 
@@ -178,14 +179,14 @@ class MouseTrackingExtension implements JsPsychExtension {
     const event_time = performance.now();
     const t = Math.round(event_time - this.currentTrialStartTime);
 
-    this.currentTrialData.push({ x, y, t, event: 'mouseup' });
+    this.currentTrialData.push({ x, y, t, event: "mouseup" });
   };
 
   private mouseDownEventHandler = ({ clientX: x, clientY: y }: MouseEvent) => {
     const event_time = performance.now();
     const t = Math.round(event_time - this.currentTrialStartTime);
 
-    this.currentTrialData.push({ x, y, t, event: 'mousedown' });
+    this.currentTrialData.push({ x, y, t, event: "mousedown" });
   };
 
   private mutationObserverCallback = (mutationsList, observer) => {

@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'survey-multi-choice',
+  name: "survey-multi-choice",
   version: version,
   parameters: {
     /**
@@ -46,7 +46,7 @@ const info = <const>{
         /** Name of the question in the trial data. If no name is given, the questions are named Q0, Q1, etc. */
         name: {
           type: ParameterType.STRING,
-          default: '',
+          default: "",
         },
       },
     },
@@ -66,7 +66,7 @@ const info = <const>{
     /** Label of the button. */
     button_label: {
       type: ParameterType.STRING,
-      default: 'Continue',
+      default: "Continue",
     },
     /**
      * This determines whether or not all of the input elements on the page should allow autocomplete. Setting
@@ -105,6 +105,7 @@ const info = <const>{
       array: true,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -124,27 +125,27 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    var plugin_id_name = 'jspsych-survey-multi-choice';
+    var plugin_id_name = "jspsych-survey-multi-choice";
 
-    var html = '';
+    var html = "";
 
     // inject CSS for trial
     html += '<style id="jspsych-survey-multi-choice-css">';
     html +=
-      '.jspsych-survey-multi-choice-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }' +
-      '.jspsych-survey-multi-choice-text span.required {color: darkred;}' +
-      '.jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align: center;}' +
-      '.jspsych-survey-multi-choice-option { line-height: 2; }' +
-      '.jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}' +
+      ".jspsych-survey-multi-choice-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }" +
+      ".jspsych-survey-multi-choice-text span.required {color: darkred;}" +
+      ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align: center;}" +
+      ".jspsych-survey-multi-choice-option { line-height: 2; }" +
+      ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}" +
       "label.jspsych-survey-multi-choice-text input[type='radio'] {margin-right: 1em;}";
-    html += '</style>';
+    html += "</style>";
 
     // show preamble text
     if (trial.preamble !== null) {
       html +=
         '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble">' +
         trial.preamble +
-        '</div>';
+        "</div>";
     }
 
     // form element
@@ -170,16 +171,16 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
       var question_id = question_order[i];
 
       // create question container
-      var question_classes = ['jspsych-survey-multi-choice-question'];
+      var question_classes = ["jspsych-survey-multi-choice-question"];
       if (question.horizontal) {
-        question_classes.push('jspsych-survey-multi-choice-horizontal');
+        question_classes.push("jspsych-survey-multi-choice-horizontal");
       }
 
       html +=
         '<div id="jspsych-survey-multi-choice-' +
         question_id +
         '" class="' +
-        question_classes.join(' ') +
+        question_classes.join(" ") +
         '"  data-name="' +
         question.name +
         '">';
@@ -189,16 +190,16 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
       if (question.required) {
         html += "<span class='required'>*</span>";
       }
-      html += '</p>';
+      html += "</p>";
 
       // create option radio buttons
       for (var j = 0; j < question.options.length; j++) {
         // add label and question text
-        var option_id_name = 'jspsych-survey-multi-choice-option-' + question_id + '-' + j;
-        var input_name = 'jspsych-survey-multi-choice-response-' + question_id;
-        var input_id = 'jspsych-survey-multi-choice-response-' + question_id + '-' + j;
+        var option_id_name = "jspsych-survey-multi-choice-option-" + question_id + "-" + j;
+        var input_name = "jspsych-survey-multi-choice-response-" + question_id;
+        var input_id = "jspsych-survey-multi-choice-response-" + question_id + "-" + j;
 
-        var required_attr = question.required ? 'required' : '';
+        var required_attr = question.required ? "required" : "";
 
         // add radio button container
         html += '<div id="' + option_id_name + '" class="jspsych-survey-multi-choice-option">';
@@ -212,12 +213,12 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
           question.options[j] +
           '" ' +
           required_attr +
-          '></input>';
-        html += question.options[j] + '</label>';
-        html += '</div>';
+          "></input>";
+        html += question.options[j] + "</label>";
+        html += "</div>";
       }
 
-      html += '</div>';
+      html += "</div>";
     }
 
     // add submit button
@@ -227,14 +228,14 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
       '-next" class="' +
       plugin_id_name +
       ' jspsych-btn"' +
-      (trial.button_label ? ' value="' + trial.button_label + '"' : '') +
-      '></input>';
-    html += '</form>';
+      (trial.button_label ? ' value="' + trial.button_label + '"' : "") +
+      "></input>";
+    html += "</form>";
 
     // render
     display_element.innerHTML = html;
 
-    document.querySelector('form').addEventListener('submit', (event) => {
+    document.querySelector("form").addEventListener("submit", (event) => {
       event.preventDefault();
       // measure response time
       var endTime = performance.now();
@@ -243,18 +244,18 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
       // create object to hold responses
       var question_data = {};
       for (var i = 0; i < trial.questions.length; i++) {
-        var match = display_element.querySelector('#jspsych-survey-multi-choice-' + i);
-        var id = 'Q' + i;
+        var match = display_element.querySelector("#jspsych-survey-multi-choice-" + i);
+        var id = "Q" + i;
         var val: String;
-        if (match.querySelector('input[type=radio]:checked') !== null) {
-          val = match.querySelector<HTMLInputElement>('input[type=radio]:checked').value;
+        if (match.querySelector("input[type=radio]:checked") !== null) {
+          val = match.querySelector<HTMLInputElement>("input[type=radio]:checked").value;
         } else {
-          val = '';
+          val = "";
         }
         var obje = {};
         var name = id;
-        if (match.attributes['data-name'].value !== '') {
-          name = match.attributes['data-name'].value;
+        if (match.attributes["data-name"].value !== "") {
+          name = match.attributes["data-name"].value;
         }
         obje[name] = val;
         Object.assign(question_data, obje);
@@ -279,11 +280,11 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == 'data-only') {
+    if (simulation_mode == "data-only") {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == 'visual') {
+    if (simulation_mode == "visual") {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -340,7 +341,7 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
     }
 
     this.jsPsych.pluginAPI.clickTarget(
-      display_element.querySelector('#jspsych-survey-multi-choice-next'),
+      display_element.querySelector("#jspsych-survey-multi-choice-next"),
       data.rt
     );
   }

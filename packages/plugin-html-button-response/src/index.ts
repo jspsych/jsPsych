@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'html-button-response',
+  name: "html-button-response",
   version: version,
   parameters: {
     /** The HTML content to be displayed. */
@@ -44,7 +44,7 @@ const info = <const>{
     /** Setting to `'grid'` will make the container element have the CSS property `display: grid` and enable the use of `grid_rows` and `grid_columns`. Setting to `'flex'` will make the container element have the CSS property `display: flex`. You can customize how the buttons are laid out by adding inline CSS in the `button_html` parameter. */
     button_layout: {
       type: ParameterType.STRING,
-      default: 'grid',
+      default: "grid",
     },
     /**
      * The number of rows in the button grid. Only applicable when `button_layout` is set to `'grid'`. If null, the number of rows will be determined automatically based on the number of buttons and the number of columns.
@@ -85,6 +85,7 @@ const info = <const>{
       type: ParameterType.HTML_STRING,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -103,20 +104,20 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // Display stimulus
-    const stimulusElement = document.createElement('div');
-    stimulusElement.id = 'jspsych-html-button-response-stimulus';
+    const stimulusElement = document.createElement("div");
+    stimulusElement.id = "jspsych-html-button-response-stimulus";
     stimulusElement.innerHTML = trial.stimulus;
 
     display_element.appendChild(stimulusElement);
 
     // Display buttons
-    const buttonGroupElement = document.createElement('div');
-    buttonGroupElement.id = 'jspsych-html-button-response-btngroup';
-    if (trial.button_layout === 'grid') {
-      buttonGroupElement.classList.add('jspsych-btn-group-grid');
+    const buttonGroupElement = document.createElement("div");
+    buttonGroupElement.id = "jspsych-html-button-response-btngroup";
+    if (trial.button_layout === "grid") {
+      buttonGroupElement.classList.add("jspsych-btn-group-grid");
       if (trial.grid_rows === null && trial.grid_columns === null) {
         throw new Error(
-          'You cannot set `grid_rows` to `null` without providing a value for `grid_columns`.'
+          "You cannot set `grid_rows` to `null` without providing a value for `grid_columns`."
         );
       }
       const n_cols =
@@ -129,15 +130,15 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
           : trial.grid_rows;
       buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
       buttonGroupElement.style.gridTemplateRows = `repeat(${n_rows}, 1fr)`;
-    } else if (trial.button_layout === 'flex') {
-      buttonGroupElement.classList.add('jspsych-btn-group-flex');
+    } else if (trial.button_layout === "flex") {
+      buttonGroupElement.classList.add("jspsych-btn-group-flex");
     }
 
     for (const [choiceIndex, choice] of trial.choices.entries()) {
-      buttonGroupElement.insertAdjacentHTML('beforeend', trial.button_html(choice, choiceIndex));
+      buttonGroupElement.insertAdjacentHTML("beforeend", trial.button_html(choice, choiceIndex));
       const buttonElement = buttonGroupElement.lastChild as HTMLElement;
       buttonElement.dataset.choice = choiceIndex.toString();
-      buttonElement.addEventListener('click', () => {
+      buttonElement.addEventListener("click", () => {
         after_response(choiceIndex);
       });
     }
@@ -146,7 +147,7 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // Show prompt if there is one
     if (trial.prompt !== null) {
-      display_element.insertAdjacentHTML('beforeend', trial.prompt);
+      display_element.insertAdjacentHTML("beforeend", trial.prompt);
     }
 
     // start time
@@ -181,11 +182,11 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      stimulusElement.classList.add('responded');
+      stimulusElement.classList.add("responded");
 
       // disable all the buttons after a response
       for (const button of buttonGroupElement.children) {
-        button.setAttribute('disabled', 'disabled');
+        button.setAttribute("disabled", "disabled");
       }
 
       if (trial.response_ends_trial) {
@@ -196,20 +197,20 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
     // hide image if timing is set
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
-        stimulusElement.style.visibility = 'hidden';
+        stimulusElement.style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
 
     // disable all the buttons and set a timeout that enables them after a specified delay if timing is set
     if (trial.enable_button_after > 0) {
-      var btns = document.querySelectorAll('.jspsych-html-button-response-button button');
+      var btns = document.querySelectorAll(".jspsych-html-button-response-button button");
       for (var i = 0; i < btns.length; i++) {
-        btns[i].setAttribute('disabled', 'disabled');
+        btns[i].setAttribute("disabled", "disabled");
       }
       this.jsPsych.pluginAPI.setTimeout(() => {
-        var btns = document.querySelectorAll('.jspsych-html-button-response-button button');
+        var btns = document.querySelectorAll(".jspsych-html-button-response-button button");
         for (var i = 0; i < btns.length; i++) {
-          btns[i].removeAttribute('disabled');
+          btns[i].removeAttribute("disabled");
         }
       }, trial.enable_button_after);
     }
@@ -226,11 +227,11 @@ class HtmlButtonResponsePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == 'data-only') {
+    if (simulation_mode == "data-only") {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == 'visual') {
+    if (simulation_mode == "visual") {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }

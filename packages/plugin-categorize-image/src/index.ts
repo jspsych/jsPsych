@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'categorize-image',
+  name: "categorize-image",
   version: version,
   parameters: {
     /** The path to the image file. */
@@ -19,7 +19,7 @@ const info = <const>{
     /** This array contains the key(s) that the participant is allowed to press in order to respond to the stimulus. Keys should be specified as characters (e.g., `'a'`, `'q'`, `' '`, `'Enter'`, `'ArrowDown'`) - see [this page](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) and [this page (event.key column)](https://www.freecodecamp.org/news/javascript-keycode-list-keypress-event-key-codes/) for more examples. Any key presses that are not listed in the array will be ignored. The default value of `"ALL_KEYS"` means that all keys will be accepted as valid responses. Specifying `"NO_KEYS"` will mean that no responses are allowed. */
     choices: {
       type: ParameterType.KEYS,
-      default: 'ALL_KEYS',
+      default: "ALL_KEYS",
     },
     /** A label that is associated with the correct answer. Used in conjunction with the `correct_text` and `incorrect_text` parameters.*/
     text_answer: {
@@ -60,7 +60,7 @@ const info = <const>{
     /** The message to show on a timeout non-response. */
     timeout_message: {
       type: ParameterType.HTML_STRING,
-      default: '<p>Please respond faster.</p>',
+      default: "<p>Please respond faster.</p>",
     },
     /** How long to show the stimulus for (milliseconds). If null, then the stimulus is shown until a response is given. */
     stimulus_duration: {
@@ -96,6 +96,7 @@ const info = <const>{
       type: ParameterType.BOOL,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -122,8 +123,8 @@ class CategorizeImagePlugin implements JsPsychPlugin<Info> {
     if (trial.stimulus_duration !== null) {
       this.jsPsych.pluginAPI.setTimeout(() => {
         display_element.querySelector<HTMLElement>(
-          '#jspsych-categorize-image-stimulus'
-        ).style.visibility = 'hidden';
+          "#jspsych-categorize-image-stimulus"
+        ).style.visibility = "hidden";
       }, trial.stimulus_duration);
     }
 
@@ -159,7 +160,7 @@ class CategorizeImagePlugin implements JsPsychPlugin<Info> {
     this.jsPsych.pluginAPI.getKeyboardResponse({
       callback_function: after_response,
       valid_responses: trial.choices,
-      rt_method: 'performance',
+      rt_method: "performance",
       persist: false,
       allow_held_key: false,
     });
@@ -190,11 +191,11 @@ class CategorizeImagePlugin implements JsPsychPlugin<Info> {
         }
 
         // substitute answer in feedback string.
-        var atext = '';
+        var atext = "";
         if (correct) {
-          atext = trial.correct_text.replace('%ANS%', trial.text_answer);
+          atext = trial.correct_text.replace("%ANS%", trial.text_answer);
         } else {
-          atext = trial.incorrect_text.replace('%ANS%', trial.text_answer);
+          atext = trial.incorrect_text.replace("%ANS%", trial.text_answer);
         }
 
         // show the feedback
@@ -213,7 +214,7 @@ class CategorizeImagePlugin implements JsPsychPlugin<Info> {
         this.jsPsych.pluginAPI.getKeyboardResponse({
           callback_function: after_forced_response,
           valid_responses: [trial.key_answer],
-          rt_method: 'performance',
+          rt_method: "performance",
           persist: false,
           allow_held_key: false,
         });
@@ -229,11 +230,11 @@ class CategorizeImagePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == 'data-only') {
+    if (simulation_mode == "data-only") {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == 'visual') {
+    if (simulation_mode == "visual") {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }

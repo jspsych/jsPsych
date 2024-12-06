@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'resize',
+  name: "resize",
   version: version,
   parameters: {
     /** The height of the item to be measured. Any units can be used
@@ -37,7 +37,7 @@ const info = <const>{
     /** Label to display on the button to complete calibration. */
     button_label: {
       type: ParameterType.STRING,
-      default: 'Continue',
+      default: "Continue",
     },
   },
   data: {
@@ -50,6 +50,7 @@ const info = <const>{
       type: ParameterType.FLOAT,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -85,16 +86,16 @@ class ResizePlugin implements JsPsychPlugin<Info> {
     var html =
       '<div id="jspsych-resize-div" style="border: 2px solid steelblue; height: ' +
       start_div_height +
-      'px; width:' +
+      "px; width:" +
       start_div_width +
       'px; margin: 7px auto; background-color: lightsteelblue; position: relative;">';
     html +=
       '<div id="jspsych-resize-handle" style="cursor: nwse-resize; background-color: steelblue; width: 10px; height: 10px; border: 2px solid lightsteelblue; position: absolute; bottom: 0; right: 0;"></div>';
-    html += '</div>';
+    html += "</div>";
     if (trial.prompt !== null) {
       html += trial.prompt;
     }
-    html += '<a class="jspsych-btn" id="jspsych-resize-btn">' + trial.button_label + '</a>';
+    html += '<a class="jspsych-btn" id="jspsych-resize-btn">' + trial.button_label + "</a>";
 
     // render
     display_element.innerHTML = html;
@@ -102,8 +103,8 @@ class ResizePlugin implements JsPsychPlugin<Info> {
     // function to end trial
     const end_trial = () => {
       // clear document event listeners
-      document.removeEventListener('mousemove', resizeevent);
-      document.removeEventListener('mouseup', mouseupevent);
+      document.removeEventListener("mousemove", resizeevent);
+      document.removeEventListener("mouseup", mouseupevent);
 
       // finishes trial
 
@@ -117,7 +118,7 @@ class ResizePlugin implements JsPsychPlugin<Info> {
     };
 
     // listens for the click
-    document.getElementById('jspsych-resize-btn').addEventListener('click', () => {
+    document.getElementById("jspsych-resize-btn").addEventListener("click", () => {
       scale();
       end_trial();
     });
@@ -136,16 +137,16 @@ class ResizePlugin implements JsPsychPlugin<Info> {
     };
 
     display_element
-      .querySelector('#jspsych-resize-handle')
-      .addEventListener('mousedown', mousedownevent);
+      .querySelector("#jspsych-resize-handle")
+      .addEventListener("mousedown", mousedownevent);
 
     var mouseupevent = (e) => {
       dragging = false;
     };
 
-    document.addEventListener('mouseup', mouseupevent);
+    document.addEventListener("mouseup", mouseupevent);
 
-    var scale_div: HTMLDivElement = display_element.querySelector('#jspsych-resize-div');
+    var scale_div: HTMLDivElement = display_element.querySelector("#jspsych-resize-div");
 
     var resizeevent = (e) => {
       if (dragging) {
@@ -153,16 +154,16 @@ class ResizePlugin implements JsPsychPlugin<Info> {
         var dy = e.pageY - origin_y;
 
         if (Math.abs(dx) >= Math.abs(dy)) {
-          scale_div.style.width = Math.round(Math.max(20, cx + dx * 2)) + 'px';
-          scale_div.style.height = Math.round(Math.max(20, cx + dx * 2) / aspect_ratio) + 'px';
+          scale_div.style.width = Math.round(Math.max(20, cx + dx * 2)) + "px";
+          scale_div.style.height = Math.round(Math.max(20, cx + dx * 2) / aspect_ratio) + "px";
         } else {
-          scale_div.style.height = Math.round(Math.max(20, cy + dy * 2)) + 'px';
-          scale_div.style.width = Math.round(aspect_ratio * Math.max(20, cy + dy * 2)) + 'px';
+          scale_div.style.height = Math.round(Math.max(20, cy + dy * 2)) + "px";
+          scale_div.style.width = Math.round(aspect_ratio * Math.max(20, cy + dy * 2)) + "px";
         }
       }
     };
 
-    document.addEventListener('mousemove', resizeevent);
+    document.addEventListener("mousemove", resizeevent);
 
     // scales the stimulus
     var scale_factor;
@@ -174,7 +175,7 @@ class ResizePlugin implements JsPsychPlugin<Info> {
       var pixels_unit_screen = final_width_px / trial.item_width;
 
       scale_factor = pixels_unit_screen / trial.pixels_per_unit;
-      document.getElementById('jspsych-content').style.transform = 'scale(' + scale_factor + ')';
+      document.getElementById("jspsych-content").style.transform = "scale(" + scale_factor + ")";
     }
   }
 }

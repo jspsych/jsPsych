@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'video-button-response',
+  name: "video-button-response",
   version: version,
   parameters: {
     /**
@@ -48,17 +48,17 @@ const info = <const>{
     /** The width of the video display in pixels. */
     width: {
       type: ParameterType.INT,
-      default: '',
+      default: "",
     },
     /** The height of the video display in pixels. */
     height: {
       type: ParameterType.INT,
-      default: '',
+      default: "",
     },
     /** If true, the video will begin playing as soon as it has loaded. */
     autoplay: {
       type: ParameterType.BOOL,
-      pretty_name: 'Autoplay',
+      pretty_name: "Autoplay",
       default: true,
     },
     /** If true, controls for the video player will be available to the participant. They will be able to pause
@@ -104,7 +104,7 @@ const info = <const>{
      */
     button_layout: {
       type: ParameterType.STRING,
-      default: 'grid',
+      default: "grid",
     },
     /**
      * The number of rows in the button grid. Only applicable when `button_layout` is set to `'grid'`. If null,
@@ -162,6 +162,7 @@ const info = <const>{
       array: true,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -189,12 +190,12 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // Setup stimulus
-    const stimulusWrapper = document.createElement('div');
+    const stimulusWrapper = document.createElement("div");
     display_element.appendChild(stimulusWrapper);
 
-    const videoElement = document.createElement('video');
+    const videoElement = document.createElement("video");
     stimulusWrapper.appendChild(videoElement);
-    videoElement.id = 'jspsych-video-button-response-stimulus';
+    videoElement.id = "jspsych-video-button-response-stimulus";
 
     if (trial.width) {
       videoElement.width = trial.width;
@@ -212,37 +213,37 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
     if (trial.start !== null) {
       // hide video element when page loads if the start time is specified,
       // to prevent the video element from showing the first frame
-      videoElement.style.visibility = 'hidden';
+      videoElement.style.visibility = "hidden";
     }
 
     const videoPreloadBlob = this.jsPsych.pluginAPI.getVideoBuffer(trial.stimulus[0]);
     if (!videoPreloadBlob) {
       for (let filename of trial.stimulus) {
-        if (filename.indexOf('?') > -1) {
-          filename = filename.substring(0, filename.indexOf('?'));
+        if (filename.indexOf("?") > -1) {
+          filename = filename.substring(0, filename.indexOf("?"));
         }
-        const type = filename.substring(filename.lastIndexOf('.') + 1).toLowerCase();
-        if (type === 'mov') {
+        const type = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase();
+        if (type === "mov") {
           console.warn(
-            'Warning: video-button-response plugin does not reliably support .mov files.'
+            "Warning: video-button-response plugin does not reliably support .mov files."
           );
         }
 
-        const sourceElement = document.createElement('source');
+        const sourceElement = document.createElement("source");
         sourceElement.src = filename;
-        sourceElement.type = 'video/' + type;
+        sourceElement.type = "video/" + type;
         videoElement.appendChild(sourceElement);
       }
     }
 
     // Display buttons
-    const buttonGroupElement = document.createElement('div');
-    buttonGroupElement.id = 'jspsych-video-button-response-btngroup';
-    if (trial.button_layout === 'grid') {
-      buttonGroupElement.classList.add('jspsych-btn-group-grid');
+    const buttonGroupElement = document.createElement("div");
+    buttonGroupElement.id = "jspsych-video-button-response-btngroup";
+    if (trial.button_layout === "grid") {
+      buttonGroupElement.classList.add("jspsych-btn-group-grid");
       if (trial.grid_rows === null && trial.grid_columns === null) {
         throw new Error(
-          'You cannot set `grid_rows` to `null` without providing a value for `grid_columns`.'
+          "You cannot set `grid_rows` to `null` without providing a value for `grid_columns`."
         );
       }
       const n_cols =
@@ -255,15 +256,15 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
           : trial.grid_rows;
       buttonGroupElement.style.gridTemplateColumns = `repeat(${n_cols}, 1fr)`;
       buttonGroupElement.style.gridTemplateRows = `repeat(${n_rows}, 1fr)`;
-    } else if (trial.button_layout === 'flex') {
-      buttonGroupElement.classList.add('jspsych-btn-group-flex');
+    } else if (trial.button_layout === "flex") {
+      buttonGroupElement.classList.add("jspsych-btn-group-flex");
     }
 
     for (const [choiceIndex, choice] of trial.choices.entries()) {
-      buttonGroupElement.insertAdjacentHTML('beforeend', trial.button_html(choice, choiceIndex));
+      buttonGroupElement.insertAdjacentHTML("beforeend", trial.button_html(choice, choiceIndex));
       const buttonElement = buttonGroupElement.lastChild as HTMLElement;
       buttonElement.dataset.choice = choiceIndex.toString();
-      buttonElement.addEventListener('click', () => {
+      buttonElement.addEventListener("click", () => {
         after_response(choiceIndex);
       });
     }
@@ -272,7 +273,7 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     // Show prompt if there is one
     if (trial.prompt !== null) {
-      display_element.insertAdjacentHTML('beforeend', trial.prompt);
+      display_element.insertAdjacentHTML("beforeend", trial.prompt);
     }
 
     var start_time = performance.now();
@@ -296,7 +297,7 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
     if (trial.start !== null) {
       videoElement.pause();
       videoElement.onseeked = () => {
-        videoElement.style.visibility = 'visible';
+        videoElement.style.visibility = "visible";
         videoElement.muted = false;
         if (trial.autoplay) {
           videoElement.play();
@@ -317,7 +318,7 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     let stopped = false;
     if (trial.stop !== null) {
-      videoElement.addEventListener('timeupdate', (e) => {
+      videoElement.addEventListener("timeupdate", (e) => {
         if (videoElement.currentTime >= trial.stop) {
           if (!trial.response_allowed_while_playing) {
             if (trial.enable_button_after > 0) {
@@ -386,7 +387,7 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
 
       // after a valid response, the stimulus will have the CSS class 'responded'
       // which can be used to provide visual feedback that a response was recorded
-      videoElement.classList.add('responded');
+      videoElement.classList.add("responded");
 
       // disable all the buttons after a response
       disable_buttons();
@@ -398,13 +399,13 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
 
     function disable_buttons() {
       for (const button of buttonGroupElement.children) {
-        button.setAttribute('disabled', 'disabled');
+        button.setAttribute("disabled", "disabled");
       }
     }
 
     function enable_buttons() {
       for (const button of buttonGroupElement.children) {
-        button.removeAttribute('disabled');
+        button.removeAttribute("disabled");
       }
     }
 
@@ -420,11 +421,11 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == 'data-only') {
+    if (simulation_mode == "data-only") {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == 'visual') {
+    if (simulation_mode == "visual") {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -460,7 +461,7 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
     load_callback();
 
     const video_element = display_element.querySelector<HTMLVideoElement>(
-      '#jspsych-video-button-response-stimulus'
+      "#jspsych-video-button-response-stimulus"
     );
 
     const respond = () => {
@@ -475,7 +476,7 @@ class VideoButtonResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     if (!trial.response_allowed_while_playing) {
-      video_element.addEventListener('ended', respond);
+      video_element.addEventListener("ended", respond);
     } else {
       respond();
     }

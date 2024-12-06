@@ -1,9 +1,9 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'preload',
+  name: "preload",
   version: version,
   parameters: {
     /** If `true`, the plugin will preload any files that can be automatically preloaded based on the main experiment
@@ -74,7 +74,7 @@ const info = <const>{
     /** HTML-formatted message to be shown on the page after loading fails or times out. Only applies when `continue_after_error` is `false`.*/
     error_message: {
       type: ParameterType.HTML_STRING,
-      default: 'The experiment failed to load.',
+      default: "The experiment failed to load.",
     },
     /**
      * Whether or not to show a detailed error message on the page. If true, then detailed error messages will be shown on the
@@ -134,6 +134,7 @@ const info = <const>{
       array: true,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -204,7 +205,7 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
 
     // render display of message and progress bar
 
-    var html = '';
+    var html = "";
 
     if (trial.message !== null) {
       html += trial.message;
@@ -224,17 +225,17 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
       if (trial.show_progress_bar) {
         var percent_loaded = (loaded / total_n) * 100;
         var preload_progress_bar = display_element.querySelector<HTMLElement>(
-          '#jspsych-loading-progress-bar'
+          "#jspsych-loading-progress-bar"
         );
         if (preload_progress_bar !== null) {
-          preload_progress_bar.style.width = percent_loaded + '%';
+          preload_progress_bar.style.width = percent_loaded + "%";
         }
       }
     };
 
     // called if all files load successfully
     const on_success = () => {
-      if (typeof timeout !== 'undefined' && timeout === false) {
+      if (typeof timeout !== "undefined" && timeout === false) {
         // clear timeout immediately after finishing, to handle race condition with max_load_time
         this.jsPsych.pluginAPI.clearAllTimeouts();
         // need to call cancel preload function to clear global jsPsych preload_request list, even when they've all succeeded
@@ -247,16 +248,16 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
     // called if all_files haven't finished loading when max_load_time is reached
     const on_timeout = () => {
       this.jsPsych.pluginAPI.cancelPreloads();
-      if (typeof success !== 'undefined' && (success === false || success === null)) {
+      if (typeof success !== "undefined" && (success === false || success === null)) {
         timeout = true;
         if (loaded_success < total_n) {
           success = false;
         }
-        after_error('timeout'); // call trial's on_error event handler here, in case loading timed out with no file errors
+        after_error("timeout"); // call trial's on_error event handler here, in case loading timed out with no file errors
         detailed_errors.push(
-          '<p><strong>Loading timed out.</strong><br>' +
-            'Consider compressing your stimuli files, loading your files in smaller batches,<br>' +
-            'and/or increasing the <i>max_load_time</i> parameter.</p>'
+          "<p><strong>Loading timed out.</strong><br>" +
+            "Consider compressing your stimuli files, loading your files in smaller batches,<br>" +
+            "and/or increasing the <i>max_load_time</i> parameter.</p>"
         );
         if (trial.continue_after_error) {
           end_trial();
@@ -273,7 +274,7 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
       display_element.innerHTML = trial.error_message;
       // show detailed errors, if necessary
       if (trial.show_detailed_errors) {
-        display_element.innerHTML += '<p><strong>Error details:</strong></p>';
+        display_element.innerHTML += "<p><strong>Error details:</strong></p>";
         detailed_errors.forEach((e) => {
           display_element.innerHTML += e;
         });
@@ -336,39 +337,39 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
         success = false;
       }
       // add file to failed media list
-      var source = 'unknown file';
+      var source = "unknown file";
       if (e.source) {
         source = e.source;
       }
       if (e.error && e.error.path && e.error.path.length > 0) {
-        if (e.error.path[0].localName == 'img') {
+        if (e.error.path[0].localName == "img") {
           failed_images.push(source);
-        } else if (e.error.path[0].localName == 'audio') {
+        } else if (e.error.path[0].localName == "audio") {
           failed_audio.push(source);
-        } else if (e.error.path[0].localName == 'video') {
+        } else if (e.error.path[0].localName == "video") {
           failed_video.push(source);
         }
       }
       // construct detailed error message
-      var err_msg = '<p><strong>Error loading file: ' + source + '</strong><br>';
+      var err_msg = "<p><strong>Error loading file: " + source + "</strong><br>";
       if (e.error.statusText) {
-        err_msg += 'File request response status: ' + e.error.statusText + '<br>';
+        err_msg += "File request response status: " + e.error.statusText + "<br>";
       }
-      if (e.error == '404') {
-        err_msg += '404 - file not found.<br>';
+      if (e.error == "404") {
+        err_msg += "404 - file not found.<br>";
       }
       if (
-        typeof e.error.loaded !== 'undefined' &&
+        typeof e.error.loaded !== "undefined" &&
         e.error.loaded !== null &&
         e.error.loaded !== 0
       ) {
-        err_msg += e.error.loaded + ' bytes transferred.';
+        err_msg += e.error.loaded + " bytes transferred.";
       } else {
         err_msg +=
-          'File did not begin loading. Check that file path is correct and reachable by the browser,<br>' +
-          'and that loading is not blocked by cross-origin resource sharing (CORS) errors.';
+          "File did not begin loading. Check that file path is correct and reachable by the browser,<br>" +
+          "and that loading is not blocked by cross-origin resource sharing (CORS) errors.";
       }
-      err_msg += '</p>';
+      err_msg += "</p>";
       detailed_errors.push(err_msg);
       // call trial's on_error function
       after_error(source);
@@ -425,11 +426,11 @@ class PreloadPlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == 'data-only') {
+    if (simulation_mode == "data-only") {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == 'visual') {
+    if (simulation_mode == "visual") {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }

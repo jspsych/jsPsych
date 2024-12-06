@@ -1,10 +1,10 @@
-import { detect } from 'detect-browser';
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from 'jspsych';
+import { detect } from "detect-browser";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
-import { version } from '../package.json';
+import { version } from "../package.json";
 
 const info = <const>{
-  name: 'browser-check',
+  name: "browser-check",
   version: version,
   parameters: {
     /**
@@ -14,17 +14,17 @@ const info = <const>{
       type: ParameterType.STRING,
       array: true,
       default: [
-        'width',
-        'height',
-        'webaudio',
-        'browser',
-        'browser_version',
-        'mobile',
-        'os',
-        'fullscreen',
-        'vsync_rate',
-        'webcam',
-        'microphone',
+        "width",
+        "height",
+        "webaudio",
+        "browser",
+        "browser_version",
+        "mobile",
+        "os",
+        "fullscreen",
+        "vsync_rate",
+        "webcam",
+        "microphone",
       ],
     },
     /**
@@ -100,7 +100,7 @@ const info = <const>{
      */
     resize_fail_button_text: {
       type: ParameterType.STRING,
-      default: 'I cannot make the window any larger',
+      default: "I cannot make the window any larger",
     },
     /**
      * A function that evaluates to `true` if the browser meets all of the inclusion criteria
@@ -173,6 +173,7 @@ const info = <const>{
       type: ParameterType.BOOL,
     },
   },
+  // prettier-ignore
   citations: '__CITATIONS__',
 };
 
@@ -330,7 +331,7 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
             }
             navigator.mediaDevices.enumerateDevices().then((devices) => {
               const webcams = devices.filter((d) => {
-                return d.kind == 'videoinput';
+                return d.kind == "videoinput";
               });
               if (webcams.length > 0) {
                 resolve(true);
@@ -347,7 +348,7 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
             }
             navigator.mediaDevices.enumerateDevices().then((devices) => {
               const microphones = devices.filter((d) => {
-                return d.kind == 'audioinput';
+                return d.kind == "audioinput";
               });
               if (microphones.length > 0) {
                 resolve(true);
@@ -373,7 +374,7 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
     const results = await Promise.allSettled(feature_checks);
 
     for (let i = 0; i < features_to_check.length; i++) {
-      if (results[i].status === 'fulfilled') {
+      if (results[i].status === "fulfilled") {
         // @ts-expect-error because .value isn't recognized for some reason
         feature_data.set(features_to_check[i], results[i].value);
       } else {
@@ -397,8 +398,8 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
 
   private async check_allow_resize(feature_data) {
     const display_element = this.jsPsych.getDisplayElement();
-    const w = feature_data.get('width');
-    const h = feature_data.get('height');
+    const w = feature_data.get("width");
+    const h = feature_data.get("height");
 
     if (
       this.t.allow_window_resize &&
@@ -409,15 +410,15 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
         this.t.window_resize_message +
         `<p><button id="browser-check-max-size-btn" class="jspsych-btn">${this.t.resize_fail_button_text}</button></p>`;
 
-      display_element.querySelector('#browser-check-max-size-btn').addEventListener('click', () => {
-        display_element.innerHTML = '';
+      display_element.querySelector("#browser-check-max-size-btn").addEventListener("click", () => {
+        display_element.innerHTML = "";
         this.end_flag = true;
       });
 
-      const min_width_el = display_element.querySelector('#browser-check-min-width');
-      const min_height_el = display_element.querySelector('#browser-check-min-height');
-      const actual_height_el = display_element.querySelector('#browser-check-actual-height');
-      const actual_width_el = display_element.querySelector('#browser-check-actual-width');
+      const min_width_el = display_element.querySelector("#browser-check-min-width");
+      const min_height_el = display_element.querySelector("#browser-check-min-height");
+      const actual_height_el = display_element.querySelector("#browser-check-actual-height");
+      const actual_width_el = display_element.querySelector("#browser-check-actual-width");
 
       while (
         !this.end_flag &&
@@ -441,8 +442,8 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
 
         await this.delay(100);
 
-        feature_data.set('width', window.innerWidth);
-        feature_data.set('height', window.innerHeight);
+        feature_data.set("width", window.innerWidth);
+        feature_data.set("height", window.innerHeight);
       }
     }
   }
@@ -454,7 +455,7 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
   }
 
   private end_experiment(feature_data) {
-    this.jsPsych.getDisplayElement().innerHTML = '';
+    this.jsPsych.getDisplayElement().innerHTML = "";
 
     const trial_data = { ...Object.fromEntries(feature_data) };
 
@@ -467,11 +468,11 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
     simulation_options: any,
     load_callback: () => void
   ) {
-    if (simulation_mode == 'data-only') {
+    if (simulation_mode == "data-only") {
       load_callback();
       this.simulate_data_only(trial, simulation_options);
     }
-    if (simulation_mode == 'visual') {
+    if (simulation_mode == "visual") {
       this.simulate_visual(trial, simulation_options, load_callback);
     }
   }
@@ -483,10 +484,10 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
 
     const feature_data = await this.measure_features(
       featureCheckFunctionsMap,
-      features_to_check.filter((x) => x !== 'vsync_rate')
+      features_to_check.filter((x) => x !== "vsync_rate")
     );
-    if (features_to_check.includes('vsync_rate')) {
-      feature_data.set('vsync_rate', 60);
+    if (features_to_check.includes("vsync_rate")) {
+      feature_data.set("vsync_rate", 60);
     }
 
     const default_data = Object.fromEntries(feature_data);
@@ -531,7 +532,7 @@ class BrowserCheckPlugin implements JsPsychPlugin<Info> {
       // finish it up too.
 
       setTimeout(() => {
-        const btn = document.querySelector('#browser-check-max-size-btn');
+        const btn = document.querySelector("#browser-check-max-size-btn");
         if (btn) {
           this.jsPsych.pluginAPI.clickTarget(btn);
         }
