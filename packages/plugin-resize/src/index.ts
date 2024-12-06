@@ -50,6 +50,8 @@ const info = <const>{
       type: ParameterType.FLOAT,
     },
   },
+  // prettier-ignore
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;

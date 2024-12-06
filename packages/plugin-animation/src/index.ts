@@ -96,6 +96,8 @@ const info = <const>{
       },
     },
   },
+  // prettier-ignore
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;

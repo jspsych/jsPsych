@@ -1,9 +1,13 @@
 import autoBind from "auto-bind";
+// To work with citations
+import { Class } from "type-fest";
 
 import { version } from "../package.json";
 import { ExtensionManager, ExtensionManagerDependencies } from "./ExtensionManager";
 import { JsPsychData, JsPsychDataDependencies } from "./modules/data";
+import { JsPsychExtension } from "./modules/extensions";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
+import { JsPsychPlugin } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
@@ -255,6 +259,31 @@ export class JsPsych {
 
   getTimeline() {
     return this.timeline?.description.timeline;
+  }
+
+  getCitations(
+    plugins: Array<Class<JsPsychPlugin<any>> | Class<JsPsychExtension>>,
+    format?: string
+  ) {
+    format = format ? format.toLowerCase() : "apa";
+    // Check if plugins is an array
+    if (!Array.isArray(plugins)) {
+      throw new Error("Expected array of plugins/extensions");
+    }
+    // Check if array is empty
+    else if (plugins.length == 0) {
+      console.warn("No plugins/extensions provided");
+      return;
+    }
+    // Check if format is supported
+    else if (!Object.keys(plugins[0]["info"].citations).includes(format)) {
+      throw new Error("Unsupported citation format");
+    } else {
+      plugins.map((plugin) => {
+        let pluginCitations = plugin["info"].citations;
+        console.log(format == "apa" ? `${pluginCitations.apa}` : `${pluginCitations.bibtex}`);
+      });
+    }
   }
 
   get extensions() {
