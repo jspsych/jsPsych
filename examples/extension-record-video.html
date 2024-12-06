@@ -32,7 +32,7 @@
             type: jsPsychHtmlKeyboardResponse,
             stimulus: ()=>{
                 let html = `<div style="width:100vw; height:100vh; position: relative;">
-                  <div style="width:15px; height:15px; border-radius:15px; background-color: #000; position:absolute; top: ${jsPsych.timelineVariable('y')}%; left: ${jsPsych.timelineVariable('x')}%;"></div>
+                  <div style="width:15px; height:15px; border-radius:15px; background-color: #000; position:absolute; top: ${jsPsych.evaluateTimelineVariable('y')}%; left: ${jsPsych.evaluateTimelineVariable('x')}%;"></div>
                   </div>`;
               return html;
             },

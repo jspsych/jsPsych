@@ -3,11 +3,15 @@ The following people have contributed to the development of jsPsych by writing c
 * Antonia - https://github.com/Ahoidal
 * aucuparia - https://github.com/aucuparia
 * Xiaolu Bai - https://github.com/lbai001
+* Niranjan Baskaran - https://github.com/Bankminer78
+* brchristian - https://github.com/brchristian
 * bjoluc - https://github.com/bjoluc
 * Christian Brickhouse - https://github.com/chrisbrickhouse
 * Teon L Brooks - https://github.com/teonbrooks
+* Susan Buck - https://github.com/susanBuck
 * Eamon Caddigan - https://github.com/eamoncaddigan
 * Jason Carpenter
+* Cherrie Chang - https://github.com/cherriechang
 * Steve Chao - https://github.com/stchao
 * Zhanwen "Phil" Chen - https://github.com/zhanwenchen
 * cthorey - https://github.com/cthorey
@@ -20,15 +24,17 @@ The following people have contributed to the development of jsPsych by writing c
 * Becky Gilbert - https://github.com/becky-gilbert
 * Mark Gorenstein - https://github.com/mgorenstein
 * Rui Han - https://github.com/hrcn
+* Eitan Hemed - https://github.com/EitanHemed
 * Andy Heusser - https://github.com/andrewheusser
 * Angus Hughes - https://github.com/awhug
-* jadeddelta - https://github.com/jadeddelta
+* jade - https://github.com/jadeddelta
 * Gustavo Juantorena - https://github.com/GEJ1
 * Chris Jungerius - https://github.com/cjungerius
 * George Kachergis - https://github.com/kachergis
 * Yul Kang - https://github.com/yulkang
 * Spencer King - https://github.com/spencerking
 * Jana Klaus - https://github.com/janakl4us
+* Ethan Knights - https://github.com/ethanknights
 * Arnold Kochari - https://github.com/akochari
 * Peter Jes Kohler - https://github.com/pjkohler 
 * kupiqu - https://github.com/kupiqu
@@ -38,6 +44,7 @@ The following people have contributed to the development of jsPsych by writing c
 * madebyafox - https://github.com/madebyafox
 * Shane Martin - https://github.com/shamrt
 * Vijay Marupudi - https://github.com/vijaymarupudi
+* Cian Monnin - https://github.com/CMonnin
 * Adrian Oesch - https://github.com/adrianoesch
 * Benjamin Ooghe-Tabanou - https://github.com/boogheta
 * Nikolay B Petrov - https://github.com/nikbpetrov
@@ -65,3 +72,4 @@ The following people have contributed to the development of jsPsych by writing c
 * Shaobin Jiang - https://github.com/Shaobin-Jiang
 * Haotian Tu - https://github.com/thtTNT
 * Joshua Unrau - https://github.com/joshunrau
+* Victor Zhang - https://github.com/vzhang03
