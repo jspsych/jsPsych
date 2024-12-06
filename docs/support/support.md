@@ -6,7 +6,7 @@ If you have identified a problem with jsPsych, such as a bug in the code or an e
 
 If you have a suggestion for fixing the problem, feel free to [contribute to the project](../developers/contributing.md)!
 
-Additionally, our team has finally launched a mailing system for users to tune in directly to framework updates and developments. You can set your subscribe to any of our available lists, or adjust your preferences, using our [phpList page](https://mail.jspsych.org/). 
+Additionally, our team has finally launched a mailing system for users to tune in directly to framework updates and developments. You can  subscribe to any of our available lists, or adjust your preferences, using our [phpList page](https://mail.jspsych.org/). 
 
 According to your list settings, you can notifications ranging from functionality improvements to special collaborative opportunities for developers. 
 
