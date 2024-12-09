@@ -37,7 +37,7 @@ stimulus | string | The HTML content that was displayed on the screen.
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.0.1"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
