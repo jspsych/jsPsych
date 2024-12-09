@@ -22,6 +22,7 @@ export default function generateCitations() {
   const citationCff = (() => {
     let rawCff;
     try {
+      // look for CITATION.cff in the current directory
       rawCff = fs.readFileSync("./CITATION.cff", "utf-8").toString();
       const cffData = yaml.parse(rawCff);
       if (cffData["preferred-citation"]) {
@@ -30,6 +31,7 @@ export default function generateCitations() {
       return yaml.stringify(rawCff);
     } catch (error) {
       try {
+        // look for CITATION.cff in the root of the repository
         rawCff = fs.readFileSync(path.join(appRootPath.path, "CITATION.cff"), "utf-8").toString();
         return yaml.stringify(rawCff);
       } catch (error) {

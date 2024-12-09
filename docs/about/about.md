@@ -16,12 +16,12 @@ This paper is an updated description of jsPsych and includes all current core te
 
 Citations help us demonstrate that this library is used and valued, which allows us to continue working on it.
 
-#### Cite using citation tool
+#### Citation tool for third-party plugins/extensions
 
-We also made a command-line citation tool that can be used to cite this library, as well as any plugins/extensions you use in your experiment that are developed by other developers. You can see this tool in action by following these steps:
+jsPsych is an open-source, collaborative ecosystem, and many of the plugins/extensions you end up using may be contributed by third-party developers! We want to make sure they get recognition for their good work, so we  made a command-line citation tool that you should use to cite this library and the plugins/extensions used in your experiment. You can see this tool in action by following these steps:
 
 1. Launch a jsPsych experiment in your browser
 2. Open up the browser console using Ctrl + ⇧ + J (Windows) or ⌘ + ⌥ + J (Mac)
-3. Type `jsPsych.getCitations([jsPsychHtmlKeyboardResponse], "apa")`
+3. Type `jsPsych.getCitations([], "apa")`
 
-This should print the APA format citation for the `jsPsychHtmlKeyboardResponse` plugin, which you can then copy and paste into your working document. You can type any number of plugins/extensions by name in the array `[ ]` to generate a list of citations. We currently support APA formatting (`"apa"`) and BibTex formatting (`"bibtex"`).
+This should print the APA format citation for the jsPsych library, which you can then copy and paste into your working document. You can type any number of plugins/extensions by name in the array `[ ]` to generate a list of citations, e.g. `jsPsych.getCitations([jsPsychHtmlKeyboardResponse, jsPsychMouseTrackingExtension], "apa")`. We currently support APA formatting (`"apa"`) and BibTex formatting (`"bibtex"`).
