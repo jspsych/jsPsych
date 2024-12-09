@@ -88,6 +88,8 @@ const info = <const>{
       type: ParameterType.BOOL,
     },
   },
+  // prettier-ignore
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
