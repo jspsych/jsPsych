@@ -140,6 +140,11 @@ const info = <const>{
       type: ParameterType.BOOL,
       default: true,
     },
+    /** If true, the slider's value will be displayed in real time below the slider. */
+    value_display: {
+      type: ParameterType.BOOL,
+      default: false,
+  },
   },
   data: {
     /** The numeric value of the slider. */
@@ -265,7 +270,16 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
     if (!trial.response_allowed_while_playing) {
       html += " disabled";
     }
-    html += "></input><div>";
+
+    // Add real-time value display if enabled
+    if (trial.value_display) {
+        html += ' oninput="this.nextElementSibling.value = this.value"></input>';
+        html += "<output>" + trial.slider_start + "</output>";
+    }else{
+        html += "></input>";
+    }
+    html += "<div>";
+    
     for (var j = 0; j < trial.labels.length; j++) {
       var label_width_perc = 100 / (trial.labels.length - 1);
       var percent_of_range = j * (100 / (trial.labels.length - 1));
