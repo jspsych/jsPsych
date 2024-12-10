@@ -1,5 +1,20 @@
 # @jspsych/config
 
+## 3.1.1
+
+### Patch Changes
+
+- [#3396](https://github.com/jspsych/jsPsych/pull/3396) [`d683396e`](https://github.com/jspsych/jsPsych/commit/d683396e5e6465f454625ec99675f76959a99e9b) Thanks [@bjoluc](https://github.com/bjoluc)! - Update dependencies for config.
+
+  - `@rollup/plugin-common-js` updated to 26.0.1
+  - `esbuild` updated to 0.23.1
+  - `gulp` updated to 5.0.0
+  - `gulp-cli` updated to 3.0.0
+  - `rollup` updated to 4.21.2
+  - `rollup-plugin-dts` updated to 6.1.1
+  - `rollup-plugin-esbuild` updated to 6.1.1
+  - `rollup-plugin-node-externals` updated to 7.1.3
+
 ## 3.1.0
 
 ### Minor Changes
