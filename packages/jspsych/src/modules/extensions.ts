@@ -4,6 +4,7 @@ export interface JsPsychExtensionInfo {
   name: string;
   version?: string;
   data?: ParameterInfos;
+  citations?: Record<string, string> | string;
 }
 
 export interface JsPsychExtension {

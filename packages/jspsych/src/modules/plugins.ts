@@ -141,6 +141,7 @@ export interface PluginInfo {
   version?: string;
   parameters: ParameterInfos;
   data?: ParameterInfos;
+  citations?: Record<string, string> | string;
 }
 
 export interface JsPsychPlugin<I extends PluginInfo> {

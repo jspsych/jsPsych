@@ -27,6 +27,8 @@ const info = <const>{
       default: undefined,
     },
   },
+  // prettier-ignore
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;
