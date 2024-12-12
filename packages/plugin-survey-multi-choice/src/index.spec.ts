@@ -1,5 +1,6 @@
 import { clickTarget, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 
+import { initJsPsych } from "jspsych";
 import surveyMultiChoice from ".";
 
 jest.useFakeTimers();
@@ -10,6 +11,36 @@ const getInputElement = (choiceId: number, value: string) =>
   ) as HTMLInputElement;
 
 describe("survey-multi-choice plugin", () => {
+  test("properly ends when has sibling form", async () => {
+
+    const container = document.createElement('div')
+    const outerForm = document.createElement('form')
+    outerForm.id = 'outer_form'
+    container.appendChild(outerForm)
+    const innerDiv = document.createElement('div')
+    innerDiv.id = 'target_id';
+    container.appendChild(innerDiv);
+    document.body.appendChild(container)
+    const jsPsychInst = initJsPsych({ display_element: innerDiv })
+    const options = ["a", "b", "c"];
+
+    const { getData, expectFinished } = await startTimeline([
+      {
+        type: surveyMultiChoice,
+        questions: [
+          { prompt: "Q0", options },
+          { prompt: "Q1", options },
+        ]
+      },
+    ], jsPsychInst);
+
+    getInputElement(0, "a").checked = true;
+    await clickTarget(document.querySelector("#jspsych-survey-multi-choice-next"));
+    await expectFinished();
+
+  })
+
+
   test("data are logged with the right question when randomize order is true", async () => {
     var scale = ["a", "b", "c", "d", "e"];
     const { getData, expectFinished } = await startTimeline([
@@ -45,7 +76,7 @@ describe("survey-multi-choice plugin", () => {
   });
 });
 
-describe("survey-likert plugin simulation", () => {
+describe("survey-multi-choice plugin simulation", () => {
   test("data-only mode works", async () => {
     const scale = ["a", "b", "c", "d", "e"];
     const { getData, expectFinished } = await simulateTimeline([
