@@ -145,3 +145,5 @@ nav:
 - About:
   - 'About jsPsych': 'about/about.md'
   - 'License': 'about/license.md'
+- Newsletter:
+  - 'Subscribe': 'newsletter/subscribe.md'
