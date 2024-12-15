@@ -2701,6 +2701,69 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Newsletter
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            Newsletter
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../newsletter/subscribe/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Subscribe
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -2800,7 +2863,7 @@
 <td>text</td>
 <td>string</td>
 <td><em>undefined</em></td>
-<td>The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. % correct solution %).</td>
+<td>The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. % correct solution %). To input multiple correct answers, add a / between each answer (i.e. %correct/alsocorrect%).</td>
 </tr>
 <tr>
 <td>button_text</td>
@@ -2821,10 +2884,22 @@
 <td>Boolean value indicating if the answers given by participants should be checked for completion after the button was clicked. If <code>true</code>, answers are not checked for completion and blank answers are allowed. The trial will then automatically finish upon the clicking the button. If <code>false</code>, answers are checked for completion, and in case there are some fields with missing answers, the <code>mistake_fn</code> is called. In this case, the trial does not automatically finish.</td>
 </tr>
 <tr>
+<td>case_sensitivity</td>
+<td>boolean</td>
+<td>true</td>
+<td>Boolean value indicating if the answers given by participants should also be checked to have the right case along with correctness. If set to <code>false</code>, case is disregarded and participants may type in whatever case they please.</td>
+</tr>
+<tr>
 <td>mistake_fn</td>
 <td>function</td>
 <td><code>function(){}</code></td>
 <td>Function called if <code>check_answers</code> is set to <code>true</code> and there is a difference between the participant's answers and the correct solution provided in the text, or if <code>allow_blanks</code> is set to <code>false</code> and there is at least one field with a blank answer.</td>
+</tr>
+<tr>
+<td>autofocus</td>
+<td>boolean</td>
+<td>true</td>
+<td>Boolean value indicating if the first input field should be focused when the trial starts. Enabled by default, but may be disabled especially if participants are using screen readers.</td>
 </tr>
 </tbody>
 </table>
@@ -2848,7 +2923,7 @@
 </table>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-cloze@2.0.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-cloze@2.1.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-cloze.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>

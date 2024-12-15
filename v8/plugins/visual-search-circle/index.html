@@ -2701,6 +2701,69 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Newsletter
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            Newsletter
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../newsletter/subscribe/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Subscribe
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -2782,7 +2845,7 @@
 
 
 <h1 id="visual-search-circle">visual-search-circle<a class="headerlink" href="#visual-search-circle" title="Permanent link">&para;</a></h1>
-<p>Current version: 2.0.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-visual-search-circle/CHANGELOG.md">See version history</a>.</p>
+<p>Current version: 2.1.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-visual-search-circle/CHANGELOG.md">See version history</a>.</p>
 <p>This plugin presents a customizable visual-search task modelled after <a href="http://dx.doi.org/10.3758/BF03206946">Wang, Cavanagh, &amp; Green (1994)</a>. The participant indicates whether or not a target is present among a set of distractors. The stimuli are displayed in a circle, evenly-spaced, equidistant from a fixation point. Here is an example using normal and backward Ns:</p>
 <p><img alt="Sample Visual Search Stimulus" src="../../img/visual_search_example.jpg" /></p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
@@ -2882,6 +2945,18 @@ OR</li>
 <td>How long to show the fixation image for before the search array (in milliseconds).</td>
 </tr>
 <tr>
+<td>randomize_item_locations</td>
+<td>bool</td>
+<td>true</td>
+<td>Whether to use randomized locations on the circle for the items. If <code>false</code>, then the first item will always show at the location specified by <code>location_first_item</code>.</td>
+</tr>
+<tr>
+<td>location_first_item</td>
+<td>numeric</td>
+<td>0</td>
+<td>If <code>randomize_item_locations</code> is <code>false</code>, the location of the first item on the circle, in degrees. 0 degrees is above the fixation, and moving clockwise in the positive direction.</td>
+</tr>
+<tr>
 <td>response_ends_trial</td>
 <td>boolean</td>
 <td>true</td>
@@ -2934,7 +3009,7 @@ OR</li>
 </table>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-visual-search-circle@2.0.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-visual-search-circle@2.1.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-visual-search-circle.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
