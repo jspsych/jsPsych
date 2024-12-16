@@ -96,6 +96,8 @@ const info = <const>{
 
 type Info = typeof info;
 
+const plugin_id_name = "jspsych-survey-multi-choice";
+
 /**
  * **survey-multi-choice**
  *
@@ -107,38 +109,37 @@ type Info = typeof info;
 class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) {}
+  constructor(private jsPsych: JsPsych) { }
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    var plugin_id_name = "jspsych-survey-multi-choice";
+
+    const trial_form_id = `${plugin_id_name}_form`;
 
     var html = "";
 
     // inject CSS for trial
-    html += '<style id="jspsych-survey-multi-choice-css">';
-    html +=
-      ".jspsych-survey-multi-choice-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }" +
-      ".jspsych-survey-multi-choice-text span.required {color: darkred;}" +
-      ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-text {  text-align: center;}" +
-      ".jspsych-survey-multi-choice-option { line-height: 2; }" +
-      ".jspsych-survey-multi-choice-horizontal .jspsych-survey-multi-choice-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}" +
-      "label.jspsych-survey-multi-choice-text input[type='radio'] {margin-right: 1em;}";
-    html += "</style>";
+    html += `
+    <style id="${plugin_id_name}-css">
+      .${plugin_id_name}-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }
+      .${plugin_id_name}-text span.required {color: darkred;}
+      .${plugin_id_name}-horizontal .${plugin_id_name}-text {  text-align: center;}
+      .${plugin_id_name}-option { line-height: 2; }
+      .${plugin_id_name}-horizontal .${plugin_id_name}-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}
+      label.${plugin_id_name}-text input[type='radio'] {margin-right: 1em;}
+      </style>`;
 
     // show preamble text
     if (trial.preamble !== null) {
-      html +=
-        '<div id="jspsych-survey-multi-choice-preamble" class="jspsych-survey-multi-choice-preamble">' +
-        trial.preamble +
-        "</div>";
+      html += `<div id="${plugin_id_name}-preamble" class="${plugin_id_name}-preamble">${trial.preamble}</div>`;
     }
 
     // form element
     if (trial.autocomplete) {
-      html += '<form id="jspsych-survey-multi-choice-form">';
+      html += `<form id="${trial_form_id}">`;
     } else {
-      html += '<form id="jspsych-survey-multi-choice-form" autocomplete="off">';
+      html += `<form id="${trial_form_id}" autocomplete="off">`;
     }
+
     // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
     // so that the data are always associated with the same question regardless of order
     var question_order = [];
@@ -156,22 +157,15 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
       var question_id = question_order[i];
 
       // create question container
-      var question_classes = ["jspsych-survey-multi-choice-question"];
+      var question_classes = [`${plugin_id_name}-question`];
       if (question.horizontal) {
-        question_classes.push("jspsych-survey-multi-choice-horizontal");
+        question_classes.push(`${plugin_id_name}-horizontal`);
       }
 
-      html +=
-        '<div id="jspsych-survey-multi-choice-' +
-        question_id +
-        '" class="' +
-        question_classes.join(" ") +
-        '"  data-name="' +
-        question.name +
-        '">';
+      html += `<div id="${plugin_id_name}-${question_id}" class="${question_classes.join(" ")}" data-name="${question.name}">`;
 
       // add question text
-      html += '<p class="jspsych-survey-multi-choice-text survey-multi-choice">' + question.prompt;
+      html += `<p class="${plugin_id_name}-text survey-multi-choice">${question.prompt}`;
       if (question.required) {
         html += "<span class='required'>*</span>";
       }
@@ -180,47 +174,35 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
       // create option radio buttons
       for (var j = 0; j < question.options.length; j++) {
         // add label and question text
-        var option_id_name = "jspsych-survey-multi-choice-option-" + question_id + "-" + j;
-        var input_name = "jspsych-survey-multi-choice-response-" + question_id;
-        var input_id = "jspsych-survey-multi-choice-response-" + question_id + "-" + j;
+        var option_id_name = `${plugin_id_name}-option-${question_id}-${j}`;
+        var input_name = `${plugin_id_name}-response-${question_id}`;
+        var input_id = `${plugin_id_name}-response-${question_id}-${j}`;
 
         var required_attr = question.required ? "required" : "";
 
         // add radio button container
-        html += '<div id="' + option_id_name + '" class="jspsych-survey-multi-choice-option">';
-        html += '<label class="jspsych-survey-multi-choice-text" for="' + input_id + '">';
-        html +=
-          '<input type="radio" name="' +
-          input_name +
-          '" id="' +
-          input_id +
-          '" value="' +
-          question.options[j] +
-          '" ' +
-          required_attr +
-          "></input>";
-        html += question.options[j] + "</label>";
-        html += "</div>";
+        html += `
+        <div id="${option_id_name}" class="${plugin_id_name}-option">
+          <label class="${plugin_id_name}-text" for="${input_id}">
+            <input type="radio" name="${input_name}" id="${input_id}" value="${question.options[j]}" ${required_attr} />
+            ${question.options[j]}
+            </label>
+        </div>`;
       }
 
       html += "</div>";
     }
 
     // add submit button
-    html +=
-      '<input type="submit" id="' +
-      plugin_id_name +
-      '-next" class="' +
-      plugin_id_name +
-      ' jspsych-btn"' +
-      (trial.button_label ? ' value="' + trial.button_label + '"' : "") +
-      "></input>";
+    html += `<input type="submit" id="${plugin_id_name}-next" class="${plugin_id_name} jspsych-btn"${trial.button_label ? ' value="' + trial.button_label + '"' : ""} />`;
     html += "</form>";
 
     // render
     display_element.innerHTML = html;
 
-    document.querySelector("form").addEventListener("submit", (event) => {
+    const trial_form = display_element.querySelector<HTMLFormElement>(`#${trial_form_id}`);
+
+    trial_form.addEventListener("submit", (event) => {
       event.preventDefault();
       // measure response time
       var endTime = performance.now();
@@ -229,7 +211,7 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
       // create object to hold responses
       var question_data = {};
       for (var i = 0; i < trial.questions.length; i++) {
-        var match = display_element.querySelector("#jspsych-survey-multi-choice-" + i);
+        var match = display_element.querySelector(`#${plugin_id_name}-${i}`);
         var id = "Q" + i;
         var val: String;
         if (match.querySelector("input[type=radio]:checked") !== null) {
@@ -317,7 +299,7 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
     for (let i = 0; i < answers.length; i++) {
       this.jsPsych.pluginAPI.clickTarget(
         display_element.querySelector(
-          `#jspsych-survey-multi-choice-response-${i}-${trial.questions[i].options.indexOf(
+          `#${plugin_id_name}-response-${i}-${trial.questions[i].options.indexOf(
             answers[i][1]
           )}`
         ),
@@ -326,7 +308,7 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
     }
 
     this.jsPsych.pluginAPI.clickTarget(
-      display_element.querySelector("#jspsych-survey-multi-choice-next"),
+      display_element.querySelector(`#${plugin_id_name}-next`),
       data.rt
     );
   }
