@@ -1,5 +1,5 @@
 ---
-"@jspsych/plugin-survey-multi-choice": minor
+"@jspsych/plugin-survey-multi-choice": patch
 ---
 
-Fixed multiple form in page handling
+The plugin will now work in cases where there are multiple forms on the page.
