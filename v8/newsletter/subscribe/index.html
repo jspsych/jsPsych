@@ -2761,31 +2761,33 @@ You can unsubscribe at any time.</p>
     return true;
   } 
 
-  function submitForm() { 
-
+  async function submitForm() { 
     const emailInput = document.getElementById("email");
     const successMessage = 'Thank you for your registration. Please check your email to confirm.'; 
     const url = 'https://mail.jspsych.org/?p=asubscribe&id=6';
     const resultDiv = document.getElementById("result");
+    const subscribeButton = document.querySelector('button#subscribe');
 
-    fetch(url, {
-      method: 'POST',
-      headers: {
+    // Disable the subscribe button
+    subscribeButton.disabled = true;
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
           'Content-Type': 'application/x-www-form-urlencoded', // Adjust based on your content type
-      },
-      body: new URLSearchParams(new FormData(document.getElementById('subscribeform'))),
-    })
-    .then(async response => {
-      const r = await response.text();
-      console.log(r);
-    })
-    .then(data => {
-      console.log(data)
+        },
+        body: new URLSearchParams(new FormData(document.getElementById('subscribeform'))),
+      });
+
+      const data = await response.text();
       resultDiv.innerHTML = successMessage;
-    })
-    .catch(error => {
+    } catch (error) {
       resultDiv.innerHTML = 'An error occurred. Please try again later.';
-    });
+    } finally {
+      // Re-enable the subscribe button
+      subscribeButton.disabled = false;
+    }
   }
 
   document.querySelector('button#subscribe').addEventListener('click', submitForm);
