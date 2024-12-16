@@ -58,6 +58,4 @@ You can unsubscribe at any time.
       subscribeButton.disabled = false;
     }
   }
-
-  document.querySelector('button#subscribe').addEventListener('click', submitForm);
 </script>
