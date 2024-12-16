@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-survey-multi-choice",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "a jspsych plugin for multiple choice survey questions",
   "type": "module",
   "main": "dist/index.cjs",
