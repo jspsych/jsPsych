@@ -150,9 +150,7 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
     if (trial.autocomplete) {
       html += `<form id="${trial_form_id}">`;
     } else {
-      html += `---------
-        <form id="${trial_form_id}" autocomplete="off">
-        ---------`;
+      html += `<form id="${trial_form_id}" autocomplete="off">`;
     }
 
     // generate question order. this is randomized here as opposed to randomizing the order of trial.questions
