@@ -1,5 +1,11 @@
 # @jspsych/plugin-survey-multi-choice
 
+## 2.0.2
+
+### Patch Changes
+
+- [#3444](https://github.com/jspsych/jsPsych/pull/3444) [`996d403a`](https://github.com/jspsych/jsPsych/commit/996d403ac302e68da8cec9b48a007cb0ad9a260f) Thanks [@crava2199](https://github.com/crava2199)! - The plugin will now work in cases where there are multiple forms on the page.
+
 ## 2.0.1
 
 ### Patch Changes
