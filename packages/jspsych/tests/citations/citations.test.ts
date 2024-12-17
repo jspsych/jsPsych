@@ -1,4 +1,4 @@
-import { JsPsych } from "../../src/JsPsych";
+//import { JsPsych } from "../../src/JsPsych";
 import { TestExtension } from "../extensions/TestExtension";
 import TestPlugin from "../TestPlugin";
 
@@ -6,72 +6,94 @@ const testPluginApaCitation = "Test plugin APA citation";
 const testPluginBibtexCitation = "Test plugin BibTeX citation";
 const testExtensionApaCitation = "Test extension APA citation";
 
-let jspsych: JsPsych;
 let consoleLogSpy: jest.SpyInstance;
 let consoleWarnSpy: jest.SpyInstance;
 
-beforeEach(() => {
-  jspsych = new JsPsych();
-  consoleLogSpy = jest.spyOn(console, "log").mockImplementation();
-  consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
-});
+let JsPsych;
 
-afterEach(() => {
-  jest.restoreAllMocks();
-});
+/**
+ * These tests are skipped if the built version of JsPsych is not found.
+ * This is because the citation functionality is only available in the built version
+ * due to code injections that run during the build.
+ */
 
-describe("citing not using an array", () => {
-  test("citing nothing", () => {
-    expect(() => jspsych.getCitations(null)).toThrow("Expected array of plugins/extensions");
-  });
-  test("citing without input and with invalid format", () => {
-    expect(() => jspsych.getCitations(null, "apa")).toThrow("Expected array of plugins/extensions");
-  });
-});
+try {
+  // Try to import built version
+  JsPsych = require("../../dist/index").JsPsych;
+  let jspsych: typeof JsPsych;
 
-describe("citing using an array in different formats", () => {
-  test("citing empty array with APA format", () => {
-    jspsych.getCitations([], "apa");
-    expect(consoleWarnSpy.mock.calls[0][0]).toBe("No plugins/extensions provided");
+  beforeEach(() => {
+    jspsych = new JsPsych();
+    consoleLogSpy = jest.spyOn(console, "log").mockImplementation();
+    consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
   });
-  test("citing empty array with BibTeX format", () => {
-    jspsych.getCitations([], "bibtex");
-    expect(consoleWarnSpy.mock.calls[0][0]).toBe("No plugins/extensions provided");
-  });
-  test("citing empty array without format", () => {
-    jspsych.getCitations([]);
-    expect(consoleWarnSpy.mock.calls[0][0]).toBe("No plugins/extensions provided");
-  });
-  test("citing one plugin with valid format in all caps", () => {
-    jspsych.getCitations([TestPlugin], "APA");
-    expect(consoleLogSpy.mock.calls[0][0]).toBe(testPluginApaCitation);
-  });
-  test("citing with unsupported format", () => {
-    expect(() => jspsych.getCitations([TestPlugin], "DummyTex")).toThrow(
-      "Unsupported citation format"
-    );
-  });
-});
 
-describe("citing mix of valid plugins/extensions", () => {
-  test("citing a plugin", () => {
-    jspsych.getCitations([TestPlugin]);
-    expect(consoleLogSpy.mock.calls[0][0]).toBe(testPluginApaCitation);
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
-  test("citing a plugin in BibTeX", () => {
-    jspsych.getCitations([TestPlugin], "bibtex");
-    expect(consoleLogSpy.mock.calls[0][0]).toBe(testPluginBibtexCitation);
+
+  describe("citing not using an array", () => {
+    test("citing nothing", () => {
+      expect(() => jspsych.getCitations(null)).toThrow("Expected array of plugins/extensions");
+    });
+    test("citing without input and with invalid format", () => {
+      expect(() => jspsych.getCitations(null, "apa")).toThrow(
+        "Expected array of plugins/extensions"
+      );
+    });
   });
-  test("citing multiple plugins", () => {
-    jspsych.getCitations([TestPlugin, TestPlugin]);
-    expect(consoleLogSpy.mock.calls).toHaveLength(2);
-    expect(consoleLogSpy.mock.calls[0][0]).toBe(testPluginApaCitation);
-    expect(consoleLogSpy.mock.calls[1][0]).toBe(testPluginApaCitation);
+
+  describe("citing using an array in different formats", () => {
+    test("citing empty array with APA format", () => {
+      jspsych.getCitations([], "apa");
+      expect(consoleWarnSpy.mock.calls[0][0]).toBe("No plugins/extensions provided");
+    });
+    test("citing empty array with BibTeX format", () => {
+      jspsych.getCitations([], "bibtex");
+      expect(consoleWarnSpy.mock.calls[0][0]).toBe("No plugins/extensions provided");
+    });
+    test("citing empty array without format", () => {
+      jspsych.getCitations([]);
+      expect(consoleWarnSpy.mock.calls[0][0]).toBe("No plugins/extensions provided");
+    });
+    test("citing one plugin with valid format in all caps", () => {
+      jspsych.getCitations([TestPlugin], "APA");
+      expect(consoleLogSpy.mock.calls[0][0]).toBe(testPluginApaCitation);
+    });
+    test("citing with unsupported format", () => {
+      expect(() => jspsych.getCitations([TestPlugin], "DummyTex")).toThrow(
+        "Unsupported citation format"
+      );
+    });
   });
-  test("citing mix of plugins and extensions", () => {
-    jspsych.getCitations([TestPlugin, TestExtension]);
-    expect(consoleLogSpy.mock.calls).toHaveLength(2);
-    expect(consoleLogSpy.mock.calls[0][0]).toBe(testPluginApaCitation);
-    expect(consoleLogSpy.mock.calls[1][0]).toBe(testExtensionApaCitation);
+
+  describe("citing mix of valid plugins/extensions", () => {
+    test("citing a plugin", () => {
+      jspsych.getCitations([TestPlugin]);
+      expect(consoleLogSpy.mock.calls[0][0]).toBe(testPluginApaCitation);
+    });
+    test("citing a plugin in BibTeX", () => {
+      jspsych.getCitations([TestPlugin], "bibtex");
+      expect(consoleLogSpy.mock.calls[0][0]).toBe(testPluginBibtexCitation);
+    });
+    test("citing multiple plugins", () => {
+      jspsych.getCitations([TestPlugin, TestPlugin]);
+      expect(consoleLogSpy.mock.calls).toHaveLength(2);
+      expect(consoleLogSpy.mock.calls[0][0]).toBe(testPluginApaCitation);
+      expect(consoleLogSpy.mock.calls[1][0]).toBe(testPluginApaCitation);
+    });
+    test("citing mix of plugins and extensions", () => {
+      jspsych.getCitations([TestPlugin, TestExtension]);
+      expect(consoleLogSpy.mock.calls).toHaveLength(2);
+      expect(consoleLogSpy.mock.calls[0][0]).toBe(testPluginApaCitation);
+      expect(consoleLogSpy.mock.calls[1][0]).toBe(testExtensionApaCitation);
+    });
   });
-});
+} catch (e) {
+  // Fall back to development version if built version not found
+  describe("skipping citation tests because of missing built version", () => {
+    test.skip("skip", () => {
+      expect(true).toBe(true);
+    });
+  });
+}
