@@ -266,7 +266,8 @@ export class JsPsych {
     format: "apa" | "bibtex" = "apa"
   ) {
     const formatOptions = ["apa", "bibtex"];
-    const jsPsychCitations: any = "__CITATIONS__";
+    // prettier-ignore
+    const jsPsychCitations: any = '__CITATIONS__';
     format = format.toLowerCase() as "apa" | "bibtex";
     // Check if plugins is an array
     if (!Array.isArray(plugins)) {
