@@ -151,7 +151,8 @@ describe("html-button-response", () => {
       },
     ]);
 
-    const btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+    const btns = document.querySelectorAll("div#jspsych-html-button-response-btngroup button");
+    expect(btns.length).toBeGreaterThan(0);
 
     for (let i = 0; i < btns.length; i++) {
       expect(btns[i].getAttribute("disabled")).toBe("disabled");

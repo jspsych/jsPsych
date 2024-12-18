@@ -1,5 +1,11 @@
 # jspsych
 
+## 8.1.0
+
+### Minor Changes
+
+- [#3426](https://github.com/jspsych/jsPsych/pull/3426) [`bfeeea3a`](https://github.com/jspsych/jsPsych/commit/bfeeea3ab217f9d7f2bcb1e8f2dcc3f0e59761a7) Thanks [@bjoluc](https://github.com/bjoluc)! - We added a feature that allows users to dynamically add or remove trials or nested timelines to a timeline array during runtime.
+
 ## 8.0.3
 
 ### Patch Changes

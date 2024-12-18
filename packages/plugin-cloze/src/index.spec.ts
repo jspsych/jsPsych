@@ -84,6 +84,21 @@ describe("cloze", () => {
     await expectFinished();
   });
 
+  test("ends trial on button click when answers are checked and correct without case sensitivity", async () => {
+    const { expectFinished } = await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze% text.",
+        check_answers: true,
+        case_sensitivity: false,
+      },
+    ]);
+
+    getInputElementById("input0").value = "CLOZE";
+    clickTarget(document.querySelector("#finish_cloze_button"));
+    await expectFinished();
+  });
+
   test("ends trial on button click when all answers are checked for completion and are complete", async () => {
     const { expectFinished } = await startTimeline([
       {
@@ -177,6 +192,27 @@ describe("cloze", () => {
     mistakeFn.mockReset();
 
     getInputElementById("input0").value = "";
+    await clickFinishButton();
+    expect(mistakeFn).toHaveBeenCalled();
+
+    getInputElementById("input0").value = "cloze";
+    await clickFinishButton();
+    await expectFinished();
+  });
+
+  test("calls mistake function on button click when answers are checked and do not belong to a multiple answer blank", async () => {
+    const mistakeFn = jest.fn();
+
+    const { expectFinished } = await startTimeline([
+      {
+        type: cloze,
+        text: "This is a %cloze/jspsych% text.",
+        check_answers: true,
+        mistake_fn: mistakeFn,
+      },
+    ]);
+
+    getInputElementById("input0").value = "not fitting in answer";
     await clickFinishButton();
     expect(mistakeFn).toHaveBeenCalled();
 

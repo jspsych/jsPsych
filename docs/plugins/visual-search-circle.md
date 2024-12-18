@@ -1,6 +1,6 @@
 # visual-search-circle
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-visual-search-circle/CHANGELOG.md).
+Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-visual-search-circle/CHANGELOG.md).
 
 This plugin presents a customizable visual-search task modelled after [Wang, Cavanagh, & Green (1994)](http://dx.doi.org/10.3758/BF03206946). The participant indicates whether or not a target is present among a set of distractors. The stimuli are displayed in a circle, evenly-spaced, equidistant from a fixation point. Here is an example using normal and backward Ns:
 
@@ -32,6 +32,8 @@ The `target_present` and `fixation_image` parameters must always be specified. O
 | target_absent_key  | string          | 'f'           | The key to press if the target is not present in the search array. |
 | trial_duration     | numeric         | null          | The maximum amount of time the participant is allowed to search before the trial will continue. A value of null will allow the participant to search indefinitely. |
 | fixation_duration  | numeric         | 1000          | How long to show the fixation image for before the search array (in milliseconds). |
+| randomize_item_locations | bool      | true      | Whether to use randomized locations on the circle for the items. If `false`, then the first item will always show at the location specified by `location_first_item`.
+| location_first_item | numeric | 0 | If `randomize_item_locations` is `false`, the location of the first item on the circle, in degrees. 0 degrees is above the fixation, and moving clockwise in the positive direction.
 | response_ends_trial| boolean         | true         | If true, the trial will end when the participant makes a response. |
 
 ## Data Generated
@@ -52,7 +54,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-visual-search-circle@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-visual-search-circle@2.1.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

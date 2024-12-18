@@ -1,6 +1,6 @@
 # audio-button-response
 
-Current version: 2.0.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-button-response/CHANGELOG.md).
+Current version: 2.0.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-button-response/CHANGELOG.md).
 
 This plugin plays audio files and records responses generated with a button click.
 
@@ -37,6 +37,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | -------------- | ------- | ---------------------------------------- |
 | rt             | numeric | The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first began playing until the participant's response. |
 | response       | numeric | Indicates which button the participant pressed. The first button in the `choices` array is 0, the second is 1, and so on. |
+| stimulus       | string  | Path to the audio file that played during the trial. |
 
 ## Simulation Mode
 
@@ -49,7 +50,7 @@ This may change in a future version as we improve the simulation modes.
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.0.1"></script>
+<script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.0.2"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

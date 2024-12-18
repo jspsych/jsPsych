@@ -10,11 +10,13 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 
 | Parameter     | Type     | Default Value      | Description                              |
 | ------------- | -------- | ------------------ | ---------------------------------------- |
-| text          | string   | *undefined*        | The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. % correct solution %). |
+| text          | string   | *undefined*        | The cloze text to be displayed. Blanks are indicated by %% signs and automatically replaced by input fields. If there is a correct answer you want the system to check against, it must be typed between the two percentage signs (i.e. % correct solution %). To input multiple correct answers, add a / between each answer (i.e. %correct/alsocorrect%). |
 | button_text   | string   | OK                 | Text of the button participants have to press for finishing the cloze test. |
 | check_answers | boolean  | false              | Boolean value indicating if the answers given by participants should be compared against a correct solution given in the text (between % signs) after the button was clicked. If ```true```, answers are checked and in case of differences, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. If ```false```, no checks are performed and the trial automatically ends when clicking the button. |
 | allow_blanks  | boolean  | true               | Boolean value indicating if the answers given by participants should be checked for completion after the button was clicked. If ```true```, answers are not checked for completion and blank answers are allowed. The trial will then automatically finish upon the clicking the button. If ```false```, answers are checked for completion, and in case there are some fields with missing answers, the ```mistake_fn``` is called. In this case, the trial does not automatically finish. |
+| case_sensitivity | boolean  | true            | Boolean value indicating if the answers given by participants should also be checked to have the right case along with correctness. If set to ```false```, case is disregarded and participants may type in whatever case they please. | 
 | mistake_fn    | function | ```function(){}``` | Function called if ```check_answers``` is set to ```true``` and there is a difference between the participant's answers and the correct solution provided in the text, or if ```allow_blanks``` is set to ```false``` and there is at least one field with a blank answer. |
+| autofocus     | boolean  | true               | Boolean value indicating if the first input field should be focused when the trial starts. Enabled by default, but may be disabled especially if participants are using screen readers. |
 
 ## Data Generated
 
@@ -29,7 +31,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-cloze@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-cloze@2.1.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

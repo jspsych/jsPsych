@@ -1,5 +1,11 @@
 # @jspsych/plugin-survey-html-form
 
+## 2.0.1
+
+### Patch Changes
+
+- [#3451](https://github.com/jspsych/jsPsych/pull/3451) [`7ffc644d`](https://github.com/jspsych/jsPsych/commit/7ffc644d0469cb5625efc5f1bb043d3aee22c501) Thanks [@jadeddelta](https://github.com/jadeddelta)! - fix `response` data type to be just `ParameterType.OBJECT`
+
 ## 2.0.0
 
 ### Major Changes

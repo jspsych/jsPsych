@@ -1,5 +1,11 @@
 # @jspsych/plugin-visual-search-circle
 
+## 2.1.0
+
+### Minor Changes
+
+- [#2897](https://github.com/jspsych/jsPsych/pull/2897) [`8759217f`](https://github.com/jspsych/jsPsych/commit/8759217f0ef0c1d127ca58440d1cbe5f152dbde5) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Add options (`randomize_item_locations` and `location_first_item`) to allow for fixed locations of the item array across trials.
+
 ## 2.0.0
 
 ### Major Changes

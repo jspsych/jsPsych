@@ -100,6 +100,10 @@ const info = <const>{
     },
   },
   data: {
+    /** The path of the audio file that was played. */
+    stimulus: {
+      type: ParameterType.STRING,
+    },
     /** The response time in milliseconds for the participant to make a response. The time is measured from
      * when the stimulus first began playing until the participant's response.*/
     rt: {

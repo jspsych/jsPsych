@@ -58,6 +58,109 @@ describe("Timeline", () => {
       expect((children[1] as Timeline).children.map((child) => child.index)).toEqual([1, 2]);
     });
 
+    it("respects dynamically added child node descriptions", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timelineDescription: TimelineArray = [{ type: TestPlugin }];
+      const timeline = createTimeline(timelineDescription);
+
+      const runPromise = timeline.run();
+      expect(timeline.children.length).toEqual(1);
+
+      timelineDescription.push({ timeline: [{ type: TestPlugin }] });
+      await TestPlugin.finishTrial();
+      await TestPlugin.finishTrial();
+      await runPromise;
+
+      expect(timeline.children.length).toEqual(2);
+    });
+
+    it("dynamically added child node descriptions before a node after it has been run", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timelineDescription: TimelineArray = [{ type: TestPlugin }];
+      const timeline = createTimeline(timelineDescription);
+
+      const runPromise = timeline.run();
+      expect(timeline.children.length).toEqual(1);
+
+      await TestPlugin.finishTrial();
+      timelineDescription.splice(0, 0, { timeline: [{ type: TestPlugin }] });
+      await TestPlugin.finishTrial();
+      await runPromise;
+
+      expect(timeline.children.length).toEqual(1);
+    });
+
+    it("respects dynamically removed end child node descriptions", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timelineDescription: TimelineArray = [
+        { type: TestPlugin },
+        { timeline: [{ type: TestPlugin }] },
+        { type: TestPlugin },
+      ];
+      const timeline = createTimeline(timelineDescription);
+
+      const runPromise = timeline.run();
+      expect(timeline.children.length).toEqual(1); // Only the first child is instantiated because they are incrementally instantiated now
+
+      timelineDescription.pop();
+      await TestPlugin.finishTrial();
+      await TestPlugin.finishTrial();
+      await runPromise;
+
+      expect(timeline.children.length).toEqual(2);
+      expect(timeline.children).toEqual([expect.any(Trial), expect.any(Timeline)]);
+    });
+
+    it("respects dynamically removed middle child node descriptions", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timelineDescription: TimelineArray = [
+        { type: TestPlugin },
+        { timeline: [{ type: TestPlugin }] },
+        { type: TestPlugin },
+      ];
+      const timeline = createTimeline(timelineDescription);
+
+      const runPromise = timeline.run();
+      expect(timeline.children.length).toEqual(1);
+
+      timelineDescription.splice(1, 1);
+      await TestPlugin.finishTrial();
+      await TestPlugin.finishTrial();
+      await runPromise;
+
+      expect(timeline.children.length).toEqual(2);
+      expect(timeline.children).toEqual([expect.any(Trial), expect.any(Trial)]);
+    });
+
+    it("dynamically remove first node after running it", async () => {
+      TestPlugin.setManualFinishTrialMode();
+
+      const timelineDescription: TimelineArray = [
+        { type: TestPlugin, data: { I: 0 } },
+        { timeline: [{ type: TestPlugin, data: { I: 1 } }] },
+        { type: TestPlugin, data: { I: 2 } },
+        { type: TestPlugin, data: { I: 3 } },
+      ];
+      const timeline = createTimeline(timelineDescription);
+
+      const runPromise = timeline.run();
+      await TestPlugin.finishTrial();
+      timelineDescription.shift();
+      await TestPlugin.finishTrial();
+      await TestPlugin.finishTrial();
+      await runPromise;
+
+      expect(timeline.children.length).toEqual(3);
+      expect(timeline.children[0].getDataParameter().I).toEqual(0);
+      const secondChildDescription = timeline.children[1].description as TimelineDescription;
+      expect(secondChildDescription["timeline"][0]).toHaveProperty("data.I", 1);
+      expect(timeline.children[2].getDataParameter().I).toEqual(3);
+    });
+
     describe("with `pause()` and `resume()` calls`", () => {
       beforeEach(() => {
         TestPlugin.setManualFinishTrialMode();
@@ -84,12 +187,9 @@ describe("Timeline", () => {
 
         await TestPlugin.finishTrial();
         expect(timeline.children[1].getStatus()).toBe(TimelineNodeStatus.COMPLETED);
-        expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.PENDING);
 
-        // Resolving the next trial promise shouldn't continue the experiment since no trial should be running.
-        await TestPlugin.finishTrial();
-
-        expect(timeline.children[2].getStatus()).toBe(TimelineNodeStatus.PENDING);
+        // The timeline is paused, so it shouldn't have instantiated the next child node yet.
+        expect(timeline.children.length).toEqual(2);
 
         timeline.resume();
         await flushPromises();
