@@ -261,6 +261,14 @@ export class JsPsych {
     return this.timeline?.description.timeline;
   }
 
+  /**
+   * Prints out a string containing citations for the jsPsych library and all input plugins/extensions in the specified format.
+   * If called without input, prints citation for jsPsych library.
+   *
+   * @param plugins The plugins/extensions to generate citations for. Always prints the citation for the jsPsych library at the top.
+   * @param format The desired output citation format. Currently supports "apa" and "bibtex".
+   * @returns String containing citations separated with newline character.
+   */
   getCitations(
     plugins: Array<Class<JsPsychPlugin<any>> | Class<JsPsychExtension>> = [],
     format: "apa" | "bibtex" = "apa"
