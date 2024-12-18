@@ -52,6 +52,8 @@ const info = <const>{
       type: ParameterType.INT,
     },
   },
+  // prettier-ignore
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;

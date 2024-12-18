@@ -134,6 +134,8 @@ const info = <const>{
       array: true,
     },
   },
+  // prettier-ignore
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;

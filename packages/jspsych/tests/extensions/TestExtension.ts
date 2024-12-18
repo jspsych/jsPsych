@@ -5,6 +5,10 @@ export class TestExtension implements JsPsychExtension {
     name: "test",
     version: "0.0.1",
     data: {},
+    citations: {
+      apa: "Test extension APA citation",
+      bibtex: "Test extension BibTeX citation",
+    },
   };
 
   constructor(private jsPsych: JsPsych) {}

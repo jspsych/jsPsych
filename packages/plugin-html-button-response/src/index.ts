@@ -85,6 +85,8 @@ const info = <const>{
       type: ParameterType.HTML_STRING,
     },
   },
+  // prettier-ignore
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;

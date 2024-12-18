@@ -62,6 +62,8 @@ const info = <const>{
   data: {
     // no data collected
   },
+  // prettier-ignore
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;

@@ -20,6 +20,8 @@ We welcome contributions of any scope. Before we can merge changes into the main
 
 * **An example file should be included if applicable.** If you are contributing a new feature, new plugin, or new extension, or contributing a modification that changes the behavior of the library in some important way, consider adding an example file to the `/examples` folder in the repository.
 
+* **If you are contributing a plugin/extension, we strongly encourage including a file containing citation information.** This file should be named `CITATION.cff` and placed at the root of your repository. This allows people who use your plugin/extension in their code to easily cite your work by calling `jsPsych.getCitations([<yourPlugin>])` from their command line. More information on `.cff` files can be found [here](https://citation-file-format.github.io/).
+
 * **A changeset must be included in the pull request**. We use [changesets](https://github.com/atlassian/changesets/blob/main/docs/adding-a-changeset.md) to generate new releases and their corresponding release notes. [This is a good overview of changesets](https://github.com/atlassian/changesets/blob/main/docs/adding-a-changeset.md) that explains how to add one to your pull request. Feel free to ask for help with this!
 
 * **Update the contributors.md file**. If you are a first time contributor to jsPsych please add your name to our [contributors file](https://github.com/jspsych/jsPsych/blob/main/contributors.md). And thanks!

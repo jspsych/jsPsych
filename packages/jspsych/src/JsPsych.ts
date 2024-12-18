@@ -1,9 +1,13 @@
 import autoBind from "auto-bind";
+// To work with citations
+import { Class } from "type-fest";
 
 import { version } from "../package.json";
 import { ExtensionManager, ExtensionManagerDependencies } from "./ExtensionManager";
 import { JsPsychData, JsPsychDataDependencies } from "./modules/data";
+import { JsPsychExtension } from "./modules/extensions";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
+import { JsPsychPlugin } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
@@ -255,6 +259,48 @@ export class JsPsych {
 
   getTimeline() {
     return this.timeline?.description.timeline;
+  }
+
+  /**
+   * Prints out a string containing citations for the jsPsych library and all input plugins/extensions in the specified format.
+   * If called without input, prints citation for jsPsych library.
+   *
+   * @param plugins The plugins/extensions to generate citations for. Always prints the citation for the jsPsych library at the top.
+   * @param format The desired output citation format. Currently supports "apa" and "bibtex".
+   * @returns String containing citations separated with newline character.
+   */
+  getCitations(
+    plugins: Array<Class<JsPsychPlugin<any>> | Class<JsPsychExtension>> = [],
+    format: "apa" | "bibtex" = "apa"
+  ) {
+    const formatOptions = ["apa", "bibtex"];
+    // prettier-ignore
+    const jsPsychCitations: any = '__CITATIONS__';
+    format = format.toLowerCase() as "apa" | "bibtex";
+    // Check if plugins is an array
+    if (!Array.isArray(plugins)) {
+      throw new Error("Expected array of plugins/extensions");
+    }
+    // Check if format is supported
+    else if (!formatOptions.includes(format)) {
+      throw new Error("Unsupported citation format");
+    }
+    // Print citations
+    else {
+      const jsPsychCitation = jsPsychCitations[format];
+      const citationSet = new Set([jsPsychCitation]);
+
+      for (const plugin of plugins) {
+        try {
+          const pluginCitation = plugin["info"].citations[format];
+          citationSet.add(pluginCitation);
+        } catch {
+          console.error(`${plugin} does not have citation in ${format} format.`);
+        }
+      }
+      const citationList = Array.from(citationSet).join("\n");
+      return citationList;
+    }
   }
 
   get extensions() {

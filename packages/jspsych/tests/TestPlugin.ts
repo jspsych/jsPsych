@@ -10,6 +10,10 @@ export const testPluginInfo = <const>{
   version: "0.0.1",
   parameters: {},
   data: {},
+  citations: {
+    apa: "Test plugin APA citation",
+    bibtex: "Test plugin BibTeX citation",
+  },
 };
 
 class TestPlugin implements JsPsychPlugin<typeof testPluginInfo> {

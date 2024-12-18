@@ -46,6 +46,8 @@ const info = <const>{
       description: "Time in milliseconds until the user entered fullscreen mode.",
     },
   },
+  // prettier-ignore
+  citations: '__CITATIONS__',
 };
 
 type Info = typeof info;

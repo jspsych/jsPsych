@@ -6,8 +6,11 @@ import resolve from "@rollup/plugin-node-resolve";
 import { defineConfig } from "rollup";
 import dts from "rollup-plugin-dts";
 import esbuild from "rollup-plugin-esbuild";
+import modify from "rollup-plugin-modify";
 import externals from "rollup-plugin-node-externals";
 import ts from "typescript";
+
+import generateCitations from "./generateCitations.js";
 
 const getTsCompilerOptions = () => {
   const cwd = process.cwd();
@@ -37,6 +40,8 @@ const makeConfig = ({
     sourcemap: true,
     ...outputOptions,
   };
+
+  const citationData = generateCitations();
 
   /** @type{import("rollup-plugin-esbuild").Options} */
   const esBuildPluginOptions = {
@@ -71,6 +76,11 @@ const makeConfig = ({
       input,
       plugins: [
         externals(),
+        modify({
+          // prettier-ignore
+          find: /'__CITATIONS__'/g,
+          replace: JSON.stringify(citationData, null, 2),
+        }),
         esbuild({ ...esBuildPluginOptions, target: "node18" }),
         commonjs(commonjsPluginOptions),
       ],
@@ -96,6 +106,11 @@ const makeConfig = ({
       input,
       plugins: [
         externals({ deps: false }),
+        modify({
+          // prettier-ignore
+          find: /'__CITATIONS__'/g,
+          replace: JSON.stringify(citationData, null, 2),
+        }),
         resolve({ preferBuiltins: false }),
         esbuild({ ...esBuildPluginOptions, target: "esnext" }),
         commonjs(commonjsPluginOptions),
@@ -115,6 +130,11 @@ const makeConfig = ({
       input,
       plugins: [
         externals({ deps: false }),
+        modify({
+          // prettier-ignore
+          find: /'__CITATIONS__'/g,
+          replace: JSON.stringify(citationData, null, 2),
+        }),
         resolve({ preferBuiltins: false }),
         esbuild({ ...esBuildPluginOptions, target: "es2015", minify: true }),
         commonjs(commonjsPluginOptions),
@@ -164,8 +184,9 @@ export const makeCoreRollupConfig = () =>
 /**
  * Returns the rollup configuration for Node.js-only packages
  */
-export const makeNodeRollupConfig = () =>
-  makeConfig({
+export const makeNodeRollupConfig = () => {
+  return makeConfig({
     globalOptions: { external: ["jspsych"] },
     isNodeOnlyBuild: true,
   });
+};
