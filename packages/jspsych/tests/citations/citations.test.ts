@@ -9,9 +9,6 @@ const testPluginApaCitation = "Test plugin APA citation";
 const testPluginBibtexCitation = "Test plugin BibTeX citation";
 const testExtensionApaCitation = "Test extension APA citation";
 
-let consoleLogSpy: jest.SpyInstance;
-let consoleWarnSpy: jest.SpyInstance;
-
 let JsPsych;
 
 /**
@@ -27,12 +24,6 @@ try {
 
   beforeEach(() => {
     jspsych = new JsPsych();
-    consoleLogSpy = jest.spyOn(console, "log").mockImplementation();
-    consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
   });
 
   describe("citing not using an array", () => {
