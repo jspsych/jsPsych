@@ -347,6 +347,34 @@ jsPsych.finishTrial({correct_response: true});
 ```
 
 ---
+## jsPsych.getCitations
+
+```javascript
+jsPsych.getCitations(plugins, format)
+```
+### Parameters
+| Parameter | Type   | Description                                          |
+| --------- | ------ | ---------------------------------------------------- |
+| plugins   | array  | Array containing list of plugins/extensions by name. |
+| format    | string | Output citation format ("apa" | "bibtex")            |
+
+### Return value
+
+String of generated citations in the specified format for the jsPsych library, followed by that for each input plugin/extension, separated with a "\n" character.
+
+### Description
+
+Get citations in a specified format for the jsPsych library and input list of plugins/extensions, usually those used within an experiment.
+
+### Example
+
+```javascript
+// in browser console
+jsPsych.getCitations() // prints citation for jsPsych library in APA format
+jsPsych.getCitations([TestPlugin], "bibtex") // prints citation for jsPsych library and TestPlugin (if different) in BibTex format
+```
+
+---
 ## jsPsych.getCurrentTrial
 
 ```javascript
