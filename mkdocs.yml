@@ -43,7 +43,7 @@ nav:
 - Tutorials:
   - 'The Basics: Hello World': 'tutorials/hello-world.md'
   - 'Demo Experiment: Simple Reaction Time Task': 'tutorials/rt-task.md'
-  - 'Video Tutorials': 'tutorials/video-tutorials.md'
+  - 'Community Tutorials': 'tutorials/community-tutorials.md'
 - Overview:
   - 'Creating an Experiment: The Timeline': 'overview/timeline.md'
   - 'Plugins': 'overview/plugins.md'
