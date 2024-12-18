@@ -107,6 +107,7 @@ const makeConfig = ({
       plugins: [
         externals({ deps: false }),
         modify({
+          // prettier-ignore
           find: /'__CITATIONS__'/g,
           replace: JSON.stringify(citationData, null, 2),
         }),
@@ -130,6 +131,7 @@ const makeConfig = ({
       plugins: [
         externals({ deps: false }),
         modify({
+          // prettier-ignore
           find: /'__CITATIONS__'/g,
           replace: JSON.stringify(citationData, null, 2),
         }),
