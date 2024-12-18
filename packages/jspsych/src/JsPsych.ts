@@ -262,33 +262,35 @@ export class JsPsych {
   }
 
   getCitations(
-    plugins: Array<Class<JsPsychPlugin<any>> | Class<JsPsychExtension>>,
-    format?: string
+    plugins: Array<Class<JsPsychPlugin<any>> | Class<JsPsychExtension>> = [],
+    format: "apa" | "bibtex" = "apa"
   ) {
-    format = format ? format.toLowerCase() : "apa";
+    const formatOptions = ["apa", "bibtex"];
+    const jsPsychCitations: any = "__CITATIONS__";
+    format = format.toLowerCase() as "apa" | "bibtex";
     // Check if plugins is an array
     if (!Array.isArray(plugins)) {
       throw new Error("Expected array of plugins/extensions");
     }
-    // Check if array is empty
-    else if (plugins.length == 0) {
-      console.log(
-        format == "apa"
-          ? "de Leeuw, J. R., Gilbert, R. A., & Luchterhandt, B. (2023). jsPsych: Enabling an Open-Source Collaborative Ecosystem of Behavioral Experiments. Journal of Open Source Software, 8(85), 5351. https://doi.org/10.21105/joss.05351 "
-          : '@article{Leeuw2023jsPsych, 	author = {de Leeuw, Joshua R. and Gilbert, Rebecca A. and Luchterhandt, Bj{\\" o}rn}, 	journal = {Journal of Open Source Software}, 	doi = {10.21105/joss.05351}, 	issn = {2475-9066}, 	number = {85}, 	year = {2023}, 	month = {may 11}, 	pages = {5351}, 	publisher = {Open Journals}, 	title = {jsPsych: Enabling an {Open}-{Source} {Collaborative} {Ecosystem} of {Behavioral} {Experiments}}, 	url = {https://joss.theoj.org/papers/10.21105/joss.05351}, 	volume = {8}, }  '
-      );
-      return;
-    }
     // Check if format is supported
-    else if (!Object.keys(plugins[0]["info"].citations).includes(format)) {
+    else if (!formatOptions.includes(format)) {
       throw new Error("Unsupported citation format");
-    } else {
-      const pluginsSet = new Set(plugins);
-      plugins = Array.from(pluginsSet);
-      plugins.map((plugin) => {
-        let pluginCitations = plugin["info"].citations;
-        console.log(format == "apa" ? `${pluginCitations.apa}` : `${pluginCitations.bibtex}`);
-      });
+    }
+    // Print citations
+    else {
+      const jsPsychCitation = jsPsychCitations[format];
+      const citationSet = new Set([jsPsychCitation]);
+
+      for (const plugin of plugins) {
+        try {
+          const pluginCitation = plugin["info"].citations[format];
+          citationSet.add(pluginCitation);
+        } catch {
+          console.error(`${plugin} does not have citation in ${format} format.`);
+        }
+      }
+      const citationList = Array.from(citationSet).join("\n");
+      return citationList;
     }
   }
 

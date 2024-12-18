@@ -21,19 +21,22 @@ export default function generateCitations() {
   // Try to find CITATION.cff file and look for preferred-citation
   const citationCff = (() => {
     let rawCff;
-    try {
-      // look for CITATION.cff in the current directory
-      rawCff = fs.readFileSync("./CITATION.cff", "utf-8").toString();
+    const getCff = (path) => {
+      rawCff = fs.readFileSync(path, "utf-8").toString();
       const cffData = yaml.parse(rawCff);
       if (cffData["preferred-citation"]) {
         preferredCitation = true;
       }
       return yaml.stringify(rawCff);
+    };
+
+    try {
+      // look for CITATION.cff in the current directory
+      return getCff("./CITATION.cff");
     } catch (error) {
       try {
         // look for CITATION.cff in the root of the repository
-        rawCff = fs.readFileSync(path.join(appRootPath.path, "CITATION.cff"), "utf-8").toString();
-        return yaml.stringify(rawCff);
+        return getCff(path.join(appRootPath.path, "CITATION.cff"));
       } catch (error) {
         console.warn(
           `No CITATION.cff file found: ${error.message}. If you would like to include a citation, please create a CITATION.cff file in the root of your repository.`
