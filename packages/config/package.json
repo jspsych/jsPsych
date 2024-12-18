@@ -67,11 +67,5 @@
     "tslib": "2.6.2",
     "typescript": "^5.2.2",
     "yaml": "^2.5.1"
-  },
-  "overrides": {
-    "alias-hq": {
-      "jscodeshift": "0.16.1",
-      "inquirer": "10.1.6"
-    }
   }
 }
