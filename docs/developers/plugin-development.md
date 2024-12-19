@@ -12,7 +12,7 @@ As of version 7.0, plugins are [JavaScript Classes](https://developer.mozilla.or
 
 Templates for plugins are available in the [jspsych-contrib](https://github.com/jspsych/jspsych-contrib) repository. Plugins can be written in either plain [JavaScript](https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-js/src/index.js) or in [TypeScript](https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-ts/src/index.ts).
 
-Additionally, `jspsych-contrib` offers guidance for either approach in its [`README`](https://github.com/jspsych/jspsych-contrib) file. It is likewise (for now) the exclusive home for CLI tools like `npm run new`, which we've built to help developers get started. Those relying on Typescript can then use the `npm run build` command to compile their `index.ts` code into Javascript files. Meanwhile, those templating directly in Javascript can run their trial code using the `trial()` method, as detailed below.
+To get started with a template, we recommend using the CLI tool that we have published in jspsych-contrib. This automates the setup of a new plugin in either JavaScript or TypeScript. Additional information about the CLI tool is available in the [`README`](https://github.com/jspsych/jspsych-contrib?tab=readme-ov-file#creating-a-new-plugin-or-extension) of jspsych-contrib. 
 
 ## Plugin components
 
