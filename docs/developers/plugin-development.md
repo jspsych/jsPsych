@@ -8,9 +8,11 @@ As of version 7.0, plugins are [JavaScript Classes](https://developer.mozilla.or
 * [A `trial()` method](#trial) that accepts an `HTMLElement` as its first argument and an `object` of trial parameters as its second argument. There is an optional third argument to [handle the `on_load` event](#asynchronous-loading) in certain cirumstances. The `trial()` method should *either* invoke `jsPsych.finishTrial()` or should be an `async` function that returns a data object to [end the trial and save data](#save-data).
 * [A static `info` property](#static-info) on the class that contains an object describing the plugin's parameters, data generated, and version.
 
-### Templates
+## Plugin templates
 
-Plugins can be written in either plain JavaScript or in TypeScript. Template files for both [JavaScript](https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-js/src/index.js) and [TypeScript](https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-ts/src/index.ts) are available in the [jspsych-contrib repository](https://github.com/jspsych/jspsych-contrib/).
+Templates for plugins are available in the [jspsych-contrib](https://github.com/jspsych/jspsych-contrib) repository. Plugins can be written in either plain [JavaScript](https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-js/src/index.js) or in [TypeScript](https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-ts/src/index.ts).
+
+To get started with a template, we recommend using the CLI tool that we have published in jspsych-contrib. This automates the setup of a new plugin in either JavaScript or TypeScript. Additional information about the CLI tool is available in the [`README`](https://github.com/jspsych/jspsych-contrib?tab=readme-ov-file#creating-a-new-plugin-or-extension) of jspsych-contrib. 
 
 ## Plugin components
 
@@ -327,9 +329,5 @@ We plan to add a longer guide about simulation development in the future. For no
 If you are developing a plugin with the aim of including it in the main jsPsych repository we encourage you to follow the [contribution guidelines](contributing.md#contributing-to-the-codebase). 
 
 We also recommend that you make your plugin *as general as possible*. Consider using parameters to give the user of the plugin as many options for customization as possible. For example, if you have any text that displays in the plugin including things like button labels, implement the text as a parameter. This allows users running experiments in other languages to replace text values as needed.
-
-## Plugin templates
-
-Templates for plugins are available in the [jspsych-contrib](https://github.com/jspsych/jspsych-contrib) repository. There is a command-line tool for generating a new plugin from these templates in that repository. See the README file in the jspsych-contrib repository for more information.
 
 
