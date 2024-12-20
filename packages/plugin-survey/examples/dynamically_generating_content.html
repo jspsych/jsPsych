@@ -100,7 +100,7 @@
           type: jsPsychHtmlKeyboardResponse,
           stimulus: function () {
             var html = `
-              <div style="display:flex;width:70%;margin:auto;justify-content:space-around;"><span>${jsPsych.timelineVariable('word1')}</span><span>${jsPsych.timelineVariable('word2')}</span></div>`;
+              <div style="display:flex;width:70%;margin:auto;justify-content:space-around;"><span>${jsPsych.evaluateTimelineVariable('word1')}</span><span>${jsPsych.evaluateTimelineVariable('word2')}</span></div>`;
             return html;
           },
           choices: ['f', 'j'],
@@ -112,7 +112,7 @@
           survey_json: function () {
             const last_response = jsPsych.data.getLastTrialData().values()[0].response;
             const response_type = (last_response === 'j') ? "RELATED" : "NOT RELATED";
-            const question_text = `You said that the words "${jsPsych.timelineVariable('word1')}" and "${jsPsych.timelineVariable('word2')}" are ${response_type}. Please explain your answer.`;
+            const question_text = `You said that the words "${jsPsych.evaluateTimelineVariable('word1')}" and "${jsPsych.evaluateTimelineVariable('word2')}" are ${response_type}. Please explain your answer.`;
             const survey_json = {
               showQuestionNumbers: false,
               completeText: "Next",
