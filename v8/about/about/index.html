@@ -2635,6 +2635,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Citation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#citation-tool-for-third-party-pluginsextensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Citation tool for third-party plugins/extensions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -2770,6 +2785,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Citation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#citation-tool-for-third-party-pluginsextensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Citation tool for third-party plugins/extensions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -2795,10 +2825,22 @@
 <p>jsPsych was created by <a href="https://www.vassar.edu/faculty/jdeleeuw">Josh de Leeuw</a>.</p>
 <h3 id="citation">Citation<a class="headerlink" href="#citation" title="Permanent link">&para;</a></h3>
 <p>If you use this library in academic work, the preferred citation is:</p>
+<blockquote>
 <p>de Leeuw, J.R., Gilbert, R.A., &amp; Luchterhandt, B. (2023). jsPsych: Enabling an open-source collaborative ecosystem of behavioral experiments. <em>Journal of Open Source Software</em>, <em>8</em>(85), 5351, <a href="https://joss.theoj.org/papers/10.21105/joss.05351">https://joss.theoj.org/papers/10.21105/joss.05351</a>.</p>
+</blockquote>
 <p>This paper is an updated description of jsPsych and includes all current core team members. It replaces the earlier paper that described jsPsych:</p>
+<blockquote>
 <p>de Leeuw, J.R. (2015). jsPsych: A JavaScript library for creating behavioral experiments in a Web browser. <em>Behavior Research Methods</em>, <em>47</em>(1), 1-12. doi:<a href="http://link.springer.com/article/10.3758%2Fs13428-014-0458-y">10.3758/s13428-014-0458-y</a></p>
+</blockquote>
 <p>Citations help us demonstrate that this library is used and valued, which allows us to continue working on it.</p>
+<h4 id="citation-tool-for-third-party-pluginsextensions">Citation tool for third-party plugins/extensions<a class="headerlink" href="#citation-tool-for-third-party-pluginsextensions" title="Permanent link">&para;</a></h4>
+<p>jsPsych is an open-source, collaborative ecosystem, and many of the plugins/extensions you end up using may be contributed by third-party developers! We want to make sure they get recognition for their good work, so we  made a command-line citation tool that you should use to cite this library and the plugins/extensions used in your experiment. You can see this tool in action by following these steps:</p>
+<ol>
+<li>Launch a jsPsych experiment in your browser</li>
+<li>Open up the browser console using Ctrl + ⇧ + J (Windows) or ⌘ + ⌥ + J (Mac)</li>
+<li>Type <code>jsPsych.getCitations()</code></li>
+</ol>
+<p>This should print the APA format citation for the jsPsych library, which you can then copy and paste into your working document. To cite the plugins/extensions in your experiment, you should pass in an array containing the name of each plugin/extension to generate a list of citations, e.g. <code>jsPsych.getCitations([jsPsychHtmlKeyboardResponse, jsPsychMouseTrackingExtension])</code>. You can also pass in the desired output citation format as the second argument, e.g. <code>jsPsych.getCitations([jsPsychHtmlKeyboardResponse, jsPsychMouseTrackingExtension], "apa")</code>. We currently support APA formatting (<code>"apa"</code>) and BibTex formatting (<code>"bibtex"</code>).</p>
 
 
 

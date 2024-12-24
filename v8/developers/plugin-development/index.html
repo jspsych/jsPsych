@@ -2446,20 +2446,14 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Requirements for a plugin">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#templates" class="md-nav__link">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugin-templates" class="md-nav__link">
     <span class="md-ellipsis">
-      Templates
+      Plugin templates
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2587,15 +2581,6 @@
   <a href="#advice-for-writing-plugins" class="md-nav__link">
     <span class="md-ellipsis">
       Advice for writing plugins
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#plugin-templates" class="md-nav__link">
-    <span class="md-ellipsis">
-      Plugin templates
     </span>
   </a>
   
@@ -2923,20 +2908,14 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Requirements for a plugin">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#templates" class="md-nav__link">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugin-templates" class="md-nav__link">
     <span class="md-ellipsis">
-      Templates
+      Plugin templates
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -3069,15 +3048,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#plugin-templates" class="md-nav__link">
-    <span class="md-ellipsis">
-      Plugin templates
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -3104,8 +3074,9 @@
 <li><a href="#trial">A <code>trial()</code> method</a> that accepts an <code>HTMLElement</code> as its first argument and an <code>object</code> of trial parameters as its second argument. There is an optional third argument to <a href="#asynchronous-loading">handle the <code>on_load</code> event</a> in certain cirumstances. The <code>trial()</code> method should <em>either</em> invoke <code>jsPsych.finishTrial()</code> or should be an <code>async</code> function that returns a data object to <a href="#save-data">end the trial and save data</a>.</li>
 <li><a href="#static-info">A static <code>info</code> property</a> on the class that contains an object describing the plugin's parameters, data generated, and version.</li>
 </ul>
-<h3 id="templates">Templates<a class="headerlink" href="#templates" title="Permanent link">&para;</a></h3>
-<p>Plugins can be written in either plain JavaScript or in TypeScript. Template files for both <a href="https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-js/src/index.js">JavaScript</a> and <a href="https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-ts/src/index.ts">TypeScript</a> are available in the <a href="https://github.com/jspsych/jspsych-contrib/">jspsych-contrib repository</a>.</p>
+<h2 id="plugin-templates">Plugin templates<a class="headerlink" href="#plugin-templates" title="Permanent link">&para;</a></h2>
+<p>Templates for plugins are available in the <a href="https://github.com/jspsych/jspsych-contrib">jspsych-contrib</a> repository. Plugins can be written in either plain <a href="https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-js/src/index.js">JavaScript</a> or in <a href="https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-ts/src/index.ts">TypeScript</a>.</p>
+<p>To get started with a template, we recommend using the CLI tool that we have published in jspsych-contrib. This automates the setup of a new plugin in either JavaScript or TypeScript. Additional information about the CLI tool is available in the <a href="https://github.com/jspsych/jspsych-contrib?tab=readme-ov-file#creating-a-new-plugin-or-extension"><code>README</code></a> of jspsych-contrib. </p>
 <h2 id="plugin-components">Plugin components<a class="headerlink" href="#plugin-components" title="Permanent link">&para;</a></h2>
 <h3 id="constructor">constructor()<a class="headerlink" href="#constructor" title="Permanent link">&para;</a></h3>
 <p>The plugin's <code>constructor()</code> will be passed a reference to the instance of the <code>JsPsych</code> class that is running the experiment. The constructor should store this reference so that the plugin can access functionality from the core library and its modules.</p>
@@ -3351,8 +3322,6 @@
 <h2 id="advice-for-writing-plugins">Advice for writing plugins<a class="headerlink" href="#advice-for-writing-plugins" title="Permanent link">&para;</a></h2>
 <p>If you are developing a plugin with the aim of including it in the main jsPsych repository we encourage you to follow the <a href="../contributing/#contributing-to-the-codebase">contribution guidelines</a>. </p>
 <p>We also recommend that you make your plugin <em>as general as possible</em>. Consider using parameters to give the user of the plugin as many options for customization as possible. For example, if you have any text that displays in the plugin including things like button labels, implement the text as a parameter. This allows users running experiments in other languages to replace text values as needed.</p>
-<h2 id="plugin-templates">Plugin templates<a class="headerlink" href="#plugin-templates" title="Permanent link">&para;</a></h2>
-<p>Templates for plugins are available in the <a href="https://github.com/jspsych/jspsych-contrib">jspsych-contrib</a> repository. There is a command-line tool for generating a new plugin from these templates in that repository. See the README file in the jspsych-contrib repository for more information.</p>
 
 
 
