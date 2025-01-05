@@ -140,7 +140,7 @@ class InitializeMicrophonePlugin implements JsPsychPlugin<Info> {
   private rejectPermission(trial: TrialType<Info>) {
     this.jsPsych.getDisplayElement().innerHTML = "";
 
-    this.jsPsych.endExperiment(trial.rejection_message, {});
+    this.jsPsych.abortExperiment(trial.rejection_message, {});
   }
 }
 
