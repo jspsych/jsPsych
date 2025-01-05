@@ -21,7 +21,7 @@ describe("serial-reaction-time plugin", () => {
     expect(getCellElement("0-2").style.backgroundColor).toBe("");
     expect(getCellElement("0-3").style.backgroundColor).toBe("");
 
-    pressKey("3");
+    await pressKey("3");
 
     await expectFinished();
     expect(getData().last(1).values()[0].correct).toBe(true);
@@ -42,7 +42,7 @@ describe("serial-reaction-time plugin", () => {
     expect(getCellElement("0-2").style.backgroundColor).toBe("");
     expect(getCellElement("0-3").style.backgroundColor).toBe("");
 
-    pressKey("3");
+    await pressKey("3");
 
     expect(getHTML()).not.toBe("");
 
@@ -69,7 +69,7 @@ describe("serial-reaction-time plugin", () => {
     expect(getCellElement("0-2").style.backgroundColor).toBe("");
     expect(getCellElement("0-3").style.backgroundColor).toBe("");
 
-    pressKey("3");
+    await pressKey("3");
 
     jest.runAllTimers();
 
@@ -78,7 +78,7 @@ describe("serial-reaction-time plugin", () => {
     expect(getCellElement("0-2").style.backgroundColor).toBe("");
     expect(getCellElement("0-3").style.backgroundColor).toBe("");
 
-    pressKey("3");
+    await pressKey("3");
 
     await expectFinished();
 

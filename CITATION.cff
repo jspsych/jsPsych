@@ -1,0 +1,47 @@
+cff-version: "1.2.0"
+authors:
+- family-names: Leeuw
+  given-names: Joshua R.
+  name-particle: de
+  orcid: "https://orcid.org/0000-0003-4815-2364"
+- family-names: Gilbert
+  given-names: Rebecca A.
+  orcid: "https://orcid.org/0000-0003-4574-7792"
+- family-names: Luchterhandt
+  given-names: Björn
+  orcid: "https://orcid.org/0000-0002-9225-2787"
+contact:
+- family-names: Leeuw
+  given-names: Joshua R.
+  name-particle: de
+  orcid: "https://orcid.org/0000-0003-4815-2364"
+doi: 10.5281/zenodo.7702307
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+  - family-names: Leeuw
+    given-names: Joshua R.
+    name-particle: de
+    orcid: "https://orcid.org/0000-0003-4815-2364"
+  - family-names: Gilbert
+    given-names: Rebecca A.
+    orcid: "https://orcid.org/0000-0003-4574-7792"
+  - family-names: Luchterhandt
+    given-names: Björn
+    orcid: "https://orcid.org/0000-0002-9225-2787"
+  date-published: 2023-05-11
+  doi: 10.21105/joss.05351
+  issn: 2475-9066
+  issue: 85
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 5351
+  title: "jsPsych: Enabling an Open-Source Collaborative Ecosystem of
+    Behavioral Experiments"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.05351"
+  volume: 8
+title: "jsPsych: Enabling an Open-Source Collaborative Ecosystem of
+  Behavioral Experiments"

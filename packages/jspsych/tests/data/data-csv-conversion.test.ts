@@ -17,11 +17,13 @@ describe("data conversion to csv", () => {
     document.querySelector<HTMLInputElement>("#input-0").value = "Response 1";
     document.querySelector<HTMLInputElement>("#input-1").value = "Response 2";
 
-    clickTarget(document.querySelector("#jspsych-survey-text-next"));
+    await clickTarget(document.querySelector("#jspsych-survey-text-next"));
 
-    expect(getData().ignore(["rt", "internal_node_id", "time_elapsed", "trial_type"]).csv()).toBe(
-      '"response","trial_index"\r\n"{""Q0"":""Response 1"",""Q1"":""Response 2""}","0"\r\n'
-    );
+    expect(
+      getData()
+        .ignore(["rt", "internal_node_id", "time_elapsed", "trial_type", "plugin_version"])
+        .csv()
+    ).toBe('"response","trial_index"\r\n"{""Q0"":""Response 1"",""Q1"":""Response 2""}","0"\r\n');
   });
 
   test("same-different-html stimulus array is correctly converted", async () => {
@@ -36,10 +38,10 @@ describe("data conversion to csv", () => {
     ]);
 
     expect(getHTML()).toMatch("<p>Climbing</p>");
-    pressKey("q");
+    await pressKey("q");
     jest.runAllTimers();
     expect(getHTML()).toMatch("<p>Walking</p>");
-    pressKey("q");
+    await pressKey("q");
     expect(getHTML()).toBe("");
 
     expect(
@@ -51,6 +53,7 @@ describe("data conversion to csv", () => {
           "trial_type",
           "rt_stim1",
           "response_stim1",
+          "plugin_version",
         ])
         .csv()
     ).toBe(
@@ -67,14 +70,21 @@ describe("data conversion to csv", () => {
     ]);
 
     expect(getHTML()).toMatch("foo");
-    clickTarget(document.querySelector("#jspsych-survey-multi-select-response-0-0"));
-    clickTarget(document.querySelector("#jspsych-survey-multi-select-response-0-1"));
-    clickTarget(document.querySelector("#jspsych-survey-multi-select-next"));
+    await clickTarget(document.querySelector("#jspsych-survey-multi-select-response-0-0"));
+    await clickTarget(document.querySelector("#jspsych-survey-multi-select-response-0-1"));
+    await clickTarget(document.querySelector("#jspsych-survey-multi-select-next"));
     expect(getHTML()).toBe("");
 
     expect(
       getData()
-        .ignore(["rt", "internal_node_id", "time_elapsed", "trial_type", "question_order"])
+        .ignore([
+          "rt",
+          "internal_node_id",
+          "time_elapsed",
+          "trial_type",
+          "question_order",
+          "plugin_version",
+        ])
         .csv()
     ).toBe('"response","trial_index"\r\n"{""q"":[""fuzz"",""bizz""]}","0"\r\n');
   });

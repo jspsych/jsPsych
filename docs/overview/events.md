@@ -102,7 +102,7 @@ var trial = {
 
 ## on_timeline_finish
 
-The `on_timeline_finish` callback can be declared in a timeline node. The callback will be triggered when the timeline ends during the experiment. If `timeline_variables`, `conditional_function`, `loop_function`, or `sample` options are used, this function will execute when all trials have finished. If a `loop_function` is used, then this `on_timeline_finish` function will be triggered before the loop function. If the `repetitions` option is used, this function will be triggered at the end of every repetition.
+The `on_timeline_finish` callback can be declared in a timeline node. The callback will be triggered when the timeline ends. The event will trigger only once if the timeline loops, after all repetitions are complete.
 
 ```javascript
 var procedure = {
@@ -115,10 +115,6 @@ var procedure = {
 	],
   on_timeline_finish: function() {
     console.log('This timeline has finished.');
-  },
-  loop_function: function() {
-    console.log('This loop function will execute after on_timeline_finish.');
-    return false;
   }
 }
 ```
@@ -127,7 +123,7 @@ var procedure = {
 
 ## on_timeline_start
 
-The `on_timeline_start` callback can be declared in a timeline node. The callback will be triggered when the timeline starts during the experiment, including when `timeline_variables`, `loop_function`, or `sample` options are used. If a `conditional_function` is used, then the conditional function will execute first, and the `on_timeline_start` function will only execute if the conditional function returns `true`. If the `repetitions` option is used, this function will be triggered at the start of every repetition. 
+The `on_timeline_start` callback can be declared in a timeline node. The callback will be triggered when the timeline starts during the experiment. If a `conditional_function` is used, then the conditional function will execute first, and the `on_timeline_start` function will only execute if the conditional function returns `true`. The event is triggered once, even if the timeline has a `loop_function` or `repetitions`.
 
 ```javascript
 var procedure = {
@@ -146,7 +142,7 @@ var procedure = {
 
 ## on_trial_finish
 
-The `on_trial_finish` callback can be declared in the `initJsPsych` method. The callback will trigger at the end of every trial in the experiment. If you want a callback to trigger only for the end of certain trials, use the [`on_finish`](#onfinishtrial) callback on the trial object. The callback function will be passed a single argument, containing the data object from the trial.
+The `on_trial_finish` callback can be declared in the `initJsPsych` method. The callback will trigger at the end of every trial in the experiment, after the trial object's [`on_finish`](#on_finish-trial) callback has been run. The callback function will be passed a single argument, containing the data object from the trial. If you want a callback to trigger only for the end of certain trials, use the [`on_finish`](#on_finish-trial) callback on the trial object instead.
 
 ```javascript
 initJsPsych({
@@ -161,7 +157,7 @@ initJsPsych({
 
 ## on_trial_start
 
-The `on_trial_start` callback can be declared in the `initJsPsych` method. The callback will trigger at the start of every trial in the experiment. The function receives a single argument: a modifiable copy of the trial object that will be used to run the next trial. Changes can be made to this object to alter the parameters of the upcoming trial.
+The `on_trial_start` callback can be declared in the `initJsPsych` method. The callback will trigger at the start of every trial in the experiment, before the trial-specific `on_start` callback is executed. The function receives a single argument: a modifiable copy of the trial object that will be used to run the next trial. Changes can be made to this object to alter the parameters of the upcoming trial.
 
 ```javascript
 var current_score = 0; // a variable that is updated throughout the experiment to keep track of the current score.

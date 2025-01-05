@@ -1,10 +1,140 @@
-import { pressKey, simulateTimeline, startTimeline } from "@jspsych/test-utils";
+jest.mock("../../jspsych/src/modules/plugin-api/AudioPlayer");
+
+import {
+  clickTarget,
+  flushPromises,
+  pressKey,
+  simulateTimeline,
+  startTimeline,
+} from "@jspsych/test-utils";
 import { initJsPsych } from "jspsych";
 
+//@ts-expect-error mock
+import { mockStop } from "../../jspsych/src/modules/plugin-api/AudioPlayer";
 import audioSliderResponse from ".";
 
 jest.useFakeTimers();
 
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
+describe("audio-slider-response", () => {
+  // this relies on AudioContext, which we haven't mocked yet
+  it.skip("works with all defaults", async () => {
+    const { expectFinished, expectRunning } = await startTimeline([
+      {
+        type: audioSliderResponse,
+        stimulus: "foo.mp3",
+      },
+    ]);
+
+    expectRunning();
+
+    pressKey("a");
+
+    expectFinished();
+
+    await flushPromises();
+  });
+
+  it("works with use_webaudio:false", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { expectFinished, expectRunning, displayElement, getHTML } = await startTimeline(
+      [
+        {
+          type: audioSliderResponse,
+          stimulus: "foo.mp3",
+        },
+      ],
+      jsPsych
+    );
+
+    await expectRunning();
+
+    //jest.runAllTimers();
+
+    clickTarget(displayElement.querySelector("button"));
+
+    await expectFinished();
+  });
+
+  it("ends when trial_ends_after_audio is true and audio finishes", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { expectFinished, expectRunning } = await startTimeline(
+      [
+        {
+          type: audioSliderResponse,
+          stimulus: "foo.mp3",
+          trial_ends_after_audio: true,
+        },
+      ],
+      jsPsych
+    );
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+  });
+
+  it("prevents responses when response_allowed_while_playing is false", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { expectFinished, expectRunning, displayElement } = await startTimeline(
+      [
+        {
+          type: audioSliderResponse,
+          stimulus: "foo.mp3",
+          response_allowed_while_playing: false,
+        },
+      ],
+      jsPsych
+    );
+
+    await expectRunning();
+
+    clickTarget(displayElement.querySelector("button"));
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectRunning();
+
+    clickTarget(displayElement.querySelector("button"));
+
+    await expectFinished();
+  });
+
+  it("ends when trial_duration is shorter than the audio duration, stopping the audio", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { expectFinished, expectRunning } = await startTimeline(
+      [
+        {
+          type: audioSliderResponse,
+          stimulus: "foo.mp3",
+          trial_duration: 500,
+        },
+      ],
+      jsPsych
+    );
+
+    await expectRunning();
+
+    expect(mockStop).not.toHaveBeenCalled();
+
+    jest.advanceTimersByTime(500);
+
+    expect(mockStop).toHaveBeenCalled();
+
+    await expectFinished();
+  });
+});
 describe("audio-slider-response simulation", () => {
   test("data mode works", async () => {
     const timeline = [

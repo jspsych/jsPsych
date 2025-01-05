@@ -18,7 +18,7 @@ describe("maxdiff plugin", () => {
     document.querySelector<HTMLInputElement>('input[data-name="0"][name="left"]').checked = true;
     document.querySelector<HTMLInputElement>('input[data-name="1"][name="right"]').checked = true;
 
-    clickTarget(document.querySelector("#jspsych-maxdiff-next"));
+    await clickTarget(document.querySelector("#jspsych-maxdiff-next"));
     await expectFinished();
 
     expect(getData().values()[0].response).toEqual({ left: "a", right: "b" });

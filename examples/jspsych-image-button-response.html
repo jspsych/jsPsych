@@ -88,6 +88,15 @@
       post_trial_gap: 500
     });
 
+    timeline.push({
+      type: jsPsychImageButtonResponse,
+      stimulus: 'img/happy_face_1.jpg',
+      choices: ['Happy', 'Sad'],
+      enable_button_after: 2000,
+      prompt: "<p>What emotion is this person showing? (button enable after 2s)</p>",
+      post_trial_gap: 500
+    });
+
     jsPsych.run(timeline);
 
   </script>

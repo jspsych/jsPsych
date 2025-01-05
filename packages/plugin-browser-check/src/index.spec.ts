@@ -126,7 +126,7 @@ describe("browser-check", () => {
     expect(getHTML()).toMatch("1200");
     expect(getHTML()).toMatch("1000");
 
-    clickTarget(displayElement.querySelector("button"));
+    await clickTarget(displayElement.querySelector("button"));
 
     jest.runAllTimers();
 
@@ -152,7 +152,7 @@ describe("browser-check", () => {
 
     expect(displayElement.querySelector("button").innerHTML).toMatch("foo");
 
-    clickTarget(displayElement.querySelector("button"));
+    await clickTarget(displayElement.querySelector("button"));
 
     jest.runAllTimers();
 

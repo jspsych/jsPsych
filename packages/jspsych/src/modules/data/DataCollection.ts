@@ -89,7 +89,7 @@ export class DataCollection {
   }
 
   addToLast(properties) {
-    if (this.trials.length != 0) {
+    if (this.trials.length > 0) {
       Object.assign(this.trials[this.trials.length - 1], properties);
     }
     return this;

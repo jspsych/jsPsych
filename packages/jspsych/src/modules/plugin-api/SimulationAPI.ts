@@ -1,6 +1,11 @@
 export class SimulationAPI {
+  constructor(
+    private getDisplayContainerElement: () => HTMLElement,
+    private setJsPsychTimeout: (callback: () => void, delay: number) => number
+  ) {}
+
   dispatchEvent(event: Event) {
-    document.body.dispatchEvent(event);
+    this.getDisplayContainerElement().dispatchEvent(event);
   }
 
   /**
@@ -26,7 +31,7 @@ export class SimulationAPI {
    */
   pressKey(key: string, delay = 0) {
     if (delay > 0) {
-      setTimeout(() => {
+      this.setJsPsychTimeout(() => {
         this.keyDown(key);
         this.keyUp(key);
       }, delay);
@@ -43,7 +48,7 @@ export class SimulationAPI {
    */
   clickTarget(target: Element, delay = 0) {
     if (delay > 0) {
-      setTimeout(() => {
+      this.setJsPsychTimeout(() => {
         target.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
         target.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
         target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -63,7 +68,7 @@ export class SimulationAPI {
    */
   fillTextInput(target: HTMLInputElement, text: string, delay = 0) {
     if (delay > 0) {
-      setTimeout(() => {
+      this.setJsPsychTimeout(() => {
         target.value = text;
       }, delay);
     } else {

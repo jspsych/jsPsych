@@ -14,10 +14,22 @@ afterEach(() => {
 });
 
 describe("shuffle", () => {
-  test("should produce fixed order with mock RNG", () => {
+  beforeEach(() => {
     jest.spyOn(Math, "random").mockReturnValue(0.5);
+  });
+
+  it("should produce fixed order with mock RNG", () => {
     const arr = [1, 2, 3, 4, 5, 6];
     expect(shuffle(arr)).toEqual([1, 6, 2, 5, 3, 4]);
+  });
+
+  it("should not modify the original array and return a new array instance", () => {
+    const array = [1, 2, 3];
+    const shuffledArray = shuffle(array);
+
+    expect(array).toEqual([1, 2, 3]);
+    expect(shuffledArray).not.toBe(array);
+    expect(shuffledArray).toEqual([1, 3, 2]);
   });
 });
 
@@ -125,6 +137,29 @@ describe("shuffleNoRepeats", function () {
   test("should generate a random order with no repeats", function () {
     var equalityTest = (a, b) => a === b;
     var toShuffle = ["a", "b", "c", "d"];
+    var repeated = repeat(toShuffle, 20);
+    var randomOrder = shuffleNoRepeats(repeated, equalityTest);
+    var repeats = 0;
+    for (var i = 1; i < randomOrder.length; i++) {
+      if (equalityTest(randomOrder[i], randomOrder[i - 1])) {
+        repeats++;
+      }
+    }
+    expect(repeats).toBe(0);
+  });
+
+  test("should generate a random order with no repeats using objects", function () {
+    var equalityTest = (a, b) => a.color === b.color || a.word === b.word;
+    var toShuffle = [
+      { color: "red", word: "red" },
+      { color: "red", word: "blue" },
+      { color: "blue", word: "blue" },
+      { color: "blue", word: "red" },
+      { color: "green", word: "green" },
+      { color: "green", word: "yellow" },
+      { color: "yellow", word: "yellow" },
+      { color: "yellow", word: "green" },
+    ];
     var repeated = repeat(toShuffle, 20);
     var randomOrder = shuffleNoRepeats(repeated, equalityTest);
     var repeats = 0;

@@ -49,9 +49,9 @@ describe("reconstruction", () => {
 
     const { getHTML } = await startTimeline(timeline);
 
-    pressKey("h");
+    await pressKey("h");
     expect(getHTML()).toContain("<p>6</p>");
-    pressKey("h");
+    await pressKey("h");
     expect(getHTML()).toContain("<p>7</p>");
   });
 
@@ -68,9 +68,9 @@ describe("reconstruction", () => {
 
     const { getHTML } = await startTimeline(timeline);
 
-    pressKey("g");
+    await pressKey("g");
     expect(getHTML()).toContain("<p>4</p>");
-    pressKey("g");
+    await pressKey("g");
     expect(getHTML()).toContain("<p>3</p>");
   });
 
@@ -88,11 +88,11 @@ describe("reconstruction", () => {
 
     const { getHTML } = await startTimeline(timeline);
 
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toContain("<p>6</p>");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toContain("<p>7</p>");
-    pressKey("h");
+    await pressKey("h");
     expect(getHTML()).toContain("<p>7</p>");
   });
 
@@ -110,11 +110,11 @@ describe("reconstruction", () => {
 
     const { getHTML } = await startTimeline(timeline);
 
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toContain("<p>4</p>");
-    pressKey("a");
+    await pressKey("a");
     expect(getHTML()).toContain("<p>3</p>");
-    pressKey("g");
+    await pressKey("g");
     expect(getHTML()).toContain("<p>3</p>");
   });
 
@@ -147,7 +147,7 @@ describe("reconstruction", () => {
 
     const { displayElement, expectFinished } = await startTimeline(timeline);
 
-    clickTarget(displayElement.querySelector("button"));
+    await clickTarget(displayElement.querySelector("button"));
 
     await expectFinished();
   });
@@ -165,9 +165,9 @@ describe("reconstruction", () => {
 
     const { displayElement, getData } = await startTimeline(timeline);
 
-    pressKey("h");
+    await pressKey("h");
 
-    clickTarget(displayElement.querySelector("button"));
+    await clickTarget(displayElement.querySelector("button"));
 
     expect(getData().values()[0].final_value).toEqual(0.55);
   });

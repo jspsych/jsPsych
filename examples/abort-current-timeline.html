@@ -2,14 +2,19 @@
 <html>
   <head>
     <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-image-keyboard-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-preload/dist/index.browser.js"></script>
-    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
   </head>
   <body></body>
   <script>
 
-    var jsPsych = initJsPsych();
+    var jsPsych = initJsPsych({
+      on_finish: function () {
+        jsPsych.data.displayData();
+      }
+    });
 
     var images = ["img/1.gif", "img/2.gif", "img/3.gif", "img/4.gif", "img/5.gif", "img/6.gif", "img/7.gif", "img/8.gif", "img/9.gif", "img/10.gif"];
 
@@ -27,18 +32,22 @@
 
     var block = {
       type: jsPsychImageKeyboardResponse,
-      choices: ['y','n'], 
-      prompt: '<p>Press "y" to continue. Press "n" to end the experiment.</p>',
+      choices: ['y','n'],
       stimulus_width: 300,
+      prompt: '<p>Press "y" to continue. Press "n" to end this node of the experiment.</p>',
       on_finish: function(data) {
-        if (jsPsych.pluginAPI.compareKeys(data.response, 'n')) {
-          jsPsych.endExperiment('The experiment was ended. This is the end message.');
+        if (jsPsych.pluginAPI.compareKeys(data.response, "n")) {
+          jsPsych.abortCurrentTimeline();
         }
       },
       timeline: trials
     };
 
-    jsPsych.run([preload, block]);
-    
+    var after_block = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: '<p>The next node.</p><p>Press any key to finish.</p>',
+    };
+
+    jsPsych.run([preload, block, after_block]);
   </script>
 </html>

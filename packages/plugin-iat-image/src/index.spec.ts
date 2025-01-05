@@ -23,7 +23,7 @@ describe("iat-image plugin", () => {
 
     expect(getHTML()).toContain("blue.png");
 
-    pressKey("f");
+    await pressKey("f");
     await expectFinished();
   });
 
@@ -39,10 +39,10 @@ describe("iat-image plugin", () => {
       },
     ]);
 
-    pressKey("j");
+    await pressKey("j");
     expect(getHTML()).toContain('<img src="../media/blue.png" id="jspsych-iat-stim">');
 
-    pressKey("f");
+    await pressKey("f");
     await expectFinished();
   });
 
@@ -58,10 +58,10 @@ describe("iat-image plugin", () => {
       },
     ]);
 
-    pressKey("f");
+    await pressKey("f");
     expect(getHTML()).toContain('<img src="../media/blue.png" id="jspsych-iat-stim">');
 
-    pressKey("j");
+    await pressKey("j");
     await expectFinished();
   });
 
@@ -80,12 +80,12 @@ describe("iat-image plugin", () => {
       },
     ]);
 
-    pressKey("f");
+    await pressKey("f");
     expect(getHTML()).toContain(
       '<img src="../media/blue.png" id="jspsych-iat-stim" class=" responded">'
     );
 
-    pressKey("a");
+    await pressKey("a");
     await expectFinished();
   });
 
@@ -104,12 +104,12 @@ describe("iat-image plugin", () => {
       },
     ]);
 
-    pressKey("j");
+    await pressKey("j");
     expect(getHTML()).toContain(
       '<img src="../media/blue.png" id="jspsych-iat-stim" class=" responded">'
     );
 
-    pressKey("x");
+    await pressKey("x");
     await expectFinished();
   });
 
@@ -129,7 +129,7 @@ describe("iat-image plugin", () => {
     expect(getHTML()).toContain("<p>Press j for:<br> <b>UNFRIENDLY</b>");
     expect(getHTML()).toContain("<p>Press f for:<br> <b>FRIENDLY</b>");
 
-    pressKey("f");
+    await pressKey("f");
     await expectFinished();
   });
 
@@ -152,10 +152,10 @@ describe("iat-image plugin", () => {
 
     const wrongImageContainer = displayElement.querySelector<HTMLElement>("#wrongImgContainer");
     expect(wrongImageContainer.style.visibility).toBe("hidden");
-    pressKey("j");
+    await pressKey("j");
     expect(wrongImageContainer.style.visibility).toBe("visible");
 
-    pressKey("a");
+    await pressKey("a");
     await expectFinished();
   });
 
@@ -193,7 +193,7 @@ describe("iat-image plugin", () => {
       },
     ]);
 
-    pressKey("f");
+    await pressKey("f");
     expect(getHTML()).toContain(
       '<img src="../media/blue.png" id="jspsych-iat-stim" class=" responded">'
     );
@@ -242,7 +242,7 @@ describe("iat-image plugin", () => {
 
     jest.advanceTimersByTime(500);
 
-    pressKey("i");
+    await pressKey("i");
     expect(displayElement.querySelector<HTMLElement>("#wrongImgContainer").style.visibility).toBe(
       "visible"
     );
@@ -294,7 +294,7 @@ describe("iat-image plugin", () => {
 
     expect(getHTML()).toContain('<img src="../media/blue.png" id="jspsych-iat-stim">');
 
-    pressKey("i");
+    await pressKey("i");
     expect(getHTML()).toContain(
       '<img src="../media/blue.png" id="jspsych-iat-stim" class=" responded">'
     );
@@ -307,7 +307,7 @@ describe("iat-image plugin", () => {
 
     jest.advanceTimersByTime(500);
 
-    pressKey("a");
+    await pressKey("a");
     await expectFinished();
   });
 
@@ -329,7 +329,7 @@ describe("iat-image plugin", () => {
     ]);
 
     expect(getHTML()).toContain("blue.png");
-    pressKey("j");
+    await pressKey("j");
 
     await expectFinished();
   });

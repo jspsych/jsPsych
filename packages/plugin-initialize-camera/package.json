@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-initialize-camera",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "jsPsych plugin for getting permission to initialize the user's camera",
   "type": "module",
   "main": "dist/index.cjs",
@@ -37,7 +37,7 @@
     "jspsych": ">=7.2.0"
   },
   "devDependencies": {
-    "@jspsych/config": "^1.3.0",
-    "@jspsych/test-utils": "^1.1.2"
+    "@jspsych/config": "^3.0.0",
+    "@jspsych/test-utils": "^1.2.0"
   }
 }

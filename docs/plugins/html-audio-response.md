@@ -1,6 +1,6 @@
 # html-audio-response
 
-Current version: 1.0.2. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-audio-response/CHANGELOG.md).
+Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-audio-response/CHANGELOG.md).
 
 This plugin displays HTML content and records audio from the participant via a microphone. 
 
@@ -63,7 +63,7 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-html-audio-response@1.0.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-html-audio-response@2.0.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
@@ -159,7 +159,7 @@ import htmlAudioResponse from '@jspsych/plugin-html-audio-response';
             },
             prompt: '<p>Click the object the matches the spoken name.</p>',
             choices: ['img/9.gif','img/10.gif','img/11.gif','img/12.gif'],
-            button_html: '<img src="%choice%" style="width:100px; padding: 20px;"></img>'
+            button_html: (choice) => `<img src=${choice} style="width:100px; padding: 20px;"></img>`
         }
         ```
 

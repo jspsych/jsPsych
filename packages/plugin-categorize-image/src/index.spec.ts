@@ -16,7 +16,7 @@ describe("categorize-image plugin", () => {
     ]);
 
     expect(getHTML()).toMatch("FOO.png");
-    pressKey("d");
+    await pressKey("d");
     expect(getHTML()).toMatch("Correct");
     jest.advanceTimersByTime(2000);
 

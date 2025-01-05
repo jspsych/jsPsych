@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <script src="../../jspsych/dist/index.browser.js"></script>
+  <script src="../dist/index.browser.js"></script>
+  <link rel="stylesheet" href="../../jspsych/css/jspsych.css" />
+  <link rel="stylesheet" href="../css/survey.css" />
+</head>
+
+<body></body>
+<script type="text/javascript">
+
+  const jsPsych = initJsPsych({
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+
+  // This example shows how to reference previous answers during the same survey trial,
+  // for instance to create a variable ('calculated value') that can be referenced elsewhere in the survey, or
+  // to use selected answers as choices for a subsequent question.
+  const reference_previous_answers = {
+    title: "jsPsych Survey Plugin: referencing answers from previous questions",
+    // These "calculated values" are defined at the top level of your survey JSON
+    // and allow you to create variables based on responses that you can reference in the survey.
+    // These expressions reference answers to questions using the syntax {questionName},
+    // are are updated dynamically as the participant enters/changes their responses.
+    // These values will be added to the data with "includeIntoResult: true".
+    calculatedValues: [{
+        name: "fullname",
+        expression: "{firstName} +  ' ' + {lastName}",
+        includeIntoResult: true
+    }, {
+        name: "age",
+        expression: "age({birthdate})",
+        includeIntoResult: true
+    }],
+    // Define the survey pages and elements (questions).
+    pages: [{
+        elements: [
+        { name: "firstName", type: "text", title: "First Name", isRequired: true },
+        { name: "lastName", type: "text", title: "Last Name", isRequired: true },
+        {
+            name: "greetings-name",
+            type: "html",
+            html: "<p>Hello, <strong>{fullname}</strong>!</p>",
+            visibleIf: "{firstName} notempty and {lastName} notempty"
+        },
+        {
+            name: "greetings-empty",
+            type: "html",
+            html: "<p>Hello! Please enter your name above.</p>",
+            visibleIf: "{firstName} empty or {lastName} empty"
+        },
+        {
+            type: "text",
+            name: "birthdate",
+            title: "Please enter your birth date:",
+            isRequired: true,
+            inputType: "date",
+            maxValueExpression: "today()",
+            validators: [
+                {
+                    type: "expression",
+                    text: "You should be younger than 200 years old.",
+                    expression: "{age} <= 200"
+                }
+            ]
+        },
+        {
+            name: "show-age",
+            type: "html",
+            html: "<p>You are <strong>{age}</strong> years old!</p>",
+            visibleIf: "{birthdate} notempty"
+        }]
+    }, {
+        elements: [{
+            type: "checkbox",
+            name: "favorite-animals",
+            title: "What are your favorite animals?",
+            description: "Please select at least TWO features to see the Carry Forward functionality.",
+            isRequired: true,
+            colCount: 2,
+            choices: [
+                "Hippopotamus",
+                "Raccoon",
+                "Kangaroo",
+                "Shark",
+                "Cat",
+                "Hedgehog",
+                "Bunny",
+                "Monkey"
+            ]
+        }, 
+        // This question gets the selected choices from the previous question and uses those as the choices
+        // for this question (choicesFromQuestion: "favorite-animals").
+        // Note that this question only appears if 2 or more answers have been selected in the previous question
+        // (visibleIf: "{favorite-animals.length} > 1") because this ranking question doesn't make sense unless
+        // there are at least 2 choices.
+        {
+            type: "ranking",
+            name: "animals-ranked",
+            title: "Which of these animals would make the best pet? Please rank your favorite animals from BEST (1) to WORST pet option.",
+            visibleIf: "{favorite-animals.length} > 1",
+            isRequired: true,
+            choicesFromQuestion: "favorite-animals",
+            choicesFromQuestionMode: "selected"
+        }],
+    }],
+    showQuestionNumbers: false
+  };
+  const reference_previous_answers_trial = {
+    type: jsPsychSurvey,
+    survey_json: reference_previous_answers
+  };
+
+  jsPsych.run([reference_previous_answers_trial]);
+
+</script>
+
+</html>

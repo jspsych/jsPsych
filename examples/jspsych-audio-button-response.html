@@ -43,7 +43,7 @@
     stimulus: 'sound/speech_red.mp3',
     choices: ['#00ff00', '#0000ff', '#ff0000'],
     response_allowed_while_playing: false,
-    button_html: '<div style="background-color: %choice%; width:100px; height:100px;"></div>',
+    button_html: (choice) => `<div style="background-color: ${choice}; width:100px; height:100px;"></div>`,
     prompt: "<p>Which color was said?</p>"
   });
 
@@ -53,6 +53,24 @@
     choices: ['Not funny', 'Funny'],
     prompt: '<p>Is the joke funny?</p><p>When the audio stops, click a button to end the trial.</p><p>Response buttons are disabled while the audio is playing.</p>',
     response_allowed_while_playing: false
+  })
+
+  timeline.push({
+    type: jsPsychAudioButtonResponse,
+    stimulus: 'sound/speech_joke.mp3',
+    choices: ['Not funny', 'Funny'],
+    prompt: '<p>Is the joke funny?</p><p>Click a button to end the trial.</p><p>Response buttons are disabled for the first 2 seconds of playing.</p>',
+    response_allowed_while_playing: true,
+    enable_button_after: 2000
+  })
+
+  timeline.push({
+    type: jsPsychAudioButtonResponse,
+    stimulus: 'sound/speech_joke.mp3',
+    choices: ['Not funny', 'Funny'],
+    prompt: '<p>Is the joke funny?</p><p>When the audio stops, click a button to end the trial.</p><p>Response buttons are enabled 2 seconds after the end of playing.</p>',
+    response_allowed_while_playing: false,
+    enable_button_after: 2000
   })
 
   jsPsych.run(timeline); 

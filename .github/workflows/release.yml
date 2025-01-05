@@ -16,29 +16,33 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js 16
-        uses: actions/setup-node@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
       - name: Download Turborepo cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: node_modules/.cache/turbo
-          key: ${{ runner.os }}-node-16-turbo-${{ hashFiles('node_modules/.cache/turbo') }}
+          key: ${{ runner.os }}-node-20-turbo-${{ hashFiles('node_modules/.cache/turbo') }}
           restore-keys: |
-            ${{ runner.os }}-node-16-turbo-
+            ${{ runner.os }}-node-20-turbo-
+
+      - name: Check types
+        run: npm run tsc
+
+      - name: Build packages
+        run: npm run build
 
       - name: Run tests
         run: npm run test -- --ci --maxWorkers=2
-        env:
-          NODE_OPTIONS: "--max-old-space-size=4096" # Increase heap size for jest
 
       - name: Create Release Pull Request or Publish Packages
         id: changesets
@@ -52,58 +56,70 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pack Dist Archive
-        if: steps.changesets.outputs.published == 'true'
         run: npm run build:archive
 
       - name: Upload Release Assets
-        uses: actions/github-script@v4
-        if: steps.changesets.outputs.published == 'true'
+        uses: actions/github-script@v7
         with:
           script: |
             const fs = require("fs");
 
-            const publishedPackages = ${{ steps.changesets.outputs.publishedPackages }};
             const { owner, repo } = context.repo;
             const distFile = "dist.zip";
+            const assetName = "jspsych.zip";
 
-            let errorMessage;
-            for (const { name, version } of publishedPackages) {
-              const tag = `${name}@${version}`;
-              // Only upload the dist archive for the core package, plugins, and extensions
-              if (name === "jspsych" || name.includes("/plugin-") || name.includes("/extension-")) {
-                console.log(`Uploading dist archive release asset for ${tag}`);
-                try {
-                  // https://docs.github.com/en/rest/reference/repos#get-a-release-by-tag-name
-                  const releaseId = (
-                    await github.request("GET /repos/{owner}/{repo}/releases/tags/{tag}", {
-                      owner,
-                      repo,
-                      tag,
-                    })
-                  ).data.id;
+            /**
+            * Returns all recent releases without a dist archive asset, up to (excluding) the first release
+            * that has a dist archive asset.
+            **/
+            async function fetchReleasesWithoutDistArchive() {
+              const releasesWithoutDistArchive = [];
 
-                  // https://octokit.github.io/rest.js/v18#repos-upload-release-asset
-                  await github.repos.uploadReleaseAsset({
-                    owner,
-                    repo,
-                    release_id: releaseId,
-                    name: `jspsych.zip`,
-                    label: "Dist archive (zip)",
-                    headers: {
-                      "content-type": "application/zip",
-                      "content-length": fs.statSync(distFile).size,
-                    },
-                    data: fs.readFileSync(distFile),
-                  });
-                } catch (error) {
-                  console.log(error);
-                  errorMessage = error.message;
+              for await (const response of github.paginate.iterator(github.rest.repos.listReleases, {
+                owner,
+                repo,
+              })) {
+                for (const release of response.data) {
+                  if (!release.assets.some((asset) => asset.name === assetName)) {
+                    releasesWithoutDistArchive.push(release);
+                  } else {
+                    return releasesWithoutDistArchive;
+                  }
                 }
               }
+
+              return releasesWithoutDistArchive;
             }
 
-            if (errorMessage) {
-              core.setFailed(errorMessage);
-            } else {
-              console.log(`Release assets successfully uploaded`);
+            console.log("Collecting recent releases that do not have a dist archive");
+            const releasesWithoutDistArchive = await fetchReleasesWithoutDistArchive();
+
+            if (releasesWithoutDistArchive.length === 0) {
+              console.log("The most recent release already has a dist archive. Skipping asset upload.");
+              return;
+            }
+
+            console.log(`Found ${releasesWithoutDistArchive.length} recent releases without a dist archive.`);
+
+            const distFileSize = fs.statSync(distFile).size;
+            const distFileContents = fs.readFileSync(distFile);
+
+            // Upload dist archive for each release without a dist archive, in reverse order so re-running an
+            // aborted or failed job will pick up where it left off last time
+            for (const release of releasesWithoutDistArchive.reverse()) {
+              console.log(`Uploading dist archive release asset for ${release.tag_name}`);
+
+              // https://octokit.github.io/rest.js/v20#repos-upload-release-asset
+              await github.rest.repos.uploadReleaseAsset({
+                owner,
+                repo,
+                release_id: release.id,
+                name: assetName,
+                label: "Dist archive (zip)",
+                headers: {
+                  "content-type": "application/zip",
+                  "content-length": distFileSize,
+                },
+                data: distFileContents,
+              });
             }

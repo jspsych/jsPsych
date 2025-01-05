@@ -3,7 +3,7 @@
   <head>
     <script src="../packages/jspsych/dist/index.browser.js"></script>
     <script src="../packages/plugin-canvas-button-response/dist/index.browser.js"></script>
-    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
   </head>
   <body></body>
   <script>
@@ -78,7 +78,7 @@
       timeline: [{
         type: jsPsychCanvasButtonResponse,
         stimulus: function (c) {
-          filledCirc(c, jsPsych.timelineVariable('radius'), jsPsych.timelineVariable('color'));
+          filledCirc(c, jsPsych.evaluateTimelineVariable('radius'), jsPsych.evaluateTimelineVariable('color'));
         },
         choices: ['Red', 'Green', 'Blue'],
         prompt: '<p>What color is the circle?</p>',
@@ -92,6 +92,5 @@
     };
 
     jsPsych.run([circle_1, circle_2, lines, circle_procedure]);
-
   </script>
 </html>

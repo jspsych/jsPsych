@@ -34,6 +34,7 @@ The following people have contributed to the development of jsPsych by writing c
 * kupiqu - https://github.com/kupiqu
 * Daiichiro Kuroki - https://github.com/kurokida
 * Jonas Lambers
+* Max Lovell - https://github.com/max-lovell
 * madebyafox - https://github.com/madebyafox
 * Shane Martin - https://github.com/shamrt
 * Vijay Marupudi - https://github.com/vijaymarupudi
@@ -61,3 +62,6 @@ The following people have contributed to the development of jsPsych by writing c
 * Rob Wilkinson - https://github.com/RobAWilkinson
 * Andy Woods - https://github.com/andytwoods
 * Reto Wyss - https://github.com/retowyss
+* Shaobin Jiang - https://github.com/Shaobin-Jiang
+* Haotian Tu - https://github.com/thtTNT
+* Joshua Unrau - https://github.com/joshunrau

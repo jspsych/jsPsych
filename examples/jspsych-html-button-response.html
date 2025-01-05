@@ -20,7 +20,25 @@
     type: jsPsychHtmlButtonResponse,
     stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
     choices: ['Green', 'Blue', 'Red'],
-    prompt: "<p>What color is this word?</p>"
+    button_layout: "flex",
+    prompt: "<p>What color is this word? (flex layout)</p>"
+  });
+
+  timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+    choices: ['Green', 'Blue', 'Red'],
+    button_layout: "grid",
+    prompt: "<p>What color is this word? (grid layout)</p>"
+  });
+
+  timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+    choices: ['Green', 'Blue', 'Red'],
+    button_layout: "grid",
+    grid_rows: 2,
+    prompt: "<p>What color is this word? (grid layout, two rows)</p>"
   });
 
   timeline.push({
@@ -38,6 +56,14 @@
     trial_duration: 2000,
     response_ends_trial: false,
     prompt: "<p>What color is this word? (trial ends after 2s)</p>"
+  });
+
+  timeline.push({
+    type: jsPsychHtmlButtonResponse,
+    stimulus: '<p style="color: red; font-size: 48px; font-weight: bold;">GREEN</p>',
+    choices: ['Green', 'Blue', 'Red'],
+    enable_button_after: 2000,
+    prompt: "<p>What color is this word? (button enable after 2s)</p>"
   });
 
   jsPsych.run(timeline);

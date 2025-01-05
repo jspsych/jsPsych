@@ -30,7 +30,7 @@ describe("survey-likert plugin", () => {
     selectInput("Q3", "3").checked = true;
     selectInput("Q4", "4").checked = true;
 
-    clickTarget(document.querySelector("#jspsych-survey-likert-next"));
+    await clickTarget(document.querySelector("#jspsych-survey-likert-next"));
 
     await expectFinished();
 
@@ -62,7 +62,7 @@ describe("survey-likert plugin simulation", () => {
 
     await expectFinished();
 
-    const surveyData = getData().values()[0].response;
+    const surveyData = getData().values()[0].response as Record<string, number>;
     const all_valid = Object.entries(surveyData).every((x) => {
       return x[1] <= 4 && x[1] >= 0;
     });
@@ -94,7 +94,7 @@ describe("survey-likert plugin simulation", () => {
 
     await expectFinished();
 
-    const surveyData = getData().values()[0].response;
+    const surveyData = getData().values()[0].response as Record<string, number>;
     const all_valid = Object.entries(surveyData).every((x) => {
       return x[1] <= 4 && x[1] >= 0;
     });

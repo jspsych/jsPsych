@@ -23,7 +23,7 @@ describe("iat-html plugin", () => {
 
     expect(getHTML()).toContain('<p id="jspsych-iat-stim"></p><p>dogs</p><p></p>');
 
-    pressKey("f");
+    await pressKey("f");
     await expectFinished();
   });
 
@@ -39,10 +39,10 @@ describe("iat-html plugin", () => {
       },
     ]);
 
-    pressKey(" ");
+    await pressKey(" ");
     expect(getHTML()).toContain('<p id="jspsych-iat-stim"></p><p>hello</p><p></p>');
 
-    pressKey("f");
+    await pressKey("f");
     await expectFinished();
   });
 
@@ -58,10 +58,10 @@ describe("iat-html plugin", () => {
       },
     ]);
 
-    pressKey(" ");
+    await pressKey(" ");
     expect(getHTML()).toContain('<p id="jspsych-iat-stim"></p><p>hello</p><p></p>');
 
-    pressKey("j");
+    await pressKey("j");
     await expectFinished();
   });
 
@@ -80,10 +80,10 @@ describe("iat-html plugin", () => {
       },
     ]);
 
-    pressKey("f");
+    await pressKey("f");
     expect(getHTML()).toContain('<p id="jspsych-iat-stim" class=" responded"></p><p>hello</p>');
 
-    pressKey(" ");
+    await pressKey(" ");
     await expectFinished();
   });
 
@@ -102,10 +102,10 @@ describe("iat-html plugin", () => {
       },
     ]);
 
-    pressKey("j");
+    await pressKey("j");
     expect(getHTML()).toContain('<p id="jspsych-iat-stim" class=" responded"></p><p>hello</p>');
 
-    pressKey("x");
+    await pressKey("x");
     await expectFinished();
   });
 
@@ -125,7 +125,7 @@ describe("iat-html plugin", () => {
     expect(getHTML()).toContain("<p>Press j for:<br> <b>UNFRIENDLY</b>");
     expect(getHTML()).toContain("<p>Press f for:<br> <b>FRIENDLY</b>");
 
-    pressKey("f");
+    await pressKey("f");
     await expectFinished();
   });
 
@@ -150,10 +150,10 @@ describe("iat-html plugin", () => {
 
     expect(wrongImageContainer.style.visibility).toBe("hidden");
 
-    pressKey("j");
+    await pressKey("j");
     expect(wrongImageContainer.style.visibility).toBe("visible");
 
-    pressKey("f");
+    await pressKey("f");
     await expectFinished();
   });
 
@@ -191,7 +191,7 @@ describe("iat-html plugin", () => {
       },
     ]);
 
-    pressKey("f");
+    await pressKey("f");
     expect(getHTML()).toContain('<p id="jspsych-iat-stim" class=" responded"></p><p>hello</p>');
 
     await expectRunning();
@@ -218,7 +218,7 @@ describe("iat-html plugin", () => {
 
     jest.advanceTimersByTime(500);
 
-    pressKey("i");
+    await pressKey("i");
     expect(displayElement.querySelector<HTMLElement>("#wrongImgContainer").style.visibility).toBe(
       "visible"
     );
@@ -247,14 +247,14 @@ describe("iat-html plugin", () => {
 
     expect(getHTML()).toContain('<p id="jspsych-iat-stim"></p><p>hello</p>');
 
-    pressKey("i");
+    await pressKey("i");
     expect(getHTML()).toContain('<p id="jspsych-iat-stim" class=" responded"></p><p>hello</p>');
 
     jest.advanceTimersByTime(1000);
     expect(getHTML()).toContain('<p id="jspsych-iat-stim" class=" responded"></p><p>hello</p>');
 
     jest.advanceTimersByTime(500);
-    pressKey("e");
+    await pressKey("e");
     await expectFinished();
   });
 
@@ -276,7 +276,7 @@ describe("iat-html plugin", () => {
     ]);
 
     expect(getHTML()).toContain('<p id="jspsych-iat-stim"></p><p>dogs</p><p></p>');
-    pressKey("j");
+    await pressKey("j");
 
     await expectFinished();
   });

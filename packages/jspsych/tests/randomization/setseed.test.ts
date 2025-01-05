@@ -41,7 +41,7 @@ describe("setSeed generates predictable randomization", () => {
     );
 
     for (let i = 0; i < 9; i++) {
-      pressKey(" ");
+      await pressKey(" ");
     }
 
     const data_run_1 = getData().readOnly();
@@ -80,7 +80,7 @@ describe("setSeed generates predictable randomization", () => {
     );
 
     for (let i = 0; i < 9; i++) {
-      pressKey(" ");
+      await pressKey(" ");
     }
 
     const data_run_2 = getData2().readOnly();

@@ -12,7 +12,7 @@ describe("case_sensitive_responses parameter", () => {
     ]);
 
     expect(getHTML()).toMatch("foo");
-    pressKey("A");
+    await pressKey("A");
     await expectFinished();
   });
 
@@ -29,7 +29,7 @@ describe("case_sensitive_responses parameter", () => {
     );
 
     expect(getHTML()).toMatch("foo");
-    pressKey("A");
+    await pressKey("A");
     await expectFinished();
   });
 
@@ -46,9 +46,9 @@ describe("case_sensitive_responses parameter", () => {
     );
 
     expect(getHTML()).toMatch("foo");
-    pressKey("A");
+    await pressKey("A");
     expect(getHTML()).toMatch("foo");
-    pressKey("a");
+    await pressKey("a");
     await expectFinished();
   });
 });

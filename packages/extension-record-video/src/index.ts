@@ -1,9 +1,23 @@
 import autoBind from "auto-bind";
-import { JsPsych, JsPsychExtension, JsPsychExtensionInfo } from "jspsych";
+import { JsPsych, JsPsychExtension, JsPsychExtensionInfo, ParameterType } from "jspsych";
 
+import { version } from "../package.json";
+
+/**
+ * https://www.jspsych.org/latest/extensions/record-video/
+ */
 class RecordVideoExtension implements JsPsychExtension {
   static info: JsPsychExtensionInfo = {
     name: "record-video",
+    version: version,
+    data: {
+      /** [Base 64 encoded](https://developer.mozilla.org/en-US/docs/Glossary/Base64) representation of the video data. */
+      record_video_data: {
+        type: ParameterType.STRING,
+      },
+    },
+    // prettier-ignore
+    citations: '__CITATIONS__',
   };
 
   constructor(private jsPsych: JsPsych) {

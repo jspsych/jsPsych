@@ -24,7 +24,7 @@ describe("external-html", () => {
     await expectRunning();
 
     expect(getHTML()).toMatch("This is external HTML");
-    clickTarget(displayElement.querySelector("#finished"));
+    await clickTarget(displayElement.querySelector("#finished"));
 
     await expectFinished();
   });

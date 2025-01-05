@@ -1,77 +1,74 @@
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import { pressKey, startTimeline } from "@jspsych/test-utils";
 
-import { initJsPsych } from "../../src";
+import { JsPsych, initJsPsych } from "../../src";
+
+function setIsFullScreen(isFullscreen: boolean) {
+  // @ts-expect-error
+  window.document.isFullScreen = isFullscreen;
+  document.dispatchEvent(new Event("fullscreenchange"));
+}
+
+afterEach(async () => {
+  // Finish the experiment so its interaction listeners are removed
+  await pressKey("a");
+});
 
 describe("Data recording", () => {
+  let jsPsych: JsPsych;
+
+  beforeEach(async () => {
+    jsPsych = (await startTimeline([{ type: htmlKeyboardResponse, stimulus: "hello" }])).jsPsych;
+  });
+
   test("record focus events", async () => {
-    const { jsPsych } = await startTimeline([{ type: htmlKeyboardResponse, stimulus: "hello" }]);
     window.dispatchEvent(new Event("focus"));
-    // click through first trial
-    pressKey("a");
-    // check data
     expect(jsPsych.data.getInteractionData().filter({ event: "focus" }).count()).toBe(1);
   });
 
   test("record blur events", async () => {
-    const { jsPsych } = await startTimeline([{ type: htmlKeyboardResponse, stimulus: "hello" }]);
     window.dispatchEvent(new Event("blur"));
-    // click through first trial
-    pressKey("a");
-    // check data
     expect(jsPsych.data.getInteractionData().filter({ event: "blur" }).count()).toBe(1);
   });
 
-  /* not sure yet how to test fullscreen events with jsdom engine */
-
-  test.skip("record fullscreenenter events", async () => {
-    const { jsPsych } = await startTimeline([{ type: htmlKeyboardResponse, stimulus: "hello" }]);
-    // click through first trial
-    pressKey("a");
-    // check if data contains rt
+  test("record fullscreenenter events", async () => {
+    setIsFullScreen(true);
+    expect(jsPsych.data.getInteractionData().filter({ event: "fullscreenenter" }).count()).toBe(1);
   });
 
-  test.skip("record fullscreenexit events", async () => {
-    const { jsPsych } = await startTimeline([{ type: htmlKeyboardResponse, stimulus: "hello" }]);
-    // click through first trial
-    pressKey("a");
-    // check if data contains rt
+  test("record fullscreenexit events", async () => {
+    setIsFullScreen(false);
+    expect(jsPsych.data.getInteractionData().filter({ event: "fullscreenexit" }).count()).toBe(1);
   });
 });
 
 describe("on_interaction_data_update", () => {
-  test("fires for blur", async () => {
-    const updateFunction = jest.fn();
-    const jsPsych = initJsPsych({
-      on_interaction_data_update: updateFunction,
-    });
+  const updateFunction = jest.fn();
+  let jsPsych: JsPsych;
 
+  beforeEach(async () => {
+    updateFunction.mockClear();
+    jsPsych = initJsPsych({ on_interaction_data_update: updateFunction });
     await startTimeline([{ type: htmlKeyboardResponse, stimulus: "hello" }], jsPsych);
+  });
 
+  test("fires for blur", async () => {
     window.dispatchEvent(new Event("blur"));
     expect(updateFunction).toHaveBeenCalledTimes(1);
-
-    // click through first trial
-    pressKey("a");
   });
 
   test("fires for focus", async () => {
-    const updateFunction = jest.fn();
-
-    const jsPsych = initJsPsych({
-      on_interaction_data_update: updateFunction,
-    });
-    await startTimeline([{ type: htmlKeyboardResponse, stimulus: "hello" }], jsPsych);
-
     window.dispatchEvent(new Event("focus"));
     expect(updateFunction).toHaveBeenCalledTimes(1);
-    // click through first trial
-    pressKey("a");
   });
 
-  /* not sure yet how to test fullscreen events with jsdom engine */
+  test("fires for fullscreenenter", async () => {
+    setIsFullScreen(true);
+    expect(updateFunction).toHaveBeenCalledTimes(1);
+  });
 
-  test.skip("fires for fullscreenexit", () => {});
-
-  test.skip("fires for fullscreenenter", () => {});
+  test("fires for fullscreenexit", async () => {
+    setIsFullScreen(false);
+    expect(updateFunction).toHaveBeenCalledTimes(1);
+  });
 });

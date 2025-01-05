@@ -16,7 +16,7 @@ describe("categorize-html plugin", () => {
     ]);
 
     expect(getHTML()).toMatch("FOO");
-    pressKey("d");
+    await pressKey("d");
     expect(getHTML()).toMatch("Correct");
     jest.advanceTimersByTime(2000);
 

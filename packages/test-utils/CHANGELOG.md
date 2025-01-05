@@ -1,5 +1,11 @@
 # @jspsych/test-utils
 
+## 1.2.0
+
+### Minor Changes
+
+- [#3342](https://github.com/jspsych/jsPsych/pull/3342) [`6717e00c`](https://github.com/jspsych/jsPsych/commit/6717e00c97f602a987a7511afa3182a74d43b5fb) Thanks [@Bankminer78](https://github.com/Bankminer78)! - clickTarget method now respects disabled tag on form elements.
+
 ## 1.1.2
 
 ### Patch Changes

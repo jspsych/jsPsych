@@ -43,7 +43,7 @@ When the experiment is complete, Prolific requires that you send the participant
 You can accomplish this in a couple different ways.
 
 !!! warning
-    It's important that you've saved all the data from your experiment before the participant returns to Prolific. Make sure that any server communication has completed prior to redirecting the participant. One way to do this is by using the async features of the `call-function` plugin ([example](../plugins/call-function.md#async-function-call)).
+    It's important that you've saved all the data from your experiment before the participant returns to Prolific. Make sure that any server communication has completed prior to redirecting the participant. One way to do this is by using the async features of the `call-function` plugin ([example](../plugins/call-function.md#async-example)).
 
 ### Participant clicks a link
 

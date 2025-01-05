@@ -2,30 +2,63 @@ import { setImmediate as flushMicroTasks } from "timers";
 
 import { JsPsych } from "jspsych";
 
-export function dispatchEvent(event: Event) {
-  document.body.dispatchEvent(event);
+/**
+ * https://github.com/facebook/jest/issues/2157#issuecomment-279171856
+ */
+export function flushPromises() {
+  return new Promise((resolve) => flushMicroTasks(resolve));
 }
 
-export function keyDown(key: string) {
-  dispatchEvent(new KeyboardEvent("keydown", { key }));
+export function dispatchEvent(event: Event, target: Element = document.body) {
+  target.dispatchEvent(event);
+  return flushPromises();
 }
 
-export function keyUp(key: string) {
-  dispatchEvent(new KeyboardEvent("keyup", { key }));
+export async function keyDown(key: string) {
+  await dispatchEvent(new KeyboardEvent("keydown", { key }));
 }
 
-export function pressKey(key: string) {
-  keyDown(key);
-  keyUp(key);
+export async function keyUp(key: string) {
+  await dispatchEvent(new KeyboardEvent("keyup", { key }));
 }
 
-export function mouseDownMouseUpTarget(target: Element) {
-  target.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
-  target.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+export async function pressKey(key: string) {
+  await keyDown(key);
+  await keyUp(key);
 }
 
-export function clickTarget(target: Element) {
-  target.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+export async function mouseDownMouseUpTarget(target: Element) {
+  await dispatchEvent(new MouseEvent("mousedown", { bubbles: true }), target);
+  await dispatchEvent(new MouseEvent("mouseup", { bubbles: true }), target);
+}
+
+export async function clickTarget(target: Element) {
+  // Check if the target is a form element and if it's disabled
+  if (target instanceof HTMLButtonElement || target instanceof HTMLInputElement) {
+    if (target.disabled) {
+      console.log("Target is disabled, not dispatching click event.");
+      return; // Exit the function if the target is disabled
+    }
+  }
+  await dispatchEvent(new MouseEvent("click", { bubbles: true }), target);
+}
+
+/**
+ * Dispatch a `MouseEvent` of type `eventType`, with x and y defined relative to the container element.
+ * @param x The x location of the event, relative to the x location of `container`.
+ * @param y The y location of the event, relative to the y location of `container`.
+ * @param container The DOM element for relative location of the event.
+ */
+async function dispatchMouseEvent(eventType: string, x: number, y: number, container: Element) {
+  const containerRect = container.getBoundingClientRect();
+  await dispatchEvent(
+    new MouseEvent(eventType, {
+      clientX: containerRect.x + x,
+      clientY: containerRect.y + y,
+      bubbles: true,
+    }),
+    container
+  );
 }
 
 /**
@@ -34,16 +67,8 @@ export function clickTarget(target: Element) {
  * @param y The y location of the event, relative to the y location of `container`.
  * @param container The DOM element for relative location of the event.
  */
-export function mouseMove(x: number, y: number, container: Element) {
-  const containerRect = container.getBoundingClientRect();
-
-  const eventInit = {
-    clientX: containerRect.x + x,
-    clientY: containerRect.y + y,
-    bubbles: true,
-  };
-
-  container.dispatchEvent(new MouseEvent("mousemove", eventInit));
+export async function mouseMove(x: number, y: number, container: Element) {
+  await dispatchMouseEvent("mousemove", x, y, container);
 }
 
 /**
@@ -52,16 +77,8 @@ export function mouseMove(x: number, y: number, container: Element) {
  * @param y The y location of the event, relative to the y location of `container`.
  * @param container The DOM element for relative location of the event.
  */
-export function mouseUp(x: number, y: number, container: Element) {
-  const containerRect = container.getBoundingClientRect();
-
-  const eventInit = {
-    clientX: containerRect.x + x,
-    clientY: containerRect.y + y,
-    bubbles: true,
-  };
-
-  container.dispatchEvent(new MouseEvent("mouseup", eventInit));
+export async function mouseUp(x: number, y: number, container: Element) {
+  await dispatchMouseEvent("mouseup", x, y, container);
 }
 
 /**
@@ -70,23 +87,8 @@ export function mouseUp(x: number, y: number, container: Element) {
  * @param y The y location of the event, relative to the y location of `container`.
  * @param container The DOM element for relative location of the event.
  */
-export function mouseDown(x: number, y: number, container: Element) {
-  const containerRect = container.getBoundingClientRect();
-
-  const eventInit = {
-    clientX: containerRect.x + x,
-    clientY: containerRect.y + y,
-    bubbles: true,
-  };
-
-  container.dispatchEvent(new MouseEvent("mousedown", eventInit));
-}
-
-/**
- * https://github.com/facebook/jest/issues/2157#issuecomment-279171856
- */
-export function flushPromises() {
-  return new Promise((resolve) => flushMicroTasks(resolve));
+export async function mouseDown(x: number, y: number, container: Element) {
+  await dispatchMouseEvent("mousedown", x, y, container);
 }
 
 /**

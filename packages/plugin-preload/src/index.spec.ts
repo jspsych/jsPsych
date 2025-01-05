@@ -1,7 +1,7 @@
 import audioKeyboardResponse from "@jspsych/plugin-audio-keyboard-response";
 import imageKeyboardResponse from "@jspsych/plugin-image-keyboard-response";
 import videoKeyboardResponse from "@jspsych/plugin-video-keyboard-response";
-import { simulateTimeline, startTimeline } from "@jspsych/test-utils";
+import { flushPromises, simulateTimeline, startTimeline } from "@jspsych/test-utils";
 import { JsPsych, initJsPsych } from "jspsych";
 
 import preloadPlugin from ".";
@@ -573,6 +573,7 @@ describe("preload plugin", () => {
       );
 
       jest.advanceTimersByTime(101);
+      await flushPromises();
 
       expect(mockFn).toHaveBeenCalledWith("timeout");
       expect(getHTML()).toMatch(
