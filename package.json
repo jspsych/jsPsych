@@ -35,6 +35,9 @@
     "prettier-plugin-import-sort": "^0.0.7",
     "turbo": "^1.6.3"
   },
+  "overrides": {
+    "cross-spawn": "^7.0.5"
+  },
   "prettier": {
     "printWidth": 100
   },
