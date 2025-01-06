@@ -41,7 +41,7 @@ describe("Trial", () => {
       expect(
         () => new Trial(dependencies, description, timeline)
       ).toThrowErrorMatchingInlineSnapshot(
-        "\"Trial plugin not recognized. Please provide a valid plugin using the 'type' parameter.\""
+        "\"Plugin not recognized. Please provide a valid plugin using the 'type' parameter.\""
       );
     }
   });

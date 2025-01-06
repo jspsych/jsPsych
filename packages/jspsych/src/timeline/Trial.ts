@@ -38,7 +38,7 @@ export class Trial extends TimelineNode {
     this.pluginInfo = this.pluginClass?.["info"];
     if (!this.pluginInfo) {
       throw new Error(
-        "Trial plugin not recognized. Please provide a valid plugin using the 'type' parameter."
+        "Plugin not recognized. Please provide a valid plugin using the 'type' parameter."
       );
     }
 
