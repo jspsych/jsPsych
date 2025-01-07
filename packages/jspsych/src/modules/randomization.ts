@@ -1,5 +1,5 @@
 import rw from "random-words";
-import seedrandom from "seedrandom/lib/alea";
+import seedrandom from "seedrandom/lib/alea.js";
 
 /**
  * Uses the `seedrandom` package to replace Math.random() with a seedable PRNG.
