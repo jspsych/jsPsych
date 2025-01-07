@@ -38,7 +38,7 @@ Note: the canvas stimulus is *not* included in the trial data because it is a fu
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-canvas-button-response@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-canvas-button-response@2.1.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

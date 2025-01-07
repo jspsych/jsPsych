@@ -1,5 +1,17 @@
 # jspsych
 
+## 8.2.0
+
+### Minor Changes
+
+- [#3385](https://github.com/jspsych/jsPsych/pull/3385) [`3948fdc0ac176584fe4b8fe0b9cca5ed6e8b3afc`](https://github.com/jspsych/jsPsych/commit/3948fdc0ac176584fe4b8fe0b9cca5ed6e8b3afc) Thanks [@cherriechang](https://github.com/cherriechang)! - Added citations property to info field of all plugins/extensions in two citation formats (apa, bibtex); added getCitations() as function in jsPsych package allowing user to generate citations by passing an array of plugins/extensions by name as first input and citation format as string as second input; changed template of plugins/extensions to contain citations field by default; citations for each plugin/extension are automatically generated from .cff file (if any) at its folder's root during build process; getCitations() prints out citations in the form of a string separating each citation with newline character, and always prints the jsPsych library citation first.
+
+### Patch Changes
+
+- [#3477](https://github.com/jspsych/jsPsych/pull/3477) [`d8653b076008807b382f002ae0215c887ad6db13`](https://github.com/jspsych/jsPsych/commit/d8653b076008807b382f002ae0215c887ad6db13) Thanks [@rkilpadi](https://github.com/rkilpadi)! - Add informative error message when a trial is missing the `type` parameter
+
+- [#3479](https://github.com/jspsych/jsPsych/pull/3479) [`2f8413970e06ef23dd0dd03059e2f88da396136b`](https://github.com/jspsych/jsPsych/commit/2f8413970e06ef23dd0dd03059e2f88da396136b) Thanks [@alexrockhill](https://github.com/alexrockhill)! - Modify import of seedrandom to fix build issue with some configurations of webpack
+
 ## 8.1.0
 
 ### Minor Changes

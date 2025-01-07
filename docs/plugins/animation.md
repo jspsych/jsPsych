@@ -32,7 +32,7 @@ response | array | An array, where each element is an object representing a resp
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-animation@2.0.1"></script>
+<script src="https://unpkg.com/@jspsych/plugin-animation@2.1.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

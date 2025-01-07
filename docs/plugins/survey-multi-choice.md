@@ -31,7 +31,7 @@ question_order | array | An array with the order of questions. For example `[2,0
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@2.0.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@2.1.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
