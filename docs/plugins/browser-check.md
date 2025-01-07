@@ -80,7 +80,7 @@ As with all simulated plugins, you can override the default (actual) data with f
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-browser-check@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-browser-check@2.1.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

@@ -49,7 +49,7 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-free-sort@2.0.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-free-sort@2.1.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
