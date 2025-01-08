@@ -39,7 +39,7 @@
     "cross-spawn": "^7.0.5",
     "nanoid": "^3.3.8",
     "micromatch": "^4.0.8",
-    "vue-template-compiler": "^3.0.0"
+    "vue-jscodeshift-adapter": "^3.0.0"
   },
   "prettier": {
     "printWidth": 100
