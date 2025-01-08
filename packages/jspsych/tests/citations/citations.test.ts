@@ -39,7 +39,7 @@ try {
     });
     test("citing without input and with invalid format", () => {
       expect(() => jspsych.getCitations(null, "apa")).toThrow(
-        "Expected array of plugins/extensionss"
+        "Expected array of plugins/extensions"
       );
     });
   });
