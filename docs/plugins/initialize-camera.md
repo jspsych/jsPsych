@@ -18,7 +18,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
 device_select_message | html string | `<p>Please select the camera you would like to use.</p>` | The message to display when the user is presented with a dropdown list of available devices.
-button_label | sting | 'Use this camera.' | The label for the select button.
+button_label | string | 'Use this camera.' | The label for the select button.
 include_audio | bool | false | Set to `true` to include an audio track in the recordings.
 width | int | null | Request a specific width for the recording. This is not a guarantee that this width will be used, as it depends on the capabilities of the participant's device. Learn more about `MediaRecorder` constraints [here](https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API/Constraints#requesting_a_specific_value_for_a_setting).
 height | int | null | Request a specific height for the recording. This is not a guarantee that this height will be used, as it depends on the capabilities of the participant's device. Learn more about `MediaRecorder` constraints [here](https://developer.mozilla.org/en-US/docs/Web/API/Media_Streams_API/Constraints#requesting_a_specific_value_for_a_setting).
