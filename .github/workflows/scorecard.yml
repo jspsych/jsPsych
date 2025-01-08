@@ -4,6 +4,9 @@
 
 name: Scorecard supply-chain security
 on:
+  pull_request:
+    types:
+      - synchronize
   workflow_dispatch:
   # For Branch-Protection check. Only the default branch is supported. See
   # https://github.com/ossf/scorecard/blob/main/docs/checks.md#branch-protection
@@ -20,6 +23,7 @@ permissions: read-all
 
 jobs:
   analysis:
+    if: ${{ !(github.event_name == 'pull_request' && !startsWith(github.head_ref, '3466'))}}
     name: Scorecard analysis
     runs-on: ubuntu-latest
     permissions:
