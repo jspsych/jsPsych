@@ -76,22 +76,11 @@ const makeConfig = ({
       input,
       plugins: [
         externals(),
-        modify(
-          {
-            // prettier-ignore
-            find: /'__CITATIONS__'/g,
-            replace: JSON.stringify(citationData, null, 2),
-          },
-          {
-            // Patch to mitigate DOM Clobbering vulnerability
-            find: /document\.currentScript/g,
-            replace: `(typeof document !== 'undefined' &&
-                    document.currentScript &&
-                    document.currentScript.tagName &&
-                    document.currentScript.tagName.toUpperCase() === 'SCRIPT' &&
-                    document.currentScript)`,
-          }
-        ),
+        modify({
+          // prettier-ignore
+          find: /'__CITATIONS__'/g,
+          replace: JSON.stringify(citationData, null, 2),
+        }),
         esbuild({ ...esBuildPluginOptions, target: "node18" }),
         commonjs(commonjsPluginOptions),
       ],
@@ -117,22 +106,11 @@ const makeConfig = ({
       input,
       plugins: [
         externals({ deps: false }),
-        modify(
-          {
-            // prettier-ignore
-            find: /'__CITATIONS__'/g,
-            replace: JSON.stringify(citationData, null, 2),
-          },
-          {
-            // Patch to mitigate DOM Clobbering vulnerability
-            find: /document\.currentScript/g,
-            replace: `(typeof document !== 'undefined' &&
-                    document.currentScript &&
-                    document.currentScript.tagName &&
-                    document.currentScript.tagName.toUpperCase() === 'SCRIPT' &&
-                    document.currentScript)`,
-          }
-        ),
+        modify({
+          // prettier-ignore
+          find: /'__CITATIONS__'/g,
+          replace: JSON.stringify(citationData, null, 2),
+        }),
         resolve({ preferBuiltins: false }),
         esbuild({ ...esBuildPluginOptions, target: "esnext" }),
         commonjs(commonjsPluginOptions),
@@ -152,22 +130,11 @@ const makeConfig = ({
       input,
       plugins: [
         externals({ deps: false }),
-        modify(
-          {
-            // prettier-ignore
-            find: /'__CITATIONS__'/g,
-            replace: JSON.stringify(citationData, null, 2),
-          },
-          {
-            // Patch to mitigate DOM Clobbering vulnerability
-            find: /document\.currentScript/g,
-            replace: `(typeof document !== 'undefined' &&
-                    document.currentScript &&
-                    document.currentScript.tagName &&
-                    document.currentScript.tagName.toUpperCase() === 'SCRIPT' &&
-                    document.currentScript)`,
-          }
-        ),
+        modify({
+          // prettier-ignore
+          find: /'__CITATIONS__'/g,
+          replace: JSON.stringify(citationData, null, 2),
+        }),
         resolve({ preferBuiltins: false }),
         esbuild({ ...esBuildPluginOptions, target: "es2015", minify: true }),
         commonjs(commonjsPluginOptions),
