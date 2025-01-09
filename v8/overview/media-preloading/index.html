@@ -334,11 +334,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tutorials/video-tutorials/" class="md-nav__link">
+      <a href="../../tutorials/community-tutorials/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Video Tutorials
+    Community Tutorials
   </span>
   
 
@@ -2920,9 +2920,7 @@
 <p>If an experiment uses image, audio, or video files as stimuli, it is a good idea to preload the files before running the experiment. You can preload files at any point in your experiment using the <a href="../../plugins/preload/">jsPsych <code>preload</code> plugin</a>. Preloading files means that the participant's browser will download the files and store them in local memory on the participant's computer. This is important because displaying or playing a media file is much faster if it is already in memory on the participant's computer. Without preloading, there will be noticeable delays in the display of media, which will affect any timing measurements (such as how long an image is displayed, or a participant's response time since first viewing an image). For particularly large files, like video, preloading content avoids lengthy pauses in the middle of the experiment that can be disruptive to the flow of the experiment.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<div class="codehilite"><pre><span></span><code>Note that video preloading will not work when you run your experiment offline (e.g., by double-clicking on the HTML file), but it will work once your experiment is running online (hosted on a server). The [Cross-origin requests (CORS) and safe mode](running-experiments.md#cross-origin-requests-cors-and-safe-mode) section on the Running Experiments page contains more information about this.
-</code></pre></div>
-
+<p>Note that video preloading will not work when you run your experiment offline (e.g., by double-clicking on the HTML file), but it will work once your experiment is running online (hosted on a server). The <a href="../running-experiments/#cross-origin-requests-cors-and-safe-mode">Cross-origin requests (CORS) and safe mode</a> section on the Running Experiments page contains more information about this.</p>
 </div>
 <h2 id="automatic-preloading">Automatic Preloading<a class="headerlink" href="#automatic-preloading" title="Permanent link">&para;</a></h2>
 <p>jsPsych can automatically preload audio, video, and image files that are used as parameters for the standard set of plugins, based on the timeline that is passed to <code>jsPsych.run</code>. You must initiate this preloading using a <code>preload</code> trial. You should add this <code>preload</code> trial into your timeline when you want the preloading to occur, and set the <code>auto_preload</code> parameter to <code>true</code>.</p>

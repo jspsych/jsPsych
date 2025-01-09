@@ -334,11 +334,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tutorials/video-tutorials/" class="md-nav__link">
+      <a href="../../tutorials/community-tutorials/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Video Tutorials
+    Community Tutorials
   </span>
   
 
@@ -2492,6 +2492,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="static info">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameter-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameter Types
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -2954,6 +2969,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="static info">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameter-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameter Types
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -3111,6 +3141,10 @@
 <span class="w">  </span><span class="p">...</span>
 <span class="p">}</span>
 </code></pre></div>
+<details class="info">
+<summary>Automatic versioning with custom build environments</summary>
+<p>If you are using a custom build environment that imports its own <code>tsconfig.json</code> file that does not extend jsPsych's, and you want to use this automatic versioning syntax, you must add <code>"resolveJsonModule": true</code> to the config's <code>compilerOptions</code> object.</p>
+</details>
 <p>If you are not using a build environment that supports <code>import</code> and <code>package.json</code> (such as writing a plain JS file), you can manually enter the <code>version</code> as a string.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="p">...</span>
@@ -3197,6 +3231,146 @@
 <span class="p">}</span>
 
 <span class="nx">MyAwesomePlugin</span><span class="p">.</span><span class="nx">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">info</span><span class="p">;</span>
+</code></pre></div>
+<h4 id="parameter-types">Parameter Types<a class="headerlink" href="#parameter-types" title="Permanent link">&para;</a></h4>
+<p>jsPsych currently has support for the following parameter types:</p>
+<table>
+<thead>
+<tr>
+<th>Type Name</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BOOL</td>
+<td>A simple truth value.</td>
+<td><code>true</code> or <code>false</code></td>
+</tr>
+<tr>
+<td>STRING</td>
+<td>A set of characters.</td>
+<td>"Continue"</td>
+</tr>
+<tr>
+<td>INT</td>
+<td>A value that supports whole numbers.</td>
+<td>12</td>
+</tr>
+<tr>
+<td>FLOAT</td>
+<td>A value that supports decimal numbers.</td>
+<td>5.55</td>
+</tr>
+<tr>
+<td>FUNCTION</td>
+<td>A Javascript function, tends to process multiple objects in an array from other parameters.</td>
+<td><code>function(tries) { return "&lt;p&gt;You have " + tries + " tries left." }</code></td>
+</tr>
+<tr>
+<td>KEY</td>
+<td>A single key, with support for function keys like arrows and spacebars.</td>
+<td><code>"j"</code>, <code>"n"</code>, <code>"ArrowLeft"</code></td>
+</tr>
+<tr>
+<td>KEYS</td>
+<td>Either an array of keys, or the string <code>"ALL_KEYS"</code> or <code>"NO_KEYS"</code>, indicating their respective inclusion/exclusion criterea.</td>
+<td><code>["f", "j"]</code></td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>A list of strings that a developer can choose between as a parameter.</td>
+<td><code>["cm", "px", "em"]</code></td>
+</tr>
+<tr>
+<td>HTML_STRING</td>
+<td>A string with HTML markup.</td>
+<td><code>"&lt;p&gt;This is the prompt.&lt;/p&gt;"</code></td>
+</tr>
+<tr>
+<td>IMAGE</td>
+<td>A string that contains the path to an image file.</td>
+<td><code>"my_image.jpg"</code></td>
+</tr>
+<tr>
+<td>AUDIO</td>
+<td>A string that contains the path to an audio file.</td>
+<td><code>"my_sound.mp3"</code></td>
+</tr>
+<tr>
+<td>VIDEO</td>
+<td>A string that contains the path to a video file.</td>
+<td><code>"my_video.mp4"</code></td>
+</tr>
+<tr>
+<td>OBJECT</td>
+<td>A general JSON object (key-value pairs).</td>
+<td><code>{ rt: 350, response: "hello!", correct: true }</code></td>
+</tr>
+<tr>
+<td>COMPLEX</td>
+<td>A JSON object that one can specify nested parameters for.</td>
+<td><code>{ rt: 350, response: "hello!", correct: true }</code></td>
+</tr>
+<tr>
+<td>TIMELINE</td>
+<td>A jsPsych timeline object with trials.</td>
+<td><code>[{ type: jsPsychKeyboardResponse, stimulus: 'my_image.jpg }]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Within each parameter, you may also specify if it is an array of the specific type. For example, a parameter that requires a list of button labels would be described as:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="w">  </span><span class="nx">parameters</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/** The labels to be displayed on each button. */</span>
+<span class="w">    </span><span class="nx">labels</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">ParameterType</span><span class="p">.</span><span class="nx">STRING</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">array</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Pause&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Play&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Continue&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Specific parameter types also have their own special markup. For <code>ParameterType.SELECT</code>, you specify the options one can choose with an <code>options</code> field, and then the <code>default</code> field must be within that field.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="w">  </span><span class="nx">parameters</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/** The units of measure used to display the length and width of the stimulus. */</span>
+<span class="w">    </span><span class="nx">units</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">ParameterType</span><span class="p">.</span><span class="nx">SELECT</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">options</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;em&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;px&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;vh&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;vw&quot;</span><span class="p">],</span>
+<span class="w">      </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;px&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>For <code>ParameterType.COMPLEX</code>, we may specify the underlying fields in the object with the <code>nested</code> field. This acts in the same way as us defining parameters regularly, only we are now just delineating the fields within the object itself.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="w">  </span><span class="nx">parameters</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/** Where to display the location of the stimuli. */</span>
+<span class="w">    </span><span class="nx">locations</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">ParameterType</span><span class="p">.</span><span class="nx">COMPLEX</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">array</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="k">default</span><span class="o">:</span><span class="w"> </span><span class="kc">undefined</span><span class="p">,</span>
+<span class="w">      </span><span class="nx">nested</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="cm">/** The x-coordinate of the stimulus, in the units from the `units` field. */</span>
+<span class="w">        </span><span class="nx">x</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">ParameterType</span><span class="p">.</span><span class="nx">INT</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">        </span><span class="cm">/** The y-coordinate of the stimulus. */</span>
+<span class="w">        </span><span class="nx">y</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">ParameterType</span><span class="p">.</span><span class="nx">INT</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="p">}</span>
 </code></pre></div>
 <h2 id="plugin-functionality">Plugin functionality<a class="headerlink" href="#plugin-functionality" title="Permanent link">&para;</a></h2>
 <p>Inside the <code>.trial()</code> method you can do pretty much anything that you want, including modifying the DOM, setting up event listeners, and making asynchronous requests. In this section we'll highlight a few common things that you might want to do as examples.</p>

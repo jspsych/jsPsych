@@ -334,11 +334,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tutorials/video-tutorials/" class="md-nav__link">
+      <a href="../../tutorials/community-tutorials/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Video Tutorials
+    Community Tutorials
   </span>
   
 
@@ -2841,12 +2841,14 @@
 <p>There are many other web browsers that are available, but that are not commonly used. The most well-known of these are Internet Explorer and Opera. jsPsych is not tested on these and other browsers not listed in the Supported section above. jsPsych experiments <em>might</em> work in these browsers, but they <em>might not</em>. If you want to give participants the option to use unsupported browsers, then we recommend carefully testing your experiment to make sure that everything works as expected. Otherwise, we suggest asking your participants to only use a supported browser, or incorporating browser, device, and/or feature checks at the start of your experiment. jsPsych offers built-in methods for <a href="../exclude-browser/">exclusion based on minimum browser size and WebAudio API compatibility</a>. You can incorporate other browser/device/feature checks into your experiment by adding custom JavaScript code.</p>
 <h2 id="mobile-devices">Mobile Devices<a class="headerlink" href="#mobile-devices" title="Permanent link">&para;</a></h2>
 <p>In general, jsPsych experiments can be run on mobile devices (smartphones and tablets). However, certain plugins will not work on mobile. For instance, any plugin that requires a keyboard response without a text input box, such as the *-keyboard-response plugins, will not work. Even plugins that do work on mobile might work differently than they do on desktop and laptop computers. For instance, on mobile devices, a text input box will cause an on-screen keyboard to pop up, which affects the visible content on the screen.</p>
-<p>If you plan to run an experiment that allows people to use mobile devices, we recommend doing some extra testing to make sure that everything works as expected. In particular, you may want to check that:
-* Font sizes are readable on smaller screens
-* Stimuli sizes are large enough and appropriate for the task
-* Page is laid out as intended (e.g. elements are centered and do not overlap)
-* Response options are touchscreen-friendly (e.g. buttons rather than key presses)
-* Response options (e.g. buttons, text boxes, radio buttons) are large enough and far enough apart to be easily selected with a finger tap</p>
+<p>If you plan to run an experiment that allows people to use mobile devices, we recommend doing some extra testing to make sure that everything works as expected. In particular, you may want to check that:</p>
+<ul>
+<li>Font sizes are readable on smaller screens</li>
+<li>Stimuli sizes are large enough and appropriate for the task</li>
+<li>Page is laid out as intended (e.g. elements are centered and do not overlap)</li>
+<li>Response options are touchscreen-friendly (e.g. buttons rather than key presses)</li>
+<li>Response options (e.g. buttons, text boxes, radio buttons) are large enough and far enough apart to be easily selected with a finger tap</li>
+</ul>
 <p>It's possible to use your browser's developer tools to emulate mobile devices (<a href="https://developers.google.com/web/tools/chrome-devtools/device-mode">this page shows how to do it in Chrome</a>), which is useful for getting a sense of how your experiment will look on mobile devices. Just be aware that there are limitations to emulator tools, and there are some aspects of mobile devices/browsers that a desktop browser will not be able to simulate.</p>
 <h2 id="mobile-browsers">Mobile Browsers<a class="headerlink" href="#mobile-browsers" title="Permanent link">&para;</a></h2>
 <p>The browser options for mobile phones and tablets are slightly different than those for desktop and laptop computers. In addition to mobile versions of Chrome, Firefox, Safari, and Edge, other notable mobile browsers include Opera Mobile, Samsung Internet, UC Browser, and Dolphin. Because of the greater diversity of mobile browsers and volatility in their usage statistics, jsPsych does not officially support any particular set of mobile browsers. However, we do anticipate that most experiments should work in most mobile browsers, especially the mobile versions of browsers that we do support in Desktop mode. If you run into a problem using jsPsych in mobile browsers, please report it on the <a href="https://github.com/jspsych/jsPsych/issues">jsPsych GitHub Issues page</a>! We do our best to fix browser incompatibilities that are not specific to a single experiment.</p>

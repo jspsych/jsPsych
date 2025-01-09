@@ -334,11 +334,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tutorials/video-tutorials/" class="md-nav__link">
+      <a href="../../tutorials/community-tutorials/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Video Tutorials
+    Community Tutorials
   </span>
   
 
@@ -2611,6 +2611,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#changes-to-the-audioplayer-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      Changes to the AudioPlayer class
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#changes-to-finishtrial" class="md-nav__link">
     <span class="md-ellipsis">
       Changes to finishTrial()
@@ -2899,6 +2908,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#changes-to-the-audioplayer-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      Changes to the AudioPlayer class
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#changes-to-finishtrial" class="md-nav__link">
     <span class="md-ellipsis">
       Changes to finishTrial()
@@ -2973,7 +2991,8 @@
 <h1 id="migrating-an-experiment-to-v8x">Migrating an experiment to v8.x<a class="headerlink" href="#migrating-an-experiment-to-v8x" title="Permanent link">&para;</a></h1>
 <p>Version 8.x of jsPsych focused on a complete rewrite of the core library to enable new features and make it easier to maintain.
 Most of the changes in version 8.x are behind the scenes.
-However, there are some breaking changes that you will need to address in your experiment code in order to upgrade to v8.x.</p>
+However, there are some breaking changes that you will need to address in your experiment code in order to upgrade to v8.x. 
+If you are a plugin developer, there are also some special considerations below to factor in when developing your plugins or modifying existing ones.</p>
 <p>This guide is aimed at upgrades from version 7.x to 8.x. 
 If you are using version 6.x or earlier, please follow the <a href="../migration-v7/">migration guide for v7.x</a> before trying to upgrade to v8.x.</p>
 <h2 id="timeline-events">Timeline Events<a class="headerlink" href="#timeline-events" title="Permanent link">&para;</a></h2>
@@ -3032,7 +3051,7 @@ We've now made it so that it must be a function. </p>
 <span class="p">}</span>
 </code></pre></div></p>
 <p>The <code>button_html</code> parameter can also support different HTML for each button. 
-See the <a href="https://www.jspsych.org/plugins/jspsych-html-button-response/">plugin documentation</a> for more details.</p>
+See the <a href="https://www.jspsych.org/latest/plugins/html-button-response/index.html">plugin documentation</a> for more details.</p>
 <h2 id="plugin-parameter-handling">Plugin parameter handling<a class="headerlink" href="#plugin-parameter-handling" title="Permanent link">&para;</a></h2>
 <p>In version 7.x, a plugin could omit parameters from the <code>info</code> object and jsPsych would still evaluate these parameters appropriately in most cases. 
 Version 8.x is more strict about this.
@@ -3046,6 +3065,38 @@ This property is an object that can contain a description of the types of data t
 <p>Including these properties is not <em>required</em> for a plugin to work, but it is recommended.
 In version 8.x, jsPsych will throw a warning if a plugin is used that does not have a <code>version</code> or <code>data</code> property in the <code>info</code> object.
 In version 9.x, we plan to make this a requirement.</p>
+<h2 id="changes-to-the-audioplayer-class">Changes to the <code>AudioPlayer</code> class<a class="headerlink" href="#changes-to-the-audioplayer-class" title="Permanent link">&para;</a></h2>
+<p>In version 7.x, jsPsych's <code>pluginAPI</code> class exposed WebAudio and HTML5 audio APIs through <code>getAudioBuffer()</code>. However, this required different implementations done by the developer to account for each API. 
+In version 8.x, we've removed this in favor of <code>getAudioPlayer()</code>, which handles both API choices under the hood. </p>
+<p>This change only affects plugin developers. If you want to update to use the new <code>getAudioPlayer()</code>, it is recommend that you call this new method using the <code>await</code> syntax, which requires an asynchronous <code>trial</code> function:
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">audio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span><span class="p">.</span><span class="nx">getAudioPlayer</span><span class="p">(</span><span class="s1">&#39;my-sound.mp3&#39;</span><span class="p">);</span>
+</code></pre></div></p>
+<p>If you'd like to still use the <code>.then()</code> syntax to resolve the Promise generated, you may update it as such:</p>
+<p>Version 7.x:
+<div class="highlight"><pre><span></span><code><span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span>
+<span class="w">      </span><span class="p">.</span><span class="nx">getAudioBuffer</span><span class="p">(</span><span class="s1">&#39;my-audio.mp3&#39;</span><span class="p">)</span>
+<span class="w">      </span><span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">audio</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// call play on audio if HTML5 audio API, create and connect buffer if WebAudio API</span>
+<span class="w">      </span><span class="p">})</span>
+<span class="w">      </span><span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;{</span>
+<span class="w">        </span><span class="c1">// handle error</span>
+<span class="w">      </span><span class="p">});</span>
+</code></pre></div></p>
+<p>Version 8.x:
+<div class="highlight"><pre><span></span><code><span class="k">this</span><span class="p">.</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">pluginAPI</span>
+<span class="w">      </span><span class="p">.</span><span class="nx">getAudioPlayer</span><span class="p">(</span><span class="s1">&#39;my-audio.mp3&#39;</span><span class="p">)</span>
+<span class="w">      </span><span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">player</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// no need to create and connect buffer, can just directly call functions on player</span>
+<span class="w">      </span><span class="p">})</span>
+<span class="w">      </span><span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">err</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// handle error</span>
+<span class="w">      </span><span class="p">})</span>
+</code></pre></div></p>
+<p>Along with this, the <code>start()</code> and <code>pause()</code> functions were removed from the <code>AudioPlayer</code> class. 
+You can still call <code>stop()</code> upon an audio ending in order to regenerate the <code>AudioPlayer</code>, and be able
+to call <code>play()</code> on it again. </p>
+<p>For a general guide on implementation, the <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-button-response/src/index.ts"><code>audio-button-response</code></a> plugin uses the <code>await</code> syntax
+to handle playing audio.</p>
 <h2 id="changes-to-finishtrial">Changes to <code>finishTrial()</code><a class="headerlink" href="#changes-to-finishtrial" title="Permanent link">&para;</a></h2>
 <p>When a plugin calls <code>finishTrial()</code> or ends via a <code>return</code> statement, jsPsych will now automatically clear the display and clear any timeouts that are still pending. This change should only affect plugin developers. If you are using built-in plugins you should not notice any difference.</p>
 <h2 id="progress-bar">Progress bar<a class="headerlink" href="#progress-bar" title="Permanent link">&para;</a></h2>

@@ -334,11 +334,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tutorials/video-tutorials/" class="md-nav__link">
+      <a href="../../tutorials/community-tutorials/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Video Tutorials
+    Community Tutorials
   </span>
   
 
@@ -3316,7 +3316,7 @@
 <span class="w">          </span><span class="nx">elements</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">            </span><span class="p">{</span>
 <span class="w">              </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;text&quot;</span><span class="p">,</span><span class="w"> </span>
-<span class="w">              </span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="sb">`Enter a word related to </span><span class="si">${</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;word&#39;</span><span class="p">).</span><span class="nx">toUpperCase</span><span class="p">()</span><span class="si">}</span><span class="sb">:`</span><span class="p">,</span><span class="w"> </span>
+<span class="w">              </span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="sb">`Enter a word related to </span><span class="si">${</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">evaluteTimelineVariable</span><span class="p">(</span><span class="s1">&#39;word&#39;</span><span class="p">).</span><span class="nx">toUpperCase</span><span class="p">()</span><span class="si">}</span><span class="sb">:`</span><span class="p">,</span><span class="w"> </span>
 <span class="w">              </span><span class="nx">autocomplete</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;off&quot;</span><span class="w"> </span>
 <span class="w">            </span><span class="p">}</span>
 <span class="w">          </span><span class="p">],</span><span class="w"> </span>
@@ -3344,7 +3344,7 @@
 <span class="w">  </span><span class="c1">// Create question using timeline variables</span>
 <span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">page</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">survey</span><span class="p">.</span><span class="nx">addNewPage</span><span class="p">(</span><span class="s1">&#39;page1&#39;</span><span class="p">);</span>
 <span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">question</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">page</span><span class="p">.</span><span class="nx">addNewQuestion</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">);</span><span class="w"> </span>
-<span class="w">  </span><span class="nx">question</span><span class="p">.</span><span class="nx">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`Enter a word related to </span><span class="si">${</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">timelineVariable</span><span class="p">(</span><span class="s1">&#39;word&#39;</span><span class="p">).</span><span class="nx">toUpperCase</span><span class="p">()</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">question</span><span class="p">.</span><span class="nx">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sb">`Enter a word related to </span><span class="si">${</span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">evaluateTimelineVariable</span><span class="p">(</span><span class="s1">&#39;word&#39;</span><span class="p">).</span><span class="nx">toUpperCase</span><span class="p">()</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
 <span class="w">  </span><span class="nx">question</span><span class="p">.</span><span class="nx">autocomplete</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;off&quot;</span><span class="p">;</span>
 <span class="w">  </span><span class="c1">// Set survey-level parameters</span>
 <span class="w">  </span><span class="nx">survey</span><span class="p">.</span><span class="nx">showQuestionNumbers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
