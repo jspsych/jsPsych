@@ -4,28 +4,31 @@ import serialReactionTimeMouse from ".";
 
 jest.useFakeTimers();
 
-const getCellElement = (cellId: string) =>
-  document.querySelector(`#jspsych-serial-reaction-time-stimulus-cell-${cellId}`) as HTMLElement;
+const getCellElement = (
+  cellId: string,
+  displayElement: HTMLElement
+) =>
+  displayElement.querySelector(`#jspsych-serial-reaction-time-stimulus-cell-${cellId}`) as HTMLElement;
 
 describe("serial-reaction-time-mouse plugin", () => {
   test("default behavior", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
+    const { getHTML, expectFinished, displayElement } = await startTimeline([
       {
         type: serialReactionTimeMouse,
         target: [0, 0],
       },
     ]);
 
-    expect(getCellElement("0-0").style.backgroundColor).toBe("rgb(153, 153, 153)");
-    expect(getCellElement("0-1").style.backgroundColor).toBe("");
-    expect(getCellElement("0-2").style.backgroundColor).toBe("");
-    expect(getCellElement("0-3").style.backgroundColor).toBe("");
+    expect(getCellElement("0-0", displayElement).style.backgroundColor).toBe("rgb(153, 153, 153)");
+    expect(getCellElement("0-1", displayElement).style.backgroundColor).toBe("");
+    expect(getCellElement("0-2", displayElement).style.backgroundColor).toBe("");
+    expect(getCellElement("0-3", displayElement).style.backgroundColor).toBe("");
 
-    mouseDownMouseUpTarget(getCellElement("0-1"));
+    mouseDownMouseUpTarget(getCellElement("0-1", displayElement));
 
     expect(getHTML()).not.toBe("");
 
-    mouseDownMouseUpTarget(getCellElement("0-0"));
+    mouseDownMouseUpTarget(getCellElement("0-0", displayElement));
 
     await expectFinished();
   });

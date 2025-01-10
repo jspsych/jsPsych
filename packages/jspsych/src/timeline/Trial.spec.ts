@@ -524,7 +524,7 @@ describe("Trial", () => {
           );
           await expect(
             createTrial({ type: TestPlugin, requiredComplexNested: {} }).run()
-          ).rejects.toThrowError('"requiredComplexNested.requiredChild" parameter');
+          ).rejects.toThrow('"requiredComplexNested.requiredChild" parameter');
         });
 
         it("errors on missing parameters nested in `COMPLEX` array parameters", async () => {

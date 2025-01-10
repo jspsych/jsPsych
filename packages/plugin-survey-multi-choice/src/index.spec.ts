@@ -5,8 +5,12 @@ import surveyMultiChoice from ".";
 
 jest.useFakeTimers();
 
-const getInputElement = (choiceId: number, value: string) =>
-  document.querySelector(
+const getInputElement = (
+  choiceId: number, 
+  value: string,
+  displayElement: HTMLElement
+) =>
+  displayElement.querySelector(
     `#jspsych-survey-multi-choice-${choiceId} input[value="${value}"]`
   ) as HTMLInputElement;
 
@@ -24,7 +28,7 @@ describe("survey-multi-choice plugin", () => {
     const jsPsychInst = initJsPsych({ display_element: innerDiv })
     const options = ["a", "b", "c"];
 
-    const { getData, expectFinished } = await startTimeline([
+    const { displayElement, expectFinished } = await startTimeline([
       {
         type: surveyMultiChoice,
         questions: [
@@ -34,16 +38,14 @@ describe("survey-multi-choice plugin", () => {
       },
     ], jsPsychInst);
 
-    getInputElement(0, "a").checked = true;
-    await clickTarget(document.querySelector("#jspsych-survey-multi-choice-next"));
+    getInputElement(0, "a", displayElement).checked = true;
+    await clickTarget(displayElement.querySelector("#jspsych-survey-multi-choice-next"));
     await expectFinished();
-
   })
-
 
   test("data are logged with the right question when randomize order is true", async () => {
     var scale = ["a", "b", "c", "d", "e"];
-    const { getData, expectFinished } = await startTimeline([
+    const { getData, expectFinished, displayElement } = await startTimeline([
       {
         type: surveyMultiChoice,
         questions: [
@@ -57,13 +59,13 @@ describe("survey-multi-choice plugin", () => {
       },
     ]);
 
-    getInputElement(0, "a").checked = true;
-    getInputElement(1, "b").checked = true;
-    getInputElement(2, "c").checked = true;
-    getInputElement(3, "d").checked = true;
-    getInputElement(4, "e").checked = true;
+    getInputElement(0, "a", displayElement).checked = true;
+    getInputElement(1, "b", displayElement).checked = true;
+    getInputElement(2, "c", displayElement).checked = true;
+    getInputElement(3, "d", displayElement).checked = true;
+    getInputElement(4, "e", displayElement).checked = true;
 
-    await clickTarget(document.querySelector("#jspsych-survey-multi-choice-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-survey-multi-choice-next"));
 
     await expectFinished();
 

@@ -6,7 +6,7 @@ jest.useFakeTimers();
 
 describe("maxdiff plugin", () => {
   test("returns appropriate response with randomization", async () => {
-    const { getData, expectFinished } = await startTimeline([
+    const { getData, expectFinished, displayElement } = await startTimeline([
       {
         type: maxdiff,
         alternatives: ["a", "b", "c", "d"],
@@ -15,10 +15,10 @@ describe("maxdiff plugin", () => {
       },
     ]);
 
-    document.querySelector<HTMLInputElement>('input[data-name="0"][name="left"]').checked = true;
-    document.querySelector<HTMLInputElement>('input[data-name="1"][name="right"]').checked = true;
+    displayElement.querySelector<HTMLInputElement>('input[data-name="0"][name="left"]').checked = true;
+    displayElement.querySelector<HTMLInputElement>('input[data-name="1"][name="right"]').checked = true;
 
-    await clickTarget(document.querySelector("#jspsych-maxdiff-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-maxdiff-next"));
     await expectFinished();
 
     expect(getData().values()[0].response).toEqual({ left: "a", right: "b" });

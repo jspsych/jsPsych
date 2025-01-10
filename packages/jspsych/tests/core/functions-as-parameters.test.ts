@@ -21,7 +21,7 @@ describe("standard use of function as parameter", () => {
   test("parameters can be protected from early evaluation using ParameterType.FUNCTION", async () => {
     const mock = jest.fn();
 
-    await startTimeline([
+    const { displayElement } = await startTimeline([
       {
         type: cloze,
         text: "%foo%",
@@ -31,7 +31,7 @@ describe("standard use of function as parameter", () => {
     ]);
 
     expect(mock).not.toHaveBeenCalled();
-    await clickTarget(document.querySelector("#finish_cloze_button"));
+    await clickTarget(displayElement.querySelector("#finish_cloze_button"));
     expect(mock).toHaveBeenCalledTimes(1);
   });
 });
@@ -76,12 +76,12 @@ describe("nested parameters as functions", () => {
     ]);
 
     expect(displayElement.querySelectorAll("p.jspsych-survey-text").length).toBe(2);
-    await clickTarget(document.querySelector("#jspsych-survey-text-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-survey-text-next"));
     await expectFinished();
   });
 
   test("nested parameter can be a function", async () => {
-    const { expectFinished } = await startTimeline([
+    const { expectFinished, displayElement } = await startTimeline([
       {
         type: surveyText,
         questions: [
@@ -95,18 +95,18 @@ describe("nested parameters as functions", () => {
       },
     ]);
 
-    expect(document.querySelector("#jspsych-survey-text-0 p.jspsych-survey-text").innerHTML).toBe(
+    expect(displayElement.querySelector("#jspsych-survey-text-0 p.jspsych-survey-text").innerHTML).toBe(
       "foo"
     );
-    expect(document.querySelector("#jspsych-survey-text-1 p.jspsych-survey-text").innerHTML).toBe(
+    expect(displayElement.querySelector("#jspsych-survey-text-1 p.jspsych-survey-text").innerHTML).toBe(
       "bar"
     );
-    await clickTarget(document.querySelector("#jspsych-survey-text-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-survey-text-next"));
     await expectFinished();
   });
 
   test("multiple nested parameters can be functions", async () => {
-    const { expectFinished } = await startTimeline([
+    const { expectFinished, displayElement } = await startTimeline([
       {
         type: surveyMultiChoice,
         questions: [
@@ -128,11 +128,11 @@ describe("nested parameters as functions", () => {
       },
     ]);
 
-    expect(document.querySelector("#jspsych-survey-multi-choice-0").innerHTML).toMatch("foo");
-    expect(document.querySelector("#jspsych-survey-multi-choice-0").innerHTML).toMatch("buzz");
-    expect(document.querySelector("#jspsych-survey-multi-choice-1").innerHTML).toMatch("bar");
-    expect(document.querySelector("#jspsych-survey-multi-choice-1").innerHTML).toMatch("one");
-    await clickTarget(document.querySelector("#jspsych-survey-multi-choice-next"));
+    expect(displayElement.querySelector("#jspsych-survey-multi-choice-0").innerHTML).toMatch("foo");
+    expect(displayElement.querySelector("#jspsych-survey-multi-choice-0").innerHTML).toMatch("buzz");
+    expect(displayElement.querySelector("#jspsych-survey-multi-choice-1").innerHTML).toMatch("bar");
+    expect(displayElement.querySelector("#jspsych-survey-multi-choice-1").innerHTML).toMatch("one");
+    await clickTarget(displayElement.querySelector("#jspsych-survey-multi-choice-next"));
     await expectFinished();
   });
 

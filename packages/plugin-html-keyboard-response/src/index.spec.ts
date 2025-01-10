@@ -113,7 +113,7 @@ describe("html-keyboard-response", () => {
   });
 
   test("class should say responded when key is pressed", async () => {
-    const { getHTML, expectRunning } = await startTimeline([
+    const { getHTML, expectRunning, displayElement } = await startTimeline([
       {
         type: htmlKeyboardResponse,
         stimulus: "this is html",
@@ -128,7 +128,7 @@ describe("html-keyboard-response", () => {
 
     await pressKey("f");
 
-    expect(document.querySelector("#jspsych-html-keyboard-response-stimulus").className).toBe(
+    expect(displayElement.querySelector("#jspsych-html-keyboard-response-stimulus").className).toBe(
       " responded"
     );
 
