@@ -542,8 +542,6 @@ describe("data simulation mode", () => {
 
     const data = getData().values()[1];
 
-    console.log(data);
-
     expect(data.rt).toBeGreaterThan(0);
     expect(data.response).toBeDefined();
   });

@@ -155,8 +155,6 @@ describe("instructions plugin simulation", () => {
 
     const data = getData().values()[0];
 
-    console.log(data.view_history);
-
     expect(data.rt).toBe(4000);
 
     let sum_view_history_rt = 0;

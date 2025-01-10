@@ -16,11 +16,15 @@ let JsPsych;
  * This is because the citation functionality is only available in the built version
  * due to code injections that run during the build.
  */
-
 try {
   // Try to import built version
   JsPsych = require("../../dist/index").JsPsych;
   let jspsych: typeof JsPsych;
+
+  // Check if getCitations exists in current built version
+  if (!jspsych.hasOwnProperty("getCitations")) {
+    throw new Error("getCitations not found");
+  }
 
   beforeEach(() => {
     jspsych = new JsPsych();
