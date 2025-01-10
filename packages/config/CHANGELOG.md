@@ -1,5 +1,11 @@
 # @jspsych/config
 
+## 3.2.1
+
+### Patch Changes
+
+- [#3486](https://github.com/jspsych/jsPsych/pull/3486) [`ad1d854f43c1e25ba988a3aa2a23a8ab22be3535`](https://github.com/jspsych/jsPsych/commit/ad1d854f43c1e25ba988a3aa2a23a8ab22be3535) Thanks [@jadeddelta](https://github.com/jadeddelta)! - remove DOM clearing after each individual test, fixes issues with testing in other repositories
+
 ## 3.2.0
 
 ### Minor Changes
