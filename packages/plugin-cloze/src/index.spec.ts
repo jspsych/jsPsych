@@ -4,13 +4,18 @@ import cloze from ".";
 
 jest.useFakeTimers();
 
-const getInputElementById = (id: string) => document.getElementById(id) as HTMLInputElement;
+const getInputElementById = (
+  id: string,
+  displayElement: HTMLElement
+) => displayElement.querySelector("#" + id) as HTMLInputElement;
 
-const clickFinishButton = () => clickTarget(document.querySelector("#finish_cloze_button"));
+const clickFinishButton = (
+  displayElement: HTMLElement
+) => clickTarget(displayElement.querySelector("#finish_cloze_button"));
 
 describe("cloze", () => {
   test("displays cloze", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
+    const { getHTML, expectFinished, displayElement } = await startTimeline([
       {
         type: cloze,
         text: "This is a %cloze% text.",
@@ -21,12 +26,12 @@ describe("cloze", () => {
       '<div class="cloze">This is a <input type="text" id="input0" value=""> text.</div>'
     );
 
-    await clickFinishButton();
+    await clickFinishButton(displayElement);
     await expectFinished();
   });
 
   test("displays default button text", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
+    const { getHTML, expectFinished, displayElement } = await startTimeline([
       {
         type: cloze,
         text: "This is a %cloze% text.",
@@ -37,12 +42,12 @@ describe("cloze", () => {
       '<button class="jspsych-html-button-response-button" type="button" id="finish_cloze_button">OK</button>'
     );
 
-    await clickFinishButton();
+    await clickFinishButton(displayElement);
     await expectFinished();
   });
 
   test("displays custom button text", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
+    const { getHTML, expectFinished, displayElement } = await startTimeline([
       {
         type: cloze,
         text: "This is a %cloze% text.",
@@ -54,24 +59,24 @@ describe("cloze", () => {
       '<button class="jspsych-html-button-response-button" type="button" id="finish_cloze_button">Next</button>'
     );
 
-    await clickFinishButton();
+    await clickFinishButton(displayElement);
     await expectFinished();
   });
 
   test("ends trial on button click when using default settings, i.e. answers are not checked", async () => {
-    const { expectFinished } = await startTimeline([
+    const { expectFinished, displayElement } = await startTimeline([
       {
         type: cloze,
         text: "This is a %cloze% text.",
       },
     ]);
 
-    await clickFinishButton();
+    await clickFinishButton(displayElement);
     await expectFinished();
   });
 
   test("ends trial on button click when answers are checked and correct", async () => {
-    const { expectFinished } = await startTimeline([
+    const { expectFinished, displayElement } = await startTimeline([
       {
         type: cloze,
         text: "This is a %cloze% text.",
@@ -79,13 +84,13 @@ describe("cloze", () => {
       },
     ]);
 
-    getInputElementById("input0").value = "cloze";
-    await clickFinishButton();
+    getInputElementById("input0", displayElement).value = "cloze";
+    await clickFinishButton(displayElement);
     await expectFinished();
   });
 
   test("ends trial on button click when answers are checked and correct without case sensitivity", async () => {
-    const { expectFinished } = await startTimeline([
+    const { expectFinished, displayElement } = await startTimeline([
       {
         type: cloze,
         text: "This is a %cloze% text.",
@@ -94,13 +99,13 @@ describe("cloze", () => {
       },
     ]);
 
-    getInputElementById("input0").value = "CLOZE";
-    clickTarget(document.querySelector("#finish_cloze_button"));
+    getInputElementById("input0", displayElement).value = "CLOZE";
+    await clickFinishButton(displayElement);
     await expectFinished();
   });
 
   test("ends trial on button click when all answers are checked for completion and are complete", async () => {
-    const { expectFinished } = await startTimeline([
+    const { expectFinished, displayElement } = await startTimeline([
       {
         type: cloze,
         text: "This is a %cloze% text.",
@@ -108,13 +113,13 @@ describe("cloze", () => {
       },
     ]);
 
-    getInputElementById("input0").value = "filler";
-    await clickFinishButton();
+    getInputElementById("input0", displayElement).value = "filler";
+    await clickFinishButton(displayElement);
     await expectFinished();
   });
 
   test("does not end trial on button click when answers are checked and not correct or missing", async () => {
-    const { expectRunning, expectFinished } = await startTimeline([
+    const { expectRunning, expectFinished, displayElement } = await startTimeline([
       {
         type: cloze,
         text: "This is a %cloze% text.",
@@ -122,23 +127,23 @@ describe("cloze", () => {
       },
     ]);
 
-    getInputElementById("input0").value = "some wrong answer";
-    await clickFinishButton();
+    getInputElementById("input0", displayElement).value = "some wrong answer";
+    await clickFinishButton(displayElement);
     await expectRunning();
 
-    getInputElementById("input0").value = "";
-    await clickFinishButton();
+    getInputElementById("input0", displayElement).value = "";
+    await clickFinishButton(displayElement);
     await expectRunning();
 
-    getInputElementById("input0").value = "cloze";
-    await clickFinishButton();
+    getInputElementById("input0", displayElement).value = "cloze";
+    await clickFinishButton(displayElement);
     await expectFinished();
   });
 
   test("does not call mistake function on button click when answers are checked and correct", async () => {
     const mistakeFn = jest.fn();
 
-    const { expectFinished } = await startTimeline([
+    const { expectFinished, displayElement } = await startTimeline([
       {
         type: cloze,
         text: "This is a %cloze% text.",
@@ -147,8 +152,8 @@ describe("cloze", () => {
       },
     ]);
 
-    getInputElementById("input0").value = "cloze";
-    await clickFinishButton();
+    getInputElementById("input0", displayElement).value = "cloze";
+    await clickFinishButton(displayElement);
     expect(mistakeFn).not.toHaveBeenCalled();
 
     await expectFinished();
@@ -157,7 +162,7 @@ describe("cloze", () => {
   test("does not call mistake function on button click when answers are checked for completion and are complete", async () => {
     const mistakeFn = jest.fn();
 
-    const { expectFinished } = await startTimeline([
+    const { expectFinished, displayElement } = await startTimeline([
       {
         type: cloze,
         text: "This is a %cloze% text.",
@@ -166,8 +171,8 @@ describe("cloze", () => {
       },
     ]);
 
-    getInputElementById("input0").value = "cloze";
-    await clickFinishButton();
+    getInputElementById("input0", displayElement).value = "cloze";
+    await clickFinishButton(displayElement);
     expect(mistakeFn).not.toHaveBeenCalled();
 
     await expectFinished();
@@ -176,7 +181,7 @@ describe("cloze", () => {
   test("calls mistake function on button click when answers are checked and not correct or missing", async () => {
     const mistakeFn = jest.fn();
 
-    const { expectFinished } = await startTimeline([
+    const { expectFinished, displayElement } = await startTimeline([
       {
         type: cloze,
         text: "This is a %cloze% text.",
@@ -185,25 +190,25 @@ describe("cloze", () => {
       },
     ]);
 
-    getInputElementById("input0").value = "some wrong answer";
-    await clickFinishButton();
+    getInputElementById("input0", displayElement).value = "some wrong answer";
+    await clickFinishButton(displayElement);
     expect(mistakeFn).toHaveBeenCalled();
 
     mistakeFn.mockReset();
 
-    getInputElementById("input0").value = "";
-    await clickFinishButton();
+    getInputElementById("input0", displayElement).value = "";
+    await clickFinishButton(displayElement);
     expect(mistakeFn).toHaveBeenCalled();
 
-    getInputElementById("input0").value = "cloze";
-    await clickFinishButton();
+    getInputElementById("input0", displayElement).value = "cloze";
+    await clickFinishButton(displayElement);
     await expectFinished();
   });
 
   test("calls mistake function on button click when answers are checked and do not belong to a multiple answer blank", async () => {
     const mistakeFn = jest.fn();
 
-    const { expectFinished } = await startTimeline([
+    const { expectFinished, displayElement } = await startTimeline([
       {
         type: cloze,
         text: "This is a %cloze/jspsych% text.",
@@ -212,26 +217,26 @@ describe("cloze", () => {
       },
     ]);
 
-    getInputElementById("input0").value = "not fitting in answer";
-    await clickFinishButton();
+    getInputElementById("input0", displayElement).value = "not fitting in answer";
+    await clickFinishButton(displayElement);
     expect(mistakeFn).toHaveBeenCalled();
 
-    getInputElementById("input0").value = "cloze";
-    await clickFinishButton();
+    getInputElementById("input0", displayElement).value = "cloze";
+    await clickFinishButton(displayElement);
     await expectFinished();
   });
 
   test("response data is stored as an array", async () => {
-    const { getData, expectFinished } = await startTimeline([
+    const { getData, expectFinished, displayElement } = await startTimeline([
       {
         type: cloze,
         text: "This is a %cloze% text. Here is another cloze response box %%.",
       },
     ]);
 
-    getInputElementById("input0").value = "cloze1";
-    getInputElementById("input1").value = "cloze2";
-    await clickFinishButton();
+    getInputElementById("input0", displayElement).value = "cloze1";
+    getInputElementById("input1", displayElement).value = "cloze2";
+    await clickFinishButton(displayElement);
     await expectFinished();
 
     const data = getData().values()[0].response;

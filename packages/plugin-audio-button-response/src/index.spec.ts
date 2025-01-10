@@ -273,9 +273,9 @@ describe("audio-button-response", () => {
       use_webaudio: false,
     });
 
-    await startTimeline(timeline, jsPsych);
+    const { displayElement } = await startTimeline(timeline, jsPsych);
 
-    const btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+    const btns = displayElement.querySelectorAll(".jspsych-html-button-response-button button");
 
     for (let i = 0; i < btns.length; i++) {
       expect(btns[i].getAttribute("disabled")).toBe(true);

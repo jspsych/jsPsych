@@ -23,7 +23,7 @@ describe("video-button-response", () => {
 
     await expect(async () => {
       await jsPsych.run(timeline);
-    }).rejects.toThrowError();
+    }).rejects.toThrow();
   });
 
   test("enable buttons during video playing", async () => {
@@ -40,9 +40,9 @@ describe("video-button-response", () => {
 
     const jsPsych = initJsPsych();
 
-    const { getHTML, finished } = await startTimeline(timeline, jsPsych);
+    const { displayElement } = await startTimeline(timeline, jsPsych);
 
-    const btns = document.querySelectorAll(".jspsych-html-button-response-button button");
+    const btns = displayElement.querySelectorAll(".jspsych-html-button-response-button button");
 
     for (let i = 0; i < btns.length; i++) {
       expect(btns[i].getAttribute("disabled")).toBe(true);

@@ -4,13 +4,16 @@ import surveyLikert from ".";
 
 jest.useFakeTimers();
 
-const selectInput = (name: string, value: string) =>
-  document.querySelector(`input[name="${name}"][value="${value}"]`) as HTMLInputElement;
+const selectInput = (
+  name: string, 
+  value: string,
+  displayElement: HTMLElement
+) => displayElement.querySelector(`input[name="${name}"][value="${value}"]`) as HTMLInputElement;
 
 describe("survey-likert plugin", () => {
   test("data are logged with the right question when randomize order is true", async () => {
     const scale = ["a", "b", "c", "d", "e"];
-    const { getData, expectFinished } = await startTimeline([
+    const { getData, expectFinished, displayElement } = await startTimeline([
       {
         type: surveyLikert,
         questions: [
@@ -24,13 +27,13 @@ describe("survey-likert plugin", () => {
       },
     ]);
 
-    selectInput("Q0", "0").checked = true;
-    selectInput("Q1", "1").checked = true;
-    selectInput("Q2", "2").checked = true;
-    selectInput("Q3", "3").checked = true;
-    selectInput("Q4", "4").checked = true;
+    selectInput("Q0", "0", displayElement).checked = true;
+    selectInput("Q1", "1", displayElement).checked = true;
+    selectInput("Q2", "2", displayElement).checked = true;
+    selectInput("Q3", "3", displayElement).checked = true;
+    selectInput("Q4", "4", displayElement).checked = true;
 
-    await clickTarget(document.querySelector("#jspsych-survey-likert-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-survey-likert-next"));
 
     await expectFinished();
 

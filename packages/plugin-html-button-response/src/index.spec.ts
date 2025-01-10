@@ -142,7 +142,7 @@ describe("html-button-response", () => {
   });
 
   test("buttons should be disabled first and then enabled after enable_button_after is set", async () => {
-    const { getHTML } = await startTimeline([
+    const { displayElement } = await startTimeline([
       {
         type: htmlButtonResponse,
         stimulus: "this is html",
@@ -151,7 +151,7 @@ describe("html-button-response", () => {
       },
     ]);
 
-    const btns = document.querySelectorAll("div#jspsych-html-button-response-btngroup button");
+    const btns = displayElement.querySelectorAll("div#jspsych-html-button-response-btngroup button");
     expect(btns.length).toBeGreaterThan(0);
 
     for (let i = 0; i < btns.length; i++) {

@@ -6,7 +6,7 @@ jest.useFakeTimers();
 
 describe("image-slider-response", () => {
   test("displays image stimulus", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
+    const { getHTML, expectFinished, displayElement } = await startTimeline([
       {
         type: imageSliderResponse,
         stimulus: "../media/blue.png",
@@ -19,12 +19,12 @@ describe("image-slider-response", () => {
     expect(getHTML()).toContain(
       '<div id="jspsych-image-slider-response-stimulus"><img src="../media/blue.png"'
     );
-    await clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-image-slider-response-next"));
     await expectFinished();
   });
 
   test("displays labels", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
+    const { getHTML, expectFinished, displayElement } = await startTimeline([
       {
         type: imageSliderResponse,
         stimulus: "../media/blue.png",
@@ -37,12 +37,12 @@ describe("image-slider-response", () => {
     expect(getHTML()).toContain('<span style="text-align: center; font-size: 80%;">left</span>');
     expect(getHTML()).toContain('<span style="text-align: center; font-size: 80%;">right</span>');
 
-    await clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-image-slider-response-next"));
     await expectFinished();
   });
 
   test("displays button label", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
+    const { getHTML, expectFinished, displayElement } = await startTimeline([
       {
         type: imageSliderResponse,
         stimulus: "../media/blue.png",
@@ -56,7 +56,7 @@ describe("image-slider-response", () => {
       '<button id="jspsych-image-slider-response-next" class="jspsych-btn">button</button>'
     );
 
-    await clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-image-slider-response-next"));
     await expectFinished();
   });
 
@@ -82,12 +82,12 @@ describe("image-slider-response", () => {
     expect(responseElement.max).toBe("10");
     expect(responseElement.step).toBe("2");
 
-    await clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-image-slider-response-next"));
     await expectFinished();
   });
 
   test("prompt should append to bottom of stimulus", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
+    const { getHTML, expectFinished, displayElement } = await startTimeline([
       {
         type: imageSliderResponse,
         stimulus: "../media/blue.png",
@@ -100,7 +100,7 @@ describe("image-slider-response", () => {
 
     expect(getHTML()).toContain("<p>This is a prompt</p>");
 
-    await clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-image-slider-response-next"));
     await expectFinished();
   });
 
@@ -123,7 +123,7 @@ describe("image-slider-response", () => {
     jest.advanceTimersByTime(500);
     expect(stimulusElement.style.visibility).toContain("hidden");
 
-    await clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-image-slider-response-next"));
     await expectFinished();
   });
 
@@ -148,7 +148,7 @@ describe("image-slider-response", () => {
   });
 
   test("should end trial when button is clicked", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
+    const { getHTML, expectFinished, displayElement } = await startTimeline([
       {
         type: imageSliderResponse,
         stimulus: "../media/blue.png",
@@ -163,7 +163,7 @@ describe("image-slider-response", () => {
       '<div id="jspsych-image-slider-response-stimulus"><img src="../media/blue.png"'
     );
 
-    await clickTarget(document.querySelector("#jspsych-image-slider-response-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-image-slider-response-next"));
     await expectFinished();
   });
 });
