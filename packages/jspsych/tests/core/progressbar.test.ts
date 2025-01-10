@@ -3,11 +3,6 @@ import { pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { initJsPsych, JsPsych } from "../../src";
 
-// progress bar lives in the container element
-const getContainer = (jsPsych: JsPsych) => {
-  return jsPsych.getDisplayContainerElement();
-}
-
 describe("automatic progress bar", () => {
   test("progress bar does not display by default", async () => {
     const { jsPsych } = await startTimeline([
@@ -17,8 +12,8 @@ describe("automatic progress bar", () => {
       },
     ]);
 
-    const displayContainer = getContainer(jsPsych);
-    expect(displayContainer.querySelector("#jspsych-progressbar-container")).toBeNull();
+    expect(jsPsych.getDisplayContainerElement().querySelector("#jspsych-progressbar-container"))
+      .toBeNull();
     await pressKey("a");
   });
 
@@ -33,10 +28,10 @@ describe("automatic progress bar", () => {
       { show_progress_bar: true }
     );
 
-    const displayContainer = getContainer(jsPsych);
-    expect(displayContainer.querySelector("#jspsych-progressbar-container").innerHTML).toMatch(
-      '<span>Completion Progress</span><div id="jspsych-progressbar-outer"><div id="jspsych-progressbar-inner" style="width: 0%;"></div></div>'
-    );
+    expect(jsPsych.getDisplayContainerElement().querySelector("#jspsych-progressbar-container").innerHTML)
+      .toMatch(
+        '<span>Completion Progress</span><div id="jspsych-progressbar-outer"><div id="jspsych-progressbar-inner" style="width: 0%;"></div></div>'
+      );
   });
 
   test("progress bar automatically updates by default", async () => {
@@ -50,8 +45,8 @@ describe("automatic progress bar", () => {
       { show_progress_bar: true }
     );
 
-    const displayContainer = getContainer(jsPsych);
-    const progressbarElement = displayContainer.querySelector<HTMLElement>("#jspsych-progressbar-inner");
+    const progressbarElement = 
+      jsPsych.getDisplayContainerElement().querySelector<HTMLElement>("#jspsych-progressbar-inner");
 
     expect(progressbarElement.style.width).toEqual("0%");
     await pressKey("a");
@@ -75,8 +70,8 @@ describe("automatic progress bar", () => {
       auto_update_progress_bar: false,
     });
 
-    const displayContainer = getContainer(jsPsych);
-    const progressbarElement = displayContainer.querySelector<HTMLElement>("#jspsych-progressbar-inner");
+    const progressbarElement = 
+      jsPsych.getDisplayContainerElement().querySelector<HTMLElement>("#jspsych-progressbar-inner");
 
     for (let i = 0; i < 4; i++) {
       expect(progressbarElement.style.width).toEqual("0%");
@@ -110,8 +105,8 @@ describe("automatic progress bar", () => {
 
     const { jsPsych } = await startTimeline(timeline, jsPsychObject);
 
-    const displayContainer = getContainer(jsPsych);
-    const progressbarElement = displayContainer.querySelector<HTMLElement>("#jspsych-progressbar-inner");
+    const progressbarElement = 
+      jsPsych.getDisplayContainerElement().querySelector<HTMLElement>("#jspsych-progressbar-inner");
 
     expect(progressbarElement.style.width).toEqual("0%");
     await pressKey("a");
