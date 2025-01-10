@@ -22,7 +22,7 @@ describe("video-slider-response", () => {
 
     await expect(async () => {
       await jsPsych.run(timeline);
-    }).rejects.toThrowError();
+    }).rejects.toThrow();
   });
 });
 
