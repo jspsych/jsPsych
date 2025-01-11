@@ -89,7 +89,7 @@ output:
 full_design = {
 	stimulus: ['a.jpg','b.jpg','b.jpg','a.jpg'],
 	ms_delay: [200, 100, 200, 100]
-]
+}
 */
 ```
 
@@ -181,6 +181,8 @@ The return value depends on the `unpack` parameter. See description of the param
 This method takes an array of values and generates a new random order of the array, with the option of repeating each element of the array a specified number of times.
 
 If the array elements are objects with the same set of properties, then this method can optionally return a single object where each property is a randomized order of the properties defined in the original set of objects. This is useful for randomizing sets of parameters that are used to define a jsPsych block.
+
+This returns a shallow copy of the array, i.e. modifications to arrays/objects within this array will affect the original. If this is not desired, consider taking a [`deepCopy`](./jspsych-utils.md#jspsychutilsdeepcopy).
 
 ### Examples
 
@@ -414,6 +416,8 @@ An array containing the sample.
 
 This method returns a sample drawn at random from a set of values with replacement. The relative probability of drawing each item can be controlled by specifying the `weights`.
 
+This returns a shallow copy of the array, i.e. modifications to arrays/objects within this array will affect the original. If this is not desired, consider taking a [`deepCopy`](./jspsych-utils.md#jspsychutilsdeepcopy).
+
 ### Examples
 
 #### Sample with equal probability
@@ -454,6 +458,8 @@ An array containing the sample.
 ### Description
 
 This method returns a sample drawn at random from a set of values without replacement. The sample size must be less than or equal to the length of the array.
+
+This returns a shallow copy of the array, i.e. modifications to arrays/objects within this array will affect the original. If this is not desired, consider taking a [`deepCopy`](./jspsych-utils.md#jspsychutilsdeepcopy).
 
 ### Examples
 
@@ -532,6 +538,8 @@ Returns an array with the same elements as the input array in a random order.
 
 A simple method for shuffling the order of an array.
 
+This returns a shallow copy of the array, i.e. modifications to arrays/objects within this array will affect the original. If this is not desired, consider taking a [`deepCopy`](./jspsych-utils.md#jspsychutilsdeepcopy).
+
 ### Examples
 
 #### Shuffle an array
@@ -564,6 +572,8 @@ Returns an array with the same elements as the input array in a random order, wi
 ### Description
 
 Shuffle an array, ensuring that neighboring elements in the array are different.
+
+This returns a shallow copy of the array, i.e. modifications to arrays/objects within this array will affect the original. If this is not desired, consider taking a [`deepCopy`](./jspsych-utils.md#jspsychutilsdeepcopy).
 
 *Warning: if you provide an array that has very few valid permutations with no neighboring elements, then this method will fail and cause the browser to hang.*
 
