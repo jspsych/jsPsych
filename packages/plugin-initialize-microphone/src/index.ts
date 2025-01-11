@@ -69,7 +69,7 @@ class InitializeMicrophonePlugin implements JsPsychPlugin<Info> {
       await this.askForPermission();
     } catch(e) {
       this.rejectPermission(trial);  
-      return;
+      return null;
     }
 
     this.showMicrophoneSelection(display_element, trial);

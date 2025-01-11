@@ -93,9 +93,8 @@ class InitializeCameraPlugin implements JsPsychPlugin<Info> {
     try {
       await this.askForPermission(trial);
     } catch (e) {
-      // TODO: does not properly display rejection message
       this.rejectPermission(trial);
-      return;
+      return null;
     }
 
     this.showCameraSelection(display_element, trial);
