@@ -130,7 +130,7 @@ describe("html-slider-response", () => {
   });
 
   test("should end trial when button is clicked", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
+    const { getHTML, expectFinished, displayElement } = await startTimeline([
       {
         type: htmlSliderResponse,
         stimulus: "this is html",
@@ -144,7 +144,7 @@ describe("html-slider-response", () => {
       '<div id="jspsych-html-slider-response-stimulus">this is html</div>'
     );
 
-    await clickTarget(document.querySelector("#jspsych-html-slider-response-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-html-slider-response-next"));
 
     await expectFinished();
   });

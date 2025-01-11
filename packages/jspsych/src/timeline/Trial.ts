@@ -35,7 +35,12 @@ export class Trial extends TimelineNode {
 
     this.trialObject = deepCopy(description);
     this.pluginClass = this.getParameterValue("type", { evaluateFunctions: false });
-    this.pluginInfo = this.pluginClass["info"];
+    this.pluginInfo = this.pluginClass?.["info"];
+    if (!this.pluginInfo) {
+      throw new Error(
+        "Plugin not recognized. Please provide a valid plugin using the 'type' parameter."
+      );
+    }
 
     if (!("version" in this.pluginInfo) && !("data" in this.pluginInfo)) {
       console.warn(

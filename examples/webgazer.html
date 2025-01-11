@@ -109,8 +109,8 @@
       stimulus: function () {
         return(
         `<div style="position: relative; width: 400px; height: 400px;">
-          <div style="position: absolute; top:${jsPsych.timelineVariable('top', true)}%; left: ${jsPsych.timelineVariable('left', true)}%">
-            <span id="arrow-target" style="font-size: 40px; transform: translate(-50%, -50%);">${jsPsych.timelineVariable('direction', true) == 'left' ? '⬅' : '➡'}</span>
+          <div style="position: absolute; top:${jsPsych.evaluateTimelineVariable('top', true)}%; left: ${jsPsych.evaluateTimelineVariable('left', true)}%">
+            <span id="arrow-target" style="font-size: 40px; transform: translate(-50%, -50%);">${jsPsych.evaluateTimelineVariable('direction', true) == 'left' ? '⬅' : '➡'}</span>
           </div>
         </div>`
         )

@@ -49,7 +49,7 @@ In `visual` simulation mode, the plugin will run the trial as if the experiment 
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-preload@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

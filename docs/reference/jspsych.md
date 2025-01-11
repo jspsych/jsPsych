@@ -229,42 +229,6 @@ const memoryTestProcedure = {
 ```
 
 ---
-## jsPsych.addNodeToEndOfTimeline
-
-```javascript
-jsPsych.addNodeToEndOfTimeline(node_parameters)
-```
-
-### Parameters
-
-| Parameter       | Type     | Description                              |
-| --------------- | -------- | ---------------------------------------- |
-| node_parameters | object   | An object defining a timeline. It must have, at a minimum, a `timeline` parameter with a valid timeline array as the value for that parameter. |
-
-### Return value
-
-None.
-
-### Description
-
-Adds the timeline to the end of the experiment.
-
-### Example
-
-```javascript
-var trial = {
-  type: jsPsychHtmlKeyboardResponse,
-  stimulus: 'This is a new trial.'
-}
-
-var new_timeline = {
-  timeline: [trial]
-}
-
-jsPsych.addNodeToEndOfTimeline(new_timeline)
-```
-
----
 ## jsPsych.evaluateTimelineVariable
 
 ```js
@@ -330,13 +294,14 @@ Returns nothing.
 
 ### Description
 
-This method tells jsPsych that the current trial is over. It is used in all of the plugins to end the current trial. When the trial ends a few things happen:
+This method tells jsPsych that the current trial is over. It is used in all of the plugins to end the current trial. When the trial ends, a few things happen:
 
 * The data is stored using `jsPsych.data.write()`
-* The on_finish callback function is executed for the trial
-* The on_trial_finish callback function is executed
+* The `on_finish` callback function is executed for the trial
+* The `on_trial_finish` callback function is executed
+* The display element is cleared, and any timeouts that are pending are cleared.
 * The progress bar is updated if it is being displayed
-* The experiment ends if the trial is the last one (and the on_finish callback function is executed).
+* The experiment ends if the trial is the last one (and the `on_finish` callback function is executed).
 * The next trial, if one exists, is started.
 
 ### Example
@@ -391,7 +356,7 @@ Returns the object describing the current trial. The object will contain all of 
 
 ### Description
 
-Get a description of the current trial
+Get a description of the current trial.
 
 ### Example
 
@@ -428,6 +393,8 @@ var el = jsPsych.getDisplayElement();
 // hide the jsPsych display
 el.style.visibility = 'hidden';
 ```
+
+
 ---
 
 ## jsPsych.getInitSettings
@@ -492,31 +459,6 @@ var progress = jsPsych.getProgress();
 alert('You have completed approximately '+progress.percent_complete+'% of the experiment');
 ```
 
-
----
-## jsPsych.getProgressBarCompleted
-
-```javascript
-jsPsych.getProgressBarCompleted()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-Returns a value between 0 and 1 representing how full the progress bar currently is.
-
-### Description
-
-Used to get the current value of the progress bar. Works for automated and manual control.
-
-### Example
-
-```javascript
-var progress_bar_amount = jsPsych.getProgressBarCompleted();
-```
 
 ---
 
@@ -596,9 +538,9 @@ Pauses the experiment. The experiment will finish the current trial, but will no
 var trial = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: 'Press p to take a 30 second break. Otherwise, press c to continue immediately.',
-  choices: ['p','c'],
+  choices: ['p', 'c'],
   on_finish: function(data){
-    if(jsPsych.pluginAPI.compareKeys(data.response, "p")) { 
+    if (jsPsych.pluginAPI.compareKeys(data.response, "p")) { 
       jsPsych.pauseExperiment();
       setTimeout(jsPsych.resumeExperiment, 30000);
     }
@@ -670,35 +612,6 @@ Start the jsPsych experiment with the specified timeline.
 var timeline = [trial1, trial2, trial3];
 
 jsPsych.run(timeline);
-```
-
----
-
-## jsPsych.setProgressBar
-
-```javascript
-jsPsych.setProgressBar(value)
-```
-
-### Parameters
-
-| Parameter | Type    | Description                              |
-| --------- | ------- | ---------------------------------------- |
-| value     | numeric | Proprotion (between 0 and 1) to fill the progress bar. |
-
-
-### Return value
-
-None.
-
-### Description
-
-Set the progress bar to a custom amount. Proportion must be between 0 and 1. Values larger than 1 are treated as 1.
-
-### Example
-
-```javascript
-jsPsych.setProgressBar(0.85);
 ```
 
 ---

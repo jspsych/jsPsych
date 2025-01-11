@@ -36,6 +36,16 @@ describe("Trial", () => {
     return trial;
   };
 
+  it("throws an error upon construction when the `type` parameter or plugin info object is undefined", () => {
+    for (const description of [{}, { type: {} }] as TrialDescription[]) {
+      expect(
+        () => new Trial(dependencies, description, timeline)
+      ).toThrowErrorMatchingInlineSnapshot(
+        "\"Plugin not recognized. Please provide a valid plugin using the 'type' parameter.\""
+      );
+    }
+  });
+
   describe("run()", () => {
     it("instantiates the corresponding plugin", async () => {
       const trial = createTrial({ type: TestPlugin });
@@ -514,7 +524,7 @@ describe("Trial", () => {
           );
           await expect(
             createTrial({ type: TestPlugin, requiredComplexNested: {} }).run()
-          ).rejects.toThrowError('"requiredComplexNested.requiredChild" parameter');
+          ).rejects.toThrow('"requiredComplexNested.requiredChild" parameter');
         });
 
         it("errors on missing parameters nested in `COMPLEX` array parameters", async () => {

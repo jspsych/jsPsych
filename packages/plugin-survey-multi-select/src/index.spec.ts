@@ -4,8 +4,12 @@ import surveyMultiSelect from ".";
 
 jest.useFakeTimers();
 
-const getInputElement = (selectId: number, value: string) =>
-  document.querySelector(
+const getInputElement = (
+  selectId: number, 
+  value: string,
+  displayElement: HTMLElement
+) =>
+  displayElement.querySelector(
     `#jspsych-survey-multi-select-${selectId} input[value="${value}"]`
   ) as HTMLInputElement;
 
@@ -43,7 +47,7 @@ describe("survey-multi-select plugin", () => {
 
   test("data are logged with the right question when randomize order is true", async () => {
     const scale = ["a", "b", "c", "d", "e"];
-    const { expectFinished, getData } = await startTimeline([
+    const { expectFinished, getData, displayElement } = await startTimeline([
       {
         type: surveyMultiSelect,
         questions: [
@@ -57,13 +61,13 @@ describe("survey-multi-select plugin", () => {
       },
     ]);
 
-    getInputElement(0, "a").checked = true;
-    getInputElement(1, "b").checked = true;
-    getInputElement(2, "c").checked = true;
-    getInputElement(3, "d").checked = true;
-    getInputElement(4, "e").checked = true;
+    getInputElement(0, "a", displayElement).checked = true;
+    getInputElement(1, "b", displayElement).checked = true;
+    getInputElement(2, "c", displayElement).checked = true;
+    getInputElement(3, "d", displayElement).checked = true;
+    getInputElement(4, "e", displayElement).checked = true;
 
-    await clickTarget(document.querySelector("#jspsych-survey-multi-select-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-survey-multi-select-next"));
 
     await expectFinished();
 

@@ -50,7 +50,7 @@ This may change in a future version as we improve the simulation modes.
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.0.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.1.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

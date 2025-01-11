@@ -54,7 +54,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-visual-search-circle@2.1.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-visual-search-circle@2.2.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

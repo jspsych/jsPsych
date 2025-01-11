@@ -64,7 +64,7 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-virtual-chinrest@3.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-virtual-chinrest@3.1.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

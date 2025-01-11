@@ -198,7 +198,7 @@ describe("randomInt", () => {
   test("setting upper < lower throws an error", () => {
     expect(() => {
       randomInt(1, 0);
-    }).toThrowError();
+    }).toThrow();
   });
 });
 

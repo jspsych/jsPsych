@@ -40,7 +40,7 @@ slider_start | numeric | The starting value of the slider.
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-html-slider-response@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-html-slider-response@2.1.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

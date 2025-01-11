@@ -44,7 +44,7 @@ Additionally, if `first_stim_duration` is  null, then the following data is also
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-same-different-html@2.0.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-same-different-html@2.1.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:

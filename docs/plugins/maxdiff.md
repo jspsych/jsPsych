@@ -33,7 +33,7 @@ response | object | An object with two keys, `left` and `right`, containing the 
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-maxdiff@2.0.2"></script>
+<script src="https://unpkg.com/@jspsych/plugin-maxdiff@2.1.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
