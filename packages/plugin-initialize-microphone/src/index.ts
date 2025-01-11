@@ -16,6 +16,11 @@ const info = <const>{
       type: ParameterType.STRING,
       default: "Use this microphone",
     },
+    /** The message to display when permission to access the microphone is rejected. */
+    rejection_message: {
+      type: ParameterType.HTML_STRING,
+      default: `<p>You must allow access to a microphone in order to participate in the experiment.</p>`,
+    },
   },
   data: {
     /**  The [device ID](https://developer.mozilla.org/en-US/docs/Web/API/MediaDeviceInfo/deviceId) of the selected microphone. */
@@ -60,7 +65,12 @@ class InitializeMicrophonePlugin implements JsPsychPlugin<Info> {
   }
 
   private async run_trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    await this.askForPermission();
+    try {
+      await this.askForPermission();
+    } catch(e) {
+      this.rejectPermission(trial);  
+      return null;
+    }
 
     this.showMicrophoneSelection(display_element, trial);
 
@@ -125,6 +135,12 @@ class InitializeMicrophonePlugin implements JsPsychPlugin<Info> {
         display_element.querySelector("#which-mic").appendChild(el);
       });
     });
+  }
+
+  private rejectPermission(trial: TrialType<Info>) {
+    this.jsPsych.getDisplayElement().innerHTML = "";
+
+    this.jsPsych.abortExperiment(trial.rejection_message, {});
   }
 }
 
