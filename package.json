@@ -35,6 +35,9 @@
     "prettier-plugin-import-sort": "^0.0.7",
     "turbo": "^1.6.3"
   },
+  "overrides": {
+    "typescript": "^5.0.0"
+  },
   "prettier": {
     "printWidth": 100
   },
