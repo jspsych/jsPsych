@@ -1,5 +1,5 @@
 ---
-"@jspsych/config": major
+"@jspsych/config": patch
 ---
 
-Removes the canvas dependency from `@jspsych/config` and adds it to packages that need it for testing
+Replaces the dependency on `canvas` in `@jspsych/config` with `jest-canvas-mock`.
