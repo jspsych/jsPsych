@@ -2,11 +2,13 @@ name: build
 
 on: [push, pull_request]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     name: Build, lint, and test on Node.js ${{ matrix.node }}
-    # Prevent the action running twice when the event is both a push and pull request
-    if: github.event_name != 'push' || github.event_name == 'push' && !github.event.pull_request
     runs-on: ubuntu-latest
     strategy:
       matrix:
