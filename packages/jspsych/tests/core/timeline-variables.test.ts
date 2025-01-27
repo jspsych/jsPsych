@@ -400,8 +400,7 @@ describe("timeline variables are correctly evaluated", () => {
   });
 });
 
-// using console.warn instead of error for now. plan is to enable this test with version 8.
-test.skip("timelineVariable() throws an error when variable doesn't exist", async () => {
+test("throws an error when variable doesn't exist", async () => {
   const jsPsych = initJsPsych();
   const { expectFinished } = await startTimeline(
     [
@@ -411,7 +410,7 @@ test.skip("timelineVariable() throws an error when variable doesn't exist", asyn
             type: htmlKeyboardResponse,
             stimulus: "foo",
             on_start: () => {
-              expect(() => jsPsych.evaluateTimelineVariable("c")).toThrowError();
+              expect(() => jsPsych.evaluateTimelineVariable("c")).toThrow();
             },
           },
         ],
@@ -430,7 +429,7 @@ test.skip("timelineVariable() throws an error when variable doesn't exist", asyn
   await expectFinished();
 });
 
-test("timelineVariable() can fetch a variable called 'data'", async () => {
+test("can fetch a variable called 'data'", async () => {
   const jsPsych = initJsPsych();
   const { expectFinished } = await startTimeline(
     [
@@ -440,7 +439,7 @@ test("timelineVariable() can fetch a variable called 'data'", async () => {
             type: htmlKeyboardResponse,
             stimulus: "foo",
             on_start: () => {
-              expect(() => jsPsych.evaluateTimelineVariable("data")).not.toThrowError();
+              expect(() => jsPsych.evaluateTimelineVariable("data")).not.toThrow();
             },
           },
         ],

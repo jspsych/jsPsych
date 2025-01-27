@@ -586,10 +586,10 @@ describe("Timeline", () => {
         const variable = new TimelineVariable("x");
 
         await timeline.run();
-        expect(() => timeline.evaluateTimelineVariable(variable)).toThrowError("");
+        expect(() => timeline.evaluateTimelineVariable(variable)).toThrow();
         expect(() =>
           (timeline.children[0] as Timeline).evaluateTimelineVariable(variable)
-        ).toThrowError("");
+        ).toThrow();
       });
     });
   });

@@ -63,6 +63,10 @@ const info = {
 }
 ```
 
+??? info "Automatic versioning with custom build environments"
+
+    If you are using a custom build environment that imports its own `tsconfig.json` file that does not extend jsPsych's, and you want to use this automatic versioning syntax, you must add `"resolveJsonModule": true` to the config's `compilerOptions` object.
+
 If you are not using a build environment that supports `import` and `package.json` (such as writing a plain JS file), you can manually enter the `version` as a string.
 
 ```javascript
@@ -163,6 +167,89 @@ class MyAwesomePlugin {
 }
 
 MyAwesomePlugin.info = info;
+```
+
+#### Parameter Types
+
+jsPsych currently has support for the following parameter types:
+
+| Type Name | Description | Example |
+| --------- | ----------- | ------- |
+| BOOL | A simple truth value. | `true` or `false` |
+| STRING | A set of characters. | "Continue" |
+| INT | A value that supports whole numbers. | 12 |
+| FLOAT | A value that supports decimal numbers. | 5.55 |
+| FUNCTION | A Javascript function, tends to process multiple objects in an array from other parameters. | `function(tries) { return "<p>You have " + tries + " tries left." }` |
+| KEY | A single key, with support for function keys like arrows and spacebars. | `"j"`, `"n"`, `"ArrowLeft"` |
+| KEYS | Either an array of keys, or the string `"ALL_KEYS"` or `"NO_KEYS"`, indicating their respective inclusion/exclusion criterea. | `["f", "j"]` |
+| SELECT | A list of strings that a developer can choose between as a parameter. | `["cm", "px", "em"]` |
+| HTML_STRING | A string with HTML markup. | `"<p>This is the prompt.</p>"` |
+| IMAGE | A string that contains the path to an image file. | `"my_image.jpg"` |
+| AUDIO | A string that contains the path to an audio file. | `"my_sound.mp3"` |
+| VIDEO | A string that contains the path to a video file. | `"my_video.mp4"` |
+| OBJECT | A general JSON object (key-value pairs). | `{ rt: 350, response: "hello!", correct: true }` |
+| COMPLEX | A JSON object that one can specify nested parameters for. | `{ rt: 350, response: "hello!", correct: true }` |
+| TIMELINE | A jsPsych timeline object with trials. | `[{ type: jsPsychKeyboardResponse, stimulus: 'my_image.jpg }]` |
+
+Within each parameter, you may also specify if it is an array of the specific type. For example, a parameter that requires a list of button labels would be described as:
+
+```js
+const info = {
+  // ...
+  parameters: {
+    /** The labels to be displayed on each button. */
+    labels: {
+      type: ParameterType.STRING,
+      array: true,
+      default: ["Pause", "Play", "Continue"]
+    }
+  },
+  // ...
+}
+```
+
+Specific parameter types also have their own special markup. For `ParameterType.SELECT`, you specify the options one can choose with an `options` field, and then the `default` field must be within that field.
+
+```js
+const info = {
+  // ...
+  parameters: {
+    /** The units of measure used to display the length and width of the stimulus. */
+    units: {
+      type: ParameterType.SELECT,
+      options: ["em", "px", "vh", "vw"],
+      default: "px"
+    }
+  },
+  // ...
+}
+```
+
+For `ParameterType.COMPLEX`, we may specify the underlying fields in the object with the `nested` field. This acts in the same way as us defining parameters regularly, only we are now just delineating the fields within the object itself.
+
+```js
+const info = {
+  // ...
+  parameters: {
+    /** Where to display the location of the stimuli. */
+    locations: {
+      type: ParameterType.COMPLEX,
+      array: true,
+      default: undefined,
+      nested: {
+        /** The x-coordinate of the stimulus, in the units from the `units` field. */
+        x: {
+          type: ParameterType.INT
+        },
+        /** The y-coordinate of the stimulus. */
+        y: {
+          type: ParameterType.INT
+        }
+      }
+    }
+  },
+  // ...
+}
 ```
 
 ## Plugin functionality

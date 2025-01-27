@@ -4,22 +4,24 @@ import serialReactionTime from ".";
 
 jest.useFakeTimers();
 
-const getCellElement = (cellId: string) =>
-  document.querySelector(`#jspsych-serial-reaction-time-stimulus-cell-${cellId}`) as HTMLElement;
+const getCellElement = (
+  cellId: string,
+  displayElement: HTMLElement
+) => displayElement.querySelector(`#jspsych-serial-reaction-time-stimulus-cell-${cellId}`) as HTMLElement;
 
 describe("serial-reaction-time plugin", () => {
   test("default behavior", async () => {
-    const { expectFinished, getData } = await startTimeline([
+    const { expectFinished, getData, displayElement } = await startTimeline([
       {
         type: serialReactionTime,
         target: [0, 0],
       },
     ]);
 
-    expect(getCellElement("0-0").style.backgroundColor).toBe("rgb(153, 153, 153)");
-    expect(getCellElement("0-1").style.backgroundColor).toBe("");
-    expect(getCellElement("0-2").style.backgroundColor).toBe("");
-    expect(getCellElement("0-3").style.backgroundColor).toBe("");
+    expect(getCellElement("0-0", displayElement).style.backgroundColor).toBe("rgb(153, 153, 153)");
+    expect(getCellElement("0-1", displayElement).style.backgroundColor).toBe("");
+    expect(getCellElement("0-2", displayElement).style.backgroundColor).toBe("");
+    expect(getCellElement("0-3", displayElement).style.backgroundColor).toBe("");
 
     await pressKey("3");
 
@@ -28,7 +30,7 @@ describe("serial-reaction-time plugin", () => {
   });
 
   test("response ends trial is false", async () => {
-    const { getHTML, expectFinished, getData } = await startTimeline([
+    const { getHTML, expectFinished, getData, displayElement } = await startTimeline([
       {
         type: serialReactionTime,
         target: [0, 0],
@@ -37,10 +39,10 @@ describe("serial-reaction-time plugin", () => {
       },
     ]);
 
-    expect(getCellElement("0-0").style.backgroundColor).toBe("rgb(153, 153, 153)");
-    expect(getCellElement("0-1").style.backgroundColor).toBe("");
-    expect(getCellElement("0-2").style.backgroundColor).toBe("");
-    expect(getCellElement("0-3").style.backgroundColor).toBe("");
+    expect(getCellElement("0-0", displayElement).style.backgroundColor).toBe("rgb(153, 153, 153)");
+    expect(getCellElement("0-1", displayElement).style.backgroundColor).toBe("");
+    expect(getCellElement("0-2", displayElement).style.backgroundColor).toBe("");
+    expect(getCellElement("0-3", displayElement).style.backgroundColor).toBe("");
 
     await pressKey("3");
 
@@ -53,7 +55,7 @@ describe("serial-reaction-time plugin", () => {
   });
 
   test("responses are scored correctly", async () => {
-    const { getHTML, expectFinished, getData } = await startTimeline([
+    const { displayElement, expectFinished, getData } = await startTimeline([
       {
         type: serialReactionTime,
         target: [0, 0],
@@ -64,19 +66,19 @@ describe("serial-reaction-time plugin", () => {
       },
     ]);
 
-    expect(getCellElement("0-0").style.backgroundColor).toBe("rgb(153, 153, 153)");
-    expect(getCellElement("0-1").style.backgroundColor).toBe("");
-    expect(getCellElement("0-2").style.backgroundColor).toBe("");
-    expect(getCellElement("0-3").style.backgroundColor).toBe("");
+    expect(getCellElement("0-0", displayElement).style.backgroundColor).toBe("rgb(153, 153, 153)");
+    expect(getCellElement("0-1", displayElement).style.backgroundColor).toBe("");
+    expect(getCellElement("0-2", displayElement).style.backgroundColor).toBe("");
+    expect(getCellElement("0-3", displayElement).style.backgroundColor).toBe("");
 
     await pressKey("3");
 
     jest.runAllTimers();
 
-    expect(getCellElement("0-0").style.backgroundColor).toBe("");
-    expect(getCellElement("0-1").style.backgroundColor).toBe("rgb(153, 153, 153)");
-    expect(getCellElement("0-2").style.backgroundColor).toBe("");
-    expect(getCellElement("0-3").style.backgroundColor).toBe("");
+    expect(getCellElement("0-0", displayElement).style.backgroundColor).toBe("");
+    expect(getCellElement("0-1", displayElement).style.backgroundColor).toBe("rgb(153, 153, 153)");
+    expect(getCellElement("0-2", displayElement).style.backgroundColor).toBe("");
+    expect(getCellElement("0-3", displayElement).style.backgroundColor).toBe("");
 
     await pressKey("3");
 

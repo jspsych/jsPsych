@@ -8,17 +8,17 @@ jest.useFakeTimers();
 
 describe("data conversion to json", () => {
   test("survey-text data response object is correctly converted", async () => {
-    const { getData } = await startTimeline([
+    const { getData, displayElement } = await startTimeline([
       {
         type: surveyText,
         questions: [{ prompt: "Q1" }, { prompt: "Q2" }],
       },
     ]);
 
-    document.querySelector<HTMLInputElement>("#input-0").value = "Response 1";
-    document.querySelector<HTMLInputElement>("#input-1").value = "Response 2";
+    displayElement.querySelector<HTMLInputElement>("#input-0").value = "Response 1";
+    displayElement.querySelector<HTMLInputElement>("#input-1").value = "Response 2";
 
-    await clickTarget(document.querySelector("#jspsych-survey-text-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-survey-text-next"));
 
     expect(
       getData()
@@ -71,7 +71,7 @@ describe("data conversion to json", () => {
   });
 
   test("survey-multi-select response array is correctly converted", async () => {
-    const { getHTML, getData } = await startTimeline([
+    const { getHTML, getData, displayElement } = await startTimeline([
       {
         type: surveyMultiSelect,
         questions: [{ prompt: "foo", options: ["fuzz", "bizz", "bar"], name: "q" }],
@@ -79,9 +79,9 @@ describe("data conversion to json", () => {
     ]);
 
     expect(getHTML()).toMatch("foo");
-    await clickTarget(document.querySelector("#jspsych-survey-multi-select-response-0-0"));
-    await clickTarget(document.querySelector("#jspsych-survey-multi-select-response-0-1"));
-    await clickTarget(document.querySelector("#jspsych-survey-multi-select-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-survey-multi-select-response-0-0"));
+    await clickTarget(displayElement.querySelector("#jspsych-survey-multi-select-response-0-1"));
+    await clickTarget(displayElement.querySelector("#jspsych-survey-multi-select-next"));
     expect(getHTML()).toBe("");
 
     expect(

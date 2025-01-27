@@ -65,7 +65,7 @@ describe("Trial parameters in the data", () => {
   test("Arrayed objects work with save_trial_parameters ", async () => {
     const questions = [{ prompt: "foo" }, { prompt: "bar" }];
 
-    const { getData } = await startTimeline([
+    const { getData, displayElement } = await startTimeline([
       {
         type: surveyText,
         questions,
@@ -75,7 +75,7 @@ describe("Trial parameters in the data", () => {
       },
     ]);
 
-    await clickTarget(document.querySelector("#jspsych-survey-text-next"));
+    await clickTarget(displayElement.querySelector("#jspsych-survey-text-next"));
 
     const data = getData().values()[0];
     expect(data.questions[0].prompt).toBe(questions[0].prompt);
@@ -96,7 +96,7 @@ describe("Trial parameters in the data", () => {
       return html;
     };
 
-    const { getData } = await startTimeline([
+    const { getData, displayElement } = await startTimeline([
       {
         type: reconstruction,
         stim_function: sample_function,
@@ -107,7 +107,7 @@ describe("Trial parameters in the data", () => {
       },
     ]);
 
-    await clickTarget(document.querySelector("button"));
+    await clickTarget(displayElement.querySelector("button"));
 
     expect(getData().values()[0].stim_function).toBe(sample_function.toString());
   });

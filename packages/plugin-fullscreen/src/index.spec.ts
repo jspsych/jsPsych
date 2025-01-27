@@ -12,7 +12,7 @@ describe("fullscreen plugin", () => {
   });
 
   test("launches fullscreen mode by default", async () => {
-    await startTimeline([
+    const { displayElement } = await startTimeline([
       {
         type: fullscreen,
         delay_after: 0,
@@ -20,12 +20,12 @@ describe("fullscreen plugin", () => {
     ]);
 
     expect(document.documentElement.requestFullscreen).not.toHaveBeenCalled();
-    await clickTarget(document.querySelector("#jspsych-fullscreen-btn"));
+    await clickTarget(displayElement.querySelector("#jspsych-fullscreen-btn"));
     expect(document.documentElement.requestFullscreen).toHaveBeenCalled();
   });
 
   test("records RT of click", async () => {
-    const { getData, expectFinished } = await startTimeline([
+    const { getData, expectFinished, displayElement } = await startTimeline([
       {
         type: fullscreen,
         delay_after: 0,
@@ -34,7 +34,7 @@ describe("fullscreen plugin", () => {
 
     expect(document.documentElement.requestFullscreen).not.toHaveBeenCalled();
     jest.advanceTimersByTime(1000);
-    clickTarget(document.querySelector("#jspsych-fullscreen-btn"));
+    clickTarget(displayElement.querySelector("#jspsych-fullscreen-btn"));
     expect(document.documentElement.requestFullscreen).toHaveBeenCalled();
     jest.runAllTimers();
     await expectFinished();

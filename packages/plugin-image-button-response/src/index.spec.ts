@@ -15,7 +15,6 @@ describe("image-button-response", () => {
       },
     ]);
 
-    // expect(getHTML()).toContain('<img ');
     expect(getHTML()).toMatchInlineSnapshot(
       '"<img src="../media/blue.png" id="jspsych-image-button-response-stimulus"><div id="jspsych-image-button-response-btngroup" class="jspsych-btn-group-grid" style="grid-template-columns: repeat(1, 1fr); grid-template-rows: repeat(1, 1fr);"><button class="jspsych-btn" data-choice="0">button-choice</button></div>"'
     );
@@ -68,7 +67,7 @@ describe("image-button-response", () => {
   });
 
   test("should hide stimulus if stimulus-duration is set", async () => {
-    const { getHTML, displayElement } = await startTimeline([
+    const { displayElement } = await startTimeline([
       {
         type: imageButtonResponse,
         stimulus: "../media/blue.png",
@@ -105,7 +104,7 @@ describe("image-button-response", () => {
   });
 
   test("should end trial when button is clicked", async () => {
-    const { getHTML, expectFinished, displayElement } = await startTimeline([
+    const { expectFinished, displayElement } = await startTimeline([
       {
         type: imageButtonResponse,
         stimulus: "../media/blue.png",
@@ -138,7 +137,7 @@ describe("image-button-response", () => {
   });
 
   test("delay enable button", async () => {
-    const { getHTML, expectFinished } = await startTimeline([
+    const { displayElement } = await startTimeline([
       {
         type: imageButtonResponse,
         stimulus: "../media/blue.png",
@@ -148,7 +147,7 @@ describe("image-button-response", () => {
       },
     ]);
 
-    const btns = document.querySelectorAll(".jspsych-image-button-response-button button");
+    const btns = displayElement.querySelectorAll(".jspsych-image-button-response-button button");
 
     for (let i = 0; i < btns.length; i++) {
       expect(btns[i].getAttribute("disabled")).toBe("disabled");
@@ -200,7 +199,7 @@ describe("image-button-response simulation", () => {
       },
     ];
 
-    const { expectFinished, expectRunning, getHTML, getData } = await simulateTimeline(
+    const { expectFinished, expectRunning, getData } = await simulateTimeline(
       timeline,
       "visual"
     );
