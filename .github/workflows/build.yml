@@ -1,11 +1,13 @@
 name: build
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+    types: [opened, reopened, ready_for_review, review_requested]
 
 jobs:
   test:
     name: Build, lint, and test on Node.js ${{ matrix.node }}
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
