@@ -4,6 +4,9 @@
 
 name: Scorecard supply-chain security
 on:
+  pull_request:
+    types:
+      - synchronize
   workflow_dispatch:
   # For Branch-Protection check. Only the default branch is supported. See
   # https://github.com/ossf/scorecard/blob/main/docs/checks.md#branch-protection
@@ -20,6 +23,7 @@ permissions: read-all
 
 jobs:
   analysis:
+    if: ${{ !(github.event_name == 'pull_request' && !startsWith(github.head_ref, '3466'))}}
     name: Scorecard analysis
     runs-on: ubuntu-latest
     permissions:
@@ -55,7 +59,7 @@ jobs:
           # For private repositories:
           #   - `publish_results` will always be set to `false`, regardless
           #     of the value entered here.
-          publish_results: true
+          publish_results: false
 
       # Upload the results as artifacts (optional). Commenting out will disable uploads of run results in SARIF
       # format to the repository Actions tab.

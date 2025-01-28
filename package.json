@@ -35,6 +35,12 @@
     "prettier-plugin-import-sort": "^0.0.7",
     "turbo": "^1.6.3"
   },
+  "overrides": {
+    "cross-spawn": "^7.0.5",
+    "nanoid": "^3.3.8",
+    "micromatch": "^4.0.8",
+    "vue-jscodeshift-adapter": "^3.0.0"
+  },
   "prettier": {
     "printWidth": 100
   },
