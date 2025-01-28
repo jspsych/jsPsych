@@ -19,6 +19,6 @@ module.exports.makePackageConfig = (dirname) => {
       name: packageBaseName,
       color: packageBaseName === "jspsych" ? "white" : "cyanBright",
     },
-    setupFiles: ["jest-canvas-mock"],
+    setupFiles: [require.resolve("jest-canvas-mock")],
   };
 };
