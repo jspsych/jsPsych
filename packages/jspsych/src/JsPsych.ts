@@ -36,6 +36,9 @@ export class JsPsych {
     return version;
   }
 
+  // prettier-ignore
+  private citation: any = '__CITATIONS__';
+
   /** Options */
   private options: any = {};
 
@@ -274,8 +277,6 @@ export class JsPsych {
     format: "apa" | "bibtex" = "apa"
   ) {
     const formatOptions = ["apa", "bibtex"];
-    // prettier-ignore
-    const jsPsychCitations: any = '__CITATIONS__';
     format = format.toLowerCase() as "apa" | "bibtex";
     // Check if plugins is an array
     if (!Array.isArray(plugins)) {
@@ -287,7 +288,7 @@ export class JsPsych {
     }
     // Print citations
     else {
-      const jsPsychCitation = jsPsychCitations[format];
+      const jsPsychCitation = this.citation[format];
       const citationSet = new Set([jsPsychCitation]);
 
       for (const plugin of plugins) {

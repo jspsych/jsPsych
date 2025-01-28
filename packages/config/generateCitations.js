@@ -7,7 +7,6 @@ import path from "node:path";
 
 import { Cite } from "@citation-js/core";
 import appRootPath from "app-root-path";
-import yaml from "yaml";
 
 /**
  * Generate citation data from CITATION.cff file
@@ -23,11 +22,8 @@ export default function generateCitations() {
     let rawCff;
     const getCff = (path) => {
       rawCff = fs.readFileSync(path, "utf-8").toString();
-      const cffData = yaml.parse(rawCff);
-      if (cffData["preferred-citation"]) {
-        preferredCitation = true;
-      }
-      return yaml.stringify(rawCff);
+      preferredCitation = rawCff.includes("preferred-citation:");
+      return rawCff;
     };
 
     try {
@@ -80,7 +76,7 @@ export default function generateCitations() {
       return citationBibtex;
     } catch (error) {
       console.log(`Error converting CITATION.cff to BibTeX string: ${error.message}`);
-      return null;
+      return "";
     }
   })();
 
