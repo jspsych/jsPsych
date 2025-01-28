@@ -1,5 +1,13 @@
 # @jspsych/config
 
+## 3.2.2
+
+### Patch Changes
+
+- [#3488](https://github.com/jspsych/jsPsych/pull/3488) [`64a01292c350b5f6fd9f3f2e0dad5124262d53c9`](https://github.com/jspsych/jsPsych/commit/64a01292c350b5f6fd9f3f2e0dad5124262d53c9) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Replaces the dependency on `canvas` in `@jspsych/config` with `jest-canvas-mock`.
+
+- [#3484](https://github.com/jspsych/jsPsych/pull/3484) [`e710cb01e8ab2f992d0be902016e3e6540197f67`](https://github.com/jspsych/jsPsych/commit/e710cb01e8ab2f992d0be902016e3e6540197f67) Thanks [@jadeddelta](https://github.com/jadeddelta)! - Patches some edge cases for `getCitations` and the build process that reads CITATION.CFF files to include citation info
+
 ## 3.2.1
 
 ### Patch Changes
