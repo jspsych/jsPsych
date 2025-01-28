@@ -1,5 +1,11 @@
 # jspsych
 
+## 8.2.1
+
+### Patch Changes
+
+- [#3484](https://github.com/jspsych/jsPsych/pull/3484) [`e710cb01e8ab2f992d0be902016e3e6540197f67`](https://github.com/jspsych/jsPsych/commit/e710cb01e8ab2f992d0be902016e3e6540197f67) Thanks [@jadeddelta](https://github.com/jadeddelta)! - Patches some edge cases for `getCitations` and the build process that reads CITATION.CFF files to include citation info
+
 ## 8.2.0
 
 ### Minor Changes

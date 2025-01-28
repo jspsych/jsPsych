@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/config",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "Shared (build) configuration for jsPsych packages",
   "type": "module",
   "scripts": {
