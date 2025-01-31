@@ -507,8 +507,7 @@ None.
 
 #### Description
 
-Generates a `MediaRecorder` object from provided `MediaStream` and stores this for access via [`getCameraRecorder()`](#getcamerarecorder).
-
+Generates a `MediaRecorder` object from provided `MediaStream` and stores this for access via [`getCameraRecorder()`](#getcamerarecorder). By default, `mimeType` is set to `"video/webm"`.
 #### Example
 
 ```javascript

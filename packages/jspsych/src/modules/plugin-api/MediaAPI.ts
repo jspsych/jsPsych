@@ -284,6 +284,12 @@ export class MediaAPI {
   private camera_recorder: MediaRecorder = null;
 
   initializeCameraRecorder(stream: MediaStream, opts?: MediaRecorderOptions) {
+    if (!opts) {
+      opts = { mimeType: "video/webm" };
+    } else if (!opts.mimeType) {
+      opts.mimeType = "video/webm";
+    }
+
     this.camera_stream = stream;
     const recorder = new MediaRecorder(stream, opts);
     this.camera_recorder = recorder;
