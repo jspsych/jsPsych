@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://www.jspsych.org/v8/developers/contributing/">
+        <link rel="canonical" href="https://www.jspsych.org/v8/reference/jspsych-utils/">
       
       
-        <link rel="prev" href="../documentation/">
+        <link rel="prev" href="../jspsych-turk/">
       
       
-        <link rel="next" href="../plugin-development/">
+        <link rel="next" href="../jspsych-pluginAPI/">
       
       
       <link rel="icon" href="../../img/jspsych-favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Contributing to jsPsych - jsPsych</title>
+        <title>jsPsych.utils - jsPsych</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#contributing-to-jspsych" class="md-skip">
+        <a href="#jspsychutils" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Contributing to jsPsych
+              jsPsych.utils
             
           </span>
         </div>
@@ -842,17 +842,19 @@
       
   
   
+    
   
   
+  
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
           <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
@@ -866,7 +868,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Reference
@@ -880,7 +882,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/jspsych/" class="md-nav__link">
+      <a href="../jspsych/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -901,7 +903,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/jspsych-data/" class="md-nav__link">
+      <a href="../jspsych-data/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -922,7 +924,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/jspsych-randomization/" class="md-nav__link">
+      <a href="../jspsych-randomization/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -943,7 +945,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/jspsych-turk/" class="md-nav__link">
+      <a href="../jspsych-turk/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -961,10 +963,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../reference/jspsych-utils/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    jsPsych.utils
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -973,6 +995,179 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychutilsunique" class="md-nav__link">
+    <span class="md-ellipsis">
+      jsPsych.utils.unique
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.utils.unique">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      Return value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychutilsdeepcopy" class="md-nav__link">
+    <span class="md-ellipsis">
+      jsPsych.utils.deepCopy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.utils.deepCopy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Return value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychutilsdeepmerge" class="md-nav__link">
+    <span class="md-ellipsis">
+      jsPsych.utils.deepMerge
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.utils.deepMerge">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Return value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -985,7 +1180,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reference/jspsych-pluginAPI/" class="md-nav__link">
+      <a href="../jspsych-pluginAPI/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2312,19 +2507,17 @@
       
   
   
-    
   
   
-  
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
         
           
           <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
@@ -2338,7 +2531,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             Developers
@@ -2352,7 +2545,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../configuration/" class="md-nav__link">
+      <a href="../../developers/configuration/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2373,7 +2566,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../documentation/" class="md-nav__link">
+      <a href="../../developers/documentation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2391,30 +2584,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Contributing to jsPsych
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../developers/contributing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2423,68 +2596,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#guidelines-for-contibuting" class="md-nav__link">
-    <span class="md-ellipsis">
-      Guidelines for contibuting
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Guidelines for contibuting">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#contributing-to-the-codebase" class="md-nav__link">
-    <span class="md-ellipsis">
-      Contributing to the codebase
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#contributing-to-the-documentation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Contributing to the documentation
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#contributing-to-jspsych-vs-jspsych-contrib" class="md-nav__link">
-    <span class="md-ellipsis">
-      Contributing to jspsych vs. jspsych-contrib
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2497,7 +2608,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../plugin-development/" class="md-nav__link">
+      <a href="../../developers/plugin-development/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2518,7 +2629,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../extension-development/" class="md-nav__link">
+      <a href="../../developers/extension-development/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2818,28 +2929,46 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#guidelines-for-contibuting" class="md-nav__link">
+  <a href="#jspsychutilsunique" class="md-nav__link">
     <span class="md-ellipsis">
-      Guidelines for contibuting
+      jsPsych.utils.unique
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Guidelines for contibuting">
+    <nav class="md-nav" aria-label="jsPsych.utils.unique">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#contributing-to-the-codebase" class="md-nav__link">
+  <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
-      Contributing to the codebase
+      Parameters
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#contributing-to-the-documentation" class="md-nav__link">
+  <a href="#return-value" class="md-nav__link">
     <span class="md-ellipsis">
-      Contributing to the documentation
+      Return value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
     </span>
   </a>
   
@@ -2851,11 +2980,104 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#contributing-to-jspsych-vs-jspsych-contrib" class="md-nav__link">
+  <a href="#jspsychutilsdeepcopy" class="md-nav__link">
     <span class="md-ellipsis">
-      Contributing to jspsych vs. jspsych-contrib
+      jsPsych.utils.deepCopy
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.utils.deepCopy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Return value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jspsychutilsdeepmerge" class="md-nav__link">
+    <span class="md-ellipsis">
+      jsPsych.utils.deepMerge
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="jsPsych.utils.deepMerge">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameters_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#return-value_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Return value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Description
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2877,45 +3099,102 @@
   
 
 
-<h1 id="contributing-to-jspsych">Contributing to jsPsych<a class="headerlink" href="#contributing-to-jspsych" title="Permanent link">&para;</a></h1>
-<p>We welcome contributions of all kinds, including changes to the core codebase, the development of new plugins and extensions, and improvements to the documentation. </p>
-<p>The project is managed entirely through the <a href="https://github.com/jspsych/jsPsych">GitHub repository</a>. There you can:</p>
-<ul>
-<li>Use <a href="https://github.com/jspsych/jsPsych/discussions">discussions</a> to propose ideas for development and seek feedback on contributions, such as a new plugin.</li>
-<li>Use <a href="https://github.com/jspsych/jsPsych/issues">issues</a> to identify anything with an actionable next step. For example, a page in the documentation that needs to be fixed, a bug in the code, or a specific feature that has a clear scope.</li>
-<li>Submit a <a href="https://github.com/jspsych/jsPsych/pulls">pull request</a> with modifications to the codebase. Pull requests will be reviewed by one or more members of the core team.</li>
-</ul>
-<h2 id="guidelines-for-contibuting">Guidelines for contibuting<a class="headerlink" href="#guidelines-for-contibuting" title="Permanent link">&para;</a></h2>
-<h3 id="contributing-to-the-codebase">Contributing to the codebase<a class="headerlink" href="#contributing-to-the-codebase" title="Permanent link">&para;</a></h3>
-<p>We welcome contributions of any scope. Before we can merge changes into the main codebase, we generally require a few things. Note that you are welcome to contribute code without these things in place, but it will help us get to your contribution faster if you take care of whatever components you are comfortable doing.</p>
-<ul>
-<li>
-<p><strong>The code must be tested through our automated testing system.</strong> We use <a href="https://jestjs.io/">Jest</a> as the testing framework. If you are fixing a bug, consider adding a test case that shows the bug has been resolved. If you are contributing new features, like a new plugin, a test suite for the plugin is very helpful. See <a href="../configuration/#testing">testing jsPsych</a> for more information about configuring the test tools and writing tests.</p>
-</li>
-<li>
-<p><strong>Relevant documentation must be updated.</strong> Any pages in <code>/docs</code> that are affected by the contribution should be updated, and if new pages are needed they should be created. For example, if you are contributing a plugin then adding documentation for the plugin and updating the <a href="https://github.com/jspsych/jsPsych/blob/main/docs/plugins/list-of-plugins.md">list of available plugins</a> as well as the <a href="https://github.com/jspsych/jsPsych/blob/main/mkdocs.yml">mkdocs configuration file</a> is very helpful!</p>
-</li>
-<li>
-<p><strong>An example file should be included if applicable.</strong> If you are contributing a new feature, new plugin, or new extension, or contributing a modification that changes the behavior of the library in some important way, consider adding an example file to the <code>/examples</code> folder in the repository.</p>
-</li>
-<li>
-<p><strong>If you are contributing a plugin/extension, we strongly encourage including a file containing citation information.</strong> This file should be named <code>CITATION.cff</code> and placed at the root of your repository. This allows people who use your plugin/extension in their code to easily cite your work by calling <code>jsPsych.getCitations([&lt;yourPlugin&gt;])</code> from their command line. More information on <code>.cff</code> files can be found <a href="https://citation-file-format.github.io/">here</a>.</p>
-</li>
-<li>
-<p><strong>A changeset must be included in the pull request</strong>. We use <a href="https://github.com/atlassian/changesets/blob/main/docs/adding-a-changeset.md">changesets</a> to generate new releases and their corresponding release notes. <a href="https://github.com/atlassian/changesets/blob/main/docs/adding-a-changeset.md">This is a good overview of changesets</a> that explains how to add one to your pull request. Feel free to ask for help with this!</p>
-</li>
-<li>
-<p><strong>Update the contributors.md file</strong>. If you are a first time contributor to jsPsych please add your name to our <a href="https://github.com/jspsych/jsPsych/blob/main/contributors.md">contributors file</a>. And thanks!</p>
-</li>
-</ul>
-<h3 id="contributing-to-the-documentation">Contributing to the documentation<a class="headerlink" href="#contributing-to-the-documentation" title="Permanent link">&para;</a></h3>
-<p>We are very appreciative of both small and large contributions to the documentation, from fixing a typo to adding a whole new tutorial. All of the documentation that appears on this site is contained in the <a href="https://github.com/jspsych/jsPsych/tree/main/docs"><code>/docs</code> folder</a> of the repository. The documentation is built using <a href="https://www.mkdocs.org/">MkDocs</a> and themed using <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>. You can edit any of the markdown files and submit a pull request to modify documentation.</p>
-<p>If you'd like to test your changes to the documentation locally you'll need to install <a href="https://www.mkdocs.org/user-guide/installation/">MkDocs</a> and <a href="https://squidfunk.github.io/mkdocs-material/getting-started/#installation">Material for MkDocs</a>. Then you can run the command <code>mike serve</code> in the root folder of the repository to launch a local webserver and view the documentation.</p>
-<h2 id="contributing-to-jspsych-vs-jspsych-contrib">Contributing to <code>jspsych</code> vs. <code>jspsych-contrib</code><a class="headerlink" href="#contributing-to-jspsych-vs-jspsych-contrib" title="Permanent link">&para;</a></h2>
-<p>If you are developing a new plugin or extension there are two different repositories that you can contribute to: <a href="https://github.com/jspsych/jsPsych"><code>jspsych</code></a> or <a href="https://github.com/jspsych/jspsych-contrib"><code>jspsych-contrib</code></a>. </p>
-<p>The main <code>jspsych</code> repository is open to new plugins and extensions that are likely to be widely used. We require that contributions to main repository are well documented and tested before they are merged. Contributions to the main repository must use TypeScript. We limit contributions to this repository because once a plugin or extension is in the main codebase we are generally committed to providing updates as we develop new versions of jsPsych. Each new plugin and extension potentially increases the amount of development work that we will need to do in the future, so we are somewhat selective about what we will merge. If you have an idea that you'd like to discuss please <a href="https://github.com/jspsych/jsPsych/discussions/new">open a discussion thread</a> and we'd love to chat about it!</p>
-<p>The <code>jspsych-contrib</code> repository is open to any contributions that are complete and working code. There are some minimal guidelines in place about basic documentation that should be provided. Contributors can choose whether to develop their plugin or extension using our <a href="https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-ts/src/index.ts">TypeScript template</a> or using our <a href="https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-js/src/index.js">JavaScript template</a>. Check our <a href="https://www.jspsych.org/latest/developers/plugin-development/">plugin developer documentation</a> for additional guidance. </p>
-<p>Contributions to <code>jspsych-contrib</code> are not evaluated for general usefulness in the same way that contributions to the main repository are. We also periodically consider whether to move contributions into the main repository from <code>jspsych-contrib</code> based on their popularity and completeness (documentation and testing).</p>
+<h1 id="jspsychutils">jsPsych.utils<a class="headerlink" href="#jspsychutils" title="Permanent link">&para;</a></h1>
+<p>The jsPsych.utils module contains utility functions that might turn out useful at one place or the other.</p>
+<hr />
+<h2 id="jspsychutilsunique">jsPsych.utils.unique<a class="headerlink" href="#jspsychutilsunique" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">unique</span><span class="p">(</span><span class="nx">array</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>array</td>
+<td>Array</td>
+<td>An array of arbitrary elements</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value">Return value<a class="headerlink" href="#return-value" title="Permanent link">&para;</a></h3>
+<p>An array containing all elements from the input array, but without duplicate elements</p>
+<h3 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h3>
+<p>This function takes an array and returns a copy of that array with all duplicate elements removed.</p>
+<h3 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">unique</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;b&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">])</span><span class="w"> </span><span class="c1">// returns [&quot;a&quot;, &quot;b&quot;, 1, 2]</span>
+</code></pre></div>
+<hr />
+<h2 id="jspsychutilsdeepcopy">jsPsych.utils.deepCopy<a class="headerlink" href="#jspsychutilsdeepcopy" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">deepCopy</span><span class="p">(</span><span class="nx">object</span><span class="p">);</span>
+</code></pre></div>
+<h3 id="parameters_1">Parameters<a class="headerlink" href="#parameters_1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object</td>
+<td>Object or Array</td>
+<td>An arbitrary object or array</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value_1">Return value<a class="headerlink" href="#return-value_1" title="Permanent link">&para;</a></h3>
+<p>A deep copy of the provided object or array</p>
+<h3 id="description_1">Description<a class="headerlink" href="#description_1" title="Permanent link">&para;</a></h3>
+<p>This function takes an arbitrary object or array and returns a deep copy of it, i.e. all child objects or arrays are recursively copied too.</p>
+<h3 id="example_1">Example<a class="headerlink" href="#example_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">myObject</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">nested</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;array&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;of&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;elements&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">};</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">deepCopy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">deepCopy</span><span class="p">(</span><span class="nx">myObject</span><span class="p">);</span>
+<span class="nx">deepCopy</span><span class="p">.</span><span class="nx">nested</span><span class="p">[</span><span class="mf">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;thingies&quot;</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">myObject</span><span class="p">.</span><span class="nx">nested</span><span class="p">[</span><span class="mf">2</span><span class="p">])</span><span class="w"> </span><span class="c1">// still logs &quot;elements&quot;</span>
+</code></pre></div>
+<hr />
+<h2 id="jspsychutilsdeepmerge">jsPsych.utils.deepMerge<a class="headerlink" href="#jspsychutilsdeepmerge" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nx">jsPsych</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">deepMerge</span><span class="p">(</span><span class="nx">object1</span><span class="p">,</span><span class="w"> </span><span class="nx">object2</span><span class="p">);</span>
+</code></pre></div>
+<h3 id="parameters_2">Parameters<a class="headerlink" href="#parameters_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>object1</td>
+<td>Object</td>
+<td>Object to merge</td>
+</tr>
+<tr>
+<td>object2</td>
+<td>Object</td>
+<td>Object to merge</td>
+</tr>
+</tbody>
+</table>
+<h3 id="return-value_2">Return value<a class="headerlink" href="#return-value_2" title="Permanent link">&para;</a></h3>
+<p>A deep copy of <code>object1</code> with all the (nested) properties from <code>object2</code> filled in</p>
+<h3 id="description_2">Description<a class="headerlink" href="#description_2" title="Permanent link">&para;</a></h3>
+<p>This function takes two objects and recursively merges them into a new object. If both objects define the same (nested) property, the property value from <code>object2</code> takes precedence.</p>
+<h3 id="example_2">Example<a class="headerlink" href="#example_2" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">object1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">a</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">c</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">d</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">};</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">object2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">b</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">c</span><span class="o">:</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nx">e</span><span class="o">:</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span><span class="p">};</span>
+<span class="nx">jsPsych</span><span class="p">.</span><span class="nx">utils</span><span class="p">.</span><span class="nx">deepMerge</span><span class="p">(</span><span class="nx">object1</span><span class="p">,</span><span class="w"> </span><span class="nx">object2</span><span class="p">);</span><span class="w"> </span><span class="c1">// returns { a: 1, b: { c: 2, d: 2 }, e: 3 }</span>
+</code></pre></div>
 
 
 

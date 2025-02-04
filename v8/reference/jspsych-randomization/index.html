@@ -1906,6 +1906,27 @@
   
   
     <li class="md-nav__item">
+      <a href="../jspsych-utils/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    jsPsych.utils
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../jspsych-pluginAPI/" class="md-nav__link">
         
   
@@ -4663,7 +4684,7 @@
 <span class="cm">full_design = {</span>
 <span class="cm">    stimulus: [&#39;a.jpg&#39;,&#39;b.jpg&#39;,&#39;b.jpg&#39;,&#39;a.jpg&#39;],</span>
 <span class="cm">    ms_delay: [200, 100, 200, 100]</span>
-<span class="cm">]</span>
+<span class="cm">}</span>
 <span class="cm">*/</span>
 </code></pre></div>
 <hr />
@@ -4768,6 +4789,7 @@
 <h3 id="description_3">Description<a class="headerlink" href="#description_3" title="Permanent link">&para;</a></h3>
 <p>This method takes an array of values and generates a new random order of the array, with the option of repeating each element of the array a specified number of times.</p>
 <p>If the array elements are objects with the same set of properties, then this method can optionally return a single object where each property is a randomized order of the properties defined in the original set of objects. This is useful for randomizing sets of parameters that are used to define a jsPsych block.</p>
+<p>This returns a shallow copy of the array, i.e. modifications to arrays/objects within this array will affect the original. If this is not desired, consider taking a <a href="../jspsych-utils/#jspsychutilsdeepcopy"><code>deepCopy</code></a>.</p>
 <h3 id="examples_1">Examples<a class="headerlink" href="#examples_1" title="Permanent link">&para;</a></h3>
 <h4 id="shuffle-an-array-no-repeats">Shuffle an array, no repeats<a class="headerlink" href="#shuffle-an-array-no-repeats" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">myArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
@@ -5008,6 +5030,7 @@
 <p>An array containing the sample.</p>
 <h3 id="description_8">Description<a class="headerlink" href="#description_8" title="Permanent link">&para;</a></h3>
 <p>This method returns a sample drawn at random from a set of values with replacement. The relative probability of drawing each item can be controlled by specifying the <code>weights</code>.</p>
+<p>This returns a shallow copy of the array, i.e. modifications to arrays/objects within this array will affect the original. If this is not desired, consider taking a <a href="../jspsych-utils/#jspsychutilsdeepcopy"><code>deepCopy</code></a>.</p>
 <h3 id="examples_6">Examples<a class="headerlink" href="#examples_6" title="Permanent link">&para;</a></h3>
 <h4 id="sample-with-equal-probability">Sample with equal probability<a class="headerlink" href="#sample-with-equal-probability" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">myArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
@@ -5049,6 +5072,7 @@
 <p>An array containing the sample.</p>
 <h3 id="description_9">Description<a class="headerlink" href="#description_9" title="Permanent link">&para;</a></h3>
 <p>This method returns a sample drawn at random from a set of values without replacement. The sample size must be less than or equal to the length of the array.</p>
+<p>This returns a shallow copy of the array, i.e. modifications to arrays/objects within this array will affect the original. If this is not desired, consider taking a <a href="../jspsych-utils/#jspsychutilsdeepcopy"><code>deepCopy</code></a>.</p>
 <h3 id="examples_7">Examples<a class="headerlink" href="#examples_7" title="Permanent link">&para;</a></h3>
 <h4 id="sample-without-replacement">Sample without replacement<a class="headerlink" href="#sample-without-replacement" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">myArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
@@ -5120,6 +5144,7 @@ The seed value will be returned from the function call, allowing you to save it 
 <p>Returns an array with the same elements as the input array in a random order.</p>
 <h3 id="description_11">Description<a class="headerlink" href="#description_11" title="Permanent link">&para;</a></h3>
 <p>A simple method for shuffling the order of an array.</p>
+<p>This returns a shallow copy of the array, i.e. modifications to arrays/objects within this array will affect the original. If this is not desired, consider taking a <a href="../jspsych-utils/#jspsychutilsdeepcopy"><code>deepCopy</code></a>.</p>
 <h3 id="examples_9">Examples<a class="headerlink" href="#examples_9" title="Permanent link">&para;</a></h3>
 <h4 id="shuffle-an-array">Shuffle an array<a class="headerlink" href="#shuffle-an-array" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nx">myArray</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="mf">2</span><span class="p">,</span><span class="mf">3</span><span class="p">,</span><span class="mf">4</span><span class="p">,</span><span class="mf">5</span><span class="p">];</span>
@@ -5156,6 +5181,7 @@ The seed value will be returned from the function call, allowing you to save it 
 <p>Returns an array with the same elements as the input array in a random order, with no repeating neighbors.</p>
 <h3 id="description_12">Description<a class="headerlink" href="#description_12" title="Permanent link">&para;</a></h3>
 <p>Shuffle an array, ensuring that neighboring elements in the array are different.</p>
+<p>This returns a shallow copy of the array, i.e. modifications to arrays/objects within this array will affect the original. If this is not desired, consider taking a <a href="../jspsych-utils/#jspsychutilsdeepcopy"><code>deepCopy</code></a>.</p>
 <p><em>Warning: if you provide an array that has very few valid permutations with no neighboring elements, then this method will fail and cause the browser to hang.</em></p>
 <h3 id="examples_10">Examples<a class="headerlink" href="#examples_10" title="Permanent link">&para;</a></h3>
 <h4 id="basic-example">Basic example<a class="headerlink" href="#basic-example" title="Permanent link">&para;</a></h4>
