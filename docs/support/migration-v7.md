@@ -114,11 +114,11 @@ var trial = {
 
 ## Custom plugins
 
-If you have custom plugins that you would like to upgrade to be compatible with v7.x we recommend using our [plugin template](https://github.com/jspsych/jspsych-dev/tree/main/packages/new-plugin/templates).
+If you have custom plugins that you would like to upgrade to be compatible with v7.x we recommend using our [plugin template](https://github.com/jspsych/jspsych-contrib/blob/main/packages/plugin-template/index.js).
 
 The new template implements plugins as a class, but the core components are essentially unchanged. 
 
-* Anything in `plugin.info` from a v6.x plugin should be moved into the `info` object. Note that the `type` argument for the parameters follows a slightly different syntax in the v7.x plugins. This object is then [assigned as a static property of the class](https://github.com/jspsych/jspsych-dev/blob/main/packages/new-plugin/templates/plugin-template-js/src/index.js#L58).
+* Anything in `plugin.info` from a v6.x plugin should be moved into the `info` object. Note that the `type` argument for the parameters follows a slightly different syntax in the v7.x plugins. This object is then [assigned as a static property of the class](https://github.com/jspsych/jspsych-contrib/blob/6a27c3fc72fdb1feb1a4041cd670775a7c4bf51d/packages/plugin-template/index.js#L39).
 * Anything in `plugin.trial` from a v6.x plugin should be moved into the `trial` method inside the class. 
 * The new template has a `constructor()` function that accepts an instance of jsPsych. You do not need to adjust this portion of the plugin.
 

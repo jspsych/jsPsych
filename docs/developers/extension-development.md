@@ -13,7 +13,7 @@ As of version 7.0, extensions are [JavaScript Classes](https://developer.mozilla
 
 ### Templates
 
-Plugins can be written in either plain JavaScript or in TypeScript. Template files for both [JavaScript](https://github.com/jspsych/jspsych-dev/blob/main/packages/new-extension/templates/extension-template-js/src/index.js) and [TypeScript](https://github.com/jspsych/jspsych-dev/blob/main/packages/new-extension/templates/extension-template-ts/src/index.ts) are available in the [jspsych-dev repository](https://github.com/jspsych/jspsych-dev/).
+Plugins can be written in either plain JavaScript or in TypeScript. Template files for both [JavaScript](https://github.com/jspsych/jspsych-contrib/blob/main/packages/extension-template/index.js) and [TypeScript](https://github.com/jspsych/jspsych-contrib/blob/main/packages/extension-template-ts/src/index.ts) are available in the [jspsych-contrib repository](https://github.com/jspsych/jspsych-contrib/).
 
 ## Extension components
 
