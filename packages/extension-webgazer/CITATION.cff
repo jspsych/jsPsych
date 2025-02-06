@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "If you use WebGazer in your research, please cite the following paper."
+preferred-citation:
+    authors:
+    -   family-names: Papoutsaki
+        given-names: Alexandra
+        affiliation: Brown University
+        orcid: "https://orcid.org/0000-0003-1041-4760"
+    -   family-names: Sangkloy
+        given-names: Patsorn
+        affiliation: Georgia Institute of Technology
+        orcid: 
+    -   family-names: Laskey
+        given-names: James
+        affiliation: Brown University
+    -   family-names: Daskalova
+        given-names: Nediyana
+        affiliation: Brown University
+        orcid: "https://orcid.org/0000-0002-0711-3177"
+    -   family-names: Huang
+        given-names: Jeff
+        affiliation: Brown University
+        orcid: "https://orcid.org/0000-0002-3453-5666"
+    -   family-names: Hays
+        given-names: James
+        affiliation: Georgia Institute of Technology
+        orcid: "https://orcid.org/0000-0001-7016-4252"
+    title: "WebGazer: Scalable Webcam Eye Tracking Using User Interactions"
+    type: article
+    date-published: 2016-07-09
+    isbn: 9781577357704
+    publisher:
+        name: AAAI Press
+    journal: "Proceedings of the Twenty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-16)"
+    start: 3839
+    end: 3845
+    pages: 7
+    location: New York, New York, USA
+    series: IJCAI'16
