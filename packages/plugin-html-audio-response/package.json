@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-html-audio-response",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "jsPsych plugin for displaying a stimulus and recording an audio response through the microphone",
   "type": "module",
   "main": "dist/index.cjs",
