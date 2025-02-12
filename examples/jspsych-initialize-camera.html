@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="../packages/jspsych/dist/index.browser.js"></script>
-  <script src="../packages/plugin-initialize-camera/dist/index.browser.js"></script>
-  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
-</head>
-<body></body>
-<script>
+  <head>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-initialize-camera/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-video-response/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
+  </head>
+  <body></body>
+  <script>
 
-  var jsPsych = initJsPsych();
+      var jsPsych = initJsPsych();
 
-  let init_camera = {
-    type: jsPsychInitializeCamera,
-  }
+      let init_camera = {
+        type: jsPsychInitializeCamera,
+      }
 
-  jsPsych.run([init_camera]);
+      let vr = {
+        type: jsPsychHtmlVideoResponse,
+        stimulus: `<p>Make a sad face</p>`,
+        recording_duration: 3500,
+        show_done_button: false,
+        allow_playback: true
+    };
 
-</script>
+      jsPsych.run([init_camera, vr]);
+  </script>
 </html>
