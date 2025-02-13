@@ -1,5 +1,11 @@
 # @jspsych/plugin-html-audio-response
 
+## 2.1.1
+
+### Patch Changes
+
+- [#2991](https://github.com/jspsych/jsPsych/pull/2991) [`5ab4cc7a0f8750735b88e87df3bb692f140b3c53`](https://github.com/jspsych/jsPsych/commit/5ab4cc7a0f8750735b88e87df3bb692f140b3c53) Thanks [@bbonf](https://github.com/bbonf)! - uses mimetype of audio recorded for playback instead of defaulting to webm
+
 ## 2.1.0
 
 ### Minor Changes
