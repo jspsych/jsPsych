@@ -303,7 +303,7 @@ export class MediaAPI {
       "video/webm;codecs=vp9,opus",
       "video/webm;codecs=vp8,opus",
       // general
-      'video/mp4; codecs="avc1.42E01E, mp4a.40.2"',
+      "video/mp4;codecs=avc1.42E01E,mp4a.40.2",
       // safari
       "video/mp4;codecs=h264,aac",
       "video/mp4;codecs=hevc,aac",

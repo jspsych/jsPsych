@@ -507,7 +507,10 @@ None.
 
 #### Description
 
-Generates a `MediaRecorder` object from provided `MediaStream` and stores this for access via [`getCameraRecorder()`](#getcamerarecorder). By default, `mimeType` is set to `"video/webm"`.
+Generates a `MediaRecorder` object from provided `MediaStream` and stores this for access via [`getCameraRecorder()`](#getcamerarecorder). By default, `mimeType` is set to the first compatible container/codec combination found in a list of common types, or `"video/webm"` if no supported combination is found. 
+
+The common container/codec combinations that jsPsych checks for are `"video/webm;codecs=vp9,opus"`, `"video/webm;codecs=vp8,opus"`, `"video/mp4;codecs=avc1.42E01E,mp4a.40.2"`, `"video/mp4;codecs=h264,aac"`, and `"video/mp4;codecs=hevc,aac"`.
+
 #### Example
 
 ```javascript
