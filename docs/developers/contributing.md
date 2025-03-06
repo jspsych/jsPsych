@@ -8,6 +8,10 @@ The project is managed entirely through the [GitHub repository](https://github.c
 * Use [issues](https://github.com/jspsych/jsPsych/issues) to identify anything with an actionable next step. For example, a page in the documentation that needs to be fixed, a bug in the code, or a specific feature that has a clear scope.
 * Submit a [pull request](https://github.com/jspsych/jsPsych/pulls) with modifications to the codebase. Pull requests will be reviewed by one or more members of the core team.
 
+We also have two community repositories for new plugins, extensions and experiment timelines.
+New plugins and extensions should be contributed to the [`jspsych-contrib`](https://github.com/jspsych/jspsych-contrib) repository, and new timelines should be contributed to the [`jspsych-timelines`](https://github.com/jspsych/jspsych-timelines) repository.
+Detailed guidelines for contributing to these repositories can be found in their respective readme files.
+
 ## Guidelines for contibuting
 
 ### Contributing to the codebase
@@ -20,7 +24,7 @@ We welcome contributions of any scope. Before we can merge changes into the main
 
 * **An example file should be included if applicable.** If you are contributing a new feature, new plugin, or new extension, or contributing a modification that changes the behavior of the library in some important way, consider adding an example file to the `/examples` folder in the repository.
 
-* **If you are contributing a plugin/extension, we strongly encourage including a file containing citation information.** This file should be named `CITATION.cff` and placed at the root of your repository. This allows people who use your plugin/extension in their code to easily cite your work by calling `jsPsych.getCitations([<yourPlugin>])` from their command line. More information on `.cff` files can be found [here](https://citation-file-format.github.io/).
+* **If you are contributing a plugin/extension/timeline, we strongly encourage including a file containing citation information.** This file should be named `CITATION.cff` and placed at the root of your repository. This allows people who use your plugin/extension/timeline in their code to easily cite your work by calling `jsPsych.getCitations([<yourPlugin>])` from their command line. More information on `.cff` files can be found [here](https://citation-file-format.github.io/).
 
 * **A changeset must be included in the pull request**. We use [changesets](https://github.com/atlassian/changesets/blob/main/docs/adding-a-changeset.md) to generate new releases and their corresponding release notes. [This is a good overview of changesets](https://github.com/atlassian/changesets/blob/main/docs/adding-a-changeset.md) that explains how to add one to your pull request. Feel free to ask for help with this!
 

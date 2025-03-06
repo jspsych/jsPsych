@@ -15,6 +15,8 @@ As of version 7.0, extensions are [JavaScript Classes](https://developer.mozilla
 
 Plugins can be written in either plain JavaScript or in TypeScript. Template files for both [JavaScript](https://github.com/jspsych/jspsych-dev/blob/main/packages/new-extension/templates/extension-template-js/src/index.js) and [TypeScript](https://github.com/jspsych/jspsych-dev/blob/main/packages/new-extension/templates/extension-template-ts/src/index.ts) are available in the [jspsych-dev repository](https://github.com/jspsych/jspsych-dev/).
 
+To get started with a template, we recommend using the CLI tool [`new-extension`](https://github.com/jspsych/jspsych-dev/tree/main/packages/new-extension) that we have published in [jspsych-dev](https://github.com/jspsych/jspsych-dev/tree/main). This tool automates the setup of a new extension in either JavaScript or TypeScript. Additional information about the CLI tool is available in the [`README`](https://github.com/jspsych/jspsych-dev/tree/main/packages/new-extension/README.md) of the tool. 
+
 ## Extension components
 
 ### constructor()
