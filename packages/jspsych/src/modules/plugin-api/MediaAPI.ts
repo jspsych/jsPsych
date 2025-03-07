@@ -284,9 +284,36 @@ export class MediaAPI {
   private camera_recorder: MediaRecorder = null;
 
   initializeCameraRecorder(stream: MediaStream, opts?: MediaRecorderOptions) {
+    let mimeType = this.getCompatibleMimeType() || "video/webm";
+    const recorderOptions: MediaRecorderOptions = {
+      ...opts,
+      mimeType
+    }
+
     this.camera_stream = stream;
-    const recorder = new MediaRecorder(stream, opts);
+    const recorder = new MediaRecorder(stream, recorderOptions);
     this.camera_recorder = recorder;
+  }
+
+  // mimetype checking code adapted from https://github.com/lookit/lookit-jspsych/blob/develop/packages/record/src/videoConfig.ts#L673-L699
+  /** returns a compatible mimetype string, or null if none from the array are supported. */
+  private getCompatibleMimeType(): string {
+    const types = [
+      // chrome firefox edge
+      "video/webm;codecs=vp9,opus",
+      "video/webm;codecs=vp8,opus",
+      // general
+      "video/mp4;codecs=avc1.42E01E,mp4a.40.2",
+      // safari
+      "video/mp4;codecs=h264,aac",
+      "video/mp4;codecs=hevc,aac",
+    ]
+    for (const mimeType of types) {
+      if (MediaRecorder.isTypeSupported(mimeType)) {
+        return mimeType;
+      }
+    }
+    return null;
   }
 
   getCameraStream(): MediaStream {

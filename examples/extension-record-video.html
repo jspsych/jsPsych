@@ -13,7 +13,10 @@
     const jsPsych = initJsPsych({
         extensions: [
             {type: jsPsychExtensionRecordVideo}
-        ]
+        ],
+        on_finish: function() {
+          jsPsych.data.displayData();
+        }
     });
 
     const initCamera = {
