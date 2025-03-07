@@ -1,5 +1,11 @@
 # jspsych
 
+## 8.2.2
+
+### Patch Changes
+
+- [#3495](https://github.com/jspsych/jsPsych/pull/3495) [`1f535826a296556252d5c0c8da5cb6aaa8fec656`](https://github.com/jspsych/jsPsych/commit/1f535826a296556252d5c0c8da5cb6aaa8fec656) Thanks [@jadeddelta](https://github.com/jadeddelta)! - add a default `mimeType` of `"video/webm" to `initializeCameraRecorder()`
+
 ## 8.2.1
 
 ### Patch Changes
