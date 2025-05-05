@@ -41,6 +41,7 @@
   "homepage": "/packages/plugin-free-sort-ordered/README.md",
   "dependencies": {
     "jspsych": "^8.0.0",
+    "@jspsych/plugin-free-sort": "^2.1.0",
     "@citation-js/core": "^0.7.14",
     "@citation-js/plugin-software-formats": "^0.6.1",
     "@citation-js/plugin-bibtex": "^0.7.14",
