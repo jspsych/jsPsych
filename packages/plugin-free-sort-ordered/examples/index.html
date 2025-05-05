@@ -1,25 +1,38 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <title>jsPsychPluginFreeSortOrdered Example</title>
-  <script src="https://unpkg.com/jspsych"></script>
-  <!-- Load the published plugin package here, e.g.
+  <head>
+    <title>jsPsychPluginFreeSortOrdered Example</title>
+    <script src="https://unpkg.com/jspsych"></script>
+    <!-- Load the published plugin package here, e.g.
 <script src="https://unpkg.com/plugin-free-sort-ordered"></script>
 <script src="../dist/index.browser.js"></script> -->
-  <script src="../dist/index.browser.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/jspsych/css/jspsych.css">
-</head>
+    <script src="../dist/index.browser.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych/css/jspsych.css" />
+  </head>
 
-<body></body>
-<script>
-  const jsPsych = initJsPsych();
+  <body></body>
+  <script>
+    const jsPsych = initJsPsych();
 
-  const trial = {
-    type: jsPsychPluginFreeSortOrdered
-  };
+    const trial = {
+      type: jsPsychPluginFreeSortOrdered,
+      stimuli: [
+        '<div style="width: 200px; height: 100px; background-color: red;"></div>',
+        '<div style="width: 200px; height: 100px; background-color: blue;"></div>',
+        '<div style="width: 200px; height: 100px; background-color: green;"></div>'
+      ],
+      stim_height: 100,
+      stim_width: 200,
+      stim_order: [2, 0, 1],
+      scale_factor: 1,
+      holding_area_height: 500,
+      holding_area_width: 1000,
+      prompt: 'Drag and drop the boxes to sort them in order.',
+      prompt_location: 'top',
+      button_label: 'Continue',
+      include_counter: true,
+    };
 
-  jsPsych.run([trial])
-</script>
-
+    jsPsych.run([trial])
+  </script>
 </html>

@@ -1,6 +1,7 @@
-import * as FreeSortPluginUtils from "@jspsych/plugin-free-sort/src/utils";
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
+// import * as FreeSortPluginUtils from "@jspsych/plugin-free-sort/src/utils";
+import * as FreeSortPluginUtils from "../../plugin-free-sort/src/utils";
 import { version } from "../package.json";
 import * as Utils from "./utils";
 
@@ -155,7 +156,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
     // counter text if included
     const counter_html = `
       <p id="jspsych-free-sort-ordered-counter" style="display: inline-block;">
-      ${trial.include_counter ? trial.get_counter_text(trial.stimuli.length) : ""}
+      ${trial.include_counter ? get_counter_text(trial.stimuli.length) : ""}
       </p>`;
 
     // container for the boxes
