@@ -293,17 +293,9 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         // on pointer move, check if the stimulus is inside a box and update its position
         const on_pointer_move = ({ clientX, clientY }: PointerEvent) => {
           inside[i] = Utils.inside_box(clientX - x, clientY - y, boxAreas);
-          this.style.top =
-            Math.min(
-              window.innerHeight - trial.stim_height, // Bottom boundary of the viewport
-              Math.max(0, clientY - y) // Top boundary of the viewport
-            ) + "px";
+          this.style.top = clientY - y + "px";
 
-          this.style.left =
-            Math.min(
-              window.innerWidth - trial.stim_width, // Right boundary of the viewport
-              Math.max(0, clientX - x) // Left boundary of the viewport
-            ) + "px";
+          this.style.left = clientX - x + "px";
 
           // modify text and background if all items are inside
           if (inside.every(Boolean)) {
@@ -322,6 +314,22 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         const on_pointer_up = (e) => {
           document.removeEventListener("pointermove", on_pointer_move);
           this.style.transform = "scale(1, 1)";
+          let snapped = false;
+          for (const box of boxAreas) {
+            const distanceX = Math.abs(this.offsetLeft - box.left);
+            const distanceY = Math.abs(this.offsetTop - box.top);
+
+            // Define a snapping threshold (e.g., 20px)
+            const snappingThreshold = 20;
+
+            if (distanceX <= snappingThreshold && distanceY <= snappingThreshold) {
+              // Snap the draggable to the box
+              this.style.left = box.left + "px";
+              this.style.top = box.top + "px";
+              snapped = true;
+              break;
+            }
+          }
           moves.push({
             src: this.dataset.src,
             x: this.offsetLeft,
