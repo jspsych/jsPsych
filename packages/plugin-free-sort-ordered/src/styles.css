@@ -1,0 +1,7 @@
+.jspsych-free-sort-ordered-draggable {
+    touch-action: none;          /* disable scrolling on touch-drag */
+    user-select: none;           /* disable text selection */
+    -webkit-user-drag: none;     /* disable Safari ghost */
+    -moz-user-select: none;
+  }
+  

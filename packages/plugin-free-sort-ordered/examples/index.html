@@ -8,6 +8,7 @@
 <script src="../dist/index.browser.js"></script> -->
     <script src="../dist/index.browser.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/jspsych/css/jspsych.css" />
+    <link rel="stylesheet" href="../src/styles.css" />
   </head>
 
   <body></body>
@@ -16,10 +17,10 @@
 
     const trial = {
       type: jsPsychPluginFreeSortOrdered,
-      stimuli: [
-        '<div style="width: 200px; height: 100px; background-color: red;"></div>',
-        '<div style="width: 200px; height: 100px; background-color: blue;"></div>',
-        '<div style="width: 200px; height: 100px; background-color: green;"></div>'
+      stimulus: [
+        '../assets/blue-rec.png',
+        '../assets/green-rec.png',
+        '../assets/red-rec.png',
       ],
       stim_height: 100,
       stim_width: 200,
@@ -28,7 +29,7 @@
       holding_area_height: 500,
       holding_area_width: 1000,
       prompt: 'Drag and drop the boxes to sort them in order.',
-      prompt_location: 'top',
+      prompt_location: 'above',
       button_label: 'Continue',
       include_counter: true,
     };
