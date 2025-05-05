@@ -3,5 +3,6 @@
     user-select: none;           /* disable text selection */
     -webkit-user-drag: none;     /* disable Safari ghost */
     -moz-user-select: none;
+    z-index: 100;           /* make sure the dragged item is on top */
   }
   
