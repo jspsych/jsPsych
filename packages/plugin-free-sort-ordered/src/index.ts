@@ -293,17 +293,11 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         // on pointer move, check if the stimulus is inside a box and update its position
         const on_pointer_move = ({ clientX, clientY }: PointerEvent) => {
           inside[i] = Utils.inside_box(clientX - x, clientY - y, boxAreas);
-          this.style.top =
-            Math.min(
-              window.innerHeight - trial.stim_height, // Bottom boundary of the viewport
-              Math.max(0, clientY - y) // Top boundary of the viewport
-            ) + "px";
 
-          this.style.left =
-            Math.min(
-              window.innerWidth - trial.stim_width, // Right boundary of the viewport
-              Math.max(0, clientX - x) // Left boundary of the viewport
-            ) + "px";
+          // TODO: add constraints to keep the stimulus within the viewport
+
+          this.style.top = clientY - y + "px";
+          this.style.left = clientX - x + "px";
 
           // modify text and background if all items are inside
           if (inside.every(Boolean)) {
