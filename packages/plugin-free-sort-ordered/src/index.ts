@@ -276,7 +276,9 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
     let inside = new Array(stimulus.length).fill(false);
 
     // button to finish sorting
-    const button: HTMLButtonElement = display_element.querySelector("#jspsych-free-sort-done-btn");
+    const button: HTMLButtonElement = display_element.querySelector(
+      "#jspsych-free-sort-ordered-done-btn"
+    );
 
     // save draggable items as array
     const draggables = Array.prototype.slice.call(
@@ -288,11 +290,16 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       draggable.addEventListener("pointerdown", function ({ clientX: pageX, clientY: pageY }) {
         let x = pageX - this.offsetLeft;
         let y = pageY - this.offsetTop - window.scrollY;
+        console.log("x: " + x + ", y: " + y);
         this.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
 
         // on pointer move, check if the stimulus is inside a box and update its position
         const on_pointer_move = ({ clientX, clientY }: PointerEvent) => {
-          inside[i] = Utils.inside_box(clientX - x, clientY - y, boxAreas);
+          let position = Utils.getPosition(this);
+          inside[i] = Utils.inside_box(position.x, position.y, 10, boxAreas);
+          if (inside[i] !== null) {
+            console.log("inside box: " + inside[i]);
+          }
 
           // TODO: add constraints to keep the stimulus within the viewport
 
@@ -300,7 +307,8 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
           this.style.left = clientX - x + "px";
 
           // modify text and background if all items are inside
-          if (inside.every(Boolean)) {
+          // if any of inside are not null
+          if (inside.every((val) => typeof val === "number")) {
             button.style.visibility = "visible";
             display_element.querySelector("#jspsych-free-sort-ordered-counter").innerHTML =
               trial.counter_text_finished;

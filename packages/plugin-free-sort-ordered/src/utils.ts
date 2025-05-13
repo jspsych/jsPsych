@@ -6,15 +6,47 @@ export type boxArea = {
   height: number;
 };
 
-export function inside_box(x: number, y: number, box_areas: boxArea[]): string | null {
+export function inside_box(
+  x: number,
+  y: number,
+  margin: number,
+  box_areas: boxArea[]
+): string | null {
   for (const box_area of box_areas) {
     const { id, left, top, width, height } = box_area;
     const right = left + width;
     const bottom = top + height;
 
-    if (x >= left && x <= right && y >= top && y <= bottom) {
-      return id; // point is inside this box
+    // if x is +- margin of left and y is +- margin of top
+    if (x >= left - margin && x <= right + margin && y >= top - margin && y <= bottom + margin) {
+      return id; // point is inside the box
     }
   }
   return null; // point not inside any box
+}
+
+export function getPosition(el) {
+  var xPos = 0;
+  var yPos = 0;
+
+  while (el) {
+    if (el.tagName == "BODY") {
+      // deal with browser quirks with body/window/document and page scroll
+      var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+      var yScroll = el.scrollTop || document.documentElement.scrollTop;
+
+      xPos += el.offsetLeft - xScroll + el.clientLeft;
+      yPos += el.offsetTop - yScroll + el.clientTop;
+    } else {
+      // for all other non-BODY elements
+      xPos += el.offsetLeft - el.scrollLeft + el.clientLeft;
+      yPos += el.offsetTop - el.scrollTop + el.clientTop;
+    }
+
+    el = el.offsetParent;
+  }
+  return {
+    x: xPos,
+    y: yPos,
+  };
 }
