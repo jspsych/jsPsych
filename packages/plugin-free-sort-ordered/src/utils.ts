@@ -25,6 +25,7 @@ export function inside_box(
   return null; // point not inside any box
 }
 
+// https://www.kirupa.com/snippets/move_element_to_click_position.htm
 export function getPosition(el) {
   var xPos = 0;
   var yPos = 0;

@@ -290,22 +290,49 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       draggable.addEventListener("pointerdown", function ({ clientX: pageX, clientY: pageY }) {
         let x = pageX - this.offsetLeft;
         let y = pageY - this.offsetTop - window.scrollY;
-        console.log("x: " + x + ", y: " + y);
         this.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
 
         // on pointer move, check if the stimulus is inside a box and update its position
         const on_pointer_move = ({ clientX, clientY }: PointerEvent) => {
           let position = Utils.getPosition(this);
+          // TODO: add margin as a parameter to main function (not done so as not to break index.html)
           inside[i] = Utils.inside_box(position.x, position.y, 10, boxAreas);
-          if (inside[i] !== null) {
-            console.log("inside box: " + inside[i]);
-          }
 
           // TODO: add constraints to keep the stimulus within the viewport
-
           this.style.top = clientY - y + "px";
           this.style.left = clientX - x + "px";
+        };
+        document.addEventListener("pointermove", on_pointer_move);
 
+        // on pointer up, remove the event listeners and save the move
+        const on_pointer_up = (e) => {
+          document.removeEventListener("pointermove", on_pointer_move);
+          this.style.transform = "scale(1, 1)";
+          if (inside[i] !== null) {
+            const box = document.getElementById(`jspsych-free-sort-ordered-box-${inside[i]}`);
+            if (box) {
+              const box_rect = box.getBoundingClientRect();
+              const holding_area = document.getElementById(
+                "jspsych-free-sort-ordered-holding-area"
+              );
+              const holding_rect = holding_area.getBoundingClientRect();
+
+              // Calculate position relative to the holding area
+              const left_pos = box_rect.left - holding_rect.left + window.scrollX;
+              const top_pos = box_rect.top - holding_rect.top + window.scrollY;
+
+              // Center the image in the box if needed
+              this.style.left = left_pos + "px";
+              this.style.top = top_pos + "px";
+              this.style.position = "absolute";
+            }
+          }
+          moves.push({
+            src: this.dataset.src,
+            x: this.offsetLeft,
+            y: this.offsetTop,
+          });
+          document.removeEventListener("pointerup", on_pointer_up);
           // modify text and background if all items are inside
           // if any of inside are not null
           if (inside.every((val) => typeof val === "number")) {
@@ -317,19 +344,6 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
             display_element.querySelector("#jspsych-free-sort-ordered-counter").innerHTML =
               get_counter_text(inside.length - inside.filter(Boolean).length);
           }
-        };
-        document.addEventListener("pointermove", on_pointer_move);
-
-        // on pointer up, remove the event listeners and save the move
-        const on_pointer_up = (e) => {
-          document.removeEventListener("pointermove", on_pointer_move);
-          this.style.transform = "scale(1, 1)";
-          moves.push({
-            src: this.dataset.src,
-            x: this.offsetLeft,
-            y: this.offsetTop,
-          });
-          document.removeEventListener("pointerup", on_pointer_up);
         };
         document.addEventListener("pointerup", on_pointer_up);
       });
