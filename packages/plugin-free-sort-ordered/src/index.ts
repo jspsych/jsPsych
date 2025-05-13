@@ -25,12 +25,6 @@ const info = <const>{
       type: ParameterType.INT,
       default: 100,
     },
-    /** The correct order of the stimuli. */
-    stim_order: {
-      type: ParameterType.INT,
-      default: undefined,
-      array: true,
-    },
     /** How much larger to make the stimulus while moving (1 = no scaling). */
     scale_factor: {
       type: ParameterType.FLOAT,
@@ -45,6 +39,22 @@ const info = <const>{
     holding_area_width: {
       type: ParameterType.INT,
       default: 700,
+    },
+    /** The colours of the boxes that are correct for the stimuli in order. */
+    box_correct: {
+      type: ParameterType.STRING,
+      default: "#000000",
+      array: true,
+    },
+    /** The margin between the boxes in pixels. */
+    box_margin: {
+      type: ParameterType.INT,
+      default: 20,
+    },
+    /** How close to the box does the drag need to be to snap. */
+    snap_margin: {
+      type: ParameterType.INT,
+      default: 10,
     },
     /** This string can contain HTML markup. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).  */
     prompt: {
@@ -169,12 +179,13 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       >`;
 
     // create boxes for each stimulus
+    const stim_order = this.jsPsych.randomization.shuffle(trial.box_correct);
     for (let i = 0; i < stimulus.length; i++) {
       box_container_html += `
         <div
         id="jspsych-free-sort-ordered-box-${i}"
         class="jspsych-free-sort-ordered-box"
-        style="width: ${trial.stim_width}px; height: ${trial.stim_height}px; background-color: #FFFFFF; border: 2px solid #000000; margin: 5px;"
+        style="width: ${trial.stim_width}px; height: ${trial.stim_height}px; background-color: #FFFFFF; border: 2px solid ${stim_order[i]}; margin: ${trial.box_margin}px;"
         ></div>`;
     }
     box_container_html += "</div>";
@@ -296,7 +307,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         const on_pointer_move = ({ clientX, clientY }: PointerEvent) => {
           let position = Utils.getPosition(this);
           // TODO: add margin as a parameter to main function (not done so as not to break index.html)
-          inside[i] = Utils.inside_box(position.x, position.y, 10, boxAreas);
+          inside[i] = Utils.inside_box(position.x, position.y, trial.snap_margin, boxAreas);
 
           // TODO: add constraints to keep the stimulus within the viewport
           this.style.top = clientY - y + "px";
@@ -334,8 +345,22 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
           });
           document.removeEventListener("pointerup", on_pointer_up);
           // modify text and background if all items are inside
-          // if any of inside are not null
-          if (inside.every((val) => typeof val === "number")) {
+          // Replace the current if statement with this improved logic
+          if (
+            inside.every((boxIndex, stimIndex) => {
+              // If stimulus is not in any box, return false
+              if (boxIndex === false) return false;
+
+              // Get the color of the box where the stimulus is currently placed
+              const currentBoxColor = stim_order[boxIndex];
+
+              // Get the correct color for this stimulus from the original array
+              const correctBoxColor = trial.box_correct[stimIndex];
+
+              // Return true if the colors match (stimulus is in correct box)
+              return currentBoxColor === correctBoxColor;
+            })
+          ) {
             button.style.visibility = "visible";
             display_element.querySelector("#jspsych-free-sort-ordered-counter").innerHTML =
               trial.counter_text_finished;
