@@ -352,32 +352,30 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
     display_element
       .querySelector("#jspsych-free-sort-ordered-done-btn")
       .addEventListener("click", () => {
-        if (inside.every(Boolean)) {
-          const end_time = performance.now();
-          const rt = Math.round(end_time - start_time);
-          // gather data
-          const items = display_element.querySelectorAll<HTMLElement>(
-            ".jspsych-free-sort-ordered-draggable"
-          );
-          // get final position of all items
-          let final_locations = [];
-          for (let i = 0; i < items.length; i++) {
-            final_locations.push({
-              src: items[i].dataset.src,
-              x: parseInt(items[i].style.left),
-              y: parseInt(items[i].style.top),
-            });
-          }
-
-          const trial_data = {
-            init_locations: init_locations,
-            moves: moves,
-            final_locations: final_locations,
-            rt: rt,
-          };
-
-          this.jsPsych.finishTrial(trial_data);
+        const end_time = performance.now();
+        const rt = Math.round(end_time - start_time);
+        // gather data
+        const items = display_element.querySelectorAll<HTMLElement>(
+          ".jspsych-free-sort-ordered-draggable"
+        );
+        // get final position of all items
+        let final_locations = [];
+        for (let i = 0; i < items.length; i++) {
+          final_locations.push({
+            src: items[i].dataset.src,
+            x: parseInt(items[i].style.left),
+            y: parseInt(items[i].style.top),
+          });
         }
+
+        const trial_data = {
+          init_locations: init_locations,
+          moves: moves,
+          final_locations: final_locations,
+          rt: rt,
+        };
+
+        this.jsPsych.finishTrial(trial_data);
       });
 
     function get_counter_text(n: number) {
