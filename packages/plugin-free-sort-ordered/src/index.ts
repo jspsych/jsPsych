@@ -424,7 +424,8 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
               ).style.boxShadow = "none";
               inside[i] = false; // reset inside status
             }
-            // if multiple items are allowed, scale down the items in the box
+
+            // otherwise, snap into place within the box.
             const box = document.getElementById(`jspsych-free-sort-ordered-box-${inside[i]}`);
             if (box) {
               const box_rect = box.getBoundingClientRect();
