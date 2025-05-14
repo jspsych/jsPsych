@@ -367,7 +367,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
           } else {
             button.style.visibility = "hidden";
             display_element.querySelector("#jspsych-free-sort-ordered-counter").innerHTML =
-              get_counter_text(inside.length - inside.filter(Boolean).length);
+              get_counter_text(inside.filter((value) => typeof value !== "number").length);
           }
         };
         document.addEventListener("pointerup", on_pointer_up);
