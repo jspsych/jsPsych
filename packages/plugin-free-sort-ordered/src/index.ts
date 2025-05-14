@@ -9,6 +9,16 @@ const info = <const>{
   name: "plugin-free-sort-ordered",
   version: version,
   parameters: {
+    stimuli: {
+      type: ParameterType.COMPLEX,
+      default: undefined,
+      array: true,
+    },
+    boxes: {
+      type: ParameterType.COMPLEX,
+      default: undefined,
+      array: true,
+    },
     /** Each element of this array is an image path or SVG code. */
     stimulus: {
       type: ParameterType.INT | ParameterType.HTML_STRING,
@@ -170,6 +180,8 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var start_time = performance.now();
     var stimulus = trial.stimulus;
+    var boxes = trial.boxes;
+    var stimuli = trial.stimuli;
 
     // holding area
     const holding_area_html = `
@@ -194,20 +206,13 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       >`;
 
     // create boxes for each stimulus
-    let stims: string[];
-    if (trial.box_colors.length !== stimulus.length) {
-      // make array the same length as stimulus with box_colors
-      stims = Array(stimulus.length).fill(trial.box_colors[0]);
-    } else {
-      stims = trial.box_colors;
-    }
-    const stim_order = this.jsPsych.randomization.shuffle(stims);
-    for (let i = 0; i < stimulus.length; i++) {
+    const stim_order = this.jsPsych.randomization.shuffle(boxes);
+    for (let i = 0; i < boxes.length; i++) {
       box_container_html += `
         <div
         id="jspsych-free-sort-ordered-box-${i}"
         class="jspsych-free-sort-ordered-box"
-        style="width: ${trial.stim_width}px; height: ${trial.stim_height}px; background-color: #FFFFFF; border: 2px solid ${stim_order[i]}; margin: ${trial.box_margin}px;"
+        style="width: ${boxes[i].width}px; height: ${boxes[i].height}px; background-color: #FFFFFF; border: 2px solid ${boxes[i].colour}; margin: ${trial.box_margin}px;"
         ></div>`;
     }
     box_container_html += "</div>";
@@ -237,7 +242,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
 
     // store locations of the boxes
     let boxCoordinates = [];
-    for (let i = 0; i < stimulus.length; i++) {
+    for (let i = 0; i < boxes.length; i++) {
       const box = document.getElementById(`jspsych-free-sort-ordered-box-${i}`);
       if (box) {
         const rect = box.getBoundingClientRect();
@@ -265,18 +270,18 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
     // place each stimulus in initial locations
     for (let i = 0; i < stimulus.length; i++) {
       var coords = FreeSortPluginUtils.random_coordinate(
-        trial.holding_area_width - trial.stim_width,
-        trial.holding_area_height - trial.stim_height
+        trial.holding_area_width - boxes[i].width,
+        trial.holding_area_height - boxes[i].height
       );
 
       // add stimuli and their initial locations to the display
       display_element.querySelector("#jspsych-free-sort-ordered-holding-area").innerHTML +=
         "<img " +
         'src="' +
-        stimulus[i] +
+        stimuli[i].file +
         '" ' +
         'data-src="' +
-        stimulus[i] +
+        stimuli[i].file +
         '" ' +
         'class="jspsych-free-sort-ordered-draggable" ' +
         'draggable="false" ' +
@@ -284,9 +289,9 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         i +
         '" ' +
         'style="position: absolute; cursor: move; width:' +
-        trial.stim_width +
+        stimuli[i].width +
         "px; height:" +
-        trial.stim_height +
+        stimuli[i].height +
         "px; top:" +
         coords.y +
         "px; left:" +
@@ -296,7 +301,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
 
       // add initial locations to the init_locations array
       init_locations.push({
-        src: stimulus[i],
+        src: stimuli[i].file,
         x: coords.x,
         y: coords.y,
       });
@@ -306,7 +311,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
     let moves = [];
 
     // are objects currently inside
-    let inside = new Array(stimulus.length).fill(false);
+    let inside = new Array(stimuli.length).fill(false);
 
     // button to finish sorting
     const button: HTMLButtonElement = display_element.querySelector(

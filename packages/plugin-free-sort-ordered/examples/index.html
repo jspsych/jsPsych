@@ -22,6 +22,11 @@
 
     const trial = {
       type: jsPsychPluginFreeSortOrdered,
+      stimuli: [
+        {id: 0, file: '../assets/blue-rec.png', height: 100, width: 200},
+        {id: 1, file: '../assets/green-rec.png', height: 100, width: 200},
+        {id: 2, file: '../assets/red-rec.png', height: 100, width: 200}
+      ],
       stimulus: [
         '../assets/blue-rec.png',
         '../assets/green-rec.png',
@@ -32,11 +37,14 @@
       scale_factor: 1.1,
       holding_area_height: 400,
       holding_area_width: 1000,
-      box_colors: ["#0271bc", "#3ab54b", "#FF0000"],
-      check_correct_order: true,
-      allow_multiple: true,
-      box_margin: 30,
-      snap_margin: 15,
+      boxes: [
+        {id: 0, colour: '#0271bc', height: 100, width: 200},
+        {id: 1, colour: '#3ab54b', height: 100, width: 200},
+        {id: 2, colour: '#FF0000', height: 100, width: 200}
+      ],
+      box_correct: ["#0271bc", "#3ab54b", "#FF0000"],
+      box_margin: 20,
+      snap_margin: 10,
       prompt: 'Drag and drop the boxes to sort them in order.',
       prompt_location: 'above',
       button_label: 'Continue',
