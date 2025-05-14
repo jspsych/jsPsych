@@ -232,9 +232,9 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
 
     // prompt text (and counter if included)
     const prompt_counter_html = `
-      <div style="line-height: 1.0em;">
+      <div style="line-height: 1.0em;"><p>
       ${trial.prompt + (trial.include_counter ? counter_html : "")}
-      </div>`;
+      </p></div>`;
 
     // button to continue
     const button_html = `
