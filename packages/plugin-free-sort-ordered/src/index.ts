@@ -321,11 +321,11 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
           if (typeof inside[i] === "number") {
             document.getElementById(
               `jspsych-free-sort-ordered-box-${inside[i]}`
-            ).style.backgroundColor = "box_color";
+            ).style.backgroundColor = trial.box_color;
           } else {
             for (let j = 0; j < inside.length; j++) {
               document.getElementById(`jspsych-free-sort-ordered-box-${j}`).style.backgroundColor =
-                "box_color_not";
+                trial.box_color_not;
             }
           }
         };
