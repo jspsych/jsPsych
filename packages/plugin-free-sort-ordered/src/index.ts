@@ -213,13 +213,13 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       >`;
 
     // create boxes for each stimulus
-    const stim_order = this.jsPsych.randomization.shuffle(boxes);
+    const stim_order = this.jsPsych.randomization.shuffle(boxes.map((box) => box.colour));
     for (let i = 0; i < boxes.length; i++) {
       box_container_html += `
         <div
         id="jspsych-free-sort-ordered-box-${i}"
         class="jspsych-free-sort-ordered-box"
-        style="width: ${boxes[i].width}px; height: ${boxes[i].height}px; background-color: #FFFFFF; border: 2px solid ${boxes[i].colour}; margin: ${trial.box_margin}px;"
+        style="width: ${boxes[i].width}px; height: ${boxes[i].height}px; background-color: #FFFFFF; border: 2px solid ${stim_order[i]}; margin: ${trial.box_margin}px;"
         ></div>`;
     }
     box_container_html += "</div>";
@@ -416,9 +416,8 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
               // If stimulus is not in any box, return false
               if (stimBox === false || stimBox === null) return false;
               // Return true if the colors match (stimulus is in correct box)
-              return stim_order[stimBox] === trial.box_colors[stimNo];
+              return stim_order[stimBox] === boxes[stimNo].colour;
             });
-
             const isComplete = allItemsInCorrectBoxes;
             button.style.visibility = isComplete ? "visible" : "hidden";
             display_element.querySelector("#jspsych-free-sort-ordered-counter").innerHTML =
