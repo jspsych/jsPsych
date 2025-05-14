@@ -9,7 +9,7 @@ const info = <const>{
   name: "plugin-free-sort-ordered",
   version: version,
   parameters: {
-    stimuli: {
+    stimulus: {
       type: ParameterType.COMPLEX,
       default: undefined,
       array: true,
@@ -19,26 +19,10 @@ const info = <const>{
       default: undefined,
       array: true,
     },
-    /** Each element of this array is an image path or SVG code. */
-    stimulus: {
-      type: ParameterType.INT | ParameterType.HTML_STRING,
-      default: undefined,
-      array: true,
-    },
-    /** The height of the images in pixels. */
-    stim_height: {
-      type: ParameterType.INT,
-      default: 100,
-    },
-    /** The width of the images in pixels. */
-    stim_width: {
-      type: ParameterType.INT,
-      default: 100,
-    },
     /** How much larger to make the stimulus while moving (1 = no scaling). */
     scale_factor: {
       type: ParameterType.FLOAT,
-      default: 1.5,
+      default: 1.25,
     },
     /** The height of the container that the stimuli start in. */
     holding_area_height: {
@@ -50,21 +34,40 @@ const info = <const>{
       type: ParameterType.INT,
       default: 700,
     },
-    /** The colours of the boxes that are correct for the stimuli in order. */
-    box_correct: {
-      type: ParameterType.STRING,
-      default: "#000000",
-      array: true,
+    /** Checks if the stimuli are placed in the correct order, as determined by box_colors. */
+    use_correctness: {
+      type: ParameterType.BOOL,
+      default: false,
+    },
+    /** Pairs of stimuli and their correct positions. */
+    // correctness_pairs: {
+    //   type: ParameterType.COMPLEX,
+    //   default: undefined
+    // }
+    /** How close to the box does the drag need to be to snap. */
+    snap_margin: {
+      type: ParameterType.INT,
+      default: 10,
     },
     /** The margin between the boxes in pixels. */
     box_margin: {
       type: ParameterType.INT,
       default: 20,
     },
-    /** How close to the box does the drag need to be to snap. */
-    snap_margin: {
-      type: ParameterType.INT,
-      default: 10,
+    /** The colour the boxes go when the stimulus is nearby */
+    box_hover_color: {
+      type: ParameterType.STRING,
+      default: "#90EE90",
+    },
+    /** Whether multiple stimuli can be placed in the same box. If true, items in a box with multiple occupants will be scaled down. */
+    allow_multiple_per_box: {
+      type: ParameterType.BOOL,
+      default: false,
+    },
+    // TODO
+    reject_wrong_moves: {
+      type: ParameterType.BOOL,
+      default: false,
     },
     /** This string can contain HTML markup. The intention is that it can be used to provide a reminder about the action the participant is supposed to take (e.g., which key to press).  */
     prompt: {
@@ -82,16 +85,36 @@ const info = <const>{
       type: ParameterType.STRING,
       default: "Continue",
     },
-    /** Whether to display counter indicating how many items are left to be sorted. */
-    include_counter: {
+    /** When to show the button */
+    show_button: {
       type: ParameterType.BOOL,
       default: true,
+    },
+    use_criteria: {
+      type: ParameterType.STRING,
+      default: ["none"],
+      array: true, // "none", "correct_answers", "all_items_sorted", "all_boxes_used"
+    },
+    /** How long to wait for the participant to make a response before ending the trial in milliseconds. If the participant fails to make a response before this timer is reached, the participant's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, the trial will wait for a response indefinitely.  */
+    trial_duration: {
+      type: ParameterType.INT,
+      default: null,
+    },
+    /** If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete. */
+    response_ends_trial: {
+      type: ParameterType.BOOL,
+      default: false,
     },
     /**
      * Text to display when there are one or more items that still need to be placed in a box.
      * If "%n%" is included in the string, it will be replaced with the number of items that still need to be moved inside.
      * If "%s%" is included in the string, a "s" will be included when the number of items remaining is greater than one.
      */
+    /** Whether to display counter indicating how many items are left to be sorted. */
+    include_counter: {
+      type: ParameterType.BOOL,
+      default: true,
+    },
     counter_text_unfinished: {
       type: ParameterType.HTML_STRING,
       default: "You still need to place %n% item%s% in a box.",
@@ -164,9 +187,8 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var start_time = performance.now();
-    var stimulus = trial.stimulus;
     var boxes = trial.boxes;
-    var stimuli = trial.stimuli;
+    var stimuli = trial.stimulus;
 
     // holding area
     const holding_area_html = `
@@ -179,7 +201,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
     // counter text if included
     const counter_html = `
       <p id="jspsych-free-sort-ordered-counter" style="display: inline-block;">
-      ${trial.include_counter ? get_counter_text(stimulus.length) : ""}
+      ${trial.include_counter ? get_counter_text(stimuli.length) : ""}
       </p>`;
 
     // container for the target boxes
@@ -253,7 +275,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
     });
 
     // place each stimulus in initial locations
-    for (let i = 0; i < stimulus.length; i++) {
+    for (let i = 0; i < stimuli.length; i++) {
       var coords = FreeSortPluginUtils.random_coordinate(
         trial.holding_area_width - boxes[i].width,
         trial.holding_area_height - boxes[i].height
@@ -313,17 +335,32 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       draggable.addEventListener("pointerdown", function ({ clientX: pageX, clientY: pageY }) {
         let x = pageX - this.offsetLeft;
         let y = pageY - this.offsetTop - window.scrollY;
-        this.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
+        //this.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
 
         // on pointer move, check if the stimulus is inside a box and update its position
         const on_pointer_move = ({ clientX, clientY }: PointerEvent) => {
+          for (let j = 0; j < inside.length; j++) {
+            document.getElementById(`jspsych-free-sort-ordered-box-${j}`).style.backgroundColor =
+              "white";
+            document.getElementById(`jspsych-free-sort-ordered-box-${j}`).style.boxShadow = "none";
+          }
           let position = Utils.getPosition(this);
-          // TODO: add margin as a parameter to main function (not done so as not to break index.html)
           inside[i] = Utils.inside_box(position.x, position.y, trial.snap_margin, boxAreas);
 
           // TODO: add constraints to keep the stimulus within the viewport
           this.style.top = clientY - y + "px";
           this.style.left = clientX - x + "px";
+          if (typeof inside[i] === "number") {
+            // add colour to the box the stimulus is nearest to
+            document.getElementById(
+              `jspsych-free-sort-ordered-box-${inside[i]}`
+            ).style.backgroundColor = trial.box_hover_color;
+            // add shadow to the box
+            document.getElementById(`jspsych-free-sort-ordered-box-${inside[i]}`).style.boxShadow =
+              "0 0 10px rgba(0, 0, 0, 0.5)";
+            // make stimulus slightly larger
+            this.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
+          }
         };
         document.addEventListener("pointermove", on_pointer_move);
 
@@ -331,7 +368,16 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         const on_pointer_up = (e) => {
           document.removeEventListener("pointermove", on_pointer_move);
           this.style.transform = "scale(1, 1)";
-          if (inside[i] !== null) {
+          if (typeof inside[i] === "number") {
+            if (trial.allow_multiple_per_box && inside.includes(inside[i])) {
+              // if multiple items are allowed, scale down the items in the box
+              const boxes = document.querySelectorAll<HTMLElement>(
+                ".jspsych-free-sort-ordered-box"
+              );
+              const items = document.querySelectorAll<HTMLElement>(
+                ".jspsych-free-sort-ordered-draggable"
+              );
+            }
             const box = document.getElementById(`jspsych-free-sort-ordered-box-${inside[i]}`);
             if (box) {
               const box_rect = box.getBoundingClientRect();
@@ -348,6 +394,14 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
               this.style.left = left_pos + "px";
               this.style.top = top_pos + "px";
               this.style.position = "absolute";
+
+              // if there are multiple items in the box, scale them down
+
+              // remove shadow from the box
+              box.style.boxShadow = "none";
+              document.getElementById(
+                `jspsych-free-sort-ordered-box-${inside[i]}`
+              ).style.backgroundColor = "white";
             }
           }
           moves.push({
@@ -356,30 +410,30 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
             y: this.offsetTop,
           });
           document.removeEventListener("pointerup", on_pointer_up);
-          // modify text and background if all items are inside
-          // Replace the current if statement with this improved logic
-          if (
-            inside.every((boxIndex, stimIndex) => {
+          // check if all stimuli are in correct boxes
+          if (trial.use_correctness) {
+            const allItemsInCorrectBoxes = inside.every((stimBox, stimNo) => {
               // If stimulus is not in any box, return false
-              if (boxIndex === false) return false;
-
-              // Get the color of the box where the stimulus is currently placed
-              const currentBoxColor = stim_order[boxIndex].colours;
-
-              // Get the correct color for this stimulus from the original array
-              const correctBoxColor = boxes[stimIndex].colours;
-
+              if (stimBox === false || stimBox === null) return false;
               // Return true if the colors match (stimulus is in correct box)
-              return currentBoxColor === correctBoxColor;
-            })
-          ) {
-            button.style.visibility = "visible";
+              return stim_order[stimBox] === trial.box_colors[stimNo];
+            });
+
+            const isComplete = allItemsInCorrectBoxes;
+            button.style.visibility = isComplete ? "visible" : "hidden";
             display_element.querySelector("#jspsych-free-sort-ordered-counter").innerHTML =
-              trial.counter_text_finished;
+              isComplete
+                ? trial.counter_text_finished
+                : get_counter_text(inside.filter((value) => typeof value !== "number").length);
           } else {
-            button.style.visibility = "hidden";
+            const allItemsInBoxes =
+              inside.filter((value) => typeof value !== "number").length === 0;
+
+            button.style.visibility = allItemsInBoxes ? "visible" : "hidden";
             display_element.querySelector("#jspsych-free-sort-ordered-counter").innerHTML =
-              get_counter_text(inside.filter((value) => typeof value !== "number").length);
+              allItemsInBoxes
+                ? trial.counter_text_finished
+                : get_counter_text(inside.filter((value) => typeof value !== "number").length);
           }
         };
         document.addEventListener("pointerup", on_pointer_up);

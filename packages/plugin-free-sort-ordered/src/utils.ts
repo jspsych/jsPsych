@@ -25,29 +25,23 @@ export function inside_box(
   return null; // point not inside any box
 }
 
-// https://www.kirupa.com/snippets/move_element_to_click_position.htm
-export function getPosition(el) {
+// adapted from: https://www.kirupa.com/snippets/move_element_to_click_position.htm
+export function getPosition(el: HTMLElement) {
+  // Added type for el
   var xPos = 0;
   var yPos = 0;
+  const elWidth = el.offsetWidth; // Get the width of the element
+  const elHeight = el.offsetHeight; // Get the height of the element
 
   while (el) {
-    if (el.tagName == "BODY") {
-      // deal with browser quirks with body/window/document and page scroll
-      var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
-      var yScroll = el.scrollTop || document.documentElement.scrollTop;
-
-      xPos += el.offsetLeft - xScroll + el.clientLeft;
-      yPos += el.offsetTop - yScroll + el.clientTop;
-    } else {
-      // for all other non-BODY elements
-      xPos += el.offsetLeft - el.scrollLeft + el.clientLeft;
-      yPos += el.offsetTop - el.scrollTop + el.clientTop;
-    }
-
-    el = el.offsetParent;
+    var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+    var yScroll = el.scrollTop || document.documentElement.scrollTop;
+    xPos += el.offsetLeft - xScroll + el.clientLeft;
+    yPos += el.offsetTop - yScroll + el.clientTop;
+    el = el.offsetParent as HTMLElement; // Added type assertion
   }
   return {
-    x: xPos,
-    y: yPos,
+    x: xPos + elWidth / 2, // Adjust x to be the center
+    y: yPos + elHeight / 2, // Adjust y to be the center
   };
 }
