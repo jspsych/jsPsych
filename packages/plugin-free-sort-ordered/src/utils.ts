@@ -51,3 +51,12 @@ export function getPosition(el) {
     y: yPos,
   };
 }
+
+export function random_coordinate(min_width, min_height, max_width, max_height) {
+  const rnd_x = Math.floor(Math.random() * (max_width - min_width + 1)) + min_width;
+  const rnd_y = Math.floor(Math.random() * (max_height - min_height + 1)) + min_height;
+  return {
+    x: rnd_x,
+    y: rnd_y,
+  };
+}
