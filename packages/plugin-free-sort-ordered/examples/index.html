@@ -20,7 +20,7 @@
       }
     });
 
-    const trial = {
+    const trial1 = {
       type: jsPsychPluginFreeSortOrdered,
       stimulus: [
         {id: 0, file: '../assets/blue-rec.png', height: 100, width: 200},
@@ -46,6 +46,35 @@
       include_counter: true,
     };
 
-    jsPsych.run([trial])
+    const trial2 = {
+      type: jsPsychPluginFreeSortOrdered,
+      prompt: 'This is a template trial, we can make lots of variations to see how this plugin can function!',
+      scale_factor: 1.1,
+      holding_area_height: 400,
+      holding_area_width: 800,
+      box_margin: 40,
+      snap_margin: 20,
+      prompt_location: 'above',
+      button_label: 'Continue',
+      include_counter: false,
+      use_correctness: false,
+      stimulus: [
+        {id: 0, file: '../assets/blue-rec.png', height: 100, width: 200},
+        {id: 1, file: '../assets/blue-rec.png', height: 100, width: 200},
+        {id: 2, file: '../assets/blue-rec.png', height: 100, width: 200}
+      ],
+      stim_height: 100, 
+      <!--Debug note! If you dont include these stim height and width parameters, you get bad box clicking behavior-->
+      stim_width: 120,
+      boxes: [
+        {id: 0, colour: '#0271bc', height: 100, width: 200},
+        {id: 1, colour: '#3ab54b', height: 100, width: 200},
+        {id: 2, colour: '#FF0000', height: 100, width: 200}
+      ],
+
+    };
+    
+    
+    jsPsych.run([trial1, trial2])
   </script>
 </html>
