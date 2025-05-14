@@ -349,7 +349,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       draggable.addEventListener("pointerdown", function ({ clientX: pageX, clientY: pageY }) {
         let x = pageX - this.offsetLeft;
         let y = pageY - this.offsetTop - window.scrollY;
-        //this.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
+        this.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
 
         // on pointer move, check if the stimulus is inside a box and update its position
         const on_pointer_move = ({ clientX, clientY }: PointerEvent) => {
@@ -390,7 +390,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
             document.getElementById(`jspsych-free-sort-ordered-box-${inside[i]}`).style.boxShadow =
               "0 0 10px rgba(0, 0, 0, 0.5)";
             // make stimulus slightly larger
-            this.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
+            // this.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
           }
         };
         document.addEventListener("pointermove", on_pointer_move);
