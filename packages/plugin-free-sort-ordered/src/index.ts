@@ -403,14 +403,27 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
           if (typeof inside[i] === "number") {
             const boxIndex = inside[i] as number;
             const alreadyOccupied = inside.some((val, idx) => idx !== i && val === boxIndex);
-
-            if (alreadyOccupied && !trial.allow_multiple_per_box) {
-              console.log("bruh");
-              return; // <-- bail out before any placement
+            let isCorrect = true;
+            if (trial.use_correctness) {
+              // check if the stimulus is in the correct box
+              isCorrect = stim_order[boxIndex] === boxes[i][trial.correctness_by];
             }
-          }
-
-          if (typeof inside[i] === "number") {
+            if ((alreadyOccupied && !trial.allow_multiple_per_box) || !isCorrect) {
+              // move back to init_position
+              const init_pos = init_locations.find((loc) => loc.src === this.dataset.src);
+              if (init_pos) {
+                this.style.left = init_pos.x + "px";
+                this.style.top = init_pos.y + "px";
+              }
+              // remove colour and shadow from the box
+              document.getElementById(
+                `jspsych-free-sort-ordered-box-${inside[i]}`
+              ).style.backgroundColor = "white";
+              document.getElementById(
+                `jspsych-free-sort-ordered-box-${inside[i]}`
+              ).style.boxShadow = "none";
+              inside[i] = false; // reset inside status
+            }
             // if multiple items are allowed, scale down the items in the box
             const box = document.getElementById(`jspsych-free-sort-ordered-box-${inside[i]}`);
             if (box) {
