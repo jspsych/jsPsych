@@ -40,10 +40,10 @@ const info = <const>{
       default: false,
     },
     /** Pairs of stimuli and their correct positions. */
-    // correctness_pairs: {
-    //   type: ParameterType.COMPLEX,
-    //   default: undefined
-    // }
+    correctness_by: {
+      type: ParameterType.STRING,
+      default: null,
+    },
     /** How close to the box does the drag need to be to snap. */
     snap_margin: {
       type: ParameterType.INT,
@@ -213,13 +213,19 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       >`;
 
     // create boxes for each stimulus
-    const stim_order = this.jsPsych.randomization.shuffle(boxes.map((box) => box.colour));
+    let stim_order = boxes;
+    if (trial.use_correctness === true && trial.correctness_by !== null) {
+      // shuffle based on correctness_by
+      stim_order = this.jsPsych.randomization.shuffle(
+        boxes.map((box) => box[trial.correctness_by])
+      );
+    }
     for (let i = 0; i < boxes.length; i++) {
       box_container_html += `
         <div
         id="jspsych-free-sort-ordered-box-${i}"
         class="jspsych-free-sort-ordered-box"
-        style="width: ${boxes[i].width}px; height: ${boxes[i].height}px; background-color: #FFFFFF; border: 2px solid ${stim_order[i]}; margin: ${trial.box_margin}px;"
+        style="width: ${boxes[i].width}px; height: ${boxes[i].height}px; background-color: #FFFFFF; border: 2px solid #000000; margin: ${trial.box_margin}px;"
         ></div>`;
     }
     box_container_html += "</div>";
@@ -243,6 +249,14 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         : holding_area_html + box_container_html + prompt_counter_html + button_html;
 
     display_element.innerHTML = html;
+
+    // if we want people to match by color.
+    if (trial.use_correctness && trial.correctness_by === "color") {
+      for (let i = 0; i < boxes.length; i++) {
+        const boxElement = document.getElementById(`jspsych-free-sort-ordered-box-${i}`);
+        boxElement.style.borderColor = stim_order[i];
+      }
+    }
 
     // store initial locations of stimuli
     let init_locations = [];
@@ -347,9 +361,26 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
           let position = Utils.getPosition(this);
           inside[i] = Utils.inside_box(position.x, position.y, trial.snap_margin, boxAreas);
 
-          // TODO: add constraints to keep the stimulus within the viewport
-          this.style.top = clientY - y + "px";
-          this.style.left = clientX - x + "px";
+          // Calculate new positions
+          let newTop = clientY - y;
+          let newLeft = clientX - x;
+          const bottomOfBoxes = boxAreas.reduce(
+            (max, box) => Math.max(max, box.top + box.height),
+            0
+          );
+          const maxBoxHeight = Math.max(...boxAreas.map((box) => box.height));
+
+          // left + right
+          newLeft = Math.max(0, newLeft);
+          newLeft = Math.min(newLeft, trial.holding_area_width - this.offsetWidth);
+          // top + bottom
+          newTop = Math.max(0, newTop);
+          newTop = Math.min(newTop, bottomOfBoxes - maxBoxHeight);
+
+          // Apply the constrained position
+          this.style.top = newTop + "px";
+          this.style.left = newLeft + "px";
+
           if (typeof inside[i] === "number") {
             // add colour to the box the stimulus is nearest to
             document.getElementById(
@@ -365,7 +396,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         document.addEventListener("pointermove", on_pointer_move);
 
         // on pointer up, remove the event listeners and save the move
-        const on_pointer_up = (e) => {
+        const on_pointer_up = () => {
           document.removeEventListener("pointermove", on_pointer_move);
           this.style.transform = "scale(1, 1)";
           if (typeof inside[i] === "number") {
@@ -395,7 +426,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
               this.style.top = top_pos + "px";
               this.style.position = "absolute";
 
-              // if there are multiple items in the box, scale them down
+              // TODO: if there are multiple items in the box, scale them down
 
               // remove shadow from the box
               box.style.boxShadow = "none";
@@ -410,13 +441,15 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
             y: this.offsetTop,
           });
           document.removeEventListener("pointerup", on_pointer_up);
+          console.log(inside);
           // check if all stimuli are in correct boxes
           if (trial.use_correctness) {
+            // if the item has been placed in the incorrect box, based on stim_order[stimBox] === boxes[stimNo][trial.correctness_by], put it back
             const allItemsInCorrectBoxes = inside.every((stimBox, stimNo) => {
               // If stimulus is not in any box, return false
               if (stimBox === false || stimBox === null) return false;
               // Return true if the colors match (stimulus is in correct box)
-              return stim_order[stimBox] === boxes[stimNo].colour;
+              return stim_order[stimBox] === boxes[stimNo][trial.correctness_by];
             });
             const isComplete = allItemsInCorrectBoxes;
             button.style.visibility = isComplete ? "visible" : "hidden";
@@ -427,7 +460,6 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
           } else {
             const allItemsInBoxes =
               inside.filter((value) => typeof value !== "number").length === 0;
-
             button.style.visibility = allItemsInBoxes ? "visible" : "hidden";
             display_element.querySelector("#jspsych-free-sort-ordered-counter").innerHTML =
               allItemsInBoxes
