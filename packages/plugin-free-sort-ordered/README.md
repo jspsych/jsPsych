@@ -18,4 +18,4 @@ See [documentation](/packages/plugin-free-sort-ordered/README.md)
 
 ## Author / Citation
 
-[Cherrie Chang](https://github.com/cherriechang)
+[Cherrie Chang](https://github.com/cherriechang) 
