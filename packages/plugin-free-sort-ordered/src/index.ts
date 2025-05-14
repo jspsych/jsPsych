@@ -441,7 +441,6 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
             y: this.offsetTop,
           });
           document.removeEventListener("pointerup", on_pointer_up);
-          console.log(inside);
           // check if all stimuli are in correct boxes
           if (trial.use_correctness) {
             // if the item has been placed in the incorrect box, based on stim_order[stimBox] === boxes[stimNo][trial.correctness_by], put it back
