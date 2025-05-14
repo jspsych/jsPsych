@@ -225,7 +225,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         <div
         id="jspsych-free-sort-ordered-box-${i}"
         class="jspsych-free-sort-ordered-box"
-        style="width: ${boxes[i].width}px; height: ${boxes[i].height}px; background-color: #FFFFFF; border: 2px solid #000000; margin: ${trial.box_margin}px;"
+        style="width: ${boxes[i].width}px; height: ${boxes[i].height}px; background-color: #FFFFFF; border: 2px solid ${boxes[i].color}; margin: ${trial.box_margin}px;"
         ></div>`;
     }
     box_container_html += "</div>";
@@ -404,7 +404,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
             const boxIndex = inside[i] as number;
             const alreadyOccupied = inside.some((val, idx) => idx !== i && val === boxIndex);
 
-            if (alreadyOccupied && !trial.allow_many) {
+            if (alreadyOccupied && !trial.allow_multiple_per_box) {
               console.log("bruh");
               return; // <-- bail out before any placement
             }
