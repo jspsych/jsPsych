@@ -399,16 +399,19 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         const on_pointer_up = () => {
           document.removeEventListener("pointermove", on_pointer_move);
           this.style.transform = "scale(1, 1)";
+
           if (typeof inside[i] === "number") {
-            if (trial.allow_multiple_per_box && inside.includes(inside[i])) {
-              // if multiple items are allowed, scale down the items in the box
-              const boxes = document.querySelectorAll<HTMLElement>(
-                ".jspsych-free-sort-ordered-box"
-              );
-              const items = document.querySelectorAll<HTMLElement>(
-                ".jspsych-free-sort-ordered-draggable"
-              );
+            const boxIndex = inside[i] as number;
+            const alreadyOccupied = inside.some((val, idx) => idx !== i && val === boxIndex);
+
+            if (alreadyOccupied && !trial.allow_many) {
+              console.log("bruh");
+              return; // <-- bail out before any placement
             }
+          }
+
+          if (typeof inside[i] === "number") {
+            // if multiple items are allowed, scale down the items in the box
             const box = document.getElementById(`jspsych-free-sort-ordered-box-${inside[i]}`);
             if (box) {
               const box_rect = box.getBoundingClientRect();
@@ -430,9 +433,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
 
               // remove shadow from the box
               box.style.boxShadow = "none";
-              document.getElementById(
-                `jspsych-free-sort-ordered-box-${inside[i]}`
-              ).style.backgroundColor = "white";
+              box.style.backgroundColor = "white";
             }
           }
           moves.push({
