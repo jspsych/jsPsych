@@ -81,6 +81,17 @@ const info = <const>{
       type: ParameterType.HTML_STRING,
       default: "All items placed. Feel free to reposition items if necessary.",
     },
+
+    /** The color of the box when the stimulus is inside it. */
+    box_color: {
+      type: ParameterType.STRING,
+      default: "yellow",
+    },
+    /** The color of the box when the stimulus is not inside it. */
+    box_color_not: {
+      type: ParameterType.STRING,
+      default: "white",
+    },
   },
   data: {
     /**  An array containing objects representing the initial locations of all the stimuli in the sorting area. Each element in the array represents a stimulus, and has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions.  */
@@ -294,6 +305,10 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
 
         // on pointer move, check if the stimulus is inside a box and update its position
         const on_pointer_move = ({ clientX, clientY }: PointerEvent) => {
+          for (let j = 0; j < inside.length; j++) {
+            document.getElementById(`jspsych-free-sort-ordered-box-${j}`).style.backgroundColor =
+              "white";
+          }
           let position = Utils.getPosition(this);
           // TODO: add margin as a parameter to main function (not done so as not to break index.html)
           inside[i] = Utils.inside_box(position.x, position.y, 10, boxAreas);
@@ -301,12 +316,27 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
           // TODO: add constraints to keep the stimulus within the viewport
           this.style.top = clientY - y + "px";
           this.style.left = clientX - x + "px";
+
+          console.log(inside);
+          if (typeof inside[i] === "number") {
+            document.getElementById(
+              `jspsych-free-sort-ordered-box-${inside[i]}`
+            ).style.backgroundColor = "box_color";
+          } else {
+            for (let j = 0; j < inside.length; j++) {
+              document.getElementById(`jspsych-free-sort-ordered-box-${j}`).style.backgroundColor =
+                "box_color_not";
+            }
+          }
         };
         document.addEventListener("pointermove", on_pointer_move);
 
         // on pointer up, remove the event listeners and save the move
         const on_pointer_up = (e) => {
           document.removeEventListener("pointermove", on_pointer_move);
+          document.getElementById(
+            `jspsych-free-sort-ordered-box-${inside[i]}`
+          ).style.backgroundColor = "white";
           this.style.transform = "scale(1, 1)";
           if (inside[i] !== null) {
             const box = document.getElementById(`jspsych-free-sort-ordered-box-${inside[i]}`);
