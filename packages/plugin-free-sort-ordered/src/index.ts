@@ -9,6 +9,11 @@ const info = <const>{
   name: "plugin-free-sort-ordered",
   version: version,
   parameters: {
+    stimuli: {
+      type: ParameterType.COMPLEX,
+      default: undefined,
+      array: true,
+    },
     /** Each element of this array is an image path or SVG code. */
     stimulus: {
       type: ParameterType.INT | ParameterType.HTML_STRING,
