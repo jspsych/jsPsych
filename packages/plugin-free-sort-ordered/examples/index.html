@@ -57,7 +57,6 @@
       prompt_location: 'above',
       button_label: 'Continue',
       include_counter: false,
-      use_correctness: false,
       stimulus: [
         {id: 0, file: '../assets/blue-rec.png', height: 100, width: 200},
         {id: 1, file: '../assets/blue-rec.png', height: 100, width: 200},
@@ -71,7 +70,72 @@
         {id: 1, colour: '#3ab54b', height: 100, width: 200},
         {id: 2, colour: '#FF0000', height: 100, width: 200}
       ],
+      use_correctness: false
 
+    };
+
+
+    const trial10 = {
+      type: jsPsychPluginFreeSortOrdered,
+      prompt: 'WONT WORK YET. This is a trial with a correct answer. You have to put all of the green shapes in the single box before you can move on.',
+      scale_factor: 1.1,
+      holding_area_height: 400,
+      holding_area_width: 800,
+      box_margin: 40,
+      snap_margin: 20,
+      prompt_location: 'above',
+      button_label: 'Continue',
+      include_counter: false,
+      stimulus: [
+        {id: 0, file: '../assets/green-circle.png', height: 100, width: 100},
+        {id: 0, file: '../assets/green-triangle.png', height: 100, width: 100},
+        {id: 0, file: '../assets/green-square.png', height: 100, width: 100},
+        {id: 1, file: '../assets/orange-circle.png', height: 100, width: 100},
+        {id: 1, file: '../assets/purple-triangle.png', height: 100, width: 100},
+        {id: 1, file: '../assets/purple-square.png', height: 100, width: 100}
+      ],
+      stim_height: 100, 
+      stim_width: 120,
+      boxes: [
+        {id: 0, colour: '#0271bc', height: 100, width: 200}
+      ],
+      use_correctness: true,
+      correctness_by: 'id',
+      use_criteria: true,
+      criteria: 'exact_correct_answers',
+      show_button: 'on_criteria'
+    };
+
+    const trial11 = {
+      type: jsPsychPluginFreeSortOrdered,
+      prompt: 'WONT WORK YET. Put the circles in the red box, the triangles in the blue box, and the squares in the green box. The trial will advance automatically once you put the last shape in the boxes, even if the answer is wrong.',
+      scale_factor: 1.1,
+      holding_area_height: 400,
+      holding_area_width: 800,
+      box_margin: 40,
+      snap_margin: 20,
+      prompt_location: 'above',
+      button_label: 'Continue',
+      include_counter: false,
+      stimulus: [
+        {id: 0, file: '../assets/green-circle.png', height: 100, width: 100},
+        {id: 1, file: '../assets/green-triangle.png', height: 100, width: 100},
+        {id: 2, file: '../assets/green-square.png', height: 100, width: 100},
+        {id: 0, file: '../assets/orange-circle.png', height: 100, width: 100},
+        {id: 1, file: '../assets/purple-triangle.png', height: 100, width: 100},
+        {id: 2, file: '../assets/purple-square.png', height: 100, width: 100}
+      ],
+      stim_height: 100, 
+      stim_width: 120,
+      boxes: [
+        {id: 0, colour: 'Red', height: 100, width: 200},
+        {id: 1, colour: 'Blue', height: 100, width: 200},
+        {id: 2, colour: 'Green', height: 100, width: 200}
+      ],
+      use_correctness: false,
+      use_criteria: true,
+      criteria: 'all_items_sorted',
+      response_ends_trial: true 
     };
     
     
