@@ -222,11 +222,11 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
     let box_order = this.jsPsych.randomization.shuffle(boxes.map((box) => box.id));
     console.log(box_order);
     // stimulus order defaults to array length number of stimuli 0, 1, 2...
-    let stim_order = Array.from({ length: stimuli.length }, (_, i) => i);
+    let stim_order = Array.from({ length: stimulus.length }, (_, i) => i);
     // get the correct stimulus order based on the box order (i.e., what the inside array needs to match)
     if (trial.use_correctness && trial.correctness_by !== null) {
       // if using correctness, we need to get the order of the boxes based on the stimuli
-      stim_order = stimuli.map((stimuli) => box_order.indexOf(stimuli.correct_box_id));
+      stim_order = stimulus.map((stimulus) => box_order.indexOf(stimulus.correct_box_id));
     }
     console.log(stim_order);
     for (let i = 0; i < boxes.length; i++) {
