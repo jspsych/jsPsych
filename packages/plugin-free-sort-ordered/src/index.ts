@@ -30,6 +30,10 @@ const info = <const>{
       options: ["above", "below", "left", "right"],
       default: "below",
     },
+    holding_background_color: {
+      type: ParameterType.STRING,
+      default: "#CCCCCC",
+    },
     /** Checks if the stimuli are placed in the correct order, as determined by box_colors. */
     use_correctness: {
       type: ParameterType.BOOL,
@@ -41,6 +45,10 @@ const info = <const>{
       default: 10,
     },
     /** The margin between the boxes in pixels. */
+    box_background_color: {
+      type: ParameterType.STRING,
+      default: "#FFFFFF",
+    },
     box_margin: {
       type: ParameterType.INT,
       default: 20,
@@ -183,16 +191,18 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
 
     if (trial.holding_area_location === "above" || trial.holding_area_location === "below") {
       var holding_area_width = 90;
-      var holding_area_height = 40;
+      var holding_area_height = 30;
       var box_grid_width = 90;
-      var box_grid_height = 40;
-      var display_var = "inline-flex";
+      var box_grid_height = 35;
+      var hold_margin = "1em 0 1em 0"; // margin for the holding area
+      var grid_margin = "1em 0 1em 0"; // margin for the box grid
     } else {
       var holding_area_width = 50;
-      var holding_area_height = 85;
-      var box_grid_width = 50;
-      var box_grid_height = 85;
-      var display_var = "inline-flex";
+      var holding_area_height = 65;
+      var box_grid_width = 35;
+      var box_grid_height = 70;
+      var hold_margin = "0 1em 0 1em"; // margin for the holding area
+      var grid_margin = "0 1em 0 1em"; // margin for the box grid
     }
 
     // holding area
@@ -200,7 +210,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       <div
       id="jspsych-free-sort-ordered-holding-area"
       class="jspsych-free-sort-ordered-holding-area"
-      style="position: relative; width: ${holding_area_width}vw; height: ${holding_area_height}vh; background-color: #CCCCCC; margin: auto;">
+      style="position: relative; width: ${holding_area_width}vw; height: ${holding_area_height}vh; background-color: ${trial.holding_background_color}; margin: ${hold_margin};">
       </div>`;
 
     // counter text if included
@@ -214,8 +224,8 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       <div
       id="jspsych-free-sort-ordered-box-grid"
       class="jspsych-free-sort-ordered-box-grid"
-      style="background-color: #ADD8E6; position: relative; width: ${box_grid_width}vw; height: ${box_grid_height}vh; 
-        display: flex; flex-flow: column wrap; justify-content: center; align-items: center; margin: auto;"
+      style="background-color: ${trial.box_background_color}; position: relative; width: ${box_grid_width}vw; height: ${box_grid_height}vh; 
+        display: flex; flex-flow: wrap; justify-content: center; align-items: center; margin: ${grid_margin};"
       >`;
 
     // create boxes for each stimulus
@@ -251,7 +261,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
 
     // button to continue
     const button_html = `
-      <div><button id="jspsych-free-sort-ordered-done-btn" class="jspsych-btn" style="margin-top: 5px; margin-bottom: 15px; visibility: hidden;">
+      <div><button id="jspsych-free-sort-ordered-done-btn" class="jspsych-btn" style="margin-top: 1em; margin-bottom: 0.5em; visibility: hidden;">
       ${trial.button_label}
       </button></div>`;
 
