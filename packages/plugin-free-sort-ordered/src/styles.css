@@ -1,4 +1,4 @@
-.jspsych-free-sort-ordered-draggable {
+.jspsych-snap-sort-draggable {
     touch-action: none;          /* disable scrolling on touch-drag */
     user-select: none;           /* disable text selection */
     -webkit-user-drag: none;     /* disable Safari ghost */

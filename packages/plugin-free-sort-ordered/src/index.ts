@@ -173,7 +173,7 @@ const info = <const>{
 type Info = typeof info;
 
 /**
- * **plugin-free-sort-ordered**
+ * **plugin-snap-sort**
  *
  * The free sort core plugin, but the images have to be sorted by placing into ordered boxes.
  *
@@ -210,24 +210,24 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
     // holding area
     const holding_area_html = `
       <div
-      id="jspsych-free-sort-ordered-holding-area"
-      class="jspsych-free-sort-ordered-holding-area"
-      style="position: relative; width: ${holding_area_width}vw; height: ${holding_area_height}vh; background-color: ${trial.holding_background_color}; margin: ${hold_margin};">
+      id="jspsych-snap-sort-holding-area"
+      class="jspsych-snap-sort-holding-area"
+      style="position: relative; width: ${holding_area_width}vw; height: ${holding_area_height}vh; background-color: #CCCCCC; margin: auto;">
       </div>`;
 
     // counter text if included
     const counter_html = `
-      <p id="jspsych-free-sort-ordered-counter" style="display: inline-block;">
+      <p id="jspsych-snap-sort-counter" style="display: inline-block;">
       ${trial.include_counter ? get_counter_text(stimulus.length) : ""}
       </p>`;
 
     // container for the target boxes
     let box_container_html = `
       <div
-      id="jspsych-free-sort-ordered-box-grid"
-      class="jspsych-free-sort-ordered-box-grid"
-      style="background-color: ${trial.box_background_color}; position: relative; width: ${box_grid_width}vw; height: ${box_grid_height}vh; 
-        display: flex; flex-flow: wrap; justify-content: center; align-items: center; margin: ${grid_margin};"
+      id="jspsych-snap-sort-box-grid"
+      class="jspsych-snap-sort-box-grid"
+      style="background-color: #ADD8E6; position: relative; width: ${box_grid_width}vw; height: ${box_grid_height}vh; 
+        display: flex; flex-flow: column wrap; justify-content: center; align-items: center; margin: auto;"
       >`;
 
     // create boxes for each stimulus
@@ -244,8 +244,8 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
     for (let i = 0; i < boxes.length; i++) {
       box_container_html += `
         <div
-        id="jspsych-free-sort-ordered-box-${i}"
-        class="jspsych-free-sort-ordered-box"
+        id="jspsych-snap-sort-box-${i}"
+        class="jspsych-snap-sort-box"
         style="width: ${boxes[box_order[i]].width}px; height: ${
         boxes[box_order[i]].height
       }px; background-color: #FFFFFF; border: 2px solid ${boxes[box_order[i]].color}; margin: ${
@@ -263,7 +263,7 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
 
     // button to continue
     const button_html = `
-      <div><button id="jspsych-free-sort-ordered-done-btn" class="jspsych-btn" style="margin-top: 1em; margin-bottom: 0.5em; visibility: hidden;">
+      <div><button id="jspsych-snap-sort-done-btn" class="jspsych-btn" style="margin-top: 5px; margin-bottom: 15px; visibility: hidden;">
       ${trial.button_label}
       </button></div>`;
 
@@ -308,7 +308,7 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
     // store locations of the boxes
     let boxCoordinates = [];
     for (let i = 0; i < boxes.length; i++) {
-      const box = document.getElementById(`jspsych-free-sort-ordered-box-${i}`);
+      const box = document.getElementById(`jspsych-snap-sort-box-${i}`);
       if (box) {
         const rect = box.getBoundingClientRect();
         boxCoordinates.push({
@@ -316,7 +316,7 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
           y: rect.top,
         });
       } else {
-        console.error(`Box element with id jspsych-free-sort-ordered-box-${i} not found.`);
+        console.error(`Box element with id jspsych-snap-sort-box-${i} not found.`);
       }
     }
 
@@ -332,9 +332,8 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
       });
     });
 
-    // get the bounding boxes of the box grid and the holding area
-    const box_grid = document.getElementById(`jspsych-free-sort-ordered-box-grid`);
-    const holding_box = document.getElementById(`jspsych-free-sort-ordered-holding-area`);
+    const box_grid = document.getElementById(`jspsych-snap-sort-box-grid`);
+    const holding_box = document.getElementById(`jspsych-snap-sort-holding-area`);
     const rect_grid = box_grid.getBoundingClientRect();
     const rect_holding = holding_box.getBoundingClientRect();
 
@@ -353,7 +352,7 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
       existing_coordinates.push([coords.x, coords.y, boxes[i].width, boxes[i].height]);
 
       // add stimuli and their initial locations to the display
-      display_element.querySelector("#jspsych-free-sort-ordered-holding-area").innerHTML +=
+      display_element.querySelector("#jspsych-snap-sort-holding-area").innerHTML +=
         "<img " +
         'src="' +
         stimulus[i].file +
@@ -361,9 +360,9 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
         'data-src="' +
         stimulus[i].file +
         '" ' +
-        'class="jspsych-free-sort-ordered-draggable" ' +
+        'class="jspsych-snap-sort-draggable" ' +
         'draggable="false" ' +
-        'id="jspsych-free-sort-ordered-draggable-' +
+        'id="jspsych-snap-sort-draggable-' +
         i +
         '" ' +
         'style="position: absolute; cursor: move; width:' +
@@ -392,13 +391,11 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
     let inside = new Array(stimulus.length).fill(false);
 
     // button to finish sorting
-    const button: HTMLButtonElement = display_element.querySelector(
-      "#jspsych-free-sort-ordered-done-btn"
-    );
+    const button: HTMLButtonElement = display_element.querySelector("#jspsych-snap-sort-done-btn");
 
     // save draggable items as array
     const draggables = Array.prototype.slice.call(
-      display_element.querySelectorAll<HTMLImageElement>(".jspsych-free-sort-ordered-draggable")
+      display_element.querySelectorAll<HTMLImageElement>(".jspsych-snap-sort-draggable")
     );
 
     // make each stimulus draggable by adding event listeners for when they are dragged and dropped
@@ -411,9 +408,8 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
         // on pointer move, check if the stimulus is inside a box and update its position
         const on_pointer_move = ({ clientX, clientY }: PointerEvent) => {
           for (let j = 0; j < inside.length; j++) {
-            document.getElementById(`jspsych-free-sort-ordered-box-${j}`).style.backgroundColor =
-              "white";
-            document.getElementById(`jspsych-free-sort-ordered-box-${j}`).style.boxShadow = "none";
+            document.getElementById(`jspsych-snap-sort-box-${j}`).style.backgroundColor = "white";
+            document.getElementById(`jspsych-snap-sort-box-${j}`).style.boxShadow = "none";
           }
           let position = Utils.getPosition(this);
           inside[i] = Utils.inside_box(position.x, position.y, trial.snap_margin, boxAreas);
@@ -453,11 +449,10 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
 
           if (typeof inside[i] === "number") {
             // add colour to the box the stimulus is nearest to
-            document.getElementById(
-              `jspsych-free-sort-ordered-box-${inside[i]}`
-            ).style.backgroundColor = trial.box_hover_color;
+            document.getElementById(`jspsych-snap-sort-box-${inside[i]}`).style.backgroundColor =
+              trial.box_hover_color;
             // add shadow to the box
-            document.getElementById(`jspsych-free-sort-ordered-box-${inside[i]}`).style.boxShadow =
+            document.getElementById(`jspsych-snap-sort-box-${inside[i]}`).style.boxShadow =
               "0 0 10px rgba(0, 0, 0, 0.5)";
             // make stimulus slightly larger
             // this.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
@@ -487,22 +482,18 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
                 this.style.top = init_pos.y + "px";
               }
               // remove colour and shadow from the box
-              document.getElementById(
-                `jspsych-free-sort-ordered-box-${inside[i]}`
-              ).style.backgroundColor = "white";
-              document.getElementById(
-                `jspsych-free-sort-ordered-box-${inside[i]}`
-              ).style.boxShadow = "none";
+              document.getElementById(`jspsych-snap-sort-box-${inside[i]}`).style.backgroundColor =
+                "white";
+              document.getElementById(`jspsych-snap-sort-box-${inside[i]}`).style.boxShadow =
+                "none";
               inside[i] = false; // reset inside status
             }
 
             // otherwise, snap into place within the box.
-            const box = document.getElementById(`jspsych-free-sort-ordered-box-${inside[i]}`);
+            const box = document.getElementById(`jspsych-snap-sort-box-${inside[i]}`);
             if (box) {
               const box_rect = box.getBoundingClientRect();
-              const holding_area = document.getElementById(
-                "jspsych-free-sort-ordered-holding-area"
-              );
+              const holding_area = document.getElementById("jspsych-snap-sort-holding-area");
               const holding_rect = holding_area.getBoundingClientRect();
 
               // Calculate position relative to the holding area
@@ -545,52 +536,46 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
               (value, index) => typeof value === "number" && value === stim_order[index]
             );
             button.style.visibility = isComplete ? "visible" : "hidden";
-            display_element.querySelector("#jspsych-free-sort-ordered-counter").innerHTML =
-              isComplete
-                ? trial.counter_text_finished
-                : get_counter_text(inside.filter((value) => typeof value !== "number").length);
+            display_element.querySelector("#jspsych-snap-sort-counter").innerHTML = isComplete
+              ? trial.counter_text_finished
+              : get_counter_text(inside.filter((value) => typeof value !== "number").length);
           } else {
             const allItemsInBoxes =
               inside.filter((value) => typeof value !== "number").length === 0;
             button.style.visibility = allItemsInBoxes ? "visible" : "hidden";
-            display_element.querySelector("#jspsych-free-sort-ordered-counter").innerHTML =
-              allItemsInBoxes
-                ? trial.counter_text_finished
-                : get_counter_text(inside.filter((value) => typeof value !== "number").length);
+            display_element.querySelector("#jspsych-snap-sort-counter").innerHTML = allItemsInBoxes
+              ? trial.counter_text_finished
+              : get_counter_text(inside.filter((value) => typeof value !== "number").length);
           }
         };
         document.addEventListener("pointerup", on_pointer_up);
       });
     });
 
-    display_element
-      .querySelector("#jspsych-free-sort-ordered-done-btn")
-      .addEventListener("click", () => {
-        const end_time = performance.now();
-        const rt = Math.round(end_time - start_time);
-        // gather data
-        const items = display_element.querySelectorAll<HTMLElement>(
-          ".jspsych-free-sort-ordered-draggable"
-        );
-        // get final position of all items
-        let final_locations = [];
-        for (let i = 0; i < items.length; i++) {
-          final_locations.push({
-            src: items[i].dataset.src,
-            x: parseInt(items[i].style.left),
-            y: parseInt(items[i].style.top),
-          });
-        }
+    display_element.querySelector("#jspsych-snap-sort-done-btn").addEventListener("click", () => {
+      const end_time = performance.now();
+      const rt = Math.round(end_time - start_time);
+      // gather data
+      const items = display_element.querySelectorAll<HTMLElement>(".jspsych-snap-sort-draggable");
+      // get final position of all items
+      let final_locations = [];
+      for (let i = 0; i < items.length; i++) {
+        final_locations.push({
+          src: items[i].dataset.src,
+          x: parseInt(items[i].style.left),
+          y: parseInt(items[i].style.top),
+        });
+      }
 
-        const trial_data = {
-          init_locations: init_locations,
-          moves: moves,
-          final_locations: final_locations,
-          rt: rt,
-        };
+      const trial_data = {
+        init_locations: init_locations,
+        moves: moves,
+        final_locations: final_locations,
+        rt: rt,
+      };
 
-        this.jsPsych.finishTrial(trial_data);
-      });
+      this.jsPsych.finishTrial(trial_data);
+    });
 
     // get the counter text
     function get_counter_text(n: number) {
