@@ -232,7 +232,6 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
 
     // create boxes for each stimulus
     let box_order = this.jsPsych.randomization.shuffle(boxes.map((box) => box.id));
-    console.log(box_order);
     // stimulus order defaults to array length number of stimuli 0, 1, 2...
     let stim_order = Array.from({ length: stimulus.length }, (_, i) => i);
     // get the correct stimulus order based on the box order (i.e., what the inside array needs to match)
@@ -240,7 +239,6 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
       // if using correctness, we need to get the order of the boxes based on the stimuli
       stim_order = stimulus.map((stimulus) => box_order.indexOf(stimulus.correct_box_id));
     }
-    console.log(stim_order);
     for (let i = 0; i < boxes.length; i++) {
       box_container_html += `
         <div
@@ -464,8 +462,6 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
         const on_pointer_up = () => {
           document.removeEventListener("pointermove", on_pointer_move);
           this.style.transform = "scale(1, 1)";
-          console.log(inside);
-
           if (typeof inside[i] === "number") {
             const boxIndex = inside[i] as number;
             const alreadyOccupied = inside.some((val, idx) => idx !== i && val === boxIndex);
