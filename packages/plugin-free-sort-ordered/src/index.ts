@@ -188,7 +188,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var start_time = performance.now();
     var boxes = trial.boxes;
-    var stimuli = trial.stimulus;
+    var stimulus = trial.stimulus;
 
     // holding area
     const holding_area_html = `
@@ -201,7 +201,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
     // counter text if included
     const counter_html = `
       <p id="jspsych-free-sort-ordered-counter" style="display: inline-block;">
-      ${trial.include_counter ? get_counter_text(stimuli.length) : ""}
+      ${trial.include_counter ? get_counter_text(stimulus.length) : ""}
       </p>`;
 
     // container for the target boxes
@@ -289,7 +289,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
     });
 
     // place each stimulus in initial locations
-    for (let i = 0; i < stimuli.length; i++) {
+    for (let i = 0; i < stimulus.length; i++) {
       var coords = FreeSortPluginUtils.random_coordinate(
         trial.holding_area_width - boxes[i].width,
         trial.holding_area_height - boxes[i].height
@@ -299,10 +299,10 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       display_element.querySelector("#jspsych-free-sort-ordered-holding-area").innerHTML +=
         "<img " +
         'src="' +
-        stimuli[i].file +
+        stimulus[i].file +
         '" ' +
         'data-src="' +
-        stimuli[i].file +
+        stimulus[i].file +
         '" ' +
         'class="jspsych-free-sort-ordered-draggable" ' +
         'draggable="false" ' +
@@ -310,9 +310,9 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         i +
         '" ' +
         'style="position: absolute; cursor: move; width:' +
-        stimuli[i].width +
+        stimulus[i].width +
         "px; height:" +
-        stimuli[i].height +
+        stimulus[i].height +
         "px; top:" +
         coords.y +
         "px; left:" +
@@ -322,7 +322,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
 
       // add initial locations to the init_locations array
       init_locations.push({
-        src: stimuli[i].file,
+        src: stimulus[i].file,
         x: coords.x,
         y: coords.y,
       });
@@ -332,7 +332,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
     let moves = [];
 
     // are objects currently inside
-    let inside = new Array(stimuli.length).fill(false);
+    let inside = new Array(stimulus.length).fill(false);
 
     // button to finish sorting
     const button: HTMLButtonElement = display_element.querySelector(
