@@ -196,15 +196,15 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
       var holding_area_height = 35;
       var box_grid_width = 90;
       var box_grid_height = 35;
-      var hold_margin = "1em 0 1em 0"; // margin for the holding area
-      var grid_margin = "1em 0 1em 0"; // margin for the box grid
+      var hold_margin = "1em 2em 1em 2em"; // margin for the holding area
+      var grid_margin = "1em 2em 1em 2em"; // margin for the box grid
     } else {
       var holding_area_width = 35;
       var holding_area_height = 70;
       var box_grid_width = 35;
       var box_grid_height = 70;
-      var hold_margin = "0 1em 0 1em"; // margin for the holding area
-      var grid_margin = "0 1em 0 1em"; // margin for the box grid
+      var hold_margin = "2em 1em 2em 1em"; // margin for the holding area
+      var grid_margin = "2em 1em 2em 1em"; // margin for the box grid
     }
 
     // holding area
@@ -227,7 +227,7 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
       id="jspsych-snap-sort-box-grid"
       class="jspsych-snap-sort-box-grid"
       style="background-color: ${trial.box_background_color}; position: relative; width: ${box_grid_width}vw; height: ${box_grid_height}vh; 
-        display: flex; flex-flow: column wrap; justify-content: center; align-items: center; margin: ${grid_margin};"
+        display: flex; flex-flow: wrap; justify-content: center; align-items: center; margin: ${grid_margin};"
       >`;
 
     // create boxes for each stimulus

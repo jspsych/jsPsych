@@ -3,7 +3,7 @@
   <head>
     <title>jsPsychPluginSnapSort Example</title>
     <script src="https://unpkg.com/jspsych"></script>
-    <script src="https://cdn.jsdelivr.net/npm/plain-draggable@2.5.15"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/plain-draggable@2.5.15"></script> -->
     <!-- Load the published plugin package here, e.g.
 <script src="https://unpkg.com/plugin-snap-sort"></script>
 <script src="../dist/index.browser.js"></script> -->
@@ -25,20 +25,23 @@
     const basic = {
       type: jsPsychPluginSnapSort,
       stimulus: [
-        {id: 0, file: '../assets/blue-rec.png', height: 100, width: 200},
-        {id: 1, file: '../assets/green-rec.png', height: 100, width: 200},
-        {id: 2, file: '../assets/red-rec.png', height: 100, width: 200}
+        {file: '../assets/blue-rec.png', height: 100, width: 200},
+        {file: '../assets/green-rec.png', height: 100, width: 200},
+        {file: '../assets/red-rec.png', height: 100, width: 200},
+        {file: '../assets/purple-square.png', height: 100, width: 100},
       ],
-      holding_area_location: "above",
+      holding_area_location: "left",
       stim_height: 100,
       stim_width: 120,
       scale_factor: 1.1,
       boxes: [
         {id: 0, color: '#000000', height: 100, width: 200},
         {id: 1, color: '#000000', height: 100, width: 200},
-        {id: 2, color: '#000000', height: 100, width: 200}
+        {id: 2, color: '#000000', height: 100, width: 200},
+        {id: 1, color: '#000000', height: 100, width: 200}
       ],
       use_correctness: false,
+      allow_multiple_per_box: true,
       box_margin: 40,
       box_hover_color: "#40E0D0",
       snap_margin: 20,
@@ -49,8 +52,6 @@
       include_counter: true,
       counter_text_unfinished: 'Your job is not done. Get to work!',
       counter_text_finished: 'Nice',
-      allow_multiple_per_box: false,
-	    // <!--allow_multiple_per_box false is not working yet.-->
       show_button: "always",
 	    // <!--show_button doesn't seem to be independent of use_correctness yet-->
       use_completeness_criteria: true,
@@ -59,7 +60,7 @@
       // trial_duration: 60000,
 	    // <!--trial_duration is not yet in use. -->
       response_ends_trial: true
-	    <!--response_ends_trial is not yet in use-->
+	    // <!--response_ends_trial is not yet in use-->
     };
 
 const basic_left = {
