@@ -20,7 +20,49 @@
       }
     });
 
+//first, a basic trial. boxes are black. participants can sort how they please. As long as all stimuli are sorted in a box, they may proceed.
+
     const trial1 = {
+      type: jsPsychPluginFreeSortOrdered,
+      stimulus: [
+        {id: 0, file: '../assets/blue-rec.png', height: 100, width: 200},
+        {id: 1, file: '../assets/green-rec.png', height: 100, width: 200},
+        {id: 2, file: '../assets/red-rec.png', height: 100, width: 200}
+      ],
+      holding_area_location: "above",
+      stim_height: 100,
+      stim_width: 120,
+      scale_factor: 1.1,
+      boxes: [
+        {id: 0, color: '#000000', height: 100, width: 200},
+        {id: 1, color: '#000000', height: 100, width: 200},
+        {id: 2, color: '#000000', height: 100, width: 200}
+      ],
+      use_correctness: false,
+      box_margin: 40,
+      box_hover_color: "#40E0D0",
+      snap_margin: 20,
+      prompt: 'Drag and drop the boxes to sort them in order. (Same number of stimuli and boxes. Once all stimuli . Include messages to encourage your participant to finish the task.)',
+      prompt_location: 'above',
+	    <!--above is the only option.-->
+      button_label: 'Continue',
+      include_counter: true,
+      counter_text_unfinished: 'your job is not done. get to work!',
+      counter_text_finished: 'nice',
+      allow_multiple_per_box: false,
+	    <!--allow_multiple_per_box false is not working yet.-->
+      show_button: "always",
+	    <!--show_button doesn't seem to be independent of use_correctness yet-->
+      use_completeness_criteria: true,
+      completeness_criteria: "exact_correct_answers",
+	    <!--use_completeness criteria (currently use_criteria) and completeness criteria are either not parameters or are not in use.-->
+      trial_duration: 60000,
+	    <!--trial_duration is not yet in use. -->
+      response_ends_trial: true
+	    <!--response_ends_trial is not yet in use-->
+    };
+
+    const trial2 = {
       type: jsPsychPluginFreeSortOrdered,
       stimulus: [
         {id: 0, file: '../assets/blue-rec.png', height: 100, width: 200},
@@ -30,8 +72,7 @@
       stim_height: 100,
       stim_width: 120,
       scale_factor: 1.1,
-      holding_area_height: 400,
-      holding_area_width: 1000,
+      holding_area_location: "left",
       boxes: [
         {id: 0, color: '#0271bc', height: 100, width: 200},
         {id: 1, color: '#3ab54b', height: 100, width: 200},
@@ -39,43 +80,27 @@
       ],
       use_correctness: true,
       correctness_by: "id",
-	    <!--this parameter does not exist yet-->
       box_margin: 40,
       box_hover_color: "#40E0D0",
       snap_margin: 20,
-      prompt: 'Drag and drop the boxes to sort them in order. (Answers must be correct for the Continue to function)',
+      prompt: 'Same, except holding area is on the left . Messages tell participants how many more stimuli they have left before they can proceed)',
       prompt_location: 'above',
-	    <!--above seems to be the only option.-->
       button_label: 'Continue',
       include_counter: true,
-      counter_text_unfinished: 'pls finish your job <3',
-      counter_text_finished: 'nice',
-	    <!--these counter texts (finished and unfinished) should probably be placed on a new line or something.-->
       allow_multiple_per_box: false,
-	    <!--allow_multiple_per_box false is not working yet.-->
-      reject_wrong_moves: true,
-	    <!--reject_wrong_moves is not working yet. -->
-      show_button: "on_criteria",
-	    <!--show_button, use_completeness_criteria, completeness_criteria don't seem to be independent of use_correctness yet-->
-      use_completeness_criteria: true,
-      completeness_criteria: "exact_correct_answers",
-      trial_duration: 60000,
-	    <!--trial_duration is not yet in use. -->
-      response_ends_trial: true
-	    <!--response_ends_trial is not yet in use-->
+      show_button: "always",
     };
 
-    const trial2 = {
+    const trial3 = {
       type: jsPsychPluginFreeSortOrdered,
-      prompt: 'Continue button will show up as long as all boxes are full, regardless of correctness.',
+      prompt: 'Changed the location of the holding area. Continue button will show up as long as all boxes are full, regardless of correctness.',
       scale_factor: 1.1,
-      holding_area_height: 400,
-      holding_area_width: 800,
+      holding_area_location: "above",
       box_margin: 40,
       snap_margin: 20,
       prompt_location: 'above',
       button_label: 'Continue',
-      include_counter: false,
+      include_counter: true,
       stimulus: [
         {id: 0, file: '../assets/blue-rec.png', height: 100, width: 200},
         {id: 1, file: '../assets/green-rec.png', height: 100, width: 200},
@@ -97,8 +122,7 @@
       type: jsPsychPluginFreeSortOrdered,
       prompt: 'WONT WORK YET. This is a trial with a correct answer. You have to put all of the green shapes in the single box before you can move on.',
       scale_factor: 1.1,
-      holding_area_height: 400,
-      holding_area_width: 800,
+      holding_area_location: "right",
       box_margin: 40,
       snap_margin: 20,
       prompt_location: 'above',
@@ -128,8 +152,6 @@
       type: jsPsychPluginFreeSortOrdered,
       prompt: 'WONT WORK YET. Put the circles in the red box, the triangles in the blue box, and the squares in the green box. The trial will advance automatically once you put the last shape in the boxes, even if the answer is wrong.',
       scale_factor: 1.1,
-      holding_area_height: 400,
-      holding_area_width: 800,
       box_margin: 40,
       snap_margin: 20,
       prompt_location: 'above',
@@ -157,6 +179,6 @@
     };
     
     
-    jsPsych.run([trial1, trial2])
+    jsPsych.run([trial1, trial2, trial3])
   </script>
 </html>
