@@ -330,7 +330,7 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
 
     // place each stimulus in initial locations
     var existing_coordinates = [];
-    for (let i = 0; i < stimuli.length; i++) {
+    for (let i = 0; i < stimulus.length; i++) {
       var coords = Utils.random_coordinate(
         0,
         0,
