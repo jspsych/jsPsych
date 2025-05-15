@@ -28,7 +28,7 @@ const info = <const>{
     holding_area_location: {
       type: ParameterType.SELECT,
       options: ["above", "below", "left", "right"],
-      default: "right",
+      default: "below",
     },
     /** Checks if the stimuli are placed in the correct order, as determined by box_colors. */
     use_correctness: {
@@ -328,7 +328,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
 
     const box_grid = document.getElementById(`jspsych-free-sort-ordered-box-grid`);
     const holding_box = document.getElementById(`jspsych-free-sort-ordered-holding-area`);
-    //const rect_grid = box_grid.getBoundingClientRect();
+    const rect_grid = box_grid.getBoundingClientRect();
     const rect_holding = holding_box.getBoundingClientRect();
 
     // place each stimulus in initial locations
@@ -439,11 +439,24 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
           const maxBoxHeight = Math.max(...boxAreas.map((box) => box.height));
 
           // left + right
-          newLeft = Math.max(0, newLeft);
-          newLeft = Math.min(newLeft, trial.holding_area_width - this.offsetWidth);
+          if (trial.holding_area_location === "above" || trial.holding_area_location === "below") {
+            newLeft = Math.max(0, newLeft);
+            newLeft = Math.min(newLeft, rect_holding.width - this.offsetWidth);
+          } else if (trial.holding_area_location === "right") {
+            newLeft = Math.max(-rect_holding.width, newLeft);
+            newLeft = Math.min(newLeft, rect_grid.width - this.offsetWidth);
+          } else {
+            newLeft = Math.max(0, newLeft);
+            newLeft = Math.min(newLeft, rect_grid.width + rect_holding.width - this.offsetWidth);
+          }
           // top + bottom
-          newTop = Math.max(0, newTop);
-          newTop = Math.min(newTop, bottomOfBoxes - maxBoxHeight);
+          if (trial.holding_area_location === "below") {
+            newTop = Math.max(-rect_holding.height, newTop);
+            newTop = Math.min(newTop, bottomOfBoxes - maxBoxHeight + this.offsetHeight);
+          } else {
+            newTop = Math.max(0, newTop);
+            newTop = Math.min(newTop, bottomOfBoxes - maxBoxHeight + this.offsetHeight);
+          }
 
           // Apply the constrained position
           this.style.top = newTop + "px";
