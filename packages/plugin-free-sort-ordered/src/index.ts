@@ -39,11 +39,6 @@ const info = <const>{
       type: ParameterType.BOOL,
       default: false,
     },
-    /** Pairs of stimuli and their correct positions. */
-    correctness_by: {
-      type: ParameterType.STRING,
-      default: null,
-    },
     /** How close to the box does the drag need to be to snap. */
     snap_margin: {
       type: ParameterType.INT,
@@ -213,19 +208,26 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       >`;
 
     // create boxes for each stimulus
-    let stim_order = boxes;
-    if (trial.use_correctness === true && trial.correctness_by !== null) {
-      // shuffle based on correctness_by
-      stim_order = this.jsPsych.randomization.shuffle(
-        boxes.map((box) => box[trial.correctness_by])
-      );
+    let box_order = this.jsPsych.randomization.shuffle(boxes.map((box) => box.id));
+    console.log(box_order);
+    // stimulus order defaults to array length number of stimuli 0, 1, 2...
+    let stim_order = Array.from({ length: stimuli.length }, (_, i) => i);
+    // get the correct stimulus order based on the box order (i.e., what the inside array needs to match)
+    if (trial.use_correctness && trial.correctness_by !== null) {
+      // if using correctness, we need to get the order of the boxes based on the stimuli
+      stim_order = stimuli.map((stimuli) => box_order.indexOf(stimuli.correct_box_id));
     }
+    console.log(stim_order);
     for (let i = 0; i < boxes.length; i++) {
       box_container_html += `
         <div
         id="jspsych-free-sort-ordered-box-${i}"
         class="jspsych-free-sort-ordered-box"
-        style="width: ${boxes[i].width}px; height: ${boxes[i].height}px; background-color: #FFFFFF; border: 2px solid ${boxes[i].color}; margin: ${trial.box_margin}px;"
+        style="width: ${boxes[box_order[i]].width}px; height: ${
+        boxes[box_order[i]].height
+      }px; background-color: #FFFFFF; border: 2px solid ${boxes[box_order[i]].color}; margin: ${
+        trial.box_margin
+      }px;"
         ></div>`;
     }
     box_container_html += "</div>";
@@ -249,14 +251,6 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         : holding_area_html + box_container_html + prompt_counter_html + button_html;
 
     display_element.innerHTML = html;
-
-    // if we want people to match by color.
-    if (trial.use_correctness && trial.correctness_by === "color") {
-      for (let i = 0; i < boxes.length; i++) {
-        const boxElement = document.getElementById(`jspsych-free-sort-ordered-box-${i}`);
-        boxElement.style.borderColor = stim_order[i];
-      }
-    }
 
     // store initial locations of stimuli
     let init_locations = [];
@@ -399,16 +393,17 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         const on_pointer_up = () => {
           document.removeEventListener("pointermove", on_pointer_move);
           this.style.transform = "scale(1, 1)";
+          console.log(inside);
 
           if (typeof inside[i] === "number") {
             const boxIndex = inside[i] as number;
             const alreadyOccupied = inside.some((val, idx) => idx !== i && val === boxIndex);
-            let isCorrect = true;
-            if (trial.use_correctness) {
-              // check if the stimulus is in the correct box
-              isCorrect = stim_order[boxIndex] === boxes[i][trial.correctness_by];
-            }
-            if ((alreadyOccupied && !trial.allow_multiple_per_box) || !isCorrect) {
+            let isCorrect = stim_order[i] === boxIndex;
+            if (
+              (alreadyOccupied && !trial.allow_multiple_per_box) ||
+              (trial.use_correctness && !isCorrect)
+            ) {
+              // add back check correct
               // move back to init_position
               const init_pos = init_locations.find((loc) => loc.src === this.dataset.src);
               if (init_pos) {
@@ -457,15 +452,11 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
           });
           document.removeEventListener("pointerup", on_pointer_up);
           // check if all stimuli are in correct boxes
-          if (trial.use_correctness) {
-            // if the item has been placed in the incorrect box, based on stim_order[stimBox] === boxes[stimNo][trial.correctness_by], put it back
-            const allItemsInCorrectBoxes = inside.every((stimBox, stimNo) => {
-              // If stimulus is not in any box, return false
-              if (stimBox === false || stimBox === null) return false;
-              // Return true if the colors match (stimulus is in correct box)
-              return stim_order[stimBox] === boxes[stimNo][trial.correctness_by];
-            });
-            const isComplete = allItemsInCorrectBoxes;
+          if (trial.use_correctness && trial.correctness_by !== null) {
+            // does every element of inside match stim_order?
+            const isComplete = inside.every(
+              (value, index) => typeof value === "number" && value === stim_order[index]
+            );
             button.style.visibility = isComplete ? "visible" : "hidden";
             display_element.querySelector("#jspsych-free-sort-ordered-counter").innerHTML =
               isComplete
