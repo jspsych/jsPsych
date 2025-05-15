@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>jsPsychPluginFreeSortOrdered Example</title>
+    <title>jsPsychPluginSnapSort Example</title>
     <script src="https://unpkg.com/jspsych"></script>
     <script src="https://cdn.jsdelivr.net/npm/plain-draggable@2.5.15"></script>
     <!-- Load the published plugin package here, e.g.
@@ -45,7 +45,7 @@
     };
 
     const trial_by_shape = {
-      type: jsPsychPluginFreeSortOrdered,
+      type: jsPsychPluginSnapSort,
       stimulus: [
         {file: '../assets/blue-rec.png', color: '#0271bc', height: 50, width: 200, correct_box_id: 0},
         {file: '../assets/green-rec.png', color: '#3ab54b', height: 75, width: 200, correct_box_id: 1},
@@ -72,7 +72,7 @@
     };
 
     const trial_by_hidden = {
-      type: jsPsychPluginFreeSortOrdered,
+      type: jsPsychPluginSnapSort,
       stimulus: [
         {file: '../assets/blue-rec.png', color: '#0271bc', height: 50, width: 200, correct_box_id: 1},
         {file: '../assets/green-rec.png', color: '#3ab54b', height: 75, width: 200, correct_box_id: 2},
@@ -99,7 +99,7 @@
     };
 
     const anything_goes = {
-      type: jsPsychPluginFreeSortOrdered,
+      type: jsPsychPluginSnapSort,
       stimulus: [
         {file: '../assets/blue-rec.png', color: '#0271bc', height: 50, width: 200, correct_box_id: 1},
         {file: '../assets/green-rec.png', color: '#3ab54b', height: 75, width: 200, correct_box_id: 2},
