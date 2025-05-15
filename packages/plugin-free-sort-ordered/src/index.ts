@@ -143,6 +143,7 @@ const info = <const>{
         },
       },
     },
+    /** An array containing objects representing the final locations of all the stimuli in the sorting area. Each element in the array represents a stimulus, and has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions.  */
     final_locations: {
       type: ParameterType.COMPLEX,
       array: true,
@@ -186,6 +187,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
     var boxes = trial.boxes;
     var stimuli = trial.stimulus;
 
+    /** Height and width of the holding area depending on the location **/
     if (trial.holding_area_location === "above" || trial.holding_area_location === "below") {
       var holding_area_width = 90;
       var holding_area_height = 40;
@@ -219,8 +221,8 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       <div
       id="jspsych-free-sort-ordered-box-grid"
       class="jspsych-free-sort-ordered-box-grid"
-      style="background-color: #ADD8E6; position: relative; width: ${box_grid_width}vw; height: ${box_grid_height}vh; 
-        display: flex; flex-flow: column wrap; justify-content: center; align-items: center; margin: auto;"
+      style="position: relative; width: ${box_grid_width}vw; height: ${box_grid_height}vh; 
+        display: flex; flex-flow: wrap; justify-content: center; align-items: center; margin: auto;"
       >`;
 
     // create boxes for each stimulus
@@ -253,7 +255,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       ${trial.button_label}
       </button></div>`;
 
-    // combine all HTML
+    // combine all HTML based on the holding area location
     if (trial.holding_area_location === "above") {
       var html =
         trial.prompt_location === "above"
@@ -326,42 +328,25 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       });
     });
 
+    // get the bounding boxes of the box grid and the holding area
     const box_grid = document.getElementById(`jspsych-free-sort-ordered-box-grid`);
     const holding_box = document.getElementById(`jspsych-free-sort-ordered-holding-area`);
     const rect_grid = box_grid.getBoundingClientRect();
     const rect_holding = holding_box.getBoundingClientRect();
 
     // place each stimulus in initial locations
+    var existing_coordinates = [];
     for (let i = 0; i < stimuli.length; i++) {
-      if (trial.holding_area_location === "above") {
-        var coords = Utils.random_coordinate(
-          0,
-          0,
-          rect_holding.width - boxes[i].width,
-          rect_holding.height - boxes[i].height
-        );
-      } else if (trial.holding_area_location === "below") {
-        var coords = Utils.random_coordinate(
-          0,
-          0,
-          rect_holding.width - boxes[i].width,
-          rect_holding.height - boxes[i].height
-        );
-      } else if (trial.holding_area_location === "left") {
-        var coords = Utils.random_coordinate(
-          0,
-          0,
-          rect_holding.width - boxes[i].width,
-          rect_holding.height - boxes[i].height
-        );
-      } else if (trial.holding_area_location === "right") {
-        var coords = Utils.random_coordinate(
-          0,
-          0,
-          rect_holding.width - boxes[i].width,
-          rect_holding.height - boxes[i].height
-        );
-      }
+      var coords = Utils.random_coordinate(
+        0,
+        0,
+        rect_holding.width - boxes[i].width,
+        rect_holding.height - boxes[i].height,
+        existing_coordinates,
+        boxes[i].width,
+        boxes[i].height
+      );
+      existing_coordinates.push([coords.x, coords.y, boxes[i].width, boxes[i].height]);
 
       // add stimuli and their initial locations to the display
       display_element.querySelector("#jspsych-free-sort-ordered-holding-area").innerHTML +=
@@ -595,6 +580,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         this.jsPsych.finishTrial(trial_data);
       });
 
+    // get the counter text
     function get_counter_text(n: number) {
       var text_out = "";
       var text_bits = trial.counter_text_unfinished.split("%");
