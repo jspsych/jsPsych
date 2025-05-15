@@ -30,6 +30,10 @@ const info = <const>{
       options: ["above", "below", "left", "right"],
       default: "below",
     },
+    holding_background_color: {
+      type: ParameterType.STRING,
+      default: "#CCCCCC",
+    },
     /** Checks if the stimuli are placed in the correct order, as determined by box_colors. */
     use_correctness: {
       type: ParameterType.BOOL,
@@ -41,6 +45,10 @@ const info = <const>{
       default: 10,
     },
     /** The margin between the boxes in pixels. */
+    box_background_color: {
+      type: ParameterType.STRING,
+      default: "#FFFFFF",
+    },
     box_margin: {
       type: ParameterType.INT,
       default: 20,
@@ -138,6 +146,7 @@ const info = <const>{
         },
       },
     },
+    /** An array containing objects representing the final locations of all the stimuli in the sorting area. Each element in the array represents a stimulus, and has a "src", "x", and "y" value. "src" is the image path, and "x" and "y" are the object location. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions.  */
     final_locations: {
       type: ParameterType.COMPLEX,
       array: true,
@@ -181,18 +190,21 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
     var boxes = trial.boxes;
     var stimulus = trial.stimulus;
 
+    /** Height and width of the holding area depending on the location **/
     if (trial.holding_area_location === "above" || trial.holding_area_location === "below") {
       var holding_area_width = 90;
-      var holding_area_height = 40;
+      var holding_area_height = 30;
       var box_grid_width = 90;
-      var box_grid_height = 40;
-      var display_var = "inline-flex";
+      var box_grid_height = 35;
+      var hold_margin = "1em 0 1em 0"; // margin for the holding area
+      var grid_margin = "1em 0 1em 0"; // margin for the box grid
     } else {
       var holding_area_width = 50;
-      var holding_area_height = 85;
-      var box_grid_width = 50;
-      var box_grid_height = 85;
-      var display_var = "inline-flex";
+      var holding_area_height = 65;
+      var box_grid_width = 35;
+      var box_grid_height = 70;
+      var hold_margin = "0 1em 0 1em"; // margin for the holding area
+      var grid_margin = "0 1em 0 1em"; // margin for the box grid
     }
 
     // holding area
@@ -255,7 +267,7 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
       ${trial.button_label}
       </button></div>`;
 
-    // combine all HTML
+    // combine all HTML based on the holding area location
     if (trial.holding_area_location === "above") {
       var html =
         trial.prompt_location === "above"
@@ -326,36 +338,18 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
     const rect_holding = holding_box.getBoundingClientRect();
 
     // place each stimulus in initial locations
+    var existing_coordinates = [];
     for (let i = 0; i < stimulus.length; i++) {
-      if (trial.holding_area_location === "above") {
-        var coords = Utils.random_coordinate(
-          0,
-          0,
-          rect_holding.width - boxes[i].width,
-          rect_holding.height - boxes[i].height
-        );
-      } else if (trial.holding_area_location === "below") {
-        var coords = Utils.random_coordinate(
-          0,
-          0,
-          rect_holding.width - boxes[i].width,
-          rect_holding.height - boxes[i].height
-        );
-      } else if (trial.holding_area_location === "left") {
-        var coords = Utils.random_coordinate(
-          0,
-          0,
-          rect_holding.width - boxes[i].width,
-          rect_holding.height - boxes[i].height
-        );
-      } else if (trial.holding_area_location === "right") {
-        var coords = Utils.random_coordinate(
-          0,
-          0,
-          rect_holding.width - boxes[i].width,
-          rect_holding.height - boxes[i].height
-        );
-      }
+      var coords = Utils.random_coordinate(
+        0,
+        0,
+        rect_holding.width - boxes[i].width,
+        rect_holding.height - boxes[i].height,
+        existing_coordinates,
+        boxes[i].width,
+        boxes[i].height
+      );
+      existing_coordinates.push([coords.x, coords.y, boxes[i].width, boxes[i].height]);
 
       // add stimuli and their initial locations to the display
       display_element.querySelector("#jspsych-snap-sort-holding-area").innerHTML +=
@@ -572,6 +566,7 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
       this.jsPsych.finishTrial(trial_data);
     });
 
+    // get the counter text
     function get_counter_text(n: number) {
       var text_out = "";
       var text_bits = trial.counter_text_unfinished.split("%");
