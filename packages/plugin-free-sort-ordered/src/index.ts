@@ -24,15 +24,11 @@ const info = <const>{
       type: ParameterType.FLOAT,
       default: 1.25,
     },
-    /** The height of the container that the stimuli start in. */
-    holding_area_height: {
-      type: ParameterType.INT,
-      default: 700,
-    },
-    /** The width of the container that the stimuli start in. */
-    holding_area_width: {
-      type: ParameterType.INT,
-      default: 700,
+    /** The location of the holding area relative to the box grid. */
+    holding_area_location: {
+      type: ParameterType.SELECT,
+      options: ["above", "below", "left", "right"],
+      default: "below",
     },
     /** Checks if the stimuli are placed in the correct order, as determined by box_colors. */
     use_correctness: {
@@ -183,20 +179,34 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     var start_time = performance.now();
     var boxes = trial.boxes;
-    var stimuli = trial.stimulus;
+    var stimulus = trial.stimulus;
+
+    if (trial.holding_area_location === "above" || trial.holding_area_location === "below") {
+      var holding_area_width = 90;
+      var holding_area_height = 40;
+      var box_grid_width = 90;
+      var box_grid_height = 40;
+      var display_var = "inline-flex";
+    } else {
+      var holding_area_width = 50;
+      var holding_area_height = 85;
+      var box_grid_width = 50;
+      var box_grid_height = 85;
+      var display_var = "inline-flex";
+    }
 
     // holding area
     const holding_area_html = `
       <div
       id="jspsych-free-sort-ordered-holding-area"
       class="jspsych-free-sort-ordered-holding-area"
-      style="position: relative; width: ${trial.holding_area_width}px; height: ${trial.holding_area_height}px; background-color: #CCCCCC; margin: auto;">
+      style="position: relative; width: ${holding_area_width}vw; height: ${holding_area_height}vh; background-color: #CCCCCC; margin: auto;">
       </div>`;
 
     // counter text if included
     const counter_html = `
       <p id="jspsych-free-sort-ordered-counter" style="display: inline-block;">
-      ${trial.include_counter ? get_counter_text(stimuli.length) : ""}
+      ${trial.include_counter ? get_counter_text(stimulus.length) : ""}
       </p>`;
 
     // container for the target boxes
@@ -204,7 +214,8 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       <div
       id="jspsych-free-sort-ordered-box-grid"
       class="jspsych-free-sort-ordered-box-grid"
-      style="position: relative; max-width: 80vw; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; margin: auto; padding: 20px;"
+      style="background-color: #ADD8E6; position: relative; width: ${box_grid_width}vw; height: ${box_grid_height}vh; 
+        display: flex; flex-flow: column wrap; justify-content: center; align-items: center; margin: auto;"
       >`;
 
     // create boxes for each stimulus
@@ -234,9 +245,9 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
 
     // prompt text (and counter if included)
     const prompt_counter_html = `
-      <div style="line-height: 1.0em;">
+      <div style="line-height: 1.0em;"><p>
       ${trial.prompt + (trial.include_counter ? counter_html : "")}
-      </div>`;
+      </p></div>`;
 
     // button to continue
     const button_html = `
@@ -245,10 +256,37 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
       </button></div>`;
 
     // combine all HTML
-    let html =
-      trial.prompt_location === "above"
-        ? prompt_counter_html + holding_area_html + box_container_html + button_html
-        : holding_area_html + box_container_html + prompt_counter_html + button_html;
+    if (trial.holding_area_location === "above") {
+      var html =
+        trial.prompt_location === "above"
+          ? prompt_counter_html + holding_area_html + box_container_html + button_html
+          : holding_area_html + box_container_html + prompt_counter_html + button_html;
+    } else if (trial.holding_area_location === "below") {
+      var html =
+        trial.prompt_location === "above"
+          ? prompt_counter_html + box_container_html + holding_area_html + button_html
+          : box_container_html + holding_area_html + prompt_counter_html + button_html;
+    } else if (trial.holding_area_location === "left") {
+      var html =
+        trial.prompt_location === "above"
+          ? prompt_counter_html +
+            `<div style="display: inline-flex; flex-direction: row;">` +
+            holding_area_html +
+            box_container_html +
+            `</div>` +
+            button_html
+          : holding_area_html + box_container_html + prompt_counter_html + button_html;
+    } else if (trial.holding_area_location === "right") {
+      var html =
+        trial.prompt_location === "above"
+          ? prompt_counter_html +
+            `<div style="display: inline-flex; flex-direction: row;">` +
+            box_container_html +
+            holding_area_html +
+            `</div>` +
+            button_html
+          : box_container_html + holding_area_html + prompt_counter_html + button_html;
+    }
 
     display_element.innerHTML = html;
 
@@ -277,26 +315,56 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         id: i,
         left: boxCoord.x,
         top: boxCoord.y,
-        width: trial.stim_width,
-        height: trial.stim_height,
+        width: boxes[i].width,
+        height: boxes[i].height,
       });
     });
 
+    const box_grid = document.getElementById(`jspsych-free-sort-ordered-box-grid`);
+    const holding_box = document.getElementById(`jspsych-free-sort-ordered-holding-area`);
+    const rect_grid = box_grid.getBoundingClientRect();
+    const rect_holding = holding_box.getBoundingClientRect();
+
     // place each stimulus in initial locations
-    for (let i = 0; i < stimuli.length; i++) {
-      var coords = FreeSortPluginUtils.random_coordinate(
-        trial.holding_area_width - boxes[i].width,
-        trial.holding_area_height - boxes[i].height
-      );
+    for (let i = 0; i < stimulus.length; i++) {
+      if (trial.holding_area_location === "above") {
+        var coords = Utils.random_coordinate(
+          0,
+          0,
+          rect_holding.width - boxes[i].width,
+          rect_holding.height - boxes[i].height
+        );
+      } else if (trial.holding_area_location === "below") {
+        var coords = Utils.random_coordinate(
+          0,
+          0,
+          rect_holding.width - boxes[i].width,
+          rect_holding.height - boxes[i].height
+        );
+      } else if (trial.holding_area_location === "left") {
+        var coords = Utils.random_coordinate(
+          0,
+          0,
+          rect_holding.width - boxes[i].width,
+          rect_holding.height - boxes[i].height
+        );
+      } else if (trial.holding_area_location === "right") {
+        var coords = Utils.random_coordinate(
+          0,
+          0,
+          rect_holding.width - boxes[i].width,
+          rect_holding.height - boxes[i].height
+        );
+      }
 
       // add stimuli and their initial locations to the display
       display_element.querySelector("#jspsych-free-sort-ordered-holding-area").innerHTML +=
         "<img " +
         'src="' +
-        stimuli[i].file +
+        stimulus[i].file +
         '" ' +
         'data-src="' +
-        stimuli[i].file +
+        stimulus[i].file +
         '" ' +
         'class="jspsych-free-sort-ordered-draggable" ' +
         'draggable="false" ' +
@@ -304,9 +372,9 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         i +
         '" ' +
         'style="position: absolute; cursor: move; width:' +
-        stimuli[i].width +
+        stimulus[i].width +
         "px; height:" +
-        stimuli[i].height +
+        stimulus[i].height +
         "px; top:" +
         coords.y +
         "px; left:" +
@@ -316,7 +384,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
 
       // add initial locations to the init_locations array
       init_locations.push({
-        src: stimuli[i].file,
+        src: stimulus[i].file,
         x: coords.x,
         y: coords.y,
       });
@@ -326,7 +394,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
     let moves = [];
 
     // are objects currently inside
-    let inside = new Array(stimuli.length).fill(false);
+    let inside = new Array(stimulus.length).fill(false);
 
     // button to finish sorting
     const button: HTMLButtonElement = display_element.querySelector(
@@ -342,7 +410,7 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
     draggables.forEach((draggable, i) => {
       draggable.addEventListener("pointerdown", function ({ clientX: pageX, clientY: pageY }) {
         let x = pageX - this.offsetLeft;
-        let y = pageY - this.offsetTop - window.scrollY;
+        let y = pageY - this.offsetTop;
         this.style.transform = "scale(" + trial.scale_factor + "," + trial.scale_factor + ")";
 
         // on pointer move, check if the stimulus is inside a box and update its position
@@ -365,11 +433,24 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
           const maxBoxHeight = Math.max(...boxAreas.map((box) => box.height));
 
           // left + right
-          newLeft = Math.max(0, newLeft);
-          newLeft = Math.min(newLeft, trial.holding_area_width - this.offsetWidth);
+          if (trial.holding_area_location === "above" || trial.holding_area_location === "below") {
+            newLeft = Math.max(0, newLeft);
+            newLeft = Math.min(newLeft, rect_holding.width - this.offsetWidth);
+          } else if (trial.holding_area_location === "right") {
+            newLeft = Math.max(-rect_holding.width, newLeft);
+            newLeft = Math.min(newLeft, rect_grid.width - this.offsetWidth);
+          } else {
+            newLeft = Math.max(0, newLeft);
+            newLeft = Math.min(newLeft, rect_grid.width + rect_holding.width - this.offsetWidth);
+          }
           // top + bottom
-          newTop = Math.max(0, newTop);
-          newTop = Math.min(newTop, bottomOfBoxes - maxBoxHeight);
+          if (trial.holding_area_location === "below") {
+            newTop = Math.max(-rect_holding.height, newTop);
+            newTop = Math.min(newTop, bottomOfBoxes - maxBoxHeight + this.offsetHeight);
+          } else {
+            newTop = Math.max(0, newTop);
+            newTop = Math.min(newTop, bottomOfBoxes - maxBoxHeight + this.offsetHeight);
+          }
 
           // Apply the constrained position
           this.style.top = newTop + "px";
@@ -430,8 +511,8 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
               const holding_rect = holding_area.getBoundingClientRect();
 
               // Calculate position relative to the holding area
-              const left_pos = box_rect.left - holding_rect.left + window.scrollX;
-              const top_pos = box_rect.top - holding_rect.top + window.scrollY;
+              const left_pos = box_rect.left - holding_rect.left;
+              const top_pos = box_rect.top - holding_rect.top;
 
               // Center the image in the box if needed
               this.style.left = left_pos + "px";
