@@ -514,8 +514,19 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
               this.style.top = top_pos + "px";
               this.style.position = "absolute";
 
-              // TODO: if there are multiple items in the box, scale them down
-
+              // if there are multiple items in the box, make sure this one is on top
+              // Find all draggables currently in this box
+              if (alreadyOccupied && trial.allow_multiple_per_box) {
+                const itemsInBox = draggables.filter((_, idx) => inside[idx] === inside[i]);
+                itemsInBox.forEach((el, idx) => {
+                  // Scale down
+                  el.style.transform = "scale(0.8, 0.8)";
+                  // Offset each item by 5px horizontally and vertically
+                  el.style.left = left_pos + idx * 5 + "px";
+                  el.style.top = top_pos + idx * 5 + "px";
+                  el.style.zIndex = (100 + idx).toString();
+                });
+              }
               // remove shadow from the box
               box.style.boxShadow = "none";
               box.style.backgroundColor = "white";
