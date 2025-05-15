@@ -243,9 +243,9 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
 
     // prompt text (and counter if included)
     const prompt_counter_html = `
-      <div style="line-height: 1.0em;">
+      <div style="line-height: 1.0em;"><p>
       ${trial.prompt + (trial.include_counter ? counter_html : "")}
-      </div>`;
+      </p></div>`;
 
     // button to continue
     const button_html = `
@@ -484,15 +484,29 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
           if (typeof inside[i] === "number") {
             const boxIndex = inside[i] as number;
             const alreadyOccupied = inside.some((val, idx) => idx !== i && val === boxIndex);
-
-            if (alreadyOccupied && !trial.allow_multiple_per_box) {
-              console.log("bruh");
-              return; // <-- bail out before any placement
+            let isCorrect = true;
+            if (trial.use_correctness) {
+              // check if the stimulus is in the correct box
+              isCorrect = stim_order[boxIndex] === boxes[i][trial.correctness_by];
             }
-          }
+            if ((alreadyOccupied && !trial.allow_multiple_per_box) || !isCorrect) {
+              // move back to init_position
+              const init_pos = init_locations.find((loc) => loc.src === this.dataset.src);
+              if (init_pos) {
+                this.style.left = init_pos.x + "px";
+                this.style.top = init_pos.y + "px";
+              }
+              // remove colour and shadow from the box
+              document.getElementById(
+                `jspsych-free-sort-ordered-box-${inside[i]}`
+              ).style.backgroundColor = "white";
+              document.getElementById(
+                `jspsych-free-sort-ordered-box-${inside[i]}`
+              ).style.boxShadow = "none";
+              inside[i] = false; // reset inside status
+            }
 
-          if (typeof inside[i] === "number") {
-            // if multiple items are allowed, scale down the items in the box
+            // otherwise, snap into place within the box.
             const box = document.getElementById(`jspsych-free-sort-ordered-box-${inside[i]}`);
             if (box) {
               const box_rect = box.getBoundingClientRect();
