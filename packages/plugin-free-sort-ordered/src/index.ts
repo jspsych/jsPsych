@@ -283,8 +283,8 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
         id: i,
         left: boxCoord.x,
         top: boxCoord.y,
-        width: trial.stim_width,
-        height: trial.stim_height,
+        width: boxes[i].width,
+        height: boxes[i].height,
       });
     });
 
