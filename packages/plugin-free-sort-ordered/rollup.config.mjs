@@ -1,3 +1,3 @@
 import { makeRollupConfig } from "@jspsych/config/rollup";
 
-export default makeRollupConfig("jsPsychPluginFreeSortOrdered");
+export default makeRollupConfig("jsPsychPluginSnapSort");

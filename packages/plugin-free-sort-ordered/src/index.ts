@@ -6,7 +6,7 @@ import { version } from "../package.json";
 import * as Utils from "./utils";
 
 const info = <const>{
-  name: "plugin-free-sort-ordered",
+  name: "plugin-snap-sort",
   version: version,
   parameters: {
     stimulus: {
@@ -176,7 +176,7 @@ type Info = typeof info;
  * @author Cherrie Chang
  * @see {@link /packages/plugin-free-sort-ordered/README.md}}
  */
-class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
+class SnapSortPlugin implements JsPsychPlugin<Info> {
   static info = info;
 
   constructor(private jsPsych: JsPsych) {}
@@ -614,4 +614,4 @@ class FreeSortOrderedPlugin implements JsPsychPlugin<Info> {
   }
 }
 
-export default FreeSortOrderedPlugin;
+export default SnapSortPlugin;
