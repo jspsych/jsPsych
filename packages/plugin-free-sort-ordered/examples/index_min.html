@@ -44,7 +44,7 @@
     };
 
     const trial_by_shape = {
-      type: jsPsychPluginFreeSortOrdered,
+      type: jsPsychPluginSnapSort,
       stimulus: [
         {file: '../assets/blue-rec.png', color: '#0271bc', height: 50, width: 200, correct_box_id: 0},
         {file: '../assets/green-rec.png', color: '#3ab54b', height: 75, width: 200, correct_box_id: 1},
@@ -69,7 +69,7 @@
     };
 
     const trial_by_hidden = {
-      type: jsPsychPluginFreeSortOrdered,
+      type: jsPsychPluginSnapSort,
       stimulus: [
         {file: '../assets/blue-rec.png', color: '#0271bc', height: 50, width: 200, correct_box_id: 1},
         {file: '../assets/green-rec.png', color: '#3ab54b', height: 75, width: 200, correct_box_id: 2},
@@ -95,7 +95,7 @@
     };
 
     const anything_goes = {
-      type: jsPsychPluginFreeSortOrdered,
+      type: jsPsychPluginSnapSort,
       stimulus: [
         {file: '../assets/blue-rec.png', color: '#0271bc', height: 50, width: 200, correct_box_id: 1},
         {file: '../assets/green-rec.png', color: '#3ab54b', height: 75, width: 200, correct_box_id: 2},
@@ -121,8 +121,8 @@
     };
 
     jsPsych.run([
-      // trial_by_color,
-      // trial_by_shape,
+      trial_by_color,
+      trial_by_shape,
       trial_by_hidden,
       anything_goes
     ]);
