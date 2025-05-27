@@ -4,7 +4,7 @@ import { Class } from "type-fest";
 
 import { version } from "../package.json";
 import { ExtensionManager, ExtensionManagerDependencies } from "./ExtensionManager";
-import { JsPsychData, JsPsychDataDependencies } from "./modules/data";
+import { InteractionRecord, JsPsychData, JsPsychDataDependencies } from "./modules/data";
 import { JsPsychExtension } from "./modules/extensions";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin } from "./modules/plugins";
@@ -19,11 +19,46 @@ import {
   TimelineDescription,
   TimelineNodeDependencies,
   TimelineVariable,
+  TrialDescription,
   TrialResult,
 } from "./timeline";
 import { Timeline } from "./timeline/Timeline";
 import { Trial } from "./timeline/Trial";
 import { PromiseWrapper } from "./timeline/util";
+import { DataCollection } from "./modules/data/DataCollection";
+
+export type PrepareDomResult = {
+    displayContainerElement: HTMLElement;
+    displayElement: HTMLElement;
+    progressBar?: ProgressBar;
+};
+
+export type JsPsychConstructorOptions = {
+  display_element?: HTMLElement,
+  main_eventSource?: GlobalEventSource,
+  on_finish?: (arg: DataCollection) => void,
+  on_trial_start?: (arg: TrialDescription) => void,
+  on_trial_finish?: (arg: TrialResult) => void,
+  on_data_update?: (arg: TrialResult) => void,
+  on_interaction_data_update?: (d: InteractionRecord) => void,
+  on_close?: () => void,
+  use_webaudio?: boolean,
+  show_progress_bar?: boolean,
+  message_progress_bar?: string,
+  auto_update_progress_bar?: boolean,
+  default_iti?: number,
+  minimum_valid_rt?: number,
+  experiment_width?: number,
+  override_safe_mode?: boolean,
+  case_sensitive_responses?: boolean,
+  extensions?: any[],
+  prepareDom?: (jsPsych: JsPsych) => Promise<PrepareDomResult>
+};
+
+export interface GlobalEventSource {
+  addEventListener<K extends keyof GlobalEventHandlersEventMap>(type: K, listener: (this: Window, ev: GlobalEventHandlersEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+  removeEventListener<K extends keyof GlobalEventHandlersEventMap>(type: K, listener: (this: Window, ev: GlobalEventHandlersEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+}
 
 export class JsPsych {
   turk = turk;
@@ -40,7 +75,7 @@ export class JsPsych {
   private citation: any = '__CITATIONS__';
 
   /** Options */
-  private options: any = {};
+  private options: JsPsychConstructorOptions = {};
 
   /** Experiment timeline */
   private timeline?: Timeline;
@@ -66,10 +101,11 @@ export class JsPsych {
 
   private extensionManager: ExtensionManager;
 
-  constructor(options?) {
+  constructor(options?: JsPsychConstructorOptions) {
     // override default options if user specifies an option
     options = {
       display_element: undefined,
+      main_eventSource: undefined, 
       on_finish: () => {},
       on_trial_start: () => {},
       on_trial_finish: () => {},
@@ -140,10 +176,17 @@ export class JsPsych {
     // create experiment timeline
     this.timeline = new Timeline(this.timelineDependencies, timeline);
 
-    await this.prepareDom();
+    if (this.options.prepareDom) {
+      const pdResult = await this.options.prepareDom(this);
+      this.displayContainerElement = pdResult.displayContainerElement;
+      this.displayElement = pdResult.displayElement;
+      this.progressBar = pdResult.progressBar;
+    } else {
+      await this.prepareDom();
+    }
     await this.extensionManager.initializeExtensions();
 
-    document.documentElement.setAttribute("jspsych", "present");
+    if (!this.options.prepareDom) document.documentElement.setAttribute("jspsych", "present");
 
     this.experimentStartTime = new Date();
 
@@ -194,6 +237,10 @@ export class JsPsych {
 
   getDisplayContainerElement() {
     return this.displayContainerElement;
+  }
+
+  getMainEventSource(): GlobalEventSource {
+    return this.options.main_eventSource || this.displayContainerElement;
   }
 
   abortExperiment(endMessage?: string, data = {}) {
@@ -344,7 +391,10 @@ export class JsPsych {
       if (display === null) {
         console.error("The display_element specified in initJsPsych() does not exist in the DOM.");
       } else {
-        options.display_element = display;
+        if (display instanceof HTMLElement)
+          options.display_element = display;
+        else
+          throw new Error(`display not an HTMLElement`);
       }
     }
 

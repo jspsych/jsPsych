@@ -1,6 +1,6 @@
 // __rollup-babel-import-regenerator-runtime__
 
-import { JsPsych } from "./JsPsych";
+import { JsPsych, JsPsychConstructorOptions } from "./JsPsych";
 import { MigrationError } from "./migration";
 
 // temporary patch for Safari
@@ -22,7 +22,7 @@ if (
  * @param options The options to pass to the JsPsych constructor
  * @returns A new JsPsych instance
  */
-export function initJsPsych(options?) {
+export function initJsPsych(options?: JsPsychConstructorOptions) {
   const jsPsych = new JsPsych(options);
 
   // Handle invocations of non-existent v6 methods with migration errors
@@ -66,3 +66,4 @@ export type { JsPsychPlugin, PluginInfo, TrialType } from "./modules/plugins";
 export { ParameterType } from "./modules/plugins";
 export type { JsPsychExtension, JsPsychExtensionInfo } from "./modules/extensions";
 export { DataCollection } from "./modules/data/DataCollection";
+export type { TimelineDescription, TimelineArray } from "./timeline";
