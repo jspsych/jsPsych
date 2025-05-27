@@ -57,8 +57,8 @@ export type JsPsychConstructorOptions = {
 };
 
 export interface GlobalEventSource {
-  addEventListener<K extends keyof GlobalEventHandlersEventMap>(type: K, listener: (this: Window, ev: GlobalEventHandlersEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-  removeEventListener<K extends keyof GlobalEventHandlersEventMap>(type: K, listener: (this: Window, ev: GlobalEventHandlersEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+  addEventListener<K extends keyof GlobalEventHandlersEventMap>(type: K, listener: (this: GlobalEventSource, ev: GlobalEventHandlersEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+  removeEventListener<K extends keyof GlobalEventHandlersEventMap>(type: K, listener: (this: GlobalEventSource, ev: GlobalEventHandlersEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
 }
 
 export class JsPsych {
