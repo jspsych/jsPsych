@@ -35,7 +35,6 @@ export type PrepareDomResult = {
 
 export type JsPsychConstructorOptions = {
   display_element?: HTMLElement,
-  main_eventSource?: GlobalEventSource,
   on_finish?: (arg: DataCollection) => void,
   on_trial_start?: (arg: TrialDescription) => void,
   on_trial_finish?: (arg: TrialResult) => void,
@@ -52,7 +51,9 @@ export type JsPsychConstructorOptions = {
   override_safe_mode?: boolean,
   case_sensitive_responses?: boolean,
   extensions?: any[],
-  prepareDom?: (jsPsych: JsPsych) => Promise<PrepareDomResult>
+  prepareDom?: (jsPsych: JsPsych) => Promise<PrepareDomResult>,
+  main_eventSource?: GlobalEventSource,
+  [x: string | number | symbol]: unknown; // allow for additional unknown properties
 };
 
 export interface GlobalEventSource {
