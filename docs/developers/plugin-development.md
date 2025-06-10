@@ -8,11 +8,11 @@ As of version 7.0, plugins are [JavaScript Classes](https://developer.mozilla.or
 * [A `trial()` method](#trial) that accepts an `HTMLElement` as its first argument and an `object` of trial parameters as its second argument. There is an optional third argument to [handle the `on_load` event](#asynchronous-loading) in certain cirumstances. The `trial()` method should *either* invoke `jsPsych.finishTrial()` or should be an `async` function that returns a data object to [end the trial and save data](#save-data).
 * [A static `info` property](#static-info) on the class that contains an object describing the plugin's parameters, data generated, and version.
 
-## Plugin templates
+## Setting up a new plugin
 
-Templates for plugins are available in the [jspsych-contrib](https://github.com/jspsych/jspsych-contrib) repository. Plugins can be written in either plain [JavaScript](https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-js/src/index.js) or in [TypeScript](https://github.com/jspsych/jspsych-contrib/blob/main/templates/plugin-template-ts/src/index.ts).
+To develop a new plugin for contribution, we recommend using the CLI tool that we have published in jspsych-contrib. This automates the setup of a new plugin in either JavaScript or TypeScript. For more information about this CLI tool, as well as step-by-step instructions on how to make a contribution to jsPsych, is available in the [`README`](https://github.com/jspsych/jspsych-contrib?tab=readme-ov-file#guidelines-for-contributions) of jspsych-contrib. 
 
-To get started with a template, we recommend using the CLI tool that we have published in jspsych-contrib. This automates the setup of a new plugin in either JavaScript or TypeScript. Additional information about the CLI tool is available in the [`README`](https://github.com/jspsych/jspsych-contrib?tab=readme-ov-file#creating-a-new-plugin-or-extension) of jspsych-contrib. 
+If for any reason you want access to the templates themselves, without running the CLI tool, they are still available in the [jspsych-dev](https://github.com/jspsych/jspsych-dev) repository. These are set up for either plain [JavaScript](https://github.com/jspsych/jspsych-dev/tree/main/packages/new-plugin/templates/plugin-template-js) or in [TypeScript](https://github.com/jspsych/jspsych-dev/tree/main/packages/new-plugin/templates/plugin-template-ts).
 
 ## Plugin components
 
