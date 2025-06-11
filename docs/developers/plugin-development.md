@@ -10,7 +10,7 @@ As of version 7.0, plugins are [JavaScript Classes](https://developer.mozilla.or
 
 ## Setting up a new plugin
 
-To develop a new plugin for contribution, we recommend using the CLI tool that we have published in jspsych-contrib. This automates the setup of a new plugin in either JavaScript or TypeScript, depepending on how you answer the commandline prompts. For more information about this CLI tool, as well as step-by-step instructions on how to make a contribution to jsPsych, is available in the [`README`](https://github.com/jspsych/jspsych-contrib?tab=readme-ov-file#guidelines-for-contributions) of jspsych-contrib. 
+To develop a new plugin for contribution, we recommend using the CLI tool we've published for jspsych-contrib. This automates setup for a new plugin in either JavaScript or TypeScript, depending on how you answer the commandline prompts. For more information about this tool, as well as step-by-step instructions on how to make a contribution to jsPsych, check out jspsych-contrib's [`README`](https://github.com/jspsych/jspsych-contrib?tab=readme-ov-file#guidelines-for-contributions). 
 
 If for any reason you want access to the templates themselves, without running the CLI tool, they are still available in the [jspsych-dev](https://github.com/jspsych/jspsych-dev) repository. Here is the template in plain [Javascript](https://github.com/jspsych/jspsych-dev/tree/main/packages/new-plugin/templates/plugin-template-js), and here is the template in [Typescript](https://github.com/jspsych/jspsych-dev/tree/main/packages/new-plugin/templates/plugin-template-ts).
 
