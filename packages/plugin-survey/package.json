@@ -10,6 +10,7 @@
       "require": "./dist/index.cjs"
     },
     "./css/survey.css": "./css/survey.css",
+    "./css/survey.min.css": "./css/survey.min.css",
     "./css/survey.scss": "./css/survey.scss"
   },
   "typings": "dist/index.d.ts",
@@ -25,7 +26,9 @@
     "test:watch": "npm test -- --watch",
     "tsc": "tsc",
     "build:js": "rollup --config",
-    "build:styles": "sass --load-path ./node_modules --load-path ../../node_modules css/survey.scss css/survey.css",
+    "build:styles": "run-p build:css build:css:min",
+    "build:css": "sass --load-path ./node_modules --load-path ../../node_modules css/survey.scss css/survey.css",
+    "build:css:min": "sass --style=compressed --load-path ./node_modules --load-path ../../node_modules css/survey.scss css/survey.min.css",
     "build": "run-p build:js build:styles",
     "build:watch": "run-p \"build:js -- --watch\" \"build:styles -- --watch\""
   },
