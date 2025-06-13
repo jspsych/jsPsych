@@ -29,7 +29,6 @@ jobs:
       security-events: write
       # Needed to publish results and get a badge (see publish_results below).
       id-token: write
-      # Uncomment the permissions below if installing in a private repository.
 
 
     steps:
@@ -63,7 +62,7 @@ jobs:
       - name: "Upload artifact"
         uses: actions/upload-artifact@97a0fba1372883ab732affbe8f94b823f91727db # v3.pre.node20
         with:
-          name: SARIF file
+          name: scorecard-sarif-results
           path: results.sarif
           retention-days: 5
 
