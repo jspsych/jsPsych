@@ -208,7 +208,7 @@ const select_color_trial = {
   type: jsPsychHtmlButtonResponse,
   stimulus: '<p>Which of these is your favorite color?</p>',
   choices: color_choices,
-  button_html: '<button class="jspsych-btn" style="color:%choice%";">%choice%</button>',
+  button_html: (choice) => `<button class="jspsych-btn" style="color:${choice};">%choice%</button>`,
   data: {trial_id: 'color_trial'}
 };
 
