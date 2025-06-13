@@ -50,7 +50,7 @@
     "sass": "^1.43.5"
   },
   "dependencies": {
-    "survey-core": "^1.9.138",
-    "survey-knockout-ui": "^1.9.139"
+    "survey-core": "^2.2.0",
+    "survey-js-ui": "^2.2.0"
   }
 }
