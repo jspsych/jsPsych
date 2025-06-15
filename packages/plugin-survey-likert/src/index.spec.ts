@@ -4,11 +4,8 @@ import surveyLikert from ".";
 
 jest.useFakeTimers();
 
-const selectInput = (
-  name: string, 
-  value: string,
-  displayElement: HTMLElement
-) => displayElement.querySelector(`input[name="${name}"][value="${value}"]`) as HTMLInputElement;
+const selectInput = (name: string, value: string, displayElement: HTMLElement) =>
+  displayElement.querySelector(`input[name="${name}"][value="${value}"]`) as HTMLInputElement;
 
 describe("survey-likert plugin", () => {
   test("data are logged with the right question when randomize order is true", async () => {
@@ -43,6 +40,56 @@ describe("survey-likert plugin", () => {
     expect(surveyData.Q2).toEqual(2);
     expect(surveyData.Q3).toEqual(3);
     expect(surveyData.Q4).toEqual(4);
+  });
+
+  test("default_response options are pre-selected correctly", async () => {
+    const scale = ["a", "b", "c", "d", "e"];
+    const { displayElement } = await startTimeline([
+      {
+        type: surveyLikert,
+        questions: [
+          { prompt: "Q0", labels: scale, default_response: 2 },
+          { prompt: "Q1", labels: scale, default_response: 0 },
+          { prompt: "Q2", labels: scale, default_response: 4 },
+          { prompt: "Q3", labels: scale }, // No default
+        ],
+        randomize_question_order: false,
+      },
+    ]);
+
+    // Check correct radio buttons are pre-selected
+    expect(selectInput("Q0", "2", displayElement).checked).toBe(true);
+    expect(selectInput("Q1", "0", displayElement).checked).toBe(true);
+    expect(selectInput("Q2", "4", displayElement).checked).toBe(true);
+
+    // Check other options are NOT selected
+    expect(selectInput("Q0", "0", displayElement).checked).toBe(false);
+    expect(selectInput("Q0", "1", displayElement).checked).toBe(false);
+    expect(selectInput("Q1", "1", displayElement).checked).toBe(false);
+    expect(selectInput("Q2", "0", displayElement).checked).toBe(false);
+
+    // Check question without default has no selection
+    expect(selectInput("Q3", "0", displayElement).checked).toBe(false);
+    expect(selectInput("Q3", "1", displayElement).checked).toBe(false);
+    expect(selectInput("Q3", "2", displayElement).checked).toBe(false);
+    expect(selectInput("Q3", "3", displayElement).checked).toBe(false);
+    expect(selectInput("Q3", "4", displayElement).checked).toBe(false);
+  });
+
+  test("default_response null does not pre-select anything", async () => {
+    const scale = ["a", "b", "c"];
+    const { displayElement } = await startTimeline([
+      {
+        type: surveyLikert,
+        questions: [{ prompt: "Q0", labels: scale, default_response: null }],
+        randomize_question_order: false,
+      },
+    ]);
+
+    // Check that no options are pre-selected
+    expect(selectInput("Q0", "0", displayElement).checked).toBe(false);
+    expect(selectInput("Q0", "1", displayElement).checked).toBe(false);
+    expect(selectInput("Q0", "2", displayElement).checked).toBe(false);
   });
 });
 
