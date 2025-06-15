@@ -25,13 +25,17 @@ const info = <const>{
       pretty_name: "Prompt",
       default: null,
     },
-    /** The width of the video in pixels. */
+    /** The width of the video display in pixels. If `null`, the video will take the original video's dimensions, 
+     * or properly scaled with the aspect ratio if the height is also specified.
+     */
     width: {
       type: ParameterType.INT,
       pretty_name: "Width",
       default: "",
     },
-    /** The height of the video display in pixels. */
+    /** The height of the video display in pixels. If `null`, the video will take the original video's dimensions,
+     * or properly scaled with the aspect ratio if the width is also specified.
+     */
     height: {
       type: ParameterType.INT,
       pretty_name: "Height",
@@ -99,7 +103,7 @@ const info = <const>{
     },
     /** The response time in milliseconds for the participant to make a response. The time is measured from when the
      * stimulus first appears on the screen until the participant's response.
-     * */
+     */
     rt: {
       type: ParameterType.INT,
     },
@@ -137,14 +141,6 @@ class VideoKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    // catch mistake where stimuli are not an array
-    if (!Array.isArray(trial.stimulus)) {
-      throw new Error(`
-        The stimulus property for the video-keyboard-response plugin must be an array
-        of files. See https://www.jspsych.org/latest/plugins/video-keyboard-response/#parameters
-      `);
-    }
-
     // setup stimulus
     var video_html = "<div>";
     video_html += '<video id="jspsych-video-keyboard-response-stimulus"';
