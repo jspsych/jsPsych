@@ -33,7 +33,7 @@
     var trial_1 = {
       type: jsPsychVideoButtonResponse,
       stimulus: ['video/sample_video.mp4'],
-      choices: ['Y','N'],
+      choices: ['Y', 'N'],
       margin_vertical: '10px',
       margin_horizontal: '8px',
       prompt: 'Press Y or N',
@@ -51,7 +51,7 @@
     var trial_2 = {
       type: jsPsychVideoButtonResponse,
       stimulus: ['video/sample_video.mp4'],
-      choices: ['😄','😁','🥱','😣','🤯'],
+      choices: ['😄', '😁', '🥱', '😣', '🤯'],
       button_html: function (choice) {
         return '<span style="font-size:40px;">' + choice + '</span>';
       },
@@ -68,7 +68,9 @@
       type: jsPsychVideoButtonResponse,
       stimulus: ['video/sample_video.mp4'],
       choices: ['😄','😁','🥱','😣','🤯'],
-      button_html: '<div style="font-size:40px;">%choice%</div>',
+      button_html: function (choice) {
+        return '<span style="font-size:40px;">' + choice + '</span>';
+      },
       margin_vertical: '10px',
       margin_horizontal: '8px',
       prompt: '<p>Click the emoji that best represents your reaction to the video</p><p>Click a button to end the trial.</p><p>Response buttons are disabled for the first 2 seconds of playing.</p>',
