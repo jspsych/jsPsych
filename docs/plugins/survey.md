@@ -512,7 +512,7 @@ import '@jspsych/plugin-survey/css/survey.css'
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo4.html">Open demo in new tab</a>
 
 ??? example "Repeating survey trials with different variables"
-    The survey plugin is not well-suited for use with the jsPsych timeline variables feature, so an alternative to creating a set of repeating survey trials is to construct them in a loop.
+    The survey plugin is not well-suited for use with the jsPsych timeline variables feature, so an alternative to creating a set of repeating survey trials is to construct them in a loop. You can also check out the [SurveyJS loop and merge feature](https://surveyjs.io/form-library/examples/loop-and-merge/vanillajs).
     When adding any data to a survey trial, you should add it via the `data` parameter at the whole-trial level (not inside the question objects), even if it only relates to one question out of multiple questions/pages contained within the trial.
     === "Code"
 

@@ -271,7 +271,9 @@ Instead, it's often preferrable to separate the information that changes across 
 
 The following section presents some different options for programmatically defining multiple questions in a survey trial, or multiple survey trials, based on an array of values that should change across questions or trials.
 
-The example below shows how to use the `survey_function` to loop over a set of question-level variables (titles/prompts and names), and dynamically add each question to a single survey page. You could use this same approach to add questions across multiple pages within the same survey trial.
+One option is to try the new [SurveyJS loop and merge feature](https://surveyjs.io/form-library/examples/loop-and-merge/vanillajs) (available as of `survey` plugin v3.0.0). This feature allows you to create a predefined number of question loops by linking each question loop to a row in a single- or multi-select matrix. Or, you can use a dynamic matrix or dynamic panel to generate question loops in response to participants' responses (e.g. repeat a set of questions for each choice that they selected in a checkbox question).
+
+Another, more flexible option is to use JavaScript to dynamically generate your survey structure. The example below shows how to use the `survey_function` to loop over a set of question-level variables (titles/prompts and names), and dynamically add each question to a single survey page. You could use this same approach to add questions across multiple pages within the same survey trial.
 
 ```javascript
 const survey_function = (survey) => {
