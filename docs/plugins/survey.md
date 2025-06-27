@@ -44,42 +44,42 @@ For reference, the SurveyJS question/element types are listed below, with links 
 
 The "boolean" type is a yes/no (or other two-option) multiple choice question. It differs from the "radiogroup" (multiple choice) question type in that it offers different response format options (left/right slider button, yes/no checkbox) in addition to the standard multiple choice format (two separate radio buttons).
 
-- [Boolean example](https://surveyjs.io/form-library/examples/yes-no-question/jquery) 
+- [Boolean example](https://surveyjs.io/form-library/examples/yes-no-question/vanillajs)
 - [Boolean API documentation](https://surveyjs.io/form-library/documentation/api-reference/boolean-question-model)
 
 #### checkbox
 
 This checkbox question type allows participants to select one or more options from the set of choices. You can optionally include special choices, such as "Select all", "None", and "Other" with a text box that appears when selected.
 
-- [Checkbox example](https://surveyjs.io/form-library/examples/create-checkboxes-question-in-javascript/jquery)
+- [Checkbox example](https://surveyjs.io/form-library/examples/create-checkboxes-question-in-javascript/vanillajs)
 - [Checkbox API documentation](https://surveyjs.io/form-library/documentation/api-reference/checkbox-question-model)
 
 #### comment
 
 This is the "long text" question type. It's similar to the text input question, but unlike text input, you can make the comment text box larger than a single line. You can also make the box resizeable and limit the number of characters.
 
-- [Comment example](https://surveyjs.io/form-library/examples/add-open-ended-question-to-a-form/jquery) 
+- [Comment example](https://surveyjs.io/form-library/examples/add-open-ended-question-to-a-form/vanillajs)
 - [Comment API documentation](https://surveyjs.io/form-library/documentation/api-reference/comment-field-model)
 
 #### dropdown
 
 The dropdown question type allows participants to select a single option from a list presented in a drop-down box. 
 
-- [Dropdown example](https://surveyjs.io/form-library/examples/create-dropdown-menu-in-javascript/jquery) 
+- [Dropdown example](https://surveyjs.io/form-library/examples/create-dropdown-menu-in-javascript/vanillajs)
 - [Dropdown API documentation](https://surveyjs.io/form-library/documentation/api-reference/dropdown-menu-model)
 
 #### tagbox
 
 This is a multi-select dropdown question type. It is similar to a dropdown question, but allows participants to select more than one response from the drop-down list.
 
-- [Tagbox example](https://surveyjs.io/form-library/examples/how-to-create-multiselect-tag-box/jquery) 
+- [Tagbox example](https://surveyjs.io/form-library/examples/how-to-create-multiselect-tag-box/vanillajs)
 - [Tagbox API documentation](https://surveyjs.io/form-library/documentation/api-reference/dropdown-tag-box-model)
 
 #### expression
 
 This is a read-only element that calculates a value based on a specified expression. This question type can be used to dynamically calculate values based on the participant's responses and/or predefined variables and display the calculated value on the page. For example, if you asked participants to estimate the percentage of their day doing various activies, you could have participants enter a percentage value for each activity, and use this 'expression' question to calculate and display the total percentage across all activities (to ensure that it does not exceed 100).
 
-- [Expression example](https://surveyjs.io/form-library/examples/expression-question-for-dynamic-form-calculations/jquery) 
+- [Expression example](https://surveyjs.io/form-library/examples/expression-question-for-dynamic-form-calculations/vanillajs)
 - [Expression API documentation](https://surveyjs.io/form-library/documentation/api-reference/expression-model)
 
 #### file
@@ -87,94 +87,94 @@ This is a read-only element that calculates a value based on a specified express
 This question allows participants to upload one or more files (images, documents, etc.). It provides drag-and-drop and browse/select options. Files can be uploaded to a server or stored directly in the survey results JSON object as base64-encoded text.
 
 !!! note 
-    When using this question type, you will need to choose how to handle the files. One option is to save the file with the rest of the response data as a Base64-encoded text string (`storeDataAsText: true`), but keep in mind that this will significantly increase the size of the response data and should only be used for small files. Another option is to upload the participant's file to a server, which you can do using the `onUploadFiles` event handler in the jsPsych `survey_function` function. You can read more about these options in the SurveyJS [file upload documentation](https://surveyjs.io/form-library/examples/file-upload/jquery#content-docs), and see an example of the file upload option in the `index.js` part of this [code example](https://surveyjs.io/form-library/examples/file-upload/jquery#content-code).
+    When using this question type, you will need to choose how to handle the files. One option is to save the file with the rest of the response data as a Base64-encoded text string (`storeDataAsText: true`), but keep in mind that this will significantly increase the size of the response data and should only be used for small files. Another option is to upload the participant's file to a server, which you can do using the `onUploadFiles` event handler in the jsPsych `survey_function` function. You can read more about these options in the SurveyJS [file upload documentation](https://surveyjs.io/form-library/examples/file-upload/documentation), and see an example of the file upload option in the `index.js` part of this [code example](https://surveyjs.io/form-library/examples/file-upload/vanillajs#content-code).
 
-- [File example](https://surveyjs.io/form-library/examples/file-upload/jquery) 
+- [File example](https://surveyjs.io/form-library/examples/file-upload/vanillajs)
 - [File API documentation](https://surveyjs.io/form-library/documentation/api-reference/file-model)
 
 #### html
 
 Most SurveyJS question types do not support HTML markup in the display fields. The html element allows you to add custom HTML to the survey, so that you can insert images, hyperlinks, etc. 
 
-- [HTML example](https://surveyjs.io/form-library/examples/add-html-form-field/jquery#) 
+- [HTML example](https://surveyjs.io/form-library/examples/add-html-form-field/vanillajs)
 - [HTML API documentation](https://surveyjs.io/form-library/documentation/api-reference/add-custom-html-to-survey)
 
 #### image
 
 This element adds an image or video to the survey page.
 
-- [Image example](https://surveyjs.io/form-library/examples/add-image-and-video-to-survey/jquery#) 
+- [Image example](https://surveyjs.io/form-library/examples/add-image-and-video-to-survey/vanillajs)
 - [Image API documentation](https://surveyjs.io/form-library/documentation/api-reference/add-image-to-survey)
 
 #### imagepicker
 
 This question type displays images/videos and allows the participant to select one or more as their repsonse.
 
-- [Imagepicker example](https://surveyjs.io/form-library/examples/image-picker-question/jquery)
+- [Imagepicker example](https://surveyjs.io/form-library/examples/image-picker-question/vanillajs)
 - [Imagepicker API documentation](https://surveyjs.io/form-library/documentation/api-reference/image-picker-question-model)
 
 #### matrix
 
 The matrix question creates a table of multiple choice questions (rows) that use the same set of response options (columns). This is often used for presenting multiple questions/statements with a Likert or similar rating scale.
 
-- [Matrix example](https://surveyjs.io/form-library/examples/single-selection-matrix-table-question/jquery) 
+- [Matrix example](https://surveyjs.io/form-library/examples/single-selection-matrix-table-question/vanillajs)
 - [Matrix API documentation](https://surveyjs.io/form-library/documentation/api-reference/matrix-table-question-model)
 
 #### matrixdropdown
 
 This question type allows you to present a matrix (table) of questions, with different types of response options in each cell. Despite the "dropdown" part of the question type name, this question type allows not only dropdown questions in the matrix cells, but also checkbox, radiogroup, text, and comment.
 
-- [Matrixdropdown example](https://surveyjs.io/form-library/examples/multi-select-matrix-question/jquery) 
+- [Matrixdropdown example](https://surveyjs.io/form-library/examples/multi-select-matrix-question/vanillajs)
 - [Matrixdropdown API documentation](https://surveyjs.io/form-library/documentation/api-reference/matrix-table-with-dropdown-list)
 
 #### multipletext
 
 This question type allows you to present multiple [text questions](#text) as part of a single 'question', which can be useful if you want to group together related short-answer text input boxes (e.g. separate first/middle/last text boxes for entering full name). Each 'item' within this question type defines a single text question, and supports the text question's input types (email, date, etc.) for built-in formatting and validation. In the results, there will be a single key for this question (either the question name, if specified in the question parameters, otheriwse automatically named `questionN`), and the value will be an object with key-value pairs for each text entry 'item' (`"item1Name": "item1Response", "item2Name": "item2Response"`, etc.).
 
-- [Multipletext example](https://surveyjs.io/form-library/examples/multiple-text-box-question/jquery) 
+- [Multipletext example](https://surveyjs.io/form-library/examples/multiple-text-box-question/vanillajs)
 - [Multipletext API documentation](https://surveyjs.io/form-library/documentation/api-reference/multiple-text-entry-question-model)
 
 #### panel
 
 This element allows you to group related questions together. This can help with visual organization on the page, and can help participants understand the purpose of a set of questions. Panels appear as a title/description above a box that contains the panel's nested elements/questions. The panel can be initially expanded (show all questions) and collapsed (hide all questions), and users can toggle this state by clicking on the panel title.
 
-- [Panel example](https://surveyjs.io/form-library/examples/set-properties-on-multiple-questions-using-panel/jquery) 
+- [Panel example](https://surveyjs.io/form-library/examples/set-properties-on-multiple-questions-using-panel/vanillajs)
 - [Panel API documentation](https://surveyjs.io/form-library/documentation/api-reference/panel-model)
 
 #### paneldynamic
 
 The paneldyanmic element allows you to set up a group of questions that repeat based on the participant's response(s) to another question. This can be useful when the participant will have an unknown number of responses, and you want to ask the same questions about each response. For instance, you could use this element type to set up a series of questions about the participant's children, employment history, favorite hobbies, etc. The paneldynamic element allows participants to add/delete the 'subpanels' (response and associated question set).
 
-- [Paneldynamic example](https://surveyjs.io/form-library/examples/duplicate-group-of-fields-in-form/jquery) 
+- [Paneldynamic example](https://surveyjs.io/form-library/examples/duplicate-group-of-fields-in-form/vanillajs)
 - [Paneldynamic API documentation](https://surveyjs.io/form-library/documentation/api-reference/dynamic-panel-model)
 
 #### radiogroup
 
 This is a multiple choice question type. Participants can select a single option from the set of choices. You can optionally add special choices, such as "Other" with a text box that appears when selected.
 
-- [Radiogroup example](https://surveyjs.io/form-library/examples/single-select-radio-button-group/jquery) 
+- [Radiogroup example](https://surveyjs.io/form-library/examples/single-select-radio-button-group/vanillajs)
 - [Radiogroup API documentation](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model)
 
 #### rating
 
-The rating question type is a type of multiple-choice question that is intended for allowing participants to evaluate something on a scale. The scale can display a range of numbers, graphic symbols (stars, faces), or text labels. The scale options can be presented as a set of horizontal buttons, a drop-down menu, or "auto" (displays buttons if there is sufficient page width, otherwise drop-down; see the [Rating UI page](https://surveyjs.io/form-library/examples/ui-adaptation-modes-for-rating-scale/jquery) for more documentation and examples).
+The rating question type is a type of multiple-choice question that is intended for allowing participants to evaluate something on a scale. The scale can display a range of numbers, graphic symbols (stars, faces), or text labels. The scale options can be presented as a set of horizontal buttons, a drop-down menu, or "auto" (displays buttons if there is sufficient page width, otherwise drop-down; see the [Rating UI page](https://surveyjs.io/form-library/examples/ui-adaptation-modes-for-rating-scale/vanillajs) for more documentation and examples).
 
-- [Rating example](https://surveyjs.io/form-library/examples/rating-scale/jquery) 
+- [Rating example](https://surveyjs.io/form-library/examples/rating-scale/vanillajs)
 - [Rating API documentation](https://surveyjs.io/form-library/documentation/api-reference/rating-scale-question-model)
 
 #### ranking
 
 The ranking question allows participants to arrange a set of choices in order of preference, importance, or other criteria, or assign a numerical value to each choice based on their relative rank. The options are displayed vertically, and participants can drag-and-drop to change their order.
-This question type can be useful when used with the SurveyJS "carry forward" feature. For instance, you can take the participant's responses from a previous checkbox (multi-select) question and use those selections as the options to rank in a ranking question (see the `reference_previous_answers.html` example in the jsPsych survey package). It's also possible to combine the selection and ranking steps into a single question using the ['select items to rank'](https://surveyjs.io/form-library/examples/select-items-to-rank/jquery) approach, which allows participants to 'select' items by dragging them into a separate ranking area, and re-order the items in the ranking area.
+This question type can be useful when used with the SurveyJS "carry forward" feature. For instance, you can take the participant's responses from a previous checkbox (multi-select) question and use those selections as the options to rank in a ranking question (see the `reference_previous_answers.html` example in the jsPsych survey package). It's also possible to combine the selection and ranking steps into a single question using the ['select items to rank'](https://surveyjs.io/form-library/examples/select-items-to-rank/vanillajs) approach, which allows participants to 'select' items by dragging them into a separate ranking area, and re-order the items in the ranking area.
 
 - [Ranking example](https://surveyjs.io/form-library/documentation/api-reference/ranking-question-model) 
 - [Ranking API documentation](https://surveyjs.io/form-library/documentation/api-reference/ranking-question-model)
 
 #### signaturepad
 
-The signaturepad question allows participants to add their digital signature to the survey by drawing with the mouse or finger (on a trackpad or touchscreen-enabled device). You can specify the pen color and box size, and save the signature as Base64-encoded text in PNG (default), JPEG, or SVG format. You can also save the image directly to a server rather than encoding it as text with the rest of the response data. See this [SurveyJS demo and documentation](https://surveyjs.io/form-library/examples/upload-signature-pad-data-to-server/jquery#content-code) about uploading the signature as an image file, and the [file question](#file) for more information and warnings about handling files.
+The signaturepad question allows participants to add their digital signature to the survey by drawing with the mouse or finger (on a trackpad or touchscreen-enabled device). You can specify the pen color and box size, and save the signature as Base64-encoded text in PNG (default), JPEG, or SVG format. You can also save the image directly to a server rather than encoding it as text with the rest of the response data. See this [SurveyJS demo and documentation](https://surveyjs.io/form-library/examples/upload-signature-pad-data-to-server/vanillajs#content-code) about uploading the signature as an image file, and the [file question](#file) for more information and warnings about handling files.
 
-- [Signaturepad example](https://surveyjs.io/form-library/examples/signature-pad-widget-javascript/jquery)
+- [Signaturepad example](https://surveyjs.io/form-library/examples/signature-pad-widget-javascript/vanillajs)
 - [Signaturepad API documentation](https://surveyjs.io/form-library/documentation/api-reference/signature-pad-model)
 
 #### sliders
@@ -189,10 +189,10 @@ A slider presents a predefined range of values along a scale with a draggable th
 
 In addition to a basic text input box, you can select from any of these other input types: **color, date, datetime-local, email, month, number, password, range, tel, time, url, week**. Setting these input types will change things like (1) the format of the response elements, (2) the characters/values that the participant is allowed to enter, and/or (3) add automatic validation for the response format.
 
-- [Text input examples](https://surveyjs.io/form-library/examples/text-entry-question/jquery) - includes email, password, and URL input types
-- [Date/time input examples](https://surveyjs.io/form-library/examples/datetime-entry-question/jquery)
-- [Numeric input examples](https://surveyjs.io/form-library/examples/numeric-entry-question/jquery) - includes range input (slider) and telephone number input types
-- [Color input example](https://surveyjs.io/form-library/examples/color-input-question/jquery)
+- [Text input examples](https://surveyjs.io/form-library/examples/text-entry-question/vanillajs) - includes email, password, and URL input types
+- [Date/time input examples](https://surveyjs.io/form-library/examples/datetime-entry-question/vanillajs)
+- [Numeric input examples](https://surveyjs.io/form-library/examples/numeric-entry-question/vanillajs) - includes range input (slider) and telephone number input types
+- [Color input example](https://surveyjs.io/form-library/examples/color-input-question/vanillajs)
 - [Text API documentation](https://surveyjs.io/form-library/documentation/api-reference/text-entry-question-model)
 
 ## Data Generated
