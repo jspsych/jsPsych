@@ -80,10 +80,10 @@
         }
       ],
       timeline_variables: [
-        { word: 'cheese', survey_json: { elements: [{ type: "text", title: "Enter a word related to CHEESE:", autocomplete: "off" }], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } },
-        { word: 'ring', survey_json: { elements: [{ type: "text", title: "Enter a word related to RING:", autocomplete: "off" }], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } },
-        { word: 'bat', survey_json: { elements: [{ type: "text", title: "Enter a word related to BAT:", autocomplete: "off" }], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } },
-        { word: 'cow', survey_json: { elements: [{ type: "text", title: "Enter a word related to COW:", autocomplete: "off" }], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } }
+        { word: 'cheese', survey_json: { elements: [{ type: "text", title: "Enter a word related to CHEESE:", autocomplete: "off" }], completeText: "Next", focusFirstQuestionAutomatic: true } },
+        { word: 'ring', survey_json: { elements: [{ type: "text", title: "Enter a word related to RING:", autocomplete: "off" }], completeText: "Next", focusFirstQuestionAutomatic: true } },
+        { word: 'bat', survey_json: { elements: [{ type: "text", title: "Enter a word related to BAT:", autocomplete: "off" }], completeText: "Next", focusFirstQuestionAutomatic: true } },
+        { word: 'cow', survey_json: { elements: [{ type: "text", title: "Enter a word related to COW:", autocomplete: "off" }], completeText: "Next", focusFirstQuestionAutomatic: true } }
       ]
     };
 
@@ -121,7 +121,6 @@
             const response_type = (last_response === 'j') ? "RELATED" : "NOT RELATED";
             const question_text = `You said that the words "${jsPsych.evaluateTimelineVariable('word1')}" and "${jsPsych.evaluateTimelineVariable('word2')}" are ${response_type}. Please explain your answer.`;
             const survey_json = {
-              showQuestionNumbers: false,
               completeText: "Next",
               focusFirstQuestionAutomatic: true,
               elements: [

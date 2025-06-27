@@ -256,7 +256,6 @@ import '@jspsych/plugin-survey/css/survey.css'
         const trial = {
           type: jsPsychSurvey,
           survey_json: {
-            showQuestionNumbers: false,
             elements:
               [
                 {
@@ -295,7 +294,6 @@ import '@jspsych/plugin-survey/css/survey.css'
         const trial = {
           type: jsPsychSurvey,
           survey_json: {
-            showQuestionNumbers: false,
             title: 'My questionnaire',
             completeText: 'Done!',
             pageNextText: 'Continue',
@@ -367,7 +365,6 @@ import '@jspsych/plugin-survey/css/survey.css'
         const trial = {
           type: jsPsychSurvey,
           survey_json: {
-            showQuestionNumbers: false,
             title: 'Likert scale examples',
             pages: [
               {
@@ -470,7 +467,6 @@ import '@jspsych/plugin-survey/css/survey.css'
         const trial = {
           type: jsPsychSurvey,
           survey_json: {
-            showQuestionNumbers: false,
             title: 'Conditional question visibility.',
             showNavigationButtons: "none",
             goNextPageAutomatic: true,
@@ -552,7 +548,6 @@ import '@jspsych/plugin-survey/css/survey.css'
           // set up the survey JSON for this trial
           // any question-specific variables come from the appropriate object in the question_variables array
           let survey_json = {
-            showQuestionNumbers: false,
             title: 'Dynamically constructing survey trials.',
             completeText: 'Next >>',
             elements: [
@@ -677,7 +672,6 @@ import '@jspsych/plugin-survey/css/survey.css'
             showLabel: true,
             multiSelect: true
           }],
-          showQuestionNumbers: "off",
           completeText: 'Next',
         };
 
@@ -706,8 +700,7 @@ import '@jspsych/plugin-survey/css/survey.css'
               regex: "[rR]{1}[eE]{1}[dD]{1}"
             }],
           }],
-          completeText: "Check my response",
-          showQuestionNumbers: "off"
+          completeText: "Check my response"
         };
 
         const sound_trial = {
@@ -791,8 +784,7 @@ import '@jspsych/plugin-survey/css/survey.css'
                 pattern: "aaa-9999"
               }
             }
-          ],
-          showQuestionNumbers: false
+          ]
         };
 
         timeline.push({

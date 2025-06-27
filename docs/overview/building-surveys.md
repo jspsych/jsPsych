@@ -144,7 +144,6 @@ Along with either the 'elements' or 'pages' property, you can add optional surve
 ```javascript
 const survey_json = {
   title: "Survey title",
-  showQuestionNumbers: "off",
   completeText: "Done",
   pageNextText: "Next",
   pagePrevText: "Back",
@@ -336,19 +335,19 @@ Rather than repeating a question format within the same trial, perhaps you want 
       timeline_variables: [
         {
           word: 'cheese',
-          survey_json: { elements: [ {type: "text", title: "Enter a word related to CHEESE:", autocomplete: "off" } ], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } 
+          survey_json: { elements: [ {type: "text", title: "Enter a word related to CHEESE:", autocomplete: "off" } ], completeText: "Next", focusFirstQuestionAutomatic: true }
         },
         {
           word: 'ring',
-          survey_json: { elements: [ {type: "text", title: "Enter a word related to RING:", autocomplete: "off" } ], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } 
+          survey_json: { elements: [ {type: "text", title: "Enter a word related to RING:", autocomplete: "off" } ], completeText: "Next", focusFirstQuestionAutomatic: true }
         },
         {
           word: 'bat',
-          survey_json: { elements: [ {type: "text", title: "Enter a word related to BAT:", autocomplete: "off" } ], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true }
+          survey_json: { elements: [ {type: "text", title: "Enter a word related to BAT:", autocomplete: "off" } ], completeText: "Next", focusFirstQuestionAutomatic: true }
         },
         {
           word: 'cow',
-          survey_json: { elements: [ {type: "text", title: "Enter a word related to COW:", autocomplete: "off" } ], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true }
+          survey_json: { elements: [ {type: "text", title: "Enter a word related to COW:", autocomplete: "off" } ],completeText: "Next", focusFirstQuestionAutomatic: true }
         }
       ]
     };
@@ -391,7 +390,6 @@ Rather than repeating a question format within the same trial, perhaps you want 
                   autocomplete: "off" 
                 }
               ], 
-              showQuestionNumbers: false, 
               completeText: "Next", 
               focusFirstQuestionAutomatic: true 
             }
@@ -419,7 +417,6 @@ Rather than repeating a question format within the same trial, perhaps you want 
       question.title = `Enter a word related to ${jsPsych.evaluateTimelineVariable('word').toUpperCase()}`;
       question.autocomplete = "off";
       // Set survey-level parameters
-      survey.showQuestionNumbers = false;
       survey.completeText = "Next";
       survey.focusFirstQuestionAutomatic = true;
     }
