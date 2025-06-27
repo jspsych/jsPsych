@@ -151,6 +151,13 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     });
   }
 
+  private createSurveyContainer(parent: HTMLElement): HTMLElement {
+    const container = document.createElement("div");
+    container.classList.add("jspsych-survey-container");
+    parent.appendChild(container);
+    return container;
+  }
+
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // check for empty JSON and no survey function
     if (JSON.stringify(trial.survey_json) === "{}" && trial.survey_function === null) {
@@ -197,7 +204,10 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     // remove flex display from jspsych-content-wrapper to get formatting to work
     document.querySelector<HTMLElement>(".jspsych-content-wrapper").style.display = "block";
 
-    this.survey.render(display_element);
+    // As of the SurveyJS v2.2 update, we need to create a new container for the survey to render in.
+    // Otherwise the rendering fails silently with repeated similar survey trials.
+    const survey_container = this.createSurveyContainer(display_element);
+    this.survey.render(survey_container);
 
     this.start_time = performance.now();
   }
