@@ -167,7 +167,7 @@ The rating question type is a type of multiple-choice question that is intended 
 The ranking question allows participants to arrange a set of choices in order of preference, importance, or other criteria, or assign a numerical value to each choice based on their relative rank. The options are displayed vertically, and participants can drag-and-drop to change their order.
 This question type can be useful when used with the SurveyJS "carry forward" feature. For instance, you can take the participant's responses from a previous checkbox (multi-select) question and use those selections as the options to rank in a ranking question (see the `reference_previous_answers.html` example in the jsPsych survey package). It's also possible to combine the selection and ranking steps into a single question using the ['select items to rank'](https://surveyjs.io/form-library/examples/select-items-to-rank/vanillajs) approach, which allows participants to 'select' items by dragging them into a separate ranking area, and re-order the items in the ranking area.
 
-- [Ranking example](https://surveyjs.io/form-library/documentation/api-reference/ranking-question-model) 
+- [Ranking example](https://surveyjs.io/form-library/examples/add-ranking-question-to-form/vanillajs) 
 - [Ranking API documentation](https://surveyjs.io/form-library/documentation/api-reference/ranking-question-model)
 
 #### signaturepad
