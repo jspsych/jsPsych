@@ -177,6 +177,14 @@ The signaturepad question allows participants to add their digital signature to 
 - [Signaturepad example](https://surveyjs.io/form-library/examples/signature-pad-widget-javascript/jquery)
 - [Signaturepad API documentation](https://surveyjs.io/form-library/documentation/api-reference/signature-pad-model)
 
+#### sliders
+
+A slider presents a predefined range of values along a scale with a draggable thumb that users can move to select a location/number. It offers an alternative to text boxes by visually representing the available input range. A range slider displays a predefined scale with *two* draggable thumbs, allowing users to select a range of values. Users can also drag the entire selected range along the scale without changing the distance between the thumbs.
+
+- [Slider example](https://surveyjs.io/form-library/examples/single-value-slider-input/vanillajs#)
+- [Range slider example](https://surveyjs.io/form-library/examples/dual-range-slider-input/vanillajs)
+- [Slider and range slider API documentation](https://surveyjs.io/form-library/documentation/api-reference/questionslidermodel)
+
 #### text 
 
 In addition to a basic text input box, you can select from any of these other input types: **color, date, datetime-local, email, month, number, password, range, tel, time, url, week**. Setting these input types will change things like (1) the format of the response elements, (2) the characters/values that the participant is allowed to enter, and/or (3) add automatic validation for the response format.
