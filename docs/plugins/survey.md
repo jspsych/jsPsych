@@ -210,10 +210,10 @@ This plugin does not yet support [simulation mode](../overview/simulation.md).
 
 ## CSS
 
-This plugin requires an additional stylesheet called `survey.css`. You can load it via: 
+This plugin requires an additional stylesheet called `survey.css`. You can also choose to use the minified version, `survey.min.css`. You can load it via:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@2.1.0/css/survey.css">
+<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@2.1.0/css/survey.min.css">
 ```
 
 If you are using a bundler such as [webpack](https://webpack.js.org/), you can also import it in JavaScript as follows, depending on your bundler configuration:
@@ -227,7 +227,7 @@ Using the CDN-hosted JavaScript file:
 
 ```js
 <script src="https://unpkg.com/@jspsych/plugin-survey@2.1.0"></script>
-<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@2.1.0/css/survey.css">
+<link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@2.1.0/css/survey.min.css">
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
