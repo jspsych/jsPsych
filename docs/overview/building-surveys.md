@@ -45,16 +45,16 @@ Here are some other places to start learning about SurveyJS:
 
 SurveyJS has some more specific features that some researchers might find useful, including:
 
-- [Automatic question numbering](https://surveyjs.io/form-library/examples/how-to-number-pages-and-questions/jquery) (across the survey, within each page, and using custom values/characters)
-- [Response validation](https://surveyjs.io/form-library/examples/javascript-form-validation/jquery)
-- [Table of contents and navigation across sections](https://surveyjs.io/form-library/examples/table-of-contents/jquery)
-- [Progress bar](https://surveyjs.io/form-library/examples/configure-form-navigation-with-progress-indicators/jquery)
-- [Carry responses forward from a selection question](https://surveyjs.io/form-library/examples/carry-forward-responses/jquery)
-- [Carry responses forward from a dynamic matrix/panel](https://surveyjs.io/form-library/examples/pipe-answers-from-dynamic-matrix-or-panel/jquery)
-- [Conditional visibility for elements/questions](https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#conditional-visibility) (see also [this example](https://surveyjs.io/form-library/examples/implement-conditional-logic-to-change-question-visibility/jquery))
+- [Automatic question numbering](https://surveyjs.io/form-library/examples/how-to-number-pages-and-questions/vanillajs) (across the survey, within each page, and using custom values/characters)
+- [Response validation](https://surveyjs.io/form-library/examples/javascript-form-validation/vanillajs)
+- [Table of contents and navigation across sections](https://surveyjs.io/form-library/examples/table-of-contents/vanillajs)
+- [Progress bar](https://surveyjs.io/form-library/examples/configure-form-navigation-with-progress-indicators/vanillajs)
+- [Carry responses forward from a selection question](https://surveyjs.io/form-library/examples/carry-forward-responses/vanillajs)
+- [Carry responses forward from a dynamic matrix/panel](https://surveyjs.io/form-library/examples/pipe-answers-from-dynamic-matrix-or-panel/vanillajs)
+- [Conditional visibility for elements/questions](https://surveyjs.io/form-library/documentation/design-survey/conditional-logic#conditional-visibility) (see also [this example](https://surveyjs.io/form-library/examples/implement-conditional-logic-to-change-question-visibility/vanillajs))
 - Special choices for multi-choice-type questions: [None](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model#showNoneItem), [Other](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model#showOtherItem), [Select All](https://surveyjs.io/form-library/documentation/api-reference/checkbox-question-model#showSelectAllItem), [Refuse to answer](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model#showRefuseItem), and [Don't know](https://surveyjs.io/form-library/documentation/api-reference/radio-button-question-model#showDontKnowItem)
-- [Localization](https://surveyjs.io/form-library/examples/survey-localization/jquery) (adapting the survey's language based on a country/region value)
-- [Text piping](https://surveyjs.io/form-library/examples/text-piping-in-surveys/jquery) (dynamically insert text into questions/answers based on previous responses)
+- [Localization](https://surveyjs.io/form-library/examples/survey-localization/vanillajs) (adapting the survey's language based on a country/region value)
+- [Text piping](https://surveyjs.io/form-library/examples/text-piping-in-surveys/vanillajs) (dynamically insert text into questions/answers based on previous responses)
 
 You can find realistic examples on the [SurveyJS examples/demos page](https://surveyjs.io/form-library/examples/overview). And to view all of the survey-level options, see the [Survey API documentation](https://surveyjs.io/form-library/documentation/api-reference/survey-data-model).
 
@@ -144,7 +144,6 @@ Along with either the 'elements' or 'pages' property, you can add optional surve
 ```javascript
 const survey_json = {
   title: "Survey title",
-  showQuestionNumbers: "off",
   completeText: "Done",
   pageNextText: "Next",
   pagePrevText: "Back",
@@ -208,7 +207,7 @@ const select_color_trial = {
   type: jsPsychHtmlButtonResponse,
   stimulus: '<p>Which of these is your favorite color?</p>',
   choices: color_choices,
-  button_html: '<button class="jspsych-btn" style="color:%choice%";">%choice%</button>',
+  button_html: (choice) => `<button class="jspsych-btn" style="color:${choice};">%choice%</button>`,
   data: {trial_id: 'color_trial'}
 };
 
@@ -272,7 +271,9 @@ Instead, it's often preferrable to separate the information that changes across 
 
 The following section presents some different options for programmatically defining multiple questions in a survey trial, or multiple survey trials, based on an array of values that should change across questions or trials.
 
-The example below shows how to use the `survey_function` to loop over a set of question-level variables (titles/prompts and names), and dynamically add each question to a single survey page. You could use this same approach to add questions across multiple pages within the same survey trial.
+One option is to try the new [SurveyJS loop and merge feature](https://surveyjs.io/form-library/examples/loop-and-merge/vanillajs) (available as of `survey` plugin v3.0.0). This feature allows you to create a predefined number of question loops by linking each question loop to a row in a single- or multi-select matrix. Or, you can use a dynamic matrix or dynamic panel to generate question loops in response to participants' responses (e.g. repeat a set of questions for each choice that they selected in a checkbox question).
+
+Another, more flexible option is to use JavaScript to dynamically generate your survey structure. The example below shows how to use the `survey_function` to loop over a set of question-level variables (titles/prompts and names), and dynamically add each question to a single survey page. You could use this same approach to add questions across multiple pages within the same survey trial.
 
 ```javascript
 const survey_function = (survey) => {
@@ -305,7 +306,7 @@ const survey_function = (survey) => {
 ```
 
 !!! tip "Use the 'matrix' question type for repeated response options"
-    The example above was used to illustrate how you can loop over information to programmatically construct a series of questions that are shown on the same page. But in cases where you have different question prompts that all use the same multiple choice options, you might prefer to use the the SurveyJS ["matrix" question type](https://surveyjs.io/form-library/examples/single-selection-matrix-table-question/jquery). This question type creates a table where each row is a question and each column is a response option. The table format is often used for Likert scales, satisfaction surveys, etc. You can even create a table that repeats a set of questions with different response types using the SurveyJS [multi-select matrix](https://surveyjs.io/form-library/examples/multi-select-matrix-question/jquery#) ("matrixdropdown") question type.
+    The example above was used to illustrate how you can loop over information to programmatically construct a series of questions that are shown on the same page. But in cases where you have different question prompts that all use the same multiple choice options, you might prefer to use the the SurveyJS ["matrix" question type](https://surveyjs.io/form-library/examples/single-selection-matrix-table-question/vanillajs). This question type creates a table where each row is a question and each column is a response option. The table format is often used for Likert scales, satisfaction surveys, etc. You can even create a table that repeats a set of questions with different response types using the SurveyJS [multi-select matrix](https://surveyjs.io/form-library/examples/multi-select-matrix-question/vanillajs) ("matrixdropdown") question type.
 
 
 Rather than repeating a question format within the same trial, perhaps you want to use trial-level variables to generate separate `survey` trials, for instance in order to incorporate them into a larger repeating trial procedure. jsPsych's [timeline variables](timeline.md#timeline-variables) feature was designed to address this use case, but the use of timeline variables looks a little different with the `survey` plugin. This is because the various individual parameters that you might want to change across `survey` trials don't have their own plugin parameters - instead everything is nested within the `survey_json` parameter. Below are some examples showing how you can programmatically generate survey trials using a set of trial-level variables.
@@ -336,19 +337,19 @@ Rather than repeating a question format within the same trial, perhaps you want 
       timeline_variables: [
         {
           word: 'cheese',
-          survey_json: { elements: [ {type: "text", title: "Enter a word related to CHEESE:", autocomplete: "off" } ], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } 
+          survey_json: { elements: [ {type: "text", title: "Enter a word related to CHEESE:", autocomplete: "off" } ], completeText: "Next", focusFirstQuestionAutomatic: true }
         },
         {
           word: 'ring',
-          survey_json: { elements: [ {type: "text", title: "Enter a word related to RING:", autocomplete: "off" } ], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } 
+          survey_json: { elements: [ {type: "text", title: "Enter a word related to RING:", autocomplete: "off" } ], completeText: "Next", focusFirstQuestionAutomatic: true }
         },
         {
           word: 'bat',
-          survey_json: { elements: [ {type: "text", title: "Enter a word related to BAT:", autocomplete: "off" } ], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true }
+          survey_json: { elements: [ {type: "text", title: "Enter a word related to BAT:", autocomplete: "off" } ], completeText: "Next", focusFirstQuestionAutomatic: true }
         },
         {
           word: 'cow',
-          survey_json: { elements: [ {type: "text", title: "Enter a word related to COW:", autocomplete: "off" } ], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true }
+          survey_json: { elements: [ {type: "text", title: "Enter a word related to COW:", autocomplete: "off" } ],completeText: "Next", focusFirstQuestionAutomatic: true }
         }
       ]
     };
@@ -391,7 +392,6 @@ Rather than repeating a question format within the same trial, perhaps you want 
                   autocomplete: "off" 
                 }
               ], 
-              showQuestionNumbers: false, 
               completeText: "Next", 
               focusFirstQuestionAutomatic: true 
             }
@@ -419,7 +419,6 @@ Rather than repeating a question format within the same trial, perhaps you want 
       question.title = `Enter a word related to ${jsPsych.evaluateTimelineVariable('word').toUpperCase()}`;
       question.autocomplete = "off";
       // Set survey-level parameters
-      survey.showQuestionNumbers = false;
       survey.completeText = "Next";
       survey.focusFirstQuestionAutomatic = true;
     }

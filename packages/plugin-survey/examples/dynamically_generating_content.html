@@ -6,7 +6,7 @@
     <script src="../dist/index.browser.js"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
     <link rel="stylesheet" href="../../jspsych/css/jspsych.css" />
-    <link rel="stylesheet" href="../css/survey.css" />
+    <link rel="stylesheet" href="../css/survey.min.css" />
     <style>
       /* These CSS changes make the survey plugin content and position more similar to other jsPsych trials. */
       /* Remove the border around the survey question and align the text to center instead of left. */
@@ -28,6 +28,13 @@
 
       /* Align the survey navigation buttons to the center */
       .sv-components-column {
+        align-items: center;
+      }
+
+      /* Makes the div around the text input element into a flex container, and centers the input element vertically and horizontally */
+      .sd-text__content.sd-question__content {
+        display: flex;
+        justify-content: center;
         align-items: center;
       }
     </style>
@@ -73,10 +80,10 @@
         }
       ],
       timeline_variables: [
-        { word: 'cheese', survey_json: { elements: [{ type: "text", title: "Enter a word related to CHEESE:", autocomplete: "off" }], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } },
-        { word: 'ring', survey_json: { elements: [{ type: "text", title: "Enter a word related to RING:", autocomplete: "off" }], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } },
-        { word: 'bat', survey_json: { elements: [{ type: "text", title: "Enter a word related to BAT:", autocomplete: "off" }], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } },
-        { word: 'cow', survey_json: { elements: [{ type: "text", title: "Enter a word related to COW:", autocomplete: "off" }], showQuestionNumbers: false, completeText: "Next", focusFirstQuestionAutomatic: true } }
+        { word: 'cheese', survey_json: { elements: [{ type: "text", title: "Enter a word related to CHEESE:", autocomplete: "off" }], completeText: "Next", focusFirstQuestionAutomatic: true } },
+        { word: 'ring', survey_json: { elements: [{ type: "text", title: "Enter a word related to RING:", autocomplete: "off" }], completeText: "Next", focusFirstQuestionAutomatic: true } },
+        { word: 'bat', survey_json: { elements: [{ type: "text", title: "Enter a word related to BAT:", autocomplete: "off" }], completeText: "Next", focusFirstQuestionAutomatic: true } },
+        { word: 'cow', survey_json: { elements: [{ type: "text", title: "Enter a word related to COW:", autocomplete: "off" }], completeText: "Next", focusFirstQuestionAutomatic: true } }
       ]
     };
 
@@ -114,7 +121,6 @@
             const response_type = (last_response === 'j') ? "RELATED" : "NOT RELATED";
             const question_text = `You said that the words "${jsPsych.evaluateTimelineVariable('word1')}" and "${jsPsych.evaluateTimelineVariable('word2')}" are ${response_type}. Please explain your answer.`;
             const survey_json = {
-              showQuestionNumbers: false,
               completeText: "Next",
               focusFirstQuestionAutomatic: true,
               elements: [

@@ -7,7 +7,7 @@
   <script src="../dist/index.browser.js"></script>
   <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
   <link rel="stylesheet" href="../../jspsych/css/jspsych.css" />
-  <link rel="stylesheet" href="../css/survey.css" />
+  <link rel="stylesheet" href="../css/survey.min.css" />
 </head>
 
 <body></body>
@@ -26,7 +26,7 @@
     type: jsPsychHtmlButtonResponse,
     stimulus: '<h3>jsPsych button response trial</h3><p>Which of these is your favorite color?</p>',
     choices: color_choices,
-    button_html: '<button class="jspsych-btn" style="color:%choice%";">%choice%</button>',
+    button_html: (choice) => `<button class="jspsych-btn" style="color:${choice};">${choice}</button>`,
     data: {trial_id: 'color_trial'}
   };
 
@@ -55,7 +55,6 @@
   // The survey_function is a function that can be used to make the contents of the survey conditional 
   // on things that happened earlier in the experiment, outside of the survey trial.
   const jspsych_rating_function = (survey) => {
-    survey.showQuestionNumbers = false;
 
     // Add follow up question to the existing page "example_page" based on response to jspsych_rating question 
     // presented in this survey trial

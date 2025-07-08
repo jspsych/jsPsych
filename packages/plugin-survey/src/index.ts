@@ -1,6 +1,8 @@
+import "survey-js-ui"; // Side-effect import: this registers the vanilla JS UI components
+
 // import SurveyJS dependencies: survey-core and survey-knockout-ui (UI theme): https://surveyjs.io/documentation/surveyjs-architecture#surveyjs-packages
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
-import * as SurveyJS from "survey-knockout-ui";
+import { Model } from "survey-core";
 
 import { version } from "../package.json";
 
@@ -85,7 +87,7 @@ const jsPsychSurveyCssClassMap = {
 };
 
 /**
- * SurveyJS version: 1.9.138
+ * SurveyJS version: 2.2.0
  *
  * This plugin is a wrapper for the [**SurveyJS form library**](https://surveyjs.io/form-library/documentation/overview). It displays survey-style questions across one or more pages. You can mix different question types on the same page, and participants can navigate back and forth through multiple survey pages without losing responses. SurveyJS provides a large number of built-in question types, response validation options, conditional display options, special response options ("None", "Select all", "Other"), and other useful features for building complex surveys. See the [Building Surveys in jsPsych](../overview/building-surveys.md) page for a more detailed list of all options and features.
  *
@@ -109,7 +111,7 @@ const jsPsychSurveyCssClassMap = {
  */
 class SurveyPlugin implements JsPsychPlugin<Info> {
   static info = info;
-  private survey: SurveyJS.Survey;
+  private survey: Model;
   private start_time: number;
 
   constructor(private jsPsych: JsPsych) {
@@ -149,6 +151,13 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     });
   }
 
+  private createSurveyContainer(parent: HTMLElement): HTMLElement {
+    const container = document.createElement("div");
+    container.classList.add("jspsych-survey-container");
+    parent.appendChild(container);
+    return container;
+  }
+
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     // check for empty JSON and no survey function
     if (JSON.stringify(trial.survey_json) === "{}" && trial.survey_function === null) {
@@ -156,7 +165,7 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
         "Survey plugin warning: you must define the survey using a non-empty JSON object and/or a survey function."
       );
     }
-    this.survey = new SurveyJS.Survey(trial.survey_json);
+    this.survey = new Model(trial.survey_json);
 
     if (trial.survey_function !== null) {
       trial.survey_function(this.survey);
@@ -195,7 +204,10 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     // remove flex display from jspsych-content-wrapper to get formatting to work
     document.querySelector<HTMLElement>(".jspsych-content-wrapper").style.display = "block";
 
-    this.survey.render(display_element);
+    // As of the SurveyJS v2.2 update, we need to create a new container for the survey to render in.
+    // Otherwise the rendering fails silently with repeated similar survey trials.
+    const survey_container = this.createSurveyContainer(display_element);
+    this.survey.render(survey_container);
 
     this.start_time = performance.now();
   }
