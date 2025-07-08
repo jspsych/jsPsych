@@ -6253,7 +6253,8 @@ If no microphone recorder exists, it returns <code>null</code>.</p>
 <h4 id="return-value_12">Return value<a class="headerlink" href="#return-value_12" title="Permanent link">&para;</a></h4>
 <p>None.</p>
 <h4 id="description_12">Description<a class="headerlink" href="#description_12" title="Permanent link">&para;</a></h4>
-<p>Generates a <code>MediaRecorder</code> object from provided <code>MediaStream</code> and stores this for access via <a href="#getcamerarecorder"><code>getCameraRecorder()</code></a>.</p>
+<p>Generates a <code>MediaRecorder</code> object from provided <code>MediaStream</code> and stores this for access via <a href="#getcamerarecorder"><code>getCameraRecorder()</code></a>. By default, <code>mimeType</code> is set to the first compatible container/codec combination found in a list of common types, or <code>"video/webm"</code> if no supported combination is found. </p>
+<p>The common container/codec combinations that jsPsych checks for are <code>"video/webm;codecs=vp9,opus"</code>, <code>"video/webm;codecs=vp8,opus"</code>, <code>"video/mp4;codecs=avc1.42E01E,mp4a.40.2"</code>, <code>"video/mp4;codecs=h264,aac"</code>, and <code>"video/mp4;codecs=hevc,aac"</code>.</p>
 <h4 id="example_9">Example<a class="headerlink" href="#example_9" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">navigator</span><span class="p">.</span><span class="nx">mediaDevices</span><span class="p">.</span><span class="nx">getUserMedia</span><span class="p">({</span>
 <span class="w">  </span><span class="nx">audio</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>

@@ -2939,7 +2939,7 @@ Once access is granted for an experiment you do not need to get permission again
 <td>mime_type</td>
 <td>string</td>
 <td>null</td>
-<td>Set this to use a specific <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/mimeType">MIME type</a> for the recording. Set the entire type, e.g., <code>'video/mp4; codecs="avc1.424028, mp4a.40.2"'</code>.</td>
+<td>Set this to use a specific <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder/mimeType">MIME type</a> for the recording. Set the entire type, e.g., <code>'video/mp4; codecs="avc1.424028, mp4a.40.2"'</code>. When provided with the default value of <code>null</code>, jsPsych will search for a compatible container/codec combination, with <a href="../../reference/jspsych-pluginAPI/#initializecamerarecorder">common types listed here</a>. If none are found, jsPsych will default to <code>'video/webm'</code> as the MIME type.</td>
 </tr>
 </tbody>
 </table>
