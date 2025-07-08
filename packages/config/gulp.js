@@ -84,6 +84,7 @@ export const createCoreDistArchive = () =>
 
     // survey.css
     src("packages/plugin-survey/css/survey.css").pipe(rename("/dist/survey.css")),
+    src("packages/plugin-survey/css/survey.min.css").pipe(rename("/dist/survey.min.css")),
 
     // Examples
     src("examples/**/*", { base: "." })
