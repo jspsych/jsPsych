@@ -1,5 +1,11 @@
 # @jspsych/config
 
+## 3.3.0
+
+### Minor Changes
+
+- [#3561](https://github.com/jspsych/jsPsych/pull/3561) [`a25c47256c61a5fea67acf4a1fdf29024fe1ab21`](https://github.com/jspsych/jsPsych/commit/a25c47256c61a5fea67acf4a1fdf29024fe1ab21) Thanks [@becky-gilbert](https://github.com/becky-gilbert)! - Add the minified version of the survey plugin CSS file, `survey.min.css`, to the dist archive.
+
 ## 3.2.2
 
 ### Patch Changes
