@@ -147,7 +147,7 @@ describe("image-button-response", () => {
       },
     ]);
 
-    const btns = displayElement.querySelectorAll(".jspsych-image-button-response-button button");
+    const btns = displayElement.querySelectorAll("#jspsych-image-button-response-btngroup button");
 
     for (let i = 0; i < btns.length; i++) {
       expect(btns[i].getAttribute("disabled")).toBe("disabled");
