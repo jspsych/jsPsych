@@ -159,34 +159,6 @@ describe("image-button-response", () => {
       expect(btns[i].hasAttribute("disabled")).toBe(false);
     }
   });
-
-  test("buttons should be disabled and re-enabled with enable_button_after parameter", async () => {
-    const { displayElement } = await startTimeline([
-      {
-        type: imageButtonResponse,
-        stimulus: "../media/blue.png",
-        choices: ["Choice A", "Choice B"],
-        enable_button_after: 1000,
-        render_on_canvas: false,
-      },
-    ]);
-
-    const buttons = displayElement.querySelectorAll("button");
-
-    // All buttons should be disabled initially
-    buttons.forEach((button) => {
-      expect(button.hasAttribute("disabled")).toBe(true);
-      expect(button.getAttribute("disabled")).toBe("disabled");
-    });
-
-    // Advance time by 1000ms
-    jest.advanceTimersByTime(1000);
-
-    // All buttons should be enabled after the delay
-    buttons.forEach((button) => {
-      expect(button.hasAttribute("disabled")).toBe(false);
-    });
-  });
 });
 
 describe("image-button-response simulation", () => {
