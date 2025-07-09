@@ -199,7 +199,10 @@ describe("image-button-response simulation", () => {
       },
     ];
 
-    const { expectFinished, expectRunning, getData } = await simulateTimeline(timeline, "visual");
+    const { expectFinished, expectRunning, getData } = await simulateTimeline(
+      timeline,
+      "visual"
+    );
 
     await expectRunning();
 
