@@ -8,6 +8,8 @@ export interface JsPsychExtensionInfo {
 }
 
 export interface JsPsychExtension {
+  //DEV: This breaks the builds for th current extensions because they do not implement 'info' as an instance-level property, but as a static-level one.
+  readonly info: JsPsychExtensionInfo;
   /**
    * Called once at the start of the experiment to initialize the extension
    */
