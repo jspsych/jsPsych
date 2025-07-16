@@ -89,7 +89,9 @@ export class ExtensionManager {
     const extensionInfos = trialExtensionsConfiguration.length
       ? {
           extension_type: trialExtensionsConfiguration.map(({ type }) => type["info"].name),
-          extension_version: trialExtensionsConfiguration.map(({ type }) => type["info"].version),
+          extension_version: trialExtensionsConfiguration.map(
+            ({ type }) => type["info"].version ?? ""
+          ),
         }
       : {};
 
