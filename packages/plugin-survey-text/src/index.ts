@@ -243,6 +243,7 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
       var trialdata = {
         rt: response_time,
         response: question_data,
+        question_order: question_order,
       };
 
       // next trial
@@ -287,6 +288,7 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
     const default_data = {
       response: question_data,
       rt: rt,
+      question_order: trial.questions.map((_, i) => i),
     };
 
     const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
