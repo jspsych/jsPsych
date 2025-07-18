@@ -306,14 +306,14 @@ class ImageButtonResponsePlugin implements JsPsychPlugin<Info> {
     }
 
     function enable_buttons() {
-      var btns = document.querySelectorAll(".jspsych-image-button-response-button button");
+      var btns = document.querySelectorAll("#jspsych-image-button-response-btngroup button");
       for (var i = 0; i < btns.length; i++) {
         btns[i].removeAttribute("disabled");
       }
     }
 
     function disable_buttons() {
-      var btns = document.querySelectorAll(".jspsych-image-button-response-button button");
+      var btns = document.querySelectorAll("#jspsych-image-button-response-btngroup button");
       for (var i = 0; i < btns.length; i++) {
         btns[i].setAttribute("disabled", "disabled");
       }
