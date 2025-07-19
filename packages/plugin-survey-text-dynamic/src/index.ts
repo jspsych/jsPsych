@@ -3,7 +3,7 @@ import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 import { version } from "../package.json";
 
 const info = <const>{
-  name: "survey-text",
+  name: "survey-text-dynamic",
   version: version,
   parameters: {
     /**
@@ -103,17 +103,20 @@ type Info = typeof info;
 
 /**
  *
- * The survey-text plugin displays a set of questions with free response text fields. The participant types in answers.
+ * The survey-text-dynamic plugin displays a set of questions with free response text fields that the participant can type answers into. A new input field for the same question is generated when Enter is pressed.
  *
- * @author Josh de Leeuw
- * @see {@link https://www.jspsych.org/latest/plugins/survey-text/ survey-text plugin documentation on jspsych.org}
+ * @author Cherrie Chang
+ * @see {@link https://www.jspsych.org/latest/plugins/survey-text-dynamic/ survey-text-dynamic plugin documentation on jspsych.org}
  */
-class SurveyTextPlugin implements JsPsychPlugin<Info> {
+class SurveyTextDynamicPlugin implements JsPsychPlugin<Info> {
   static info = info;
 
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
+    // tracks how many input fields were generated for each question
+    const inputFieldCounts = new Array(trial.questions.length).fill(1);
+
     for (var i = 0; i < trial.questions.length; i++) {
       if (typeof trial.questions[i].rows == "undefined") {
         trial.questions[i].rows = 1;
@@ -134,15 +137,15 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
     // show preamble text
     if (trial.preamble !== null) {
       html +=
-        '<div id="jspsych-survey-text-preamble" class="jspsych-survey-text-preamble">' +
+        '<div id="jspsych-survey-text-dynamic-preamble" class="jspsych-survey-text-dynamic-preamble">' +
         trial.preamble +
         "</div>";
     }
     // start form
     if (trial.autocomplete) {
-      html += '<form id="jspsych-survey-text-form">';
+      html += '<form id="jspsych-survey-text-dynamic-form">';
     } else {
-      html += '<form id="jspsych-survey-text-form" autocomplete="off">';
+      html += '<form id="jspsych-survey-text-dynamic-form" autocomplete="off">';
     }
     // generate question order
     var question_order = [];
@@ -158,21 +161,31 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
       var question = trial.questions[question_order[i]];
       var question_index = question_order[i];
       html +=
-        '<div id="jspsych-survey-text-' +
+        // question
+        '<div id="jspsych-survey-text-dynamic-' +
         question_index +
-        '" class="jspsych-survey-text-question" style="margin: 2em 0em;">';
-      html += '<p class="jspsych-survey-text">' + question.prompt + "</p>";
+        '" class="jspsych-survey-text-dynamic-question" style="margin: 2em 0em;">';
+      html += '<p class="jspsych-survey-text-dynamic">' + question.prompt + "</p>";
+
+      // container for dynamic inputs
+      html +=
+        '<div id="dynamic-inputs-container-' +
+        question_index +
+        '" class="dynamic-inputs-container" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px;">';
+
       var autofocus = i == 0 ? "autofocus" : "";
       var req = question.required ? "required" : "";
       if (question.rows == 1) {
         html +=
           '<input type="text" id="input-' +
           question_index +
-          '"  name="#jspsych-survey-text-response-' +
+          '-0"  name="#jspsych-survey-text-dynamic-response-' +
           question_index +
-          '" data-name="' +
+          '-0" data-name="' +
           question.name +
-          '" size="' +
+          '" data-question-index="' +
+          question_index +
+          '" data-input-index="0" size="' +
           question.columns +
           '" ' +
           autofocus +
@@ -185,11 +198,13 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
         html +=
           '<textarea id="input-' +
           question_index +
-          '" name="#jspsych-survey-text-response-' +
+          '-0" name="#jspsych-survey-text-dynamic-response-' +
           question_index +
-          '" data-name="' +
+          '-0" data-name="' +
           question.name +
-          '" cols="' +
+          '" data-question-index="' +
+          question_index +
+          '" data-input-index="0" cols="' +
           question.columns +
           '" rows="' +
           question.rows +
@@ -201,54 +216,172 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
           question.placeholder +
           '"></textarea>';
       }
+
+      html += "</div>"; // Close the dynamic inputs container
       html += "</div>";
     }
 
     // add submit button
     html +=
-      '<input type="submit" id="jspsych-survey-text-next" class="jspsych-btn jspsych-survey-text" value="' +
+      '<input type="submit" id="jspsych-survey-text-dynamic-next" class="jspsych-btn jspsych-survey-text-dynamic" value="' +
       trial.button_label +
       '"></input>';
 
     html += "</form>";
     display_element.innerHTML = html;
 
-    // backup in case autofocus doesn't work
-    display_element.querySelector<HTMLInputElement>("#input-" + question_order[0]).focus();
+    // remove an input field when user presses backspace on empty field
+    const removeInput = (questionIndex: number, inputIndex: number) => {
+      if (inputIndex === 0) return; // don't remove the first input field
 
-    display_element.querySelector("#jspsych-survey-text-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-      // measure response time
-      var endTime = performance.now();
-      var response_time = Math.round(endTime - startTime);
+      const inputToRemove = display_element.querySelector(`#input-${questionIndex}-${inputIndex}`);
+      if (inputToRemove) {
+        inputToRemove.remove();
+        inputFieldCounts[questionIndex]--;
 
-      // create object to hold responses
-      var question_data = {};
-
-      for (var index = 0; index < trial.questions.length; index++) {
-        var id = "Q" + index;
-        var q_element = document
-          .querySelector("#jspsych-survey-text-" + index)
-          .querySelector("textarea, input") as HTMLInputElement;
-        var val = q_element.value;
-        var name = q_element.attributes["data-name"].value;
-        if (name == "") {
-          name = id;
+        // Focus the previous input field
+        const previousInputIndex = inputIndex - 1;
+        const previousInput = display_element.querySelector(
+          `#input-${questionIndex}-${previousInputIndex}`
+        ) as HTMLInputElement;
+        if (previousInput) {
+          previousInput.focus();
         }
-        var obje = {};
-        obje[name] = val;
-        Object.assign(question_data, obje);
       }
-      // save data
-      var trialdata = {
-        rt: response_time,
-        response: question_data,
-        question_order: question_order,
-      };
+    };
 
-      // next trial
-      this.jsPsych.finishTrial(trialdata);
-    });
+    // add new input fields to a question when user presses Enter or spacebar
+    const addNewInput = (questionIndex: number) => {
+      const container = display_element.querySelector(`#dynamic-inputs-container-${questionIndex}`);
+      const question = trial.questions[questionIndex];
+      const inputIndex = inputFieldCounts[questionIndex];
+
+      let newInputHtml = "";
+      if (question.rows == 1) {
+        newInputHtml =
+          '<input type="text" id="input-' +
+          questionIndex +
+          "-" +
+          inputIndex +
+          '" name="#jspsych-survey-text-dynamic-response-' +
+          questionIndex +
+          "-" +
+          inputIndex +
+          '" data-name="' +
+          question.name +
+          '" data-question-index="' +
+          questionIndex +
+          '" data-input-index="' +
+          inputIndex +
+          '" size="' +
+          question.columns +
+          '" placeholder="' +
+          question.placeholder +
+          '"></input>';
+      } else {
+        newInputHtml =
+          '<textarea id="input-' +
+          questionIndex +
+          "-" +
+          inputIndex +
+          '" name="#jspsych-survey-text-dynamic-response-' +
+          questionIndex +
+          "-" +
+          inputIndex +
+          '" data-name="' +
+          question.name +
+          '" data-question-index="' +
+          questionIndex +
+          '" data-input-index="' +
+          inputIndex +
+          '" cols="' +
+          question.columns +
+          '" rows="' +
+          question.rows +
+          '" placeholder="' +
+          question.placeholder +
+          '"></textarea>';
+      }
+
+      container.insertAdjacentHTML("beforeend", newInputHtml);
+      const newInput = container.querySelector(
+        `#input-${questionIndex}-${inputIndex}`
+      ) as HTMLInputElement;
+
+      // add event listener for the new input
+      newInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          addNewInput(questionIndex);
+          inputFieldCounts[questionIndex]++;
+        } else if (e.key === "Backspace" && newInput.value === "" && inputIndex > 0) {
+          e.preventDefault();
+          removeInput(questionIndex, inputIndex);
+        }
+      });
+
+      // focus the new input
+      newInput.focus();
+    };
+
+    // add event listeners to all initial inputs
+    for (let i = 0; i < trial.questions.length; i++) {
+      const questionIndex = question_order[i];
+      const initialInput = display_element.querySelector(
+        `#input-${questionIndex}-0`
+      ) as HTMLInputElement;
+
+      initialInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          addNewInput(questionIndex);
+          inputFieldCounts[questionIndex]++;
+        }
+      });
+    }
+
+    // backup in case autofocus doesn't work
+    display_element.querySelector<HTMLInputElement>("#input-" + question_order[0] + "-0").focus();
+
+    display_element
+      .querySelector("#jspsych-survey-text-dynamic-form")
+      .addEventListener("submit", (e) => {
+        e.preventDefault();
+        // measure response time
+        var endTime = performance.now();
+        var response_time = Math.round(endTime - startTime);
+
+        // create object to hold responses
+        var question_data = {};
+
+        for (var index = 0; index < trial.questions.length; index++) {
+          var id = "Q" + index;
+          var name = trial.questions[index].name || id;
+
+          // collect all inputs for this question
+          var questionResponses = [];
+          for (let inputIndex = 0; inputIndex < inputFieldCounts[index]; inputIndex++) {
+            const inputElement = display_element.querySelector(
+              `#input-${index}-${inputIndex}`
+            ) as HTMLInputElement;
+            if (inputElement && inputElement.value.trim() !== "") {
+              questionResponses.push(inputElement.value);
+            }
+          }
+
+          question_data[name] = questionResponses;
+        }
+
+        // save data
+        var trialdata = {
+          rt: response_time,
+          response: question_data,
+          question_order: question_order,
+        };
+
+        // next trial
+        this.jsPsych.finishTrial(trialdata);
+      });
 
     var startTime = performance.now();
   }
@@ -274,14 +407,23 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
 
     for (const q of trial.questions) {
       const name = q.name ? q.name : `Q${trial.questions.indexOf(q)}`;
-      const ans_words =
-        q.rows == 1
-          ? this.jsPsych.randomization.sampleExponential(0.25)
-          : this.jsPsych.randomization.randomInt(1, 10) * q.rows;
-      question_data[name] = this.jsPsych.randomization.randomWords({
-        exactly: ans_words,
-        join: " ",
-      });
+      const numInputs = this.jsPsych.randomization.randomInt(1, 4); // simulate 1-4 inputs per question
+      const responses = [];
+
+      for (let i = 0; i < numInputs; i++) {
+        const ans_words =
+          q.rows == 1
+            ? this.jsPsych.randomization.sampleExponential(0.25)
+            : this.jsPsych.randomization.randomInt(1, 10) * q.rows;
+        responses.push(
+          this.jsPsych.randomization.randomWords({
+            exactly: ans_words,
+            join: " ",
+          })
+        );
+      }
+
+      question_data[name] = responses;
       rt += this.jsPsych.randomization.sampleExGaussian(2000, 400, 0.004, true);
     }
 
@@ -312,22 +454,23 @@ class SurveyTextPlugin implements JsPsychPlugin<Info> {
     this.trial(display_element, trial);
     load_callback();
 
-    const answers = Object.entries(data.response).map((x) => {
-      return x[1] as string;
-    });
-    for (let i = 0; i < answers.length; i++) {
-      this.jsPsych.pluginAPI.fillTextInput(
-        display_element.querySelector(`#input-${i}`),
-        answers[i],
-        ((data.rt - 1000) / answers.length) * (i + 1)
-      );
+    // simulate typing in the first input of each question
+    for (let i = 0; i < trial.questions.length; i++) {
+      const responses = data.response[trial.questions[i].name || `Q${i}`] as string[];
+      if (responses.length > 0) {
+        this.jsPsych.pluginAPI.fillTextInput(
+          display_element.querySelector(`#input-${i}-0`),
+          responses[0],
+          ((data.rt - 1000) / trial.questions.length) * (i + 1)
+        );
+      }
     }
 
     this.jsPsych.pluginAPI.clickTarget(
-      display_element.querySelector("#jspsych-survey-text-next"),
+      display_element.querySelector("#jspsych-survey-text-dynamic-next"),
       data.rt
     );
   }
 }
 
-export default SurveyTextPlugin;
+export default SurveyTextDynamicPlugin;
