@@ -615,8 +615,11 @@ describe("Trial", () => {
     it("invokes extension callbacks and includes extension results", async () => {
       dependencies.runOnFinishExtensionCallbacks.mockResolvedValue({ extension: "result" });
 
+      const mockExtensionClass = jest.fn() as any;
+      mockExtensionClass.info = { name: "test-extension", version: "1.0.0" };
+
       const extensionsConfig: TrialExtensionsConfiguration = [
-        { type: jest.fn(), params: { my: "option" } },
+        { type: mockExtensionClass, params: { my: "option" } },
       ];
 
       const trial = createTrial({
@@ -654,9 +657,12 @@ describe("Trial", () => {
         );
       }
 
+      const mockExtensionClass2 = jest.fn() as any;
+      mockExtensionClass2.info = { name: "test-extension-2", version: "1.0.0" };
+
       const trial = createTrial({
         type: TestPlugin,
-        extensions: [{ type: jest.fn(), params: { my: "option" } }],
+        extensions: [{ type: mockExtensionClass2, params: { my: "option" } }],
         on_start: createInvocationOrderCallback("on_start"),
         on_load: createInvocationOrderCallback("on_load"),
         on_finish: createInvocationOrderCallback("on_finish"),
