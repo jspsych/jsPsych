@@ -1,5 +1,11 @@
 # @jspsych/config
 
+## 3.3.1
+
+### Patch Changes
+
+- [#3570](https://github.com/jspsych/jsPsych/pull/3570) [`8d6c03ec3da9b17b9d6582641b0d488e5198ff2d`](https://github.com/jspsych/jsPsych/commit/8d6c03ec3da9b17b9d6582641b0d488e5198ff2d) Thanks [@jadeddelta](https://github.com/jadeddelta)! - update rollup for security fix
+
 ## 3.3.0
 
 ### Minor Changes
