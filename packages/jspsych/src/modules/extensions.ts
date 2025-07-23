@@ -1,3 +1,5 @@
+import { Class } from "type-fest";
+
 import { ParameterInfos } from "./plugins";
 
 export interface JsPsychExtensionInfo {

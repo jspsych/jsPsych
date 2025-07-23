@@ -4,7 +4,7 @@ import { JsPsychExtension, JsPsychExtensionInfo } from "./modules/extensions";
 import { TrialExtensionsConfiguration } from "./timeline";
 
 export type GlobalExtensionsConfiguration = Array<{
-  type: Class<JsPsychExtension>;
+  type: Class<JsPsychExtension> & { info: JsPsychExtensionInfo };
   params?: Record<string, any>;
 }>;
 
@@ -12,12 +12,16 @@ export interface ExtensionManagerDependencies {
   /**
    * Given an extension class, create a new instance of it and return it.
    */
-  instantiateExtension(extensionClass: Class<JsPsychExtension>): JsPsychExtension;
+  instantiateExtension(
+    extensionClass: Class<JsPsychExtension> & { info: JsPsychExtensionInfo }
+  ): JsPsychExtension;
 }
 
 export class ExtensionManager {
-  private static getExtensionNameByClass(extensionClass: Class<JsPsychExtension>) {
-    return (extensionClass["info"] as JsPsychExtensionInfo).name;
+  private static getExtensionNameByClass(
+    extensionClass: Class<JsPsychExtension> & { info: JsPsychExtensionInfo }
+  ) {
+    return extensionClass.info.name;
   }
 
   public readonly extensions: Record<string, JsPsychExtension>;
@@ -34,7 +38,9 @@ export class ExtensionManager {
     );
   }
 
-  private getExtensionInstanceByClass(extensionClass: Class<JsPsychExtension>) {
+  private getExtensionInstanceByClass(
+    extensionClass: Class<JsPsychExtension> & { info: JsPsychExtensionInfo }
+  ) {
     return this.extensions[ExtensionManager.getExtensionNameByClass(extensionClass)];
   }
 
@@ -43,7 +49,7 @@ export class ExtensionManager {
       this.extensionsConfiguration.map(({ type, params = {} }) => {
         this.getExtensionInstanceByClass(type).initialize(params);
 
-        const extensionInfo = type["info"] as JsPsychExtensionInfo;
+        const extensionInfo = type.info;
 
         if (!("version" in extensionInfo) && !("data" in extensionInfo)) {
           console.warn(
@@ -88,9 +94,9 @@ export class ExtensionManager {
 
     const extensionInfos = trialExtensionsConfiguration.length
       ? {
-          extension_type: trialExtensionsConfiguration.map(({ type }) => type["info"].name),
+          extension_type: trialExtensionsConfiguration.map(({ type }) => type.info.name),
           extension_version: trialExtensionsConfiguration.map(
-            ({ type }) => type["info"].version ?? ""
+            ({ type }) => type.info.version ?? ""
           ),
         }
       : {};
