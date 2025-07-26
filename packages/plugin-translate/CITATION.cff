@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Courtney B. Hilton"  # Replace with last name
+  given-names: "Courtney B. Hilton"   # Replace with first name
+  name-particle: "Courtney B. Hilton" # Replace with name particle(s)
+  orcid: "https://orcid.org/0000-0000-0000-0000"  # Replace with ORCID
+# More  authors can be listed here in the same format as above
+contact:  # Contact person for this extension
+- family-names: "Courtney B. Hilton"
+  given-names: "Courtney B. Hilton"
+  email: "{email}"          # Replace with contact person's email
+  orcid: "https://orcid.org/0000-0000-0000-0000"  # Replace with contact person's ORCID
+title: "jsPsychPluginTranslate"
+version: 0.0.0
+doi: 10.5281/zenodo.1234    # Replace with DOI
+date-released: 2000-01-01
+url: "{softwareUrl}"        # Replace with URL to this extension
+
+# If you wish to cite a paper on this extension instead, you can use the following template:
+preferred-citation:
+  authors:
+  - family-names: "Courtney B. Hilton"
+    given-names: "Courtney B. Hilton"
+    name-particle: "Courtney B. Hilton"
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+  # More authors can be listed here in the same format as above
+  date-published: 2023-05-11
+  doi: 10.21105/joss.12345 
+  issn: 1234-5678
+  issue: 01
+  journal: Journal for Open Source Software
+  publisher:
+    name: Open Journals
+  start: 0001
+  title: "{title}"
+  type: article               # Other options include: book, pamphlet, conference-paper...
+  url: "{linkToPublicationInJournal}"
+  volume: 1
+
+# More information on the preffered-citation CFF format can be found at https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-citation-files#citing-something-other-than-software
