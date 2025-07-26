@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-translate/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
+  </head>
+  <body></body>
+  <script>
+    const jsPsych = initJsPsych({
+      on_finish: function () {
+        jsPsych.data.displayData();
+      },
+    });
+
+    // allow participant to choose the language
+    const chooseLanguage = {
+      type: jsPsychPluginTranslate,
+      stimulus: "<p>Please choose your language:</p>",
+      resources: {
+        en: { translation: { greeting: "Hello!" } },
+        de: { translation: { greeting: "Hallo!" } },
+      },
+      button_text: "Continue",
+      language_name_locale: "en",
+    };
+
+    // silently set the language without notifying participant
+    const silentlySetLanguage = {
+      type: jsPsychPluginTranslate,
+      set_locale: "de",
+      resources: {
+        en: { translation: { greeting: "Hello!" } },
+        de: { translation: { greeting: "Hallo!" } },
+      },
+    };
+
+    // silently change the language without notifying participant
+    const silentlyChangeLanguage = {
+      type: jsPsychPluginTranslate,
+      set_locale: "de",
+    };
+
+    const timeline = [chooseLanguage, silentlyChangeLanguage];
+
+    jsPsych.run(timeline);
+  </script>
+</html>
