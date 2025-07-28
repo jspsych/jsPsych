@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>jsPsychTranslate Example</title>
     <script src="../packages/jspsych/dist/index.browser.js"></script>
     <script src="../packages/plugin-translate/dist/index.browser.js"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
     <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
   </head>
   <body></body>
@@ -20,9 +22,25 @@
       resources: {
         en: { translation: { greeting: "Hello!" } },
         de: { translation: { greeting: "Hallo!" } },
+        es: { translation: { greeting: "Holla!" } },
       },
       button_text: "Continue",
       language_name_locale: "en",
+    };
+
+    const hello = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: () =>
+        `<p style="font-size:48px;">${jsPsychPluginTranslate.t(
+          "greeting"
+        )}</p>`,
+      choices: ["Next"],
+    };
+
+    const transition = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: "Now the text will silently change to Spanish.",
+      choices: ["Next"],
     };
 
     // silently set the language without notifying participant
@@ -38,10 +56,25 @@
     // silently change the language without notifying participant
     const silentlyChangeLanguage = {
       type: jsPsychPluginTranslate,
-      set_locale: "de",
+      set_locale: "es",
     };
 
-    const timeline = [chooseLanguage, silentlyChangeLanguage];
+    const hello_again = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: () =>
+        `<p style="font-size:48px;">${jsPsychPluginTranslate.t(
+          "greeting"
+        )}</p>`,
+      choices: ["Next"],
+    };
+
+    const timeline = [
+      chooseLanguage,
+      hello,
+      transition,
+      silentlyChangeLanguage,
+      hello_again,
+    ];
 
     jsPsych.run(timeline);
   </script>
