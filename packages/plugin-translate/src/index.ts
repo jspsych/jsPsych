@@ -1,5 +1,5 @@
-import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 import i18next, { Resource, TOptions } from "i18next";
+import { JsPsych, JsPsychPlugin, ParameterType, TrialType } from "jspsych";
 
 import { version } from "../package.json";
 
@@ -138,15 +138,15 @@ class TranslatePlugin implements JsPsychPlugin<Info> {
     return stimulusEl;
   }
 
-  private createDropdown(
-    resources: LabeledResourceMap,
-    locale: string
-  ): HTMLSelectElement {
+  private createDropdown(resources: LabeledResourceMap, locale: string): HTMLSelectElement {
     const displayLanguageNames = new Intl.DisplayNames([locale], {
       type: "language",
     });
 
     const dropdownEl = document.createElement("select");
+    dropdownEl.style.fontSize = "14px";
+    dropdownEl.style.fontFamily = "Open Sans, Arial', sans-serif";
+    dropdownEl.style.padding = "4px";
     dropdownEl.id = "jspsych-translate-dropdown";
 
     Object.keys(resources).forEach((code) => {
@@ -159,10 +159,7 @@ class TranslatePlugin implements JsPsychPlugin<Info> {
     return dropdownEl;
   }
 
-  private createResponseButton(
-    label: string,
-    onClick: () => void
-  ): HTMLButtonElement {
+  private createResponseButton(label: string, onClick: () => void): HTMLButtonElement {
     const buttonEl = document.createElement("button");
     buttonEl.className = "jspsych-btn";
     buttonEl.style.marginTop = "20px";
@@ -184,10 +181,7 @@ class TranslatePlugin implements JsPsychPlugin<Info> {
     this.jsPsych.finishTrial(trial_data);
   }
 
-  private async initLanguage(
-    selectedLanguage: string,
-    resources: Resource
-  ): Promise<void> {
+  private async initLanguage(selectedLanguage: string, resources: Resource): Promise<void> {
     // init i18next with the chosen language
     await i18instance.init({
       lng: selectedLanguage,
@@ -249,9 +243,7 @@ class TranslatePlugin implements JsPsychPlugin<Info> {
     if (resources !== null) {
       Object.entries(resources).forEach(([code, value]) => {
         if (!value.translation || typeof value.translation !== "object") {
-          throw new Error(
-            `Missing or invalid 'translation' for language ${code}`
-          );
+          throw new Error(`Missing or invalid 'translation' for language ${code}`);
         }
       });
     }
@@ -306,18 +298,14 @@ class TranslatePlugin implements JsPsychPlugin<Info> {
         );
         return;
       } else {
-        throw new Error(
-          "i18next is initialized, but no set_locale or stimulus was provided."
-        );
+        throw new Error("i18next is initialized, but no set_locale or stimulus was provided.");
       }
     }
 
     // IF i18next isn't initialised: initialise it
     if (!i18instance.isInitialized) {
       if (resources === null) {
-        throw new Error(
-          "i18next is not initialized and no resources were provided."
-        );
+        throw new Error("i18next is not initialized and no resources were provided.");
       }
 
       if (setLocale !== null) {
