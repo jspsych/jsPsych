@@ -52,6 +52,27 @@ const info = <const>{
       type: ParameterType.BOOL,
       default: false,
     },
+    /** If a string is provided (e.g., "https://yourserver.com/upload"), the recorded audio will be uploaded
+     * directly to the specified API endpoint as an audio file (e.g., .webm, .wav, .mp3). A reference ID returned
+     * by the server (in a field named `ref_id` in the JSON response) will be stored under `response`.
+     * If `null` or empty, no upload is performed. */
+    save_via_api: {
+      type: ParameterType.STRING,
+      default: null,
+    },
+    /** If `true`, the recorded audio will be saved locally using a randomly generated filename
+     * (e.g., "a8sjw93kd.webm"). The browser saves to the user's default Downloads folder. */
+    save_locally: {
+      type: ParameterType.BOOL,
+      default: false,
+    },
+    /** A message shown to participants while the audio file is being uploaded to a remote server
+     * (i.e., when `save_via_api` is set to a valid API endpoint). During this time, a loading spinner
+     * will appear along with this message. */
+    upload_wait_message: {
+      type: ParameterType.STRING,
+      default: "Uploading data...",
+    },
   },
   data: {
     /** The time, since the onset of the stimulus, for the participant to click the done button. If the button is not clicked (or not enabled), then `rt` will be `null`. */
@@ -121,6 +142,8 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
   private stop_event_handler;
   private data_available_handler;
   private recorded_data_chunks = [];
+  private audio_data: Blob;
+  private audio_extension: string;
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -151,7 +174,9 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
   }
 
   private hideStimulus(display_element: HTMLElement) {
-    const el: HTMLElement = display_element.querySelector("#jspsych-html-audio-response-stimulus");
+    const el: HTMLElement = display_element.querySelector(
+      "#jspsych-html-audio-response-stimulus"
+    );
     if (el) {
       el.style.visibility = "hidden";
     }
@@ -174,6 +199,102 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
     }
   }
 
+  private showLoadingStateSpinner(display_element, trial) {
+    const html = `
+          <style>
+            .spinner {
+              width: 40px;
+              height: 40px;
+              border: 4px solid rgba(0, 0, 0, 0.1);
+              border-left-color: #2b2b2a;
+              border-radius: 50%;
+              animation: spin 1s linear infinite;
+              margin: 20px auto;
+            }
+            @keyframes spin { to { transform: rotate(360deg); } }
+          </style>
+          <p>${trial.upload_wait_message}</p>
+          <div class="spinner"></div>
+        `;
+    display_element.innerHTML = html;
+  }
+
+  private async saveAudioData(
+    display_element: HTMLElement,
+    trial: TrialType<Info>
+  ): Promise<void> {
+    const isApi =
+      typeof trial.save_via_api === "string" &&
+      trial.save_via_api.trim() !== "";
+    const wantsLocalSave = trial.save_locally === true;
+
+    // UUID-style filename
+    const randomId = Math.random().toString(36).slice(2, 11);
+    const filename = `${randomId}.${this.audio_extension}`;
+
+    // API upload if requested
+    if (isApi) {
+      const formData = new FormData();
+      // Server should accept the field name "audio" (adjust if your server expects a different name)
+      formData.append("audio", this.audio_data, filename);
+
+      try {
+        this.showLoadingStateSpinner(display_element, trial);
+        const response = await fetch(trial.save_via_api, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(
+            `Upload failed (${response.status}): ${text.slice(0, 300)}`
+          );
+        }
+
+        let result: any;
+        try {
+          result = await response.json();
+        } catch {
+          const text = await response.text();
+          throw new Error(`Expected JSON but got: ${text.slice(0, 300)}`);
+        }
+
+        this.response = result.ref_id ?? "Uploaded with no ref_id";
+      } catch (error) {
+        console.error("Error uploading audio:", error);
+        this.response = "Error uploading audio: " + error;
+      }
+    }
+
+    // Local download if requested
+    if (wantsLocalSave) {
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = this.audio_url;
+      a.download = filename; // browser saves to Downloads
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      if (!isApi) {
+        this.response = filename;
+      }
+    }
+
+    // Fallback: base64-encoded into trial data
+    if (!isApi && !wantsLocalSave) {
+      this.response = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          const base64 = (reader.result as string).split(",")[1];
+          resolve(base64);
+        });
+        reader.readAsDataURL(this.audio_data);
+      });
+    }
+  }
+
   private setupRecordingEvents(display_element, trial) {
     this.data_available_handler = (e) => {
       if (e.data.size > 0) {
@@ -182,15 +303,38 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     this.stop_event_handler = () => {
-      const data = new Blob(this.recorded_data_chunks, { type: this.recorded_data_chunks[0].type });
-      this.audio_url = URL.createObjectURL(data);
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        const base64 = (reader.result as string).split(",")[1];
-        this.response = base64;
-        this.load_resolver();
+      this.audio_data = new Blob(this.recorded_data_chunks, {
+        type: this.recorded_data_chunks[0].type,
       });
-      reader.readAsDataURL(data);
+
+      this.audio_url = URL.createObjectURL(this.audio_data);
+
+      // extension from MIME type (e.g., "audio/webm;codecs=opus" → "webm")
+      const mimeType = this.audio_data.type.split("/");
+      if (mimeType.length > 1) {
+        const raw = mimeType[1].split(";")[0];
+        switch (raw) {
+          case "webm":
+            this.audio_extension = "webm";
+            break;
+          case "x-wav":
+          case "wav":
+            this.audio_extension = "wav";
+            break;
+          case "mpeg":
+            this.audio_extension = "mp3";
+            break;
+          case "ogg":
+            this.audio_extension = "ogg";
+            break;
+          default:
+            this.audio_extension = raw;
+        }
+      } else {
+        this.audio_extension = "webm";
+      }
+
+      this.load_resolver();
     };
 
     this.start_event_handler = (e) => {
@@ -226,7 +370,10 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
       }
     };
 
-    this.recorder.addEventListener("dataavailable", this.data_available_handler);
+    this.recorder.addEventListener(
+      "dataavailable",
+      this.data_available_handler
+    );
 
     this.recorder.addEventListener("stop", this.stop_event_handler);
 
@@ -251,11 +398,13 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
       <button id="continue" class="jspsych-btn">${trial.accept_button_label}</button>
     `;
 
-    display_element.querySelector("#record-again").addEventListener("click", () => {
-      // release object url to save memory
-      URL.revokeObjectURL(this.audio_url);
-      this.startRecording();
-    });
+    display_element
+      .querySelector("#record-again")
+      .addEventListener("click", () => {
+        // release object url to save memory
+        URL.revokeObjectURL(this.audio_url);
+        this.startRecording();
+      });
     display_element.querySelector("#continue").addEventListener("click", () => {
       this.endTrial(display_element, trial);
     });
@@ -264,10 +413,14 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
     // audio.src =
   }
 
-  private endTrial(display_element, trial) {
+  private async endTrial(display_element, trial) {
+    await this.saveAudioData(display_element, trial);
     // clear recordering event handler
 
-    this.recorder.removeEventListener("dataavailable", this.data_available_handler);
+    this.recorder.removeEventListener(
+      "dataavailable",
+      this.data_available_handler
+    );
     this.recorder.removeEventListener("start", this.start_event_handler);
     this.recorder.removeEventListener("stop", this.stop_event_handler);
 
@@ -276,7 +429,9 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
       rt: this.rt,
       stimulus: trial.stimulus,
       response: this.response,
-      estimated_stimulus_onset: Math.round(this.stimulus_start_time - this.recorder_start_time),
+      estimated_stimulus_onset: Math.round(
+        this.stimulus_start_time - this.recorder_start_time
+      ),
     };
 
     if (trial.save_audio_url) {
