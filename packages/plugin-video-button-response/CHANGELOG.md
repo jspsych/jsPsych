@@ -1,5 +1,11 @@
 # @jspsych/plugin-video-button-response
 
+## 2.1.1
+
+### Patch Changes
+
+- [#3556](https://github.com/jspsych/jsPsych/pull/3556) [`d13767cac84cb7e6931a12db22e7edeb8ba1132f`](https://github.com/jspsych/jsPsych/commit/d13767cac84cb7e6931a12db22e7edeb8ba1132f) Thanks [@jadeddelta](https://github.com/jadeddelta)! - `width` and `height` default parameters are set to `null` as opposed to an empty string to properly reflect their types
+
 ## 2.1.0
 
 ### Minor Changes
