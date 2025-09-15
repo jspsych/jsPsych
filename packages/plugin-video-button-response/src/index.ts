@@ -45,15 +45,19 @@ const info = <const>{
       type: ParameterType.HTML_STRING,
       default: null,
     },
-    /** The width of the video display in pixels. */
+    /** The width of the video display in pixels. If `null`, the video will take the original video's dimensions, 
+     * or properly scaled with the aspect ratio if the height is also specified.
+     */
     width: {
       type: ParameterType.INT,
-      default: "",
+      default: null,
     },
-    /** The height of the video display in pixels. */
+    /** The height of the video display in pixels. If `null`, the video will take the original video's dimensions,
+     * or properly scaled with the aspect ratio if the width is also specified.
+     */
     height: {
       type: ParameterType.INT,
-      default: "",
+      default: null,
     },
     /** If true, the video will begin playing as soon as it has loaded. */
     autoplay: {
@@ -68,12 +72,12 @@ const info = <const>{
       type: ParameterType.BOOL,
       default: false,
     },
-    /** Time to start the clip. If null (default), video will start at the beginning of the file. */
+    /** Time to start the clip. If `null` (default), video will start at the beginning of the file. */
     start: {
       type: ParameterType.FLOAT,
       default: null,
     },
-    /** Time to stop the clip. If null (default), video will stop at the end of the file. */
+    /** Time to stop the clip. If `null` (default), video will stop at the end of the file. */
     stop: {
       type: ParameterType.FLOAT,
       default: null,

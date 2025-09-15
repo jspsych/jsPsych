@@ -23,15 +23,19 @@ const info = <const>{
       type: ParameterType.HTML_STRING,
       default: null,
     },
-    /** The width of the video in pixels. */
+    /** The width of the video display in pixels. If `null`, the video will take the original video's dimensions, 
+     * or properly scaled with the aspect ratio if the height is also specified.
+     */
     width: {
       type: ParameterType.INT,
-      default: "",
+      default: null,
     },
-    /** The height of the video display in pixels. */
+    /** The height of the video display in pixels. If `null`, the video will take the original video's dimensions,
+     * or properly scaled with the aspect ratio if the width is also specified.
+     */
     height: {
       type: ParameterType.INT,
-      default: "",
+      default: null,
     },
     /** If true, the video will begin playing as soon as it has loaded. */
     autoplay: {
@@ -191,13 +195,6 @@ class VideoSliderResponsePlugin implements JsPsychPlugin<Info> {
   constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-    if (!Array.isArray(trial.stimulus)) {
-      throw new Error(`
-        The stimulus property for the video-slider-response plugin must be an array
-        of files. See https://www.jspsych.org/latest/plugins/video-slider-response/#parameters
-      `);
-    }
-
     // half of the thumb width value from jspsych.css, used to adjust the label positions
     var half_thumb_width = 7.5;
 
