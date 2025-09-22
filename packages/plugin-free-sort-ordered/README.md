@@ -1,4 +1,4 @@
-# plugin-free-sort-ordered
+# plugin-snap-sort
 
 ## Overview
 
@@ -10,11 +10,11 @@ The free sort core plugin, but the images have to be sorted by placing into orde
 
 ## Compatibility
 
-`plugin-free-sort-ordered` requires jsPsych v8.0.0 or later.
+`plugin-snap-sort` requires jsPsych v8.0.0 or later.
 
 ## Documentation
 
-See [documentation](/packages/plugin-free-sort-ordered/README.md)
+See [documentation](/packages/plugin-snap-sort/README.md)
 
 ## Author / Citation
 

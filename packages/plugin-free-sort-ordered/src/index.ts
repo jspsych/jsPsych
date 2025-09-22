@@ -177,8 +177,8 @@ type Info = typeof info;
  *
  * The free sort core plugin, but the images have to be sorted by placing into ordered boxes.
  *
- * @author Cherrie Chang
- * @see {@link /packages/plugin-free-sort-ordered/README.md}}
+ * @author Quentin Dercon, Rina Harsch, Dominic Le, Shannon Yasuda, Cherrie Chang, Melissa Struhl
+ * @see {@link /packages/plugin-snap-sort/README.md}}
  */
 class SnapSortPlugin implements JsPsychPlugin<Info> {
   static info = info;

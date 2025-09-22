@@ -1,4 +1,4 @@
-# plugin-free-sort-ordered
+# plugin-snap-sort
 
 The free sort core plugin, but the images have to be sorted by placing into ordered boxes.
 
