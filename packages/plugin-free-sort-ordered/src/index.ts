@@ -462,6 +462,7 @@ class SnapSortPlugin implements JsPsychPlugin<Info> {
         const on_pointer_up = () => {
           document.removeEventListener("pointermove", on_pointer_move);
           this.style.transform = "scale(1, 1)";
+
           if (typeof inside[i] === "number") {
             const boxIndex = inside[i] as number;
             const alreadyOccupied = inside.some((val, idx) => idx !== i && val === boxIndex);
