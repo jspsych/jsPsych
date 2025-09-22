@@ -1,41 +1,39 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
-authors:
-- family-names: "Cherrie Chang"  # Replace with last name
-  given-names: "Cherrie Chang"   # Replace with first name
-  name-particle: "Cherrie Chang" # Replace with name particle(s)
-  orcid: "https://orcid.org/0000-0000-0000-0000"  # Replace with ORCID
-# More  authors can be listed here in the same format as above
-contact:  # Contact person for this extension
-- family-names: "Cherrie Chang"
-  given-names: "Cherrie Chang"
-  email: "{email}"          # Replace with contact person's email
-  orcid: "https://orcid.org/0000-0000-0000-0000"  # Replace with contact person's ORCID
-title: "jsPsychPluginFreeSortOrdered"
-version: 0.0.0
-doi: 10.5281/zenodo.1234    # Replace with DOI
-date-released: 2000-01-01
-url: "{softwareUrl}"        # Replace with URL to this extension
+title: "free-sort-ordered"
+version: "1.0.0"
+date-released: "2025-05-15"
 
-# If you wish to cite a paper on this extension instead, you can use the following template:
-preferred-citation:
-  authors:
-  - family-names: "Cherrie Chang"
-    given-names: "Cherrie Chang"
-    name-particle: "Cherrie Chang"
-    orcid: "https://orcid.org/0000-0000-0000-0000"
-  # More authors can be listed here in the same format as above
-  date-published: 2023-05-11
-  doi: 10.21105/joss.12345 
-  issn: 1234-5678
-  issue: 01
-  journal: Journal for Open Source Software
-  publisher:
-    name: Open Journals
-  start: 0001
-  title: "{title}"
-  type: article               # Other options include: book, pamphlet, conference-paper...
-  url: "{linkToPublicationInJournal}"
-  volume: 1
+authors:
+- family-names: "Dercon"  # Replace with last name
+  given-names: "Quentin"   # Replace with first name
+  name-particle: "" # Replace with name particle(s)
+  orcid: "https://orcid.org/0000-0001-8264-347X"  # Replace with ORCID
+
+- family-names: "Harsch"  # Replace with last name
+  given-names: "Rina"   # Replace with first name
+  name-particle: "" # Replace with name particle(s)
+  orcid: "https://orcid.org/0000-0002-6314-4904"  # Replace with ORCID
+
+- family-names: "Le"  # Replace with last name
+  given-names: "Dominic"   # Replace with first name
+  name-particle: "" # Replace with name particle(s)
+  orcid: "https://orcid.org/0009-0000-4273-1379"  # Replace with ORCID
+
+- family-names: "Yasuda"  # Replace with last name
+  given-names: "Shannon"   # Replace with first name
+  name-particle: "" # Replace with name particle(s)
+  orcid: "https://orcid.org/0000-0002-4379-8150"  # Replace with ORCID
+
+- family-names: "Chang"  # Replace with last name
+  given-names: "Cherrie"   # Replace with first name
+  name-particle: "" # Replace with name particle(s)
+  orcid: "https://orcid.org/0000-0000-0000-0000"  # Replace with ORCID
+
+- family-names: "Struhl"  # Replace with last name
+  given-names: "Melissa"   # Replace with first name
+  name-particle: "" # Replace with name particle(s)
+  orcid: "https://orcid.org/0000-0003-2217-9331"  # Replace with ORCID
+
 
 # More information on the preffered-citation CFF format can be found at https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-citation-files#citing-something-other-than-software
