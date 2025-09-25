@@ -174,7 +174,7 @@ The `file_put_contents($name, $data)` method requires permission to write new fi
 To use the PHP script, the JavaScript that runs jsPsych needs to send the `filedata` information. This is done through an [AJAX](http://www.w3schools.com/xml/ajax_intro.asp) call.
 
 ```javascript
-function saveData(name, data){
+function saveData(data){
   var xhr = new XMLHttpRequest();
   xhr.open('POST', 'write_data.php'); // 'write_data.php' is the path to the php file described above.
   xhr.setRequestHeader('Content-Type', 'application/json');
