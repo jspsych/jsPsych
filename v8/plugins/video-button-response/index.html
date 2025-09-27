@@ -2920,7 +2920,7 @@
 <tr>
 <td>button_layout</td>
 <td>string</td>
-<td>'grid'</td>
+<td><code>'grid'</code></td>
 <td>Setting to <code>'grid'</code> will make the container element have the CSS property <code>display: grid</code> and enable the use of <code>grid_rows</code> and <code>grid_columns</code>. Setting to <code>'flex'</code> will make the container element have the CSS property <code>display: flex</code>. You can customize how the buttons are laid out by adding inline CSS in the <code>button_html</code> parameter.</td>
 </tr>
 <tr>
@@ -2945,13 +2945,13 @@
 <td>width</td>
 <td>numeric</td>
 <td>width of the video file</td>
-<td>The width of the video display in pixels.</td>
+<td>The width of the video display in pixels. If <code>null</code>, the video will take the original video's dimensions, or properly scaled with the aspect ratio if the height is also specified.</td>
 </tr>
 <tr>
 <td>height</td>
 <td>numeric</td>
 <td>heigh of the video file</td>
-<td>The height of the video display in pixels.</td>
+<td>The height of the video display in pixels. If <code>null</code>, the video will take the original video's dimensions, or properly scaled with the aspect ratio if the width is also specified.</td>
 </tr>
 <tr>
 <td>autoplay</td>
