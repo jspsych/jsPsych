@@ -47,19 +47,19 @@
     };
 
     // to use the canvas stimulus function with timeline variables,
-    // the jsPsych.timelineVariable() function can be used inside your stimulus function
+    // the jsPsych.evaluateTimelineVariable() function can be used inside your stimulus function
     var trial_procedure = {
       timeline: [{
         type: jsPsychCanvasKeyboardResponse,
         stimulus: function(c) {
           var ctx = c.getContext('2d');
           ctx.beginPath();
-          ctx.fillStyle = jsPsych.timelineVariable('color');
+          ctx.fillStyle = jsPsych.evaluateTimelineVariable('color');
           ctx.fillRect(
-            jsPsych.timelineVariable('upper_left_x'),
-            jsPsych.timelineVariable('upper_left_y'),
-            jsPsych.timelineVariable('width'),
-            jsPsych.timelineVariable('height')
+            jsPsych.evaluateTimelineVariable('upper_left_x'),
+            jsPsych.evaluateTimelineVariable('upper_left_y'),
+            jsPsych.evaluateTimelineVariable('width'),
+            jsPsych.evaluateTimelineVariable('height')
           );
           ctx.stroke();
         },
