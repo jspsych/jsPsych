@@ -44,6 +44,14 @@ const info = <const>{
       type: ParameterType.FUNCTION,
       default: null,
     },
+    /**
+     * The minimum width of the survey container. This is applied as a CSS `min-width` property to the survey container element.
+     * Note that the width of the survey can also be controlled using SurveyJS parameters within the `survey_json` object (e.g., `widthMode`, `width`, `fitToContainer`).
+     */
+    min_width: {
+      type: ParameterType.STRING,
+      default: "min(100vw, 800px)",
+    },
   },
   data: {
     /** An object containing the response to each question. The object will have a separate key (identifier) for each question. If the `name` parameter is defined for the question (recommended), then the response object will use the value of `name` as the key for each question. If any questions do not have a name parameter, their keys will named automatically, with the first unnamed question recorded as `question1`, the second as `question2`, and so on. The response type will depend on the question type. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. */
@@ -60,31 +68,6 @@ const info = <const>{
 };
 
 type Info = typeof info;
-
-// Define the mapping between custom jsPsych class names (jspsych-*) and class names provided by SurveyJS.
-// See here for full list: https://github.com/surveyjs/survey-library/blob/master/src/defaultCss/defaultV2Css.ts.
-// To modify the survey plugin CSS:
-// (1) search for the CSS selector that you want to modify,
-// (2) look it up and get the associated ID (note that some of these are nested)
-// (3) if the ID isn't already listed as a key here, add it and use a new jspsych class name as the value
-// (4) in survey.scss, use the jspsych class name as the selector and add/modify the rule
-
-const jsPsychSurveyCssClassMap = {
-  body: "jspsych-body",
-  bodyContainer: "jspsych-body-container",
-  question: {
-    content: "jspsych-question-content",
-    mainRoot: "jspsych-question-root",
-  },
-  page: {
-    root: "jspsych-page",
-  },
-  footer: "jspsych-footer",
-  navigation: {
-    complete: "jspsych-nav-complete",
-  },
-  rowMultiple: "jspsych-row-multiple",
-};
 
 /**
  * SurveyJS version: 2.2.0
@@ -151,9 +134,11 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     });
   }
 
-  private createSurveyContainer(parent: HTMLElement): HTMLElement {
+  private createSurveyContainer(parent: HTMLElement, minWidth: string): HTMLElement {
     const container = document.createElement("div");
     container.classList.add("jspsych-survey-container");
+    container.style.textAlign = "initial"; // this undoes jspsych's text centering
+    container.style.minWidth = minWidth;
     parent.appendChild(container);
     return container;
   }
@@ -174,9 +159,6 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
     // apply our custom theme
     this.applyStyles(this.survey);
 
-    // apply our custom CSS class names
-    this.survey.css = jsPsychSurveyCssClassMap;
-
     if (trial.validation_function) {
       this.survey.onValidateQuestion.add(trial.validation_function);
     }
@@ -191,9 +173,6 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
         }
       }
 
-      // clear display and reset flex on jspsych-content-wrapper
-      document.querySelector<HTMLElement>(".jspsych-content-wrapper").style.display = "flex";
-
       // finish trial and save data
       this.jsPsych.finishTrial({
         rt: Math.round(performance.now() - this.start_time),
@@ -201,12 +180,9 @@ class SurveyPlugin implements JsPsychPlugin<Info> {
       });
     });
 
-    // remove flex display from jspsych-content-wrapper to get formatting to work
-    document.querySelector<HTMLElement>(".jspsych-content-wrapper").style.display = "block";
-
     // As of the SurveyJS v2.2 update, we need to create a new container for the survey to render in.
     // Otherwise the rendering fails silently with repeated similar survey trials.
-    const survey_container = this.createSurveyContainer(display_element);
+    const survey_container = this.createSurveyContainer(display_element, trial.min_width);
     this.survey.render(survey_container);
 
     this.start_time = performance.now();

@@ -53,7 +53,7 @@
     "sass": "^1.43.5"
   },
   "dependencies": {
-    "survey-core": "^2.2.0",
-    "survey-js-ui": "^2.2.0"
+    "survey-core": "^2.3.11",
+    "survey-js-ui": "^2.3.11"
   }
 }
