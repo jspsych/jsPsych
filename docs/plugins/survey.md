@@ -49,7 +49,10 @@ The "boolean" type is a yes/no (or other two-option) multiple choice question. I
 
 #### checkbox
 
-This checkbox question type allows participants to select one or more options from the set of choices. You can optionally include special choices, such as "Select all", "None", and "Other" with a text box that appears when selected.
+This checkbox question type allows participants to select one or more options from the set of choices. Features include:
+- Built-in special choices, such as "Select all", "None", and "Other" with a text box that appears when selected.
+- Custom choices can be marked as an '[exclusive option](https://surveyjs.io/form-library/examples/exclusive-choice-options-for-multiple-choice-question/vanillajs)', which automatically de-selects the other choices.
+- [Nested follow-up questions](https://surveyjs.io/form-library/examples/nest-follow-up-questions-within-choice-options/vanillajs) and [comment boxes](https://surveyjs.io/form-library/examples/individual-checkbox-comments/vanillajs) that appear when under the individual response when it is selected.
 
 - [Checkbox example](https://surveyjs.io/form-library/examples/create-checkboxes-question-in-javascript/vanillajs)
 - [Checkbox API documentation](https://surveyjs.io/form-library/documentation/api-reference/checkbox-question-model)
@@ -63,7 +66,7 @@ This is the "long text" question type. It's similar to the text input question, 
 
 #### dropdown
 
-The dropdown question type allows participants to select a single option from a list presented in a drop-down box. 
+The dropdown question type allows participants to select a single option from a list presented in a drop-down box. You can optionally allow participants to [create a new item](https://surveyjs.io/form-library/examples/dropdown-custom-choice-options/vanillajs#) if their response is not included in the drop-down list.
 
 - [Dropdown example](https://surveyjs.io/form-library/examples/create-dropdown-menu-in-javascript/vanillajs)
 - [Dropdown API documentation](https://surveyjs.io/form-library/documentation/api-reference/dropdown-menu-model)
@@ -115,9 +118,10 @@ This question type displays images/videos and allows the participant to select o
 
 #### matrix
 
-The matrix question creates a table of multiple choice questions (rows) that use the same set of response options (columns). This is often used for presenting multiple questions/statements with a Likert or similar rating scale.
+The matrix question creates a table of multiple choice questions (rows) that use the same set of response options (columns). This is often used for presenting multiple questions/statements that all use the same scale (e.g. Likert) or set of response options.
 
-- [Matrix example](https://surveyjs.io/form-library/examples/single-selection-matrix-table-question/vanillajs)
+- [Matrix example - single response / radio buttons](https://surveyjs.io/form-library/examples/single-selection-matrix-table-question/vanillajs)
+- [Matrix example - multiple response / checkboxes](https://surveyjs.io/form-library/examples/checkbox-matrix-question/vanillajs)
 - [Matrix API documentation](https://surveyjs.io/form-library/documentation/api-reference/matrix-table-question-model)
 
 #### matrixdropdown
