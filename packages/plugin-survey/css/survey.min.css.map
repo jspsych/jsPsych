@@ -1,1 +1,1 @@
-{"version":3,"sourceRoot":"","sources":["../node_modules/survey-core/survey-core.min.css","survey.scss"],"names":[],"mappings":"CAAA;AAAA;AAAA;AAAA;AAAA,GAKA,sz9SCFA,wDACE,4BAIF,iBACE,WAIF,0BACE,qBACA,WAIF,uBACE,gBAIF,wBACE,gBACA,mBAMF,cACE,WACA,cACA,iBACA,kBACA,kEACA,sEAIF,cACE,UACA,gBAIF,gBACE,gEAIF,sBACE,qIACA,4DACA,cAIF,gDACE,aAIF,0BACE","file":"survey.min.css"}
+{"version":3,"sourceRoot":"","sources":["../node_modules/survey-core/survey-core.min.css"],"names":[],"mappings":"CAAA;AAAA;AAAA;AAAA;AAAA,GAKA","file":"survey.min.css"}
