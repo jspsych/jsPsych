@@ -362,15 +362,15 @@ import '@jspsych/plugin-survey/css/survey.css'
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo2.html">Open demo in new tab</a>
 
 ??? example "Rating and matrix questions for Likert-style scales"
-    This example shows several different options for presenting a single question/statement with a rating scale (buttons,  stars, smileys). It also shows a table of several questions/statements (rows) to be rated on the same scale (columns).
+    This example shows several different options for presenting questions/statements with a rating scale (buttons, stars, smileys, dropdown). The buttons can be set to wrap across lines or change to a dropdown selection on mobile devices. It also shows a table of several questions/statements (rows) to be rated on the same scale (columns). The rows can be single-response (radio button options) or allow multiple responses (checkbox options). This example also shows how the plugin's `min_width` parameter can be set to display wide questions without a scroll bar.
     **Note:** This content requires more page width and is best viewed when opened in a new tab.
     === "Code"
 
         ```javascript
-        const trial = {
+        const trial_1 = {
           type: jsPsychSurvey,
           survey_json: {
-            title: 'Likert scale examples',
+            title: 'Matrix question and Likert scale examples',
             pages: [
               {
                 elements: [
@@ -378,7 +378,7 @@ import '@jspsych/plugin-survey/css/survey.css'
                     type: 'rating',
                     name: 'like-vegetables',
                     title: 'I like to eat vegetables.',
-                    description: 'Button rating scale with min/max descriptions',
+                    description: 'Button rating scale with min/max descriptions. The buttons will wrap on smaller screens because displayMode is set to "buttons".',
                     minRateDescription: 'Strongly Disagree',
                     maxRateDescription: 'Strongly Agree',
                     displayMode: 'buttons',
@@ -388,18 +388,18 @@ import '@jspsych/plugin-survey/css/survey.css'
                     type: 'rating',
                     name: 'like-cake',
                     title: 'I like to eat cake.',
-                    description: 'Star rating scale with min/max descriptions',
-                    minRateDescription: 'Strongly Disagree',
-                    maxRateDescription: 'Strongly Agree',
+                    description: 'Star rating scale with min/max descriptions. The star buttons will change to a dropdown selection on smaller screens because displayMode is "auto" (the default).',
+                    minRateDescription: 'No',
+                    maxRateDescription: 'Yes',
                     rateType: 'stars',
-                    rateCount: 10,
-                    rateMax: 10,
+                    rateCount: 5,
+                    rateMax: 5,
                   },
                   {
                     type: 'rating',
                     name: 'like-cooking',
                     title: 'How much do you enjoy cooking?',
-                    description: 'Smiley rating scale without min/max descriptions',
+                    description: 'Smiley rating scale without min/max descriptions. The smiley buttons will change to a dropdown selection on smaller screens because displayMode is "auto" (the default).',
                     rateType: 'smileys',
                     rateCount: 10,
                     rateMax: 10,
@@ -409,37 +409,60 @@ import '@jspsych/plugin-survey/css/survey.css'
               }, {
                 elements: [
                   {
-                    type: 'matrix',
-                    name: 'like-food-matrix',
-                    title: 'Matrix question for rating mutliple statements on the same scale.',
-                    alternateRows: true,
-                    isAllRowRequired: true,
-                    rows: [
-                      {text: 'I like to eat vegetables.', value: 'VeggiesTable'},
-                      {text: 'I like to eat fruit.', value: 'FruitTable'},
-                      {text: 'I like to eat cake.', value: 'CakeTable'},
-                      {text: 'I like to cook.', value: 'CookTable'},
+                    type: "matrix",
+                    name: "device-usage",
+                    cellType: "checkbox",
+                    title: "Which devices do you use for each of the following activities?",
+                    description: "Matrix question with cellType: 'checkbox' to allow multiple responses per row.",
+                    columns: [
+                      { value: "phone", text: "Phone" },
+                      { value: "tablet", text: "Tablet" },
+                      { value: "laptop", text: "Laptop" },
+                      { value: "smart-tv", text: "Smart TV" }
                     ],
-                    columns: [{
-                      "value": 5,
-                      "text": "Strongly agree"
-                    }, {
-                      "value": 4,
-                      "text": "Agree"
-                    }, {
-                      "value": 3,
-                      "text": "Neutral"
-                    }, {
-                      "value": 2,
-                      "text": "Disagree"
-                    }, {
-                      "value": 1,
-                      "text": "Strongly disagree"
-                    }]
-                  }
+                    rows: [
+                      { value: "videos", text: "Watching videos" },
+                      { value: "news", text: "Reading news" },
+                      { value: "calls", text: "Video calls" },
+                      { value: "shopping", text: "Online shopping" }
+                    ]
+                  },
                 ]
               }
             ]
+          }
+        };
+
+        const trial_2 = {
+          type: jsPsychSurvey,
+          min_width: "1000px", // set larger min_width value to fit wide question without a scroll bar
+          survey_json: {
+            title: 'Matrix question and Likert scale examples',
+            pages: {
+              title: "This trial has a wider min_width value to show the full matrix without a scroll bar.",
+              elements: [
+                {
+                  type: 'matrix',
+                  name: 'like-food-matrix',
+                  title: "Please rate each statment on the scale from 'Strongly agree' to 'Strongly disagree'.",
+                  description: 'Matrix question for rating mutliple statements on the same scale. You can only select one response for each statement.',
+                  alternateRows: false,
+                  rows: [
+                    { text: 'I like to eat vegetables.', value: 'VeggiesTable' },
+                    { text: 'I like to eat fruit.', value: 'FruitTable' },
+                    { text: 'I like to eat cake.', value: 'CakeTable' },
+                    { text: 'I like to cook.', value: 'CookTable' },
+                  ],
+                  columns: [
+                    { value: 5, text: "Strongly agree" },
+                    { value: 4, text: "Agree" },
+                    { value: 3, text: "Neutral" },
+                    { value: 2, text: "Disagree" },
+                    { value: 1, text: "Strongly disagree" }
+                  ]
+                }
+              ]
+            }
           }
         };
         ```
