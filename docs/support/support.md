@@ -6,6 +6,6 @@ If you have identified a problem with jsPsych, such as a bug in the code or an e
 
 If you have a suggestion for fixing the problem, feel free to [contribute to the project](../developers/contributing.md)!
 
-We also manage a Discord for jsPsych users and developers to get peer support, as well as feedback for their projects from our core maintenance team. This is also our hosting site for our virtual hackathons. Join at our [#welcome-and-rules channel](), where you'll get a breakdown of the server and how to find what you need.
+We also manage a Discord for jsPsych users and developers to get peer support for coding projects, in addition to feedback from our core maintenance team. We host virtual hackathons on the server as well! Feel free to join at our [#welcome-and-rules channel](https://discord.gg/YveQdPMbYz), where you'll get a breakdown of the server and how to find what you need.
 
 Inquiries for paid consultation to develop experiments using jsPsych or to create new custom jsPsych features can be sent to [josh.deleeuw@gmail.com](mailto:josh.deleeuw@gmail.com).
