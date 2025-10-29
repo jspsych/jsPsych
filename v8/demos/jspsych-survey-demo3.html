@@ -2,12 +2,13 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="docs-demo-timeline.js"></script>
     <script src="https://unpkg.com/jspsych@8.2.2"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-survey@3.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey@4.0.0"></script>
     <link rel="stylesheet" href="https://unpkg.com/jspsych@8.2.2/css/jspsych.css" />
-    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@3.0.0/css/survey.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@4.0.0/css/survey.min.css">
     <link rel="stylesheet" href="docs-demo.css" type="text/css">
   </head>
   <body></body>
@@ -15,10 +16,10 @@
 
     const jsPsych = initJsPsych();
 
-    const trial = {
+    const trial_1 = {
       type: jsPsychSurvey,
       survey_json: {
-        title: 'Likert scale examples',
+        title: 'Matrix question and Likert scale examples',
         pages: [
           {
             elements: [
@@ -26,7 +27,7 @@
                 type: 'rating',
                 name: 'like-vegetables',
                 title: 'I like to eat vegetables.',
-                description: 'Button rating scale with min/max descriptions',
+                description: 'Button rating scale with min/max descriptions. The buttons will wrap on smaller screens because displayMode is set to "buttons".',
                 minRateDescription: 'Strongly Disagree',
                 maxRateDescription: 'Strongly Agree',
                 displayMode: 'buttons',
@@ -36,18 +37,18 @@
                 type: 'rating',
                 name: 'like-cake',
                 title: 'I like to eat cake.',
-                description: 'Star rating scale with min/max descriptions',
-                minRateDescription: 'Strongly Disagree',
-                maxRateDescription: 'Strongly Agree',
+                description: 'Star rating scale with min/max descriptions. The star buttons will change to a dropdown selection on smaller screens because displayMode is "auto" (the default).',
+                minRateDescription: 'No',
+                maxRateDescription: 'Yes',
                 rateType: 'stars',
-                rateCount: 10,
-                rateMax: 10,
+                rateCount: 5,
+                rateMax: 5,
               },
               {
                 type: 'rating',
                 name: 'like-cooking',
                 title: 'How much do you enjoy cooking?',
-                description: 'Smiley rating scale without min/max descriptions',
+                description: 'Smiley rating scale without min/max descriptions. The smiley buttons will change to a dropdown selection on smaller screens because displayMode is "auto" (the default).',
                 rateType: 'smileys',
                 rateCount: 10,
                 rateMax: 10,
@@ -57,41 +58,64 @@
           }, {
             elements: [
               {
-                type: 'matrix',
-                name: 'like-food-matrix',
-                title: 'Matrix question for rating mutliple statements on the same scale.',
-                alternateRows: true,
-                isAllRowRequired: true,
-                rows: [
-                  {text: 'I like to eat vegetables.', value: 'VeggiesTable'},
-                  {text: 'I like to eat fruit.', value: 'FruitTable'},
-                  {text: 'I like to eat cake.', value: 'CakeTable'},
-                  {text: 'I like to cook.', value: 'CookTable'},
+                type: "matrix",
+                name: "device-usage",
+                cellType: "checkbox",
+                title: "Which devices do you use for each of the following activities?",
+                description: "Matrix question with cellType: 'checkbox' to allow multiple responses per row.",
+                columns: [
+                  { value: "phone", text: "Phone" },
+                  { value: "tablet", text: "Tablet" },
+                  { value: "laptop", text: "Laptop" },
+                  { value: "smart-tv", text: "Smart TV" }
                 ],
-                columns: [{
-                  "value": 5,
-                  "text": "Strongly agree"
-                }, {
-                  "value": 4,
-                  "text": "Agree"
-                }, {
-                  "value": 3,
-                  "text": "Neutral"
-                }, {
-                  "value": 2,
-                  "text": "Disagree"
-                }, {
-                  "value": 1,
-                  "text": "Strongly disagree"
-                }]
-              }
+                rows: [
+                  { value: "videos", text: "Watching videos" },
+                  { value: "news", text: "Reading news" },
+                  { value: "calls", text: "Video calls" },
+                  { value: "shopping", text: "Online shopping" }
+                ]
+              },
             ]
           }
         ]
       }
     };
 
-    const timeline = [trial];
+    const trial_2 = {
+      type: jsPsychSurvey,
+      min_width: "1000px", // set larger min_width value to fit wide question without a scroll bar
+      survey_json: {
+        title: 'Matrix question and Likert scale examples',
+        pages: {
+          title: "This trial has a wider min_width value to show the full matrix without a scroll bar.",
+          elements: [
+            {
+              type: 'matrix',
+              name: 'like-food-matrix',
+              title: "Please rate each statment on the scale from 'Strongly agree' to 'Strongly disagree'.",
+              description: 'Matrix question for rating mutliple statements on the same scale. You can only select one response for each statement.',
+              alternateRows: false,
+              rows: [
+                { text: 'I like to eat vegetables.', value: 'VeggiesTable' },
+                { text: 'I like to eat fruit.', value: 'FruitTable' },
+                { text: 'I like to eat cake.', value: 'CakeTable' },
+                { text: 'I like to cook.', value: 'CookTable' },
+              ],
+              columns: [
+                { value: 5, text: "Strongly agree" },
+                { value: 4, text: "Agree" },
+                { value: 3, text: "Neutral" },
+                { value: 2, text: "Disagree" },
+                { value: 1, text: "Strongly disagree" }
+              ]
+            }
+          ]
+        }
+      }
+    };
+
+    const timeline = [trial_1, trial_2];
 
     if (typeof jsPsych !== "undefined") {
       jsPsych.run(generateDocsDemoTimeline(timeline));
