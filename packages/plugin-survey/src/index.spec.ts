@@ -57,7 +57,7 @@ describe("survey plugin", () => {
     await expectRunning();
 
     const complete_button = displayElement.querySelector(
-      'input[type="button"].jspsych-nav-complete'
+      'input[type="button"].sd-navigation__complete-btn'
     );
     expect(complete_button).not.toBeNull();
     await clickTarget(complete_button);
@@ -102,7 +102,7 @@ describe("survey plugin", () => {
     expect(displayElement.querySelector('div[data-name="question_2"]')).not.toBeNull();
 
     const complete_button = displayElement.querySelector(
-      'input[type="button"].jspsych-nav-complete'
+      'input[type="button"].sd-navigation__complete-btn'
     );
     expect(complete_button).not.toBeNull();
     await clickTarget(complete_button);
@@ -137,7 +137,7 @@ describe("survey plugin", () => {
     expect(displayElement.querySelector('div[data-name="question_1"]')).not.toBeNull();
 
     const complete_button = displayElement.querySelector(
-      'input[type="button"].jspsych-nav-complete'
+      'input[type="button"].sd-navigation__complete-btn'
     );
     expect(complete_button).not.toBeNull();
     await clickTarget(complete_button);
@@ -160,7 +160,7 @@ describe("survey plugin", () => {
                 setTimeout(function () {
                   expect(document.querySelector('div[data-name="question1"]')).not.toBeNull();
                   const complete_button = document.querySelector(
-                    'input[type="button"].jspsych-nav-complete'
+                    'input[type="button"].sd-navigation__complete-btn'
                   );
                   expect(complete_button).not.toBeNull();
                   clickTarget(complete_button);

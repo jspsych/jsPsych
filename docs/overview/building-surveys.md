@@ -452,3 +452,31 @@ Rather than repeating a question format within the same trial, perhaps you want 
     };
     ```
 
+### Mobile compatibility
+
+SurveyJS has good built-in support for mobile device compatibility. To enable SurveyJS's responsive design, you must add a viewport `meta` tag to your HTML file:
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+```
+
+To see how a `survey` trial looks on mobile from your laptop/desktop, you can open your browser's developer tools and click on the device emulator button. This will open a responsive design viewer, with several options for devices and their corresponding screen dimensions. You can also toggle portrait/landscape orientation.
+
+Here's where to find the mobile emulator buttons in your browser's developer tools:
+
+**Chrome**
+
+![devtools-mobile-chrome](../img/survey_devtools_mobile_chrome.png)
+
+**Firefox**
+
+![devtools-mobile-firefox](../img/survey_devtools_mobile_firefox.png)
+
+To see what the `survey` trials look like on mobile devices, can view any of the `survey` plugin demos or example files. For instance, here's what the slider scale example looks like on laptop/desktop and mobile. Note a few key differences on mobile compared to laptop/desktop:
+
+- The content takes up more of the screen
+- The font is larger relative to the other elements
+- The "Continue" button takes up the full width
+
+
+![survey-mobile-vs-desktop](../img/survey_mobile_vs_desktop.png)

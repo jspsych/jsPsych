@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="../../jspsych/dist/index.browser.js"></script>
     <script src="../dist/index.browser.js"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
@@ -9,15 +10,11 @@
     <link rel="stylesheet" href="../css/survey.min.css" />
     <style>
       /* These CSS changes make the survey plugin content and position more similar to other jsPsych trials. */
-      /* Remove the border around the survey question and align the text to center instead of left. */
-      .jspsych-question-root {
+
+      /* Remove the border around the survey question and align the text and items to center instead of left. */
+      .sd-row__question {
         box-shadow: none;
         text-align: center;
-      }
-
-      /* Use flex display for presenting the survey content in the middle of the page instead of at the top. */
-      .jspsych-content-wrapper {
-        display: flex !important;
       }
 
       /* This prevents a horizontal scroll bar from appearing on survey trials. */
@@ -26,16 +23,17 @@
         max-width: 95%;
       }
 
-      /* Align the survey navigation buttons to the center */
+      /* Center the rating buttons */
+      .sd-element__content.sd-question__content {
+        justify-items: center;
+      }
+
+      /* Align the survey navigation buttons to the center on wide screens, but keep buttons the full width on mobile. */
       .sv-components-column {
         align-items: center;
       }
-
-      /* Makes the div around the text input element into a flex container, and centers the input element vertically and horizontally */
-      .sd-text__content.sd-question__content {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      .sd-root-modern--mobile .sv-components-column {
+        align-items: unset;
       }
     </style>
   </head>
@@ -132,9 +130,8 @@
                 {
                   type: "rating",
                   title: "How confident do you feel about your response?",
-                  rateCount: 10,
-                  rateMax: 10,
-                  displayMode: "buttons",
+                  rateCount: 5,
+                  rateMax: 5,
                   minRateDescription: "Not confident",
                   maxRateDescription: "Very confident",
                   name: "response_confidence"

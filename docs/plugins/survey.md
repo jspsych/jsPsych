@@ -2,9 +2,9 @@
 
 Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md).
 
-SurveyJS version: 2.2.0
+SurveyJS version: 2.3.12 [See changelog](https://surveyjs.io/stay-updated/release-notes).
 
-This plugin is a wrapper for the [**SurveyJS form library**](https://surveyjs.io/form-library/documentation/overview). It displays survey-style questions across one or more pages. You can mix different question types on the same page, and participants can navigate back and forth through multiple survey pages without losing responses. SurveyJS provides a large number of built-in question types, response validation options, conditional display options, special response options ("None", "Select all", "Other"), and other useful features for building complex surveys. See the [Building Surveys in jsPsych](../overview/building-surveys.md) page for a more detailed list of all options and features.
+This plugin is a wrapper for the [**SurveyJS form library**](https://surveyjs.io/form-library/documentation/overview). It displays survey-style questions across one or more pages. You can mix different question types on the same page, and participants can navigate back and forth through multiple survey pages without losing responses. SurveyJS provides a large number of built-in question types, response validation options, conditional display options, special response options ("None", "Select all", "Other"), mobile device compatibility, and other useful features for building complex surveys. See the [Building Surveys in jsPsych](../overview/building-surveys.md) page for a more detailed list of all options and features.
 
 With SurveyJS, surveys can be defined using a JavaScript/JSON object, a JavaScript function, or a combination of both. The jsPsych `survey` plugin provides parameters that accept these methods of constructing a SurveyJS survey, and passes them into SurveyJS. The fact that this plugin just acts as a wrapper means you can take advantage of all of the SurveyJS features, and copy/paste directly from SurveyJS examples into the plugin's `survey_json` parameter (for JSON object configuration) or `survey_function` parameter (for JavaScript code).
 
@@ -33,6 +33,7 @@ Parameter | Type | Default Value | Description
 survey_json | object | `{}` | A SurveyJS-compatible JavaScript object that defines the survey (we refer to this as the survey 'JSON' for consistency with the SurveyJS documentation, but this parameter should be a JSON-compatible JavaScript object rather than a string). If used with the `survey_function` parameter, the survey will initially be constructed with this object and then passed to the `survey_function`. See the [SurveyJS JSON documentation](https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#define-a-static-survey-model-in-json) for more information.
 survey_function | function | null | A function that receives a SurveyJS survey object as an argument. If no `survey_json` is specified, then the function receives an empty survey model and must add all pages/elements to it. If a `survey_json` object is provided, then this object forms the basis of the survey model that is passed into the `survey_function`. See the [SurveyJS JavaScript documentation](https://surveyjs.io/form-library/documentation/design-survey/create-a-simple-survey#create-or-change-a-survey-model-dynamically) for more information.
 validation_function | function | null | A function that can be used to validate responses. This function is called whenever the SurveyJS `onValidateQuestion` event occurs. (Note: it is also possible to add this function to the survey using the `survey_function` parameter - we've just added it as a parameter for convenience).
+min_width | string | `min(100vw, 800px)` | The minimum width of the survey container. This is applied as a CSS `min-width` property to the survey container element. Note that the width of the survey can also be controlled using SurveyJS parameters within the `survey_json` object (e.g., `widthMode`, `width`, `fitToContainer`).
 
 ### Question/Element Types
 
@@ -49,7 +50,10 @@ The "boolean" type is a yes/no (or other two-option) multiple choice question. I
 
 #### checkbox
 
-This checkbox question type allows participants to select one or more options from the set of choices. You can optionally include special choices, such as "Select all", "None", and "Other" with a text box that appears when selected.
+This checkbox question type allows participants to select one or more options from the set of choices. Features include:
+- Built-in special choices, such as "Select all", "None", and "Other" with a text box that appears when selected.
+- Custom choices can be marked as an '[exclusive option](https://surveyjs.io/form-library/examples/exclusive-choice-options-for-multiple-choice-question/vanillajs)', which automatically de-selects the other choices.
+- [Nested follow-up questions](https://surveyjs.io/form-library/examples/nest-follow-up-questions-within-choice-options/vanillajs) and [comment boxes](https://surveyjs.io/form-library/examples/individual-checkbox-comments/vanillajs) that appear when under the individual response when it is selected.
 
 - [Checkbox example](https://surveyjs.io/form-library/examples/create-checkboxes-question-in-javascript/vanillajs)
 - [Checkbox API documentation](https://surveyjs.io/form-library/documentation/api-reference/checkbox-question-model)
@@ -63,7 +67,7 @@ This is the "long text" question type. It's similar to the text input question, 
 
 #### dropdown
 
-The dropdown question type allows participants to select a single option from a list presented in a drop-down box. 
+The dropdown question type allows participants to select a single option from a list presented in a drop-down box. You can optionally allow participants to [create a new item](https://surveyjs.io/form-library/examples/dropdown-custom-choice-options/vanillajs#) if their response is not included in the drop-down list.
 
 - [Dropdown example](https://surveyjs.io/form-library/examples/create-dropdown-menu-in-javascript/vanillajs)
 - [Dropdown API documentation](https://surveyjs.io/form-library/documentation/api-reference/dropdown-menu-model)
@@ -115,9 +119,10 @@ This question type displays images/videos and allows the participant to select o
 
 #### matrix
 
-The matrix question creates a table of multiple choice questions (rows) that use the same set of response options (columns). This is often used for presenting multiple questions/statements with a Likert or similar rating scale.
+The matrix question creates a table of multiple choice questions (rows) that use the same set of response options (columns). This is often used for presenting multiple questions/statements that all use the same scale (e.g. Likert) or set of response options.
 
-- [Matrix example](https://surveyjs.io/form-library/examples/single-selection-matrix-table-question/vanillajs)
+- [Matrix example - single response / radio buttons](https://surveyjs.io/form-library/examples/single-selection-matrix-table-question/vanillajs)
+- [Matrix example - multiple response / checkboxes](https://surveyjs.io/form-library/examples/checkbox-matrix-question/vanillajs)
 - [Matrix API documentation](https://surveyjs.io/form-library/documentation/api-reference/matrix-table-question-model)
 
 #### matrixdropdown
@@ -357,15 +362,15 @@ import '@jspsych/plugin-survey/css/survey.css'
     <a target="_blank" rel="noopener noreferrer" href="../../demos/jspsych-survey-demo2.html">Open demo in new tab</a>
 
 ??? example "Rating and matrix questions for Likert-style scales"
-    This example shows several different options for presenting a single question/statement with a rating scale (buttons,  stars, smileys). It also shows a table of several questions/statements (rows) to be rated on the same scale (columns).
+    This example shows several different options for presenting questions/statements with a rating scale (buttons, stars, smileys, dropdown). The buttons can be set to wrap across lines or change to a dropdown selection on mobile devices. It also shows a table of several questions/statements (rows) to be rated on the same scale (columns). The rows can be single-response (radio button options) or allow multiple responses (checkbox options). This example also shows how the plugin's `min_width` parameter can be set to display wide questions without a scroll bar.
     **Note:** This content requires more page width and is best viewed when opened in a new tab.
     === "Code"
 
         ```javascript
-        const trial = {
+        const trial_1 = {
           type: jsPsychSurvey,
           survey_json: {
-            title: 'Likert scale examples',
+            title: 'Matrix question and Likert scale examples',
             pages: [
               {
                 elements: [
@@ -373,7 +378,7 @@ import '@jspsych/plugin-survey/css/survey.css'
                     type: 'rating',
                     name: 'like-vegetables',
                     title: 'I like to eat vegetables.',
-                    description: 'Button rating scale with min/max descriptions',
+                    description: 'Button rating scale with min/max descriptions. The buttons will wrap on smaller screens because displayMode is set to "buttons".',
                     minRateDescription: 'Strongly Disagree',
                     maxRateDescription: 'Strongly Agree',
                     displayMode: 'buttons',
@@ -383,18 +388,18 @@ import '@jspsych/plugin-survey/css/survey.css'
                     type: 'rating',
                     name: 'like-cake',
                     title: 'I like to eat cake.',
-                    description: 'Star rating scale with min/max descriptions',
-                    minRateDescription: 'Strongly Disagree',
-                    maxRateDescription: 'Strongly Agree',
+                    description: 'Star rating scale with min/max descriptions. The star buttons will change to a dropdown selection on smaller screens because displayMode is "auto" (the default).',
+                    minRateDescription: 'No',
+                    maxRateDescription: 'Yes',
                     rateType: 'stars',
-                    rateCount: 10,
-                    rateMax: 10,
+                    rateCount: 5,
+                    rateMax: 5,
                   },
                   {
                     type: 'rating',
                     name: 'like-cooking',
                     title: 'How much do you enjoy cooking?',
-                    description: 'Smiley rating scale without min/max descriptions',
+                    description: 'Smiley rating scale without min/max descriptions. The smiley buttons will change to a dropdown selection on smaller screens because displayMode is "auto" (the default).',
                     rateType: 'smileys',
                     rateCount: 10,
                     rateMax: 10,
@@ -404,37 +409,60 @@ import '@jspsych/plugin-survey/css/survey.css'
               }, {
                 elements: [
                   {
-                    type: 'matrix',
-                    name: 'like-food-matrix',
-                    title: 'Matrix question for rating mutliple statements on the same scale.',
-                    alternateRows: true,
-                    isAllRowRequired: true,
-                    rows: [
-                      {text: 'I like to eat vegetables.', value: 'VeggiesTable'},
-                      {text: 'I like to eat fruit.', value: 'FruitTable'},
-                      {text: 'I like to eat cake.', value: 'CakeTable'},
-                      {text: 'I like to cook.', value: 'CookTable'},
+                    type: "matrix",
+                    name: "device-usage",
+                    cellType: "checkbox",
+                    title: "Which devices do you use for each of the following activities?",
+                    description: "Matrix question with cellType: 'checkbox' to allow multiple responses per row.",
+                    columns: [
+                      { value: "phone", text: "Phone" },
+                      { value: "tablet", text: "Tablet" },
+                      { value: "laptop", text: "Laptop" },
+                      { value: "smart-tv", text: "Smart TV" }
                     ],
-                    columns: [{
-                      "value": 5,
-                      "text": "Strongly agree"
-                    }, {
-                      "value": 4,
-                      "text": "Agree"
-                    }, {
-                      "value": 3,
-                      "text": "Neutral"
-                    }, {
-                      "value": 2,
-                      "text": "Disagree"
-                    }, {
-                      "value": 1,
-                      "text": "Strongly disagree"
-                    }]
-                  }
+                    rows: [
+                      { value: "videos", text: "Watching videos" },
+                      { value: "news", text: "Reading news" },
+                      { value: "calls", text: "Video calls" },
+                      { value: "shopping", text: "Online shopping" }
+                    ]
+                  },
                 ]
               }
             ]
+          }
+        };
+
+        const trial_2 = {
+          type: jsPsychSurvey,
+          min_width: "1000px", // set larger min_width value to fit wide question without a scroll bar
+          survey_json: {
+            title: 'Matrix question and Likert scale examples',
+            pages: {
+              title: "This trial has a wider min_width value to show the full matrix without a scroll bar.",
+              elements: [
+                {
+                  type: 'matrix',
+                  name: 'like-food-matrix',
+                  title: "Please rate each statment on the scale from 'Strongly agree' to 'Strongly disagree'.",
+                  description: 'Matrix question for rating mutliple statements on the same scale. You can only select one response for each statement.',
+                  alternateRows: false,
+                  rows: [
+                    { text: 'I like to eat vegetables.', value: 'VeggiesTable' },
+                    { text: 'I like to eat fruit.', value: 'FruitTable' },
+                    { text: 'I like to eat cake.', value: 'CakeTable' },
+                    { text: 'I like to cook.', value: 'CookTable' },
+                  ],
+                  columns: [
+                    { value: 5, text: "Strongly agree" },
+                    { value: 4, text: "Agree" },
+                    { value: 3, text: "Neutral" },
+                    { value: 2, text: "Disagree" },
+                    { value: 1, text: "Strongly disagree" }
+                  ]
+                }
+              ]
+            }
           }
         };
         ```

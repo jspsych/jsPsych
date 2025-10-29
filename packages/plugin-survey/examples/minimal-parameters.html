@@ -19,9 +19,7 @@
     }
   });
 
-  // This example shows how to combine several basic question types: 
-  // text (with autocomplete options), dropdown, multi-select dropdown ("tagbox").
-  // This also shows how to create a collapsible panel (group) of questions.
+  // This example is meant to test default styling without additional parameters
   const contact_info = {
     title: "jsPsych Survey Plugin example",
     pages: [{
@@ -106,12 +104,7 @@
         title: "Which countries have you been to?",
         description: "Multi-select dropdown - please select all that apply. Try selecting lots of countries to see how the input area grows."
       }]
-    }],
-    questionDescriptionLocation: "underInput",
-    completeText: "Continue",
-    widthMode: "static",
-    width: "900",
-    fitToContainer: true
+    }], 
   };
 
   const contact_info_trial = {
