@@ -1,5 +1,11 @@
 # @jspsych/plugin-image-button-response
 
+## 2.2.0
+
+### Minor Changes
+
+- [#3563](https://github.com/jspsych/jsPsych/pull/3563) [`c902be3887c681e72b95824148a8d9c75efbcfc4`](https://github.com/jspsych/jsPsych/commit/c902be3887c681e72b95824148a8d9c75efbcfc4) Thanks [@farhat60](https://github.com/farhat60)! - CSS selector that queries the button to disable it was trying to get a class. Now it looks for the correct id and disables the button.
+
 ## 2.1.0
 
 ### Minor Changes
