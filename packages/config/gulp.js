@@ -86,8 +86,8 @@ export const createCoreDistArchive = () =>
     src("packages/plugin-survey/css/survey.css").pipe(rename("/dist/survey.css")),
     src("packages/plugin-survey/css/survey.min.css").pipe(rename("/dist/survey.min.css")),
 
-    // Examples
-    src("examples/**/*", { base: "." })
+    // Examples HTML files
+    src(["examples/**/*.html"], { base: "." })
       // Rewrite script source paths
       .pipe(
         replace(
@@ -102,6 +102,12 @@ export const createCoreDistArchive = () =>
           '<link rel="stylesheet" href="$1/dist/$2"'
         )
       ),
+
+    // Examples files other than HTML (e.g. media files)
+    // Note: `encoding: false` means that the files contents are treated as binary.
+    // This prevents Gulp from corrupting binary files such as images when it reads them.
+    // Needed since Gulp v5.
+    src(["examples/**/*", "!examples/**/*.html"], { base: ".", encoding: false }),
 
     // VERSION.md
     file("VERSION.md", getVersionFileContents(), { src: true }),
