@@ -32,6 +32,11 @@ const info = <const>{
           type: ParameterType.STRING,
           default: "",
         },
+        /** Default response value for this question (0-based index of labels array). */
+        default_response: {
+          type: ParameterType.INT,
+          default: null,
+        },
       },
     },
     /** If true, the order of the questions in the 'questions' array will be randomized. */
@@ -163,6 +168,9 @@ class SurveyLikertPlugin implements JsPsychPlugin<Info> {
           '"';
         if (question.required) {
           options_string += " required";
+        }
+        if (question.default_response === j) {
+          options_string += " checked";
         }
         options_string += ">" + question.labels[j] + "</label></li>";
       }
