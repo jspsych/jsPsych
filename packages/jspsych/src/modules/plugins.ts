@@ -51,6 +51,7 @@ export type ParameterInfo = (
   array?: boolean;
   pretty_name?: string;
   default?: any;
+  options?: any;
 };
 
 export type ParameterInfos = Record<string, ParameterInfo>;
