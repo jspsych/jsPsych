@@ -141,7 +141,7 @@ export const updateUnpkgLinks = () => {
 export const updatePluginVersions = () => {
   const packageVersions = new Map(getAllPackages().map(({ name, version }) => [name, version]));
 
-  return src(["././docs/plugins/*.md"])
+  return src(["docs/plugins/*.md"])
     .pipe(
       replace(
         /\# (.+?)(?: plugin)?[\s]*?[\n]*Current version: (\d+.\d+.\d+|current-plugin-version)\./gi,
