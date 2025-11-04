@@ -1,6 +1,6 @@
 # instructions
 
-Current version: 2.0.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-instructions/CHANGELOG.md).
+Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-instructions/CHANGELOG.md).
 
 This plugin is for showing instructions to the participant. It allows participants to navigate through multiple pages of instructions at their own pace, recording how long the participant spends on each page. Navigation can be done using the mouse or keyboard. participants can be allowed to navigate forwards and backwards through pages, if desired.
 

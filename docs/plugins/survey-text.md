@@ -1,6 +1,6 @@
 # survey-text
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-text/CHANGELOG.md).
+Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-text/CHANGELOG.md).
 
 The survey-text plugin displays a set of questions with free response text fields. The participant types in answers.
 

@@ -1,5 +1,13 @@
 # @jspsych/config
 
+## 3.3.2
+
+### Patch Changes
+
+- [#3615](https://github.com/jspsych/jsPsych/pull/3615) [`2ee865dbe93d8d81d41d1287e3eed6dd106ec970`](https://github.com/jspsych/jsPsych/commit/2ee865dbe93d8d81d41d1287e3eed6dd106ec970) Thanks [@Jolg42](https://github.com/Jolg42)! - fix images encoding in dist zip
+
+- [#3624](https://github.com/jspsych/jsPsych/pull/3624) [`5241a2335b8fc9038f9c23c8152bec548ef43cb7`](https://github.com/jspsych/jsPsych/commit/5241a2335b8fc9038f9c23c8152bec548ef43cb7) Thanks [@becky-gilbert](https://github.com/becky-gilbert)! - Fix `updatePluginVersions` task so that plugin versions are automatically updated on the plugin documentation pages.
+
 ## 3.3.1
 
 ### Patch Changes

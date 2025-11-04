@@ -1,6 +1,6 @@
 # cloze
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-cloze/CHANGELOG.md).
+Current version: 2.2.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-cloze/CHANGELOG.md).
 
 This plugin displays a text with certain words omitted. Participants are asked to replace the missing items. Responses are recorded when clicking a button. Responses can be evaluated and a function is called in case of either differences or incomplete answers, making it possible to inform participants about mistakes before proceeding.
 

@@ -1,6 +1,6 @@
 # call-function
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-call-function/CHANGELOG.md).
+Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-call-function/CHANGELOG.md).
 
 This plugin executes a specified function. This allows the experimenter to run arbitrary code at any point during the experiment.
 

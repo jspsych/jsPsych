@@ -1,6 +1,6 @@
 # html-video-response
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-video-response/CHANGELOG.md).
+Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-video-response/CHANGELOG.md).
 
 This plugin displays HTML content and records video from the participant via a webcam. 
 

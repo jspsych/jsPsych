@@ -1,6 +1,6 @@
 # same-different-image
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-same-different-image/CHANGELOG.md).
+Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-same-different-image/CHANGELOG.md).
 
 The same-different-image plugin displays two stimuli sequentially. Stimuli are images. The participant responds using the keyboard, and indicates whether the stimuli were the same or different. Same does not necessarily mean identical; a category judgment could be made, for example.
 

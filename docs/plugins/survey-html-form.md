@@ -1,6 +1,6 @@
 # survey-html-form
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-html-form/CHANGELOG.md).
+Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-html-form/CHANGELOG.md).
 
 The survey-html-form plugin displays a set of `<inputs>` from a HTML string. The type of input can be freely chosen, for a list of possible input types see the [MDN page on inputs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input). The participant provides answers to the input fields.
 

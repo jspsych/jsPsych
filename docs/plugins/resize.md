@@ -1,6 +1,6 @@
 # resize
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-resize/CHANGELOG.md).
+Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-resize/CHANGELOG.md).
 
 This plugin displays a resizable div container that allows the user to drag until the container is the same size as the item being measured. Once the user measures the item as close as possible, clicking the button sets a scaling factor for the div containing jsPsych content. This causes the stimuli that follow to have a known size, independent of monitor resolution.
 

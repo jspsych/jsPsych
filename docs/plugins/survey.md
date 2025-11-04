@@ -1,6 +1,6 @@
 # survey
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md).
+Current version: 4.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey/CHANGELOG.md).
 
 SurveyJS version: 2.3.12 [See changelog](https://surveyjs.io/stay-updated/release-notes).
 
