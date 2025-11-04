@@ -1,6 +1,6 @@
 # initialize-microphone
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-initialize-microphone/CHANGELOG.md).
+Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-initialize-microphone/CHANGELOG.md).
 
 This plugin asks the participant to grant permission to access a microphone. 
 If multiple microphones are connected to the participant's device, then it allows the participant to pick which device to use. 

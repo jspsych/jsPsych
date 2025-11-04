@@ -1,6 +1,6 @@
 # video-keyboard-response
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-video-keyboard-response/CHANGELOG.md).
+Current version: 2.1.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-video-keyboard-response/CHANGELOG.md).
 
 This plugin plays a video file and records a keyboard response. The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically when the participant responds, when the video file has finished playing, or if the participant has failed to respond within a fixed length of time. You can also prevent a keyboard response from being recorded before the video has finished playing.
 

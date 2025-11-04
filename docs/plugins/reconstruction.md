@@ -1,6 +1,6 @@
 # reconstruction
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-reconstruction/CHANGELOG.md).
+Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-reconstruction/CHANGELOG.md).
 
 This plugin allows a participant to interact with a stimulus by modifying a parameter of the stimulus and observing the change in the stimulus in real-time.
 

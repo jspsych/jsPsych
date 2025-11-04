@@ -1,6 +1,6 @@
 # browser-check
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-browser-check/CHANGELOG.md).
+Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-browser-check/CHANGELOG.md).
 
 This plugin measures and records various features of the participant's browser and can end the experiment if defined inclusion criteria are not met.
 

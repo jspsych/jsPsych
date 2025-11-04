@@ -1,6 +1,6 @@
 # image-slider-response
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-image-slider-response/CHANGELOG.md).
+Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-image-slider-response/CHANGELOG.md).
 
 This plugin displays and image and allows the participant to respond by dragging a slider.
 

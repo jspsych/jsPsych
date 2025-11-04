@@ -1,6 +1,6 @@
 # categorize-html
 
-Current version: 2.0.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-categorize-html/CHANGELOG.md).
+Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-categorize-html/CHANGELOG.md).
 
 The categorize html plugin shows an HTML object on the screen. The participant responds by pressing a key. Feedback indicating the correctness of the response is given.
 

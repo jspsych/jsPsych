@@ -1,6 +1,6 @@
 # animation
 
-Current version: 2.0.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-animation/CHANGELOG.md).
+Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-animation/CHANGELOG.md).
 
 This plugin displays a sequence of images at a fixed frame rate. The sequence can be looped a specified number of times. The participant is free to respond at any point during the animation, and the time of the response is recorded.
 
