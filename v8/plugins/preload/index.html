@@ -2884,7 +2884,7 @@
 
 
 <h1 id="preload">preload<a class="headerlink" href="#preload" title="Permanent link">&para;</a></h1>
-<p>Current version: 2.0.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-preload/CHANGELOG.md">See version history</a>.</p>
+<p>Current version: 2.1.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-preload/CHANGELOG.md">See version history</a>.</p>
 <p>This plugin loads images, audio, and video files. It is used for loading files into the browser's memory before they are needed in the experiment, in order to improve stimulus and response timing, and avoid disruption to the experiment flow. We recommend using this plugin anytime you are loading media files, and especially when your experiment requires large and/or many media files. See the <a href="../../overview/media-preloading/">Media Preloading page</a> for more information.</p>
 <p>The preload trial will end as soon as all files have loaded successfully. The trial will end or stop with an error message when one of these two scenarios occurs (whichever comes first): (a) all files have not finished loading when the <code>max_load_time</code> duration is reached, or (b) all file requests have responded with either a load or fail event, and one or more files has failed to load. The <code>continue_after_error</code> parameter determines whether the trial will stop with an error message or end (allowing the experiment to continue) when preloading is not successful.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
