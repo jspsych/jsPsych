@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-survey-likert/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
+  </head>
+  <body></body>
+  <script>
+
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
+
+    var scale = ["Very", "Slightly", "Neutral", "Slightly", "Very"];
+
+    var sd_trial = {
+      type: jsPsychSurveyLikert,
+      stimulus: "img/happy_face_1.jpg",
+      preamble: "PREAMBLE",
+      image_caption: "CAPTION",
+      left_anchor_width: 300,
+      right_anchor_width: 300,
+      questions: [
+        {
+          prompt: "How friendly or unfriendly does this person appear to you?",
+          left_anchor: "Friendly",
+          right_anchor: "Unfriendly", 
+          name: 'Friendly', 
+          labels: scale, 
+          required: true
+        },
+        {
+          prompt: "How trustworthy or untrustworthy does this person seem?", 
+          left_anchor: "Trustworthy",
+          right_anchor: "Untrustworthy", 
+          name: 'Trustworthy', 
+          labels: scale, 
+          required: true
+        },
+        {
+          prompt: "How attractive or unattractive do you find this person?", 
+          left_anchor: "Attractive",
+          right_anchor: "Unattractive", 
+          name: 'Attractive', 
+          labels: scale, 
+          required: true
+        }
+      ]
+    };
+
+    jsPsych.run([sd_trial]);
+    
+  </script>
+</html>

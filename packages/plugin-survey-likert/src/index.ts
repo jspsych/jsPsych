@@ -32,6 +32,16 @@ const info = <const>{
           type: ParameterType.STRING,
           default: "",
         },
+        /** The string displayed at the left end in the SD method. */
+        left_anchor: {
+          type: ParameterType.HTML_STRING,
+          default: "",
+        },
+        /** The string displayed at the right end in the SD method. */
+        right_anchor: {
+          type: ParameterType.HTML_STRING,
+          default: "",        
+        },
       },
     },
     /** If true, the order of the questions in the 'questions' array will be randomized. */
@@ -59,6 +69,41 @@ const info = <const>{
       type: ParameterType.BOOL,
       default: false,
     },
+    /** The path of the image file to be displayed. */
+    stimulus: {
+      type: ParameterType.IMAGE,
+      default: null
+    },
+    /** The string displayed below the image. */
+    image_caption: {
+      type: ParameterType.HTML_STRING,
+      default: null,
+    },
+    /** The width of the image. */
+    image_width: {
+      type: ParameterType.INT,
+      default: 500
+    },
+    /** The height of the area where the scale is displayed. */
+    scale_area_height: {
+      type: ParameterType.INT,
+      default: 300
+    },
+    /** The width of the left anchor. */
+    left_anchor_width: {
+      type: ParameterType.INT,
+      default: 200 // If neither left_anchor nor right_anchor is specified, the value defaults to 0.
+    },
+    /** The width of the right anchor. */
+    right_anchor_width: {
+      type: ParameterType.INT,
+      default: 200 // If neither left_anchor nor right_anchor is specified, the value defaults to 0.
+    },
+    /** A numeric value for adjusting the position of the anchors and the horizontal alignment. */
+    line_position: {
+      type: ParameterType.INT,
+      default: 20
+    },
   },
   data: {
     /** An object containing the response for each question. The object will have a separate key (variable) for each question, with the first question in the trial being recorded in `Q0`, the second in `Q1`, and so on. The responses are recorded as integers, representing the position selected on the likert scale for that question. If the `name` parameter is defined for the question, then the response object will use the value of `name` as the key for each question. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. */
@@ -73,6 +118,10 @@ const info = <const>{
     question_order: {
       type: ParameterType.INT,
       array: true,
+    },
+    /** The path of the image file to be displayed. */
+    stimulus: {
+      type: ParameterType.STRING,
     },
   },
   // prettier-ignore
@@ -101,6 +150,12 @@ class SurveyLikertPlugin implements JsPsychPlugin<Info> {
     }
 
     var html = "";
+    if (trial.stimulus !== null) {
+      var custom_css = `.sd-container { display: flex; } 
+      #right-side { width: 100%; height: ${trial.scale_area_height}px; overflow-y: scroll}`;
+    } else {
+      var custom_css = "";
+    }
     // inject CSS for trial
     html += '<style id="jspsych-survey-likert-css">';
     html +=
@@ -112,6 +167,7 @@ class SurveyLikertPlugin implements JsPsychPlugin<Info> {
       ".jspsych-survey-likert-opts:before { content: ''; position:relative; top:11px; /*left:9.5%;*/ display:block; background-color:#efefef; height:4px; width:100%; }" +
       ".jspsych-survey-likert-opts:last-of-type { border-bottom: 0; }" +
       ".jspsych-survey-likert-opts li { display:inline-block; /*width:19%;*/ text-align:center; vertical-align: top; }" +
+      custom_css +
       ".jspsych-survey-likert-opts li input[type=radio] { display:block; position:relative; top:0; left:50%; margin-left:-6px; }";
     html += "</style>";
 
@@ -121,6 +177,16 @@ class SurveyLikertPlugin implements JsPsychPlugin<Info> {
         '<div id="jspsych-survey-likert-preamble" class="jspsych-survey-likert-preamble">' +
         trial.preamble +
         "</div>";
+    }
+
+    if (trial.stimulus !== null){
+      html += `<div class="sd-container">`;
+      html += `<div id="left-side"><img src="${trial.stimulus}" width="${trial.image_width}">`;
+      if (trial.image_caption !== null) {
+            html += `<div class="image_caption">${trial.image_caption}</div>`;       
+      }
+      html += `</div>`; // left-side
+      html += '<div id="right-side">';
     }
 
     if (trial.autocomplete) {
@@ -146,12 +212,19 @@ class SurveyLikertPlugin implements JsPsychPlugin<Info> {
       html += '<label class="jspsych-survey-likert-statement">' + question.prompt + "</label>";
       // add options
       var width = 100 / question.labels.length;
-      var options_string =
-        '<ul class="jspsych-survey-likert-opts" data-name="' +
-        question.name +
-        '" data-radio-group="Q' +
-        question_order[i] +
-        '">';
+      if (question.left_anchor === "" && question.right_anchor === "") {
+        var options_string =
+          '<ul class="jspsych-survey-likert-opts" data-name="' +
+          question.name +
+          '" data-radio-group="Q' +
+          question_order[i] +
+          '">';
+      } else {
+        var options_string = `<div style="display: flex;">
+          <p class="left_anchor" style="display: inline-block; width: ${trial.left_anchor_width}px">${question.left_anchor}</p>
+          <ul style="margin-top: ${trial.line_position}px;" class="jspsych-survey-likert-opts" 
+          data-name="${question.name}" data-radio-group="Q${question_order[i]}">`;
+      }
       for (var j = 0; j < question.labels.length; j++) {
         options_string +=
           '<li style="width:' +
@@ -166,7 +239,10 @@ class SurveyLikertPlugin implements JsPsychPlugin<Info> {
         }
         options_string += ">" + question.labels[j] + "</label></li>";
       }
-      options_string += "</ul>";
+      options_string += `</ul>`;
+      if (!(question.left_anchor === "" && question.right_anchor === ""))  {
+        options_string += `<p class="right_anchor" style="display: inline-block; width: ${trial.right_anchor_width}px">${question.right_anchor}</p></div>`;
+      }
       html += options_string;
     }
 
@@ -178,6 +254,10 @@ class SurveyLikertPlugin implements JsPsychPlugin<Info> {
 
     html += "</form>";
 
+    if (trial.stimulus !== null){
+      html += "</div>"; // right-side
+      html += "</div>"; // sd-container
+    }
     display_element.innerHTML = html;
 
     display_element.querySelector("#jspsych-survey-likert-form").addEventListener("submit", (e) => {
@@ -216,6 +296,7 @@ class SurveyLikertPlugin implements JsPsychPlugin<Info> {
         rt: response_time,
         response: question_data,
         question_order: question_order,
+        stimulus: trial.stimulus,
       };
 
       // next trial
