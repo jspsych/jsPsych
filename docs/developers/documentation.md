@@ -12,6 +12,35 @@ To build a local copy of the docs, you will need to install `mkdocs`, `mkdocs-ma
 
 Run the command `poetry install` in the root directory of jsPsych to install `mkdocs`, `mkdocs-material`, and their dependencies.
 
+## Generating plugin documentation
+
+Plugin documentation can be automatically generated from the JSDoc comments in plugin source files. The generator extracts:
+
+- Plugin description from the class JSDoc comment
+- Parameter information from the `info.parameters` object
+- Data field information from the `info.data` object
+- Example file references from the `examples/` directory
+
+To generate documentation for a single plugin:
+
+```bash
+npm run generate-plugin-docs -- html-button-response
+```
+
+To generate documentation for all plugins:
+
+```bash
+npm run generate-plugin-docs -- --all --output docs/plugins
+```
+
+To see all available options:
+
+```bash
+npm run generate-plugin-docs -- --help
+```
+
+The generated documentation follows the same format as the existing plugin docs, including parameters tables, data generated tables, and install instructions.
+
 ## Building a local copy of the docs
 
 Run `poetry run mike deploy [version] -u` to build a new version of the documentation or to override an existing version. For example, if you are testing an edit to version `7.2` of the documentation, run `poetry run mike deploy 7.2 -u`.
