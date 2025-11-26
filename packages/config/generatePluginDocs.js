@@ -126,7 +126,10 @@ function parseParametersSection(content, sectionName) {
 
       // Extract default value
       let defaultValue = "*undefined*";
-      // Match default: followed by value, handling functions, strings, numbers, etc.
+      // Regex explanation:
+      // \bdefault\s*:\s* - Match "default:" with optional whitespace
+      // ([\s\S]*?) - Capture the value (non-greedy, including newlines)
+      // (?:,\s*(?:\w+\s*:|$)|$) - Stop at: comma followed by another property, or end of string
       const defaultMatch = propertyDef.match(/\bdefault\s*:\s*([\s\S]*?)(?:,\s*(?:\w+\s*:|$)|$)/);
 
       if (defaultMatch) {
@@ -160,7 +163,21 @@ function parseParametersSection(content, sectionName) {
         }
       }
 
-      const displayType = isArray ? `array of ${type}s` : type;
+      // Format array types properly (e.g., "array of strings" not "array of strings")
+      let displayType = type;
+      if (isArray) {
+        // Handle proper pluralization for different types
+        const pluralForms = {
+          string: "strings",
+          boolean: "booleans",
+          numeric: "numbers",
+          function: "functions",
+          object: "objects",
+          "HTML string": "HTML strings",
+        };
+        const pluralType = pluralForms[type] || `${type}s`;
+        displayType = `array of ${pluralType}`;
+      }
 
       params.push({
         name: propertyName,
@@ -294,10 +311,14 @@ function findExamples(pluginName, rootDir) {
 }
 
 /**
- * Extracts JavaScript code from an example HTML file
+ * Extracts JavaScript code from an example HTML file.
+ * Note: This function parses trusted example files from the jsPsych repository,
+ * not arbitrary user-provided HTML. The regex patterns are sufficient for
+ * parsing well-formed HTML from our own examples.
  */
 function extractExampleCode(htmlContent) {
   // Find script tags that contain jsPsych code (not src imports)
+  // Note: This regex is for parsing trusted internal example files, not for security-critical HTML sanitization
   const scriptMatch = htmlContent.match(/<script[^>]*>(?![\s\S]*src=)([\s\S]*?)<\/script>/gi);
 
   if (scriptMatch) {
@@ -331,8 +352,12 @@ function generateParametersTable(params) {
   table += "----------|------|---------------|------------\n";
 
   for (const param of params) {
-    // Escape pipe characters in description
-    const description = param.description.replace(/\|/g, "\\|").replace(/\n/g, " ");
+    // Escape special markdown characters in description for table cell
+    // First escape backslashes, then pipes, and convert newlines to spaces
+    const description = param.description
+      .replace(/\\/g, "\\\\")
+      .replace(/\|/g, "\\|")
+      .replace(/\n/g, " ");
     table += `${param.name} | ${param.type} | ${param.default} | ${description}\n`;
   }
 
@@ -354,8 +379,12 @@ function generateDataTable(data) {
   table += "-----|------|------\n";
 
   for (const item of data) {
-    // Escape pipe characters in description
-    const description = item.description.replace(/\|/g, "\\|").replace(/\n/g, " ");
+    // Escape special markdown characters in description for table cell
+    // First escape backslashes, then pipes, and convert newlines to spaces
+    const description = item.description
+      .replace(/\\/g, "\\\\")
+      .replace(/\|/g, "\\|")
+      .replace(/\n/g, " ");
     table += `${item.name} | ${item.type} | ${description}\n`;
   }
 
@@ -466,6 +495,21 @@ function getAllPluginNames() {
 }
 
 /**
+ * Get argument value for a flag (supports both long and short forms)
+ */
+function getArgValue(args, longFlag, shortFlag) {
+  const longIndex = args.indexOf(longFlag);
+  if (longIndex !== -1 && args[longIndex + 1] && !args[longIndex + 1].startsWith("-")) {
+    return args[longIndex + 1];
+  }
+  const shortIndex = args.indexOf(shortFlag);
+  if (shortIndex !== -1 && args[shortIndex + 1] && !args[shortIndex + 1].startsWith("-")) {
+    return args[shortIndex + 1];
+  }
+  return null;
+}
+
+/**
  * Main entry point
  */
 function main() {
@@ -497,7 +541,6 @@ Examples:
   }
 
   let pluginNames = [];
-  let outputDir = null;
 
   if (args.includes("--all")) {
     pluginNames = getAllPluginNames();
@@ -505,14 +548,7 @@ Examples:
     pluginNames = args.filter((arg) => !arg.startsWith("-"));
   }
 
-  const outputIndex = args.indexOf("--output");
-  if (outputIndex !== -1 && args[outputIndex + 1]) {
-    outputDir = args[outputIndex + 1];
-  }
-  const outputIndexShort = args.indexOf("-o");
-  if (outputIndexShort !== -1 && args[outputIndexShort + 1]) {
-    outputDir = args[outputIndexShort + 1];
-  }
+  const outputDir = getArgValue(args, "--output", "-o");
 
   if (pluginNames.length === 0) {
     console.error("No plugins specified. Use --help for usage information.");
@@ -556,5 +592,8 @@ export {
   parameterTypeMap,
 };
 
-// Run main if this is the entry point
-main();
+// Run main if this is the entry point (i.e., script executed directly)
+const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+if (isMainModule) {
+  main();
+}
