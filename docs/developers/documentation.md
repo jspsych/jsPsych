@@ -14,12 +14,14 @@ Run the command `poetry install` in the root directory of jsPsych to install `mk
 
 ## Generating plugin documentation
 
-Plugin documentation can be automatically generated from the JSDoc comments in plugin source files. The generator extracts:
+Plugin documentation can be automatically generated from the JSDoc comments in plugin source files and examples in the `/examples` folder. The generator extracts:
 
 - Plugin description from the class JSDoc comment
 - Parameter information from the `info.parameters` object
 - Data field information from the `info.data` object
-- Example file references from the `examples/` directory
+- Individual trial configurations from the example files in `/examples`
+
+The generator converts examples into the documentation format with interactive Code/Demo tabs, eliminating the need to maintain separate example sets.
 
 To generate documentation for a single plugin:
 
@@ -27,10 +29,10 @@ To generate documentation for a single plugin:
 npm run generate-plugin-docs -- html-button-response
 ```
 
-To generate documentation for all plugins:
+To generate documentation for all plugins with demo HTML files:
 
 ```bash
-npm run generate-plugin-docs -- --all --output docs/plugins
+npm run generate-plugin-docs -- --all --output docs/plugins --demos-output docs/demos
 ```
 
 To see all available options:
@@ -39,7 +41,19 @@ To see all available options:
 npm run generate-plugin-docs -- --help
 ```
 
-The generated documentation follows the same format as the existing plugin docs, including parameters tables, data generated tables, and install instructions.
+Options:
+
+- `--output, -o`: Directory for generated markdown files
+- `--demos-output, -d`: Directory for generated demo HTML files
+- `--all`: Generate docs for all plugins
+- `--list`: List all available plugins
+
+The generated documentation follows the same format as the existing plugin docs, including:
+
+- Parameters tables
+- Data generated tables
+- Install instructions
+- Examples with Code/Demo tabs that embed interactive demos
 
 ## Building a local copy of the docs
 

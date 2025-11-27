@@ -38,6 +38,19 @@ const parameterTypeMap = {
 };
 
 /**
+ * Convert plugin name (kebab-case) to jsPsych variable name (e.g., html-button-response -> jsPsychHtmlButtonResponse)
+ */
+function pluginNameToVarName(pluginName) {
+  return (
+    "jsPsych" +
+    pluginName
+      .split("-")
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join("")
+  );
+}
+
+/**
  * Find the matching closing brace for content starting after an opening brace
  */
 function findMatchingBrace(content, startIndex) {
@@ -338,6 +351,170 @@ function extractExampleCode(htmlContent) {
 }
 
 /**
+ * Normalizes the indentation of code to use consistent 2-space indentation.
+ */
+function normalizeCodeIndentation(code) {
+  const lines = code.split("\n");
+
+  // Find the minimum indentation (excluding empty lines and the first line which should start with {)
+  let minIndent = Infinity;
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.trim()) {
+      const leadingSpaces = line.match(/^(\s*)/)[1].length;
+      minIndent = Math.min(minIndent, leadingSpaces);
+    }
+  }
+
+  if (minIndent === Infinity) minIndent = 0;
+
+  // Remove the common indentation and normalize
+  const normalizedLines = lines.map((line, idx) => {
+    if (!line.trim()) return "";
+    if (idx === 0) return line.trim(); // First line (opening brace)
+    return line.substring(minIndent);
+  });
+
+  // Format into a proper object literal with consistent indentation
+  let result = normalizedLines.join("\n").trim();
+
+  // Try to reformat as a proper JavaScript object
+  // Remove extra indentation before closing brace
+  result = result.replace(/\n\s*\}$/, "\n}");
+
+  return result;
+}
+
+/**
+ * Extracts individual trial configurations from example code.
+ * Returns an array of trial objects with their code and a description derived from the prompt or comments.
+ */
+function extractTrialsFromExampleCode(code, pluginName) {
+  const trials = [];
+
+  const pluginVarName = pluginNameToVarName(pluginName);
+
+  // Look for trial objects that use this plugin type
+  // Pattern matches: { type: jsPsychPluginName, ... } or timeline.push({ type: jsPsychPluginName, ... })
+  // Note: This regex handles up to 2 levels of nested objects which covers most trial configurations
+  const trialPattern = new RegExp(
+    `(?:(?:const|let|var)\\s+(\\w+)\\s*=\\s*)?\\{[^{}]*type\\s*:\\s*${pluginVarName}[^{}]*(?:\\{[^{}]*(?:\\{[^{}]*\\}[^{}]*)*\\}[^{}]*)*\\}`,
+    "g"
+  );
+
+  let match;
+  while ((match = trialPattern.exec(code)) !== null) {
+    let trialCode = match[0];
+
+    // If the trial was assigned to a variable, use just the object literal
+    if (match[1]) {
+      // Extract just the object part
+      const objStart = trialCode.indexOf("{");
+      trialCode = trialCode.substring(objStart);
+    }
+
+    // Try to extract a description from the prompt parameter or nearby comments
+    let description = null;
+    const promptMatch = trialCode.match(/prompt\s*:\s*["'`]([^"'`]+)["'`]/);
+    if (promptMatch) {
+      // Strip HTML tags from the prompt to get plain text for the example title
+      // Note: This is processing trusted internal example files, not user input
+      description = promptMatch[1].replace(/<[^>]*>/g, "").trim();
+    }
+
+    // Clean up and normalize the trial code formatting
+    trialCode = normalizeCodeIndentation(trialCode);
+
+    trials.push({
+      code: trialCode,
+      description: description || `Example ${trials.length + 1}`,
+    });
+  }
+
+  return trials;
+}
+
+/**
+ * Generates a demo HTML file for embedding in documentation.
+ * The demo file uses CDN-hosted scripts and the docs-demo-timeline wrapper.
+ */
+function generateDemoHtml(trialCode, pluginName, jspsychVersion, pluginVersion) {
+  const packageName = `@jspsych/plugin-${pluginName}`;
+
+  // Note: The demo HTML files depend on docs-demo-timeline.js and docs-demo.css
+  // which should already exist in docs/demos/ from the existing documentation build.
+  // These files provide the interactive "Run demo" / "Repeat demo" wrapper functionality.
+
+  return `<!DOCTYPE html>
+<html>
+  <head>
+    <script src="docs-demo-timeline.js"></script>
+    <script src="https://unpkg.com/jspsych@${jspsychVersion}"></script>
+    <script src="https://unpkg.com/${packageName}@${pluginVersion}"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@${jspsychVersion}/css/jspsych.css" />
+    <link rel="stylesheet" href="docs-demo.css" type="text/css">
+  </head>
+  <body></body>
+  <script>
+
+    const jsPsych = initJsPsych();
+
+    const timeline = [];
+
+    const trial = ${trialCode};
+
+    timeline.push(trial);
+
+    if (typeof jsPsych !== "undefined") {
+      jsPsych.run(generateDocsDemoTimeline(timeline));
+    } else {
+      document.body.innerHTML = '<div style="text-align:center; margin-top:50%; transform:translate(0,-50%);">You must be online to view the plugin demo.</div>';
+    }
+  </script>
+</html>
+`;
+}
+
+/**
+ * Generates the examples section markdown with Code/Demo tabs.
+ */
+function generateExamplesSection(trials, pluginName, demoBasePath) {
+  if (trials.length === 0) {
+    return "";
+  }
+
+  let markdown = "\n## Examples\n\n";
+
+  trials.forEach((trial, index) => {
+    const demoNum = index + 1;
+    const demoFileName = `jspsych-${pluginName}-demo${demoNum}.html`;
+
+    markdown += `???+ example "${trial.description}"\n`;
+    markdown += `    === "Code"\n`;
+    markdown += `        \`\`\`javascript\n`;
+
+    // Indent the code properly for the markdown
+    const indentedCode = trial.code
+      .split("\n")
+      .map((line) => `        ${line}`)
+      .join("\n");
+    markdown += indentedCode + "\n";
+
+    markdown += `        \`\`\`\n`;
+    markdown += `\n`;
+    markdown += `    === "Demo"\n`;
+    markdown += `        <div style="text-align:center;">\n`;
+    markdown += `            <iframe src="${demoBasePath}${demoFileName}" width="90%;" height="600px;" frameBorder="0"></iframe>\n`;
+    markdown += `        </div>\n`;
+    markdown += `\n`;
+    markdown += `    <a target="_blank" rel="noopener noreferrer" href="${demoBasePath}${demoFileName}">Open demo in new tab</a>\n`;
+    markdown += `\n`;
+  });
+
+  return markdown;
+}
+
+/**
  * Generates the parameters table markdown
  */
 function generateParametersTable(params) {
@@ -465,8 +642,44 @@ ${generateDataTable(data)}
 ${generateInstallSection(pluginName, version || "latest")}
 `;
 
-  // Add examples section if examples exist
-  if (examples.length > 0) {
+  // Extract trials from examples and generate examples section
+  const extractedTrials = [];
+  const demoFiles = [];
+
+  // Get jsPsych version for demo files
+  const jspsychPackagePath = join(rootDir, "packages", "jspsych", "package.json");
+  const jspsychVersion = existsSync(jspsychPackagePath)
+    ? JSON.parse(readFileSync(jspsychPackagePath, "utf8")).version
+    : "latest";
+
+  for (const example of examples) {
+    const exampleCode = extractExampleCode(example.content);
+    if (exampleCode) {
+      const trials = extractTrialsFromExampleCode(exampleCode, pluginName);
+      for (const trial of trials) {
+        extractedTrials.push(trial);
+
+        // Generate demo HTML file content
+        const demoHtml = generateDemoHtml(
+          trial.code,
+          pluginName,
+          jspsychVersion,
+          version || "latest"
+        );
+        const demoFileName = `jspsych-${pluginName}-demo${extractedTrials.length}.html`;
+        demoFiles.push({
+          fileName: demoFileName,
+          content: demoHtml,
+        });
+      }
+    }
+  }
+
+  // Add examples section with Code/Demo tabs if trials were extracted
+  if (extractedTrials.length > 0) {
+    markdown += generateExamplesSection(extractedTrials, pluginName, "../../demos/");
+  } else if (examples.length > 0) {
+    // Fallback to simple link if no trials could be extracted
     markdown += `\n## Examples\n\n`;
     markdown += `See example file${examples.length > 1 ? "s" : ""} in the [examples folder](https://github.com/jspsych/jsPsych/tree/main/examples) for usage demonstrations.\n`;
   }
@@ -479,6 +692,8 @@ ${generateInstallSection(pluginName, version || "latest")}
     data,
     description,
     examplesCount: examples.length,
+    extractedTrials,
+    demoFiles,
   };
 }
 
@@ -520,14 +735,15 @@ function main() {
 Usage: node generatePluginDocs.js [options] [plugin-name...]
 
 Options:
-  --help, -h     Show this help message
-  --all          Generate docs for all plugins
-  --output, -o   Output directory (default: stdout)
-  --list         List all available plugins
+  --help, -h          Show this help message
+  --all               Generate docs for all plugins
+  --output, -o        Output directory for markdown files (default: stdout)
+  --demos-output, -d  Output directory for demo HTML files
+  --list              List all available plugins
 
 Examples:
   node generatePluginDocs.js html-button-response
-  node generatePluginDocs.js --all --output docs/plugins
+  node generatePluginDocs.js --all --output docs/plugins --demos-output docs/demos
   node generatePluginDocs.js --list
 `);
     return;
@@ -545,20 +761,34 @@ Examples:
   if (args.includes("--all")) {
     pluginNames = getAllPluginNames();
   } else {
-    pluginNames = args.filter((arg) => !arg.startsWith("-"));
+    // Filter out flag arguments and their values
+    const flagsWithValues = ["--output", "-o", "--demos-output", "-d"];
+    const skipNext = new Set();
+    for (let i = 0; i < args.length; i++) {
+      if (flagsWithValues.includes(args[i])) {
+        skipNext.add(i + 1);
+      }
+    }
+    pluginNames = args.filter((arg, idx) => !arg.startsWith("-") && !skipNext.has(idx));
   }
 
   const outputDir = getArgValue(args, "--output", "-o");
+  const demosOutputDir = getArgValue(args, "--demos-output", "-d");
 
   if (pluginNames.length === 0) {
     console.error("No plugins specified. Use --help for usage information.");
     process.exit(1);
   }
 
-  // Create output directory if specified and doesn't exist
+  // Create output directories if specified and don't exist
   if (outputDir && !existsSync(outputDir)) {
     mkdirSync(outputDir, { recursive: true });
     console.error(`Created output directory: ${outputDir}`);
+  }
+
+  if (demosOutputDir && !existsSync(demosOutputDir)) {
+    mkdirSync(demosOutputDir, { recursive: true });
+    console.error(`Created demos output directory: ${demosOutputDir}`);
   }
 
   for (const pluginName of pluginNames) {
@@ -575,8 +805,17 @@ Examples:
         console.log(result.markdown);
       }
 
+      // Write demo files if demos output directory is specified
+      if (demosOutputDir && result.demoFiles && result.demoFiles.length > 0) {
+        for (const demoFile of result.demoFiles) {
+          const demoPath = join(demosOutputDir, demoFile.fileName);
+          writeFileSync(demoPath, demoFile.content);
+          console.error(`  Demo written to: ${demoPath}`);
+        }
+      }
+
       console.error(
-        `  Parameters: ${result.parameters.length}, Data fields: ${result.data.length}, Examples: ${result.examplesCount}`
+        `  Parameters: ${result.parameters.length}, Data fields: ${result.data.length}, Examples: ${result.examplesCount}, Extracted trials: ${result.extractedTrials ? result.extractedTrials.length : 0}`
       );
     }
   }
@@ -589,6 +828,10 @@ export {
   extractPluginDescription,
   parseParametersSection,
   extractPluginInfo,
+  extractTrialsFromExampleCode,
+  generateDemoHtml,
+  generateExamplesSection,
+  pluginNameToVarName,
   parameterTypeMap,
 };
 
