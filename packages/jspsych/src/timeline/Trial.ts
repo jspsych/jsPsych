@@ -380,21 +380,21 @@ export class Trial extends TimelineNode {
           },
         });
 
+        // TODO: ensure that this throws an error in v9!
         // major parameter type validation
         if (!parameterConfig.array && parameterValue !== null) {
           switch (parameterConfig.type) {
             case ParameterType.BOOL:
               if (typeof parameterValue !== "boolean") {
                 const parameterPathString = parameterPathArrayToString(parameterPath);
-                throw new Error(
+                console.warn(
                   `A non-boolean value (\`${parameterValue}\`) was provided for the boolean parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
                 );
               }
               break;
             // @ts-ignore falls through
             case ParameterType.KEYS: // "ALL_KEYS", "NO_KEYS", and single key strings are checked here
-              if (Array.isArray(parameterValue)) 
-                break;
+              if (Array.isArray(parameterValue)) break;
             case ParameterType.STRING:
             case ParameterType.HTML_STRING:
             case ParameterType.KEY:
@@ -403,7 +403,7 @@ export class Trial extends TimelineNode {
             case ParameterType.IMAGE:
               if (typeof parameterValue !== "string") {
                 const parameterPathString = parameterPathArrayToString(parameterPath);
-                throw new Error(
+                console.warn(
                   `A non-string value (\`${parameterValue}\`) was provided for the parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
                 );
               }
@@ -412,7 +412,7 @@ export class Trial extends TimelineNode {
             case ParameterType.INT:
               if (typeof parameterValue !== "number") {
                 const parameterPathString = parameterPathArrayToString(parameterPath);
-                throw new Error(
+                console.warn(
                   `A non-numeric value (\`${parameterValue}\`) was provided for the numeric parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
                 );
               }
@@ -420,7 +420,7 @@ export class Trial extends TimelineNode {
             case ParameterType.FUNCTION:
               if (typeof parameterValue !== "function") {
                 const parameterPathString = parameterPathArrayToString(parameterPath);
-                throw new Error(
+                console.warn(
                   `A non-function value (\`${parameterValue}\`) was provided for the function parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
                 );
               }
@@ -428,7 +428,7 @@ export class Trial extends TimelineNode {
             case ParameterType.SELECT:
               if (!parameterConfig.options) {
                 const parameterPathString = parameterPathArrayToString(parameterPath);
-                throw new Error(
+                console.warn(
                   `The "options" array is required for the "select" parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
                 );
               }
@@ -448,10 +448,10 @@ export class Trial extends TimelineNode {
         if (parameterConfig.type === ParameterType.SELECT) {
           if (!parameterConfig.options.includes(parameterValue)) {
             const parameterPathString = parameterPathArrayToString(parameterPath);
-            throw new Error(
-              `The value "${parameterValue}" is not a valid option for the parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin. Valid options are: ${parameterConfig.options.join(
-                ", "
-              )}.`
+            console.warn(
+              `The value "${parameterValue}" is not a valid option for the parameter "${parameterPathString}" in the "${
+                this.pluginInfo.name
+              }" plugin. Valid options are: ${parameterConfig.options.join(", ")}.`
             );
           }
         }

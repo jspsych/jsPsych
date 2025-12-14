@@ -235,7 +235,7 @@ describe("Trial", () => {
     });
 
     it("respects the `save_trial_parameters` parameter", async () => {
-      const consoleSpy = jest.spyOn(console, "warn").mockImplementation();
+      const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
 
       TestPlugin.setParameterInfos({
         stringParameter1: { type: ParameterType.STRING },
@@ -561,6 +561,17 @@ describe("Trial", () => {
     });
 
     describe("with parameter type mismatches", () => {
+      //TODO: redo these to expect errors on v9!
+      let consoleSpy: jest.SpyInstance;
+
+      beforeEach(() => {
+        consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+      });
+
+      afterEach(() => {
+        consoleSpy.mockRestore();
+      });
+
       it("errors on non-boolean values for boolean parameters", async () => {
         TestPlugin.setParameterInfos({
           boolParameter: { type: ParameterType.BOOL },
@@ -570,8 +581,9 @@ describe("Trial", () => {
         await createTrial({ type: TestPlugin, boolParameter: true }).run();
 
         // this shouldn't:
-        await expect(createTrial({ type: TestPlugin, boolParameter: "foo" }).run()).rejects.toThrow(
-          "A non-boolean value (`foo`) was provided for the boolean parameter \"boolParameter\" in the \"test\" plugin."
+        await createTrial({ type: TestPlugin, boolParameter: "foo" }).run();
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'A non-boolean value (`foo`) was provided for the boolean parameter "boolParameter" in the "test" plugin.'
         );
       });
 
@@ -584,8 +596,9 @@ describe("Trial", () => {
         await createTrial({ type: TestPlugin, stringParameter: "foo" }).run();
 
         // this shouldn't:
-        await expect(createTrial({ type: TestPlugin, stringParameter: 1 }).run()).rejects.toThrow(
-          "A non-string value (`1`) was provided for the parameter \"stringParameter\" in the \"test\" plugin."
+        await createTrial({ type: TestPlugin, stringParameter: 1 }).run();
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'A non-string value (`1`) was provided for the parameter "stringParameter" in the "test" plugin.'
         );
       });
 
@@ -599,15 +612,17 @@ describe("Trial", () => {
         await createTrial({ type: TestPlugin, intParameter: 1, floatParameter: 1.5 }).run();
 
         // this shouldn't:
-        await expect(createTrial({ type: TestPlugin, intParameter: "foo", floatParameter: 1.5 }).run()).rejects.toThrow(
-          "A non-numeric value (`foo`) was provided for the numeric parameter \"intParameter\" in the \"test\" plugin."
-        );
-        await expect(createTrial({ type: TestPlugin, intParameter: 1, floatParameter: "foo" }).run()).rejects.toThrow(
-          "A non-numeric value (`foo`) was provided for the numeric parameter \"floatParameter\" in the \"test\" plugin."
+        await createTrial({ type: TestPlugin, intParameter: "foo", floatParameter: 1.5 }).run();
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'A non-numeric value (`foo`) was provided for the numeric parameter "intParameter" in the "test" plugin.'
         );
 
-        // this should warn but not error:
-        const consoleSpy = jest.spyOn(console, "warn").mockImplementation();
+        await createTrial({ type: TestPlugin, intParameter: 1, floatParameter: "foo" }).run();
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'A non-numeric value (`foo`) was provided for the numeric parameter "floatParameter" in the "test" plugin.'
+        );
+
+        // this should warn but not error (behavior in v9):
         await createTrial({ type: TestPlugin, intParameter: 1.5, floatParameter: 1.5 }).run();
         expect(consoleSpy).toHaveBeenCalledWith(
           `A float value (\`1.5\`) was provided for the integer parameter "intParameter" in the "test" plugin. The value will be truncated to an integer.`
@@ -623,12 +638,13 @@ describe("Trial", () => {
         await createTrial({ type: TestPlugin, functionParameter: () => {} }).run();
 
         // this shouldn't:
-        await expect(createTrial({ type: TestPlugin, functionParameter: "foo" }).run()).rejects.toThrow(
-          "A non-function value (`foo`) was provided for the function parameter \"functionParameter\" in the \"test\" plugin."
+        await createTrial({ type: TestPlugin, functionParameter: "foo" }).run();
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'A non-function value (`foo`) was provided for the function parameter "functionParameter" in the "test" plugin.'
         );
       });
 
-      it("errors on select parameters with values not in the options", async () => {
+      it("errors on select parameters with values not in the options array", async () => {
         TestPlugin.setParameterInfos({
           selectParameter: {
             type: ParameterType.SELECT,
@@ -640,8 +656,10 @@ describe("Trial", () => {
         await createTrial({ type: TestPlugin, selectParameter: "foo" }).run();
 
         // this shouldn't:
-        await expect(createTrial({ type: TestPlugin, selectParameter: "baz" }).run()).rejects.toThrow(
-          "The value \"baz\" is not a valid option for the parameter \"selectParameter\" in the \"test\" plugin. Valid options are: foo, bar."
+
+        await createTrial({ type: TestPlugin, selectParameter: "baz" }).run();
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'The value "baz" is not a valid option for the parameter "selectParameter" in the "test" plugin. Valid options are: foo, bar.'
         );
       });
     });
