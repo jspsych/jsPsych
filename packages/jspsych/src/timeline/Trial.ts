@@ -360,6 +360,7 @@ export class Trial extends TimelineNode {
       for (const [parameterName, parameterConfig] of Object.entries(parameterInfos)) {
         const parameterPath = [...parentParameterPath, parameterName];
 
+        // evaluate parameter and validate required parameter
         let parameterValue = this.getParameterValue(parameterPath, {
           evaluateFunctions: parameterConfig.type !== ParameterType.FUNCTION,
           replaceResult: (originalResult) => {
@@ -379,6 +380,83 @@ export class Trial extends TimelineNode {
           },
         });
 
+        // TODO: ensure that this throws an error in v9!
+        // major parameter type validation
+        if (!parameterConfig.array && parameterValue !== null) {
+          switch (parameterConfig.type) {
+            case ParameterType.BOOL:
+              if (typeof parameterValue !== "boolean") {
+                const parameterPathString = parameterPathArrayToString(parameterPath);
+                console.warn(
+                  `A non-boolean value (\`${parameterValue}\`) was provided for the boolean parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
+                );
+              }
+              break;
+            // @ts-ignore falls through
+            case ParameterType.KEYS: // "ALL_KEYS", "NO_KEYS", and single key strings are checked here
+              if (Array.isArray(parameterValue)) break;
+            case ParameterType.STRING:
+            case ParameterType.HTML_STRING:
+            case ParameterType.KEY:
+            case ParameterType.AUDIO:
+            case ParameterType.VIDEO:
+            case ParameterType.IMAGE:
+              if (typeof parameterValue !== "string") {
+                const parameterPathString = parameterPathArrayToString(parameterPath);
+                console.warn(
+                  `A non-string value (\`${parameterValue}\`) was provided for the parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
+                );
+              }
+              break;
+            case ParameterType.FLOAT:
+            case ParameterType.INT:
+              if (typeof parameterValue !== "number") {
+                const parameterPathString = parameterPathArrayToString(parameterPath);
+                console.warn(
+                  `A non-numeric value (\`${parameterValue}\`) was provided for the numeric parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
+                );
+              }
+              break;
+            case ParameterType.FUNCTION:
+              if (typeof parameterValue !== "function") {
+                const parameterPathString = parameterPathArrayToString(parameterPath);
+                console.warn(
+                  `A non-function value (\`${parameterValue}\`) was provided for the function parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
+                );
+              }
+              break;
+            case ParameterType.SELECT:
+              if (!parameterConfig.options) {
+                const parameterPathString = parameterPathArrayToString(parameterPath);
+                console.warn(
+                  `The "options" array is required for the "select" parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
+                );
+              }
+          }
+
+          // truncate floats to integers if the parameter type is INT
+          if (parameterConfig.type === ParameterType.INT && parameterValue % 1 !== 0) {
+            const parameterPathString = parameterPathArrayToString(parameterPath);
+            console.warn(
+              `A float value (\`${parameterValue}\`) was provided for the integer parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin. The value will be truncated to an integer.`
+            );
+
+            parameterValue = Math.trunc(parameterValue);
+          }
+        }
+
+        if (parameterConfig.type === ParameterType.SELECT) {
+          if (!parameterConfig.options.includes(parameterValue)) {
+            const parameterPathString = parameterPathArrayToString(parameterPath);
+            console.warn(
+              `The value "${parameterValue}" is not a valid option for the parameter "${parameterPathString}" in the "${
+                this.pluginInfo.name
+              }" plugin. Valid options are: ${parameterConfig.options.join(", ")}.`
+            );
+          }
+        }
+
+        // array validation
         if (parameterConfig.array && !Array.isArray(parameterValue)) {
           const parameterPathString = parameterPathArrayToString(parameterPath);
           throw new Error(
