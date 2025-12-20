@@ -291,12 +291,12 @@ class AudioButtonResponsePlugin implements JsPsychPlugin<Info> {
 
   // method to end trial when it is time
   private end_trial = () => {
-    // stop the audio file if it is playing
-    this.audio.stop();
-
     // remove end event listeners if they exist
     this.audio.removeEventListener("ended", this.end_trial);
     this.audio.removeEventListener("ended", this.enable_buttons);
+
+    // stop the audio file if it is playing
+    this.audio.stop();
 
     // gather the data to store for the trial
     var trial_data = {
