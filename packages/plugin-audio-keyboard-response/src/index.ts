@@ -166,12 +166,12 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     // kill any remaining setTimeout handlers
     this.jsPsych.pluginAPI.clearAllTimeouts();
 
-    // stop the audio file if it is playing
-    this.audio.stop();
-
     // remove end event listeners if they exist
     this.audio.removeEventListener("ended", this.end_trial);
     this.audio.removeEventListener("ended", this.setup_keyboard_listener);
+
+    // stop the audio file if it is playing
+    this.audio.stop();
 
     // kill keyboard listeners
     this.jsPsych.pluginAPI.cancelAllKeyboardResponses();
