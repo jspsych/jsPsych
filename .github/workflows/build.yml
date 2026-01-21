@@ -3,7 +3,9 @@ name: build
 on:
   push:
   pull_request:
-    types: [opened, reopened, ready_for_review, review_requested]
+    types: [opened, reopened, ready_for_review, review_requested, synchronize]
+  pull_request_target:
+    types: [opened, reopened, ready_for_review, review_requested, synchronize]
 
 jobs:
   test:
@@ -15,6 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Setup Node.js ${{ matrix.node }}
         uses: actions/setup-node@v3
