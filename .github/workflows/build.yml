@@ -3,7 +3,7 @@ name: build
 on:
   push:
   pull_request:
-    types: [opened, reopened, ready_for_review, review_requested]
+    types: [opened, reopened, ready_for_review, review_requested, synchronize]
 
 jobs:
   test:
