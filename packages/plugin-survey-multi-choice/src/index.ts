@@ -82,6 +82,11 @@ const info = <const>{
     response: {
       type: ParameterType.OBJECT,
     },
+    /** An array containing the index of the selected option for each question. Unanswered questions are recorded as -1. */
+    response_index: {
+      type: ParameterType.INT,
+      array: true,
+    },
     /** The response time in milliseconds for the participant to make a response. The time is measured from when the questions first appear on the screen until the participant's response(s) are submitted. */
     rt: {
       type: ParameterType.INT,
@@ -111,10 +116,9 @@ const plugin_id_name = "jspsych-survey-multi-choice";
 class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
   static info = info;
 
-  constructor(private jsPsych: JsPsych) { }
+  constructor(private jsPsych: JsPsych) {}
 
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
-
     const trial_form_id = `${plugin_id_name}_form`;
 
     var html = "";
@@ -164,7 +168,9 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
         question_classes.push(`${plugin_id_name}-horizontal`);
       }
 
-      html += `<div id="${plugin_id_name}-${question_id}" class="${question_classes.join(" ")}" data-name="${question.name}">`;
+      html += `<div id="${plugin_id_name}-${question_id}" class="${question_classes.join(
+        " "
+      )}" data-name="${question.name}">`;
 
       // add question text
       html += `<p class="${plugin_id_name}-text survey-multi-choice">${question.prompt}`;
@@ -186,7 +192,7 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
         html += `
         <div id="${option_id_name}" class="${plugin_id_name}-option">
           <label class="${plugin_id_name}-text" for="${input_id}">
-            <input type="radio" name="${input_name}" id="${input_id}" value="${question.options[j]}" ${required_attr} />
+            <input type="radio" name="${input_name}" id="${input_id}" value="${question.options[j]}" data-option-index="${j}" ${required_attr} />
             ${question.options[j]}
             </label>
         </div>`;
@@ -196,7 +202,9 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
     }
 
     // add submit button
-    html += `<input type="submit" id="${plugin_id_name}-next" class="${plugin_id_name} jspsych-btn"${trial.button_label ? ' value="' + trial.button_label + '"' : ""} />`;
+    html += `<input type="submit" id="${plugin_id_name}-next" class="${plugin_id_name} jspsych-btn"${
+      trial.button_label ? ' value="' + trial.button_label + '"' : ""
+    } />`;
     html += "</form>";
 
     // render
@@ -212,12 +220,16 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
 
       // create object to hold responses
       var question_data = {};
+      var response_index = [];
       for (var i = 0; i < trial.questions.length; i++) {
         var match = display_element.querySelector(`#${plugin_id_name}-${i}`);
         var id = "Q" + i;
-        var val: String;
-        if (match.querySelector("input[type=radio]:checked") !== null) {
-          val = match.querySelector<HTMLInputElement>("input[type=radio]:checked").value;
+        var val: String = "";
+        var selected_index = -1;
+        var checked = match.querySelector<HTMLInputElement>("input[type=radio]:checked");
+        if (checked !== null) {
+          val = checked.value;
+          selected_index = Number(checked.dataset.optionIndex);
         } else {
           val = "";
         }
@@ -228,11 +240,13 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
         }
         obje[name] = val;
         Object.assign(question_data, obje);
+        response_index.push(selected_index);
       }
       // save data
       var trial_data = {
         rt: response_time,
         response: question_data,
+        response_index: response_index,
         question_order: question_order,
       };
 
@@ -260,16 +274,21 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
 
   private create_simulation_data(trial: TrialType<Info>, simulation_options) {
     const question_data = {};
+    const response_index = [];
     let rt = 1000;
 
-    for (const q of trial.questions) {
-      const name = q.name ? q.name : `Q${trial.questions.indexOf(q)}`;
-      question_data[name] = this.jsPsych.randomization.sampleWithoutReplacement(q.options, 1)[0];
+    for (let i = 0; i < trial.questions.length; i++) {
+      const q = trial.questions[i];
+      const name = q.name ? q.name : `Q${i}`;
+      const option_index = this.jsPsych.randomization.randomInt(0, q.options.length - 1);
+      question_data[name] = q.options[option_index];
+      response_index.push(option_index);
       rt += this.jsPsych.randomization.sampleExGaussian(1500, 400, 1 / 200, true);
     }
 
     const default_data = {
       response: question_data,
+      response_index: response_index,
       rt: rt,
       question_order: trial.randomize_question_order
         ? this.jsPsych.randomization.shuffle([...Array(trial.questions.length).keys()])
@@ -298,13 +317,17 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
     load_callback();
 
     const answers = Object.entries(data.response);
+    const response_index = Array.isArray(data.response_index) ? data.response_index : [];
     for (let i = 0; i < answers.length; i++) {
+      let option_index = response_index[i];
+      if (typeof option_index !== "number" || option_index < 0) {
+        option_index = trial.questions[i].options.indexOf(answers[i][1]);
+      }
+      if (option_index < 0) {
+        continue;
+      }
       this.jsPsych.pluginAPI.clickTarget(
-        display_element.querySelector(
-          `#${plugin_id_name}-response-${i}-${trial.questions[i].options.indexOf(
-            answers[i][1]
-          )}`
-        ),
+        display_element.querySelector(`#${plugin_id_name}-response-${i}-${option_index}`),
         ((data.rt - 1000) / answers.length) * (i + 1)
       );
     }
