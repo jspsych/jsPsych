@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/plugin-audio-keyboard-response",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "jsPsych plugin for playing an audio file and getting a keyboard response",
   "type": "module",
   "main": "dist/index.cjs",

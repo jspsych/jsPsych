@@ -1,6 +1,6 @@
 # survey-multi-choice
 
-Current version: 2.1.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-multi-choice/CHANGELOG.md).
+Current version: 2.2.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-multi-choice/CHANGELOG.md).
 
 The survey-multi-choice plugin displays a set of questions with multiple choice response fields. The participant selects a single answer.
 
@@ -32,7 +32,7 @@ question_order | array | An array with the order of questions. For example `[2,0
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@2.1.0"></script>
+<script src="https://unpkg.com/@jspsych/plugin-survey-multi-choice@2.2.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
