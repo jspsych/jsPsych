@@ -1,5 +1,11 @@
 # jspsych
 
+## 8.2.3
+
+### Patch Changes
+
+- [#3557](https://github.com/jspsych/jsPsych/pull/3557) [`761ae3700cac5b56d26216e84d36b071ef34b2e3`](https://github.com/jspsych/jsPsych/commit/761ae3700cac5b56d26216e84d36b071ef34b2e3) Thanks [@jadeddelta](https://github.com/jadeddelta)! - parameter types will properly be checked in case of type mismatch, along with `ParameterType.SELECT` params properly using the `option` field to check if it is a valid parameter. this will only warn the developer, but in v9 we plan to make it error.
+
 ## 8.2.2
 
 ### Patch Changes

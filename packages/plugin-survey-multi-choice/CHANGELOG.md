@@ -1,5 +1,11 @@
 # @jspsych/plugin-survey-multi-choice
 
+## 2.2.0
+
+### Minor Changes
+
+- [#3645](https://github.com/jspsych/jsPsych/pull/3645) [`7c1813abc375e8b70e7613e97133bdcdfab13c56`](https://github.com/jspsych/jsPsych/commit/7c1813abc375e8b70e7613e97133bdcdfab13c56) Thanks [@stephenmjerge](https://github.com/stephenmjerge)! - Add `response_index` to survey-multi-choice trial data to record selected option indices and disambiguate duplicate option labels.
+
 ## 2.1.0
 
 ### Minor Changes

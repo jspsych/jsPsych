@@ -1,5 +1,11 @@
 # @jspsych/plugin-audio-button-response
 
+## 2.1.1
+
+### Patch Changes
+
+- [#3633](https://github.com/jspsych/jsPsych/pull/3633) [`8a6b8fb5953ccfad9f9a0031ceb1bbc11b505687`](https://github.com/jspsych/jsPsych/commit/8a6b8fb5953ccfad9f9a0031ceb1bbc11b505687) Thanks [@stephenmjerge](https://github.com/stephenmjerge)! - Prevent WebAudio stop error when trials end early by removing ended listeners before stopping playback.
+
 ## 2.1.0
 
 ### Minor Changes

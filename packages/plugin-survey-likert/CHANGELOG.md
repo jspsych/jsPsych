@@ -1,5 +1,11 @@
 # @jspsych/plugin-survey-likert
 
+## 2.2.0
+
+### Minor Changes
+
+- [#3558](https://github.com/jspsych/jsPsych/pull/3558) [`55121f722307f681ec71746f583273ac79ca3139`](https://github.com/jspsych/jsPsych/commit/55121f722307f681ec71746f583273ac79ca3139) Thanks [@ethanknights](https://github.com/ethanknights)! - add `default_response` option, a field in `questions` that allows choosing an option to be pre-selected
+
 ## 2.1.0
 
 ### Minor Changes
