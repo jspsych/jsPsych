@@ -2866,7 +2866,7 @@
 
 
 <h1 id="survey-multi-choice">survey-multi-choice<a class="headerlink" href="#survey-multi-choice" title="Permanent link">&para;</a></h1>
-<p>Current version: 2.1.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-multi-choice/CHANGELOG.md">See version history</a>.</p>
+<p>Current version: 2.2.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-multi-choice/CHANGELOG.md">See version history</a>.</p>
 <p>The survey-multi-choice plugin displays a set of questions with multiple choice response fields. The participant selects a single answer.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. Parameters with a default value of <em>undefined</em> must be specified. Other parameters can be left unspecified if the default value is acceptable.</p>
@@ -2926,7 +2926,12 @@
 <tr>
 <td>response</td>
 <td>object</td>
-<td>An object containing the response for each question. The object will have a separate key (variable) for each question, with the first question in the trial being recorded in <code>Q0</code>, the second in <code>Q1</code>, and so on. The responses are recorded as the name of the option label selected (string). If the <code>name</code> parameter is defined for the question, then the response object will use the value of <code>name</code> as the key for each question. This will be encoded as a JSON string when data is saved using the <code>.json()</code> or <code>.csv()</code> functions.</td>
+<td>An object containing the response for each question. The object will have a separate key (variable) for each question, with the first question in the trial being recorded in <code>Q0</code>, the second in <code>Q1</code>, and so on. The responses are recorded as the name of the option label selected (string). If the <code>name</code> parameter is defined for the question, then the response object will use the value of <code>name</code> as the key for each question. Unanswered questions are recorded as empty strings. This will be encoded as a JSON string when data is saved using the <code>.json()</code> or <code>.csv()</code> functions.</td>
+</tr>
+<tr>
+<td>response_index</td>
+<td>array</td>
+<td>An array containing the index of the selected option for each question. Unanswered questions are recorded as -1.</td>
 </tr>
 <tr>
 <td>rt</td>
@@ -2942,7 +2947,7 @@
 </table>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey-multi-choice@2.1.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey-multi-choice@2.2.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-survey-multi-choice.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>

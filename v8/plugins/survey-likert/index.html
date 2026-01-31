@@ -2866,7 +2866,7 @@
 
 
 <h1 id="survey-likert">survey-likert<a class="headerlink" href="#survey-likert" title="Permanent link">&para;</a></h1>
-<p>Current version: 2.1.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-likert/CHANGELOG.md">See version history</a>.</p>
+<p>Current version: 2.2.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-survey-likert/CHANGELOG.md">See version history</a>.</p>
 <p>The survey-likert plugin displays a set of questions with Likert scale responses. The participant responds by selecting a radio button.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. Parameters with a default value of <em>undefined</em> must be specified. Other parameters can be left unspecified if the default value is acceptable.</p>
@@ -2884,7 +2884,7 @@
 <td>questions</td>
 <td>array</td>
 <td><em>undefined</em></td>
-<td>An array of objects, each object represents a question that appears on the screen. Each object contains a prompt, labels and required parameter that will be applied to the question. See examples below for further clarification.<code>prompt</code>: Type string, default value is <em>undefined</em>. The strings are the question that will be associated with a slider. <code>labels</code>: Type array, default value is <em>undefined</em>. Each array element is an array of strings. The innermost arrays contain a set of labels to display for an individual question. If you want to use blank responses and only label the end points or some subset of the options, just insert a blank string for the unlabeled responses.<code>required</code>: Type boolean, default value is false. Makes answering questions required. <code>name</code>: Name of the question. Used for storing data. If left undefined then default names (<code>Q0</code>, <code>Q1</code>, <code>...</code>) will be used for the questions.</td>
+<td>An array of objects, each object represents a question that appears on the screen. Each object contains a prompt, labels and required parameter that will be applied to the question. See examples below for further clarification.<code>prompt</code>: Type string, default value is <em>undefined</em>. The strings are the question that will be associated with a slider. <code>labels</code>: Type array, default value is <em>undefined</em>. Each array element is an array of strings. The innermost arrays contain a set of labels to display for an individual question. If you want to use blank responses and only label the end points or some subset of the options, just insert a blank string for the unlabeled responses.<code>required</code>: Type boolean, default value is false. Makes answering questions required. <code>name</code>: Name of the question. Used for storing data. If left undefined then default names (<code>Q0</code>, <code>Q1</code>, <code>...</code>) will be used for the questions. <code>default_response</code>: Type integer, default value is null. The 0-based index of the labels array to select by default. If null, no option will be pre-selected.</td>
 </tr>
 <tr>
 <td>randomize_question_order</td>
@@ -2948,7 +2948,7 @@
 </table>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey-likert@2.1.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-survey-likert@2.2.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-survey-likert.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
