@@ -58,7 +58,7 @@ describe("Trial parameters in the data", () => {
 
     await pressKey(" ");
 
-    expect(spy).toHaveBeenCalledTimes(4);
+    expect(spy).toHaveBeenCalledTimes(5);
     spy.mockRestore();
   });
 
