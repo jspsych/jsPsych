@@ -1,0 +1,46 @@
+name: label-issues
+
+on:
+  workflow_dispatch:
+
+jobs:
+  label-issues:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set-up labels and label filter
+        run: |
+          labels=$(jq -r '.labels' ./labels.json)
+          filter=$(jq -r '.filter' ./labels.json)
+      
+      - name: Collect all issues
+        run: |
+          gh issue list --state all --label "plugin-modification" --json number,labels,body > issues.json
+
+      - name: Find unlabeled issues
+        run: |
+          jq --argjson labels "$labels" "$filter" issues.json > unlabeled_issues.json
+
+      - name: Install Copilot CLI
+        run: |
+          curl -fsSL https://gh.io/copilot-install | bash
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Generate labels for issue
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+        run: |
+          issues=$(jq -c ./unlabeled_issues.json)
+          for issue in $issues; do
+            echo "Generating labels for: Issue No. $(echo "$issue" | jq -r '.number')"
+            LABELS=$(copilot --prompt "Pick labels from $labels for issue $issue based on the content of $(echo "$issue" | jq -r '.body'))" \
+              --model gpt-4.1 \
+              --allow-tool "read_file" \
+              --yes)
+            echo "Labels generated: $LABELS"
+          done

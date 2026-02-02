@@ -12,3 +12,6 @@ dist.zip
 packages/jspsych/README.md
 .turbo
 .env
+issues.json
+label_array.json
+unlabeled_issues.json
