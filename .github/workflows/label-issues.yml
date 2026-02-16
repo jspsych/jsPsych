@@ -30,7 +30,7 @@ jobs:
 
       - name: Find unlabeled issues
         run: |
-          jq --argjson labels "$labels" "$filter" issues.json > unlabeled_issues.json
+          jq --arg labels "$labels" "$filter" issues.json > unlabeled_issues.json
 
       - name: Install Copilot CLI
         run: |
@@ -38,8 +38,6 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Generate labels for issue
-        env:
-          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: |
           issues=$(jq -c ./unlabeled_issues.json)
           for issue in $issues; do
