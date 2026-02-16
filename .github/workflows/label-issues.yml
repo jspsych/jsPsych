@@ -8,6 +8,7 @@ on:
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  labels: 
 
 jobs:
   label-issues:
@@ -21,8 +22,8 @@ jobs:
 
       - name: Set-up labels and label filter
         run: |
-          labels=$(jq -r '.labels' ./labels.json)
-          filter=$(jq -r '.filter' ./labels.json)
+          env.LABELS=$(jq -r '.labels' ./labels.json)
+          env.FILTER=$(jq -r '.filter' ./labels.json)
       
       - name: Collect all issues
         run: |
@@ -30,9 +31,9 @@ jobs:
 
       - name: Find unlabeled issues
         run: |
-          echo $filter
-          echo $labels
-          jq --argjson labels "$labels" "$filter" issues.json > unlabeled_issues.json
+          echo "${{env.LABELS}}"
+          echo "${{env.FILTER}}"
+          jq --argjson labels "$env.LABELS" "$env.FILTER" issues.json > unlabeled_issues.json
 
       - name: Install Copilot CLI
         run: |
