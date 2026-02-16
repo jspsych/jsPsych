@@ -23,7 +23,10 @@ jobs:
       - name: Set-up labels and label filter
         id: set-up
         run: |
-          echo "labels=$(jq -r '.labels' ./labels.json)" >> $GITHUB_ENV
+          LABELS=$(jq -r '.labels' ./labels.json)
+          echo "labels<<EOF" >> $GITHUB_ENV
+          echo "$LABELS" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
           echo "filter=$(jq -r '.filter' ./labels.json)" >> $GITHUB_ENV
       
       - name: Collect all issues
