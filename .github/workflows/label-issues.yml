@@ -21,9 +21,12 @@ jobs:
           fetch-depth: 0
 
       - name: Set-up labels and label filter
+        id: set-up
         run: |
-          env.LABELS=$(jq -r '.labels' ./labels.json)
-          env.FILTER=$(jq -r '.filter' ./labels.json)
+          labels=$(jq -r '.labels' ./labels.json)
+          filter=$(jq -r '.filter' ./labels.json)
+          echo "labels=$labels" >> $GITHUB_ENV
+          echo "filter=$filter" >> $GITHUB_ENV
       
       - name: Collect all issues
         run: |
@@ -31,9 +34,9 @@ jobs:
 
       - name: Find unlabeled issues
         run: |
-          echo "${{env.LABELS}}"
-          echo "${{env.FILTER}}"
-          jq --argjson labels "$env.LABELS" "$env.FILTER" issues.json > unlabeled_issues.json
+          echo "$labels"
+          echo "$filter"
+          jq --argjson labels "$labels" "$filter" issues.json > unlabeled_issues.json
 
       - name: Install Copilot CLI
         run: |
