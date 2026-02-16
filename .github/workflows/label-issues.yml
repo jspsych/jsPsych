@@ -34,9 +34,9 @@ jobs:
 
       - name: Find unlabeled issues
         run: |
-          echo "$labels"
-          echo "$filter"
-          jq --argjson labels "$labels" "$filter" issues.json > unlabeled_issues.json
+          echo "$env.labels"
+          echo "$env.filter"
+          jq --argjson labels "$env.labels" "$env.filter" issues.json > unlabeled_issues.json
 
       - name: Install Copilot CLI
         run: |
