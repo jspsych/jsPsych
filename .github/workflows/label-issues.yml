@@ -2,6 +2,12 @@ name: label-issues
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - relabeling
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   label-issues:
