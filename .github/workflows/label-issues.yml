@@ -8,7 +8,6 @@ on:
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  labels: 
 
 jobs:
   label-issues:
@@ -46,7 +45,8 @@ jobs:
 
       - name: Generate labels for issue
         run: |
-          issues=$(jq -c ./unlabeled_issues.json)
+          issues='cat ./unlabeled_issues.json'
+          echo "Unlabeled issues: $issues"
           for issue in $issues; do
             echo "Generating labels for: Issue No. $(echo "$issue" | jq -r '.number')"
             LABELS=$(copilot --prompt "Pick labels from $labels for issue $issue based on the content of $(echo "$issue" | jq -r '.body'))" \
