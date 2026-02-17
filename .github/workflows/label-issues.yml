@@ -27,7 +27,7 @@ jobs:
           echo "labels<<EOF" >> $GITHUB_ENV
           echo "$LABELS" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-          echo "FILTER=$(jq -r '.filter' ./labels.json)" >> $GITHUB_ENV
+          echo "filter=$(jq -r '.filter' ./labels.json)" >> $GITHUB_ENV
       
       - name: Collect all issues
         run: |
@@ -35,9 +35,9 @@ jobs:
 
       - name: Find unlabeled issues
         run: |
-          echo "$LABELS"
-          echo "$FILTER"
-          jq --argjson labels "$LABELS" "$FILTER" issues.json > unlabeled_issues.json
+          echo "$labels"
+          echo "$filter"
+          jq --argjson labels "$labels" "$filter" issues.json > unlabeled_issues.json
 
       - name: Install Copilot CLI
         run: |
