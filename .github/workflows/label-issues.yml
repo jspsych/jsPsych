@@ -47,7 +47,7 @@ jobs:
         run: |
           issues=$(cat ./unlabeled_issues.json)
           for issue in $issues; do
-            echo "Generating labels for: Issue No. $(echo "$issue" | jq -r '.number')"
+            echo "Generating labels for: Issue No. $(echo "${issue}" | jq -r '.number')"
             LABELS=$(copilot --prompt "Pick labels from $labels for issue $issue based on the content of $(echo "$issue" | jq -r '.body'))" \
               --model gpt-4.1 \
               --allow-tool "read_file" \
