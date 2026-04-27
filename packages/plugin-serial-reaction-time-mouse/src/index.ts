@@ -28,7 +28,7 @@ const info = <const>{
       type: ParameterType.STRING,
       default: "#999",
     },
-    /** If true, the trial ends after a key press. Feedback is displayed if `show_response_feedback` is true. */
+    /** If true, the trial ends after a click. Feedback is displayed if `show_response_feedback` is true. */
     response_ends_trial: {
       type: ParameterType.BOOL,
       default: true,
@@ -43,6 +43,16 @@ const info = <const>{
     trial_duration: {
       type: ParameterType.INT,
       default: null,
+    },
+    /** If true, show feedback indicating where the participant clicked and whether it was correct. */
+    show_response_feedback: {
+      type: ParameterType.BOOL,
+      default: false,
+    },
+    /** The length of time in milliseconds to show the feedback. */
+    feedback_duration: {
+      type: ParameterType.INT,
+      default: 200,
     },
     /** If a positive number, the target will progressively change color at the start of the trial, with the transition lasting this many milliseconds. */
     fade_duration: {
@@ -114,6 +124,55 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
       rt: null,
       row: null,
       column: null,
+      correct: false,
+    };
+
+    const endTrial = () => {
+      // gather the data to store for the trial
+      var trial_data = {
+        rt: response.rt,
+        grid: trial.grid,
+        target: trial.target,
+        response: [parseInt(response.row, 10), parseInt(response.column, 10)],
+        correct: response.correct,
+      };
+
+      // move on to the next trial
+      this.jsPsych.finishTrial(trial_data);
+    };
+
+    const showFeedback = () => {
+      if (response.rt == null || trial.show_response_feedback == false) {
+        endTrial();
+      } else {
+        var color = response.correct ? "#0f0" : "#f00";
+        var cell = display_element.querySelector<HTMLElement>(
+          "#jspsych-serial-reaction-time-stimulus-cell-" + response.row + "-" + response.column
+        );
+        cell.style.transition = "";
+        cell.style.backgroundColor = color;
+        this.jsPsych.pluginAPI.setTimeout(endTrial, trial.feedback_duration);
+      }
+    };
+
+    // function to handle responses by the subject
+    const after_response = (info: { rt: number; row: string; column: string }) => {
+      // only record first response
+      if (response.rt == null) {
+        response.rt = info.rt;
+        response.row = info.row;
+        response.column = info.column;
+        response.correct =
+          parseInt(info.row, 10) == trial.target[0] && parseInt(info.column, 10) == trial.target[1];
+      }
+
+      if (trial.response_ends_trial) {
+        if (trial.show_response_feedback) {
+          showFeedback();
+        } else {
+          endTrial();
+        }
+      }
     };
 
     const showTarget = () => {
@@ -159,7 +218,7 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
       }
 
       if (trial.trial_duration !== null) {
-        this.jsPsych.pluginAPI.setTimeout(endTrial, trial.trial_duration);
+        this.jsPsych.pluginAPI.setTimeout(showFeedback, trial.trial_duration);
       }
     };
 
@@ -176,30 +235,6 @@ class SerialReactionTimeMousePlugin implements JsPsychPlugin<Info> {
     //show prompt if there is one
     if (trial.prompt !== null) {
       display_element.insertAdjacentHTML("beforeend", trial.prompt);
-    }
-
-    const endTrial = () => {
-      // gather the data to store for the trial
-      var trial_data = {
-        rt: response.rt,
-        grid: trial.grid,
-        target: trial.target,
-        response: [parseInt(response.row, 10), parseInt(response.column, 10)],
-        correct: response.row == trial.target[0] && response.column == trial.target[1],
-      };
-
-      // move on to the next trial
-      this.jsPsych.finishTrial(trial_data);
-    };
-
-    // function to handle responses by the subject
-    function after_response(info: { rt: string; row: number; column: number }) {
-      // only record first response
-      response = response.rt == null ? info : response;
-
-      if (trial.response_ends_trial) {
-        endTrial();
-      }
     }
   }
 
