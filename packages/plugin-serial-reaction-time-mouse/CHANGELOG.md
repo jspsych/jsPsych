@@ -1,5 +1,11 @@
 # @jspsych/plugin-serial-reaction-time-mouse
 
+## 2.2.0
+
+### Minor Changes
+
+- [#3657](https://github.com/jspsych/jsPsych/pull/3657) [`baae2ba5b44f909c872a8eff17f147f10d645898`](https://github.com/jspsych/jsPsych/commit/baae2ba5b44f909c872a8eff17f147f10d645898) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - add `show_response_feedback` and `feedback_duration` parameters, mirroring the feedback system in `@jspsych/plugin-serial-reaction-time`. When enabled, the clicked cell briefly turns green (correct) or red (incorrect) before the trial ends.
+
 ## 2.1.0
 
 ### Minor Changes
