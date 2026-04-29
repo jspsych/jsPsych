@@ -189,8 +189,14 @@ export class SessionRecorder {
 
   private mediaListeners = new WeakMap<HTMLMediaElement, (ev: Event) => void>();
   private mediaTimeLast = new WeakMap<HTMLMediaElement, number>();
+  // Strong ref to currently tracked media elements so we can iterate and
+  // remove their listeners when the trial ends. Cleared on detach.
+  private mediaTrackedElements = new Set<HTMLMediaElement>();
 
-  private originalMathRandom: () => number = Math.random.bind(Math);
+  // Reference to whatever `Math.random` was immediately before the recorder
+  // started. Restored verbatim on stop so opting into recording does not
+  // permanently alter `Math.random`, even if we auto-seeded.
+  private originalMathRandom: () => number = Math.random;
   private mathRandomPatched = false;
 
   private boundHandlers: Array<{
@@ -383,6 +389,7 @@ export class SessionRecorder {
       this.mutationObserver.disconnect();
       this.mutationObserver = null;
     }
+    this.detachMediaListeners();
     // Trial-scoped handlers are recorded in boundHandlers alongside session
     // ones; we tear down all and re-attach session listeners on next start.
     // Simpler: detach only the trial-scoped ones tagged via __trial flag.
@@ -689,25 +696,53 @@ export class SessionRecorder {
     media.addEventListener("ended", handler);
     media.addEventListener("seeked", handler);
     media.addEventListener("timeupdate", handler);
+    this.mediaTrackedElements.add(media);
     this.mediaListeners.set(media, handler);
+  }
+
+  private detachMediaListeners() {
+    for (const media of this.mediaTrackedElements) {
+      const handler = this.mediaListeners.get(media);
+      if (!handler) continue;
+      media.removeEventListener("play", handler);
+      media.removeEventListener("pause", handler);
+      media.removeEventListener("ended", handler);
+      media.removeEventListener("seeked", handler);
+      media.removeEventListener("timeupdate", handler);
+      this.mediaListeners.delete(media);
+    }
+    this.mediaTrackedElements.clear();
   }
 
   // -------- RNG --------
 
+  private isNativeMathRandom(fn: typeof Math.random) {
+    // Native built-ins stringify with the [native code] sentinel; any
+    // user-installed PRNG (e.g. via jsPsych.randomization.setSeed) will
+    // serialize as JS source instead.
+    return /\{\s*\[native code\]\s*\}/.test(Function.prototype.toString.call(fn));
+  }
+
   private patchMathRandom() {
     if (this.mathRandomPatched) return;
-    if (this.recording.rng.seed === null) {
+    // Capture the *true* pre-recording Math.random before any potential
+    // auto-seeding so `stop()` can restore exactly what was there.
+    this.originalMathRandom = Math.random;
+
+    // Only auto-seed when Math.random is the native function; if the user
+    // already installed a seeded PRNG, leave it alone.
+    if (this.recording.rng.seed === null && this.isNativeMathRandom(this.originalMathRandom)) {
       this.recording.rng.seed = randomization.setSeed();
     }
-    this.originalMathRandom = Math.random.bind(Math);
-    const orig = this.originalMathRandom;
+
+    const upstream = Math.random.bind(Math);
     const recordCall = (result: number) => {
       const target = this.currentTrial;
       if (!target) return;
       target.rng_calls.push({ t: this.t(), fn: "Math.random", args: [], result });
     };
     Math.random = () => {
-      const v = orig();
+      const v = upstream();
       recordCall(v);
       return v;
     };

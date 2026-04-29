@@ -157,15 +157,20 @@ export class JsPsych {
 
     this.sessionRecorder?.start(this.getDisplayElement());
 
-    await this.timeline.run();
-    await Promise.resolve(this.options.on_finish(this.data.get()));
+    // The recorder patches `Math.random` and attaches global listeners; we
+    // must always tear it down (and remove interaction listeners), even if
+    // the timeline run or the user-provided `on_finish` callback throws.
+    try {
+      await this.timeline.run();
+      await Promise.resolve(this.options.on_finish(this.data.get()));
 
-    if (this.endMessage) {
-      this.getDisplayElement().innerHTML = this.endMessage;
+      if (this.endMessage) {
+        this.getDisplayElement().innerHTML = this.endMessage;
+      }
+    } finally {
+      this.data.removeInteractionListeners();
+      this.sessionRecorder?.stop("finished");
     }
-
-    this.data.removeInteractionListeners();
-    this.sessionRecorder?.stop("finished");
   }
 
   async simulate(

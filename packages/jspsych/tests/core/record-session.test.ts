@@ -62,8 +62,12 @@ describe("record_session option", () => {
     }
   });
 
-  test("restores Math.random after the experiment finishes", async () => {
+  test("restores Math.random to the original after the experiment finishes", async () => {
+    // Capture the true original BEFORE the recorder has any chance to seed
+    // or wrap it. After stop(), Math.random must be exactly this reference.
+    const original = Math.random;
     let patchedRandom: () => number;
+
     const jsPsych = initJsPsych({ record_session: true });
     await startTimeline(
       [
@@ -78,8 +82,12 @@ describe("record_session option", () => {
       jsPsych
     );
     await pressKey("a");
+
     expect(patchedRandom!).toBeDefined();
-    expect(Math.random).not.toBe(patchedRandom!);
+    // The patched wrapper observed during the trial is a distinct function.
+    expect(patchedRandom!).not.toBe(original);
+    // After the experiment completes, the original is fully restored.
+    expect(Math.random).toBe(original);
   });
 
   test("captures the keypress event during the trial", async () => {
