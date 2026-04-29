@@ -9,6 +9,7 @@ import { JsPsychExtension } from "./modules/extensions";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
+import { SessionRecorder, SessionRecording, extractStimulusSource } from "./modules/recording";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
 import { ProgressBar } from "./ProgressBar";
@@ -66,6 +67,8 @@ export class JsPsych {
 
   private extensionManager: ExtensionManager;
 
+  private sessionRecorder?: SessionRecorder;
+
   constructor(options?) {
     // override default options if user specifies an option
     options = {
@@ -86,9 +89,14 @@ export class JsPsych {
       override_safe_mode: false,
       case_sensitive_responses: false,
       extensions: [],
+      record_session: false,
       ...options,
     };
     this.options = options;
+
+    if (options.record_session) {
+      this.sessionRecorder = new SessionRecorder({ jspsychVersion: version });
+    }
 
     autoBind(this); // so we can pass JsPsych methods as callbacks and `this` remains the JsPsych instance
 
@@ -147,6 +155,8 @@ export class JsPsych {
 
     this.experimentStartTime = new Date();
 
+    this.sessionRecorder?.start(this.getDisplayElement());
+
     await this.timeline.run();
     await Promise.resolve(this.options.on_finish(this.data.get()));
 
@@ -155,6 +165,7 @@ export class JsPsych {
     }
 
     this.data.removeInteractionListeners();
+    this.sessionRecorder?.stop("finished");
   }
 
   async simulate(
@@ -196,12 +207,23 @@ export class JsPsych {
     return this.displayContainerElement;
   }
 
+  /**
+   * Returns the high-fidelity session recording produced when `initJsPsych` is
+   * called with `record_session: true`. Returns `undefined` when recording is
+   * not enabled. The recording is suitable for serialization (e.g. via
+   * `JSON.stringify`) and persistence alongside the trial data.
+   */
+  getSessionRecording(): SessionRecording | undefined {
+    return this.sessionRecorder?.getRecording();
+  }
+
   abortExperiment(endMessage?: string, data = {}) {
     this.endMessage = endMessage;
     this.timeline.abort();
     this.pluginAPI.cancelAllKeyboardResponses();
     this.pluginAPI.clearAllTimeouts();
     this.finishTrial(data);
+    this.sessionRecorder?.stop("aborted");
   }
 
   abortCurrentTimeline() {
@@ -394,12 +416,22 @@ export class JsPsych {
 
   private timelineDependencies: TimelineNodeDependencies = {
     onTrialStart: (trial: Trial) => {
+      this.sessionRecorder?.onTrialStart({
+        trial_index: trial.index ?? -1,
+        plugin: trial.pluginClass?.["info"]?.name ?? "unknown",
+        trial_params: trial.trialObject,
+        stimulus_source: extractStimulusSource(trial.trialObject),
+      });
       this.options.on_trial_start(trial.trialObject);
 
       // apply the focus to the element containing the experiment.
       this.getDisplayContainerElement().focus();
       // reset the scroll on the DOM target
       this.getDisplayElement().scrollTop = 0;
+    },
+
+    onTrialLoad: (_trial: Trial) => {
+      this.sessionRecorder?.onTrialLoad();
     },
 
     onTrialResultAvailable: (trial: Trial) => {
@@ -412,6 +444,7 @@ export class JsPsych {
 
     onTrialFinished: (trial: Trial) => {
       const result = trial.getResult();
+      this.sessionRecorder?.onTrialFinish(result);
       this.options.on_trial_finish(result);
 
       if (result) {
