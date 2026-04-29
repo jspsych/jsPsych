@@ -33,15 +33,13 @@ describe("record_session option", () => {
     expect(trial.initial_dom).not.toBeNull();
   });
 
-  test("captures Math.random calls into the active trial", async () => {
+  test("captures Math.random calls in the session-level rng_calls log", async () => {
     const jsPsych = initJsPsych({ record_session: true });
     await startTimeline(
       [
         {
           type: htmlKeyboardResponse,
           stimulus: "<p>x</p>",
-          // on_load fires after onTrialStart wires up the recorder, so
-          // RNG calls here are attributed to this trial.
           on_load: () => {
             Math.random();
             Math.random();
@@ -54,12 +52,43 @@ describe("record_session option", () => {
 
     const rec = jsPsych.getSessionRecording()!;
     expect(rec.rng.math_random_patched).toBe(true);
-    expect(rec.trials[0].rng_calls.length).toBeGreaterThanOrEqual(2);
-    for (const call of rec.trials[0].rng_calls) {
+    expect(rec.rng_calls.length).toBeGreaterThanOrEqual(2);
+    for (const call of rec.rng_calls) {
       expect(call.fn).toBe("Math.random");
       expect(typeof call.result).toBe("number");
       expect(typeof call.t).toBe("number");
     }
+  });
+
+  test("captures Math.random calls made during pre-trial parameter evaluation", async () => {
+    // Parameter functions (e.g. a function-valued `stimulus`) are evaluated
+    // before `onTrialStart` fires, so any RNG calls there happen with no
+    // active trial. The session-level rng_calls log captures them anyway.
+    const jsPsych = initJsPsych({ record_session: true });
+    await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus: () => {
+            Math.random();
+            Math.random();
+            Math.random();
+            return "<p>x</p>";
+          },
+        },
+      ],
+      jsPsych
+    );
+    await pressKey("a");
+
+    const rec = jsPsych.getSessionRecording()!;
+    expect(rec.rng_calls.length).toBeGreaterThanOrEqual(3);
+
+    // Calls during parameter evaluation precede the trial's t_start, so we
+    // expect at least one call with t < trials[0].t_start.
+    const trialStart = rec.trials[0].t_start;
+    const preTrialCalls = rec.rng_calls.filter((c) => c.t < trialStart);
+    expect(preTrialCalls.length).toBeGreaterThanOrEqual(3);
   });
 
   test("restores Math.random to the original after the experiment finishes", async () => {

@@ -23,6 +23,12 @@ export interface SessionRecording {
   display_element_id: string;
   trials: TrialRecording[];
   viewport_changes: ViewportChange[];
+  // Chronological log of every Math.random output consumed during the
+  // session. Captured at session scope (rather than per-trial) so calls
+  // outside trial boundaries — pre-trial parameter evaluation, post-trial
+  // gaps, the experimenter's `on_finish` — are never dropped. A replayer
+  // consumes this list in order.
+  rng_calls: RngCall[];
   ended_at_perf: number | null;
   end_reason: "finished" | "aborted" | "unload" | null;
 }
@@ -51,7 +57,6 @@ export interface TrialRecording {
   rng_state_at_start: JsonValue;
   initial_dom: DomNode | null;
   events: RecordedEvent[];
-  rng_calls: RngCall[];
   trial_data: JsonValue;
 }
 
@@ -171,7 +176,6 @@ export class SessionRecorder {
   private currentTrial: TrialRecording | null = null;
 
   private nodeIds = new WeakMap<Node, number>();
-  private idToNode = new Map<number, Node>();
   private nextNodeId = 1;
 
   private mutationObserver: MutationObserver | null = null;
@@ -225,6 +229,7 @@ export class SessionRecorder {
       display_element_id: "",
       trials: [],
       viewport_changes: [],
+      rng_calls: [],
       ended_at_perf: null,
       end_reason: null,
     };
@@ -307,12 +312,11 @@ export class SessionRecorder {
       plugin: info.plugin,
       trial_params: serializeJson(info.trial_params),
       stimulus_source: info.stimulus_source,
-      // Per-trial RNG state snapshot is omitted in v1; the call log in
-      // `rng_calls` is sufficient to deterministically replay a trial.
+      // Per-trial RNG state snapshot is omitted in v1; the session-level
+      // `rng_calls` log is sufficient to deterministically replay.
       rng_state_at_start: null,
       initial_dom: null,
       events: [],
-      rng_calls: [],
       trial_data: null,
     };
     this.recording.trials.push(this.currentTrial);
@@ -503,10 +507,8 @@ export class SessionRecorder {
   }
 
   private releaseSubtree(node: Node) {
-    const id = this.nodeIds.get(node);
-    if (id !== undefined) {
+    if (this.nodeIds.has(node)) {
       this.nodeIds.delete(node);
-      this.idToNode.delete(id);
     }
     if (node.hasChildNodes()) {
       for (const child of Array.from(node.childNodes)) {
@@ -554,14 +556,12 @@ export class SessionRecorder {
     if (id === undefined) {
       id = this.nextNodeId++;
       this.nodeIds.set(node, id);
-      this.idToNode.set(id, node);
     }
     return id;
   }
 
   private resetNodeIds() {
     this.nodeIds = new WeakMap();
-    this.idToNode = new Map();
     this.nextNodeId = 1;
   }
 
@@ -776,14 +776,12 @@ export class SessionRecorder {
     }
 
     const upstream = Math.random.bind(Math);
-    const recordCall = (result: number) => {
-      const target = this.currentTrial;
-      if (!target) return;
-      target.rng_calls.push({ t: this.t(), fn: "Math.random", args: [], result });
-    };
     Math.random = () => {
       const v = upstream();
-      recordCall(v);
+      // Captured at session scope: includes calls during pre-trial
+      // parameter evaluation, post-trial gaps, and the experimenter's
+      // `on_finish` — none of which are bracketed by a current trial.
+      this.recording.rng_calls.push({ t: this.t(), fn: "Math.random", args: [], result: v });
       return v;
     };
     this.mathRandomPatched = true;
