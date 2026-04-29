@@ -183,4 +183,93 @@ describe("record_session option", () => {
       })
     );
   });
+
+  test("a fresh start() after stop() begins a new recording without leaking state", async () => {
+    const original = Math.random;
+    const jsPsych = initJsPsych({ record_session: true });
+
+    await startTimeline([{ type: htmlKeyboardResponse, stimulus: "first" }], jsPsych);
+    await pressKey("a");
+
+    // Snapshot the first run before re-starting; the recorder will replace
+    // its internal recording object on the next start().
+    const firstRecording = jsPsych.getSessionRecording()!;
+    expect(firstRecording.end_reason).toBe("finished");
+    expect(firstRecording.trials).toHaveLength(1);
+    expect(firstRecording.trials[0].plugin).toBe("html-keyboard-response");
+
+    // Math.random must be fully restored between sessions.
+    expect(Math.random).toBe(original);
+
+    // Reach the recorder via the JsPsych instance and restart it manually
+    // to exercise the reuse contract directly (without spinning up a second
+    // JsPsych instance, which would obscure the test).
+    const recorder = (jsPsych as any).sessionRecorder as {
+      start: (el: HTMLElement) => void;
+      stop: (reason?: "finished" | "aborted" | "unload") => void;
+      onTrialStart: (info: {
+        trial_index: number;
+        plugin: string;
+        trial_params: unknown;
+        stimulus_source: string | null;
+      }) => void;
+      onTrialFinish: (data: unknown) => void;
+      getRecording: () => any;
+    };
+
+    recorder.start(jsPsych.getDisplayElement());
+    recorder.onTrialStart({
+      trial_index: 0,
+      plugin: "synthetic",
+      trial_params: { foo: "bar" },
+      stimulus_source: null,
+    });
+    recorder.onTrialFinish({ rt: 100 });
+    recorder.stop("finished");
+
+    const secondRecording = recorder.getRecording();
+
+    // The second recording is a brand-new object with only the new trial.
+    expect(secondRecording).not.toBe(firstRecording);
+    expect(secondRecording.trials).toHaveLength(1);
+    expect(secondRecording.trials[0].plugin).toBe("synthetic");
+    expect(secondRecording.end_reason).toBe("finished");
+
+    // The first recording is unchanged.
+    expect(firstRecording.trials).toHaveLength(1);
+    expect(firstRecording.trials[0].plugin).toBe("html-keyboard-response");
+
+    // Math.random is again restored after the second stop, with no
+    // double-wrapping (i.e. the function reference equals the true original).
+    expect(Math.random).toBe(original);
+  });
+
+  test("stop() flushes pending throttled events from an in-flight trial", async () => {
+    const jsPsych = initJsPsych({ record_session: true });
+
+    await startTimeline([{ type: htmlKeyboardResponse, stimulus: "x" }], jsPsych);
+
+    // Simulate user activity, then stop the recorder mid-trial without
+    // letting the rAF callback fire. The pending mouse-move position must
+    // still appear in the trial's events.
+    const display = jsPsych.getDisplayElement();
+    display.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: 123, clientY: 456, bubbles: true })
+    );
+
+    const recorder = (jsPsych as any).sessionRecorder as {
+      stop: (reason?: "finished" | "aborted" | "unload") => void;
+    };
+    recorder.stop("aborted");
+
+    const rec = jsPsych.getSessionRecording()!;
+    expect(rec.end_reason).toBe("aborted");
+    const moves = rec.trials[0].events.filter((e) => e.type === "mouse.move");
+    expect(moves.length).toBeGreaterThan(0);
+    expect(moves[moves.length - 1]).toEqual(expect.objectContaining({ x: 123, y: 456 }));
+
+    // Tidy up: finish the still-pending pressKey-driven trial promise so
+    // the experiment can settle without tripping later assertions.
+    await pressKey("a");
+  });
 });

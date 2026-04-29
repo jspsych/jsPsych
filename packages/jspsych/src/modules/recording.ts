@@ -162,8 +162,10 @@ export interface SessionRecorderOptions {
 }
 
 export class SessionRecorder {
+  private readonly jspsychVersion: string;
   private recording: SessionRecording;
   private displayElement: HTMLElement | null = null;
+  private running = false;
 
   private startPerf = 0;
   private currentTrial: TrialRecording | null = null;
@@ -207,9 +209,14 @@ export class SessionRecorder {
   }> = [];
 
   constructor(options: SessionRecorderOptions) {
-    this.recording = {
+    this.jspsychVersion = options.jspsychVersion;
+    this.recording = this.createBlankRecording();
+  }
+
+  private createBlankRecording(): SessionRecording {
+    return {
       schema_version: SCHEMA_VERSION,
-      jspsych_version: options.jspsychVersion,
+      jspsych_version: this.jspsychVersion,
       recording_started_at: "",
       recording_started_at_perf: 0,
       user_agent: typeof navigator !== "undefined" ? navigator.userAgent : "",
@@ -226,6 +233,18 @@ export class SessionRecorder {
   // -------- lifecycle --------
 
   start(displayElement: HTMLElement) {
+    // Idempotent: starting an already-running recorder is a no-op.
+    if (this.running) return;
+
+    // If the recorder previously ran and stopped, replace the recording
+    // object with a blank one so this `start()` begins a fresh session.
+    // The previous recording remains accessible to any caller who captured
+    // it via `getRecording()` before restarting.
+    if (this.recording.end_reason !== null) {
+      this.recording = this.createBlankRecording();
+    }
+
+    this.running = true;
     this.displayElement = displayElement;
     this.startPerf = performance.now();
     this.recording.recording_started_at = new Date().toISOString();
@@ -234,17 +253,38 @@ export class SessionRecorder {
     this.recording.viewport = readViewport();
     this.lastViewport = { ...this.recording.viewport };
 
+    // Reset per-session ephemeral state so a reused recorder doesn't carry
+    // stale node ids, throttle flags, or pending event buffers.
+    this.currentTrial = null;
+    this.resetNodeIds();
+    this.mouseDirty = false;
+    this.mouseRafScheduled = false;
+    this.scrollRafScheduled = false;
+    this.pendingScroll.clear();
+
     this.patchMathRandom();
     this.attachSessionListeners();
   }
 
   stop(reason: "finished" | "aborted" | "unload" = "finished") {
-    if (this.recording.end_reason) return;
+    // Idempotent: stopping an already-stopped recorder is a no-op.
+    if (!this.running) return;
+
+    // Flush any throttled events from an in-flight trial so events near
+    // an abort boundary aren't silently dropped.
+    if (this.currentTrial !== null) {
+      this.flushPendingMouse();
+      this.flushPendingScroll();
+      this.currentTrial.t_end = this.t();
+      this.currentTrial = null;
+    }
+
     this.detachTrialListeners();
     this.detachSessionListeners();
     this.unpatchMathRandom();
     this.recording.ended_at_perf = this.t();
     this.recording.end_reason = reason;
+    this.running = false;
   }
 
   getRecording(): SessionRecording {
