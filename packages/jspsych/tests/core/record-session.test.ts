@@ -112,4 +112,67 @@ describe("record_session option", () => {
     expect(rec.recording_started_at).toEqual(expect.any(String));
     expect(rec.end_reason).toBe("finished");
   });
+
+  test("captures window scroll events", async () => {
+    const jsPsych = initJsPsych({ record_session: true });
+    await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "x",
+          on_load: () => {
+            // simulate a scroll event on the document
+            document.dispatchEvent(new Event("scroll"));
+          },
+        },
+      ],
+      jsPsych
+    );
+    await pressKey("a");
+
+    const rec = jsPsych.getSessionRecording()!;
+    const scrollEvents = rec.trials[0].events.filter((e) => e.type === "scroll.window");
+    expect(scrollEvents.length).toBeGreaterThan(0);
+    expect(scrollEvents[0]).toEqual(
+      expect.objectContaining({
+        type: "scroll.window",
+        x: expect.any(Number),
+        y: expect.any(Number),
+        t: expect.any(Number),
+      })
+    );
+  });
+
+  test("captures element scroll events keyed by node id", async () => {
+    const jsPsych = initJsPsych({ record_session: true });
+    await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus:
+            '<div id="scroll-region" style="overflow:auto;height:50px;"><p>line</p><p>line</p></div>',
+          on_load: () => {
+            const region = document.getElementById("scroll-region")!;
+            // jsdom doesn't physically scroll, but dispatching the event with
+            // the element as target exercises the code path.
+            region.dispatchEvent(new Event("scroll"));
+          },
+        },
+      ],
+      jsPsych
+    );
+    await pressKey("a");
+
+    const rec = jsPsych.getSessionRecording()!;
+    const scrollEvents = rec.trials[0].events.filter((e) => e.type === "scroll.element");
+    expect(scrollEvents.length).toBeGreaterThan(0);
+    expect(scrollEvents[0]).toEqual(
+      expect.objectContaining({
+        type: "scroll.element",
+        node: expect.any(Number),
+        x: expect.any(Number),
+        y: expect.any(Number),
+      })
+    );
+  });
 });

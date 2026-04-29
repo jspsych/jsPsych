@@ -79,7 +79,13 @@ export interface CommentNode {
   text: string;
 }
 
-export type RecordedEvent = DomMutation | InputRecord | ClipboardRecord | MediaRecord | FocusRecord;
+export type RecordedEvent =
+  | DomMutation
+  | InputRecord
+  | ClipboardRecord
+  | MediaRecord
+  | FocusRecord
+  | ScrollRecord;
 
 export type DomMutation =
   | { type: "dom.add"; t: number; parent: number; before: number | null; node: DomNode }
@@ -132,6 +138,10 @@ export interface FocusRecord {
   t: number;
 }
 
+export type ScrollRecord =
+  | { type: "scroll.window"; t: number; x: number; y: number }
+  | { type: "scroll.element"; t: number; node: number; x: number; y: number };
+
 export interface RngCall {
   t: number;
   fn: string;
@@ -168,6 +178,11 @@ export class SessionRecorder {
   private lastMouseX = 0;
   private lastMouseY = 0;
   private mouseDirty = false;
+
+  private scrollRafScheduled = false;
+  // Pending scroll state to flush at next animation frame. Key "window"
+  // refers to the document scroll; numeric keys are tracked node IDs.
+  private pendingScroll: Map<number | "window", { x: number; y: number }> = new Map();
 
   private viewportTimer: ReturnType<typeof setTimeout> | null = null;
   private lastViewport: ViewportState | null = null;
@@ -269,6 +284,7 @@ export class SessionRecorder {
   onTrialFinish(trialData: unknown) {
     if (!this.currentTrial) return;
     this.flushPendingMouse();
+    this.flushPendingScroll();
     this.detachTrialListeners();
     this.currentTrial.t_end = this.t();
     this.currentTrial.trial_data = serializeJson(trialData);
@@ -356,6 +372,10 @@ export class SessionRecorder {
     this.bind(document, "copy", this.handleClipboard("clipboard.copy"), true);
     this.bind(document, "cut", this.handleClipboard("clipboard.cut"), true);
     this.bind(document, "paste", this.handleClipboard("clipboard.paste"), true);
+    // Scroll events do not bubble, so capture-phase listening at document
+    // scope catches scroll on any descendant element. Window scrolling is
+    // handled by the same listener via a Document target check.
+    this.bind(document, "scroll", this.handleScroll, true);
   }
 
   private detachTrialListeners() {
@@ -523,6 +543,42 @@ export class SessionRecorder {
       x: this.lastMouseX,
       y: this.lastMouseY,
     });
+  }
+
+  private handleScroll = (ev: Event) => {
+    const target = ev.target;
+    if (target === document || target === document.documentElement || target === document.body) {
+      this.pendingScroll.set("window", {
+        x: window.scrollX,
+        y: window.scrollY,
+      });
+    } else if (target instanceof Element) {
+      const id = this.nodeIds.get(target);
+      if (id === undefined) return;
+      this.pendingScroll.set(id, { x: target.scrollLeft, y: target.scrollTop });
+    } else {
+      return;
+    }
+    if (!this.scrollRafScheduled) {
+      this.scrollRafScheduled = true;
+      requestAnimationFrame(() => {
+        this.scrollRafScheduled = false;
+        this.flushPendingScroll();
+      });
+    }
+  };
+
+  private flushPendingScroll() {
+    if (this.pendingScroll.size === 0) return;
+    const t = this.t();
+    for (const [key, pos] of this.pendingScroll) {
+      if (key === "window") {
+        this.pushEvent({ type: "scroll.window", t, x: pos.x, y: pos.y });
+      } else {
+        this.pushEvent({ type: "scroll.element", t, node: key, x: pos.x, y: pos.y });
+      }
+    }
+    this.pendingScroll.clear();
   }
 
   private handleMouseButton(type: "mouse.down" | "mouse.up" | "mouse.click") {
