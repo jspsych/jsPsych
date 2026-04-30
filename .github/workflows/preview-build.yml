@@ -49,7 +49,9 @@ jobs:
         id: changed
         run: |
           set -euo pipefail
-          git fetch origin main --depth=1
+          # Full fetch so the merge base for `origin/main...HEAD` is reachable;
+          # a shallow fetch of main can drop the merge base and yield an empty diff.
+          git fetch origin main
           changed=$(git diff --name-only origin/main...HEAD -- 'packages/*' \
             | awk -F/ 'NF>1 {print $2}' | sort -u | jq -R . | jq -sc .)
           echo "packages=$changed" >> "$GITHUB_OUTPUT"

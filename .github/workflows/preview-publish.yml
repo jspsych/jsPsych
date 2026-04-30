@@ -25,6 +25,44 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Resolve PR number and head SHA from the trusted workflow_run event payload
+      # rather than the artifact, which is produced by untrusted PR code.
+      # workflow_run.pull_requests is empty for fork PRs, so fall back to the
+      # commits-to-PRs API on head_sha.
+      - name: Resolve trusted PR metadata
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const headSha = context.payload.workflow_run.head_sha;
+            let prNumber = context.payload.workflow_run.pull_requests?.[0]?.number;
+
+            if (!prNumber) {
+              const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                commit_sha: headSha,
+              });
+              const match = prs.find(p => p.head.sha === headSha && p.state === 'open');
+              if (!match) {
+                core.setFailed(`No open PR found for head SHA ${headSha}`);
+                return;
+              }
+              prNumber = match.number;
+            }
+
+            if (!Number.isInteger(prNumber) || prNumber <= 0) {
+              core.setFailed(`Invalid PR number resolved: ${prNumber}`);
+              return;
+            }
+            if (!/^[0-9a-f]{40}$/.test(headSha)) {
+              core.setFailed(`Invalid head SHA from event payload: ${headSha}`);
+              return;
+            }
+
+            core.setOutput('number', String(prNumber));
+            core.setOutput('head_sha', headSha);
+
       - name: Download preview artifact
         uses: actions/download-artifact@v4
         with:
@@ -33,22 +71,43 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id }}
 
-      - name: Read metadata
+      # Validate the artifact's self-reported metadata against the trusted values
+      # before using anything from it. The `changed` list is sanitized to
+      # `[A-Za-z0-9_-]+` entries so it can't be used for path traversal or shell
+      # injection downstream.
+      - name: Validate artifact metadata
         id: meta
+        env:
+          TRUSTED_PR_NUMBER: ${{ steps.pr.outputs.number }}
+          TRUSTED_HEAD_SHA: ${{ steps.pr.outputs.head_sha }}
         run: |
           set -euo pipefail
-          pr_number=$(jq -r '.pr_number' preview-dist/metadata.json)
-          head_sha=$(jq -r '.head_sha' preview-dist/metadata.json)
-          changed=$(jq -c '.changed_packages' preview-dist/metadata.json)
-          echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
-          echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
+          artifact_pr_number=$(jq -r '.pr_number' preview-dist/metadata.json)
+          artifact_head_sha=$(jq -r '.head_sha' preview-dist/metadata.json)
+
+          if [ "$artifact_pr_number" != "$TRUSTED_PR_NUMBER" ]; then
+            echo "Artifact PR number ($artifact_pr_number) does not match trusted ($TRUSTED_PR_NUMBER)" >&2
+            exit 1
+          fi
+          if [ "$artifact_head_sha" != "$TRUSTED_HEAD_SHA" ]; then
+            echo "Artifact head SHA ($artifact_head_sha) does not match trusted ($TRUSTED_HEAD_SHA)" >&2
+            exit 1
+          fi
+
+          changed=$(jq -c '[.changed_packages[]? | select(type == "string" and test("^[A-Za-z0-9_-]+$"))]' preview-dist/metadata.json)
+
+          echo "pr_number=$TRUSTED_PR_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$TRUSTED_HEAD_SHA" >> "$GITHUB_OUTPUT"
           echo "changed=$changed" >> "$GITHUB_OUTPUT"
 
       - name: Push preview branch
         id: push
+        env:
+          PR_NUMBER: ${{ steps.meta.outputs.pr_number }}
+          HEAD_SHA: ${{ steps.meta.outputs.head_sha }}
         run: |
           set -euo pipefail
-          branch="preview/pr-${{ steps.meta.outputs.pr_number }}"
+          branch="preview/pr-${PR_NUMBER}"
 
           # Move artifact contents outside the worktree before we wipe it.
           mv preview-dist /tmp/preview-dist
@@ -66,7 +125,7 @@ jobs:
           cp /tmp/preview-dist/metadata.json .
 
           git add packages metadata.json
-          git commit -m "Preview build for PR #${{ steps.meta.outputs.pr_number }} @ ${{ steps.meta.outputs.head_sha }}"
+          git commit -m "Preview build for PR #${PR_NUMBER} @ ${HEAD_SHA}"
           git push --force origin "$branch"
 
           preview_sha=$(git rev-parse HEAD)
@@ -89,11 +148,18 @@ jobs:
           src_dir="/tmp/preview-dist"
 
           # Per-package URLs sourced from what the build actually produced.
+          # Skip any directory whose name doesn't match a known-safe pattern, since
+          # the artifact ultimately comes from untrusted PR code.
           all_links=""
           for pkg_dir in "$src_dir"/packages/*/; do
             name=$(basename "$pkg_dir")
+            if ! [[ "$name" =~ ^[A-Za-z0-9_-]+$ ]]; then
+              continue
+            fi
             pkg_name=$(jq -r '.name // empty' "${pkg_dir}package.json" 2>/dev/null || echo "")
-            [ -z "$pkg_name" ] && pkg_name="$name"
+            if ! [[ "$pkg_name" =~ ^@?[A-Za-z0-9_/-]+$ ]]; then
+              pkg_name="$name"
+            fi
             if [ -f "${pkg_dir}dist/index.browser.min.js" ]; then
               all_links+="- \`${pkg_name}\` → \`${base}/packages/${name}/dist/index.browser.min.js\`"$'\n'
             fi
