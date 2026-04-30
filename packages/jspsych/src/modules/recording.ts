@@ -19,7 +19,7 @@ export interface SessionRecording {
   recording_started_at_perf: number;
   user_agent: string;
   viewport: ViewportState;
-  rng: { seed: string | number | null; math_random_patched: boolean };
+  rng: { seed: string | null; math_random_patched: boolean };
   display_element_id: string;
   trials: TrialRecording[];
   viewport_changes: ViewportChange[];
@@ -207,6 +207,10 @@ export class SessionRecorder {
     type: string;
     handler: EventListenerOrEventListenerObject;
     options?: AddEventListenerOptions | boolean;
+    // True for handlers attached during a trial; cleared together at
+    // trial end. Session-scoped handlers (e.g. window resize) leave it
+    // unset and are torn down in `detachSessionListeners`.
+    trial?: boolean;
   }> = [];
 
   constructor(options: SessionRecorderOptions) {
@@ -421,12 +425,11 @@ export class SessionRecorder {
       this.mutationObserver = null;
     }
     this.detachMediaListeners();
-    // Trial-scoped handlers are recorded in boundHandlers alongside session
-    // ones; we tear down all and re-attach session listeners on next start.
-    // Simpler: detach only the trial-scoped ones tagged via __trial flag.
+    // Tear down only the trial-scoped handlers; session-scoped handlers
+    // (resize, focus, blur, fullscreenchange) stay attached until stop().
     const remaining: typeof this.boundHandlers = [];
     for (const b of this.boundHandlers) {
-      if ((b as any).__trial) {
+      if (b.trial) {
         b.target.removeEventListener(b.type, b.handler, b.options);
       } else {
         remaining.push(b);
@@ -790,9 +793,10 @@ export class SessionRecorder {
     options?: AddEventListenerOptions | boolean
   ) {
     target.addEventListener(type, handler, options);
-    const entry = { target, type, handler, options };
-    if (this.mutationObserver) (entry as any).__trial = true;
-    this.boundHandlers.push(entry);
+    // Trial-scoped binds happen while `mutationObserver` is set (i.e. inside
+    // `attachTrialListeners`); session-scoped binds happen when it is not.
+    const trial = this.mutationObserver !== null;
+    this.boundHandlers.push({ target, type, handler, options, trial });
   }
 
   private pushEvent(ev: RecordedEvent) {

@@ -291,4 +291,148 @@ describe("record_session option", () => {
     // the experiment can settle without tripping later assertions.
     await pressKey("a");
   });
+
+  test("captures multiple trials, each with its own initial_dom and events", async () => {
+    const jsPsych = initJsPsych({ record_session: true });
+    await startTimeline(
+      [
+        { type: htmlKeyboardResponse, stimulus: "<p>first</p>" },
+        { type: htmlKeyboardResponse, stimulus: "<p>second</p>" },
+        { type: htmlKeyboardResponse, stimulus: "<p>third</p>" },
+      ],
+      jsPsych
+    );
+    await pressKey("a");
+    await pressKey("a");
+    await pressKey("a");
+
+    const rec = jsPsych.getSessionRecording()!;
+    expect(rec.trials).toHaveLength(3);
+    expect(rec.trials.map((t) => t.trial_index)).toEqual([0, 1, 2]);
+
+    // Each trial has its own DOM baseline and a non-null t_dom_ready / t_end.
+    for (const trial of rec.trials) {
+      expect(trial.initial_dom).not.toBeNull();
+      expect(trial.t_dom_ready).not.toBeNull();
+      expect(trial.t_end).not.toBeNull();
+    }
+
+    // Trials are chronologically ordered (each starts after the previous ended).
+    expect(rec.trials[1].t_start).toBeGreaterThanOrEqual(rec.trials[0].t_end!);
+    expect(rec.trials[2].t_start).toBeGreaterThanOrEqual(rec.trials[1].t_end!);
+
+    // The DOM baselines should reflect the distinct stimuli.
+    const html = (dom: any) => JSON.stringify(dom);
+    expect(html(rec.trials[0].initial_dom)).toContain("first");
+    expect(html(rec.trials[1].initial_dom)).toContain("second");
+    expect(html(rec.trials[2].initial_dom)).toContain("third");
+  });
+
+  test("captures viewport_changes when the window resizes", async () => {
+    const jsPsych = initJsPsych({ record_session: true });
+    await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "x",
+          on_load: () => {
+            // Mutate jsdom's reported viewport size, then dispatch resize.
+            Object.defineProperty(window, "innerWidth", {
+              configurable: true,
+              value: 9999,
+            });
+            Object.defineProperty(window, "innerHeight", {
+              configurable: true,
+              value: 8888,
+            });
+            window.dispatchEvent(new Event("resize"));
+          },
+        },
+      ],
+      jsPsych
+    );
+    // The recorder debounces viewport reads with a 100 ms trailing timer; let
+    // it fire before the trial ends.
+    await new Promise((r) => setTimeout(r, 150));
+    await pressKey("a");
+
+    const rec = jsPsych.getSessionRecording()!;
+    expect(rec.viewport_changes.length).toBeGreaterThan(0);
+    const last = rec.viewport_changes[rec.viewport_changes.length - 1];
+    expect(last.w).toBe(9999);
+    expect(last.h).toBe(8888);
+  });
+
+  test("captures window focus/blur events", async () => {
+    const jsPsych = initJsPsych({ record_session: true });
+    await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "x",
+          on_load: () => {
+            window.dispatchEvent(new Event("blur"));
+            window.dispatchEvent(new Event("focus"));
+          },
+        },
+      ],
+      jsPsych
+    );
+    await pressKey("a");
+
+    const rec = jsPsych.getSessionRecording()!;
+    const focusEvents = rec.trials[0].events.filter((e) => e.type === "focus" || e.type === "blur");
+    // Both blur and focus should be present.
+    expect(focusEvents.map((e) => e.type)).toEqual(expect.arrayContaining(["blur", "focus"]));
+  });
+
+  test("captures media play and pause events for video elements", async () => {
+    const jsPsych = initJsPsych({ record_session: true });
+    await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus: '<video id="vid" src="about:blank"></video>',
+          on_load: () => {
+            const video = document.getElementById("vid") as HTMLVideoElement;
+            video.dispatchEvent(new Event("play"));
+            video.dispatchEvent(new Event("pause"));
+          },
+        },
+      ],
+      jsPsych
+    );
+    await pressKey("a");
+
+    const rec = jsPsych.getSessionRecording()!;
+    const mediaEvents = rec.trials[0].events.filter((e) =>
+      ["media.play", "media.pause", "media.ended", "media.seeked", "media.time"].includes(e.type)
+    );
+    expect(mediaEvents.map((e) => e.type)).toEqual(
+      expect.arrayContaining(["media.play", "media.pause"])
+    );
+  });
+
+  test("abortExperiment marks the recording end_reason as 'aborted'", async () => {
+    const jsPsych = initJsPsych({ record_session: true });
+    await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "first",
+          on_finish: () => {
+            jsPsych.abortExperiment("done");
+          },
+        },
+        { type: htmlKeyboardResponse, stimulus: "second" },
+      ],
+      jsPsych
+    );
+    await pressKey("a");
+
+    const rec = jsPsych.getSessionRecording()!;
+    expect(rec.end_reason).toBe("aborted");
+    // Only the first trial should have started; the second never did.
+    expect(rec.trials).toHaveLength(1);
+  });
 });
