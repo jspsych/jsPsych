@@ -11,7 +11,11 @@ on:
 # branch and edit the PR comment.
 permissions:
   contents: write
-  pull-requests: read
+  # `pull-requests: write` is required (despite PR comments using the issues
+  # API endpoint) because GitHub Actions enforces PR-targeted writes against
+  # the `pull-requests` scope. Without this, peter-evans/create-or-update-comment
+  # silently no-ops on PRs.
+  pull-requests: write
   issues: write
   actions: read
 
