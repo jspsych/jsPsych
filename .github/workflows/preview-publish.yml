@@ -1,0 +1,166 @@
+name: preview-publish
+
+on:
+  workflow_run:
+    workflows: ["preview-build"]
+    types:
+      - completed
+
+# Runs in trusted context (base repo) and consumes the artifact produced by
+# preview-build.yml. Holds the write permissions needed to push the preview
+# branch and edit the PR comment.
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: read
+
+jobs:
+  publish:
+    name: Publish preview & comment
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download preview artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: preview-dist
+          path: preview-dist
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: Read metadata
+        id: meta
+        run: |
+          set -euo pipefail
+          pr_number=$(jq -r '.pr_number' preview-dist/metadata.json)
+          head_sha=$(jq -r '.head_sha' preview-dist/metadata.json)
+          changed=$(jq -c '.changed_packages' preview-dist/metadata.json)
+          echo "pr_number=$pr_number" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+
+      - name: Push preview branch
+        id: push
+        run: |
+          set -euo pipefail
+          branch="preview/pr-${{ steps.meta.outputs.pr_number }}"
+
+          # Move artifact contents outside the worktree before we wipe it.
+          mv preview-dist /tmp/preview-dist
+
+          git config user.name "jspsych-preview-bot"
+          git config user.email "jspsych-preview-bot@users.noreply.github.com"
+
+          # Force-push a fresh orphan branch each run so history stays shallow.
+          git checkout --orphan "$branch"
+          git rm -rf . > /dev/null 2>&1 || true
+          # Defensive cleanup of any untracked leftovers.
+          find . -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+
+          cp -r /tmp/preview-dist/packages .
+          cp /tmp/preview-dist/metadata.json .
+
+          git add packages metadata.json
+          git commit -m "Preview build for PR #${{ steps.meta.outputs.pr_number }} @ ${{ steps.meta.outputs.head_sha }}"
+          git push --force origin "$branch"
+
+          preview_sha=$(git rev-parse HEAD)
+          echo "preview_sha=$preview_sha" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+
+      - name: Build comment body
+        env:
+          PREVIEW_SHA: ${{ steps.push.outputs.preview_sha }}
+          PREVIEW_BRANCH: ${{ steps.push.outputs.branch }}
+          PR_HEAD_SHA: ${{ steps.meta.outputs.head_sha }}
+          PR_NUMBER: ${{ steps.meta.outputs.pr_number }}
+          CHANGED: ${{ steps.meta.outputs.changed }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          short="${PREVIEW_SHA:0:7}"
+          head_short="${PR_HEAD_SHA:0:7}"
+          base="https://cdn.jsdelivr.net/gh/${REPO}@${PREVIEW_SHA}"
+          src_dir="/tmp/preview-dist"
+
+          # Per-package URLs sourced from what the build actually produced.
+          all_links=""
+          for pkg_dir in "$src_dir"/packages/*/; do
+            name=$(basename "$pkg_dir")
+            pkg_name=$(jq -r '.name // empty' "${pkg_dir}package.json" 2>/dev/null || echo "")
+            [ -z "$pkg_name" ] && pkg_name="$name"
+            if [ -f "${pkg_dir}dist/index.browser.min.js" ]; then
+              all_links+="- \`${pkg_name}\` → \`${base}/packages/${name}/dist/index.browser.min.js\`"$'\n'
+            fi
+          done
+
+          # Quick-start: jspsych core + a sensible plugin (changed plugin if any, else html-keyboard-response).
+          quickstart_plugin=""
+          for pkg in $(echo "$CHANGED" | jq -r '.[]?'); do
+            case "$pkg" in
+              plugin-*)
+                if [ -f "${src_dir}/packages/${pkg}/dist/index.browser.min.js" ]; then
+                  quickstart_plugin="$pkg"
+                  break
+                fi
+                ;;
+            esac
+          done
+          if [ -z "$quickstart_plugin" ] && [ -f "${src_dir}/packages/plugin-html-keyboard-response/dist/index.browser.min.js" ]; then
+            quickstart_plugin="plugin-html-keyboard-response"
+          fi
+
+          {
+            echo '<script src="'"${base}"'/packages/jspsych/dist/index.browser.min.js"></script>'
+            echo '<link rel="stylesheet" href="'"${base}"'/packages/jspsych/css/jspsych.css">'
+            if [ -n "$quickstart_plugin" ]; then
+              echo '<script src="'"${base}"'/packages/'"${quickstart_plugin}"'/dist/index.browser.min.js"></script>'
+            fi
+          } > /tmp/quickstart.html
+
+          changed_md=$(echo "$CHANGED" | jq -r 'if (. // [] | length) == 0 then "_none detected_" else map("`" + . + "`") | join(", ") end')
+          timestamp=$(date -u +'%Y-%m-%d %H:%M UTC')
+
+          {
+            echo '<!-- jspsych-preview-bot -->'
+            echo '### 📦 Preview build ready'
+            echo ''
+            echo "Built from PR head \`${head_short}\` and published at \`${short}\` on branch [\`${PREVIEW_BRANCH}\`](https://github.com/${REPO}/tree/${PREVIEW_BRANCH})."
+            echo 'URLs below are pinned to an immutable commit SHA, so they are safe to share and are cached permanently by jsDelivr.'
+            echo ''
+            echo "**Changed packages:** ${changed_md}"
+            echo ''
+            echo '**Quick-start HTML:**'
+            echo ''
+            echo '```html'
+            cat /tmp/quickstart.html
+            echo '```'
+            echo ''
+            echo '<details><summary>All package URLs</summary>'
+            echo ''
+            echo "$all_links"
+            echo '</details>'
+            echo ''
+            echo "_Last updated ${timestamp} for PR head \`${head_short}\`._"
+          } > comment.md
+
+      - name: Find existing preview comment
+        id: find
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ steps.meta.outputs.pr_number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- jspsych-preview-bot -->'
+
+      - name: Create or update preview comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find.outputs.comment-id }}
+          issue-number: ${{ steps.meta.outputs.pr_number }}
+          body-path: comment.md
+          edit-mode: replace

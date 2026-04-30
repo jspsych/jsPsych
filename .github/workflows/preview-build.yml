@@ -1,0 +1,73 @@
+name: preview-build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+# Runs in untrusted context for fork PRs: no secrets, no write permissions.
+# A separate workflow (preview-publish.yml) consumes the artifact in trusted context.
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build preview dist
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build packages
+        run: npm run build
+
+      - name: Stage preview dist
+        run: |
+          set -euo pipefail
+          mkdir -p preview-dist/packages
+          for pkg in packages/*/; do
+            name=$(basename "$pkg")
+            if [ -d "${pkg}dist" ] || [ -d "${pkg}css" ]; then
+              mkdir -p "preview-dist/packages/$name"
+              [ -d "${pkg}dist" ] && cp -r "${pkg}dist" "preview-dist/packages/$name/"
+              [ -d "${pkg}css" ] && cp -r "${pkg}css" "preview-dist/packages/$name/"
+              [ -f "${pkg}package.json" ] && cp "${pkg}package.json" "preview-dist/packages/$name/"
+            fi
+          done
+
+      - name: Compute changed packages
+        id: changed
+        run: |
+          set -euo pipefail
+          git fetch origin main --depth=1
+          changed=$(git diff --name-only origin/main...HEAD -- 'packages/*' \
+            | awk -F/ 'NF>1 {print $2}' | sort -u | jq -R . | jq -sc .)
+          echo "packages=$changed" >> "$GITHUB_OUTPUT"
+
+      - name: Write metadata
+        run: |
+          cat > preview-dist/metadata.json <<EOF
+          {
+            "pr_number": ${{ github.event.pull_request.number }},
+            "head_sha": "${{ github.event.pull_request.head.sha }}",
+            "head_ref": "${{ github.event.pull_request.head.ref }}",
+            "changed_packages": ${{ steps.changed.outputs.packages }}
+          }
+          EOF
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: preview-dist
+          path: preview-dist/
+          retention-days: 3
+          if-no-files-found: error

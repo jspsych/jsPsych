@@ -1,0 +1,28 @@
+name: preview-cleanup
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    name: Delete preview branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Delete preview branch
+        run: |
+          set -euo pipefail
+          branch="preview/pr-${{ github.event.pull_request.number }}"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            git push origin --delete "$branch"
+            echo "Deleted $branch"
+          else
+            echo "No preview branch to delete ($branch)"
+          fi
