@@ -479,7 +479,7 @@ Returns a `SessionRecording` object when the experiment was initialized with `re
 
 ### Description
 
-Returns the high-fidelity session recording produced by the `record_session` option. The recording includes a snapshot of the trial parameters and rendered DOM at the start of every trial, all DOM mutations within `#jspsych-content`, mouse, touch, keyboard, and clipboard events, video and audio playback events, viewport changes, and every `Math.random()` output. The returned object contains the schema version (`schema_version: 1`); the on-disk format is the contract between recorder and any replayer.
+Returns the high-fidelity session recording produced by the `record_session` option. The recording includes the rendered DOM at the start of every trial, all DOM mutations within `#jspsych-content`, mouse, touch, keyboard, and clipboard events, scroll position (window and per-element), video and audio playback events, viewport changes, and every `Math.random()` output. The returned object is versioned (`schema_version: 1`); see [Session Recording Schema](./session-recording-schema.md) for the full format reference.
 
 ### Example
 
