@@ -1,0 +1,35 @@
+name: preview-cleanup
+
+# Uses pull_request_target so fork PR closes also have write access to the
+# base repo (the GITHUB_TOKEN for the plain `pull_request` event is read-only
+# on fork PRs regardless of declared permissions). Safe here because we never
+# check out or run PR code -- the job only deletes a ref by a number derived
+# from the trusted event payload.
+on:
+  pull_request_target:
+    types: [closed]
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    name: Delete preview branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Delete preview branch
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          branch="preview/pr-${PR_NUMBER}"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            git push origin --delete "$branch"
+            echo "Deleted $branch"
+          else
+            echo "No preview branch to delete ($branch)"
+          fi
