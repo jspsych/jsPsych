@@ -236,23 +236,13 @@ describe("record_session option", () => {
     const recorder = (jsPsych as any).sessionRecorder as {
       start: (el: HTMLElement) => void;
       stop: (reason?: "finished" | "aborted" | "unload") => void;
-      onTrialStart: (info: {
-        trial_index: number;
-        plugin: string;
-        trial_params: unknown;
-        stimulus_source: string | null;
-      }) => void;
+      onTrialStart: (info: { trial_index: number; plugin: string }) => void;
       onTrialFinish: (data: unknown) => void;
       getRecording: () => any;
     };
 
     recorder.start(jsPsych.getDisplayElement());
-    recorder.onTrialStart({
-      trial_index: 0,
-      plugin: "synthetic",
-      trial_params: { foo: "bar" },
-      stimulus_source: null,
-    });
+    recorder.onTrialStart({ trial_index: 0, plugin: "synthetic" });
     recorder.onTrialFinish({ rt: 100 });
     recorder.stop("finished");
 

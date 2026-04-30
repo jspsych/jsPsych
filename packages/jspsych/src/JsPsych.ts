@@ -9,7 +9,7 @@ import { JsPsychExtension } from "./modules/extensions";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
-import { SessionRecorder, SessionRecording, extractStimulusSource } from "./modules/recording";
+import { SessionRecorder, SessionRecording } from "./modules/recording";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
 import { ProgressBar } from "./ProgressBar";
@@ -424,8 +424,6 @@ export class JsPsych {
       this.sessionRecorder?.onTrialStart({
         trial_index: trial.index ?? -1,
         plugin: trial.pluginClass?.["info"]?.name ?? "unknown",
-        trial_params: trial.trialObject,
-        stimulus_source: extractStimulusSource(trial.trialObject),
       });
       this.options.on_trial_start(trial.trialObject);
 
