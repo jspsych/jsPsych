@@ -2,6 +2,12 @@ name: build
 
 on:
   push:
+    # Preview branches contain only built dist artifacts (no source), so the
+    # build/lint/test job would always fail on them. They're created by the
+    # preview-publish workflow on every PR push, which would otherwise trigger
+    # this workflow many times per PR.
+    branches-ignore:
+      - 'preview/**'
   pull_request:
     types: [opened, reopened, ready_for_review, review_requested, synchronize]
 

@@ -11,7 +11,7 @@ on:
 # branch and edit the PR comment.
 permissions:
   contents: write
-  pull-requests: write
+  pull-requests: read
   issues: write
   actions: read
 
@@ -60,10 +60,27 @@ jobs:
               return;
             }
 
+            // Guard against the close/build race: if the PR was closed while
+            // preview-build was running, preview-cleanup may have already deleted
+            // the preview branch. Re-creating it here would orphan a branch with
+            // no further cleanup trigger.
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+            });
+            if (pr.state !== 'open') {
+              core.notice(`PR #${prNumber} is ${pr.state}; skipping preview publish.`);
+              core.setOutput('skip', 'true');
+              return;
+            }
+
+            core.setOutput('skip', 'false');
             core.setOutput('number', String(prNumber));
             core.setOutput('head_sha', headSha);
 
       - name: Download preview artifact
+        if: steps.pr.outputs.skip != 'true'
         uses: actions/download-artifact@v4
         with:
           name: preview-dist
@@ -71,11 +88,26 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id }}
 
+      # The artifact comes from untrusted PR code. `cp -r` follows symlinks by
+      # default, so a symlink in the artifact tree could exfiltrate runner-local
+      # files into the preview branch (which jsDelivr will publish). Refuse any
+      # symlink rather than trying to handle it safely.
+      - name: Reject symlinks in artifact
+        if: steps.pr.outputs.skip != 'true'
+        run: |
+          set -euo pipefail
+          if find preview-dist -type l -print -quit | grep -q .; then
+            echo "Refusing artifact: contains symlinks" >&2
+            find preview-dist -type l >&2
+            exit 1
+          fi
+
       # Validate the artifact's self-reported metadata against the trusted values
       # before using anything from it. The `changed` list is sanitized to
       # `[A-Za-z0-9_-]+` entries so it can't be used for path traversal or shell
       # injection downstream.
       - name: Validate artifact metadata
+        if: steps.pr.outputs.skip != 'true'
         id: meta
         env:
           TRUSTED_PR_NUMBER: ${{ steps.pr.outputs.number }}
@@ -101,6 +133,7 @@ jobs:
           echo "changed=$changed" >> "$GITHUB_OUTPUT"
 
       - name: Push preview branch
+        if: steps.pr.outputs.skip != 'true'
         id: push
         env:
           PR_NUMBER: ${{ steps.meta.outputs.pr_number }}
@@ -133,6 +166,7 @@ jobs:
           echo "branch=$branch" >> "$GITHUB_OUTPUT"
 
       - name: Build comment body
+        if: steps.pr.outputs.skip != 'true'
         env:
           PREVIEW_SHA: ${{ steps.push.outputs.preview_sha }}
           PREVIEW_BRANCH: ${{ steps.push.outputs.branch }}
@@ -216,6 +250,7 @@ jobs:
           } > comment.md
 
       - name: Find existing preview comment
+        if: steps.pr.outputs.skip != 'true'
         id: find
         uses: peter-evans/find-comment@v3
         with:
@@ -224,6 +259,7 @@ jobs:
           body-includes: '<!-- jspsych-preview-bot -->'
 
       - name: Create or update preview comment
+        if: steps.pr.outputs.skip != 'true'
         uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.find.outputs.comment-id }}
