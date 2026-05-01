@@ -3,9 +3,26 @@ import { pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { initJsPsych } from "../../src";
 
+function findById(node: any, id: string): any {
+  if (node?.attrs?.id === id) return node;
+  for (const c of node?.children ?? []) {
+    const found = findById(c, id);
+    if (found) return found;
+  }
+  return null;
+}
+
 describe("record_session option", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
+    // initJsPsych adds the `jspsych-display-element` class to whatever
+    // element it's given, defaulting to <body>. classList changes are
+    // not undone by clearing innerHTML, so without this reset the body
+    // accumulates layout classes from previous tests and the spine in
+    // `initial_dom` extends past where it should.
+    document.body.className = "";
+    document.body.removeAttribute("style");
+    document.body.removeAttribute("tabindex");
   });
 
   test("returns undefined when not enabled", async () => {
@@ -31,6 +48,93 @@ describe("record_session option", () => {
     expect(trial.t_dom_ready).not.toBeNull();
     expect(trial.t_end).not.toBeNull();
     expect(trial.initial_dom).not.toBeNull();
+  });
+
+  describe("display spine in initial_dom", () => {
+    test("initial_dom is rooted at the outermost jspsych-* ancestor, not at the content div", async () => {
+      // Without the spine, replayers only get <div class="jspsych-content">
+      // and the centering CSS (which targets the wrapper and outer container)
+      // can't take effect.
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline([{ type: htmlKeyboardResponse, stimulus: "<p>x</p>" }], jsPsych);
+      await pressKey("a");
+
+      const root = jsPsych.getSessionRecording()!.trials[0].initial_dom!;
+      expect(root.kind).toBe("element");
+      // jsPsych adds the jspsych-display-element class to the user's
+      // display container (here, the body since none was provided).
+      const rootClasses = ((root as any).attrs.class ?? "").split(/\s+/);
+      expect(rootClasses).toContain("jspsych-display-element");
+    });
+
+    test("the spine includes the jspsych-content-wrapper between container and content", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline([{ type: htmlKeyboardResponse, stimulus: "<p>x</p>" }], jsPsych);
+      await pressKey("a");
+
+      const root = jsPsych.getSessionRecording()!.trials[0].initial_dom! as any;
+      // root → content-wrapper → jspsych-content
+      expect(root.children).toHaveLength(1);
+      const wrapper = root.children[0];
+      expect((wrapper.attrs.class ?? "").split(/\s+/)).toContain("jspsych-content-wrapper");
+      expect(wrapper.children).toHaveLength(1);
+      const content = wrapper.children[0];
+      expect((content.attrs.class ?? "").split(/\s+/)).toContain("jspsych-content");
+      expect(content.attrs.id).toBe("jspsych-content");
+    });
+
+    test("trial content from the plugin lives inside the jspsych-content node, not the spine wrappers", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [{ type: htmlKeyboardResponse, stimulus: '<p id="trial-p">hello</p>' }],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const root = jsPsych.getSessionRecording()!.trials[0].initial_dom! as any;
+      // Walk down the spine to the jspsych-content node, then search its
+      // subtree for the trial paragraph. Plugins typically wrap their
+      // stimulus in a plugin-specific div, so the <p> is a descendant
+      // of jspsych-content rather than a direct child.
+      const wrapper = root.children[0];
+      const content = wrapper.children[0];
+      expect((content.attrs.class ?? "").split(/\s+/)).toContain("jspsych-content");
+      const trialP = findById(content, "trial-p");
+      expect(trialP).toBeDefined();
+      // Sibling content under outer wrappers must not appear in initial_dom
+      // even when display_element defaults to <body>; the spine excludes
+      // body siblings by design.
+      const containerSiblings = root.children.filter((c: any) => c !== wrapper);
+      expect(containerSiblings).toHaveLength(0);
+    });
+
+    test("the spine stops at the displayContainer (not the body when display_element is custom)", async () => {
+      // When the user provides a custom display_element, the recorder
+      // should walk up through the jsPsych-managed wrappers but stop at
+      // their host. Capturing further would risk including unrelated
+      // page chrome (siblings of the host inside <body>).
+      const host = document.createElement("div");
+      host.id = "experiment-host";
+      document.body.appendChild(host);
+
+      const jsPsych = initJsPsych({ record_session: true, display_element: host });
+      // `pressKey` dispatches on `document.body`, but with a custom
+      // display_element the keyboard listener is rooted at `host` (which
+      // sits inside body, not above it), so the keypress never reaches
+      // the listener. Use `trial_duration` to auto-advance instead so the
+      // run resolves and the recorder's stop() fires before the next test.
+      const tl = await startTimeline(
+        [{ type: htmlKeyboardResponse, stimulus: "<p>x</p>", trial_duration: 1 }],
+        jsPsych
+      );
+      await tl.finished;
+
+      const root = jsPsych.getSessionRecording()!.trials[0].initial_dom! as any;
+      // The spine's outermost element is the user's host (which jsPsych
+      // tagged with jspsych-display-element); the parent <body> is excluded
+      // because it isn't the displayContainer.
+      expect(root.attrs.id).toBe("experiment-host");
+    });
   });
 
   test("captures Math.random calls in the session-level rng_calls log", async () => {

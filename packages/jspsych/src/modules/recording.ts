@@ -219,6 +219,11 @@ export class SessionRecorder {
   private readonly jspsychVersion: string;
   private recording: SessionRecording;
   private displayElement: HTMLElement | null = null;
+  // Outermost layout root for the experiment. The spine in `initial_dom`
+  // walks from `displayElement` up to and including this element so the
+  // jsPsych layout containers (and the host's classes/attrs) are
+  // captured. When unset we fall back to serializing only `displayElement`.
+  private displayContainer: HTMLElement | null = null;
   private running = false;
 
   private startPerf = 0;
@@ -312,7 +317,7 @@ export class SessionRecorder {
 
   // -------- lifecycle --------
 
-  start(displayElement: HTMLElement) {
+  start(displayElement: HTMLElement, displayContainer?: HTMLElement) {
     // Idempotent: starting an already-running recorder is a no-op.
     if (this.running) return;
 
@@ -326,6 +331,7 @@ export class SessionRecorder {
 
     this.running = true;
     this.displayElement = displayElement;
+    this.displayContainer = displayContainer ?? null;
     this.startPerf = performance.now();
     this.recording.recording_started_at = new Date().toISOString();
     this.recording.recording_started_at_perf = this.startPerf;
@@ -398,7 +404,7 @@ export class SessionRecorder {
     if (!this.currentTrial || !this.displayElement) return;
     this.currentTrial.t_dom_ready = this.t();
     this.resetNodeIds();
-    this.currentTrial.initial_dom = this.serializeNode(this.displayElement);
+    this.currentTrial.initial_dom = this.serializeDisplaySpine(this.displayElement);
     this.attachTrialListeners();
     this.scanForMediaElements(this.displayElement);
     this.scanForCanvasElements(this.displayElement);
@@ -627,6 +633,48 @@ export class SessionRecorder {
         this.releaseSubtree(child);
       }
     }
+  }
+
+  // Serializes `displayElement` plus the chain of ancestors leading up
+  // to (and including) `displayContainer`. The returned tree is a
+  // "spine": each ancestor is captured with its tag and attributes, but
+  // only the descendant on the path to `displayElement` appears as a
+  // child — sibling content (e.g. unrelated body elements when
+  // `display_element` is `<body>`) is intentionally omitted.
+  //
+  // Without this, `initial_dom` would only contain `<div class=
+  // "jspsych-content">` and the trial subtree below it. The CSS that
+  // vertically centers experiment content lives on the wrappers
+  // (`jspsych-content-wrapper`, `jspsych-display-element`); replayers
+  // need those nodes to exist for `margin: auto` and the flex column
+  // to do their work.
+  //
+  // If no `displayContainer` was provided to `start()`, we fall back to
+  // serializing only `displayElement` so existing callers don't change
+  // behavior.
+  private serializeDisplaySpine(displayElement: HTMLElement): DomNode | null {
+    let root = this.serializeNode(displayElement);
+    if (!root) return null;
+    if (!this.displayContainer || this.displayContainer === displayElement) return root;
+    let cur: Element | null = displayElement.parentElement;
+    while (cur) {
+      root = this.wrapInElement(cur, root);
+      if (cur === this.displayContainer) break;
+      cur = cur.parentElement;
+    }
+    return root;
+  }
+
+  private wrapInElement(el: Element, child: DomNode): ElementNode {
+    const attrs: Record<string, string> = {};
+    for (const a of Array.from(el.attributes)) attrs[a.name] = a.value;
+    return {
+      id: this.assignId(el),
+      kind: "element",
+      tag: el.tagName.toLowerCase(),
+      attrs,
+      children: [child],
+    };
   }
 
   private serializeNode(node: Node): DomNode | null {

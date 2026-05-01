@@ -82,15 +82,32 @@ interface TrialRecording {
 | `t_dom_ready` | When the plugin's initial render completed (`on_load` fired). `initial_dom` was sampled at this moment. `null` if a recording was stopped before this point. |
 | `t_end` | When the trial ended. `null` if the recording was stopped before the trial finished. |
 | `plugin` | The plugin name (e.g. `"html-keyboard-response"`). For labeling and filtering only; replay does not depend on it. |
-| `initial_dom` | The DOM subtree of the display element at `t_dom_ready`. See [DOM representation](#dom-representation). |
+| `initial_dom` | A "spine" DOM tree at `t_dom_ready` that walks from the display container down to the display element and includes the trial subtree. See [DOM representation](#dom-representation) and [Display spine](#display-spine). |
 | `events` | Chronological log of mutations and input events from `t_dom_ready` to `t_end`. Empty arrays are valid. |
 | `trial_data` | The data row written to `jsPsych.data` for this trial (the same object exported via `data.csv` / `data.json`). Includes `rt`, `response`, `trial_type`, `trial_index`, etc. |
 
 ### Replay procedure for a single trial
 
-1. Clear the display element.
-2. Instantiate `initial_dom` into the display element.
+1. Clear the host element you render into.
+2. Instantiate `initial_dom` into the host. The recording's `initial_dom` is itself rooted at the experiment's display container (carrying the `jspsych-display-element` class), so you do not need to add wrapper classes yourself.
 3. Apply each entry in `events` at its `t`, in order.
+
+### Display spine
+
+`initial_dom` is not just the trial content — it is the chain of layout-bearing ancestors that wrap the trial content, with non-essential siblings stripped out. The shape is fixed for any jsPsych experiment:
+
+```
+display container (e.g. <body class="jspsych-display-element"> or the user's host)
+└── <div class="jspsych-content-wrapper">
+    └── <div id="jspsych-content" class="jspsych-content">
+        └── (trial-rendered content)
+```
+
+The recorder captures each ancestor's tag and attributes, but only the descendant on the path to the display element appears as a child. So when `display_element` defaults to `<body>`, the captured `<body>` node carries body's classes/style but has only the wrapper as a child — sibling content elsewhere in `<body>` is intentionally omitted.
+
+Why this matters: the CSS that vertically centers experiment content lives on `.jspsych-content-wrapper` (`margin: auto; flex: 1 1 100%`) and `.jspsych-display-element` (`display: flex; flex-direction: column`). Without the wrappers, `.jspsych-content`'s `margin: auto` has no flex parent to center against and the layout collapses to top-aligned, unstyled content.
+
+DOM mutations during the trial reference ids assigned during the spine serialization. The `MutationObserver` is scoped to the display element (`#jspsych-content`), so only mutations within that subtree are tracked at runtime — the wrappers are static and don't produce mutation events.
 
 ## DOM representation
 

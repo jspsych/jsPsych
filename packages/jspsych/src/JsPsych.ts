@@ -155,7 +155,7 @@ export class JsPsych {
 
     this.experimentStartTime = new Date();
 
-    this.sessionRecorder?.start(this.getDisplayElement());
+    this.sessionRecorder?.start(this.getDisplayElement(), this.getDisplayContainerElement());
 
     // The recorder patches `Math.random` and attaches global listeners; we
     // must always tear it down (and remove interaction listeners), even if
