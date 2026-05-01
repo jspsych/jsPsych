@@ -12,7 +12,8 @@ A replayer treats this recording as observational. It does not re-execute trial 
 
 1. The DOM snapshot captured at each trial's `on_load` (`trial.initial_dom`).
 2. The chronological mutation and input event log scoped to that trial (`trial.events`).
-3. Session-level metadata for context (viewport, scroll, RNG outputs, focus/blur, fullscreen).
+3. The session-level stylesheet snapshot (`stylesheets`) so the reconstructed DOM is styled identically to the original.
+4. Session-level metadata for context (viewport, scroll, RNG outputs, focus/blur, fullscreen).
 
 Each trial is a self-contained replay unit because jsPsych wipes the display element between trials.
 
@@ -28,6 +29,7 @@ interface SessionRecording {
   viewport: ViewportState;
   rng: { seed: string | null; math_random_patched: boolean };
   display_element_id: string;
+  stylesheets: StylesheetSnapshot[];
   trials: TrialRecording[];
   viewport_changes: ViewportChange[];
   rng_calls: RngCall[];
@@ -47,6 +49,7 @@ interface SessionRecording {
 | `rng.seed` | The seed installed via `jsPsych.randomization.setSeed` for the session, or `null` if `Math.random` was already non-native at recording start. |
 | `rng.math_random_patched` | `true` while recording is active; `Math.random` is wrapped to log every call into `rng_calls`. |
 | `display_element_id` | The `id` attribute of the display element (`#jspsych-content` by default). |
+| `stylesheets` | Snapshot of every stylesheet attached to the document at session start. See [Stylesheets](#stylesheets). |
 | `trials` | Per-trial recordings, in chronological order. See [`TrialRecording`](#trialrecording). |
 | `viewport_changes` | Session-level log of viewport changes (window resize, page zoom, pinch zoom, pinch pan). |
 | `rng_calls` | Chronological log of every `Math.random` output. Includes calls outside trial boundaries (parameter eval, ITI, `on_finish`). |
@@ -120,7 +123,32 @@ Every node in `initial_dom` is assigned a monotonically-increasing integer `id`.
 - Canvas/WebGL pixel content. Only the element and its dimensions are recorded.
 - Audio/video media data. Only playback events (`media.play`, `media.pause`, etc.) and the source URL are recorded.
 - Shadow DOM. jsPsych does not use it in core; recordings will not capture mutations inside shadow roots.
-- Styles applied via `<link rel="stylesheet">` referencing external sheets. The link element itself is recorded; the resolved CSS is not. Replayers generally need to load the same stylesheets out-of-band.
+- Stylesheet additions, removals, or rule mutations that occur after `start()`. The session-level [stylesheets](#stylesheets) snapshot is taken once at session start; it is not updated when later trials inject `<style>` tags or modify rules at runtime.
+
+## Stylesheets
+
+```ts
+type StylesheetSnapshot =
+  | { kind: "inline"; css: string;        media: string | null }
+  | { kind: "link";   href: string; css: string | null; media: string | null };
+```
+
+`stylesheets` is the snapshot of every entry in `document.styleSheets` at session start. It exists so a replayer can re-apply the same CSS to the reconstructed DOM — `initial_dom` carries class hooks like `.jspsych-display-element`, and without the matching rules the replay would render unstyled.
+
+| Field | Description |
+| ----- | ----------- |
+| `kind` | `"inline"` for `<style>` tags; `"link"` for `<link rel="stylesheet">`. |
+| `css` | Resolved rule text (joined `cssRules.cssText`). `null` for `<link>` sheets when `cssRules` access throws (cross-origin sheets without CORS headers). |
+| `href` | The link's resolved URL. Replayers can refetch the source from this URL when `css` is `null`. |
+| `media` | The sheet's `media` attribute, or `null` if unset. |
+
+**Replay guidance.** For each entry, inject a `<style>` element with the captured `css` text into the replayer's document head. When `css` is `null` for a `link` entry, fetch the stylesheet from `href` (or substitute a known-good copy of the same asset) and inject the result. Apply the `media` attribute on the injected element so media-conditional rules behave correctly.
+
+**Limitations.**
+
+- Snapshot is taken once at `start()`. Later mutations to the document's stylesheets — additions, removals, or `CSSOM` rule edits — are not tracked.
+- `@import` rules within a captured stylesheet are recorded as text. The imported sheet itself is not inlined; if the replayer's environment cannot resolve the import URL, those rules will not apply.
+- Pseudo-classes (`:hover`, `:focus`) and media queries are recorded as part of the rule text but only take effect during replay if the replayer reproduces the corresponding state or viewport.
 
 ## Event types
 

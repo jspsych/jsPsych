@@ -21,6 +21,7 @@ export interface SessionRecording {
   viewport: ViewportState;
   rng: { seed: string | null; math_random_patched: boolean };
   display_element_id: string;
+  stylesheets: StylesheetSnapshot[];
   trials: TrialRecording[];
   viewport_changes: ViewportChange[];
   // Chronological log of every Math.random output consumed during the
@@ -32,6 +33,15 @@ export interface SessionRecording {
   ended_at_perf: number | null;
   end_reason: "finished" | "aborted" | "unload" | null;
 }
+
+// A snapshot of one stylesheet attached to the document at session start.
+// `inline` covers `<style>` tags; `link` covers `<link rel="stylesheet">`.
+// `css` is the resolved rule text where readable. Cross-origin sheets throw
+// SecurityError on `cssRules` access; for those we record `href` only and
+// leave `css` null so a replayer can fetch the source out-of-band.
+export type StylesheetSnapshot =
+  | { kind: "inline"; css: string; media: string | null }
+  | { kind: "link"; href: string; css: string | null; media: string | null };
 
 export interface ViewportState {
   w: number;
@@ -228,6 +238,7 @@ export class SessionRecorder {
       viewport: { w: 0, h: 0, dpr: 1, scale: 1, offset_x: 0, offset_y: 0 },
       rng: { seed: null, math_random_patched: false },
       display_element_id: "",
+      stylesheets: [],
       trials: [],
       viewport_changes: [],
       rng_calls: [],
@@ -258,6 +269,7 @@ export class SessionRecorder {
     this.recording.display_element_id = displayElement.id || "";
     this.recording.viewport = readViewport();
     this.lastViewport = { ...this.recording.viewport };
+    this.recording.stylesheets = this.captureStylesheets();
 
     // Reset per-session ephemeral state so a reused recorder doesn't carry
     // stale node ids, throttle flags, or pending event buffers.
@@ -541,6 +553,70 @@ export class SessionRecorder {
     return null;
   }
 
+  // -------- stylesheet snapshot --------
+
+  // Captured at session start so a replayer can apply the same CSS to the
+  // recorded DOM. Without this, `initial_dom` reconstructs structure but
+  // not appearance — class hooks like `.jspsych-display-element` have no
+  // rules to attach to.
+  //
+  // We walk the DOM directly (rather than just `document.styleSheets`) so
+  // that <link rel="stylesheet"> tags whose sheet has not yet loaded — or
+  // failed to load — are still captured by href. For each element we then
+  // try to read the resolved rule text via the associated CSSStyleSheet:
+  //   - <style> tags: read `cssRules` (always readable for same-document
+  //     inline sheets); fall back to the element's `textContent` if rule
+  //     access throws.
+  //   - <link rel="stylesheet">: read `cssRules` if the sheet is loaded
+  //     and same-origin (or CORS-permissive). Otherwise record `href`
+  //     with `css: null` so a replayer can refetch out-of-band.
+  // Stylesheets added or mutated after `start()` are not tracked; the
+  // session-level snapshot is taken once at start.
+  private captureStylesheets(): StylesheetSnapshot[] {
+    if (typeof document === "undefined") return [];
+    const out: StylesheetSnapshot[] = [];
+    const seen = new Set<Node>();
+
+    const elements = document.querySelectorAll<HTMLElement>('style, link[rel~="stylesheet"]');
+    for (const el of Array.from(elements)) {
+      try {
+        seen.add(el);
+        const sheet = (el as unknown as { sheet?: CSSStyleSheet | null }).sheet ?? null;
+        const media = readMedia(el, sheet);
+        if (el instanceof HTMLLinkElement) {
+          const href = el.href || el.getAttribute("href") || "";
+          out.push({ kind: "link", href, css: sheet ? readSheetText(sheet) : null, media });
+        } else if (el instanceof HTMLStyleElement) {
+          const css = (sheet ? readSheetText(sheet) : null) ?? el.textContent ?? "";
+          out.push({ kind: "inline", css, media });
+        }
+      } catch {
+        // Capture must never break the experiment.
+      }
+    }
+
+    // Also include any sheets that weren't reached via the DOM walk —
+    // notably sheets pulled in via @import, which exist in
+    // `document.styleSheets` but have no `ownerNode` element.
+    for (const sheet of Array.from(document.styleSheets)) {
+      try {
+        const owner = sheet.ownerNode as Node | null;
+        if (owner && seen.has(owner)) continue;
+        const css = readSheetText(sheet);
+        const media = sheet.media && sheet.media.mediaText ? sheet.media.mediaText : null;
+        if (sheet.href) {
+          out.push({ kind: "link", href: sheet.href, css, media });
+        } else if (css !== null) {
+          out.push({ kind: "inline", css, media });
+        }
+      } catch {
+        // Capture must never break the experiment.
+      }
+    }
+
+    return out;
+  }
+
   private assignId(node: Node): number {
     let id = this.nodeIds.get(node);
     if (id === undefined) {
@@ -811,6 +887,33 @@ export class SessionRecorder {
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+
+// Reads the `media` attribute, preferring the parsed value on the
+// CSSStyleSheet (which normalizes whitespace/casing) and falling back to
+// the raw attribute on the owning element.
+function readMedia(el: HTMLElement, sheet: CSSStyleSheet | null): string | null {
+  const fromSheet = sheet?.media?.mediaText;
+  if (fromSheet) return fromSheet;
+  const attr = el.getAttribute("media");
+  return attr && attr.length > 0 ? attr : null;
+}
+
+// Reads the resolved CSS rule text from a stylesheet. Returns null when
+// `cssRules` is unreadable (cross-origin sheets without CORS access throw
+// SecurityError) so callers can record only the href in that case.
+function readSheetText(sheet: CSSStyleSheet): string | null {
+  try {
+    const rules = sheet.cssRules;
+    if (!rules) return null;
+    const parts: string[] = [];
+    for (let i = 0; i < rules.length; i++) {
+      parts.push(rules[i].cssText);
+    }
+    return parts.join("\n");
+  } catch {
+    return null;
+  }
+}
 
 function readViewport(): ViewportState {
   const vv = window.visualViewport;

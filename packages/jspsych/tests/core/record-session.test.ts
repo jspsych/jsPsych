@@ -150,6 +150,74 @@ describe("record_session option", () => {
     expect(rec.end_reason).toBe("finished");
   });
 
+  describe("stylesheet capture", () => {
+    afterEach(() => {
+      // Each test installs sheets directly on document.head; clean up so
+      // they don't leak across cases or pollute later tests in the file.
+      for (const el of Array.from(document.head.querySelectorAll("style,link"))) {
+        el.remove();
+      }
+    });
+
+    test("captures inline <style> rule text at session start", async () => {
+      const style = document.createElement("style");
+      style.textContent = ".jspsych-display-element { color: rebeccapurple; }";
+      document.head.appendChild(style);
+
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline([{ type: htmlKeyboardResponse, stimulus: "x" }], jsPsych);
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const inline = rec.stylesheets.filter((s) => s.kind === "inline");
+      expect(inline.length).toBeGreaterThan(0);
+      expect(inline.some((s) => s.css.includes("rebeccapurple"))).toBe(true);
+    });
+
+    test("captures <link rel=stylesheet> href even when CSS is unreadable", async () => {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "https://example.test/jspsych.css";
+      document.head.appendChild(link);
+
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline([{ type: htmlKeyboardResponse, stimulus: "x" }], jsPsych);
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const linkSnaps = rec.stylesheets.filter((s) => s.kind === "link");
+      expect(linkSnaps.some((s) => s.href === "https://example.test/jspsych.css")).toBe(true);
+    });
+
+    test("snapshot is taken once at start and is not mutated by later <style> additions", async () => {
+      const style = document.createElement("style");
+      style.textContent = ".pre-existing { color: red; }";
+      document.head.appendChild(style);
+
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "x",
+            on_load: () => {
+              const late = document.createElement("style");
+              late.textContent = ".added-during-trial { color: blue; }";
+              document.head.appendChild(late);
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const allCss = rec.stylesheets.map((s) => s.css ?? "").join("\n");
+      expect(allCss).toContain("pre-existing");
+      expect(allCss).not.toContain("added-during-trial");
+    });
+  });
+
   test("captures window scroll events", async () => {
     const jsPsych = initJsPsych({ record_session: true });
     await startTimeline(
