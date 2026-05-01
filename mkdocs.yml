@@ -73,6 +73,7 @@ nav:
   - 'jsPsych.turk': 'reference/jspsych-turk.md'
   - 'jsPsych.utils': 'reference/jspsych-utils.md'
   - 'jsPsych.pluginAPI': 'reference/jspsych-pluginAPI.md'
+  - 'Session Recording Schema': 'reference/session-recording-schema.md'
 - Plugins:
   - 'List of Plugins': 'plugins/list-of-plugins.md'
   - 'animation': 'plugins/animation.md'
