@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
 import { sep as pathSeparator } from "path";
+import { Readable } from "stream";
 
 import glob from "glob";
 import gulp from "gulp";
@@ -7,9 +8,20 @@ import file from "gulp-file";
 import rename from "gulp-rename";
 import replace from "gulp-replace";
 import zip from "gulp-zip";
-import merge from "merge-stream";
 
 const { dest, src } = gulp;
+
+// Drains a Vinyl object stream and resolves with the emitted files. We collect
+// every substream up front instead of feeding `gulp-zip` through `merge-stream`
+// because under gulp 5 (streamx-based Vinyl) the zip sink can finalize before
+// slow upstreams flush, silently dropping files from `dist.zip`.
+const collectFiles = (stream) =>
+  new Promise((resolve, reject) => {
+    const files = [];
+    stream.on("data", (vinylFile) => files.push(vinylFile));
+    stream.on("end", () => resolve(files));
+    stream.on("error", reject);
+  });
 
 const readJsonFile = (filename) => JSON.parse(readFileSync(filename, "utf8"));
 
@@ -63,60 +75,67 @@ const getVersionFileContents = () =>
     "",
   ].join("\n");
 
-export const createCoreDistArchive = () =>
-  merge(
+export const createCoreDistArchive = async () => {
+  const fileGroups = await Promise.all([
     // index.browser.js files
-    src("packages/*/dist/index.browser.js", { root: "packages/" })
-      // Rename dist files
-      .pipe(
-        rename((path) => {
-          const packageName = path.dirname.split(pathSeparator)[0];
+    collectFiles(
+      src("packages/*/dist/index.browser.js", { root: "packages/" })
+        // Rename dist files
+        .pipe(
+          rename((path) => {
+            const packageName = path.dirname.split(pathSeparator)[0];
 
-          path.dirname = "/dist";
-          path.basename = packageName;
-        })
-      )
-      // Remove sourceMappingURL comments
-      .pipe(replace(/\/\/# sourceMappingURL=.*\n/g, "")),
+            path.dirname = "/dist";
+            path.basename = packageName;
+          })
+        )
+        // Remove sourceMappingURL comments
+        .pipe(replace(/\/\/# sourceMappingURL=.*\n/g, ""))
+    ),
 
     // jspsych.css
-    src("packages/jspsych/css/jspsych.css").pipe(rename("/dist/jspsych.css")),
+    collectFiles(src("packages/jspsych/css/jspsych.css").pipe(rename("/dist/jspsych.css"))),
 
     // survey.css
-    src("packages/plugin-survey/css/survey.css").pipe(rename("/dist/survey.css")),
-    src("packages/plugin-survey/css/survey.min.css").pipe(rename("/dist/survey.min.css")),
+    collectFiles(src("packages/plugin-survey/css/survey.css").pipe(rename("/dist/survey.css"))),
+    collectFiles(
+      src("packages/plugin-survey/css/survey.min.css").pipe(rename("/dist/survey.min.css"))
+    ),
 
     // Examples HTML files
-    src(["examples/**/*.html"], { base: "." })
-      // Rewrite script source paths
-      .pipe(
-        replace(
-          /<script src="(.*)\/packages\/(.*)\/dist\/index\.browser\.js"/g,
-          '<script src="$1/dist/$2.js"'
+    collectFiles(
+      src(["examples/**/*.html"], { base: "." })
+        // Rewrite script source paths
+        .pipe(
+          replace(
+            /<script src="(.*)\/packages\/(.*)\/dist\/index\.browser\.js"/g,
+            '<script src="$1/dist/$2.js"'
+          )
         )
-      )
-      // Rewrite jspsych css source paths
-      .pipe(
-        replace(
-          /<link rel="stylesheet" href="(.*)\/packages\/jspsych\/css\/(.*)"/g,
-          '<link rel="stylesheet" href="$1/dist/$2"'
+        // Rewrite jspsych css source paths
+        .pipe(
+          replace(
+            /<link rel="stylesheet" href="(.*)\/packages\/jspsych\/css\/(.*)"/g,
+            '<link rel="stylesheet" href="$1/dist/$2"'
+          )
         )
-      ),
+    ),
 
     // Examples files other than HTML (e.g. media files)
     // Note: `encoding: false` means that the files contents are treated as binary.
     // This prevents Gulp from corrupting binary files such as images when it reads them.
     // Needed since Gulp v5.
-    src(["examples/**/*", "!examples/**/*.html"], { base: ".", encoding: false }),
+    collectFiles(src(["examples/**/*", "!examples/**/*.html"], { base: ".", encoding: false })),
 
     // VERSION.md
-    file("VERSION.md", getVersionFileContents(), { src: true }),
+    collectFiles(file("VERSION.md", getVersionFileContents(), { src: true })),
 
     // Other files
-    src(["*.md", "license.txt"])
-  )
-    .pipe(zip("dist.zip"))
-    .pipe(dest("."));
+    collectFiles(src(["*.md", "license.txt"])),
+  ]);
+
+  return Readable.from(fileGroups.flat()).pipe(zip("dist.zip")).pipe(dest("."));
+};
 
 /**
  * Updates each unpkg link with a precise version number to the corresponding package's current
