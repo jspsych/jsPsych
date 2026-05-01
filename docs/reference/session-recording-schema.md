@@ -235,10 +235,31 @@ type InputRecord =
       t: number; key: string; code: string;
       mods: { ctrl: boolean; shift: boolean; alt: boolean; meta: boolean };
       repeat: boolean; target: number | null;
-    };
+    }
+  | { type: "input.value";   t: number; node: number; value: string }
+  | { type: "input.checked"; t: number; node: number; checked: boolean }
+  | { type: "input.select";  t: number; node: number; values: string[] };
 ```
 
 `mouse.move` is throttled to one record per animation frame, carrying the latest position. `target` is the id of the element under the event target if it is a tracked node within the trial's DOM, otherwise `null`.
+
+#### Form-state events
+
+The `MutationObserver` only sees the DOM `value` *attribute*; the IDL `value` property the browser writes when a participant types or toggles a control is invisible to it. The three form-state records carry the post-change state directly so a replayer can reconstitute survey responses without replaying keystrokes through a live form.
+
+| Type | Fires on | Carries |
+| ---- | -------- | ------- |
+| `input.value` | `<input>` (text-like types) and `<textarea>` | `value`: the element's current `.value` |
+| `input.checked` | `<input type="checkbox">` and `<input type="radio">` | `checked`: the element's current `.checked` |
+| `input.select` | `<select>` (single and `multiple`) | `values`: the `value` of each currently-selected `<option>`, in DOM order |
+
+`node` references the element's tracked id from the trial DOM (assigned in `initial_dom` or by a `dom.add` event).
+
+`input.value` is throttled to one record per animation frame per element: rapid typing produces one event with the latest value rather than one per keystroke. Pending values are flushed at trial end so the final state is never lost. `input.checked` and `input.select` fire on `change` (i.e. user commits) and are not throttled.
+
+Selecting a different `<input type="radio">` in a group emits a single `input.checked` event for the newly-checked button (`checked: true`); the implicitly-deselected button does not fire a `change` event and therefore produces no record. Replayers should set the chosen radio's `.checked = true` and rely on the browser to clear the rest of the group.
+
+Not captured: `<input type="file">` (uploaded file contents can't be replayed), `contenteditable` regions (their value lives in `textContent` and is reflected by the per-trial DOM mutation stream), and programmatic value writes that don't dispatch an `input` or `change` event.
 
 ### Clipboard events
 

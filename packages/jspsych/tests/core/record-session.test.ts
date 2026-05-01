@@ -329,6 +329,214 @@ describe("record_session option", () => {
     });
   });
 
+  describe("form-state capture", () => {
+    test("captures input.value events for typed text", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<input id="q" type="text">',
+            on_load: () => {
+              const input = document.getElementById("q") as HTMLInputElement;
+              input.value = "hello";
+              input.dispatchEvent(new Event("input", { bubbles: true }));
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const inputs = rec.trials[0].events.filter((e) => e.type === "input.value");
+      expect(inputs.length).toBeGreaterThan(0);
+      const last = inputs[inputs.length - 1];
+      expect(last.value).toBe("hello");
+      expect(typeof last.node).toBe("number");
+    });
+
+    test("captures input.value events for textarea content", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<textarea id="ta"></textarea>',
+            on_load: () => {
+              const ta = document.getElementById("ta") as HTMLTextAreaElement;
+              ta.value = "line one\nline two";
+              ta.dispatchEvent(new Event("input", { bubbles: true }));
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const inputs = rec.trials[0].events.filter((e) => e.type === "input.value");
+      expect(inputs[inputs.length - 1].value).toBe("line one\nline two");
+    });
+
+    test("coalesces multiple input events on the same field within a frame", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<input id="q" type="text">',
+            on_load: () => {
+              const input = document.getElementById("q") as HTMLInputElement;
+              for (const v of ["h", "he", "hel", "hell", "hello"]) {
+                input.value = v;
+                input.dispatchEvent(new Event("input", { bubbles: true }));
+              }
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const inputs = rec.trials[0].events.filter((e) => e.type === "input.value");
+      // Five rapid events without an intervening RAF flush coalesce into one.
+      expect(inputs).toHaveLength(1);
+      expect(inputs[0].value).toBe("hello");
+    });
+
+    test("captures input.checked events for checkboxes", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<input id="cb" type="checkbox">',
+            on_load: () => {
+              const cb = document.getElementById("cb") as HTMLInputElement;
+              cb.checked = true;
+              cb.dispatchEvent(new Event("change", { bubbles: true }));
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const checks = rec.trials[0].events.filter((e) => e.type === "input.checked");
+      expect(checks).toHaveLength(1);
+      expect(checks[0].checked).toBe(true);
+    });
+
+    test("captures input.checked events for radio buttons", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus:
+              '<input id="r1" type="radio" name="g" value="a">' +
+              '<input id="r2" type="radio" name="g" value="b">',
+            on_load: () => {
+              const r2 = document.getElementById("r2") as HTMLInputElement;
+              r2.checked = true;
+              r2.dispatchEvent(new Event("change", { bubbles: true }));
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const checks = rec.trials[0].events.filter((e) => e.type === "input.checked");
+      expect(checks).toHaveLength(1);
+      expect(checks[0].checked).toBe(true);
+    });
+
+    test("captures input.select events for single-select <select>", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus:
+              '<select id="s">' +
+              '<option value="a">A</option>' +
+              '<option value="b">B</option>' +
+              "</select>",
+            on_load: () => {
+              const s = document.getElementById("s") as HTMLSelectElement;
+              s.value = "b";
+              s.dispatchEvent(new Event("change", { bubbles: true }));
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const selects = rec.trials[0].events.filter((e) => e.type === "input.select");
+      expect(selects).toHaveLength(1);
+      expect(selects[0].values).toEqual(["b"]);
+    });
+
+    test("captures input.select events for multi-select <select multiple>", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus:
+              '<select id="s" multiple>' +
+              '<option value="a">A</option>' +
+              '<option value="b">B</option>' +
+              '<option value="c">C</option>' +
+              "</select>",
+            on_load: () => {
+              const s = document.getElementById("s") as HTMLSelectElement;
+              (s.options[0] as HTMLOptionElement).selected = true;
+              (s.options[2] as HTMLOptionElement).selected = true;
+              s.dispatchEvent(new Event("change", { bubbles: true }));
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const selects = rec.trials[0].events.filter((e) => e.type === "input.select");
+      expect(selects).toHaveLength(1);
+      expect(selects[0].values).toEqual(["a", "c"]);
+    });
+
+    test("ignores input events from <input type=file>", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<input id="f" type="file">',
+            on_load: () => {
+              const f = document.getElementById("f") as HTMLInputElement;
+              f.dispatchEvent(new Event("input", { bubbles: true }));
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const inputs = rec.trials[0].events.filter((e) => e.type === "input.value");
+      expect(inputs).toHaveLength(0);
+    });
+  });
+
   test("captures window scroll events", async () => {
     const jsPsych = initJsPsych({ record_session: true });
     await startTimeline(

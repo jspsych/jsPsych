@@ -144,7 +144,15 @@ export type InputRecord =
       mods: { ctrl: boolean; shift: boolean; alt: boolean; meta: boolean };
       repeat: boolean;
       target: number | null;
-    };
+    }
+  // Form-state changes. The MutationObserver only sees the `value` *attribute*,
+  // not the IDL property the browser writes when a participant types or
+  // toggles a control. These records carry the post-change value/checked/
+  // selection so a replayer can reconstitute survey responses without
+  // having to replay keystrokes through a live form.
+  | { type: "input.value"; t: number; node: number; value: string }
+  | { type: "input.checked"; t: number; node: number; checked: boolean }
+  | { type: "input.select"; t: number; node: number; values: string[] };
 
 export interface ClipboardRecord {
   type: "clipboard.copy" | "clipboard.cut" | "clipboard.paste";
@@ -218,6 +226,12 @@ export class SessionRecorder {
   // Pending scroll state to flush at next animation frame. Key "window"
   // refers to the document scroll; numeric keys are tracked node IDs.
   private pendingScroll: Map<number | "window", { x: number; y: number }> = new Map();
+
+  private inputRafScheduled = false;
+  // Latest value-per-input collected within the current animation frame.
+  // Coalesced so a fast typist produces one record per RAF rather than
+  // one per keystroke (matching how mouse.move is throttled).
+  private pendingInput: Map<number, string> = new Map();
 
   private viewportTimer: ReturnType<typeof setTimeout> | null = null;
   private lastViewport: ViewportState | null = null;
@@ -304,6 +318,8 @@ export class SessionRecorder {
     this.mouseRafScheduled = false;
     this.scrollRafScheduled = false;
     this.pendingScroll.clear();
+    this.inputRafScheduled = false;
+    this.pendingInput.clear();
 
     this.patchMathRandom();
     this.attachSessionListeners();
@@ -318,6 +334,7 @@ export class SessionRecorder {
     if (this.currentTrial !== null) {
       this.flushPendingMouse();
       this.flushPendingScroll();
+      this.flushPendingInput();
       this.currentTrial.t_end = this.t();
       this.currentTrial = null;
     }
@@ -363,6 +380,7 @@ export class SessionRecorder {
     if (!this.currentTrial) return;
     this.flushPendingMouse();
     this.flushPendingScroll();
+    this.flushPendingInput();
     this.detachTrialListeners();
     this.currentTrial.t_end = this.t();
     this.currentTrial.trial_data = serializeJson(trialData);
@@ -474,6 +492,12 @@ export class SessionRecorder {
     // scope catches scroll on any descendant element. Window scrolling is
     // handled by the same listener via a Document target check.
     this.bind(document, "scroll", this.handleScroll, true);
+    // Form-state events. `input` covers text fields, textareas, and
+    // sliders (fires on every value change). `change` covers checkboxes,
+    // radios, and selects (fires on commit). Capture phase at document
+    // scope so nothing in user code can stopPropagation past us.
+    this.bind(document, "input", this.handleInputEvent, true);
+    this.bind(document, "change", this.handleChangeEvent, true);
   }
 
   private detachTrialListeners() {
@@ -813,6 +837,61 @@ export class SessionRecorder {
         this.scrollRafScheduled = false;
         this.flushPendingScroll();
       });
+    }
+  };
+
+  // `input` events come from text-like form fields, textareas, and sliders.
+  // Checkboxes/radios/selects also fire `input`, but they're routed through
+  // `handleChangeEvent` instead so we don't double-record. The MutationObserver
+  // can't see these changes — typing updates the IDL `value` property, not
+  // the DOM `value` attribute.
+  private handleInputEvent = (ev: Event) => {
+    const target = ev.target;
+    if (!(target instanceof Element)) return;
+    if (target instanceof HTMLInputElement) {
+      // Skip control kinds whose state lives elsewhere (handled by `change`).
+      const t = target.type;
+      if (t === "checkbox" || t === "radio" || t === "file") return;
+    } else if (!(target instanceof HTMLTextAreaElement)) {
+      return;
+    }
+    const id = this.nodeIds.get(target);
+    if (id === undefined) return;
+    this.pendingInput.set(id, target.value);
+    if (!this.inputRafScheduled) {
+      this.inputRafScheduled = true;
+      requestAnimationFrame(() => {
+        this.inputRafScheduled = false;
+        this.flushPendingInput();
+      });
+    }
+  };
+
+  private flushPendingInput() {
+    if (this.pendingInput.size === 0) return;
+    const t = this.t();
+    for (const [node, value] of this.pendingInput) {
+      this.pushEvent({ type: "input.value", t, node, value });
+    }
+    this.pendingInput.clear();
+  }
+
+  private handleChangeEvent = (ev: Event) => {
+    const target = ev.target;
+    if (!(target instanceof Element)) return;
+    const id = this.nodeIds.get(target);
+    if (id === undefined) return;
+    if (target instanceof HTMLInputElement) {
+      const ttype = target.type;
+      if (ttype === "checkbox" || ttype === "radio") {
+        this.pushEvent({ type: "input.checked", t: this.t(), node: id, checked: target.checked });
+      }
+      // Text-like inputs are already covered by `handleInputEvent`; their
+      // additional `change` event on blur would just duplicate the last
+      // value we already recorded.
+    } else if (target instanceof HTMLSelectElement) {
+      const values = Array.from(target.selectedOptions).map((o) => o.value);
+      this.pushEvent({ type: "input.select", t: this.t(), node: id, values });
     }
   };
 
