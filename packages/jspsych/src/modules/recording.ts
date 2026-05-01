@@ -113,7 +113,8 @@ export type RecordedEvent =
   | ClipboardRecord
   | MediaRecord
   | FocusRecord
-  | ScrollRecord;
+  | ScrollRecord
+  | CanvasSnapshot;
 
 export type DomMutation =
   | { type: "dom.add"; t: number; parent: number; before: number | null; node: DomNode }
@@ -178,6 +179,19 @@ export type ScrollRecord =
   | { type: "scroll.window"; t: number; x: number; y: number }
   | { type: "scroll.element"; t: number; node: number; x: number; y: number };
 
+// Captures `<canvas>` pixel state as a PNG data URL. The MutationObserver
+// can't see drawing operations inside `<canvas>`; without these events a
+// replayer reconstructs the element but renders it blank, so anything the
+// participant drew (e.g. plugin-sketchpad strokes) would be invisible.
+// Emitted at gesture boundaries (mouseup/touchend) and at trial end, with
+// per-canvas throttling and a same-as-last-snapshot dedupe.
+export interface CanvasSnapshot {
+  type: "canvas.snapshot";
+  t: number;
+  node: number;
+  data_url: string;
+}
+
 export interface RngCall {
   t: number;
   fn: string;
@@ -192,6 +206,10 @@ export interface RngCall {
 const SCHEMA_VERSION = 1;
 const VIEWPORT_DEBOUNCE_MS = 100;
 const MEDIA_TIME_THROTTLE_MS = 250;
+// Per-canvas minimum gap between gesture-driven snapshots. Bounds the
+// `toDataURL` cost for users who rapidly click/release; trial-end
+// captures bypass this so the final state always lands.
+const CANVAS_SNAPSHOT_MIN_INTERVAL_MS = 250;
 
 export interface SessionRecorderOptions {
   jspsychVersion: string;
@@ -241,6 +259,14 @@ export class SessionRecorder {
   // Strong ref to currently tracked media elements so we can iterate and
   // remove their listeners when the trial ends. Cleared on detach.
   private mediaTrackedElements = new Set<HTMLMediaElement>();
+
+  // Strong ref to canvas elements within the current trial's display
+  // subtree. Used to drive deferred snapshotting after gestures and at
+  // trial end. Per-canvas throttle/dedupe state is held alongside.
+  private canvasTrackedElements = new Set<HTMLCanvasElement>();
+  private canvasLastSnapshot = new WeakMap<HTMLCanvasElement, string>();
+  private canvasLastSnapshotTime = new WeakMap<HTMLCanvasElement, number>();
+  private canvasSnapshotScheduled = false;
 
   // Reference to whatever `Math.random` was immediately before the recorder
   // started. Restored verbatim on stop so opting into recording does not
@@ -335,6 +361,7 @@ export class SessionRecorder {
       this.flushPendingMouse();
       this.flushPendingScroll();
       this.flushPendingInput();
+      this.captureCanvasSnapshots(true);
       this.currentTrial.t_end = this.t();
       this.currentTrial = null;
     }
@@ -374,6 +401,7 @@ export class SessionRecorder {
     this.currentTrial.initial_dom = this.serializeNode(this.displayElement);
     this.attachTrialListeners();
     this.scanForMediaElements(this.displayElement);
+    this.scanForCanvasElements(this.displayElement);
   }
 
   onTrialFinish(trialData: unknown) {
@@ -381,6 +409,7 @@ export class SessionRecorder {
     this.flushPendingMouse();
     this.flushPendingScroll();
     this.flushPendingInput();
+    this.captureCanvasSnapshots(true);
     this.detachTrialListeners();
     this.currentTrial.t_end = this.t();
     this.currentTrial.trial_data = serializeJson(trialData);
@@ -506,6 +535,8 @@ export class SessionRecorder {
       this.mutationObserver = null;
     }
     this.detachMediaListeners();
+    this.canvasTrackedElements.clear();
+    this.canvasSnapshotScheduled = false;
     // Tear down only the trial-scoped handlers; session-scoped handlers
     // (resize, focus, blur, fullscreenchange) stay attached until stop().
     const remaining: typeof this.boundHandlers = [];
@@ -543,6 +574,8 @@ export class SessionRecorder {
             this.pushEvent({ type: "dom.add", t, parent: parentId, before, node });
             if (added instanceof HTMLMediaElement) this.attachMediaListeners(added);
             else if (added instanceof Element) this.scanForMediaElements(added);
+            if (added instanceof HTMLCanvasElement) this.trackCanvasElement(added);
+            else if (added instanceof Element) this.scanForCanvasElements(added);
           }
         } else if (r.type === "attributes") {
           const id = this.nodeIds.get(r.target);
@@ -578,6 +611,14 @@ export class SessionRecorder {
   }
 
   private releaseSubtree(node: Node) {
+    if (node instanceof HTMLCanvasElement && this.canvasTrackedElements.has(node)) {
+      // jsPsych core clears the display element via `innerHTML = ""`
+      // immediately after each trial, before `onTrialFinish` fires. Take
+      // a final snapshot here so the canvas's last pixel state is in the
+      // recording instead of being silently dropped on removal.
+      this.snapshotCanvas(node, this.t(), true);
+      this.canvasTrackedElements.delete(node);
+    }
     if (this.nodeIds.has(node)) {
       this.nodeIds.delete(node);
     }
@@ -919,6 +960,9 @@ export class SessionRecorder {
         button: e.button,
         target: this.targetId(e.target),
       });
+      // Gesture release is the moment a stroke completes; snapshot any
+      // tracked canvases so the drawing it produced reaches the replay.
+      if (type === "mouse.up") this.scheduleCanvasSnapshot();
     };
   }
 
@@ -931,6 +975,7 @@ export class SessionRecorder {
         y: tt.clientY,
       }));
       this.pushEvent({ type, t: this.t(), touches });
+      if (type === "touch.end") this.scheduleCanvasSnapshot();
     };
   }
 
@@ -1032,6 +1077,81 @@ export class SessionRecorder {
       this.mediaListeners.delete(media);
     }
     this.mediaTrackedElements.clear();
+  }
+
+  // -------- canvas snapshotting --------
+
+  // Walks `root` for `<canvas>` elements and registers each one for
+  // snapshotting. Called on trial load and when subtrees are added
+  // mid-trial via `dom.add`.
+  private scanForCanvasElements(root: Element) {
+    if (root instanceof HTMLCanvasElement) {
+      this.trackCanvasElement(root);
+      return;
+    }
+    const els = root.querySelectorAll("canvas");
+    for (const el of Array.from(els)) {
+      this.trackCanvasElement(el as HTMLCanvasElement);
+    }
+  }
+
+  private trackCanvasElement(canvas: HTMLCanvasElement) {
+    this.canvasTrackedElements.add(canvas);
+  }
+
+  // Defers actual snapshotting to the next animation frame so we wait
+  // until the page has had a chance to paint the post-gesture state
+  // (otherwise `toDataURL` could return the canvas as it was *before*
+  // the up event's listeners ran). Coalesced via a single scheduled flag
+  // so a flurry of mouseups doesn't queue redundant work.
+  private scheduleCanvasSnapshot() {
+    if (this.canvasSnapshotScheduled) return;
+    if (this.canvasTrackedElements.size === 0) return;
+    this.canvasSnapshotScheduled = true;
+    requestAnimationFrame(() => {
+      this.canvasSnapshotScheduled = false;
+      this.captureCanvasSnapshots(false);
+    });
+  }
+
+  // Throttles to at most one snapshot per canvas per
+  // `CANVAS_SNAPSHOT_MIN_INTERVAL_MS`, and dedupes by data URL so a
+  // canvas whose pixels did not actually change does not produce noise.
+  // `force` bypasses the throttle for trial-end captures so the final
+  // state of every canvas is always recorded.
+  private captureCanvasSnapshots(force: boolean) {
+    if (this.canvasTrackedElements.size === 0) return;
+    const now = this.t();
+    for (const canvas of this.canvasTrackedElements) {
+      this.snapshotCanvas(canvas, now, force);
+    }
+  }
+
+  // Pushes a `canvas.snapshot` event for one canvas, applying the
+  // per-canvas throttle (unless `force`) and skipping when the data URL
+  // is unchanged from the last snapshot. Pulled out of the loop above so
+  // it can also be called from `releaseSubtree` to capture the final
+  // pixel state at the moment a canvas is removed from the trial DOM —
+  // jsPsych core clears the display element via `innerHTML = ""` before
+  // `onTrialFinish` runs, so a trial-end-only flush would miss it.
+  private snapshotCanvas(canvas: HTMLCanvasElement, t: number, force: boolean) {
+    const id = this.nodeIds.get(canvas);
+    if (id === undefined) return;
+    if (!force) {
+      const last = this.canvasLastSnapshotTime.get(canvas) ?? -Infinity;
+      if (t - last < CANVAS_SNAPSHOT_MIN_INTERVAL_MS) return;
+    }
+    try {
+      const dataUrl = canvas.toDataURL();
+      if (this.canvasLastSnapshot.get(canvas) === dataUrl) return;
+      this.canvasLastSnapshot.set(canvas, dataUrl);
+      this.canvasLastSnapshotTime.set(canvas, t);
+      this.pushEvent({ type: "canvas.snapshot", t, node: id, data_url: dataUrl });
+    } catch {
+      // toDataURL throws SecurityError on tainted canvases (canvases
+      // that drew cross-origin images without CORS headers). Skip and
+      // never break the experiment.
+    }
   }
 
   // -------- RNG --------

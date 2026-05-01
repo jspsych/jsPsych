@@ -329,6 +329,126 @@ describe("record_session option", () => {
     });
   });
 
+  describe("canvas snapshot capture", () => {
+    test("captures a final canvas.snapshot at trial end for canvases in the initial DOM", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<canvas id="c" width="50" height="50"></canvas>',
+            on_load: () => {
+              const c = document.getElementById("c") as HTMLCanvasElement;
+              const ctx = c.getContext("2d")!;
+              ctx.fillRect(10, 10, 20, 20);
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const snaps = rec.trials[0].events.filter((e) => e.type === "canvas.snapshot");
+      expect(snaps.length).toBeGreaterThan(0);
+      const last = snaps[snaps.length - 1];
+      expect(typeof last.node).toBe("number");
+      expect(last.data_url).toEqual(expect.stringMatching(/^data:image\/png/));
+    });
+
+    test("emits no canvas.snapshot events when the trial has no canvas", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [{ type: htmlKeyboardResponse, stimulus: "<p>no canvas here</p>" }],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const snaps = rec.trials[0].events.filter((e) => e.type === "canvas.snapshot");
+      expect(snaps).toHaveLength(0);
+    });
+
+    test("tracks canvases added mid-trial via dom.add", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<div id="host"></div>',
+            on_load: () => {
+              const c = document.createElement("canvas");
+              c.id = "late";
+              c.width = 32;
+              c.height = 32;
+              document.getElementById("host")!.appendChild(c);
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const snaps = rec.trials[0].events.filter((e) => e.type === "canvas.snapshot");
+      expect(snaps.length).toBeGreaterThan(0);
+    });
+
+    test("captures the canvas's final pixel state when it is removed mid-trial", async () => {
+      // jsPsych core clears the display element via `innerHTML = ""` after
+      // every trial, before `onTrialFinish` fires. The recorder must take
+      // its final snapshot at the moment of removal — a trial-end-only
+      // flush would race with the cleanup and miss the canvas entirely.
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<canvas id="c" width="20" height="20"></canvas>',
+            on_load: () => {
+              const c = document.getElementById("c") as HTMLCanvasElement;
+              c.getContext("2d")!.fillRect(0, 0, 10, 10);
+              c.remove();
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const snaps = rec.trials[0].events.filter((e) => e.type === "canvas.snapshot");
+      expect(snaps).toHaveLength(1);
+      expect(snaps[0].data_url).toEqual(expect.stringMatching(/^data:image\/png/));
+    });
+
+    test("a tainted canvas (toDataURL throws) does not break the recording", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<canvas id="c" width="10" height="10"></canvas>',
+            on_load: () => {
+              const c = document.getElementById("c") as HTMLCanvasElement;
+              c.toDataURL = () => {
+                throw new DOMException("tainted", "SecurityError");
+              };
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      // Recording still ends cleanly and the trial completes.
+      expect(rec.end_reason).toBe("finished");
+      const snaps = rec.trials[0].events.filter((e) => e.type === "canvas.snapshot");
+      expect(snaps).toHaveLength(0);
+    });
+  });
+
   describe("form-state capture", () => {
     test("captures input.value events for typed text", async () => {
       const jsPsych = initJsPsych({ record_session: true });

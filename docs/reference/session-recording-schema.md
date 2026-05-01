@@ -117,12 +117,11 @@ Every node in `initial_dom` is assigned a monotonically-increasing integer `id`.
 
 **Element-specific extras.**
 
-- `canvas_size`: present on `<canvas>` elements; carries `width`/`height` attributes at snapshot time. Note that the *contents* of a canvas (the rendered pixels) are not captured.
+- `canvas_size`: present on `<canvas>` elements; carries `width`/`height` attributes at snapshot time. The pixel contents at any later moment are recorded as separate [`canvas.snapshot`](#canvas-snapshots) events keyed by node id.
 - `media_src`: present on `<video>` and `<audio>` elements; carries `currentSrc` if available, falling back to the `src` attribute.
 
 **What is not captured.**
 
-- Canvas/WebGL pixel content. Only the element and its dimensions are recorded.
 - Audio/video media data. Only playback events (`media.play`, `media.pause`, etc.) and the source URL are recorded.
 - Shadow DOM. jsPsych does not use it in core; recordings will not capture mutations inside shadow roots.
 - CSSOM rule-level edits (`sheet.insertRule`, `deleteRule`, etc.) made on a captured stylesheet after `start()` without touching the owning element's children. These bypass `MutationObserver` and so are not reflected in [`stylesheet_events`](#stylesheet-events). Edits via `<style>.textContent = …` or `appendChild`/`removeChild` on the inner text node are tracked.
@@ -192,7 +191,8 @@ type RecordedEvent =
   | ClipboardRecord
   | MediaRecord
   | FocusRecord
-  | ScrollRecord;
+  | ScrollRecord
+  | CanvasSnapshot;
 ```
 
 ### DOM mutations
@@ -287,6 +287,31 @@ type MediaRecord = {
 ```
 
 `media.time` records throttled `timeupdate` events at roughly 4 Hz and is intended for replay scrubbing rather than exact synchronization.
+
+### Canvas snapshots
+
+```ts
+interface CanvasSnapshot {
+  type: "canvas.snapshot";
+  t: number;
+  node: number;     // id of the <canvas> element
+  data_url: string; // PNG data URL: "data:image/png;base64,…"
+}
+```
+
+The `MutationObserver` cannot see drawing operations inside `<canvas>` (the pixels are not in the DOM tree). Without these events, replay reconstructs the element but renders it blank, so anything the participant drew (e.g. plugin-sketchpad strokes) would be invisible.
+
+**Capture timing.** Snapshots are taken at three moments:
+
+1. After a gesture release (`mouseup` or `touchend`) anywhere within the display element. The actual `toDataURL` call is deferred to the next animation frame so the page has finished painting the post-gesture state.
+2. When a tracked canvas is removed from the DOM mid-trial (jsPsych core clears the display element via `innerHTML = ""` between trials, which would otherwise lose the final pixel state).
+3. When a recording is stopped while a trial is in flight (`stop("aborted")` etc.).
+
+**Throttling and dedupe.** Per-canvas, gesture-driven snapshots are throttled to one every 250 ms; removal- and stop-driven snapshots bypass the throttle so the final state always lands. Identical consecutive data URLs are skipped, so a canvas whose pixels did not change does not produce noise.
+
+**Tainted canvases.** If a canvas drew cross-origin images without CORS headers, `toDataURL` throws `SecurityError`. The recorder catches this, skips the offending canvas, and continues — the recording is never broken by an unreadable canvas.
+
+**Replay procedure.** Track each `<canvas>` you instantiate from `initial_dom` by node id. When a `canvas.snapshot` event arrives, decode `data_url` (e.g. into an `Image` whose `src` is the data URL) and `drawImage` it onto the canvas at `(0, 0)`. This overwrites whatever was there and brings the canvas to the recorded state.
 
 ### Focus events
 
