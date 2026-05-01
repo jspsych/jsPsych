@@ -9,7 +9,7 @@ import { TimeoutAPI } from "./TimeoutAPI";
 export function createJointPluginAPIObject(jsPsych: JsPsych) {
   const settings = jsPsych.getInitSettings();
   const keyboardListenerAPI = new KeyboardListenerAPI(
-    jsPsych.getDisplayContainerElement,
+    jsPsych.getMainEventSource,
     settings.case_sensitive_responses,
     settings.minimum_valid_rt
   );
