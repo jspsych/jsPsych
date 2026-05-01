@@ -1,0 +1,6 @@
+{
+  "pr_number": 3661,
+  "head_sha": "7998445b22dc5ae8380870208e821cba8d5d5568",
+  "head_ref": "claude/add-hifi-data-recording-jfxSP",
+  "changed_packages": ["jspsych"]
+}
