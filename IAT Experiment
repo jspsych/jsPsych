@@ -1,0 +1,87 @@
+// IAT mit jsPsych v7
+import jsPsych from "jspsych";
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import categorization from "@jspsych/plugin-categorize-html";
+
+// Stimuli definieren
+const target_migrant = ["Mohammed", "Ali", "Fatima", "Aisha", "Ahmed", "Yusuf"];
+const target_deutsch = ["Thomas", "Julia", "Stefan", "Laura", "Lukas", "Marie"];
+const attribute_good = ["ehrlich", "freundlich", "hilfsbereit", "friedlich", "nett", "höflich"];
+const attribute_bad = ["aggressiv", "gefährlich", "kriminell", "bedrohlich", "feindselig", "brutal"];
+
+// Utility
+function shuffle(array) {
+  let currentIndex = array.length, randomIndex;
+  while (currentIndex != 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+  }
+  return array;
+}
+
+function createCategorizeTrial(word, category, left_keys, right_keys, left_label, right_label) {
+  return {
+    type: categorization,
+    stimulus: `<div style='font-size: 40px;'>${word}</div>`,
+    choices: ["e", "i"],
+    key_answer: left_keys.includes(category) ? "e" : "i",
+    data: { category: category, stimulus: word },
+    prompt: `<div style='display: flex; justify-content: space-between; font-size: 20px;'>
+      <div><strong>E:</strong> ${left_label}</div>
+      <div><strong>I:</strong> ${right_label}</div>
+    </div>`
+  };
+}
+
+// Blöcke definieren
+const block1 = shuffle([...target_migrant, ...target_deutsch]).map(word => {
+  const cat = target_migrant.includes(word) ? "Migrant" : "Deutsch";
+  return createCategorizeTrial(word, cat, ["Migrant"], ["Deutsch"], "Migrant", "Deutsch");
+});
+
+const block2 = shuffle([...attribute_good, ...attribute_bad]).map(word => {
+  const cat = attribute_good.includes(word) ? "Gut" : "Schlecht";
+  return createCategorizeTrial(word, cat, ["Schlecht"], ["Gut"], "Schlecht", "Gut");
+});
+
+const block3 = shuffle([...target_migrant, ...target_deutsch, ...attribute_good, ...attribute_bad]).map(word => {
+  let cat;
+  if (target_migrant.includes(word)) cat = "Migrant";
+  else if (target_deutsch.includes(word)) cat = "Deutsch";
+  else if (attribute_good.includes(word)) cat = "Gut";
+  else cat = "Schlecht";
+  return createCategorizeTrial(word, cat, ["Migrant", "Schlecht"], ["Deutsch", "Gut"], "Migrant / Schlecht", "Deutsch / Gut");
+});
+
+const block5 = shuffle([...target_migrant, ...target_deutsch]).map(word => {
+  const cat = target_migrant.includes(word) ? "Migrant" : "Deutsch";
+  return createCategorizeTrial(word, cat, ["Deutsch"], ["Migrant"], "Deutsch", "Migrant");
+});
+
+const block6 = shuffle([...target_migrant, ...target_deutsch, ...attribute_good, ...attribute_bad]).map(word => {
+  let cat;
+  if (target_migrant.includes(word)) cat = "Migrant";
+  else if (target_deutsch.includes(word)) cat = "Deutsch";
+  else if (attribute_good.includes(word)) cat = "Gut";
+  else cat = "Schlecht";
+  return createCategorizeTrial(word, cat, ["Deutsch", "Schlecht"], ["Migrant", "Gut"], "Deutsch / Schlecht", "Migrant / Gut");
+});
+
+// Timeline aufbauen
+const timeline = [];
+timeline.push(...block1);
+timeline.push(...block2);
+timeline.push(...block3); // Übung
+timeline.push(...block3); // Test
+timeline.push(...block5);
+timeline.push(...block6); // Übung
+timeline.push(...block6); // Test
+
+// jsPsych starten
+jsPsych.init({
+  timeline: timeline,
+  on_finish: () => {
+    jsPsych.data.displayData();
+  }
+});
