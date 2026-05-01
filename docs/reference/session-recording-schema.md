@@ -30,6 +30,7 @@ interface SessionRecording {
   rng: { seed: string | null; math_random_patched: boolean };
   display_element_id: string;
   stylesheets: StylesheetSnapshot[];
+  stylesheet_events: StylesheetEvent[];
   trials: TrialRecording[];
   viewport_changes: ViewportChange[];
   rng_calls: RngCall[];
@@ -50,6 +51,7 @@ interface SessionRecording {
 | `rng.math_random_patched` | `true` while recording is active; `Math.random` is wrapped to log every call into `rng_calls`. |
 | `display_element_id` | The `id` attribute of the display element (`#jspsych-content` by default). |
 | `stylesheets` | Snapshot of every stylesheet attached to the document at session start. See [Stylesheets](#stylesheets). |
+| `stylesheet_events` | Chronological log of `<head>` stylesheet changes that occurred after `start()`. See [Stylesheet events](#stylesheet-events). |
 | `trials` | Per-trial recordings, in chronological order. See [`TrialRecording`](#trialrecording). |
 | `viewport_changes` | Session-level log of viewport changes (window resize, page zoom, pinch zoom, pinch pan). |
 | `rng_calls` | Chronological log of every `Math.random` output. Includes calls outside trial boundaries (parameter eval, ITI, `on_finish`). |
@@ -123,32 +125,61 @@ Every node in `initial_dom` is assigned a monotonically-increasing integer `id`.
 - Canvas/WebGL pixel content. Only the element and its dimensions are recorded.
 - Audio/video media data. Only playback events (`media.play`, `media.pause`, etc.) and the source URL are recorded.
 - Shadow DOM. jsPsych does not use it in core; recordings will not capture mutations inside shadow roots.
-- Stylesheet additions, removals, or rule mutations that occur after `start()`. The session-level [stylesheets](#stylesheets) snapshot is taken once at session start; it is not updated when later trials inject `<style>` tags or modify rules at runtime.
+- CSSOM rule-level edits (`sheet.insertRule`, `deleteRule`, etc.) made on a captured stylesheet after `start()` without touching the owning element's children. These bypass `MutationObserver` and so are not reflected in [`stylesheet_events`](#stylesheet-events). Edits via `<style>.textContent = …` or `appendChild`/`removeChild` on the inner text node are tracked.
+- Stylesheets attached to the document outside of `<head>` (e.g. a `<style>` placed in `<body>` outside the display element) after `start()`. The initial snapshot picks them up; subsequent changes are not tracked.
 
 ## Stylesheets
 
 ```ts
 type StylesheetSnapshot =
-  | { kind: "inline"; css: string;        media: string | null }
-  | { kind: "link";   href: string; css: string | null; media: string | null };
+  | { id: number; kind: "inline"; css: string;        media: string | null }
+  | { id: number; kind: "link";   href: string; css: string | null; media: string | null };
 ```
 
 `stylesheets` is the snapshot of every entry in `document.styleSheets` at session start. It exists so a replayer can re-apply the same CSS to the reconstructed DOM — `initial_dom` carries class hooks like `.jspsych-display-element`, and without the matching rules the replay would render unstyled.
 
 | Field | Description |
 | ----- | ----------- |
+| `id` | Session-unique integer that subsequent [`stylesheet_events`](#stylesheet-events) reference when this sheet is later removed or its rule text changes. |
 | `kind` | `"inline"` for `<style>` tags; `"link"` for `<link rel="stylesheet">`. |
 | `css` | Resolved rule text (joined `cssRules.cssText`). `null` for `<link>` sheets when `cssRules` access throws (cross-origin sheets without CORS headers). |
 | `href` | The link's resolved URL. Replayers can refetch the source from this URL when `css` is `null`. |
 | `media` | The sheet's `media` attribute, or `null` if unset. |
 
-**Replay guidance.** For each entry, inject a `<style>` element with the captured `css` text into the replayer's document head. When `css` is `null` for a `link` entry, fetch the stylesheet from `href` (or substitute a known-good copy of the same asset) and inject the result. Apply the `media` attribute on the injected element so media-conditional rules behave correctly.
+**Replay guidance.** For each entry, inject a `<style>` element with the captured `css` text into the replayer's document head. When `css` is `null` for a `link` entry, fetch the stylesheet from `href` (or substitute a known-good copy of the same asset) and inject the result. Apply the `media` attribute on the injected element so media-conditional rules behave correctly. Track the injected element by `id` so [`stylesheet_events`](#stylesheet-events) can be applied later.
 
 **Limitations.**
 
-- Snapshot is taken once at `start()`. Later mutations to the document's stylesheets — additions, removals, or `CSSOM` rule edits — are not tracked.
+- Captured at `start()`. Later mutations to `<head>` stylesheets are tracked separately in [`stylesheet_events`](#stylesheet-events); changes elsewhere (e.g. a `<style>` placed in `<body>` outside the display element) are not.
 - `@import` rules within a captured stylesheet are recorded as text. The imported sheet itself is not inlined; if the replayer's environment cannot resolve the import URL, those rules will not apply.
 - Pseudo-classes (`:hover`, `:focus`) and media queries are recorded as part of the rule text but only take effect during replay if the replayer reproduces the corresponding state or viewport.
+
+## Stylesheet events
+
+```ts
+type StylesheetEvent =
+  | { type: "stylesheet.add";    t: number; sheet: StylesheetSnapshot }
+  | { type: "stylesheet.remove"; t: number; id: number }
+  | { type: "stylesheet.update"; t: number; id: number; css: string };
+```
+
+A chronological log of `<head>` stylesheet changes after `start()`. Plugins commonly inject `<style>` blocks into `<head>` mid-session (e.g. when a survey widget mounts); without this log a replayer would only have the start-of-session snapshot and would render those trials unstyled.
+
+| Type | Field | Meaning |
+| ---- | ----- | ------- |
+| `stylesheet.add` | `sheet` | Full snapshot of the newly attached element, including a fresh `id`. |
+| `stylesheet.remove` | `id` | Id of an entry from `stylesheets` or a prior `stylesheet.add`. The replayer should remove the corresponding injected element. |
+| `stylesheet.update` | `id` | Id of a tracked `<style>` element. |
+|                    | `css` | New resolved rule text. The replayer should overwrite the injected element's text content. |
+
+**Scope.** The observer is rooted at `document.head`. Stylesheet changes inside the trial display element are already represented by the per-trial DOM mutation stream (`dom.add` / `dom.remove` / `dom.text`); they do not appear here. Changes to stylesheets elsewhere in `<body>` (outside the display element) after `start()` are not tracked.
+
+**Update coalescing.** Multiple child mutations to a single `<style>` element delivered in the same observer batch produce one `stylesheet.update` event carrying the final rule text. Updates and adds across separate batches are recorded individually.
+
+**Replay procedure.** Apply each entry in order:
+1. `stylesheet.add` — inject a `<style>` (or `<link>`) matching `sheet.kind`, mirroring the start-of-session snapshot logic.
+2. `stylesheet.remove` — find the previously-injected element by `id` and detach it.
+3. `stylesheet.update` — overwrite the previously-injected element's text content with the new `css`.
 
 ## Event types
 

@@ -22,6 +22,11 @@ export interface SessionRecording {
   rng: { seed: string | null; math_random_patched: boolean };
   display_element_id: string;
   stylesheets: StylesheetSnapshot[];
+  // Chronological log of `<head>` stylesheet mutations after `start()`.
+  // Initial state is in `stylesheets`; this records subsequent additions,
+  // removals, and `<style>` text edits so the replayer can apply them
+  // alongside the per-trial DOM event stream.
+  stylesheet_events: StylesheetEvent[];
   trials: TrialRecording[];
   viewport_changes: ViewportChange[];
   // Chronological log of every Math.random output consumed during the
@@ -34,14 +39,25 @@ export interface SessionRecording {
   end_reason: "finished" | "aborted" | "unload" | null;
 }
 
-// A snapshot of one stylesheet attached to the document at session start.
-// `inline` covers `<style>` tags; `link` covers `<link rel="stylesheet">`.
-// `css` is the resolved rule text where readable. Cross-origin sheets throw
-// SecurityError on `cssRules` access; for those we record `href` only and
-// leave `css` null so a replayer can fetch the source out-of-band.
+// A snapshot of one stylesheet attached to the document. `inline` covers
+// `<style>` tags; `link` covers `<link rel="stylesheet">`. `css` is the
+// resolved rule text where readable; cross-origin sheets throw SecurityError
+// on `cssRules` access, so for those we record `href` only and leave `css`
+// null so a replayer can fetch the source out-of-band. `id` is unique within
+// the session and shared with `stylesheet_events` so add/remove/update
+// events can reference snapshots created at start.
 export type StylesheetSnapshot =
-  | { kind: "inline"; css: string; media: string | null }
-  | { kind: "link"; href: string; css: string | null; media: string | null };
+  | { id: number; kind: "inline"; css: string; media: string | null }
+  | { id: number; kind: "link"; href: string; css: string | null; media: string | null };
+
+// Session-scope log entries for `<head>` stylesheet changes after start.
+// `stylesheet.add` carries a full snapshot (with a newly-assigned `id`);
+// `stylesheet.remove` and `stylesheet.update` reference an existing `id`
+// from `stylesheets` or a prior `add` event.
+export type StylesheetEvent =
+  | { type: "stylesheet.add"; t: number; sheet: StylesheetSnapshot }
+  | { type: "stylesheet.remove"; t: number; id: number }
+  | { type: "stylesheet.update"; t: number; id: number; css: string };
 
 export interface ViewportState {
   w: number;
@@ -187,6 +203,12 @@ export class SessionRecorder {
 
   private mutationObserver: MutationObserver | null = null;
 
+  // Session-scope: tracks stylesheet `<style>`/`<link>` elements in
+  // `<head>` so add/remove/update events can be emitted by stable id.
+  private headObserver: MutationObserver | null = null;
+  private styleNodeIds = new WeakMap<Node, number>();
+  private nextStylesheetId = 1;
+
   private mouseRafScheduled = false;
   private lastMouseX = 0;
   private lastMouseY = 0;
@@ -239,6 +261,7 @@ export class SessionRecorder {
       rng: { seed: null, math_random_patched: false },
       display_element_id: "",
       stylesheets: [],
+      stylesheet_events: [],
       trials: [],
       viewport_changes: [],
       rng_calls: [],
@@ -269,12 +292,14 @@ export class SessionRecorder {
     this.recording.display_element_id = displayElement.id || "";
     this.recording.viewport = readViewport();
     this.lastViewport = { ...this.recording.viewport };
-    this.recording.stylesheets = this.captureStylesheets();
 
     // Reset per-session ephemeral state so a reused recorder doesn't carry
     // stale node ids, throttle flags, or pending event buffers.
     this.currentTrial = null;
     this.resetNodeIds();
+    this.styleNodeIds = new WeakMap();
+    this.nextStylesheetId = 1;
+    this.recording.stylesheets = this.captureStylesheets();
     this.mouseDirty = false;
     this.mouseRafScheduled = false;
     this.scrollRafScheduled = false;
@@ -357,12 +382,32 @@ export class SessionRecorder {
     this.bind(document, "fullscreenchange", () => {
       this.pushFocus(document.fullscreenElement ? "fullscreen.enter" : "fullscreen.exit");
     });
+
+    // Watch <head> for stylesheet add/remove and <style> text edits.
+    // Plugins commonly inject `<style>` blocks into `<head>` mid-session;
+    // without this observer those rules would be missing from replay.
+    if (document.head) {
+      this.headObserver = new MutationObserver((records) => this.handleHeadMutations(records));
+      this.headObserver.observe(document.head, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+      });
+    }
   }
 
   private detachSessionListeners() {
     if (this.viewportTimer) {
       clearTimeout(this.viewportTimer);
       this.viewportTimer = null;
+    }
+    if (this.headObserver) {
+      // Drain any records the observer has queued but not yet delivered
+      // so changes near `stop()` aren't dropped.
+      const pending = this.headObserver.takeRecords();
+      if (pending.length > 0) this.handleHeadMutations(pending);
+      this.headObserver.disconnect();
+      this.headObserver = null;
     }
     for (const b of this.boundHandlers) {
       b.target.removeEventListener(b.type, b.handler, b.options);
@@ -570,29 +615,16 @@ export class SessionRecorder {
   //   - <link rel="stylesheet">: read `cssRules` if the sheet is loaded
   //     and same-origin (or CORS-permissive). Otherwise record `href`
   //     with `css: null` so a replayer can refetch out-of-band.
-  // Stylesheets added or mutated after `start()` are not tracked; the
-  // session-level snapshot is taken once at start.
+  // Each captured element is registered in `styleNodeIds` so the head
+  // observer can emit remove/update events referencing the same id.
   private captureStylesheets(): StylesheetSnapshot[] {
     if (typeof document === "undefined") return [];
     const out: StylesheetSnapshot[] = [];
-    const seen = new Set<Node>();
 
     const elements = document.querySelectorAll<HTMLElement>('style, link[rel~="stylesheet"]');
     for (const el of Array.from(elements)) {
-      try {
-        seen.add(el);
-        const sheet = (el as unknown as { sheet?: CSSStyleSheet | null }).sheet ?? null;
-        const media = readMedia(el, sheet);
-        if (el instanceof HTMLLinkElement) {
-          const href = el.href || el.getAttribute("href") || "";
-          out.push({ kind: "link", href, css: sheet ? readSheetText(sheet) : null, media });
-        } else if (el instanceof HTMLStyleElement) {
-          const css = (sheet ? readSheetText(sheet) : null) ?? el.textContent ?? "";
-          out.push({ kind: "inline", css, media });
-        }
-      } catch {
-        // Capture must never break the experiment.
-      }
+      const snap = this.snapshotStylesheetElement(el);
+      if (snap) out.push(snap);
     }
 
     // Also include any sheets that weren't reached via the DOM walk —
@@ -601,13 +633,13 @@ export class SessionRecorder {
     for (const sheet of Array.from(document.styleSheets)) {
       try {
         const owner = sheet.ownerNode as Node | null;
-        if (owner && seen.has(owner)) continue;
+        if (owner && this.styleNodeIds.has(owner)) continue;
         const css = readSheetText(sheet);
         const media = sheet.media && sheet.media.mediaText ? sheet.media.mediaText : null;
         if (sheet.href) {
-          out.push({ kind: "link", href: sheet.href, css, media });
+          out.push({ id: this.nextStylesheetId++, kind: "link", href: sheet.href, css, media });
         } else if (css !== null) {
-          out.push({ kind: "inline", css, media });
+          out.push({ id: this.nextStylesheetId++, kind: "inline", css, media });
         }
       } catch {
         // Capture must never break the experiment.
@@ -615,6 +647,109 @@ export class SessionRecorder {
     }
 
     return out;
+  }
+
+  // Builds a snapshot for a single `<style>` or `<link rel=stylesheet>`
+  // element and registers it in `styleNodeIds`. Returns null if the
+  // element is not a stylesheet kind we track. Used both by the initial
+  // capture and by the head observer for added nodes.
+  private snapshotStylesheetElement(el: HTMLElement): StylesheetSnapshot | null {
+    try {
+      const sheet = (el as unknown as { sheet?: CSSStyleSheet | null }).sheet ?? null;
+      const media = readMedia(el, sheet);
+      if (el instanceof HTMLLinkElement) {
+        if (!/(^|\s)stylesheet(\s|$)/i.test(el.rel)) return null;
+        const href = el.href || el.getAttribute("href") || "";
+        const id = this.nextStylesheetId++;
+        this.styleNodeIds.set(el, id);
+        return { id, kind: "link", href, css: sheet ? readSheetText(sheet) : null, media };
+      }
+      if (el instanceof HTMLStyleElement) {
+        const css = (sheet ? readSheetText(sheet) : null) ?? el.textContent ?? "";
+        const id = this.nextStylesheetId++;
+        this.styleNodeIds.set(el, id);
+        return { id, kind: "inline", css, media };
+      }
+    } catch {
+      // Capture must never break the experiment.
+    }
+    return null;
+  }
+
+  // Reads the current resolved CSS text for a tracked `<style>` element,
+  // preferring `sheet.cssRules` (which reflects rule-level edits made via
+  // CSSOM) and falling back to the element's `textContent`.
+  private readStyleCss(el: HTMLStyleElement): string {
+    try {
+      const sheet = el.sheet ?? null;
+      if (sheet) {
+        const text = readSheetText(sheet);
+        if (text !== null) return text;
+      }
+    } catch {
+      // fall through to textContent
+    }
+    return el.textContent ?? "";
+  }
+
+  private handleHeadMutations(records: MutationRecord[]) {
+    const t = this.t();
+    // Coalesce per-element updates so a single `textContent =` (which
+    // produces multiple child mutations) emits one event, not many.
+    const updated = new Set<HTMLStyleElement>();
+
+    for (const r of records) {
+      try {
+        if (r.type === "childList") {
+          // Mutations under a tracked <style> mean its rule text changed
+          // (e.g. `style.textContent = ...` replaces the inner text node).
+          if (r.target instanceof HTMLStyleElement && this.styleNodeIds.has(r.target)) {
+            updated.add(r.target);
+            continue;
+          }
+          // Otherwise, the mutation is at <head> level: stylesheets are
+          // being added or removed from the document.
+          for (const removed of Array.from(r.removedNodes)) {
+            const id = this.styleNodeIds.get(removed);
+            if (id === undefined) continue;
+            this.styleNodeIds.delete(removed);
+            this.recording.stylesheet_events.push({ type: "stylesheet.remove", t, id });
+          }
+          for (const added of Array.from(r.addedNodes)) {
+            if (!(added instanceof HTMLStyleElement) && !(added instanceof HTMLLinkElement)) {
+              continue;
+            }
+            if (this.styleNodeIds.has(added)) continue;
+            const snap = this.snapshotStylesheetElement(added as HTMLElement);
+            if (snap)
+              this.recording.stylesheet_events.push({ type: "stylesheet.add", t, sheet: snap });
+          }
+        } else if (r.type === "characterData") {
+          // Direct edit to the text node inside a <style> (e.g. via
+          // `style.firstChild.data = ...`). Walk up to the <style>.
+          let target: Node | null = r.target;
+          while (target && !(target instanceof HTMLStyleElement)) {
+            target = target.parentNode;
+          }
+          if (target && this.styleNodeIds.has(target)) {
+            updated.add(target as HTMLStyleElement);
+          }
+        }
+      } catch {
+        // Capture must never break the experiment.
+      }
+    }
+
+    for (const el of updated) {
+      const id = this.styleNodeIds.get(el);
+      if (id === undefined) continue;
+      this.recording.stylesheet_events.push({
+        type: "stylesheet.update",
+        t,
+        id,
+        css: this.readStyleCss(el),
+      });
+    }
   }
 
   private assignId(node: Node): number {

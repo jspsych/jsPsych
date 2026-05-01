@@ -189,7 +189,7 @@ describe("record_session option", () => {
       expect(linkSnaps.some((s) => s.href === "https://example.test/jspsych.css")).toBe(true);
     });
 
-    test("snapshot is taken once at start and is not mutated by later <style> additions", async () => {
+    test("initial stylesheets array is fixed at start; later additions go to stylesheet_events", async () => {
       const style = document.createElement("style");
       style.textContent = ".pre-existing { color: red; }";
       document.head.appendChild(style);
@@ -212,9 +212,120 @@ describe("record_session option", () => {
       await pressKey("a");
 
       const rec = jsPsych.getSessionRecording()!;
-      const allCss = rec.stylesheets.map((s) => s.css ?? "").join("\n");
-      expect(allCss).toContain("pre-existing");
-      expect(allCss).not.toContain("added-during-trial");
+      const initialCss = rec.stylesheets.map((s) => s.css ?? "").join("\n");
+      expect(initialCss).toContain("pre-existing");
+      expect(initialCss).not.toContain("added-during-trial");
+
+      const adds = rec.stylesheet_events.filter((e) => e.type === "stylesheet.add");
+      expect(adds.some((e) => (e.sheet.css ?? "").includes("added-during-trial"))).toBe(true);
+    });
+
+    test("emits stylesheet.add when a <style> is appended to <head> mid-session", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "x",
+            on_load: () => {
+              const s = document.createElement("style");
+              s.textContent = ".mid-session { color: green; }";
+              document.head.appendChild(s);
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const adds = rec.stylesheet_events.filter((e) => e.type === "stylesheet.add");
+      expect(adds.length).toBeGreaterThan(0);
+      const match = adds.find(
+        (e) => e.sheet.kind === "inline" && e.sheet.css.includes("mid-session")
+      );
+      expect(match).toBeDefined();
+      expect(typeof match!.sheet.id).toBe("number");
+      expect(match!.t).toEqual(expect.any(Number));
+    });
+
+    test("emits stylesheet.remove referencing the original snapshot id", async () => {
+      const style = document.createElement("style");
+      style.textContent = ".doomed { color: red; }";
+      document.head.appendChild(style);
+
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "x",
+            on_load: () => {
+              style.remove();
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const initial = rec.stylesheets.find((s) => (s.css ?? "").includes("doomed"));
+      expect(initial).toBeDefined();
+      const removes = rec.stylesheet_events.filter((e) => e.type === "stylesheet.remove");
+      expect(removes.some((e) => e.id === initial!.id)).toBe(true);
+    });
+
+    test("emits stylesheet.update when a tracked <style>'s text changes", async () => {
+      const style = document.createElement("style");
+      style.textContent = ".v1 { color: red; }";
+      document.head.appendChild(style);
+
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "x",
+            on_load: () => {
+              style.textContent = ".v2 { color: blue; }";
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const initial = rec.stylesheets.find((s) => (s.css ?? "").includes("v1"));
+      expect(initial).toBeDefined();
+      const updates = rec.stylesheet_events.filter((e) => e.type === "stylesheet.update");
+      expect(updates.length).toBeGreaterThan(0);
+      const last = updates[updates.length - 1];
+      expect(last.id).toBe(initial!.id);
+      expect(last.css).toContain("v2");
+    });
+
+    test("ignores non-stylesheet head mutations (e.g. <meta>, <title>)", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "x",
+            on_load: () => {
+              const meta = document.createElement("meta");
+              meta.name = "irrelevant";
+              document.head.appendChild(meta);
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      expect(rec.stylesheet_events).toHaveLength(0);
     });
   });
 
