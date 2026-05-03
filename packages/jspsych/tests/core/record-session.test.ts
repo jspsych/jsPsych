@@ -2,6 +2,7 @@ import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import { pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { initJsPsych } from "../../src";
+import { computeDiffBbox } from "../../src/modules/recording";
 
 function findById(node: any, id: string): any {
   if (node?.attrs?.id === id) return node;
@@ -550,6 +551,189 @@ describe("record_session option", () => {
       expect(rec.end_reason).toBe("finished");
       const snaps = rec.trials[0].events.filter((e) => e.type === "canvas.snapshot");
       expect(snaps).toHaveLength(0);
+    });
+
+    test("patches CanvasRenderingContext2D draw methods during recording and restores them on stop", async () => {
+      const proto = (CanvasRenderingContext2D as any).prototype;
+      const originalFillRect = proto.fillRect;
+      let fillRectDuringTrial: any = null;
+
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "x",
+            on_load: () => {
+              fillRectDuringTrial = proto.fillRect;
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      // Mid-trial: the prototype method is wrapped (not the captured original).
+      expect(fillRectDuringTrial).not.toBe(originalFillRect);
+      // After `stop()`: the wrapper is removed and the original is back in
+      // place so opting in to recording does not leave global state dirty.
+      expect(proto.fillRect).toBe(originalFillRect);
+    });
+
+    test("emits a follow-up partial snapshot when the canvas is drawn to after the baseline", async () => {
+      // jest-canvas-mock's `getImageData` returns blank pixels regardless
+      // of what was drawn, so we override it on the canvas's context with
+      // a deterministic stub: the first read returns blank (becomes the
+      // baseline shadow), every subsequent read returns a single red
+      // pixel at (3, 4). The diff path should then emit a partial
+      // snapshot whose `region` matches that pixel.
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<canvas id="c" width="20" height="20"></canvas>',
+            on_load: () => {
+              const c = document.getElementById("c") as HTMLCanvasElement;
+              const ctx = c.getContext("2d")!;
+              let calls = 0;
+              ctx.getImageData = () => {
+                calls++;
+                const buf = new Uint8ClampedArray(20 * 20 * 4);
+                if (calls > 1) {
+                  const i = (4 * 20 + 3) * 4;
+                  buf[i] = 255;
+                  buf[i + 3] = 255;
+                }
+                return new ImageData(buf, 20, 20);
+              };
+              // Trigger the patched draw method so the dirty flag is set
+              // and a frame tick is scheduled.
+              ctx.fillRect(0, 0, 1, 1);
+            },
+          },
+        ],
+        jsPsych
+      );
+      // Wait long enough for both the initial-baseline RAF and the
+      // animation-throttle window (~66 ms) so the draw-driven tick can
+      // fire and run a diff.
+      await new Promise((r) => setTimeout(r, 200));
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const snaps = rec.trials[0].events.filter((e) => e.type === "canvas.snapshot") as Array<{
+        type: "canvas.snapshot";
+        t: number;
+        node: number;
+        data_url: string;
+        region?: { x: number; y: number; w: number; h: number };
+      }>;
+      // At least the full baseline + one diff-detected partial.
+      expect(snaps.length).toBeGreaterThanOrEqual(2);
+      const partial = snaps.find((s) => s.region !== undefined);
+      expect(partial).toBeDefined();
+      expect(partial!.region).toEqual({ x: 3, y: 4, w: 1, h: 1 });
+    });
+
+    test("captures an initial baseline snapshot via RAF shortly after trial load", async () => {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<canvas id="c" width="40" height="40"></canvas>',
+            on_load: () => {
+              const c = document.getElementById("c") as HTMLCanvasElement;
+              c.getContext("2d")!.fillRect(0, 0, 10, 10);
+            },
+          },
+        ],
+        jsPsych
+      );
+      // Let the recorder's initial-baseline animation frame fire before the
+      // trial ends. Without it, the only snapshot would come from the
+      // trial-end `releaseSubtree` path (close to `t_end`).
+      await new Promise((r) => setTimeout(r, 50));
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const snaps = rec.trials[0].events.filter((e) => e.type === "canvas.snapshot") as Array<{
+        type: "canvas.snapshot";
+        t: number;
+        node: number;
+        data_url: string;
+        region?: { x: number; y: number; w: number; h: number };
+      }>;
+      expect(snaps.length).toBeGreaterThanOrEqual(1);
+      // The first snapshot is a full baseline (no `region`) and lands much
+      // closer to `t_dom_ready` than to `t_end`. If the initial RAF didn't
+      // fire, this would instead land near `t_end` (release-on-removal).
+      expect(snaps[0].region).toBeUndefined();
+      const t_dom = rec.trials[0].t_dom_ready!;
+      const t_end = rec.trials[0].t_end!;
+      expect(snaps[0].t - t_dom).toBeLessThan((t_end - t_dom) / 2);
+    });
+  });
+
+  describe("computeDiffBbox", () => {
+    function makePixels(w: number, h: number, fill = 0): Uint8ClampedArray {
+      const buf = new Uint8ClampedArray(w * h * 4);
+      if (fill !== 0) buf.fill(fill);
+      return buf;
+    }
+
+    function setPixel(buf: Uint8ClampedArray, w: number, x: number, y: number, rgba: number[]) {
+      const i = (y * w + x) * 4;
+      buf[i] = rgba[0];
+      buf[i + 1] = rgba[1];
+      buf[i + 2] = rgba[2];
+      buf[i + 3] = rgba[3];
+    }
+
+    test("returns null when buffers are byte-identical", () => {
+      const w = 16;
+      const h = 16;
+      const a = makePixels(w, h);
+      const b = makePixels(w, h);
+      expect(computeDiffBbox(a, b, w, h)).toBeNull();
+    });
+
+    test("returns a 1x1 bbox at the changed pixel for a single-pixel diff", () => {
+      const w = 16;
+      const h = 16;
+      const a = makePixels(w, h);
+      const b = makePixels(w, h);
+      setPixel(b, w, 5, 7, [255, 0, 0, 255]);
+      expect(computeDiffBbox(a, b, w, h)).toEqual({ x: 5, y: 7, w: 1, h: 1 });
+    });
+
+    test("returns the tight bbox spanning two distant changed pixels", () => {
+      const w = 32;
+      const h = 32;
+      const a = makePixels(w, h);
+      const b = makePixels(w, h);
+      setPixel(b, w, 3, 4, [255, 0, 0, 255]);
+      setPixel(b, w, 20, 25, [0, 255, 0, 255]);
+      expect(computeDiffBbox(a, b, w, h)).toEqual({ x: 3, y: 4, w: 18, h: 22 });
+    });
+
+    test("returns the full canvas bbox when every pixel changed", () => {
+      const w = 8;
+      const h = 8;
+      const a = makePixels(w, h, 0);
+      const b = makePixels(w, h, 255);
+      expect(computeDiffBbox(a, b, w, h)).toEqual({ x: 0, y: 0, w, h });
+    });
+
+    test("detects an alpha-only change (channel 3) as a diff", () => {
+      const w = 4;
+      const h = 4;
+      const a = makePixels(w, h, 0);
+      const b = makePixels(w, h, 0);
+      // Only the alpha byte at (1, 1) differs.
+      b[(1 * w + 1) * 4 + 3] = 128;
+      expect(computeDiffBbox(a, b, w, h)).toEqual({ x: 1, y: 1, w: 1, h: 1 });
     });
   });
 
