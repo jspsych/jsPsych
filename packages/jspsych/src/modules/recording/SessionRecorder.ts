@@ -1,263 +1,56 @@
-import * as randomization from "./randomization";
-
-// ---------------------------------------------------------------------------
-// Schema types (schema_version: 1)
-// ---------------------------------------------------------------------------
-
-export type JsonValue =
-  | null
-  | boolean
-  | number
-  | string
-  | JsonValue[]
-  | { [key: string]: JsonValue };
-
-export interface SessionRecording {
-  schema_version: 1;
-  jspsych_version: string;
-  recording_started_at: string;
-  recording_started_at_perf: number;
-  user_agent: string;
-  viewport: ViewportState;
-  rng: { seed: string | null; math_random_patched: boolean };
-  display_element_id: string;
-  stylesheets: StylesheetSnapshot[];
-  // Chronological log of `<head>` stylesheet mutations after `start()`.
-  // Initial state is in `stylesheets`; this records subsequent additions,
-  // removals, and `<style>` text edits so the replayer can apply them
-  // alongside the per-trial DOM event stream.
-  stylesheet_events: StylesheetEvent[];
-  trials: TrialRecording[];
-  viewport_changes: ViewportChange[];
-  // Chronological log of every Math.random output consumed during the
-  // session. Captured at session scope (rather than per-trial) so calls
-  // outside trial boundaries — pre-trial parameter evaluation, post-trial
-  // gaps, the experimenter's `on_finish` — are never dropped. A replayer
-  // consumes this list in order.
-  rng_calls: RngCall[];
-  ended_at_perf: number | null;
-  end_reason: "finished" | "aborted" | "unload" | null;
-}
-
-// A snapshot of one stylesheet attached to the document. `inline` covers
-// `<style>` tags; `link` covers `<link rel="stylesheet">`. `css` is the
-// resolved rule text where readable; cross-origin sheets throw SecurityError
-// on `cssRules` access, so for those we record `href` only and leave `css`
-// null so a replayer can fetch the source out-of-band. `id` is unique within
-// the session and shared with `stylesheet_events` so add/remove/update
-// events can reference snapshots created at start.
-export type StylesheetSnapshot =
-  | { id: number; kind: "inline"; css: string; media: string | null }
-  | { id: number; kind: "link"; href: string; css: string | null; media: string | null };
-
-// Session-scope log entries for `<head>` stylesheet changes after start.
-// `stylesheet.add` carries a full snapshot (with a newly-assigned `id`);
-// `stylesheet.remove` and `stylesheet.update` reference an existing `id`
-// from `stylesheets` or a prior `add` event.
-export type StylesheetEvent =
-  | { type: "stylesheet.add"; t: number; sheet: StylesheetSnapshot }
-  | { type: "stylesheet.remove"; t: number; id: number }
-  | { type: "stylesheet.update"; t: number; id: number; css: string };
-
-export interface ViewportState {
-  w: number;
-  h: number;
-  dpr: number;
-  scale: number;
-  offset_x: number;
-  offset_y: number;
-}
-
-export interface ViewportChange extends ViewportState {
-  t: number;
-}
-
-export interface TrialRecording {
-  trial_index: number;
-  t_start: number;
-  t_dom_ready: number | null;
-  t_end: number | null;
-  plugin: string;
-  initial_dom: DomNode | null;
-  events: RecordedEvent[];
-  trial_data: JsonValue;
-}
-
-export type DomNode = ElementNode | TextNode | CommentNode;
-
-export interface ElementNode {
-  id: number;
-  kind: "element";
-  tag: string;
-  attrs: Record<string, string>;
-  children: DomNode[];
-  canvas_size?: { w: number; h: number };
-  media_src?: string;
-}
-
-export interface TextNode {
-  id: number;
-  kind: "text";
-  text: string;
-}
-
-export interface CommentNode {
-  id: number;
-  kind: "comment";
-  text: string;
-}
-
-export type RecordedEvent =
-  | DomMutation
-  | InputRecord
-  | ClipboardRecord
-  | MediaRecord
-  | FocusRecord
-  | ScrollRecord
-  | CanvasSnapshot;
-
-export type DomMutation =
-  | { type: "dom.add"; t: number; parent: number; before: number | null; node: DomNode }
-  | { type: "dom.remove"; t: number; node: number }
-  | { type: "dom.attr"; t: number; node: number; name: string; value: string | null }
-  | { type: "dom.text"; t: number; node: number; text: string };
-
-export type InputRecord =
-  | { type: "mouse.move"; t: number; x: number; y: number }
-  | {
-      type: "mouse.down" | "mouse.up" | "mouse.click";
-      t: number;
-      x: number;
-      y: number;
-      button: number;
-      target: number | null;
-    }
-  | {
-      type: "touch.start" | "touch.move" | "touch.end";
-      t: number;
-      touches: { id: number; x: number; y: number }[];
-    }
-  | {
-      type: "key.down" | "key.up";
-      t: number;
-      key: string;
-      code: string;
-      mods: { ctrl: boolean; shift: boolean; alt: boolean; meta: boolean };
-      repeat: boolean;
-      target: number | null;
-    }
-  // Form-state changes. The MutationObserver only sees the `value` *attribute*,
-  // not the IDL property the browser writes when a participant types or
-  // toggles a control. These records carry the post-change value/checked/
-  // selection so a replayer can reconstitute survey responses without
-  // having to replay keystrokes through a live form.
-  | { type: "input.value"; t: number; node: number; value: string }
-  | { type: "input.checked"; t: number; node: number; checked: boolean }
-  | { type: "input.select"; t: number; node: number; values: string[] };
-
-export interface ClipboardRecord {
-  type: "clipboard.copy" | "clipboard.cut" | "clipboard.paste";
-  t: number;
-  text: string | null;
-  html: string | null;
-  target: number | null;
-}
-
-export type MediaRecord = {
-  type: "media.play" | "media.pause" | "media.ended" | "media.seeked" | "media.time";
-  t: number;
-  node: number;
-  current_time: number;
-};
-
-export interface FocusRecord {
-  type: "focus" | "blur" | "fullscreen.enter" | "fullscreen.exit";
-  t: number;
-}
-
-export type ScrollRecord =
-  | { type: "scroll.window"; t: number; x: number; y: number }
-  | { type: "scroll.element"; t: number; node: number; x: number; y: number };
-
-// Captures `<canvas>` pixel state as a PNG data URL. The MutationObserver
-// can't see drawing operations inside `<canvas>`; without these events a
-// replayer reconstructs the element but renders it blank, so anything the
-// participant drew (e.g. plugin-sketchpad strokes) would be invisible.
-// Emitted at trial load (initial baseline), gesture boundaries
-// (mouseup/touchend/pointerup) and trial end, with per-canvas throttling.
-//
-// `region` distinguishes a full-canvas baseline from an incremental patch:
-//   - omitted: `data_url` is the entire canvas, to be drawn at (0, 0)
-//     after clearing. The first snapshot per canvas is always full so
-//     subsequent partials have a baseline to layer on.
-//   - present: `data_url` is a cropped rectangle of the canvas's current
-//     state. The replayer composites it at (region.x, region.y) without
-//     touching the rest of the canvas.
-// The recorder emits a partial when the changed bounding box covers less
-// than ~80% of the canvas; otherwise it emits a full snapshot since the
-// per-pixel cost of compositing approaches a full re-render.
-export interface CanvasSnapshot {
-  type: "canvas.snapshot";
-  t: number;
-  node: number;
-  data_url: string;
-  region?: { x: number; y: number; w: number; h: number };
-}
-
-export interface RngCall {
-  t: number;
-  fn: string;
-  args: JsonValue;
-  result: JsonValue;
-}
-
-// ---------------------------------------------------------------------------
-// SessionRecorder
-// ---------------------------------------------------------------------------
-
-const SCHEMA_VERSION = 1;
-const VIEWPORT_DEBOUNCE_MS = 100;
-const MEDIA_TIME_THROTTLE_MS = 250;
-// Per-canvas minimum gap between gesture-driven snapshots. Bounds the
-// `toDataURL` cost for users who rapidly click/release; trial-end
-// captures bypass this so the final state always lands.
-const CANVAS_SNAPSHOT_MIN_INTERVAL_MS = 250;
-// When the changed bounding box covers more than this fraction of the
-// canvas, fall back to a full snapshot. Cropping a near-full region
-// pays the `getImageData` + `drawImage` + `toDataURL` cost of a full
-// snapshot anyway, so the partial-snapshot bookkeeping is wasted.
-const CANVAS_FULL_SNAPSHOT_AREA_FRACTION = 0.8;
-// Per-canvas minimum gap between draw-triggered animation snapshots.
-// Distinct from `CANVAS_SNAPSHOT_MIN_INTERVAL_MS`, which throttles the
-// gesture-driven path. ~15 Hz is enough fidelity for replaying typical
-// canvas animations without producing 60 PNGs/sec for a continuously-
-// repainting stimulus.
-const CANVAS_ANIMATION_MIN_INTERVAL_MS = 66;
-// Pixel-mutating methods on `CanvasRenderingContext2D`. Wrapping these
-// lets the recorder notice when a canvas was redrawn between gestures
-// (the original heuristic only snapshotted at mouseup/touchend), so
-// canvases driven by animation loops or non-gesture timers can still
-// be reconstructed in the replay. Path-state methods (beginPath,
-// moveTo, lineTo, …) are intentionally omitted: they don't change
-// pixels until `fill` or `stroke` is called.
-const CANVAS_DRAW_METHODS = [
-  "clearRect",
-  "fillRect",
-  "strokeRect",
-  "fill",
-  "stroke",
-  "fillText",
-  "strokeText",
-  "drawImage",
-  "putImageData",
-] as const;
+import {
+  CANVAS_ANIMATION_MIN_INTERVAL_MS,
+  CANVAS_FULL_SNAPSHOT_AREA_FRACTION,
+  CANVAS_SNAPSHOT_MIN_INTERVAL_MS,
+  CanvasState,
+  MEDIA_EVENTS,
+  MEDIA_TIME_THROTTLE_MS,
+  RNG_NO_ARGS,
+  SCHEMA_VERSION,
+  VIEWPORT_DEBOUNCE_MS,
+} from "./constants";
+import {
+  getReadable2dContext,
+  registerCanvasRecorder,
+  registerMathRandomRecorder,
+  unregisterCanvasRecorder,
+  unregisterMathRandomRecorder,
+} from "./global-patches";
+import {
+  computeDiffBbox,
+  cropCanvasToDataURL,
+  readMedia,
+  readSheetText,
+  readViewport,
+  serializeJson,
+} from "./helpers";
+import type { ResolvedRecordSessionOptions } from "./options";
+import type {
+  ClipboardRecord,
+  DomNode,
+  ElementNode,
+  FocusRecord,
+  MediaRecord,
+  RecordedEvent,
+  SessionRecording,
+  StylesheetSnapshot,
+  TrialRecording,
+  ViewportState,
+} from "./types";
 
 export interface SessionRecorderOptions {
   jspsychVersion: string;
+  recordOptions: ResolvedRecordSessionOptions;
 }
 
 export class SessionRecorder {
   private readonly jspsychVersion: string;
+  private readonly opts: ResolvedRecordSessionOptions;
+  // Total events recorded across all categories (per-trial events,
+  // rng_calls, viewport_changes, stylesheet_events). Compared against
+  // `opts.max_events` to enforce the heap bound.
+  private totalEventCount = 0;
+  private stopRequested = false;
   private recording: SessionRecording;
   private displayElement: HTMLElement | null = null;
   // Outermost layout root for the experiment. The spine in `initial_dom`
@@ -281,17 +74,19 @@ export class SessionRecorder {
   private styleNodeIds = new WeakMap<Node, number>();
   private nextStylesheetId = 1;
 
-  private mouseRafScheduled = false;
+  // RAF-coalesced flushers. Each entry is keyed by a channel name
+  // (mouse / scroll / input); presence of a key means a flush is
+  // already scheduled for that channel.
+  private rafScheduled = new Set<string>();
+
   private lastMouseX = 0;
   private lastMouseY = 0;
   private mouseDirty = false;
 
-  private scrollRafScheduled = false;
   // Pending scroll state to flush at next animation frame. Key "window"
   // refers to the document scroll; numeric keys are tracked node IDs.
   private pendingScroll: Map<number | "window", { x: number; y: number }> = new Map();
 
-  private inputRafScheduled = false;
   // Latest value-per-input collected within the current animation frame.
   // Coalesced so a fast typist produces one record per RAF rather than
   // one per keystroke (matching how mouse.move is throttled).
@@ -300,48 +95,21 @@ export class SessionRecorder {
   private viewportTimer: ReturnType<typeof setTimeout> | null = null;
   private lastViewport: ViewportState | null = null;
 
-  private mediaListeners = new WeakMap<HTMLMediaElement, (ev: Event) => void>();
+  // Tracked media elements with their attached listener. Strong refs so
+  // we can iterate at trial end to detach. `mediaTimeLast` is keyed by
+  // element for its `timeupdate`-throttle bookkeeping.
+  private mediaListeners = new Map<HTMLMediaElement, (ev: Event) => void>();
   private mediaTimeLast = new WeakMap<HTMLMediaElement, number>();
-  // Strong ref to currently tracked media elements so we can iterate and
-  // remove their listeners when the trial ends. Cleared on detach.
-  private mediaTrackedElements = new Set<HTMLMediaElement>();
 
-  // Strong ref to canvas elements within the current trial's display
-  // subtree. Used to drive deferred snapshotting after gestures and at
-  // trial end. Per-canvas throttle/dedupe state is held alongside.
-  private canvasTrackedElements = new Set<HTMLCanvasElement>();
-  private canvasLastSnapshot = new WeakMap<HTMLCanvasElement, string>();
-  private canvasLastSnapshotTime = new WeakMap<HTMLCanvasElement, number>();
-  private canvasSnapshotScheduled = false;
-  // Last full-canvas pixel buffer per tracked canvas, used to compute
-  // the bounding box of changed pixels so subsequent snapshots can ship
-  // only the dirty rectangle. Cleared on canvas removal and on trial
-  // teardown. Absent for canvases that don't expose a 2d context (e.g.
-  // WebGL) — those always emit full snapshots.
-  private canvasShadowData = new WeakMap<HTMLCanvasElement, ImageData>();
-  private canvasInitialSnapshotScheduled = false;
-  // Set to true by the patched 2d-context draw methods whenever a
-  // tracked canvas is mutated. The frame tick reads-and-clears it to
-  // decide which canvases need a fresh diff.
-  private canvasDirty = new WeakMap<HTMLCanvasElement, boolean>();
-  // Last time the draw-detection path emitted (or attempted to emit) a
-  // snapshot for each canvas. Drives `CANVAS_ANIMATION_MIN_INTERVAL_MS`
-  // throttling without conflicting with the gesture-path throttle in
-  // `canvasLastSnapshotTime`.
-  private canvasAnimationLastTime = new WeakMap<HTMLCanvasElement, number>();
+  // Per-canvas state: strong-ref Map (we explicitly delete entries on
+  // canvas removal and trial end) so iteration and lookup are one
+  // structure.
+  private canvasStates = new Map<HTMLCanvasElement, CanvasState>();
+  // True when an in-flight RAF-deferred sweep should bypass the per-
+  // canvas throttle. Set by initial-baseline schedules; gesture-driven
+  // schedules leave it alone.
+  private pendingCanvasSnapshotForce = false;
   private canvasFrameLoopScheduled = false;
-  // Patched draw methods on `CanvasRenderingContext2D.prototype`. We
-  // restore them on `stop()` so opting in to recording does not leave
-  // wrappers in place after the experiment ends, even if the recorder
-  // auto-stopped due to abort or unload.
-  private canvasContextPatched = false;
-  private originalCanvasMethods = new Map<string, Function>();
-
-  // Reference to whatever `Math.random` was immediately before the recorder
-  // started. Restored verbatim on stop so opting into recording does not
-  // permanently alter `Math.random`, even if we auto-seeded.
-  private originalMathRandom: () => number = Math.random;
-  private mathRandomPatched = false;
 
   private boundHandlers: Array<{
     target: EventTarget;
@@ -356,6 +124,7 @@ export class SessionRecorder {
 
   constructor(options: SessionRecorderOptions) {
     this.jspsychVersion = options.jspsychVersion;
+    this.opts = options.recordOptions;
     this.recording = this.createBlankRecording();
   }
 
@@ -411,20 +180,24 @@ export class SessionRecorder {
     this.nextStylesheetId = 1;
     this.recording.stylesheets = this.captureStylesheets();
     this.mouseDirty = false;
-    this.mouseRafScheduled = false;
-    this.scrollRafScheduled = false;
+    this.rafScheduled.clear();
     this.pendingScroll.clear();
-    this.inputRafScheduled = false;
     this.pendingInput.clear();
     this.canvasFrameLoopScheduled = false;
-    this.canvasInitialSnapshotScheduled = false;
+    this.pendingCanvasSnapshotForce = false;
+    this.totalEventCount = 0;
+    this.stopRequested = false;
 
-    this.patchMathRandom();
-    this.patchCanvasContext();
+    if (this.opts.capture_random) {
+      const seed = registerMathRandomRecorder(this);
+      if (seed !== null) this.recording.rng.seed = seed;
+      this.recording.rng.math_random_patched = true;
+    }
+    if (this.opts.capture_canvas) registerCanvasRecorder(this);
     this.attachSessionListeners();
   }
 
-  stop(reason: "finished" | "aborted" | "unload" = "finished") {
+  stop(reason: "finished" | "aborted" | "unload" | "memory_limit" = "finished") {
     // Idempotent: stopping an already-stopped recorder is a no-op.
     if (!this.running) return;
 
@@ -441,8 +214,8 @@ export class SessionRecorder {
 
     this.detachTrialListeners();
     this.detachSessionListeners();
-    this.unpatchMathRandom();
-    this.unpatchCanvasContext();
+    unregisterMathRandomRecorder(this);
+    unregisterCanvasRecorder(this);
     this.recording.ended_at_perf = this.t();
     this.recording.end_reason = reason;
     this.running = false;
@@ -475,12 +248,10 @@ export class SessionRecorder {
     this.currentTrial.initial_dom = this.serializeDisplaySpine(this.displayElement);
     this.attachTrialListeners();
     this.scanForMediaElements(this.displayElement);
-    // `scanForCanvasElements` registers each canvas via
-    // `trackCanvasElement`, which schedules the initial baseline
-    // snapshot for the next animation frame so synchronously-drawn
-    // stimuli (canvas-button-response, canvas-keyboard-response, ...)
-    // are captured before any interaction.
-    this.scanForCanvasElements(this.displayElement);
+    // Registers each canvas and schedules an initial baseline snapshot
+    // so synchronously-drawn stimuli (canvas-button-response,
+    // canvas-keyboard-response, …) are captured before any interaction.
+    if (this.opts.capture_canvas) this.scanForCanvasElements(this.displayElement);
   }
 
   onTrialFinish(trialData: unknown) {
@@ -498,14 +269,14 @@ export class SessionRecorder {
   // -------- session listeners (viewport, focus) --------
 
   private attachSessionListeners() {
-    this.bind(window, "resize", this.scheduleViewportRead);
+    this.bindSession(window, "resize", this.scheduleViewportRead);
     if (window.visualViewport) {
-      this.bind(window.visualViewport, "resize", this.scheduleViewportRead);
-      this.bind(window.visualViewport, "scroll", this.scheduleViewportRead);
+      this.bindSession(window.visualViewport, "resize", this.scheduleViewportRead);
+      this.bindSession(window.visualViewport, "scroll", this.scheduleViewportRead);
     }
-    this.bind(window, "focus", () => this.pushFocus("focus"));
-    this.bind(window, "blur", () => this.pushFocus("blur"));
-    this.bind(document, "fullscreenchange", () => {
+    this.bindSession(window, "focus", () => this.pushFocus("focus"));
+    this.bindSession(window, "blur", () => this.pushFocus("blur"));
+    this.bindSession(document, "fullscreenchange", () => {
       this.pushFocus(document.fullscreenElement ? "fullscreen.enter" : "fullscreen.exit");
     });
 
@@ -557,7 +328,9 @@ export class SessionRecorder {
         last.offset_y !== v.offset_y
       ) {
         this.lastViewport = v;
-        this.recording.viewport_changes.push({ t: this.t(), ...v });
+        if (this.checkEventBudget()) {
+          this.recording.viewport_changes.push({ t: this.t(), ...v });
+        }
       }
     }, VIEWPORT_DEBOUNCE_MS);
   };
@@ -596,19 +369,19 @@ export class SessionRecorder {
     // were silently dropped before. `targetId` may now resolve to
     // `null` when the target is outside the recorded display spine,
     // which the schema already permits.
-    this.bind(window, "mousemove", this.handleMouseMove, true);
-    this.bind(window, "mousedown", this.handleMouseButton("mouse.down"), true);
-    this.bind(window, "mouseup", this.handleMouseButton("mouse.up"), true);
-    this.bind(window, "click", this.handleMouseButton("mouse.click"), true);
-    this.bind(document, "touchstart", this.handleTouch("touch.start"), {
+    this.bindTrial(window, "mousemove", this.handleMouseMove, true);
+    this.bindTrial(window, "mousedown", this.handleMouseButton("mouse.down"), true);
+    this.bindTrial(window, "mouseup", this.handleMouseButton("mouse.up"), true);
+    this.bindTrial(window, "click", this.handleMouseButton("mouse.click"), true);
+    this.bindTrial(document, "touchstart", this.handleTouch("touch.start"), {
       passive: true,
       capture: true,
     });
-    this.bind(document, "touchmove", this.handleTouch("touch.move"), {
+    this.bindTrial(document, "touchmove", this.handleTouch("touch.move"), {
       passive: true,
       capture: true,
     });
-    this.bind(document, "touchend", this.handleTouch("touch.end"), {
+    this.bindTrial(document, "touchend", this.handleTouch("touch.end"), {
       passive: true,
       capture: true,
     });
@@ -616,21 +389,24 @@ export class SessionRecorder {
     // capture phase: they may be dispatched on any element (including
     // descendants of the body), and capture-phase listening ensures we see
     // them before any user-attached handler can call stopPropagation.
-    this.bind(document, "keydown", this.handleKey("key.down"), true);
-    this.bind(document, "keyup", this.handleKey("key.up"), true);
-    this.bind(document, "copy", this.handleClipboard("clipboard.copy"), true);
-    this.bind(document, "cut", this.handleClipboard("clipboard.cut"), true);
-    this.bind(document, "paste", this.handleClipboard("clipboard.paste"), true);
+    this.bindTrial(document, "keydown", this.handleKey("key.down"), true);
+    this.bindTrial(document, "keyup", this.handleKey("key.up"), true);
+    this.bindTrial(document, "copy", this.handleClipboard("clipboard.copy"), true);
+    this.bindTrial(document, "cut", this.handleClipboard("clipboard.cut"), true);
+    this.bindTrial(document, "paste", this.handleClipboard("clipboard.paste"), true);
     // Scroll events do not bubble, so capture-phase listening at document
     // scope catches scroll on any descendant element. Window scrolling is
     // handled by the same listener via a Document target check.
-    this.bind(document, "scroll", this.handleScroll, true);
+    this.bindTrial(document, "scroll", this.handleScroll, true);
     // Form-state events. `input` covers text fields, textareas, and
     // sliders (fires on every value change). `change` covers checkboxes,
     // radios, and selects (fires on commit). Capture phase at document
-    // scope so nothing in user code can stopPropagation past us.
-    this.bind(document, "input", this.handleInputEvent, true);
-    this.bind(document, "change", this.handleChangeEvent, true);
+    // scope so nothing in user code can stopPropagation past us. Gated
+    // by `capture_inputs` for surveys whose values must not be recorded.
+    if (this.opts.capture_inputs) {
+      this.bindTrial(document, "input", this.handleInputEvent, true);
+      this.bindTrial(document, "change", this.handleChangeEvent, true);
+    }
   }
 
   private detachTrialListeners() {
@@ -639,12 +415,10 @@ export class SessionRecorder {
       this.mutationObserver = null;
     }
     this.detachMediaListeners();
-    // WeakMap entries for the released canvases will be GC'd once the
-    // tracked-set strong refs drop here; explicit deletion happens in
-    // `releaseSubtree` for canvases removed mid-trial.
-    this.canvasTrackedElements.clear();
-    this.canvasSnapshotScheduled = false;
-    this.canvasInitialSnapshotScheduled = false;
+    // Strong refs drop here; explicit deletion happens in `releaseSubtree`
+    // for canvases removed mid-trial.
+    this.canvasStates.clear();
+    this.pendingCanvasSnapshotForce = false;
     // Tear down only the trial-scoped handlers; session-scoped handlers
     // (resize, focus, blur, fullscreenchange) stay attached until stop().
     const remaining: typeof this.boundHandlers = [];
@@ -682,8 +456,10 @@ export class SessionRecorder {
             this.pushEvent({ type: "dom.add", t, parent: parentId, before, node });
             if (added instanceof HTMLMediaElement) this.attachMediaListeners(added);
             else if (added instanceof Element) this.scanForMediaElements(added);
-            if (added instanceof HTMLCanvasElement) this.trackCanvasElement(added);
-            else if (added instanceof Element) this.scanForCanvasElements(added);
+            if (this.opts.capture_canvas) {
+              if (added instanceof HTMLCanvasElement) this.trackCanvasElement(added);
+              else if (added instanceof Element) this.scanForCanvasElements(added);
+            }
           }
         } else if (r.type === "attributes") {
           const id = this.nodeIds.get(r.target);
@@ -719,14 +495,13 @@ export class SessionRecorder {
   }
 
   private releaseSubtree(node: Node) {
-    if (node instanceof HTMLCanvasElement && this.canvasTrackedElements.has(node)) {
+    if (node instanceof HTMLCanvasElement && this.canvasStates.has(node)) {
       // jsPsych core clears the display element via `innerHTML = ""`
       // immediately after each trial, before `onTrialFinish` fires. Take
       // a final snapshot here so the canvas's last pixel state is in the
       // recording instead of being silently dropped on removal.
       this.snapshotCanvas(node, this.t(), true);
-      this.canvasTrackedElements.delete(node);
-      this.canvasShadowData.delete(node);
+      this.canvasStates.delete(node);
     }
     if (this.nodeIds.has(node)) {
       this.nodeIds.delete(node);
@@ -929,7 +704,9 @@ export class SessionRecorder {
             const id = this.styleNodeIds.get(removed);
             if (id === undefined) continue;
             this.styleNodeIds.delete(removed);
-            this.recording.stylesheet_events.push({ type: "stylesheet.remove", t, id });
+            if (this.checkEventBudget()) {
+              this.recording.stylesheet_events.push({ type: "stylesheet.remove", t, id });
+            }
           }
           for (const added of Array.from(r.addedNodes)) {
             if (!(added instanceof HTMLStyleElement) && !(added instanceof HTMLLinkElement)) {
@@ -937,8 +714,9 @@ export class SessionRecorder {
             }
             if (this.styleNodeIds.has(added)) continue;
             const snap = this.snapshotStylesheetElement(added as HTMLElement);
-            if (snap)
+            if (snap && this.checkEventBudget()) {
               this.recording.stylesheet_events.push({ type: "stylesheet.add", t, sheet: snap });
+            }
           }
         } else if (r.type === "characterData") {
           // Direct edit to the text node inside a <style> (e.g. via
@@ -959,6 +737,7 @@ export class SessionRecorder {
     for (const el of updated) {
       const id = this.styleNodeIds.get(el);
       if (id === undefined) continue;
+      if (!this.checkEventBudget()) break;
       this.recording.stylesheet_events.push({
         type: "stylesheet.update",
         t,
@@ -984,21 +763,27 @@ export class SessionRecorder {
 
   // -------- input handlers --------
 
+  // Coalesces a flush of `key`'s pending state to the next animation
+  // frame. Repeated calls before the frame fires are no-ops, so a
+  // burst of input events produces one flush instead of many.
+  private scheduleRafFlush(key: string, flush: () => void) {
+    if (this.rafScheduled.has(key)) return;
+    this.rafScheduled.add(key);
+    requestAnimationFrame(() => {
+      this.rafScheduled.delete(key);
+      flush();
+    });
+  }
+
   private handleMouseMove = (ev: Event) => {
     const e = ev as MouseEvent;
     this.lastMouseX = e.clientX;
     this.lastMouseY = e.clientY;
     this.mouseDirty = true;
-    if (!this.mouseRafScheduled) {
-      this.mouseRafScheduled = true;
-      requestAnimationFrame(() => {
-        this.mouseRafScheduled = false;
-        this.flushPendingMouse();
-      });
-    }
+    this.scheduleRafFlush("mouse", this.flushPendingMouse);
   };
 
-  private flushPendingMouse() {
+  private flushPendingMouse = () => {
     if (!this.mouseDirty) return;
     this.mouseDirty = false;
     this.pushEvent({
@@ -1007,15 +792,12 @@ export class SessionRecorder {
       x: this.lastMouseX,
       y: this.lastMouseY,
     });
-  }
+  };
 
   private handleScroll = (ev: Event) => {
     const target = ev.target;
     if (target === document || target === document.documentElement || target === document.body) {
-      this.pendingScroll.set("window", {
-        x: window.scrollX,
-        y: window.scrollY,
-      });
+      this.pendingScroll.set("window", { x: window.scrollX, y: window.scrollY });
     } else if (target instanceof Element) {
       const id = this.nodeIds.get(target);
       if (id === undefined) return;
@@ -1023,13 +805,7 @@ export class SessionRecorder {
     } else {
       return;
     }
-    if (!this.scrollRafScheduled) {
-      this.scrollRafScheduled = true;
-      requestAnimationFrame(() => {
-        this.scrollRafScheduled = false;
-        this.flushPendingScroll();
-      });
-    }
+    this.scheduleRafFlush("scroll", this.flushPendingScroll);
   };
 
   // `input` events come from text-like form fields, textareas, and sliders.
@@ -1050,23 +826,17 @@ export class SessionRecorder {
     const id = this.nodeIds.get(target);
     if (id === undefined) return;
     this.pendingInput.set(id, target.value);
-    if (!this.inputRafScheduled) {
-      this.inputRafScheduled = true;
-      requestAnimationFrame(() => {
-        this.inputRafScheduled = false;
-        this.flushPendingInput();
-      });
-    }
+    this.scheduleRafFlush("input", this.flushPendingInput);
   };
 
-  private flushPendingInput() {
+  private flushPendingInput = () => {
     if (this.pendingInput.size === 0) return;
     const t = this.t();
     for (const [node, value] of this.pendingInput) {
       this.pushEvent({ type: "input.value", t, node, value });
     }
     this.pendingInput.clear();
-  }
+  };
 
   private handleChangeEvent = (ev: Event) => {
     const target = ev.target;
@@ -1087,7 +857,7 @@ export class SessionRecorder {
     }
   };
 
-  private flushPendingScroll() {
+  private flushPendingScroll = () => {
     if (this.pendingScroll.size === 0) return;
     const t = this.t();
     for (const [key, pos] of this.pendingScroll) {
@@ -1098,7 +868,7 @@ export class SessionRecorder {
       }
     }
     this.pendingScroll.clear();
-  }
+  };
 
   private handleMouseButton(type: "mouse.down" | "mouse.up" | "mouse.click") {
     return (ev: Event) => {
@@ -1113,7 +883,7 @@ export class SessionRecorder {
       });
       // Gesture release is the moment a stroke completes; snapshot any
       // tracked canvases so the drawing it produced reaches the replay.
-      if (type === "mouse.up") this.scheduleCanvasSnapshot();
+      if (type === "mouse.up") this.scheduleCanvasSnapshot(false);
     };
   }
 
@@ -1126,7 +896,7 @@ export class SessionRecorder {
         y: tt.clientY,
       }));
       this.pushEvent({ type, t: this.t(), touches });
-      if (type === "touch.end") this.scheduleCanvasSnapshot();
+      if (type === "touch.end") this.scheduleCanvasSnapshot(false);
     };
   }
 
@@ -1207,27 +977,15 @@ export class SessionRecorder {
       }
       this.pushEvent({ type, t: this.t(), node: id, current_time: media.currentTime });
     };
-    media.addEventListener("play", handler);
-    media.addEventListener("pause", handler);
-    media.addEventListener("ended", handler);
-    media.addEventListener("seeked", handler);
-    media.addEventListener("timeupdate", handler);
-    this.mediaTrackedElements.add(media);
+    for (const ev of MEDIA_EVENTS) media.addEventListener(ev, handler);
     this.mediaListeners.set(media, handler);
   }
 
   private detachMediaListeners() {
-    for (const media of this.mediaTrackedElements) {
-      const handler = this.mediaListeners.get(media);
-      if (!handler) continue;
-      media.removeEventListener("play", handler);
-      media.removeEventListener("pause", handler);
-      media.removeEventListener("ended", handler);
-      media.removeEventListener("seeked", handler);
-      media.removeEventListener("timeupdate", handler);
-      this.mediaListeners.delete(media);
+    for (const [media, handler] of this.mediaListeners) {
+      for (const ev of MEDIA_EVENTS) media.removeEventListener(ev, handler);
     }
-    this.mediaTrackedElements.clear();
+    this.mediaListeners.clear();
   }
 
   // -------- canvas snapshotting --------
@@ -1247,57 +1005,25 @@ export class SessionRecorder {
   }
 
   private trackCanvasElement(canvas: HTMLCanvasElement) {
-    this.canvasTrackedElements.add(canvas);
-    // Schedule an initial baseline snapshot. For canvases discovered at
-    // `onTrialLoad` this catches the post-render state of plugins that
-    // draw their stimulus synchronously. For canvases added mid-trial
-    // via the MutationObserver path this gives the same coverage. The
-    // diff path skips re-snapshotting canvases that are already
-    // baselined, so calling this for every added canvas is cheap.
-    this.scheduleInitialCanvasSnapshot();
+    if (!this.canvasStates.has(canvas)) this.canvasStates.set(canvas, {});
+    // Force a baseline snapshot to capture synchronously-drawn stimuli
+    // even if a gesture immediately preceded the trial. The diff path
+    // dedupes already-baselined canvases, so this is cheap.
+    this.scheduleCanvasSnapshot(true);
   }
 
-  // Wraps the pixel-mutating methods on `CanvasRenderingContext2D`
-  // so the recorder is notified whenever a tracked canvas is drawn to.
-  // The wrapper sets a per-canvas dirty flag and schedules a frame
-  // tick; the original method is then called with the original `this`
-  // and arguments so the wrap is invisible to plugin code. Idempotent
-  // and per-instance: the originals captured here are restored on
-  // `stop()`, even across nested recorder lifetimes.
-  private patchCanvasContext() {
-    if (this.canvasContextPatched) return;
-    if (typeof CanvasRenderingContext2D === "undefined") return;
-    const proto = CanvasRenderingContext2D.prototype as unknown as Record<string, Function>;
-    const recorder = this;
-    for (const method of CANVAS_DRAW_METHODS) {
-      const original = proto[method];
-      if (typeof original !== "function") continue;
-      this.originalCanvasMethods.set(method, original);
-      proto[method] = function (this: CanvasRenderingContext2D, ...args: unknown[]) {
-        try {
-          const canvas = this.canvas as HTMLCanvasElement | undefined;
-          if (canvas && recorder.canvasTrackedElements.has(canvas)) {
-            recorder.canvasDirty.set(canvas, true);
-            recorder.scheduleCanvasFrameTick();
-          }
-        } catch {
-          // Tracking must never break the experiment's own drawing.
-        }
-        return (original as Function).apply(this, args);
-      };
-    }
-    this.canvasContextPatched = true;
-  }
-
-  private unpatchCanvasContext() {
-    if (!this.canvasContextPatched) return;
-    if (typeof CanvasRenderingContext2D === "undefined") return;
-    const proto = CanvasRenderingContext2D.prototype as unknown as Record<string, Function>;
-    for (const [method, original] of this.originalCanvasMethods) {
-      proto[method] = original;
-    }
-    this.originalCanvasMethods.clear();
-    this.canvasContextPatched = false;
+  /** @internal Called from the shared draw-method wrapper. */
+  notifyCanvasDraw(canvas: HTMLCanvasElement) {
+    const state = this.canvasStates.get(canvas);
+    if (!state) return;
+    // Already-dirty short-circuit: a stroke composed of many draw calls
+    // (lineTo + stroke + lineTo + stroke ...) within a frame would
+    // otherwise re-write the same `true` and re-check the schedule
+    // flag tens of times per frame. Once dirty, nothing else needs
+    // doing until the frame tick clears the flag.
+    if (state.dirty) return;
+    state.dirty = true;
+    this.scheduleCanvasFrameTick();
   }
 
   // Coalesces draw notifications into a single per-frame tick. Multiple
@@ -1316,16 +1042,16 @@ export class SessionRecorder {
     this.canvasFrameLoopScheduled = false;
     if (!this.running) return;
     const t = this.t();
-    for (const canvas of this.canvasTrackedElements) {
-      if (!this.canvasDirty.get(canvas)) continue;
-      const last = this.canvasAnimationLastTime.get(canvas) ?? -Infinity;
+    for (const [canvas, state] of this.canvasStates) {
+      if (!state.dirty) continue;
+      const last = state.animationLastTime ?? -Infinity;
       // Skip without clearing the dirty flag: the next draw call will
       // re-schedule a tick, by which time the throttle window has
       // likely elapsed. If draws stop while throttled, the trial-end
       // `releaseSubtree` snapshot will catch the final pixels.
       if (t - last < CANVAS_ANIMATION_MIN_INTERVAL_MS) continue;
-      this.canvasAnimationLastTime.set(canvas, t);
-      this.canvasDirty.set(canvas, false);
+      state.animationLastTime = t;
+      state.dirty = false;
       // `force = true` bypasses the gesture-path 250 ms throttle. The
       // animation throttle above already bounds frequency from this
       // path; the diff inside `snapshotCanvas` then dedupes byte-
@@ -1334,33 +1060,19 @@ export class SessionRecorder {
     }
   };
 
-  // Defers an unconditional snapshot to the next animation frame so we
-  // wait for any synchronous drawing during plugin setup (or during
-  // user `on_load`) to commit. Distinct from `scheduleCanvasSnapshot`,
-  // which respects the per-canvas throttle: initial baselines must not
-  // be throttled out by an immediately preceding gesture.
-  private scheduleInitialCanvasSnapshot() {
-    if (this.canvasInitialSnapshotScheduled) return;
-    if (this.canvasTrackedElements.size === 0) return;
-    this.canvasInitialSnapshotScheduled = true;
-    requestAnimationFrame(() => {
-      this.canvasInitialSnapshotScheduled = false;
-      this.captureCanvasSnapshots(true);
-    });
-  }
-
-  // Defers actual snapshotting to the next animation frame so we wait
-  // until the page has had a chance to paint the post-gesture state
-  // (otherwise `toDataURL` could return the canvas as it was *before*
-  // the up event's listeners ran). Coalesced via a single scheduled flag
-  // so a flurry of mouseups doesn't queue redundant work.
-  private scheduleCanvasSnapshot() {
-    if (this.canvasSnapshotScheduled) return;
-    if (this.canvasTrackedElements.size === 0) return;
-    this.canvasSnapshotScheduled = true;
-    requestAnimationFrame(() => {
-      this.canvasSnapshotScheduled = false;
-      this.captureCanvasSnapshots(false);
+  // Defers a canvas-snapshot sweep to the next animation frame so the
+  // browser has had a chance to paint the post-gesture state. `force`
+  // bypasses the per-canvas throttle (used for initial baselines that
+  // must not be throttled out by an immediately preceding gesture).
+  // If both forced and unforced are scheduled in the same frame the
+  // forced wins, since it's a strict superset of the unforced sweep.
+  private scheduleCanvasSnapshot(force: boolean) {
+    if (this.canvasStates.size === 0) return;
+    if (force) this.pendingCanvasSnapshotForce = true;
+    this.scheduleRafFlush("canvas-snapshot", () => {
+      const f = this.pendingCanvasSnapshotForce;
+      this.pendingCanvasSnapshotForce = false;
+      this.captureCanvasSnapshots(f);
     });
   }
 
@@ -1370,9 +1082,9 @@ export class SessionRecorder {
   // `force` bypasses the throttle for trial-end captures so the final
   // state of every canvas is always recorded.
   private captureCanvasSnapshots(force: boolean) {
-    if (this.canvasTrackedElements.size === 0) return;
+    if (this.canvasStates.size === 0) return;
     const now = this.t();
-    for (const canvas of this.canvasTrackedElements) {
+    for (const canvas of this.canvasStates.keys()) {
       this.snapshotCanvas(canvas, now, force);
     }
   }
@@ -1391,16 +1103,17 @@ export class SessionRecorder {
   private snapshotCanvas(canvas: HTMLCanvasElement, t: number, force: boolean) {
     const id = this.nodeIds.get(canvas);
     if (id === undefined) return;
-    if (!force) {
-      const last = this.canvasLastSnapshotTime.get(canvas) ?? -Infinity;
-      if (t - last < CANVAS_SNAPSHOT_MIN_INTERVAL_MS) return;
+    const state = this.canvasStates.get(canvas);
+    if (!state) return;
+    if (!force && t - (state.lastSnapshotTime ?? -Infinity) < CANVAS_SNAPSHOT_MIN_INTERVAL_MS) {
+      return;
     }
     const w = canvas.width;
     const h = canvas.height;
     if (w === 0 || h === 0) return;
     try {
       const ctx = getReadable2dContext(canvas);
-      const shadow = this.canvasShadowData.get(canvas);
+      const shadow = state.shadowData;
       const shadowValid = !!shadow && shadow.width === w && shadow.height === h;
 
       // Without a readable 2d context (WebGL canvases, or 2d contexts
@@ -1408,7 +1121,7 @@ export class SessionRecorder {
       // we can't diff. Emit a full snapshot via toDataURL and skip
       // shadow tracking for this canvas.
       if (!ctx) {
-        this.emitFullCanvasSnapshot(canvas, id, t);
+        this.emitFullCanvasSnapshot(canvas, state, id, t);
         return;
       }
 
@@ -1416,9 +1129,8 @@ export class SessionRecorder {
       // Capture the current pixels into the shadow buffer and emit a
       // full snapshot so the replayer has a starting point.
       if (!shadowValid) {
-        const current = ctx.getImageData(0, 0, w, h);
-        this.canvasShadowData.set(canvas, current);
-        this.emitFullCanvasSnapshot(canvas, id, t);
+        state.shadowData = ctx.getImageData(0, 0, w, h);
+        this.emitFullCanvasSnapshot(canvas, state, id, t);
         return;
       }
 
@@ -1429,14 +1141,14 @@ export class SessionRecorder {
 
       const fullThreshold = w * h * CANVAS_FULL_SNAPSHOT_AREA_FRACTION;
       if (bbox.w * bbox.h >= fullThreshold) {
-        this.canvasShadowData.set(canvas, current);
-        this.emitFullCanvasSnapshot(canvas, id, t);
+        state.shadowData = current;
+        this.emitFullCanvasSnapshot(canvas, state, id, t);
         return;
       }
 
       const dataUrl = cropCanvasToDataURL(canvas, bbox);
-      this.canvasShadowData.set(canvas, current);
-      this.canvasLastSnapshotTime.set(canvas, t);
+      state.shadowData = current;
+      state.lastSnapshotTime = t;
       this.pushEvent({
         type: "canvas.snapshot",
         t,
@@ -1451,255 +1163,78 @@ export class SessionRecorder {
     }
   }
 
-  // Emits a full-canvas snapshot, applying the same data-URL dedupe the
-  // pre-diff implementation used. Useful for first captures, near-full
-  // dirty regions, and canvases without a readable 2d context.
-  private emitFullCanvasSnapshot(canvas: HTMLCanvasElement, id: number, t: number) {
+  private emitFullCanvasSnapshot(
+    canvas: HTMLCanvasElement,
+    state: CanvasState,
+    id: number,
+    t: number
+  ) {
     const dataUrl = canvas.toDataURL();
-    if (this.canvasLastSnapshot.get(canvas) === dataUrl) return;
-    this.canvasLastSnapshot.set(canvas, dataUrl);
-    this.canvasLastSnapshotTime.set(canvas, t);
+    if (state.lastSnapshot === dataUrl) return;
+    state.lastSnapshot = dataUrl;
+    state.lastSnapshotTime = t;
     this.pushEvent({ type: "canvas.snapshot", t, node: id, data_url: dataUrl });
   }
 
   // -------- RNG --------
 
-  private isNativeMathRandom(fn: typeof Math.random) {
-    // Native built-ins stringify with the [native code] sentinel; any
-    // user-installed PRNG (e.g. via jsPsych.randomization.setSeed) will
-    // serialize as JS source instead.
-    return /\{\s*\[native code\]\s*\}/.test(Function.prototype.toString.call(fn));
-  }
-
-  private patchMathRandom() {
-    if (this.mathRandomPatched) return;
-    // Capture the *true* pre-recording Math.random before any potential
-    // auto-seeding so `stop()` can restore exactly what was there.
-    this.originalMathRandom = Math.random;
-
-    // Only auto-seed when Math.random is the native function; if the user
-    // already installed a seeded PRNG, leave it alone.
-    if (this.recording.rng.seed === null && this.isNativeMathRandom(this.originalMathRandom)) {
-      this.recording.rng.seed = randomization.setSeed();
-    }
-
-    const upstream = Math.random.bind(Math);
-    Math.random = () => {
-      const v = upstream();
-      // Captured at session scope: includes calls during pre-trial
-      // parameter evaluation, post-trial gaps, and the experimenter's
-      // `on_finish` — none of which are bracketed by a current trial.
-      this.recording.rng_calls.push({ t: this.t(), fn: "Math.random", args: [], result: v });
-      return v;
-    };
-    this.mathRandomPatched = true;
-    this.recording.rng.math_random_patched = true;
-  }
-
-  private unpatchMathRandom() {
-    if (!this.mathRandomPatched) return;
-    Math.random = this.originalMathRandom;
-    this.mathRandomPatched = false;
+  /** @internal Called from the shared `Math.random` wrapper. */
+  recordRngCall(value: number) {
+    if (!this.checkEventBudget()) return;
+    this.recording.rng_calls.push({
+      t: this.t(),
+      fn: "Math.random",
+      args: RNG_NO_ARGS,
+      result: value,
+    });
   }
 
   // -------- helpers --------
 
-  private bind(
+  private bindSession(
     target: EventTarget,
     type: string,
     handler: EventListenerOrEventListenerObject,
     options?: AddEventListenerOptions | boolean
   ) {
     target.addEventListener(type, handler, options);
-    // Trial-scoped binds happen while `mutationObserver` is set (i.e. inside
-    // `attachTrialListeners`); session-scoped binds happen when it is not.
-    const trial = this.mutationObserver !== null;
-    this.boundHandlers.push({ target, type, handler, options, trial });
+    this.boundHandlers.push({ target, type, handler, options, trial: false });
+  }
+
+  private bindTrial(
+    target: EventTarget,
+    type: string,
+    handler: EventListenerOrEventListenerObject,
+    options?: AddEventListenerOptions | boolean
+  ) {
+    target.addEventListener(type, handler, options);
+    this.boundHandlers.push({ target, type, handler, options, trial: true });
   }
 
   private pushEvent(ev: RecordedEvent) {
-    if (this.currentTrial) this.currentTrial.events.push(ev);
+    if (!this.currentTrial) return;
+    if (!this.checkEventBudget()) return;
+    this.currentTrial.events.push(ev);
+  }
+
+  // Increments the session-wide event counter and triggers a memory-
+  // limit shutdown when the cap is exceeded. Returns false if the
+  // caller should drop the event. Defers the actual `stop()` to a
+  // microtask so any in-flight synchronous batch (mutation observer
+  // burst, etc.) can complete cleanly.
+  private checkEventBudget(): boolean {
+    if (this.totalEventCount >= this.opts.max_events) {
+      if (!this.stopRequested) {
+        this.stopRequested = true;
+        queueMicrotask(() => this.stop("memory_limit"));
+      }
+      return false;
+    }
+    this.totalEventCount++;
+    return true;
   }
 
   private t(): number {
     return performance.now() - this.startPerf;
   }
-}
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-// Reads the `media` attribute, preferring the parsed value on the
-// CSSStyleSheet (which normalizes whitespace/casing) and falling back to
-// the raw attribute on the owning element.
-function readMedia(el: HTMLElement, sheet: CSSStyleSheet | null): string | null {
-  const fromSheet = sheet?.media?.mediaText;
-  if (fromSheet) return fromSheet;
-  const attr = el.getAttribute("media");
-  return attr && attr.length > 0 ? attr : null;
-}
-
-// Reads the resolved CSS rule text from a stylesheet. Returns null when
-// `cssRules` is unreadable (cross-origin sheets without CORS access throw
-// SecurityError) so callers can record only the href in that case.
-function readSheetText(sheet: CSSStyleSheet): string | null {
-  try {
-    const rules = sheet.cssRules;
-    if (!rules) return null;
-    const parts: string[] = [];
-    for (let i = 0; i < rules.length; i++) {
-      parts.push(rules[i].cssText);
-    }
-    return parts.join("\n");
-  } catch {
-    return null;
-  }
-}
-
-// Returns the canvas's 2d rendering context if one exists and is
-// readable (i.e. `getImageData` is callable). WebGL canvases return
-// null here so the caller falls back to full-canvas `toDataURL`
-// snapshots.
-function getReadable2dContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D | null {
-  try {
-    const ctx = canvas.getContext("2d");
-    return ctx ?? null;
-  } catch {
-    return null;
-  }
-}
-
-// Finds the bounding box of pixels that differ between two same-size
-// ImageData buffers. Uses an edge-shrink walk: scan top-down for the
-// first dirty row, bottom-up for the last, then within that row band
-// scan inward from each side for the first dirty column. For typical
-// incremental drawing (a stroke, a localized clear) this terminates
-// after only a few thousand pixel comparisons even on a multi-megapixel
-// canvas. Returns null when the buffers are byte-identical.
-//
-// Exported for unit testing; a replayer doesn't need it.
-export function computeDiffBbox(
-  prev: Uint8ClampedArray,
-  curr: Uint8ClampedArray,
-  w: number,
-  h: number
-): { x: number; y: number; w: number; h: number } | null {
-  let top = -1;
-  for (let y = 0; y < h; y++) {
-    const rowStart = y * w * 4;
-    const rowEnd = rowStart + w * 4;
-    for (let i = rowStart; i < rowEnd; i++) {
-      if (prev[i] !== curr[i]) {
-        top = y;
-        break;
-      }
-    }
-    if (top !== -1) break;
-  }
-  if (top === -1) return null;
-
-  let bottom = top;
-  for (let y = h - 1; y > top; y--) {
-    const rowStart = y * w * 4;
-    const rowEnd = rowStart + w * 4;
-    let dirty = false;
-    for (let i = rowStart; i < rowEnd; i++) {
-      if (prev[i] !== curr[i]) {
-        dirty = true;
-        break;
-      }
-    }
-    if (dirty) {
-      bottom = y;
-      break;
-    }
-  }
-
-  let left = w - 1;
-  let right = 0;
-  for (let y = top; y <= bottom; y++) {
-    const rowStart = y * w * 4;
-    // Scan inward from the left up to the current `left` candidate.
-    for (let x = 0; x < left; x++) {
-      const i = rowStart + x * 4;
-      if (
-        prev[i] !== curr[i] ||
-        prev[i + 1] !== curr[i + 1] ||
-        prev[i + 2] !== curr[i + 2] ||
-        prev[i + 3] !== curr[i + 3]
-      ) {
-        left = x;
-        break;
-      }
-    }
-    // Scan inward from the right past the current `right` candidate.
-    for (let x = w - 1; x > right; x--) {
-      const i = rowStart + x * 4;
-      if (
-        prev[i] !== curr[i] ||
-        prev[i + 1] !== curr[i + 1] ||
-        prev[i + 2] !== curr[i + 2] ||
-        prev[i + 3] !== curr[i + 3]
-      ) {
-        right = x;
-        break;
-      }
-    }
-    if (left === 0 && right === w - 1) break;
-  }
-
-  return { x: left, y: top, w: right - left + 1, h: bottom - top + 1 };
-}
-
-// Copies a rectangular region out of a source canvas into a temporary
-// canvas and returns its data URL. The temporary canvas is sized to
-// the region so the resulting PNG carries only the dirty pixels.
-function cropCanvasToDataURL(
-  source: HTMLCanvasElement,
-  region: { x: number; y: number; w: number; h: number }
-): string {
-  const tmp = document.createElement("canvas");
-  tmp.width = region.w;
-  tmp.height = region.h;
-  const tctx = tmp.getContext("2d");
-  if (!tctx) return source.toDataURL();
-  tctx.drawImage(source, region.x, region.y, region.w, region.h, 0, 0, region.w, region.h);
-  return tmp.toDataURL();
-}
-
-function readViewport(): ViewportState {
-  const vv = window.visualViewport;
-  return {
-    w: window.innerWidth,
-    h: window.innerHeight,
-    dpr: window.devicePixelRatio || 1,
-    scale: vv?.scale ?? 1,
-    offset_x: vv?.offsetLeft ?? 0,
-    offset_y: vv?.offsetTop ?? 0,
-  };
-}
-
-/**
- * JSON-safe serialization for `trial_data` (the per-trial data row). Drops
- * functions and DOM nodes — the recording's visual fidelity comes from DOM
- * mutations, not from re-executing trial parameters.
- */
-export function serializeJson(value: unknown, seen = new WeakSet<object>()): JsonValue {
-  if (value === null || value === undefined) return null;
-  const t = typeof value;
-  if (t === "boolean" || t === "string") return value as JsonValue;
-  if (t === "number") return Number.isFinite(value as number) ? (value as number) : null;
-  if (t === "function") return null;
-  if (t !== "object") return null;
-  if (seen.has(value as object)) return null;
-  seen.add(value as object);
-  if (Array.isArray(value)) return value.map((v) => serializeJson(v, seen));
-  if (value instanceof Date) return value.toISOString();
-  if (value instanceof Element || value instanceof Node) return null;
-  const out: Record<string, JsonValue> = {};
-  for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
-    out[k] = serializeJson(v, seen);
-  }
-  return out;
 }

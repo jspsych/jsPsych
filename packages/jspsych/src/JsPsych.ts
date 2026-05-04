@@ -9,7 +9,11 @@ import { JsPsychExtension } from "./modules/extensions";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
-import { SessionRecorder, SessionRecording } from "./modules/recording";
+import {
+  SessionRecorder,
+  SessionRecording,
+  resolveRecordSessionOptions,
+} from "./modules/recording";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
 import { ProgressBar } from "./ProgressBar";
@@ -94,8 +98,9 @@ export class JsPsych {
     };
     this.options = options;
 
-    if (options.record_session) {
-      this.sessionRecorder = new SessionRecorder({ jspsychVersion: version });
+    const recordOptions = resolveRecordSessionOptions(options.record_session);
+    if (recordOptions) {
+      this.sessionRecorder = new SessionRecorder({ jspsychVersion: version, recordOptions });
     }
 
     autoBind(this); // so we can pass JsPsych methods as callbacks and `this` remains the JsPsych instance
@@ -237,44 +242,22 @@ export class JsPsych {
    * }
    * ```
    *
-   * @example Offer the participant a download:
-   * ```ts
-   * const blob = await jsPsych.getSessionRecordingCompressed();
-   * if (blob) {
-   *   const a = document.createElement("a");
-   *   a.href = URL.createObjectURL(blob);
-   *   a.download = "session.json.gz";
-   *   a.click();
-   *   URL.revokeObjectURL(a.href);
-   * }
-   * ```
-   *
-   * @example Stash in jsPsych's data record (base64-encoded):
-   * ```ts
-   * const blob = await jsPsych.getSessionRecordingCompressed();
-   * if (blob) {
-   *   const buf = new Uint8Array(await blob.arrayBuffer());
-   *   let binary = "";
-   *   for (const byte of buf) binary += String.fromCharCode(byte);
-   *   jsPsych.data.addProperties({ session_recording_b64: btoa(binary) });
-   * }
-   * ```
    */
   async getSessionRecordingCompressed(): Promise<Blob | undefined> {
     const recording = this.getSessionRecording();
     if (!recording) return undefined;
-    // Drive the compression stream directly via its writer/reader so the
-    // implementation depends only on `TextEncoder`, `CompressionStream`,
-    // and `Blob` — all available in evergreen browsers (Chrome 80,
-    // Firefox 113, Safari 16.4) and in Node 18+.
+    // Run the writer and reader sides of the gzip stream concurrently:
+    // for large recordings, awaiting the write before opening the
+    // reader would stall on backpressure, while not awaiting it at all
+    // means write/close errors surface as unhandled rejections. The
+    // pattern below propagates those errors into the returned promise.
     const json = JSON.stringify(recording);
     const cs = new CompressionStream("gzip");
     const writer = cs.writable.getWriter();
-    // Don't await the writer; the reader loop below pulls chunks out as
-    // the writer pushes them in. Awaiting first would deadlock on
-    // backpressure for large recordings.
-    writer.write(new TextEncoder().encode(json));
-    writer.close();
+    const writePromise = (async () => {
+      await writer.write(new TextEncoder().encode(json));
+      await writer.close();
+    })();
     const reader = cs.readable.getReader();
     const chunks: Uint8Array[] = [];
     for (;;) {
@@ -282,6 +265,7 @@ export class JsPsych {
       if (done) break;
       chunks.push(value);
     }
+    await writePromise;
     return new Blob(chunks, { type: "application/gzip" });
   }
 

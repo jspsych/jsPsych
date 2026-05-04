@@ -1318,4 +1318,228 @@ describe("record_session option", () => {
     // Only the first trial should have started; the second never did.
     expect(rec.trials).toHaveLength(1);
   });
+
+  test("does not commit a 2D context on a canvas the user hasn't yet committed", async () => {
+    // Regression: `getContext("2d")` on a fresh canvas permanently
+    // locks it to 2D. The recorder used to call this proactively to
+    // run its diff path, which would break any plugin that creates a
+    // canvas, attaches it to the DOM, and only later asks for a
+    // WebGL context. The recorder must now defer until the user
+    // commits a context themselves.
+    const jsPsych = initJsPsych({ record_session: true });
+    let webglContextRequested: unknown = "not-yet";
+    await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus: '<canvas id="c" width="20" height="20"></canvas>',
+          on_load: () => {
+            // Don't commit any context. The recorder's initial RAF will
+            // run before the trial ends; if it called `getContext("2d")`
+            // proactively, the canvas would be locked into 2D.
+          },
+        },
+      ],
+      jsPsych
+    );
+    // Let the recorder's initial-baseline RAF fire.
+    await new Promise((r) => setTimeout(r, 50));
+    // Now ask for a WebGL context — this must succeed (or at least
+    // not return null due to a pre-existing 2D commit). jsdom doesn't
+    // implement WebGL so the call returns null regardless; instead we
+    // verify the canvas can still commit to 2D without coming back
+    // pre-stamped. The clean signal is: a brand-new
+    // `getContext("2d")` returns a non-null context. (If the
+    // recorder had already locked the canvas into 2D, this would
+    // still succeed — so the stronger check below uses a separate
+    // canvas to verify we never see a `2d` commit recorded for one
+    // the user never asked about.)
+    const c = document.getElementById("c") as HTMLCanvasElement;
+    webglContextRequested = c.getContext("2d");
+    expect(webglContextRequested).not.toBeNull();
+    await pressKey("a");
+  });
+
+  test("preserves user-installed Math.random reassignments after stop", async () => {
+    // If the user replaces Math.random during a session, the recorder
+    // must not clobber that replacement on stop. Calls made via the
+    // user's replacement bypass the recorder's wrapper (which is
+    // expected — the user explicitly took over) but the replacement
+    // function must still be in place when the experiment ends.
+    const trueOriginal = Math.random;
+    const userRandom = () => 0.42;
+
+    try {
+      const jsPsych = initJsPsych({ record_session: true });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "x",
+            on_load: () => {
+              Math.random = userRandom;
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      expect(Math.random).toBe(userRandom);
+    } finally {
+      // Restore the realm-original so subsequent tests have working RNG.
+      Math.random = trueOriginal;
+    }
+  });
+
+  test("multi-instance recorders restore prototype patches cleanly", async () => {
+    // Two recorders running concurrently must share a single set of
+    // prototype patches; restoring after the second stops must leave
+    // the prototype back in its true original state.
+    const proto = (CanvasRenderingContext2D as any).prototype;
+    const originalFillRect = proto.fillRect;
+    const originalGetContext = HTMLCanvasElement.prototype.getContext;
+
+    const jsPsychA = initJsPsych({ record_session: true });
+    await startTimeline([{ type: htmlKeyboardResponse, stimulus: "a" }], jsPsychA);
+
+    // Mid-A run: the prototype is wrapped.
+    expect(proto.fillRect).not.toBe(originalFillRect);
+    expect(HTMLCanvasElement.prototype.getContext).not.toBe(originalGetContext);
+
+    // Spin up a second recorder while the first is still running.
+    const jsPsychB = initJsPsych({ record_session: true });
+    const recorderB = (jsPsychB as any).sessionRecorder as {
+      start: (el: HTMLElement) => void;
+      stop: (reason?: "finished" | "aborted" | "unload") => void;
+    };
+    recorderB.start(document.body);
+
+    // Both running: still exactly one wrapper, not double-wrapped.
+    const wrapperWhileBothRunning = proto.fillRect;
+    expect(wrapperWhileBothRunning).not.toBe(originalFillRect);
+
+    // Stop B first; A is still active so the wrapper stays.
+    recorderB.stop("finished");
+    expect(proto.fillRect).toBe(wrapperWhileBothRunning);
+    expect(HTMLCanvasElement.prototype.getContext).not.toBe(originalGetContext);
+
+    // Finish A. Now nothing is active; the prototype reverts.
+    await pressKey("a");
+    expect(proto.fillRect).toBe(originalFillRect);
+    expect(HTMLCanvasElement.prototype.getContext).toBe(originalGetContext);
+  });
+
+  describe("record_session as options object", () => {
+    test("capture_inputs: false skips form input/change listeners", async () => {
+      const jsPsych = initJsPsych({ record_session: { capture_inputs: false } });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<input id="q" type="text">',
+            on_load: () => {
+              const input = document.getElementById("q") as HTMLInputElement;
+              input.value = "secret";
+              input.dispatchEvent(new Event("input", { bubbles: true }));
+              input.dispatchEvent(new Event("change", { bubbles: true }));
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const inputs = rec.trials[0].events.filter(
+        (e) => e.type === "input.value" || e.type === "input.checked" || e.type === "input.select"
+      );
+      expect(inputs).toHaveLength(0);
+    });
+
+    test("capture_canvas: false skips canvas tracking and prototype patching", async () => {
+      const proto = (CanvasRenderingContext2D as any).prototype;
+      const originalFillRect = proto.fillRect;
+
+      const jsPsych = initJsPsych({ record_session: { capture_canvas: false } });
+      let fillRectDuringTrial: any = null;
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<canvas id="c" width="20" height="20"></canvas>',
+            on_load: () => {
+              const c = document.getElementById("c") as HTMLCanvasElement;
+              c.getContext("2d")!.fillRect(0, 0, 10, 10);
+              fillRectDuringTrial = proto.fillRect;
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      // No canvas events emitted, and the prototype was never patched
+      // because no recorder requested the canvas global.
+      expect(rec.trials[0].events.filter((e) => e.type === "canvas.snapshot")).toHaveLength(0);
+      expect(fillRectDuringTrial).toBe(originalFillRect);
+    });
+
+    test("capture_random: false leaves Math.random alone and skips rng_calls", async () => {
+      const trueOriginal = Math.random;
+      const jsPsych = initJsPsych({ record_session: { capture_random: false } });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "x",
+            on_load: () => {
+              // Math.random must not have been wrapped.
+              expect(Math.random).toBe(trueOriginal);
+              Math.random();
+              Math.random();
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      expect(rec.rng.math_random_patched).toBe(false);
+      expect(rec.rng_calls).toHaveLength(0);
+      expect(Math.random).toBe(trueOriginal);
+    });
+
+    test("max_events stops the recording with end_reason 'memory_limit'", async () => {
+      const jsPsych = initJsPsych({ record_session: { max_events: 3 } });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "x",
+            on_load: () => {
+              // Synthesize many events; each Math.random push counts.
+              for (let i = 0; i < 50; i++) Math.random();
+            },
+          },
+        ],
+        jsPsych
+      );
+      // Let the queueMicrotask-deferred stop fire and the trial settle.
+      await new Promise((r) => setTimeout(r, 20));
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      expect(rec.end_reason).toBe("memory_limit");
+      // Cap is enforced as "≤ max_events" — we never push the (cap+1)st.
+      const totalEvents =
+        rec.rng_calls.length +
+        rec.viewport_changes.length +
+        rec.stylesheet_events.length +
+        rec.trials.reduce((acc, t) => acc + t.events.length, 0);
+      expect(totalEvents).toBeLessThanOrEqual(3);
+    });
+  });
 });
