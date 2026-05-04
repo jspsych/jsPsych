@@ -263,18 +263,18 @@ export class JsPsych {
   async getSessionRecordingCompressed(): Promise<Blob | undefined> {
     const recording = this.getSessionRecording();
     if (!recording) return undefined;
-    // Drive the compression stream directly via its writer/reader so the
-    // implementation depends only on `TextEncoder`, `CompressionStream`,
-    // and `Blob` — all available in evergreen browsers (Chrome 80,
-    // Firefox 113, Safari 16.4) and in Node 18+.
+    // Run the writer and reader sides of the gzip stream concurrently:
+    // for large recordings, awaiting the write before opening the
+    // reader would stall on backpressure, while not awaiting it at all
+    // means write/close errors surface as unhandled rejections. The
+    // pattern below propagates those errors into the returned promise.
     const json = JSON.stringify(recording);
     const cs = new CompressionStream("gzip");
     const writer = cs.writable.getWriter();
-    // Don't await the writer; the reader loop below pulls chunks out as
-    // the writer pushes them in. Awaiting first would deadlock on
-    // backpressure for large recordings.
-    writer.write(new TextEncoder().encode(json));
-    writer.close();
+    const writePromise = (async () => {
+      await writer.write(new TextEncoder().encode(json));
+      await writer.close();
+    })();
     const reader = cs.readable.getReader();
     const chunks: Uint8Array[] = [];
     for (;;) {
@@ -282,6 +282,7 @@ export class JsPsych {
       if (done) break;
       chunks.push(value);
     }
+    await writePromise;
     return new Blob(chunks, { type: "application/gzip" });
   }
 
