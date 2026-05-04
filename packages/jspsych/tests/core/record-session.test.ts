@@ -51,6 +51,53 @@ describe("record_session option", () => {
     expect(trial.initial_dom).not.toBeNull();
   });
 
+  test("getSessionRecordingCompressed returns undefined when recording is not enabled", async () => {
+    const jsPsych = initJsPsych();
+    await startTimeline([{ type: htmlKeyboardResponse, stimulus: "x" }], jsPsych);
+    await pressKey("a");
+    expect(await jsPsych.getSessionRecordingCompressed()).toBeUndefined();
+  });
+
+  test("getSessionRecordingCompressed produces a gzip Blob that round-trips to the original recording", async () => {
+    const jsPsych = initJsPsych({ record_session: true });
+    await startTimeline([{ type: htmlKeyboardResponse, stimulus: "<p>x</p>" }], jsPsych);
+    await pressKey("a");
+
+    const original = jsPsych.getSessionRecording()!;
+    const blob = await jsPsych.getSessionRecordingCompressed();
+    expect(blob).toBeInstanceOf(Blob);
+    expect(blob!.type).toBe("application/gzip");
+    // Sanity check: compressed payload is meaningfully smaller than the
+    // raw JSON for any non-trivial recording.
+    const rawSize = JSON.stringify(original).length;
+    expect(blob!.size).toBeLessThan(rawSize);
+
+    // Decompress with the symmetric DecompressionStream and verify the
+    // bytes parse back to the same recording object. Driving the
+    // decompressor manually (not via `Response`) keeps this test
+    // portable across environments where `Response` is unavailable.
+    const ds = new DecompressionStream("gzip");
+    const writer = ds.writable.getWriter();
+    writer.write(new Uint8Array(await blob!.arrayBuffer()));
+    writer.close();
+    const reader = ds.readable.getReader();
+    const decompressedChunks: Uint8Array[] = [];
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      decompressedChunks.push(value);
+    }
+    const decoded = new TextDecoder().decode(
+      decompressedChunks.reduce((acc, chunk) => {
+        const out = new Uint8Array(acc.length + chunk.length);
+        out.set(acc);
+        out.set(chunk, acc.length);
+        return out;
+      }, new Uint8Array(0))
+    );
+    expect(JSON.parse(decoded)).toEqual(original);
+  });
+
   describe("display spine in initial_dom", () => {
     test("initial_dom is rooted at the outermost jspsych-* ancestor, not at the content div", async () => {
       // Without the spine, replayers only get <div class="jspsych-content">

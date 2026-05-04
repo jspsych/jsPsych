@@ -222,6 +222,69 @@ export class JsPsych {
     return this.sessionRecorder?.getRecording();
   }
 
+  /**
+   * Returns the session recording as a gzip-compressed `Blob` with MIME type
+   * `application/gzip`. Returns `undefined` when recording is not enabled.
+   * Typical recordings compress 8-15x — useful when persisting alongside
+   * trial data or uploading to a backend. Uses the browser's built-in
+   * `CompressionStream`, so no extra dependency is bundled.
+   *
+   * @example Upload to a backend:
+   * ```ts
+   * const blob = await jsPsych.getSessionRecordingCompressed();
+   * if (blob) {
+   *   await fetch("/upload", { method: "POST", body: blob });
+   * }
+   * ```
+   *
+   * @example Offer the participant a download:
+   * ```ts
+   * const blob = await jsPsych.getSessionRecordingCompressed();
+   * if (blob) {
+   *   const a = document.createElement("a");
+   *   a.href = URL.createObjectURL(blob);
+   *   a.download = "session.json.gz";
+   *   a.click();
+   *   URL.revokeObjectURL(a.href);
+   * }
+   * ```
+   *
+   * @example Stash in jsPsych's data record (base64-encoded):
+   * ```ts
+   * const blob = await jsPsych.getSessionRecordingCompressed();
+   * if (blob) {
+   *   const buf = new Uint8Array(await blob.arrayBuffer());
+   *   let binary = "";
+   *   for (const byte of buf) binary += String.fromCharCode(byte);
+   *   jsPsych.data.addProperties({ session_recording_b64: btoa(binary) });
+   * }
+   * ```
+   */
+  async getSessionRecordingCompressed(): Promise<Blob | undefined> {
+    const recording = this.getSessionRecording();
+    if (!recording) return undefined;
+    // Drive the compression stream directly via its writer/reader so the
+    // implementation depends only on `TextEncoder`, `CompressionStream`,
+    // and `Blob` — all available in evergreen browsers (Chrome 80,
+    // Firefox 113, Safari 16.4) and in Node 18+.
+    const json = JSON.stringify(recording);
+    const cs = new CompressionStream("gzip");
+    const writer = cs.writable.getWriter();
+    // Don't await the writer; the reader loop below pulls chunks out as
+    // the writer pushes them in. Awaiting first would deadlock on
+    // backpressure for large recordings.
+    writer.write(new TextEncoder().encode(json));
+    writer.close();
+    const reader = cs.readable.getReader();
+    const chunks: Uint8Array[] = [];
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value);
+    }
+    return new Blob(chunks, { type: "application/gzip" });
+  }
+
   abortExperiment(endMessage?: string, data = {}) {
     this.endMessage = endMessage;
     this.timeline.abort();
