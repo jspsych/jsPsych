@@ -238,6 +238,28 @@ const CANVAS_DRAW_METHODS = [
   "putImageData",
 ] as const;
 
+// Per-canvas snapshot bookkeeping. All fields are optional because they
+// fill in lazily as the canvas first emits, throttles, or animates.
+interface CanvasState {
+  // Last full-canvas data URL. Used to dedupe byte-identical
+  // re-snapshots from the gesture/forced paths.
+  lastSnapshot?: string;
+  // Last time any snapshot was emitted for this canvas. Drives the
+  // gesture-path throttle (`CANVAS_SNAPSHOT_MIN_INTERVAL_MS`).
+  lastSnapshotTime?: number;
+  // Last full-canvas pixel buffer; the next snapshot diffs against
+  // this to find the changed bounding box. Absent for canvases
+  // without a readable 2d context (WebGL); those always emit full
+  // snapshots.
+  shadowData?: ImageData;
+  // Last time the draw-detection animation path emitted, throttled
+  // independently of the gesture path via `CANVAS_ANIMATION_MIN_INTERVAL_MS`.
+  animationLastTime?: number;
+  // Set by the patched 2d-context draw methods; read-and-cleared by
+  // the frame tick. `undefined` and `false` are equivalent.
+  dirty?: boolean;
+}
+
 export interface SessionRecorderOptions {
   jspsychVersion: string;
 }
@@ -294,31 +316,15 @@ export class SessionRecorder {
   private mediaListeners = new Map<HTMLMediaElement, (ev: Event) => void>();
   private mediaTimeLast = new WeakMap<HTMLMediaElement, number>();
 
-  // Strong ref to canvas elements within the current trial's display
-  // subtree. Used to drive deferred snapshotting after gestures and at
-  // trial end. Per-canvas throttle/dedupe state is held alongside.
-  private canvasTrackedElements = new Set<HTMLCanvasElement>();
-  private canvasLastSnapshot = new WeakMap<HTMLCanvasElement, string>();
-  private canvasLastSnapshotTime = new WeakMap<HTMLCanvasElement, number>();
+  // Per-canvas state: strong-ref Map (we explicitly delete entries on
+  // canvas removal and trial end) so iteration and lookup are one
+  // structure. Replaces five parallel WeakMaps that all keyed off the
+  // same canvas element.
+  private canvasStates = new Map<HTMLCanvasElement, CanvasState>();
   // True when an in-flight RAF-deferred sweep should bypass the per-
   // canvas throttle. Set by initial-baseline schedules; gesture-driven
   // schedules leave it alone.
   private pendingCanvasSnapshotForce = false;
-  // Last full-canvas pixel buffer per tracked canvas, used to compute
-  // the bounding box of changed pixels so subsequent snapshots can ship
-  // only the dirty rectangle. Cleared on canvas removal and on trial
-  // teardown. Absent for canvases that don't expose a 2d context (e.g.
-  // WebGL) — those always emit full snapshots.
-  private canvasShadowData = new WeakMap<HTMLCanvasElement, ImageData>();
-  // Set to true by the patched 2d-context draw methods whenever a
-  // tracked canvas is mutated. The frame tick reads-and-clears it to
-  // decide which canvases need a fresh diff.
-  private canvasDirty = new WeakMap<HTMLCanvasElement, boolean>();
-  // Last time the draw-detection path emitted (or attempted to emit) a
-  // snapshot for each canvas. Drives `CANVAS_ANIMATION_MIN_INTERVAL_MS`
-  // throttling without conflicting with the gesture-path throttle in
-  // `canvasLastSnapshotTime`.
-  private canvasAnimationLastTime = new WeakMap<HTMLCanvasElement, number>();
   private canvasFrameLoopScheduled = false;
 
   private boundHandlers: Array<{
@@ -618,9 +624,9 @@ export class SessionRecorder {
     }
     this.detachMediaListeners();
     // WeakMap entries for the released canvases will be GC'd once the
-    // tracked-set strong refs drop here; explicit deletion happens in
+    // Strong refs drop here; explicit deletion happens in
     // `releaseSubtree` for canvases removed mid-trial.
-    this.canvasTrackedElements.clear();
+    this.canvasStates.clear();
     this.pendingCanvasSnapshotForce = false;
     // Tear down only the trial-scoped handlers; session-scoped handlers
     // (resize, focus, blur, fullscreenchange) stay attached until stop().
@@ -696,14 +702,13 @@ export class SessionRecorder {
   }
 
   private releaseSubtree(node: Node) {
-    if (node instanceof HTMLCanvasElement && this.canvasTrackedElements.has(node)) {
+    if (node instanceof HTMLCanvasElement && this.canvasStates.has(node)) {
       // jsPsych core clears the display element via `innerHTML = ""`
       // immediately after each trial, before `onTrialFinish` fires. Take
       // a final snapshot here so the canvas's last pixel state is in the
       // recording instead of being silently dropped on removal.
       this.snapshotCanvas(node, this.t(), true);
-      this.canvasTrackedElements.delete(node);
-      this.canvasShadowData.delete(node);
+      this.canvasStates.delete(node);
     }
     if (this.nodeIds.has(node)) {
       this.nodeIds.delete(node);
@@ -1203,7 +1208,7 @@ export class SessionRecorder {
   }
 
   private trackCanvasElement(canvas: HTMLCanvasElement) {
-    this.canvasTrackedElements.add(canvas);
+    if (!this.canvasStates.has(canvas)) this.canvasStates.set(canvas, {});
     // Force a baseline snapshot to capture synchronously-drawn stimuli
     // even if a gesture immediately preceded the trial. The diff path
     // dedupes already-baselined canvases, so this is cheap.
@@ -1212,14 +1217,15 @@ export class SessionRecorder {
 
   /** @internal Called from the shared draw-method wrapper. */
   notifyCanvasDraw(canvas: HTMLCanvasElement) {
-    if (!this.canvasTrackedElements.has(canvas)) return;
+    const state = this.canvasStates.get(canvas);
+    if (!state) return;
     // Already-dirty short-circuit: a stroke composed of many draw calls
     // (lineTo + stroke + lineTo + stroke ...) within a frame would
     // otherwise re-write the same `true` and re-check the schedule
     // flag tens of times per frame. Once dirty, nothing else needs
     // doing until the frame tick clears the flag.
-    if (this.canvasDirty.get(canvas)) return;
-    this.canvasDirty.set(canvas, true);
+    if (state.dirty) return;
+    state.dirty = true;
     this.scheduleCanvasFrameTick();
   }
 
@@ -1239,16 +1245,16 @@ export class SessionRecorder {
     this.canvasFrameLoopScheduled = false;
     if (!this.running) return;
     const t = this.t();
-    for (const canvas of this.canvasTrackedElements) {
-      if (!this.canvasDirty.get(canvas)) continue;
-      const last = this.canvasAnimationLastTime.get(canvas) ?? -Infinity;
+    for (const [canvas, state] of this.canvasStates) {
+      if (!state.dirty) continue;
+      const last = state.animationLastTime ?? -Infinity;
       // Skip without clearing the dirty flag: the next draw call will
       // re-schedule a tick, by which time the throttle window has
       // likely elapsed. If draws stop while throttled, the trial-end
       // `releaseSubtree` snapshot will catch the final pixels.
       if (t - last < CANVAS_ANIMATION_MIN_INTERVAL_MS) continue;
-      this.canvasAnimationLastTime.set(canvas, t);
-      this.canvasDirty.set(canvas, false);
+      state.animationLastTime = t;
+      state.dirty = false;
       // `force = true` bypasses the gesture-path 250 ms throttle. The
       // animation throttle above already bounds frequency from this
       // path; the diff inside `snapshotCanvas` then dedupes byte-
@@ -1264,7 +1270,7 @@ export class SessionRecorder {
   // If both forced and unforced are scheduled in the same frame the
   // forced wins, since it's a strict superset of the unforced sweep.
   private scheduleCanvasSnapshot(force: boolean) {
-    if (this.canvasTrackedElements.size === 0) return;
+    if (this.canvasStates.size === 0) return;
     if (force) this.pendingCanvasSnapshotForce = true;
     this.scheduleRafFlush("canvas-snapshot", () => {
       const f = this.pendingCanvasSnapshotForce;
@@ -1279,9 +1285,9 @@ export class SessionRecorder {
   // `force` bypasses the throttle for trial-end captures so the final
   // state of every canvas is always recorded.
   private captureCanvasSnapshots(force: boolean) {
-    if (this.canvasTrackedElements.size === 0) return;
+    if (this.canvasStates.size === 0) return;
     const now = this.t();
-    for (const canvas of this.canvasTrackedElements) {
+    for (const canvas of this.canvasStates.keys()) {
       this.snapshotCanvas(canvas, now, force);
     }
   }
@@ -1300,16 +1306,17 @@ export class SessionRecorder {
   private snapshotCanvas(canvas: HTMLCanvasElement, t: number, force: boolean) {
     const id = this.nodeIds.get(canvas);
     if (id === undefined) return;
-    if (!force) {
-      const last = this.canvasLastSnapshotTime.get(canvas) ?? -Infinity;
-      if (t - last < CANVAS_SNAPSHOT_MIN_INTERVAL_MS) return;
+    const state = this.canvasStates.get(canvas);
+    if (!state) return;
+    if (!force && t - (state.lastSnapshotTime ?? -Infinity) < CANVAS_SNAPSHOT_MIN_INTERVAL_MS) {
+      return;
     }
     const w = canvas.width;
     const h = canvas.height;
     if (w === 0 || h === 0) return;
     try {
       const ctx = getReadable2dContext(canvas);
-      const shadow = this.canvasShadowData.get(canvas);
+      const shadow = state.shadowData;
       const shadowValid = !!shadow && shadow.width === w && shadow.height === h;
 
       // Without a readable 2d context (WebGL canvases, or 2d contexts
@@ -1317,7 +1324,7 @@ export class SessionRecorder {
       // we can't diff. Emit a full snapshot via toDataURL and skip
       // shadow tracking for this canvas.
       if (!ctx) {
-        this.emitFullCanvasSnapshot(canvas, id, t);
+        this.emitFullCanvasSnapshot(canvas, state, id, t);
         return;
       }
 
@@ -1325,9 +1332,8 @@ export class SessionRecorder {
       // Capture the current pixels into the shadow buffer and emit a
       // full snapshot so the replayer has a starting point.
       if (!shadowValid) {
-        const current = ctx.getImageData(0, 0, w, h);
-        this.canvasShadowData.set(canvas, current);
-        this.emitFullCanvasSnapshot(canvas, id, t);
+        state.shadowData = ctx.getImageData(0, 0, w, h);
+        this.emitFullCanvasSnapshot(canvas, state, id, t);
         return;
       }
 
@@ -1338,14 +1344,14 @@ export class SessionRecorder {
 
       const fullThreshold = w * h * CANVAS_FULL_SNAPSHOT_AREA_FRACTION;
       if (bbox.w * bbox.h >= fullThreshold) {
-        this.canvasShadowData.set(canvas, current);
-        this.emitFullCanvasSnapshot(canvas, id, t);
+        state.shadowData = current;
+        this.emitFullCanvasSnapshot(canvas, state, id, t);
         return;
       }
 
       const dataUrl = cropCanvasToDataURL(canvas, bbox);
-      this.canvasShadowData.set(canvas, current);
-      this.canvasLastSnapshotTime.set(canvas, t);
+      state.shadowData = current;
+      state.lastSnapshotTime = t;
       this.pushEvent({
         type: "canvas.snapshot",
         t,
@@ -1360,11 +1366,16 @@ export class SessionRecorder {
     }
   }
 
-  private emitFullCanvasSnapshot(canvas: HTMLCanvasElement, id: number, t: number) {
+  private emitFullCanvasSnapshot(
+    canvas: HTMLCanvasElement,
+    state: CanvasState,
+    id: number,
+    t: number
+  ) {
     const dataUrl = canvas.toDataURL();
-    if (this.canvasLastSnapshot.get(canvas) === dataUrl) return;
-    this.canvasLastSnapshot.set(canvas, dataUrl);
-    this.canvasLastSnapshotTime.set(canvas, t);
+    if (state.lastSnapshot === dataUrl) return;
+    state.lastSnapshot = dataUrl;
+    state.lastSnapshotTime = t;
     this.pushEvent({ type: "canvas.snapshot", t, node: id, data_url: dataUrl });
   }
 
