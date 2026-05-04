@@ -1429,4 +1429,117 @@ describe("record_session option", () => {
     expect(proto.fillRect).toBe(originalFillRect);
     expect(HTMLCanvasElement.prototype.getContext).toBe(originalGetContext);
   });
+
+  describe("record_session as options object", () => {
+    test("capture_inputs: false skips form input/change listeners", async () => {
+      const jsPsych = initJsPsych({ record_session: { capture_inputs: false } });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<input id="q" type="text">',
+            on_load: () => {
+              const input = document.getElementById("q") as HTMLInputElement;
+              input.value = "secret";
+              input.dispatchEvent(new Event("input", { bubbles: true }));
+              input.dispatchEvent(new Event("change", { bubbles: true }));
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      const inputs = rec.trials[0].events.filter(
+        (e) => e.type === "input.value" || e.type === "input.checked" || e.type === "input.select"
+      );
+      expect(inputs).toHaveLength(0);
+    });
+
+    test("capture_canvas: false skips canvas tracking and prototype patching", async () => {
+      const proto = (CanvasRenderingContext2D as any).prototype;
+      const originalFillRect = proto.fillRect;
+
+      const jsPsych = initJsPsych({ record_session: { capture_canvas: false } });
+      let fillRectDuringTrial: any = null;
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: '<canvas id="c" width="20" height="20"></canvas>',
+            on_load: () => {
+              const c = document.getElementById("c") as HTMLCanvasElement;
+              c.getContext("2d")!.fillRect(0, 0, 10, 10);
+              fillRectDuringTrial = proto.fillRect;
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      // No canvas events emitted, and the prototype was never patched
+      // because no recorder requested the canvas global.
+      expect(rec.trials[0].events.filter((e) => e.type === "canvas.snapshot")).toHaveLength(0);
+      expect(fillRectDuringTrial).toBe(originalFillRect);
+    });
+
+    test("capture_random: false leaves Math.random alone and skips rng_calls", async () => {
+      const trueOriginal = Math.random;
+      const jsPsych = initJsPsych({ record_session: { capture_random: false } });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "x",
+            on_load: () => {
+              // Math.random must not have been wrapped.
+              expect(Math.random).toBe(trueOriginal);
+              Math.random();
+              Math.random();
+            },
+          },
+        ],
+        jsPsych
+      );
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      expect(rec.rng.math_random_patched).toBe(false);
+      expect(rec.rng_calls).toHaveLength(0);
+      expect(Math.random).toBe(trueOriginal);
+    });
+
+    test("max_events stops the recording with end_reason 'memory_limit'", async () => {
+      const jsPsych = initJsPsych({ record_session: { max_events: 3 } });
+      await startTimeline(
+        [
+          {
+            type: htmlKeyboardResponse,
+            stimulus: "x",
+            on_load: () => {
+              // Synthesize many events; each Math.random push counts.
+              for (let i = 0; i < 50; i++) Math.random();
+            },
+          },
+        ],
+        jsPsych
+      );
+      // Let the queueMicrotask-deferred stop fire and the trial settle.
+      await new Promise((r) => setTimeout(r, 20));
+      await pressKey("a");
+
+      const rec = jsPsych.getSessionRecording()!;
+      expect(rec.end_reason).toBe("memory_limit");
+      // Cap is enforced as "≤ max_events" — we never push the (cap+1)st.
+      const totalEvents =
+        rec.rng_calls.length +
+        rec.viewport_changes.length +
+        rec.stylesheet_events.length +
+        rec.trials.reduce((acc, t) => acc + t.events.length, 0);
+      expect(totalEvents).toBeLessThanOrEqual(3);
+    });
+  });
 });

@@ -30,7 +30,59 @@ export interface SessionRecording {
   // captured. Replayer consumes in order.
   rng_calls: RngCall[];
   ended_at_perf: number | null;
-  end_reason: "finished" | "aborted" | "unload" | null;
+  end_reason: "finished" | "aborted" | "unload" | "memory_limit" | null;
+}
+
+/**
+ * Options for `initJsPsych({ record_session })`. Pass `true` for the
+ * defaults, `false` to disable, or this object to tune what gets
+ * captured. Each `capture_*` flag defaults to `true`; setting one to
+ * `false` skips both the listeners and the corresponding event types in
+ * the recording.
+ */
+export interface RecordSessionOptions {
+  /** Capture form input values (text, textarea, checkbox/radio, select).
+   *  Defaults true. Set false for surveys whose responses must not be
+   *  retained verbatim. */
+  capture_inputs?: boolean;
+  /** Capture canvas pixel snapshots. Defaults true. Set false when
+   *  experiments use large/animated canvases and the pixel readback
+   *  would dominate recording size or perturb timing. */
+  capture_canvas?: boolean;
+  /** Capture every `Math.random()` output to `rng_calls`. Defaults true.
+   *  Set false when reproducibility isn't needed and the RNG is called
+   *  millions of times (e.g. shuffling a large array per trial). */
+  capture_random?: boolean;
+  /** Hard cap on total recorded events across all categories
+   *  (per-trial events + rng_calls + viewport_changes + stylesheet_events).
+   *  When exceeded, recording stops with `end_reason: "memory_limit"`.
+   *  Defaults to no limit. */
+  max_events?: number;
+}
+
+interface ResolvedRecordSessionOptions {
+  capture_inputs: boolean;
+  capture_canvas: boolean;
+  capture_random: boolean;
+  max_events: number;
+}
+
+/**
+ * Normalizes the user-facing `record_session` value into either `null`
+ * (disabled) or a fully-defaulted options object. Exported for callers
+ * (e.g. `JsPsych`) that need to decide whether to construct a recorder.
+ */
+export function resolveRecordSessionOptions(
+  raw: boolean | RecordSessionOptions | undefined
+): ResolvedRecordSessionOptions | null {
+  if (!raw) return null;
+  const obj = raw === true ? {} : raw;
+  return {
+    capture_inputs: obj.capture_inputs ?? true,
+    capture_canvas: obj.capture_canvas ?? true,
+    capture_random: obj.capture_random ?? true,
+    max_events: obj.max_events ?? Infinity,
+  };
 }
 
 // A snapshot of one stylesheet attached to the document. `inline` covers
@@ -262,10 +314,17 @@ interface CanvasState {
 
 export interface SessionRecorderOptions {
   jspsychVersion: string;
+  recordOptions: ResolvedRecordSessionOptions;
 }
 
 export class SessionRecorder {
   private readonly jspsychVersion: string;
+  private readonly opts: ResolvedRecordSessionOptions;
+  // Total events recorded across all categories (per-trial events,
+  // rng_calls, viewport_changes, stylesheet_events). Compared against
+  // `opts.max_events` to enforce the heap bound.
+  private totalEventCount = 0;
+  private stopRequested = false;
   private recording: SessionRecording;
   private displayElement: HTMLElement | null = null;
   // Outermost layout root for the experiment. The spine in `initial_dom`
@@ -340,6 +399,7 @@ export class SessionRecorder {
 
   constructor(options: SessionRecorderOptions) {
     this.jspsychVersion = options.jspsychVersion;
+    this.opts = options.recordOptions;
     this.recording = this.createBlankRecording();
   }
 
@@ -400,15 +460,19 @@ export class SessionRecorder {
     this.pendingInput.clear();
     this.canvasFrameLoopScheduled = false;
     this.pendingCanvasSnapshotForce = false;
+    this.totalEventCount = 0;
+    this.stopRequested = false;
 
-    const seed = registerMathRandomRecorder(this);
-    if (seed !== null) this.recording.rng.seed = seed;
-    this.recording.rng.math_random_patched = true;
-    registerCanvasRecorder(this);
+    if (this.opts.capture_random) {
+      const seed = registerMathRandomRecorder(this);
+      if (seed !== null) this.recording.rng.seed = seed;
+      this.recording.rng.math_random_patched = true;
+    }
+    if (this.opts.capture_canvas) registerCanvasRecorder(this);
     this.attachSessionListeners();
   }
 
-  stop(reason: "finished" | "aborted" | "unload" = "finished") {
+  stop(reason: "finished" | "aborted" | "unload" | "memory_limit" = "finished") {
     // Idempotent: stopping an already-stopped recorder is a no-op.
     if (!this.running) return;
 
@@ -459,12 +523,10 @@ export class SessionRecorder {
     this.currentTrial.initial_dom = this.serializeDisplaySpine(this.displayElement);
     this.attachTrialListeners();
     this.scanForMediaElements(this.displayElement);
-    // `scanForCanvasElements` registers each canvas via
-    // `trackCanvasElement`, which schedules the initial baseline
-    // snapshot for the next animation frame so synchronously-drawn
-    // stimuli (canvas-button-response, canvas-keyboard-response, ...)
-    // are captured before any interaction.
-    this.scanForCanvasElements(this.displayElement);
+    // Registers each canvas and schedules an initial baseline snapshot
+    // so synchronously-drawn stimuli (canvas-button-response,
+    // canvas-keyboard-response, …) are captured before any interaction.
+    if (this.opts.capture_canvas) this.scanForCanvasElements(this.displayElement);
   }
 
   onTrialFinish(trialData: unknown) {
@@ -541,7 +603,9 @@ export class SessionRecorder {
         last.offset_y !== v.offset_y
       ) {
         this.lastViewport = v;
-        this.recording.viewport_changes.push({ t: this.t(), ...v });
+        if (this.checkEventBudget()) {
+          this.recording.viewport_changes.push({ t: this.t(), ...v });
+        }
       }
     }, VIEWPORT_DEBOUNCE_MS);
   };
@@ -612,9 +676,12 @@ export class SessionRecorder {
     // Form-state events. `input` covers text fields, textareas, and
     // sliders (fires on every value change). `change` covers checkboxes,
     // radios, and selects (fires on commit). Capture phase at document
-    // scope so nothing in user code can stopPropagation past us.
-    this.bindTrial(document, "input", this.handleInputEvent, true);
-    this.bindTrial(document, "change", this.handleChangeEvent, true);
+    // scope so nothing in user code can stopPropagation past us. Gated
+    // by `capture_inputs` for surveys whose values must not be recorded.
+    if (this.opts.capture_inputs) {
+      this.bindTrial(document, "input", this.handleInputEvent, true);
+      this.bindTrial(document, "change", this.handleChangeEvent, true);
+    }
   }
 
   private detachTrialListeners() {
@@ -665,8 +732,10 @@ export class SessionRecorder {
             this.pushEvent({ type: "dom.add", t, parent: parentId, before, node });
             if (added instanceof HTMLMediaElement) this.attachMediaListeners(added);
             else if (added instanceof Element) this.scanForMediaElements(added);
-            if (added instanceof HTMLCanvasElement) this.trackCanvasElement(added);
-            else if (added instanceof Element) this.scanForCanvasElements(added);
+            if (this.opts.capture_canvas) {
+              if (added instanceof HTMLCanvasElement) this.trackCanvasElement(added);
+              else if (added instanceof Element) this.scanForCanvasElements(added);
+            }
           }
         } else if (r.type === "attributes") {
           const id = this.nodeIds.get(r.target);
@@ -911,7 +980,9 @@ export class SessionRecorder {
             const id = this.styleNodeIds.get(removed);
             if (id === undefined) continue;
             this.styleNodeIds.delete(removed);
-            this.recording.stylesheet_events.push({ type: "stylesheet.remove", t, id });
+            if (this.checkEventBudget()) {
+              this.recording.stylesheet_events.push({ type: "stylesheet.remove", t, id });
+            }
           }
           for (const added of Array.from(r.addedNodes)) {
             if (!(added instanceof HTMLStyleElement) && !(added instanceof HTMLLinkElement)) {
@@ -919,8 +990,9 @@ export class SessionRecorder {
             }
             if (this.styleNodeIds.has(added)) continue;
             const snap = this.snapshotStylesheetElement(added as HTMLElement);
-            if (snap)
+            if (snap && this.checkEventBudget()) {
               this.recording.stylesheet_events.push({ type: "stylesheet.add", t, sheet: snap });
+            }
           }
         } else if (r.type === "characterData") {
           // Direct edit to the text node inside a <style> (e.g. via
@@ -941,6 +1013,7 @@ export class SessionRecorder {
     for (const el of updated) {
       const id = this.styleNodeIds.get(el);
       if (id === undefined) continue;
+      if (!this.checkEventBudget()) break;
       this.recording.stylesheet_events.push({
         type: "stylesheet.update",
         t,
@@ -1383,6 +1456,7 @@ export class SessionRecorder {
 
   /** @internal Called from the shared `Math.random` wrapper. */
   recordRngCall(value: number) {
+    if (!this.checkEventBudget()) return;
     this.recording.rng_calls.push({
       t: this.t(),
       fn: "Math.random",
@@ -1414,7 +1488,26 @@ export class SessionRecorder {
   }
 
   private pushEvent(ev: RecordedEvent) {
-    if (this.currentTrial) this.currentTrial.events.push(ev);
+    if (!this.currentTrial) return;
+    if (!this.checkEventBudget()) return;
+    this.currentTrial.events.push(ev);
+  }
+
+  // Increments the session-wide event counter and triggers a memory-
+  // limit shutdown when the cap is exceeded. Returns false if the
+  // caller should drop the event. Defers the actual `stop()` to a
+  // microtask so any in-flight synchronous batch (mutation observer
+  // burst, etc.) can complete cleanly.
+  private checkEventBudget(): boolean {
+    if (this.totalEventCount >= this.opts.max_events) {
+      if (!this.stopRequested) {
+        this.stopRequested = true;
+        queueMicrotask(() => this.stop("memory_limit"));
+      }
+      return false;
+    }
+    this.totalEventCount++;
+    return true;
   }
 
   private t(): number {

@@ -75,6 +75,7 @@ export type {
   InputRecord,
   MediaRecord,
   RecordedEvent,
+  RecordSessionOptions,
   RngCall,
   ScrollRecord,
   SessionRecording,

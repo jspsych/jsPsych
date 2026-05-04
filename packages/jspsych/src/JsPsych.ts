@@ -9,7 +9,11 @@ import { JsPsychExtension } from "./modules/extensions";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
-import { SessionRecorder, SessionRecording } from "./modules/recording";
+import {
+  SessionRecorder,
+  SessionRecording,
+  resolveRecordSessionOptions,
+} from "./modules/recording";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
 import { ProgressBar } from "./ProgressBar";
@@ -94,8 +98,9 @@ export class JsPsych {
     };
     this.options = options;
 
-    if (options.record_session) {
-      this.sessionRecorder = new SessionRecorder({ jspsychVersion: version });
+    const recordOptions = resolveRecordSessionOptions(options.record_session);
+    if (recordOptions) {
+      this.sessionRecorder = new SessionRecorder({ jspsychVersion: version, recordOptions });
     }
 
     autoBind(this); // so we can pass JsPsych methods as callbacks and `this` remains the JsPsych instance
