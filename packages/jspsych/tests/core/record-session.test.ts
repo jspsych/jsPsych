@@ -1087,6 +1087,47 @@ describe("record_session option", () => {
     await pressKey("a");
   });
 
+  test("captures mouse activity outside the #jspsych-content element", async () => {
+    // Regression test: mouse listeners used to be scoped to the display
+    // element (`#jspsych-content`), which is typically narrower than the
+    // viewport. Movements toward the browser chrome (to resize/move the
+    // window) or into a canvas corner that extends past the content
+    // div fired no events at all, so the replay would freeze the
+    // cursor at its last known position. Listeners are now window-
+    // scoped so events anywhere in the viewport are captured.
+    const jsPsych = initJsPsych({ record_session: true });
+    await startTimeline([{ type: htmlKeyboardResponse, stimulus: "x" }], jsPsych);
+
+    // Dispatch on `document.body`, which is outside `#jspsych-content`
+    // (the body wraps the display container, which wraps the content
+    // div). The old element-scoped listener would not see this event.
+    document.body.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: 5, clientY: 7, bubbles: true })
+    );
+    // Allow the rAF-throttled flush to fire.
+    await new Promise((r) => requestAnimationFrame(r));
+
+    // And dispatch a click on the body, again outside the content div.
+    document.body.dispatchEvent(
+      new MouseEvent("click", { clientX: 11, clientY: 13, button: 0, bubbles: true })
+    );
+
+    await pressKey("a");
+
+    const rec = jsPsych.getSessionRecording()!;
+    const moves = rec.trials[0].events.filter((e) => e.type === "mouse.move") as Array<{
+      x: number;
+      y: number;
+    }>;
+    const clicks = rec.trials[0].events.filter((e) => e.type === "mouse.click") as Array<{
+      x: number;
+      y: number;
+      target: number | null;
+    }>;
+    expect(moves).toContainEqual(expect.objectContaining({ x: 5, y: 7 }));
+    expect(clicks).toContainEqual(expect.objectContaining({ x: 11, y: 13 }));
+  });
+
   test("captures multiple trials, each with its own initial_dom and events", async () => {
     const jsPsych = initJsPsych({ record_session: true });
     await startTimeline(

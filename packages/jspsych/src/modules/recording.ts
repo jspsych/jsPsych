@@ -580,13 +580,38 @@ export class SessionRecorder {
       characterData: true,
     });
 
-    this.bind(el, "mousemove", this.handleMouseMove);
-    this.bind(el, "mousedown", this.handleMouseButton("mouse.down"));
-    this.bind(el, "mouseup", this.handleMouseButton("mouse.up"));
-    this.bind(el, "click", this.handleMouseButton("mouse.click"));
-    this.bind(el, "touchstart", this.handleTouch("touch.start"), { passive: true });
-    this.bind(el, "touchmove", this.handleTouch("touch.move"), { passive: true });
-    this.bind(el, "touchend", this.handleTouch("touch.end"), { passive: true });
+    // Mouse and touch listeners are scoped to `window`/`document` in the
+    // capture phase rather than to `displayElement`. The display element
+    // is `#jspsych-content`, which is typically narrower than the
+    // viewport (centered, optionally constrained by `experiment_width`).
+    // Element-scoped listeners only fire while the cursor is over the
+    // element or its descendants, so a participant moving toward the
+    // browser chrome to resize/move the window — or drawing into a
+    // canvas corner that extends past `#jspsych-content` — would
+    // produce no `mouse.move` / `touch.move` events for the entire
+    // excursion. The replay would then show the cursor stuck at its
+    // last known position until it returned. Coordinates are already
+    // viewport-relative (`clientX`/`clientY`) so widening the scope
+    // doesn't change the recorded values; it only adds the events that
+    // were silently dropped before. `targetId` may now resolve to
+    // `null` when the target is outside the recorded display spine,
+    // which the schema already permits.
+    this.bind(window, "mousemove", this.handleMouseMove, true);
+    this.bind(window, "mousedown", this.handleMouseButton("mouse.down"), true);
+    this.bind(window, "mouseup", this.handleMouseButton("mouse.up"), true);
+    this.bind(window, "click", this.handleMouseButton("mouse.click"), true);
+    this.bind(document, "touchstart", this.handleTouch("touch.start"), {
+      passive: true,
+      capture: true,
+    });
+    this.bind(document, "touchmove", this.handleTouch("touch.move"), {
+      passive: true,
+      capture: true,
+    });
+    this.bind(document, "touchend", this.handleTouch("touch.end"), {
+      passive: true,
+      capture: true,
+    });
     // Keyboard and clipboard events are listened at document scope in the
     // capture phase: they may be dispatched on any element (including
     // descendants of the body), and capture-phase listening ensures we see
