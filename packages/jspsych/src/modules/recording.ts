@@ -309,7 +309,10 @@ export class SessionRecorder {
   // Strong ref to canvas elements within the current trial's display
   // subtree. Used to drive deferred snapshotting after gestures and at
   // trial end. Per-canvas throttle/dedupe state is held alongside.
-  private canvasTrackedElements = new Set<HTMLCanvasElement>();
+  // Public-within-module so the shared draw-method wrapper (installed
+  // once across all active recorders) can route notifications back to
+  // the recorders that care about each canvas.
+  canvasTrackedElements = new Set<HTMLCanvasElement>();
   private canvasLastSnapshot = new WeakMap<HTMLCanvasElement, string>();
   private canvasLastSnapshotTime = new WeakMap<HTMLCanvasElement, number>();
   private canvasSnapshotScheduled = false;
@@ -323,24 +326,17 @@ export class SessionRecorder {
   // Set to true by the patched 2d-context draw methods whenever a
   // tracked canvas is mutated. The frame tick reads-and-clears it to
   // decide which canvases need a fresh diff.
-  private canvasDirty = new WeakMap<HTMLCanvasElement, boolean>();
+  // Public-within-module so the shared draw-method wrapper can flip
+  // the flag from outside the class.
+  canvasDirty = new WeakMap<HTMLCanvasElement, boolean>();
   // Last time the draw-detection path emitted (or attempted to emit) a
   // snapshot for each canvas. Drives `CANVAS_ANIMATION_MIN_INTERVAL_MS`
   // throttling without conflicting with the gesture-path throttle in
   // `canvasLastSnapshotTime`.
   private canvasAnimationLastTime = new WeakMap<HTMLCanvasElement, number>();
   private canvasFrameLoopScheduled = false;
-  // Patched draw methods on `CanvasRenderingContext2D.prototype`. We
-  // restore them on `stop()` so opting in to recording does not leave
-  // wrappers in place after the experiment ends, even if the recorder
-  // auto-stopped due to abort or unload.
   private canvasContextPatched = false;
-  private originalCanvasMethods = new Map<string, Function>();
 
-  // Reference to whatever `Math.random` was immediately before the recorder
-  // started. Restored verbatim on stop so opting into recording does not
-  // permanently alter `Math.random`, even if we auto-seeded.
-  private originalMathRandom: () => number = Math.random;
   private mathRandomPatched = false;
 
   private boundHandlers: Array<{
@@ -498,14 +494,14 @@ export class SessionRecorder {
   // -------- session listeners (viewport, focus) --------
 
   private attachSessionListeners() {
-    this.bind(window, "resize", this.scheduleViewportRead);
+    this.bindSession(window, "resize", this.scheduleViewportRead);
     if (window.visualViewport) {
-      this.bind(window.visualViewport, "resize", this.scheduleViewportRead);
-      this.bind(window.visualViewport, "scroll", this.scheduleViewportRead);
+      this.bindSession(window.visualViewport, "resize", this.scheduleViewportRead);
+      this.bindSession(window.visualViewport, "scroll", this.scheduleViewportRead);
     }
-    this.bind(window, "focus", () => this.pushFocus("focus"));
-    this.bind(window, "blur", () => this.pushFocus("blur"));
-    this.bind(document, "fullscreenchange", () => {
+    this.bindSession(window, "focus", () => this.pushFocus("focus"));
+    this.bindSession(window, "blur", () => this.pushFocus("blur"));
+    this.bindSession(document, "fullscreenchange", () => {
       this.pushFocus(document.fullscreenElement ? "fullscreen.enter" : "fullscreen.exit");
     });
 
@@ -596,19 +592,19 @@ export class SessionRecorder {
     // were silently dropped before. `targetId` may now resolve to
     // `null` when the target is outside the recorded display spine,
     // which the schema already permits.
-    this.bind(window, "mousemove", this.handleMouseMove, true);
-    this.bind(window, "mousedown", this.handleMouseButton("mouse.down"), true);
-    this.bind(window, "mouseup", this.handleMouseButton("mouse.up"), true);
-    this.bind(window, "click", this.handleMouseButton("mouse.click"), true);
-    this.bind(document, "touchstart", this.handleTouch("touch.start"), {
+    this.bindTrial(window, "mousemove", this.handleMouseMove, true);
+    this.bindTrial(window, "mousedown", this.handleMouseButton("mouse.down"), true);
+    this.bindTrial(window, "mouseup", this.handleMouseButton("mouse.up"), true);
+    this.bindTrial(window, "click", this.handleMouseButton("mouse.click"), true);
+    this.bindTrial(document, "touchstart", this.handleTouch("touch.start"), {
       passive: true,
       capture: true,
     });
-    this.bind(document, "touchmove", this.handleTouch("touch.move"), {
+    this.bindTrial(document, "touchmove", this.handleTouch("touch.move"), {
       passive: true,
       capture: true,
     });
-    this.bind(document, "touchend", this.handleTouch("touch.end"), {
+    this.bindTrial(document, "touchend", this.handleTouch("touch.end"), {
       passive: true,
       capture: true,
     });
@@ -616,21 +612,21 @@ export class SessionRecorder {
     // capture phase: they may be dispatched on any element (including
     // descendants of the body), and capture-phase listening ensures we see
     // them before any user-attached handler can call stopPropagation.
-    this.bind(document, "keydown", this.handleKey("key.down"), true);
-    this.bind(document, "keyup", this.handleKey("key.up"), true);
-    this.bind(document, "copy", this.handleClipboard("clipboard.copy"), true);
-    this.bind(document, "cut", this.handleClipboard("clipboard.cut"), true);
-    this.bind(document, "paste", this.handleClipboard("clipboard.paste"), true);
+    this.bindTrial(document, "keydown", this.handleKey("key.down"), true);
+    this.bindTrial(document, "keyup", this.handleKey("key.up"), true);
+    this.bindTrial(document, "copy", this.handleClipboard("clipboard.copy"), true);
+    this.bindTrial(document, "cut", this.handleClipboard("clipboard.cut"), true);
+    this.bindTrial(document, "paste", this.handleClipboard("clipboard.paste"), true);
     // Scroll events do not bubble, so capture-phase listening at document
     // scope catches scroll on any descendant element. Window scrolling is
     // handled by the same listener via a Document target check.
-    this.bind(document, "scroll", this.handleScroll, true);
+    this.bindTrial(document, "scroll", this.handleScroll, true);
     // Form-state events. `input` covers text fields, textareas, and
     // sliders (fires on every value change). `change` covers checkboxes,
     // radios, and selects (fires on commit). Capture phase at document
     // scope so nothing in user code can stopPropagation past us.
-    this.bind(document, "input", this.handleInputEvent, true);
-    this.bind(document, "change", this.handleChangeEvent, true);
+    this.bindTrial(document, "input", this.handleInputEvent, true);
+    this.bindTrial(document, "change", this.handleChangeEvent, true);
   }
 
   private detachTrialListeners() {
@@ -1257,47 +1253,28 @@ export class SessionRecorder {
     this.scheduleInitialCanvasSnapshot();
   }
 
-  // Wraps the pixel-mutating methods on `CanvasRenderingContext2D`
-  // so the recorder is notified whenever a tracked canvas is drawn to.
-  // The wrapper sets a per-canvas dirty flag and schedules a frame
-  // tick; the original method is then called with the original `this`
-  // and arguments so the wrap is invisible to plugin code. Idempotent
-  // and per-instance: the originals captured here are restored on
-  // `stop()`, even across nested recorder lifetimes.
+  // Registers this recorder with the module-level prototype patches so
+  // it receives draw notifications. The first recorder to register
+  // installs the wrappers; subsequent recorders just join the active
+  // set, so multi-instance jsPsych no longer clobbers each other's
+  // saved-original references on `unpatchCanvasContext`.
   private patchCanvasContext() {
     if (this.canvasContextPatched) return;
-    if (typeof CanvasRenderingContext2D === "undefined") return;
-    const proto = CanvasRenderingContext2D.prototype as unknown as Record<string, Function>;
-    const recorder = this;
-    for (const method of CANVAS_DRAW_METHODS) {
-      const original = proto[method];
-      if (typeof original !== "function") continue;
-      this.originalCanvasMethods.set(method, original);
-      proto[method] = function (this: CanvasRenderingContext2D, ...args: unknown[]) {
-        try {
-          const canvas = this.canvas as HTMLCanvasElement | undefined;
-          if (canvas && recorder.canvasTrackedElements.has(canvas)) {
-            recorder.canvasDirty.set(canvas, true);
-            recorder.scheduleCanvasFrameTick();
-          }
-        } catch {
-          // Tracking must never break the experiment's own drawing.
-        }
-        return (original as Function).apply(this, args);
-      };
-    }
+    registerCanvasRecorder(this);
     this.canvasContextPatched = true;
   }
 
   private unpatchCanvasContext() {
     if (!this.canvasContextPatched) return;
-    if (typeof CanvasRenderingContext2D === "undefined") return;
-    const proto = CanvasRenderingContext2D.prototype as unknown as Record<string, Function>;
-    for (const [method, original] of this.originalCanvasMethods) {
-      proto[method] = original;
-    }
-    this.originalCanvasMethods.clear();
+    unregisterCanvasRecorder(this);
     this.canvasContextPatched = false;
+  }
+
+  /** @internal Called from the shared draw-method wrapper. */
+  notifyCanvasDraw(canvas: HTMLCanvasElement) {
+    if (!this.canvasTrackedElements.has(canvas)) return;
+    this.canvasDirty.set(canvas, true);
+    this.scheduleCanvasFrameTick();
   }
 
   // Coalesces draw notifications into a single per-frame tick. Multiple
@@ -1464,57 +1441,50 @@ export class SessionRecorder {
 
   // -------- RNG --------
 
-  private isNativeMathRandom(fn: typeof Math.random) {
-    // Native built-ins stringify with the [native code] sentinel; any
-    // user-installed PRNG (e.g. via jsPsych.randomization.setSeed) will
-    // serialize as JS source instead.
-    return /\{\s*\[native code\]\s*\}/.test(Function.prototype.toString.call(fn));
-  }
-
   private patchMathRandom() {
     if (this.mathRandomPatched) return;
-    // Capture the *true* pre-recording Math.random before any potential
-    // auto-seeding so `stop()` can restore exactly what was there.
-    this.originalMathRandom = Math.random;
-
-    // Only auto-seed when Math.random is the native function; if the user
-    // already installed a seeded PRNG, leave it alone.
-    if (this.recording.rng.seed === null && this.isNativeMathRandom(this.originalMathRandom)) {
-      this.recording.rng.seed = randomization.setSeed();
-    }
-
-    const upstream = Math.random.bind(Math);
-    Math.random = () => {
-      const v = upstream();
-      // Captured at session scope: includes calls during pre-trial
-      // parameter evaluation, post-trial gaps, and the experimenter's
-      // `on_finish` — none of which are bracketed by a current trial.
-      this.recording.rng_calls.push({ t: this.t(), fn: "Math.random", args: [], result: v });
-      return v;
-    };
+    const seed = registerMathRandomRecorder(this);
+    if (seed !== null) this.recording.rng.seed = seed;
     this.mathRandomPatched = true;
     this.recording.rng.math_random_patched = true;
   }
 
   private unpatchMathRandom() {
     if (!this.mathRandomPatched) return;
-    Math.random = this.originalMathRandom;
+    unregisterMathRandomRecorder(this);
     this.mathRandomPatched = false;
+  }
+
+  /** @internal Called from the shared `Math.random` wrapper. */
+  recordRngCall(value: number) {
+    this.recording.rng_calls.push({
+      t: this.t(),
+      fn: "Math.random",
+      args: [],
+      result: value,
+    });
   }
 
   // -------- helpers --------
 
-  private bind(
+  private bindSession(
     target: EventTarget,
     type: string,
     handler: EventListenerOrEventListenerObject,
     options?: AddEventListenerOptions | boolean
   ) {
     target.addEventListener(type, handler, options);
-    // Trial-scoped binds happen while `mutationObserver` is set (i.e. inside
-    // `attachTrialListeners`); session-scoped binds happen when it is not.
-    const trial = this.mutationObserver !== null;
-    this.boundHandlers.push({ target, type, handler, options, trial });
+    this.boundHandlers.push({ target, type, handler, options, trial: false });
+  }
+
+  private bindTrial(
+    target: EventTarget,
+    type: string,
+    handler: EventListenerOrEventListenerObject,
+    options?: AddEventListenerOptions | boolean
+  ) {
+    target.addEventListener(type, handler, options);
+    this.boundHandlers.push({ target, type, handler, options, trial: true });
   }
 
   private pushEvent(ev: RecordedEvent) {
@@ -1524,6 +1494,148 @@ export class SessionRecorder {
   private t(): number {
     return performance.now() - this.startPerf;
   }
+}
+
+// ---------------------------------------------------------------------------
+// Module-level patch coordination
+// ---------------------------------------------------------------------------
+// Multiple `JsPsych` instances can run with `record_session: true`
+// concurrently. The previous implementation patched
+// `CanvasRenderingContext2D.prototype` and `Math.random` per-recorder,
+// which meant the second recorder's "original" was actually the first
+// recorder's wrapper; restoring on stop in interleaved order left the
+// process with stale wrappers reinstalled on the prototype. The
+// helpers below install each global patch exactly once (refcounted by
+// the set of active recorders) so registration/unregistration order
+// is irrelevant.
+
+const activeCanvasRecorders: Set<SessionRecorder> = new Set();
+let canvasMethodOriginals: Map<string, Function> | null = null;
+// Per-canvas committed context type, learned by wrapping
+// `HTMLCanvasElement.prototype.getContext`. The recorder consults
+// this map to decide whether `getContext("2d")` is safe to call —
+// see `getReadable2dContext` for the rationale.
+const committedContextTypes: WeakMap<HTMLCanvasElement, string> = new WeakMap();
+let getContextOriginal: HTMLCanvasElement["getContext"] | null = null;
+
+function registerCanvasRecorder(recorder: SessionRecorder) {
+  if (activeCanvasRecorders.has(recorder)) return;
+  installCanvasGlobalPatches();
+  activeCanvasRecorders.add(recorder);
+}
+
+function unregisterCanvasRecorder(recorder: SessionRecorder) {
+  if (!activeCanvasRecorders.delete(recorder)) return;
+  if (activeCanvasRecorders.size === 0) uninstallCanvasGlobalPatches();
+}
+
+function installCanvasGlobalPatches() {
+  if (canvasMethodOriginals !== null) return;
+  if (typeof CanvasRenderingContext2D !== "undefined") {
+    const proto = CanvasRenderingContext2D.prototype as unknown as Record<string, Function>;
+    canvasMethodOriginals = new Map();
+    for (const method of CANVAS_DRAW_METHODS) {
+      const original = proto[method];
+      if (typeof original !== "function") continue;
+      canvasMethodOriginals.set(method, original);
+      proto[method] = function (this: CanvasRenderingContext2D, ...args: unknown[]) {
+        try {
+          const canvas = this.canvas as HTMLCanvasElement | undefined;
+          if (canvas) {
+            for (const r of activeCanvasRecorders) r.notifyCanvasDraw(canvas);
+          }
+        } catch {
+          // Tracking must never break the experiment's own drawing.
+        }
+        return (original as Function).apply(this, args);
+      };
+    }
+  }
+  // Wrap `getContext` so we learn each canvas's committed context type
+  // without ever creating a context ourselves. This is what lets
+  // `getReadable2dContext` skip the diff path for WebGL canvases — and,
+  // crucially, for canvases that the user hasn't yet committed to any
+  // type, since calling `getContext("2d")` on a fresh canvas locks it
+  // into 2D and breaks any later `getContext("webgl")` call.
+  if (typeof HTMLCanvasElement !== "undefined") {
+    const proto = HTMLCanvasElement.prototype;
+    getContextOriginal = proto.getContext;
+    const wrapped = function (this: HTMLCanvasElement, ...args: unknown[]) {
+      const result = (getContextOriginal as Function).apply(this, args);
+      if (result && !committedContextTypes.has(this) && typeof args[0] === "string") {
+        committedContextTypes.set(this, args[0] as string);
+      }
+      return result;
+    };
+    proto.getContext = wrapped as typeof proto.getContext;
+  }
+}
+
+function uninstallCanvasGlobalPatches() {
+  if (canvasMethodOriginals !== null && typeof CanvasRenderingContext2D !== "undefined") {
+    const proto = CanvasRenderingContext2D.prototype as unknown as Record<string, Function>;
+    for (const [method, original] of canvasMethodOriginals) {
+      proto[method] = original;
+    }
+  }
+  canvasMethodOriginals = null;
+  if (getContextOriginal !== null && typeof HTMLCanvasElement !== "undefined") {
+    HTMLCanvasElement.prototype.getContext = getContextOriginal;
+  }
+  getContextOriginal = null;
+}
+
+const activeMathRandomRecorders: Set<SessionRecorder> = new Set();
+let mathRandomPrePatch: typeof Math.random | null = null;
+let mathRandomWrapper: typeof Math.random | null = null;
+
+function isNativeMathRandom(fn: typeof Math.random) {
+  // Native built-ins stringify with the [native code] sentinel; any
+  // user-installed PRNG (e.g. via jsPsych.randomization.setSeed) will
+  // serialize as JS source instead.
+  return /\{\s*\[native code\]\s*\}/.test(Function.prototype.toString.call(fn));
+}
+
+// Returns the seed string assigned by auto-seeding when this recorder
+// caused the install, or null when no seeding happened (either because
+// the user already installed a PRNG, or because a previous recorder
+// already patched).
+function registerMathRandomRecorder(recorder: SessionRecorder): string | null {
+  if (activeMathRandomRecorders.has(recorder)) return null;
+  let seed: string | null = null;
+  if (mathRandomWrapper === null) {
+    mathRandomPrePatch = Math.random;
+    if (isNativeMathRandom(mathRandomPrePatch)) {
+      seed = randomization.setSeed();
+    }
+    const upstream = Math.random.bind(Math);
+    mathRandomWrapper = () => {
+      const v = upstream();
+      // Captured at session scope on every active recorder so calls
+      // outside trial boundaries (pre-trial parameter evaluation,
+      // post-trial gaps, the experimenter's `on_finish`) are still
+      // recorded.
+      for (const r of activeMathRandomRecorders) r.recordRngCall(v);
+      return v;
+    };
+    Math.random = mathRandomWrapper;
+  }
+  activeMathRandomRecorders.add(recorder);
+  return seed;
+}
+
+function unregisterMathRandomRecorder(recorder: SessionRecorder) {
+  if (!activeMathRandomRecorders.delete(recorder)) return;
+  if (activeMathRandomRecorders.size > 0) return;
+  // Only restore if our wrapper is still installed. If the user
+  // reassigned `Math.random` mid-session, leave their replacement in
+  // place — clobbering it would silently undo a deliberate user
+  // decision.
+  if (mathRandomWrapper !== null && Math.random === mathRandomWrapper) {
+    if (mathRandomPrePatch !== null) Math.random = mathRandomPrePatch;
+  }
+  mathRandomWrapper = null;
+  mathRandomPrePatch = null;
 }
 
 // ---------------------------------------------------------------------------
@@ -1557,11 +1669,16 @@ function readSheetText(sheet: CSSStyleSheet): string | null {
   }
 }
 
-// Returns the canvas's 2d rendering context if one exists and is
-// readable (i.e. `getImageData` is callable). WebGL canvases return
-// null here so the caller falls back to full-canvas `toDataURL`
-// snapshots.
+// Returns the canvas's 2d rendering context if one was already
+// committed by user code, otherwise null. Calling `getContext("2d")`
+// on a fresh canvas would permanently lock it to 2D and break any
+// subsequent `getContext("webgl")` call from a plugin, so we only
+// touch canvases whose committed type was learned via the
+// `HTMLCanvasElement.prototype.getContext` wrapper installed in
+// `installCanvasGlobalPatches`. Canvases of unknown or non-2d type
+// fall through to full `toDataURL` snapshots in `snapshotCanvas`.
 function getReadable2dContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D | null {
+  if (committedContextTypes.get(canvas) !== "2d") return null;
   try {
     const ctx = canvas.getContext("2d");
     return ctx ?? null;
