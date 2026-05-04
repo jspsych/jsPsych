@@ -22,18 +22,12 @@ export interface SessionRecording {
   rng: { seed: string | null; math_random_patched: boolean };
   display_element_id: string;
   stylesheets: StylesheetSnapshot[];
-  // Chronological log of `<head>` stylesheet mutations after `start()`.
-  // Initial state is in `stylesheets`; this records subsequent additions,
-  // removals, and `<style>` text edits so the replayer can apply them
-  // alongside the per-trial DOM event stream.
   stylesheet_events: StylesheetEvent[];
   trials: TrialRecording[];
   viewport_changes: ViewportChange[];
-  // Chronological log of every Math.random output consumed during the
-  // session. Captured at session scope (rather than per-trial) so calls
-  // outside trial boundaries — pre-trial parameter evaluation, post-trial
-  // gaps, the experimenter's `on_finish` — are never dropped. A replayer
-  // consumes this list in order.
+  // Session-scoped (not per-trial) so RNG calls during pre-trial
+  // parameter evaluation, between-trial gaps, and `on_finish` are
+  // captured. Replayer consumes in order.
   rng_calls: RngCall[];
   ended_at_perf: number | null;
   end_reason: "finished" | "aborted" | "unload" | null;
@@ -179,23 +173,12 @@ export type ScrollRecord =
   | { type: "scroll.window"; t: number; x: number; y: number }
   | { type: "scroll.element"; t: number; node: number; x: number; y: number };
 
-// Captures `<canvas>` pixel state as a PNG data URL. The MutationObserver
-// can't see drawing operations inside `<canvas>`; without these events a
-// replayer reconstructs the element but renders it blank, so anything the
-// participant drew (e.g. plugin-sketchpad strokes) would be invisible.
-// Emitted at trial load (initial baseline), gesture boundaries
-// (mouseup/touchend/pointerup) and trial end, with per-canvas throttling.
-//
-// `region` distinguishes a full-canvas baseline from an incremental patch:
-//   - omitted: `data_url` is the entire canvas, to be drawn at (0, 0)
-//     after clearing. The first snapshot per canvas is always full so
-//     subsequent partials have a baseline to layer on.
-//   - present: `data_url` is a cropped rectangle of the canvas's current
-//     state. The replayer composites it at (region.x, region.y) without
-//     touching the rest of the canvas.
-// The recorder emits a partial when the changed bounding box covers less
-// than ~80% of the canvas; otherwise it emits a full snapshot since the
-// per-pixel cost of compositing approaches a full re-render.
+// PNG data URL of `<canvas>` pixel state. MutationObserver can't see
+// drawing operations, so the replayer needs these to reconstruct
+// anything participants draw. `region` distinguishes a full-canvas
+// baseline (omitted: drawn at 0,0 after clearing) from an incremental
+// patch (present: composited at region.x,y). First snapshot per canvas
+// is always full; partials only when dirty area < 80% of canvas.
 export interface CanvasSnapshot {
   type: "canvas.snapshot";
   t: number;
@@ -218,6 +201,13 @@ export interface RngCall {
 const SCHEMA_VERSION = 1;
 const VIEWPORT_DEBOUNCE_MS = 100;
 const MEDIA_TIME_THROTTLE_MS = 250;
+// Hoisted to avoid allocating a fresh empty array on every Math.random
+// call; the rng_calls log can grow into the millions for a long
+// randomization-heavy session.
+const RNG_NO_ARGS: JsonValue[] = [];
+// Events listened on `<video>` / `<audio>` while a trial is active.
+// Listed once so attach/detach iterate the same set without drift.
+const MEDIA_EVENTS = ["play", "pause", "ended", "seeked", "timeupdate"] as const;
 // Per-canvas minimum gap between gesture-driven snapshots. Bounds the
 // `toDataURL` cost for users who rapidly click/release; trial-end
 // captures bypass this so the final state always lands.
@@ -233,13 +223,9 @@ const CANVAS_FULL_SNAPSHOT_AREA_FRACTION = 0.8;
 // canvas animations without producing 60 PNGs/sec for a continuously-
 // repainting stimulus.
 const CANVAS_ANIMATION_MIN_INTERVAL_MS = 66;
-// Pixel-mutating methods on `CanvasRenderingContext2D`. Wrapping these
-// lets the recorder notice when a canvas was redrawn between gestures
-// (the original heuristic only snapshotted at mouseup/touchend), so
-// canvases driven by animation loops or non-gesture timers can still
-// be reconstructed in the replay. Path-state methods (beginPath,
-// moveTo, lineTo, …) are intentionally omitted: they don't change
-// pixels until `fill` or `stroke` is called.
+// Pixel-mutating methods on `CanvasRenderingContext2D`. Path-state
+// methods (`beginPath`, `moveTo`, `lineTo`, …) are intentionally
+// omitted: they don't change pixels until `fill` or `stroke` is called.
 const CANVAS_DRAW_METHODS = [
   "clearRect",
   "fillRect",
@@ -281,17 +267,19 @@ export class SessionRecorder {
   private styleNodeIds = new WeakMap<Node, number>();
   private nextStylesheetId = 1;
 
-  private mouseRafScheduled = false;
+  // RAF-coalesced flushers. Each entry is keyed by a channel name
+  // (mouse / scroll / input); presence of a key means a flush is
+  // already scheduled for that channel.
+  private rafScheduled = new Set<string>();
+
   private lastMouseX = 0;
   private lastMouseY = 0;
   private mouseDirty = false;
 
-  private scrollRafScheduled = false;
   // Pending scroll state to flush at next animation frame. Key "window"
   // refers to the document scroll; numeric keys are tracked node IDs.
   private pendingScroll: Map<number | "window", { x: number; y: number }> = new Map();
 
-  private inputRafScheduled = false;
   // Latest value-per-input collected within the current animation frame.
   // Coalesced so a fast typist produces one record per RAF rather than
   // one per keystroke (matching how mouse.move is throttled).
@@ -300,44 +288,38 @@ export class SessionRecorder {
   private viewportTimer: ReturnType<typeof setTimeout> | null = null;
   private lastViewport: ViewportState | null = null;
 
-  private mediaListeners = new WeakMap<HTMLMediaElement, (ev: Event) => void>();
+  // Tracked media elements with their attached listener. Strong refs so
+  // we can iterate at trial end to detach. `mediaTimeLast` is keyed by
+  // element for its `timeupdate`-throttle bookkeeping.
+  private mediaListeners = new Map<HTMLMediaElement, (ev: Event) => void>();
   private mediaTimeLast = new WeakMap<HTMLMediaElement, number>();
-  // Strong ref to currently tracked media elements so we can iterate and
-  // remove their listeners when the trial ends. Cleared on detach.
-  private mediaTrackedElements = new Set<HTMLMediaElement>();
 
   // Strong ref to canvas elements within the current trial's display
   // subtree. Used to drive deferred snapshotting after gestures and at
   // trial end. Per-canvas throttle/dedupe state is held alongside.
-  // Public-within-module so the shared draw-method wrapper (installed
-  // once across all active recorders) can route notifications back to
-  // the recorders that care about each canvas.
-  canvasTrackedElements = new Set<HTMLCanvasElement>();
+  private canvasTrackedElements = new Set<HTMLCanvasElement>();
   private canvasLastSnapshot = new WeakMap<HTMLCanvasElement, string>();
   private canvasLastSnapshotTime = new WeakMap<HTMLCanvasElement, number>();
-  private canvasSnapshotScheduled = false;
+  // True when an in-flight RAF-deferred sweep should bypass the per-
+  // canvas throttle. Set by initial-baseline schedules; gesture-driven
+  // schedules leave it alone.
+  private pendingCanvasSnapshotForce = false;
   // Last full-canvas pixel buffer per tracked canvas, used to compute
   // the bounding box of changed pixels so subsequent snapshots can ship
   // only the dirty rectangle. Cleared on canvas removal and on trial
   // teardown. Absent for canvases that don't expose a 2d context (e.g.
   // WebGL) — those always emit full snapshots.
   private canvasShadowData = new WeakMap<HTMLCanvasElement, ImageData>();
-  private canvasInitialSnapshotScheduled = false;
   // Set to true by the patched 2d-context draw methods whenever a
   // tracked canvas is mutated. The frame tick reads-and-clears it to
   // decide which canvases need a fresh diff.
-  // Public-within-module so the shared draw-method wrapper can flip
-  // the flag from outside the class.
-  canvasDirty = new WeakMap<HTMLCanvasElement, boolean>();
+  private canvasDirty = new WeakMap<HTMLCanvasElement, boolean>();
   // Last time the draw-detection path emitted (or attempted to emit) a
   // snapshot for each canvas. Drives `CANVAS_ANIMATION_MIN_INTERVAL_MS`
   // throttling without conflicting with the gesture-path throttle in
   // `canvasLastSnapshotTime`.
   private canvasAnimationLastTime = new WeakMap<HTMLCanvasElement, number>();
   private canvasFrameLoopScheduled = false;
-  private canvasContextPatched = false;
-
-  private mathRandomPatched = false;
 
   private boundHandlers: Array<{
     target: EventTarget;
@@ -407,16 +389,16 @@ export class SessionRecorder {
     this.nextStylesheetId = 1;
     this.recording.stylesheets = this.captureStylesheets();
     this.mouseDirty = false;
-    this.mouseRafScheduled = false;
-    this.scrollRafScheduled = false;
+    this.rafScheduled.clear();
     this.pendingScroll.clear();
-    this.inputRafScheduled = false;
     this.pendingInput.clear();
     this.canvasFrameLoopScheduled = false;
-    this.canvasInitialSnapshotScheduled = false;
+    this.pendingCanvasSnapshotForce = false;
 
-    this.patchMathRandom();
-    this.patchCanvasContext();
+    const seed = registerMathRandomRecorder(this);
+    if (seed !== null) this.recording.rng.seed = seed;
+    this.recording.rng.math_random_patched = true;
+    registerCanvasRecorder(this);
     this.attachSessionListeners();
   }
 
@@ -437,8 +419,8 @@ export class SessionRecorder {
 
     this.detachTrialListeners();
     this.detachSessionListeners();
-    this.unpatchMathRandom();
-    this.unpatchCanvasContext();
+    unregisterMathRandomRecorder(this);
+    unregisterCanvasRecorder(this);
     this.recording.ended_at_perf = this.t();
     this.recording.end_reason = reason;
     this.running = false;
@@ -639,8 +621,7 @@ export class SessionRecorder {
     // tracked-set strong refs drop here; explicit deletion happens in
     // `releaseSubtree` for canvases removed mid-trial.
     this.canvasTrackedElements.clear();
-    this.canvasSnapshotScheduled = false;
-    this.canvasInitialSnapshotScheduled = false;
+    this.pendingCanvasSnapshotForce = false;
     // Tear down only the trial-scoped handlers; session-scoped handlers
     // (resize, focus, blur, fullscreenchange) stay attached until stop().
     const remaining: typeof this.boundHandlers = [];
@@ -980,21 +961,27 @@ export class SessionRecorder {
 
   // -------- input handlers --------
 
+  // Coalesces a flush of `key`'s pending state to the next animation
+  // frame. Repeated calls before the frame fires are no-ops, so a
+  // burst of input events produces one flush instead of many.
+  private scheduleRafFlush(key: string, flush: () => void) {
+    if (this.rafScheduled.has(key)) return;
+    this.rafScheduled.add(key);
+    requestAnimationFrame(() => {
+      this.rafScheduled.delete(key);
+      flush();
+    });
+  }
+
   private handleMouseMove = (ev: Event) => {
     const e = ev as MouseEvent;
     this.lastMouseX = e.clientX;
     this.lastMouseY = e.clientY;
     this.mouseDirty = true;
-    if (!this.mouseRafScheduled) {
-      this.mouseRafScheduled = true;
-      requestAnimationFrame(() => {
-        this.mouseRafScheduled = false;
-        this.flushPendingMouse();
-      });
-    }
+    this.scheduleRafFlush("mouse", this.flushPendingMouse);
   };
 
-  private flushPendingMouse() {
+  private flushPendingMouse = () => {
     if (!this.mouseDirty) return;
     this.mouseDirty = false;
     this.pushEvent({
@@ -1003,15 +990,12 @@ export class SessionRecorder {
       x: this.lastMouseX,
       y: this.lastMouseY,
     });
-  }
+  };
 
   private handleScroll = (ev: Event) => {
     const target = ev.target;
     if (target === document || target === document.documentElement || target === document.body) {
-      this.pendingScroll.set("window", {
-        x: window.scrollX,
-        y: window.scrollY,
-      });
+      this.pendingScroll.set("window", { x: window.scrollX, y: window.scrollY });
     } else if (target instanceof Element) {
       const id = this.nodeIds.get(target);
       if (id === undefined) return;
@@ -1019,13 +1003,7 @@ export class SessionRecorder {
     } else {
       return;
     }
-    if (!this.scrollRafScheduled) {
-      this.scrollRafScheduled = true;
-      requestAnimationFrame(() => {
-        this.scrollRafScheduled = false;
-        this.flushPendingScroll();
-      });
-    }
+    this.scheduleRafFlush("scroll", this.flushPendingScroll);
   };
 
   // `input` events come from text-like form fields, textareas, and sliders.
@@ -1046,23 +1024,17 @@ export class SessionRecorder {
     const id = this.nodeIds.get(target);
     if (id === undefined) return;
     this.pendingInput.set(id, target.value);
-    if (!this.inputRafScheduled) {
-      this.inputRafScheduled = true;
-      requestAnimationFrame(() => {
-        this.inputRafScheduled = false;
-        this.flushPendingInput();
-      });
-    }
+    this.scheduleRafFlush("input", this.flushPendingInput);
   };
 
-  private flushPendingInput() {
+  private flushPendingInput = () => {
     if (this.pendingInput.size === 0) return;
     const t = this.t();
     for (const [node, value] of this.pendingInput) {
       this.pushEvent({ type: "input.value", t, node, value });
     }
     this.pendingInput.clear();
-  }
+  };
 
   private handleChangeEvent = (ev: Event) => {
     const target = ev.target;
@@ -1083,7 +1055,7 @@ export class SessionRecorder {
     }
   };
 
-  private flushPendingScroll() {
+  private flushPendingScroll = () => {
     if (this.pendingScroll.size === 0) return;
     const t = this.t();
     for (const [key, pos] of this.pendingScroll) {
@@ -1094,7 +1066,7 @@ export class SessionRecorder {
       }
     }
     this.pendingScroll.clear();
-  }
+  };
 
   private handleMouseButton(type: "mouse.down" | "mouse.up" | "mouse.click") {
     return (ev: Event) => {
@@ -1109,7 +1081,7 @@ export class SessionRecorder {
       });
       // Gesture release is the moment a stroke completes; snapshot any
       // tracked canvases so the drawing it produced reaches the replay.
-      if (type === "mouse.up") this.scheduleCanvasSnapshot();
+      if (type === "mouse.up") this.scheduleCanvasSnapshot(false);
     };
   }
 
@@ -1122,7 +1094,7 @@ export class SessionRecorder {
         y: tt.clientY,
       }));
       this.pushEvent({ type, t: this.t(), touches });
-      if (type === "touch.end") this.scheduleCanvasSnapshot();
+      if (type === "touch.end") this.scheduleCanvasSnapshot(false);
     };
   }
 
@@ -1203,27 +1175,15 @@ export class SessionRecorder {
       }
       this.pushEvent({ type, t: this.t(), node: id, current_time: media.currentTime });
     };
-    media.addEventListener("play", handler);
-    media.addEventListener("pause", handler);
-    media.addEventListener("ended", handler);
-    media.addEventListener("seeked", handler);
-    media.addEventListener("timeupdate", handler);
-    this.mediaTrackedElements.add(media);
+    for (const ev of MEDIA_EVENTS) media.addEventListener(ev, handler);
     this.mediaListeners.set(media, handler);
   }
 
   private detachMediaListeners() {
-    for (const media of this.mediaTrackedElements) {
-      const handler = this.mediaListeners.get(media);
-      if (!handler) continue;
-      media.removeEventListener("play", handler);
-      media.removeEventListener("pause", handler);
-      media.removeEventListener("ended", handler);
-      media.removeEventListener("seeked", handler);
-      media.removeEventListener("timeupdate", handler);
-      this.mediaListeners.delete(media);
+    for (const [media, handler] of this.mediaListeners) {
+      for (const ev of MEDIA_EVENTS) media.removeEventListener(ev, handler);
     }
-    this.mediaTrackedElements.clear();
+    this.mediaListeners.clear();
   }
 
   // -------- canvas snapshotting --------
@@ -1244,35 +1204,21 @@ export class SessionRecorder {
 
   private trackCanvasElement(canvas: HTMLCanvasElement) {
     this.canvasTrackedElements.add(canvas);
-    // Schedule an initial baseline snapshot. For canvases discovered at
-    // `onTrialLoad` this catches the post-render state of plugins that
-    // draw their stimulus synchronously. For canvases added mid-trial
-    // via the MutationObserver path this gives the same coverage. The
-    // diff path skips re-snapshotting canvases that are already
-    // baselined, so calling this for every added canvas is cheap.
-    this.scheduleInitialCanvasSnapshot();
-  }
-
-  // Registers this recorder with the module-level prototype patches so
-  // it receives draw notifications. The first recorder to register
-  // installs the wrappers; subsequent recorders just join the active
-  // set, so multi-instance jsPsych no longer clobbers each other's
-  // saved-original references on `unpatchCanvasContext`.
-  private patchCanvasContext() {
-    if (this.canvasContextPatched) return;
-    registerCanvasRecorder(this);
-    this.canvasContextPatched = true;
-  }
-
-  private unpatchCanvasContext() {
-    if (!this.canvasContextPatched) return;
-    unregisterCanvasRecorder(this);
-    this.canvasContextPatched = false;
+    // Force a baseline snapshot to capture synchronously-drawn stimuli
+    // even if a gesture immediately preceded the trial. The diff path
+    // dedupes already-baselined canvases, so this is cheap.
+    this.scheduleCanvasSnapshot(true);
   }
 
   /** @internal Called from the shared draw-method wrapper. */
   notifyCanvasDraw(canvas: HTMLCanvasElement) {
     if (!this.canvasTrackedElements.has(canvas)) return;
+    // Already-dirty short-circuit: a stroke composed of many draw calls
+    // (lineTo + stroke + lineTo + stroke ...) within a frame would
+    // otherwise re-write the same `true` and re-check the schedule
+    // flag tens of times per frame. Once dirty, nothing else needs
+    // doing until the frame tick clears the flag.
+    if (this.canvasDirty.get(canvas)) return;
     this.canvasDirty.set(canvas, true);
     this.scheduleCanvasFrameTick();
   }
@@ -1311,33 +1257,19 @@ export class SessionRecorder {
     }
   };
 
-  // Defers an unconditional snapshot to the next animation frame so we
-  // wait for any synchronous drawing during plugin setup (or during
-  // user `on_load`) to commit. Distinct from `scheduleCanvasSnapshot`,
-  // which respects the per-canvas throttle: initial baselines must not
-  // be throttled out by an immediately preceding gesture.
-  private scheduleInitialCanvasSnapshot() {
-    if (this.canvasInitialSnapshotScheduled) return;
+  // Defers a canvas-snapshot sweep to the next animation frame so the
+  // browser has had a chance to paint the post-gesture state. `force`
+  // bypasses the per-canvas throttle (used for initial baselines that
+  // must not be throttled out by an immediately preceding gesture).
+  // If both forced and unforced are scheduled in the same frame the
+  // forced wins, since it's a strict superset of the unforced sweep.
+  private scheduleCanvasSnapshot(force: boolean) {
     if (this.canvasTrackedElements.size === 0) return;
-    this.canvasInitialSnapshotScheduled = true;
-    requestAnimationFrame(() => {
-      this.canvasInitialSnapshotScheduled = false;
-      this.captureCanvasSnapshots(true);
-    });
-  }
-
-  // Defers actual snapshotting to the next animation frame so we wait
-  // until the page has had a chance to paint the post-gesture state
-  // (otherwise `toDataURL` could return the canvas as it was *before*
-  // the up event's listeners ran). Coalesced via a single scheduled flag
-  // so a flurry of mouseups doesn't queue redundant work.
-  private scheduleCanvasSnapshot() {
-    if (this.canvasSnapshotScheduled) return;
-    if (this.canvasTrackedElements.size === 0) return;
-    this.canvasSnapshotScheduled = true;
-    requestAnimationFrame(() => {
-      this.canvasSnapshotScheduled = false;
-      this.captureCanvasSnapshots(false);
+    if (force) this.pendingCanvasSnapshotForce = true;
+    this.scheduleRafFlush("canvas-snapshot", () => {
+      const f = this.pendingCanvasSnapshotForce;
+      this.pendingCanvasSnapshotForce = false;
+      this.captureCanvasSnapshots(f);
     });
   }
 
@@ -1428,9 +1360,6 @@ export class SessionRecorder {
     }
   }
 
-  // Emits a full-canvas snapshot, applying the same data-URL dedupe the
-  // pre-diff implementation used. Useful for first captures, near-full
-  // dirty regions, and canvases without a readable 2d context.
   private emitFullCanvasSnapshot(canvas: HTMLCanvasElement, id: number, t: number) {
     const dataUrl = canvas.toDataURL();
     if (this.canvasLastSnapshot.get(canvas) === dataUrl) return;
@@ -1441,26 +1370,12 @@ export class SessionRecorder {
 
   // -------- RNG --------
 
-  private patchMathRandom() {
-    if (this.mathRandomPatched) return;
-    const seed = registerMathRandomRecorder(this);
-    if (seed !== null) this.recording.rng.seed = seed;
-    this.mathRandomPatched = true;
-    this.recording.rng.math_random_patched = true;
-  }
-
-  private unpatchMathRandom() {
-    if (!this.mathRandomPatched) return;
-    unregisterMathRandomRecorder(this);
-    this.mathRandomPatched = false;
-  }
-
   /** @internal Called from the shared `Math.random` wrapper. */
   recordRngCall(value: number) {
     this.recording.rng_calls.push({
       t: this.t(),
       fn: "Math.random",
-      args: [],
+      args: RNG_NO_ARGS,
       result: value,
     });
   }

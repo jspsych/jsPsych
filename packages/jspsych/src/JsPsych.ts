@@ -237,28 +237,6 @@ export class JsPsych {
    * }
    * ```
    *
-   * @example Offer the participant a download:
-   * ```ts
-   * const blob = await jsPsych.getSessionRecordingCompressed();
-   * if (blob) {
-   *   const a = document.createElement("a");
-   *   a.href = URL.createObjectURL(blob);
-   *   a.download = "session.json.gz";
-   *   a.click();
-   *   URL.revokeObjectURL(a.href);
-   * }
-   * ```
-   *
-   * @example Stash in jsPsych's data record (base64-encoded):
-   * ```ts
-   * const blob = await jsPsych.getSessionRecordingCompressed();
-   * if (blob) {
-   *   const buf = new Uint8Array(await blob.arrayBuffer());
-   *   let binary = "";
-   *   for (const byte of buf) binary += String.fromCharCode(byte);
-   *   jsPsych.data.addProperties({ session_recording_b64: btoa(binary) });
-   * }
-   * ```
    */
   async getSessionRecordingCompressed(): Promise<Blob | undefined> {
     const recording = this.getSessionRecording();
