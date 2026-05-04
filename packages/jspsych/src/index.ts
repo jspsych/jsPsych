@@ -66,3 +66,21 @@ export type { JsPsychPlugin, PluginInfo, TrialType } from "./modules/plugins";
 export { ParameterType } from "./modules/plugins";
 export type { JsPsychExtension, JsPsychExtensionInfo } from "./modules/extensions";
 export { DataCollection } from "./modules/data/DataCollection";
+export type {
+  CanvasSnapshot,
+  ClipboardRecord,
+  DomMutation,
+  DomNode,
+  FocusRecord,
+  InputRecord,
+  MediaRecord,
+  RecordedEvent,
+  RngCall,
+  ScrollRecord,
+  SessionRecording,
+  StylesheetEvent,
+  StylesheetSnapshot,
+  TrialRecording,
+  ViewportChange,
+  ViewportState,
+} from "./modules/recording";
