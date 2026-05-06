@@ -134,7 +134,15 @@ export const createCoreDistArchive = async () => {
     collectFiles(src(["*.md", "license.txt"])),
   ]);
 
-  return Readable.from(fileGroups.flat()).pipe(zip("dist.zip")).pipe(dest("."));
+  // Await the destination's `finish` so gulp doesn't mark this task complete
+  // before `dist.zip` is fully written (async-done resolves a returned Promise
+  // by its resolved value, not by re-handling a stream the Promise resolves to).
+  const writeStream = Readable.from(fileGroups.flat()).pipe(zip("dist.zip")).pipe(dest("."));
+  await new Promise((resolve, reject) => {
+    writeStream.on("finish", resolve);
+    writeStream.on("end", resolve);
+    writeStream.on("error", reject);
+  });
 };
 
 /**
