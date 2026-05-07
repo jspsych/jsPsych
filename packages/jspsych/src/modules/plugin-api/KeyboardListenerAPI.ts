@@ -1,4 +1,5 @@
 import autoBind from "auto-bind";
+import { GlobalEventSource } from "src/JsPsych";
 
 export type KeyboardListener = (e: KeyboardEvent) => void;
 
@@ -17,7 +18,7 @@ export interface GetKeyboardResponseOptions {
 
 export class KeyboardListenerAPI {
   constructor(
-    private getRootElement: () => Element | undefined,
+    private getEventSource: () => GlobalEventSource | EventTarget | undefined,
     private areResponsesCaseSensitive: boolean = false,
     private minimumValidRt = 0
   ) {
@@ -36,11 +37,16 @@ export class KeyboardListenerAPI {
    */
   private registerRootListeners() {
     if (!this.areRootListenersRegistered) {
-      const rootElement = this.getRootElement();
-      if (rootElement) {
-        rootElement.addEventListener("keydown", this.rootKeydownListener);
-        rootElement.addEventListener("keyup", this.rootKeyupListener);
+      const source = this.getEventSource();
+      if (source) {
+        if (source instanceof Element && isNaN(parseInt(source.getAttribute("tabIndex")))) {
+          console.warn("non-numeric tabIndex on interactive element", source);
+        }
+        source.addEventListener("keydown", this.rootKeydownListener);
+        source.addEventListener("keyup", this.rootKeyupListener);
         this.areRootListenersRegistered = true;
+      } else {
+        console.warn("No source available for KeyboardListenerAPI", this.getEventSource);
       }
     }
   }

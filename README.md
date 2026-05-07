@@ -66,3 +66,11 @@ The project is currently managed by the core team of Josh de Leeuw ([@jodeleeuw]
 jsPsych was created by [Josh de Leeuw](https://www.vassar.edu/faculty/jdeleeuw).
 
 We're also grateful for the generous support from a [Mozilla Open Source Support award](https://www.mozilla.org/en-US/moss/), which funded development of the library from 2020-2022.
+
+## Local development
+### Testing changes from a dependee project
+After modifying a JsPsych package , build it with `npm run build` then run `npm link`
+In the dependee project, `npm link <somepackage>`
+
+Show all npm symlinks: `npm ls -g --depth=0 --link=true`
+Unlink: run `npm unlink -g` in the directory where the link was originally created.
