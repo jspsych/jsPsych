@@ -69,6 +69,6 @@ jsPsych was created by [Josh de Leeuw](https://www.vassar.edu/faculty/jdeleeuw).
 
 We're grateful for the generous support from a [Mozilla Open Source Support award](https://www.mozilla.org/en-US/moss/), which funded development of the library from 2020-2022, and from a [National Science Foundation Grant](https://www.nsf.gov/awardsearch/show-award?AWD_ID=2346214), which funded work on the broader ecosystem from 2024-2026.
 
-
+This project is tested with [BrowserStack](https://www.browserstack.com).
 
 
