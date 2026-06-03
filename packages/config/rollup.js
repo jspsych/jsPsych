@@ -51,7 +51,6 @@ const makeConfig = ({
   /** @type{import("@rollup/plugin-commonjs").RollupCommonJSOptions} */
   const commonjsPluginOptions = {
     extensions: [".js", ".json"],
-    strictRequires: "auto",
   };
 
   // Non-babel builds
