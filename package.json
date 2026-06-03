@@ -54,5 +54,8 @@
     "projects": [
       "<rootDir>/packages/*/jest.config.cjs"
     ]
+  },
+  "dependencies": {
+    "auto-bind": "^5.0.1"
   }
 }
