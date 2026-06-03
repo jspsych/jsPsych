@@ -20,7 +20,7 @@
     "docs:serve": "poetry install --no-root && poetry run mike serve"
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=20.0.0",
     "npm": ">=9.0.0"
   },
   "packageManager": "npm@8.3.1",
