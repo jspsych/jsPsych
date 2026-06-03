@@ -1,1 +1,1 @@
-module.exports = require("@jspsych/config/jest").makePackageConfig(__dirname);
+module.exports = require("../config/jest.cjs").makePackageConfig(__dirname);
