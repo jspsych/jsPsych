@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="jatos.js"></script>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-call-function/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-button-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+    <script src="../packages/adapter-multiplayer-jatos/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+  </head>
+  <body></body>
+  <script>
+    jatos.onLoad(async () => {
+      const jsPsych = initJsPsych({ on_finish: () => jatos.endStudy() });
+      await jsPsych.pluginAPI.connect(new jsPsychAdapterMultiplayerJatos());
+
+      const POT = 10;
+      let myRole;       // "proposer" | "responder"
+      let proposerId;
+      let responderId;
+      let proposerOffer;         // integer 0–10
+      let responderDecision;     // "accept" | "reject"
+
+      const timeline = [
+
+        // ── Lobby ──────────────────────────────────────────────────────────
+        // Both players push a ready signal; wait until the group has 2 members,
+        // then deterministically assign roles by sorting participant IDs.
+        {
+          type: jsPsychCallFunction,
+          async: true,
+          func: async (done) => {
+            await jsPsych.pluginAPI.push({ status: "ready" });
+            const group = await jsPsych.pluginAPI.wait(
+              (group) => Object.keys(group).length >= 2
+            );
+            const sortedIds = Object.keys(group).sort();
+            proposerId = sortedIds[0];
+            responderId = sortedIds[1];
+            myRole = jsPsych.pluginAPI.participantId === proposerId
+              ? "proposer"
+              : "responder";
+            done();
+          }
+        },
+
+        // ── Proposer: choose offer ──────────────────────────────────────────
+        {
+          type: jsPsychHtmlButtonResponse,
+          stimulus: `
+            <p>You are the <strong>Proposer</strong>.</p>
+            <p>There is <strong>$${POT}</strong> in the pot.</p>
+            <p>Choose how much to offer the Responder. You keep the rest.</p>
+          `,
+          choices: Array.from({ length: POT + 1 }, (_, index) => `$${index}`),
+          conditional_function: () => myRole === "proposer",
+          on_finish: (data) => {
+            proposerOffer = data.response; // button index equals dollar amount
+          }
+        },
+
+        // ── Proposer: send offer, then wait for the responder's decision ────
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: () => `
+            <p>You offered the Responder <strong>$${proposerOffer}</strong> and kept $${POT - proposerOffer}.</p>
+            <p>Waiting for the Responder…</p>
+          `,
+          choices: "NO_KEYS",
+          on_start: async () => {
+            await jsPsych.pluginAPI.push({ offer: proposerOffer });
+            const group = await jsPsych.pluginAPI.wait(
+              (group) => group[responderId]?.decision !== undefined
+            );
+            responderDecision = group[responderId].decision;
+            jsPsych.finishTrial();
+          },
+          conditional_function: () => myRole === "proposer"
+        },
+
+        // ── Responder: wait for the proposer's offer ────────────────────────
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: "<p>Waiting for the Proposer's offer…</p>",
+          choices: "NO_KEYS",
+          on_start: async () => {
+            const group = await jsPsych.pluginAPI.wait(
+              (group) => group[proposerId]?.offer !== undefined
+            );
+            proposerOffer = group[proposerId].offer;
+            jsPsych.finishTrial();
+          },
+          conditional_function: () => myRole === "responder"
+        },
+
+        // ── Responder: accept or reject ─────────────────────────────────────
+        {
+          type: jsPsychHtmlButtonResponse,
+          stimulus: () => `
+            <p>You are the <strong>Responder</strong>.</p>
+            <p>The Proposer offered you <strong>$${proposerOffer}</strong> and kept $${POT - proposerOffer}.</p>
+            <p>Do you accept?</p>
+          `,
+          choices: ["Accept", "Reject"],
+          conditional_function: () => myRole === "responder",
+          on_finish: (data) => {
+            responderDecision = data.response === 0 ? "accept" : "reject";
+          }
+        },
+
+        // ── Responder: send decision ────────────────────────────────────────
+        {
+          type: jsPsychCallFunction,
+          async: true,
+          func: async (done) => {
+            await jsPsych.pluginAPI.push({ decision: responderDecision });
+            done();
+          },
+          conditional_function: () => myRole === "responder"
+        },
+
+        // ── Both: outcome ───────────────────────────────────────────────────
+        {
+          type: jsPsychHtmlKeyboardResponse,
+          stimulus: () => {
+            const accepted = responderDecision === "accept";
+            const proposerEarns = accepted ? POT - proposerOffer : 0;
+            const responderEarns = accepted ? proposerOffer : 0;
+
+            const verdict = accepted
+              ? `<p style="color:green">The offer was <strong>accepted</strong>.</p>`
+              : `<p style="color:red">The offer was <strong>rejected</strong>. Both players earn $0.</p>`;
+
+            return myRole === "proposer"
+              ? `${verdict}
+                 <p>You offered $${proposerOffer} and kept $${POT - proposerOffer}.</p>
+                 <p>You earn: <strong>$${proposerEarns}</strong></p>`
+              : `${verdict}
+                 <p>The Proposer offered you $${proposerOffer}.</p>
+                 <p>You earn: <strong>$${responderEarns}</strong></p>`;
+          },
+          choices: " ",
+          prompt: "<p>Press space to finish.</p>"
+        }
+
+      ];
+
+      await jsPsych.run(timeline);
+    });
+  </script>
+</html>
