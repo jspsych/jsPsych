@@ -28,6 +28,8 @@
       prompt: '<p>Please rate your enjoyment of the video clip.</p>'
     };
 
+    const timeline = [trial];
+
     if (typeof jsPsych !== "undefined") {
       jsPsych.run(generateDocsDemoTimeline(timeline, [preload]));
     } else {
