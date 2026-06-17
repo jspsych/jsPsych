@@ -157,4 +157,86 @@ describe("MultiplayerAPI mock run", () => {
     await api.disconnect();
     jest.useRealTimers();
   });
+
+  test("getAll returns all participants' data", async () => {
+    const api1 = new MultiplayerAPI();
+    const api2 = new MultiplayerAPI();
+    await api1.connect(new MockAdapter("p1"));
+    await api2.connect(new MockAdapter("p2"));
+
+    await api1.push({ x: 1 });
+    await api2.push({ x: 2 });
+
+    const all = api1.getAll();
+    expect(all).toEqual({ p1: { x: 1 }, p2: { x: 2 } });
+
+    await api1.disconnect();
+    await api2.disconnect();
+  });
+
+  test("wait resolves immediately when condition is already met", async () => {
+    const api1 = new MultiplayerAPI();
+    const api2 = new MultiplayerAPI();
+    await api1.connect(new MockAdapter("p1"));
+    await api2.connect(new MockAdapter("p2"));
+
+    await api2.push({ ready: true });
+
+    // Condition is already true — should resolve without waiting for a new push
+    const result = await api1.wait((data) => "p2" in data);
+    expect(result["p2"]).toEqual({ ready: true });
+
+    await api1.disconnect();
+    await api2.disconnect();
+  });
+
+  test("subscribe fires on every push", async () => {
+    const api1 = new MultiplayerAPI();
+    const api2 = new MultiplayerAPI();
+    await api1.connect(new MockAdapter("p1"));
+    await api2.connect(new MockAdapter("p2"));
+
+    const updates: GroupSessionData[] = [];
+    api1.subscribe((data) => updates.push(data));
+
+    await api2.push({ step: 1 });
+    await api2.push({ step: 2 });
+
+    expect(updates).toHaveLength(2);
+    expect(updates[0]["p2"]).toEqual({ step: 1 });
+    expect(updates[1]["p2"]).toEqual({ step: 2 });
+
+    await api1.disconnect();
+    await api2.disconnect();
+  });
+
+  test("disconnect clears participantId and adapter", async () => {
+    const api = new MultiplayerAPI();
+    await api.connect(new MockAdapter("p1"));
+    await api.disconnect();
+
+    expect(api.participantId).toBeNull();
+    expect(() => api.push({ x: 1 })).toThrow("connect() must be called");
+  });
+
+  test("calling methods before connect throws", async () => {
+    const api = new MultiplayerAPI();
+
+    expect(() => api.push({ x: 1 })).toThrow("connect() must be called");
+    expect(() => api.getAll()).toThrow("connect() must be called");
+    expect(() => api.get("p1")).toThrow("connect() must be called");
+    expect(() => api.subscribe(() => {})).toThrow("connect() must be called");
+    expect(() => api.wait(() => true)).toThrow("connect() must be called");
+  });
+
+  test("calling connect() twice throws", async () => {
+    const api = new MultiplayerAPI();
+    await api.connect(new MockAdapter("p1"));
+
+    await expect(api.connect(new MockAdapter("p2"))).rejects.toThrow(
+      "connect() has already been called"
+    );
+
+    await api.disconnect();
+  });
 });
