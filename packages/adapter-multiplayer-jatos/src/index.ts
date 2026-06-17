@@ -41,7 +41,7 @@ declare const jatos: {
  * Each participant's pushed data is stored under groupSession[workerId],
  * so keys never collide across participants.
  */
-export class JatosAdapter implements MultiplayerAdapter {
+export default class JatosAdapter implements MultiplayerAdapter {
   readonly participantId: string;
 
   /**
@@ -75,9 +75,7 @@ export class JatosAdapter implements MultiplayerAdapter {
           resolve();
         },
         onError: (errMsg) => {
-          reject(
-            new Error(`JatosAdapter: failed to join group — ${errMsg ?? "unknown error"}`)
-          );
+          reject(new Error(`JatosAdapter: failed to join group — ${errMsg ?? "unknown error"}`));
         },
       });
     });
