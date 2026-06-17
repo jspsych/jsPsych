@@ -66,3 +66,4 @@ export type { JsPsychPlugin, PluginInfo, TrialType } from "./modules/plugins";
 export { ParameterType } from "./modules/plugins";
 export type { JsPsychExtension, JsPsychExtensionInfo } from "./modules/extensions";
 export { DataCollection } from "./modules/data/DataCollection";
+export type { GroupSessionData, MultiplayerAdapter, Unsubscribe } from "./modules/plugin-api";
