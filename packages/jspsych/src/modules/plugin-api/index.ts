@@ -23,12 +23,20 @@ export function createJointPluginAPIObject(jsPsych: JsPsych) {
     timeoutAPI.setTimeout.bind(timeoutAPI)
   );
   const multiplayerAPI = new MultiplayerAPI();
-  return Object.assign(
+  const joinedAPI = Object.assign(
     {},
     ...[keyboardListenerAPI, timeoutAPI, mediaAPI, simulationAPI, multiplayerAPI].map((object) =>
       autoBind(object)
     )
   ) as KeyboardListenerAPI & TimeoutAPI & MediaAPI & SimulationAPI & MultiplayerAPI;
+  // Object.assign copies participantId as a null primitive at construction time, so
+  // it never reflects updates made by connect(). Override with a live getter.
+  Object.defineProperty(joinedAPI, "participantId", {
+    get: () => multiplayerAPI.participantId,
+    enumerable: true,
+    configurable: true,
+  });
+  return joinedAPI;
 }
 
 export type PluginAPI = ReturnType<typeof createJointPluginAPIObject>;

@@ -7,7 +7,7 @@
     <script src="../packages/plugin-html-button-response/dist/index.browser.js"></script>
     <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
     <script src="../packages/adapter-multiplayer-jatos/dist/index.browser.js"></script>
-    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
   </head>
   <body></body>
   <script>
@@ -22,15 +22,15 @@
       let proposerOffer;         // integer 0–10
       let responderDecision;     // "accept" | "reject"
 
-      const timeline = [
 
         // ── Lobby ──────────────────────────────────────────────────────────
         // Both players push a ready signal; wait until the group has 2 members,
         // then deterministically assign roles by sorting participant IDs.
-        {
+        const lobbyTrial = {
           type: jsPsychCallFunction,
           async: true,
           func: async (done) => {
+            console.log("[lobby] my participantId:", jsPsych.pluginAPI.participantId);
             await jsPsych.pluginAPI.push({ status: "ready" });
             const group = await jsPsych.pluginAPI.wait(
               (group) => Object.keys(group).length >= 2
@@ -38,15 +38,16 @@
             const sortedIds = Object.keys(group).sort();
             proposerId = sortedIds[0];
             responderId = sortedIds[1];
+            console.log("[lobby] group keys:", sortedIds, "proposerId:", proposerId, "responderId:", responderId);
             myRole = jsPsych.pluginAPI.participantId === proposerId
               ? "proposer"
               : "responder";
+            console.log("[lobby] myRole:", myRole);
             done();
           }
-        },
-
+        }
         // ── Proposer: choose offer ──────────────────────────────────────────
-        {
+        const proposerOfferTrial = {
           type: jsPsychHtmlButtonResponse,
           stimulus: `
             <p>You are the <strong>Proposer</strong>.</p>
@@ -54,14 +55,13 @@
             <p>Choose how much to offer the Responder. You keep the rest.</p>
           `,
           choices: Array.from({ length: POT + 1 }, (_, index) => `$${index}`),
-          conditional_function: () => myRole === "proposer",
           on_finish: (data) => {
             proposerOffer = data.response; // button index equals dollar amount
           }
-        },
+        }
 
         // ── Proposer: send offer, then wait for the responder's decision ────
-        {
+        const proposerWaitTrial = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: () => `
             <p>You offered the Responder <strong>$${proposerOffer}</strong> and kept $${POT - proposerOffer}.</p>
@@ -76,11 +76,15 @@
             responderDecision = group[responderId].decision;
             jsPsych.finishTrial();
           },
+        }
+
+        const proposerTimeline = {
+          timeline: [proposerOfferTrial, proposerWaitTrial],
           conditional_function: () => myRole === "proposer"
-        },
+        }
 
         // ── Responder: wait for the proposer's offer ────────────────────────
-        {
+        const responderWaitTrial = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: "<p>Waiting for the Proposer's offer…</p>",
           choices: "NO_KEYS",
@@ -91,11 +95,10 @@
             proposerOffer = group[proposerId].offer;
             jsPsych.finishTrial();
           },
-          conditional_function: () => myRole === "responder"
-        },
+        }
 
         // ── Responder: accept or reject ─────────────────────────────────────
-        {
+        const responderDecisionTrial = {
           type: jsPsychHtmlButtonResponse,
           stimulus: () => `
             <p>You are the <strong>Responder</strong>.</p>
@@ -103,25 +106,28 @@
             <p>Do you accept?</p>
           `,
           choices: ["Accept", "Reject"],
-          conditional_function: () => myRole === "responder",
           on_finish: (data) => {
             responderDecision = data.response === 0 ? "accept" : "reject";
           }
-        },
+        }
 
         // ── Responder: send decision ────────────────────────────────────────
-        {
+        const responderSendDecisionTrial = {
           type: jsPsychCallFunction,
           async: true,
           func: async (done) => {
             await jsPsych.pluginAPI.push({ decision: responderDecision });
             done();
           },
+        }
+
+        const responderTimeline = {
+          timeline: [responderWaitTrial, responderDecisionTrial, responderSendDecisionTrial],
           conditional_function: () => myRole === "responder"
-        },
+        }
 
         // ── Both: outcome ───────────────────────────────────────────────────
-        {
+        const outcomeTrial = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: () => {
             const accepted = responderDecision === "accept";
@@ -144,7 +150,8 @@
           prompt: "<p>Press space to finish.</p>"
         }
 
-      ];
+        const timeline = [lobbyTrial, proposerTimeline, responderTimeline, outcomeTrial];
+
 
       await jsPsych.run(timeline);
     });
