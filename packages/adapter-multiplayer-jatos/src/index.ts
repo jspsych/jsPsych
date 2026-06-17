@@ -11,7 +11,9 @@ declare const jatos: {
   joinGroup(callbacks: {
     onOpen?: () => void;
     onMemberOpen?: (memberId: string) => void;
+    onMemberClose?: (memberId: string) => void;
     onMessage?: (msg: unknown) => void;
+    onGroupSession?: () => void;
     onError?: (errMsg: string) => void;
     onClose?: () => void;
   }): void;
@@ -21,11 +23,6 @@ declare const jatos: {
     set(key: string, value: unknown): Promise<void>;
     getAll(): Record<string, unknown> | null;
   };
-  /**
-   * Register a callback that fires whenever the group session changes.
-   * Passing null clears the handler.
-   */
-  onGroupSession(callback: (() => void) | null): void;
   sendGroupMsg(msg: unknown): void;
   onError(callback: (errMsg: string) => void): void;
 };
@@ -65,14 +62,13 @@ export default class JatosAdapter implements MultiplayerAdapter {
     return new Promise((resolve, reject) => {
       jatos.joinGroup({
         onOpen: () => {
-          // Wire the single JATOS handler to fan out to all local subscribers
-          jatos.onGroupSession(() => {
-            const data = this.getAll();
-            for (const cb of this.subscribers) {
-              cb(data);
-            }
-          });
           resolve();
+        },
+        onGroupSession: () => {
+          const data = this.getAll();
+          for (const cb of this.subscribers) {
+            cb(data);
+          }
         },
         onError: (errMsg) => {
           reject(new Error(`JatosAdapter: failed to join group — ${errMsg ?? "unknown error"}`));
@@ -102,8 +98,6 @@ export default class JatosAdapter implements MultiplayerAdapter {
 
   disconnect(): Promise<void> {
     this.subscribers.clear();
-    // Clear the JATOS group session handler to prevent stale callbacks
-    jatos.onGroupSession(null);
     return Promise.resolve();
   }
 }
