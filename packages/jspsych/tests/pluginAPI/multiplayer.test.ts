@@ -239,4 +239,24 @@ describe("MultiplayerAPI mock run", () => {
 
     await api.disconnect();
   });
+
+  test("a failed connect() rolls back and allows a retry", async () => {
+    const api = new MultiplayerAPI();
+
+    // Adapter whose connect() rejects, simulating a failed network join
+    const failing = new MockAdapter("p1");
+    failing.connect = () => Promise.reject(new Error("join failed"));
+
+    await expect(api.connect(failing)).rejects.toThrow("join failed");
+
+    // State must be rolled back: not half-connected
+    expect(api.participantId).toBeNull();
+    expect(() => api.push({ x: 1 })).toThrow("connect() must be called");
+
+    // A retry with a working adapter must succeed (not throw "already been called")
+    await api.connect(new MockAdapter("p2"));
+    expect(api.participantId).toBe("p2");
+
+    await api.disconnect();
+  });
 });

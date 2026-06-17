@@ -75,8 +75,16 @@ export class MultiplayerAPI {
       );
     }
     this.adapter = adapter;
-    this.participantId = adapter.participantId;
-    await adapter.connect();
+    try {
+      await adapter.connect();
+      this.participantId = adapter.participantId;
+    } catch (e) {
+      // Roll back so a failed connection doesn't leave the API in a
+      // half-connected state that blocks a retry.
+      this.adapter = null;
+      this.participantId = null;
+      throw e;
+    }
   }
 
   /** Write this participant's data to the shared group session. */

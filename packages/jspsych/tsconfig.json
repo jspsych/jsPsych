@@ -2,7 +2,7 @@
   "extends": "@jspsych/config/tsconfig.core.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "types": ["jest"]
+    "types": ["jest", "node"]
   },
   "include": ["src", "tests", "package.json"]
 }
