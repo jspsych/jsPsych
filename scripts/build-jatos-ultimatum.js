@@ -7,6 +7,7 @@
 // Output: dist/ultimatum-jatos.zip
 
 import { execSync } from "node:child_process";
+import { randomUUID } from "node:crypto";
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { createWriteStream } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -50,15 +51,20 @@ const STUDY_DIR_NAME = "ultimatum-jatos";
 const metadata = {
   version: "3",
   data: {
+    uuid: randomUUID(),
     title: "Multiplayer Ultimatum Game",
     description: "Two-player ultimatum game built with jsPsych.",
     groupStudy: true,
+    linearStudy: false,
+    allowPreview: false,
     dirName: STUDY_DIR_NAME,
     comments: "",
     jsonData: null,
     endRedirectUrl: null,
+    studyEntryMsg: null,
     componentList: [
       {
+        uuid: randomUUID(),
         title: "Ultimatum Game",
         htmlFilePath: "index.html",
         reloadable: false,
@@ -69,6 +75,7 @@ const metadata = {
     ],
     batchList: [
       {
+        uuid: randomUUID(),
         title: "Default",
         active: true,
         maxActiveMembers: 2,
@@ -83,9 +90,9 @@ const metadata = {
 };
 
 // ── Build ─────────────────────────────────────────────────────────────────────
-// JATOS archive structure:
-//   jatos_study_metadata.json   ← at zip root
-//   ultimatum-jatos/            ← study assets folder (must match dirName)
+// JATOS 3.x archive structure:
+//   ultimatum-jatos.jas   ← study metadata at zip root (must have .jas extension)
+//   ultimatum-jatos/      ← study assets folder (must match dirName)
 //     index.html
 //     jspsych.js
 //     ...
@@ -108,12 +115,38 @@ for (const [original, replacement] of Object.entries(pathRewrites)) {
 writeFileSync(resolve(assetsDir, "index.html"), html);
 console.log(`  wrote   ${STUDY_DIR_NAME}/index.html`);
 
-writeFileSync(resolve(distDir, "jatos_study_metadata.json"), JSON.stringify(metadata, null, 2));
-console.log(`  wrote   jatos_study_metadata.json`);
+// JATOS 3.x import scans for any *.jas file at the zip root — the name is arbitrary.
+const JAS_FILE_NAME = `${STUDY_DIR_NAME}.jas`;
+writeFileSync(resolve(distDir, JAS_FILE_NAME), JSON.stringify(metadata, null, 2));
+console.log(`  wrote   ${JAS_FILE_NAME}`);
 
 // ── Zip ───────────────────────────────────────────────────────────────────────
 const zipName = "ultimatum-jatos.jzip";
-rmSync(resolve(distDir, zipName), { force: true });
-execSync(`cd "${distDir}" && zip -r ${zipName} jatos_study_metadata.json ${STUDY_DIR_NAME}/`);
+const zipPath = resolve(distDir, zipName);
+rmSync(zipPath, { force: true });
+if (process.platform === "win32") {
+  // Compress-Archive uses backslash entry names, violating the ZIP spec.
+  // Use .NET's ZipFile API directly so we can force forward-slash entry names.
+  const metadataPath = resolve(distDir, JAS_FILE_NAME);
+  const psLines = [
+    "Add-Type -AssemblyName System.IO.Compression.FileSystem",
+    `$zip = [System.IO.Compression.ZipFile]::Open("${zipPath}", 'Create')`,
+    "$comp = [System.IO.Compression.CompressionLevel]::Optimal",
+    `[System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, "${metadataPath}", '${JAS_FILE_NAME}', $comp)`,
+    `Get-ChildItem -Path "${assetsDir}" -File | ForEach-Object {`,
+    `  [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $_.FullName, '${STUDY_DIR_NAME}/' + $_.Name, $comp)`,
+    "}",
+    "$zip.Dispose()",
+  ];
+  const tmpScript = resolve(distDir, "_build_zip.ps1");
+  writeFileSync(tmpScript, psLines.join("\n"), "utf8");
+  try {
+    execSync(`powershell -NoProfile -ExecutionPolicy Bypass -File "${tmpScript}"`);
+  } finally {
+    rmSync(tmpScript, { force: true });
+  }
+} else {
+  execSync(`cd "${distDir}" && zip -r ${zipName} ${JAS_FILE_NAME} ${STUDY_DIR_NAME}/`);
+}
 console.log(`\n  zipped  dist/${zipName}`);
 console.log(`\n  Import dist/${zipName} into JATOS via the Import Study button.`);
