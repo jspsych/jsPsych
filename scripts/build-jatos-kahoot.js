@@ -103,7 +103,30 @@ console.log(`  wrote   ${JAS_FILE_NAME}`);
 const zipName = "kahoot-jatos.jzip";
 const zipPath = resolve(distDir, zipName);
 rmSync(zipPath, { force: true });
-execSync(`cd "${distDir}" && zip -r ${zipName} ${JAS_FILE_NAME} ${STUDY_DIR_NAME}/`);
+if (process.platform === "win32") {
+  // Compress-Archive uses backslash entry names, violating the ZIP spec.
+  // Use .NET's ZipFile API directly so we can force forward-slash entry names.
+  const metadataPath = resolve(distDir, JAS_FILE_NAME);
+  const psLines = [
+    "Add-Type -AssemblyName System.IO.Compression.FileSystem",
+    `$zip = [System.IO.Compression.ZipFile]::Open("${zipPath}", 'Create')`,
+    "$comp = [System.IO.Compression.CompressionLevel]::Optimal",
+    `[System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, "${metadataPath}", '${JAS_FILE_NAME}', $comp)`,
+    `Get-ChildItem -Path "${assetsDir}" -File | ForEach-Object {`,
+    `  [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $_.FullName, '${STUDY_DIR_NAME}/' + $_.Name, $comp)`,
+    "}",
+    "$zip.Dispose()",
+  ];
+  const tmpScript = resolve(distDir, "_build_zip.ps1");
+  writeFileSync(tmpScript, psLines.join("\n"), "utf8");
+  try {
+    execSync(`powershell -NoProfile -ExecutionPolicy Bypass -File "${tmpScript}"`);
+  } finally {
+    rmSync(tmpScript, { force: true });
+  }
+} else {
+  execSync(`cd "${distDir}" && zip -r ${zipName} ${JAS_FILE_NAME} ${STUDY_DIR_NAME}/`);
+}
 console.log(`\n  zipped  dist/${zipName}`);
 console.log(`\n  Import dist/${zipName} into JATOS.`);
 console.log(`  One study link for everyone — presenter clicks Host, participants click Player.`);
