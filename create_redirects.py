@@ -4,7 +4,7 @@ import re
 
 ROOT_DIR = Path(".")
 OLD_DOCS_DIR = ROOT_DIR / "6.3"
-NEW_DOCS_DIR = ROOT_DIR / "7.0"
+NEW_DOCS_DIR = ROOT_DIR / "v8"
 
 REDIRECT_TEMPLATE = """<!DOCTYPE html>
 <html>
