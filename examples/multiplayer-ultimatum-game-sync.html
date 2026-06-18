@@ -25,19 +25,40 @@
       let responderId;
       let proposerOffer; // integer 0–10
       let responderDecision; // "accept" | "reject"
+      let gameIsFull = false;
 
       // ── Lobby ──────────────────────────────────────────────────────────
       // Push a ready signal, wait for 2 members, then assign roles in on_finish
       // by sorting participant IDs (role assignment stays experiment-specific).
+      // A 3rd+ participant sets gameIsFull and is routed to the full screen.
       const lobbyTrial = {
         type: jsPsychMultiplayerSync,
         push_data: { status: "ready" },
         wait_for: (group) => Object.keys(group).length >= 2,
         message: "<p>Waiting for another player to join…</p>",
         on_finish: (data) => {
-          [proposerId, responderId] = Object.keys(data.group).sort();
+          const activePlayers = Object.keys(data.group).sort().slice(0, 2);
+          if (!activePlayers.includes(jsPsych.pluginAPI.participantId)) {
+            gameIsFull = true;
+            jsPsych.pluginAPI.disconnect();
+            return;
+          }
+          [proposerId, responderId] = activePlayers;
           myRole = jsPsych.pluginAPI.participantId === proposerId ? "proposer" : "responder";
         },
+      };
+
+      // Shown to a 3rd+ participant who arrives after the game is already full.
+      const gameFullTrial = {
+        timeline: [
+          {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: "<p>Sorry, this game is already full. Thank you for your interest.</p>",
+            choices: "NO_KEYS",
+            trial_duration: 4000,
+          },
+        ],
+        conditional_function: () => gameIsFull,
       };
 
       // ── Proposer: choose offer ──────────────────────────────────────────
@@ -135,7 +156,13 @@
         prompt: "<p>Press space to finish.</p>",
       };
 
-      const timeline = [lobbyTrial, proposerTimeline, responderTimeline, outcomeTrial];
+      // The game itself runs only for the two active players.
+      const gameTimeline = {
+        timeline: [proposerTimeline, responderTimeline, outcomeTrial],
+        conditional_function: () => !gameIsFull,
+      };
+
+      const timeline = [lobbyTrial, gameFullTrial, gameTimeline];
 
       await jsPsych.run(timeline);
     });
