@@ -20,7 +20,6 @@ const outDir = resolve(root, "dist/ultimatum-jatos");
 const assets = [
   { src: "packages/jspsych/dist/index.browser.js", dest: "jspsych.js" },
   { src: "packages/jspsych/css/jspsych.css", dest: "jspsych.css" },
-  { src: "packages/plugin-call-function/dist/index.browser.js", dest: "plugin-call-function.js" },
   {
     src: "packages/plugin-html-button-response/dist/index.browser.js",
     dest: "plugin-html-button-response.js",
@@ -30,6 +29,10 @@ const assets = [
     dest: "plugin-html-keyboard-response.js",
   },
   { src: "packages/adapter-multiplayer-jatos/dist/index.browser.js", dest: "jatos-adapter.js" },
+  {
+    src: "packages/plugin-multiplayer-sync/dist/index.browser.js",
+    dest: "plugin-multiplayer-sync.js",
+  },
 ];
 
 // ── Path rewrites in the HTML ─────────────────────────────────────────────────
@@ -37,11 +40,11 @@ const assets = [
 const pathRewrites = {
   "../packages/jspsych/dist/index.browser.js": "jspsych.js",
   "../packages/jspsych/css/jspsych.css": "jspsych.css",
-  "../packages/plugin-call-function/dist/index.browser.js": "plugin-call-function.js",
   "../packages/plugin-html-button-response/dist/index.browser.js": "plugin-html-button-response.js",
   "../packages/plugin-html-keyboard-response/dist/index.browser.js":
     "plugin-html-keyboard-response.js",
   "../packages/adapter-multiplayer-jatos/dist/index.browser.js": "jatos-adapter.js",
+  "../packages/plugin-multiplayer-sync/dist/index.browser.js": "plugin-multiplayer-sync.js",
 };
 
 const STUDY_DIR_NAME = "ultimatum-jatos";
@@ -108,7 +111,7 @@ for (const { src, dest } of assets) {
   console.log(`  copied  ${src} → ${STUDY_DIR_NAME}/${dest}`);
 }
 
-let html = readFileSync(resolve(root, "examples/multiplayer-ultimatum-game.html"), "utf8");
+let html = readFileSync(resolve(root, "examples/multiplayer-ultimatum-game-sync.html"), "utf8");
 for (const [original, replacement] of Object.entries(pathRewrites)) {
   html = html.replaceAll(original, replacement);
 }
