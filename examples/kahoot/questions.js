@@ -4,28 +4,33 @@
 
 const QUESTIONS = [
   {
-    prompt: "Placeholder question 1: What is 2 + 2?",
-    choices: ["3", "4", "5", "6"],
+    prompt: "Which birthday did Mandy celebrate?",
+    choices: ["20", "22", "23", "25"],
+    correct: 2,
+  },
+  {
+    prompt: "How many colors are in the jsPsych logo?",
+    choices: ["2", "3", "4", "5"],
+    correct: 2,
+  },
+  {
+    prompt: "What is the name of the room we ate lunch in?",
+    choices: ["Gold Parlor", "Rose Parlor", "Jade Parlor", "Villard Room"],
     correct: 1,
   },
   {
-    prompt: "Placeholder question 2: Which planet is closest to the Sun?",
-    choices: ["Venus", "Earth", "Mercury", "Mars"],
-    correct: 2,
+    prompt: "What is the first initial of Josh's middle name?",
+    choices: ["J", "C", "S", "R"],
+    correct: 3,
   },
   {
-    prompt: "Placeholder question 3: What color do you get mixing red and blue?",
-    choices: ["Green", "Orange", "Purple", "Brown"],
+    prompt: "At which value of x is the rate of change of the function (x-6)(x-2) equal to zero?",
+    choices: ["2", "3", "4", "8"],
     correct: 2,
   },
-  {
-    prompt: "Placeholder question 4: How many sides does a hexagon have?",
+  { 
+    prompt: "How many teams were we supposed to have before the actual team selection?",
     choices: ["5", "6", "7", "8"],
     correct: 1,
-  },
-  {
-    prompt: "Placeholder question 5: What is the chemical symbol for water?",
-    choices: ["CO2", "O2", "H2O", "NaCl"],
-    correct: 2,
-  },
+  }
 ];
