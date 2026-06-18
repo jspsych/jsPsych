@@ -77,8 +77,25 @@ export default class JatosAdapter implements MultiplayerAdapter {
     });
   }
 
-  push(data: Record<string, unknown>): Promise<void> {
-    return jatos.groupSession.set(this.participantId, data);
+  async push(data: Record<string, unknown>): Promise<void> {
+    // JATOS group session uses optimistic concurrency: concurrent writes from
+    // multiple participants cause version conflicts. Retry with exponential
+    // backoff + jitter so the retries spread out and don't re-collide.
+    const maxAttempts = 8;
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      try {
+        await jatos.groupSession.set(this.participantId, data);
+        return;
+      } catch {
+        if (attempt === maxAttempts - 1) {
+          throw new Error(
+            "JatosAdapter: push failed after retries (group session version conflict)"
+          );
+        }
+        const delayMs = 50 * Math.pow(2, attempt) + Math.random() * 50;
+        await new Promise<void>((resolve) => setTimeout(resolve, delayMs));
+      }
+    }
   }
 
   getAll(): GroupSessionData {
