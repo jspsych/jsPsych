@@ -33,7 +33,7 @@
             console.log("[lobby] my participantId:", jsPsych.pluginAPI.participantId);
             await jsPsych.pluginAPI.push({ status: "ready" });
             const group = await jsPsych.pluginAPI.wait(
-              (group) => Object.keys(group).length >= 2
+              (group) => Object.keys(group).length == 2
             );
             const sortedIds = Object.keys(group).sort();
             proposerId = sortedIds[0];
