@@ -82,7 +82,7 @@ const metadata = {
         title: "Default",
         active: true,
         maxActiveMembers: 2,
-        maxTotalMembers: null,
+        maxTotalMembers: 2,
         maxTotalWorkers: null,
         allowedWorkerTypes: ["Jatos", "GeneralSingle", "GeneralMultiple"],
         comments: null,
