@@ -70,7 +70,8 @@
         push_data: () => ({ role: "player", name: myName, answers: {}, totalScore: 0 }),
         wait_for: (group) => {
           const hId = getHostId(group);
-          return hId !== null && group[hId]?.phase === PHASES.QUESTION;
+          // Host has left the lobby (first question started, or further along for a late joiner).
+          return hId !== null && hostStepValue(group) >= phaseStep(0, PHASES.QUESTION);
         },
         message: "<p style='font-size:1.2rem'>Waiting for the host to start the game…</p>",
         on_finish: (data) => {
@@ -118,7 +119,7 @@
       // 3b. Reveal barrier
       const revealBarrier = {
         type: jsPsychMultiplayerSync,
-        wait_for: (group) => group[hostId]?.phase === PHASES.REVEAL,
+        wait_for: (group) => hostStepValue(group) >= phaseStep(lastQuestionIndex, PHASES.REVEAL),
         message: "<p>Waiting for results…</p>",
         on_finish: (data) => {
           const state = data.group[hostId];
@@ -164,7 +165,8 @@
       // 3e. Leaderboard barrier
       const leaderboardBarrier = {
         type: jsPsychMultiplayerSync,
-        wait_for: (group) => [PHASES.LEADERBOARD, PHASES.ENDED].includes(group[hostId]?.phase),
+        // ENDED has a step above any question, so it satisfies this too.
+        wait_for: (group) => hostStepValue(group) >= phaseStep(lastQuestionIndex, PHASES.LEADERBOARD),
         message: "<p>Calculating scores…</p>",
       };
 
@@ -189,7 +191,8 @@
       // 3g. Wait for next question or game end
       const nextQuestionBarrier = {
         type: jsPsychMultiplayerSync,
-        wait_for: (group) => [PHASES.QUESTION, PHASES.ENDED].includes(group[hostId]?.phase),
+        // Wait for the *next* question to start (or the game to end).
+        wait_for: (group) => hostStepValue(group) >= phaseStep(lastQuestionIndex + 1, PHASES.QUESTION),
         message: "<p>Get ready…</p>",
       };
 

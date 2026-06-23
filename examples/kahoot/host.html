@@ -63,11 +63,17 @@
         let countdownInterval = null;
         let revealScheduled = false;
 
-        await adapter.push({ role: "host", phase: PHASES.LOBBY });
+        await adapter.push({ role: "host", phase: PHASES.LOBBY, step: phaseStep(undefined, PHASES.LOBBY) });
         adapter.subscribe(group => {
           currentGroup = group;
           render(group);
         });
+
+        // subscribe() only fires on *future* group-session updates, so render the
+        // current state once now. Without this, players who joined before the host
+        // subscribed (i.e. already sitting in the lobby barrier) never appear.
+        currentGroup = adapter.getAll();
+        render(currentGroup);
 
         // ── Render dispatcher ───────────────────────────────────────────────
         function render(group) {
@@ -247,6 +253,7 @@
             questionChoices: question.choices,
             questionStartTime: Date.now(),
             questionDurationMs: QUESTION_DURATION_MS,
+            step: phaseStep(0, PHASES.QUESTION),
           });
         }
 
@@ -258,11 +265,17 @@
             ...state,
             phase: PHASES.REVEAL,
             correctChoice: QUESTIONS[state.questionIndex].correct,
+            step: phaseStep(state.questionIndex, PHASES.REVEAL),
           });
         }
 
         async function advanceToLeaderboard() {
-          await adapter.push({ ...currentGroup[hostId], phase: PHASES.LEADERBOARD });
+          const state = currentGroup[hostId];
+          await adapter.push({
+            ...state,
+            phase: PHASES.LEADERBOARD,
+            step: phaseStep(state.questionIndex, PHASES.LEADERBOARD),
+          });
         }
 
         async function advanceToNextQuestion() {
@@ -278,11 +291,17 @@
             questionChoices: question.choices,
             questionStartTime: Date.now(),
             questionDurationMs: QUESTION_DURATION_MS,
+            step: phaseStep(nextIndex, PHASES.QUESTION),
           });
         }
 
         async function advanceToEnded() {
-          await adapter.push({ ...currentGroup[hostId], phase: PHASES.ENDED });
+          const state = currentGroup[hostId];
+          await adapter.push({
+            ...state,
+            phase: PHASES.ENDED,
+            step: phaseStep(state.questionIndex, PHASES.ENDED),
+          });
           jatos.endStudy();
         }
       });

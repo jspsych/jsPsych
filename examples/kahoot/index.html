@@ -124,8 +124,14 @@
         let countdownInterval = null;
         let revealScheduled   = false;
 
-        await adapter.push({ role: "host", phase: PHASES.LOBBY });
+        await adapter.push({ role: "host", phase: PHASES.LOBBY, step: phaseStep(undefined, PHASES.LOBBY) });
         adapter.subscribe(group => { currentGroup = group; render(group); });
+
+        // subscribe() only fires on *future* group-session updates, so render the
+        // current state once now. Without this, players who joined before the host
+        // subscribed (i.e. already sitting in the lobby barrier) never appear.
+        currentGroup = adapter.getAll();
+        render(currentGroup);
 
         function render(group) {
           const state = group[hostId];
@@ -275,15 +281,17 @@
             role: "host", phase: PHASES.QUESTION, questionIndex: 0,
             questionPrompt: question.prompt, questionChoices: question.choices,
             questionStartTime: Date.now(), questionDurationMs: QUESTION_DURATION_MS,
+            step: phaseStep(0, PHASES.QUESTION),
           });
         }
         async function advanceToReveal() {
           clearInterval(countdownInterval); countdownInterval = null;
           const state = currentGroup[hostId];
-          await adapter.push({ ...state, phase: PHASES.REVEAL, correctChoice: QUESTIONS[state.questionIndex].correct });
+          await adapter.push({ ...state, phase: PHASES.REVEAL, correctChoice: QUESTIONS[state.questionIndex].correct, step: phaseStep(state.questionIndex, PHASES.REVEAL) });
         }
         async function advanceToLeaderboard() {
-          await adapter.push({ ...currentGroup[hostId], phase: PHASES.LEADERBOARD });
+          const state = currentGroup[hostId];
+          await adapter.push({ ...state, phase: PHASES.LEADERBOARD, step: phaseStep(state.questionIndex, PHASES.LEADERBOARD) });
         }
         async function advanceToNextQuestion() {
           const nextIndex = currentGroup[hostId].questionIndex + 1;
@@ -293,10 +301,12 @@
             role: "host", phase: PHASES.QUESTION, questionIndex: nextIndex,
             questionPrompt: question.prompt, questionChoices: question.choices,
             questionStartTime: Date.now(), questionDurationMs: QUESTION_DURATION_MS,
+            step: phaseStep(nextIndex, PHASES.QUESTION),
           });
         }
         async function advanceToEnded() {
-          await adapter.push({ ...currentGroup[hostId], phase: PHASES.ENDED });
+          const state = currentGroup[hostId];
+          await adapter.push({ ...state, phase: PHASES.ENDED, step: phaseStep(state.questionIndex, PHASES.ENDED) });
           // jatos.endStudy() is on the "End Study" button in renderEnded — don't call it here
           // or the study ends before renderEnded has a chance to show the podium.
         }
@@ -315,6 +325,7 @@
         let hostId         = null;
         let myAnswers      = {};
         let myTotalScore   = 0;
+        let lastQuestionIndex = -1;
         let lastChoice     = null;
         let lastTimeMs     = null;
         let lastPointsEarned = 0;
@@ -342,7 +353,8 @@
           push_data: () => ({ role: "player", name: myName, answers: {}, totalScore: 0 }),
           wait_for: (group) => {
             const hId = getHostId(group);
-            return hId !== null && group[hId]?.phase === PHASES.QUESTION;
+            // Host has left the lobby (first question started, or further along for a late joiner).
+            return hId !== null && hostStepValue(group) >= phaseStep(0, PHASES.QUESTION);
           },
           message: "<p style='font-size:1.2rem'>Waiting for the host to start…</p>",
           on_finish: (data) => { hostId = getHostId(data.group); },
@@ -364,19 +376,19 @@
           trial_duration: () => jsPsych.pluginAPI.get(hostId)?.questionDurationMs ?? QUESTION_DURATION_MS,
           on_finish: async (data) => {
             const state       = jsPsych.pluginAPI.get(hostId);
-            const qIdx        = state?.questionIndex ?? 0;
+            lastQuestionIndex = state?.questionIndex ?? 0;
             lastChoice        = data.response;
             lastTimeMs        = data.response !== null
               ? Math.min(data.rt, state?.questionDurationMs ?? QUESTION_DURATION_MS)
               : state?.questionDurationMs ?? QUESTION_DURATION_MS;
-            myAnswers         = { ...myAnswers, [qIdx]: { choice: lastChoice, timeMs: lastTimeMs } };
+            myAnswers         = { ...myAnswers, [lastQuestionIndex]: { choice: lastChoice, timeMs: lastTimeMs } };
             await jsPsych.pluginAPI.push({ role: "player", name: myName, answers: myAnswers, totalScore: myTotalScore });
           },
         };
 
         const revealBarrier = {
           type: jsPsychMultiplayerSync,
-          wait_for: (group) => group[hostId]?.phase === PHASES.REVEAL,
+          wait_for: (group) => hostStepValue(group) >= phaseStep(lastQuestionIndex, PHASES.REVEAL),
           message: "<p>Waiting for results…</p>",
           on_finish: (data) => {
             const state       = data.group[hostId];
@@ -419,7 +431,8 @@
 
         const leaderboardBarrier = {
           type: jsPsychMultiplayerSync,
-          wait_for: (group) => [PHASES.LEADERBOARD, PHASES.ENDED].includes(group[hostId]?.phase),
+          // ENDED has a step above any question, so it satisfies this too.
+          wait_for: (group) => hostStepValue(group) >= phaseStep(lastQuestionIndex, PHASES.LEADERBOARD),
           message: "<p>Calculating scores…</p>",
         };
 
@@ -442,7 +455,8 @@
 
         const nextQuestionBarrier = {
           type: jsPsychMultiplayerSync,
-          wait_for: (group) => [PHASES.QUESTION, PHASES.ENDED].includes(group[hostId]?.phase),
+          // Wait for the *next* question to start (or the game to end).
+          wait_for: (group) => hostStepValue(group) >= phaseStep(lastQuestionIndex + 1, PHASES.QUESTION),
           message: "<p>Get ready…</p>",
         };
 
