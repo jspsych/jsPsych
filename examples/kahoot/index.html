@@ -127,9 +127,10 @@
         await adapter.push({ role: "host", phase: PHASES.LOBBY, step: phaseStep(undefined, PHASES.LOBBY) });
         adapter.subscribe(group => { currentGroup = group; render(group); });
 
-        // subscribe() only fires on *future* group-session updates, so render the
-        // current state once now. Without this, players who joined before the host
-        // subscribed (i.e. already sitting in the lobby barrier) never appear.
+        // The raw adapter's subscribe() fires only on future updates, not the
+        // current snapshot (replay is handled by MultiplayerAPI, not the adapter).
+        // Render once now so players who joined before the host subscribed appear
+        // immediately in the lobby.
         currentGroup = adapter.getAll();
         render(currentGroup);
 

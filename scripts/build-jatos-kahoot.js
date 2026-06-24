@@ -4,6 +4,10 @@
 // contains a landing page where participants self-select Host or Player.
 //
 // Usage: node scripts/build-jatos-kahoot.js
+//
+// NOTE: This script copies pre-built dist files from packages/. If you changed
+// any package source since the last build, run `npm run build` first or the
+// jzip will contain stale output.
 
 import { execSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
