@@ -135,11 +135,15 @@ describe("MultiplayerAPI mock run", () => {
 
     const received: GroupSessionData[] = [];
     api.subscribe((data) => received.push(data));
+    // subscribe() replays current state once immediately
+    expect(received).toHaveLength(1);
+    expect(received[0]).toEqual({});
+
     api.cancelAllSubscriptions();
 
     // After cancellation, pushing should not trigger the subscriber
     await api.push({ value: 99 });
-    expect(received).toHaveLength(0);
+    expect(received).toHaveLength(1);
 
     await api.disconnect();
   });
@@ -198,13 +202,16 @@ describe("MultiplayerAPI mock run", () => {
 
     const updates: GroupSessionData[] = [];
     api1.subscribe((data) => updates.push(data));
+    // subscribe() replays current state immediately (no pushes yet)
+    expect(updates).toHaveLength(1);
+    expect(updates[0]).toEqual({});
 
     await api2.push({ step: 1 });
     await api2.push({ step: 2 });
 
-    expect(updates).toHaveLength(2);
-    expect(updates[0]["p2"]).toEqual({ step: 1 });
-    expect(updates[1]["p2"]).toEqual({ step: 2 });
+    expect(updates).toHaveLength(3);
+    expect(updates[1]["p2"]).toEqual({ step: 1 });
+    expect(updates[2]["p2"]).toEqual({ step: 2 });
 
     await api1.disconnect();
     await api2.disconnect();

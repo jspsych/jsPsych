@@ -108,7 +108,8 @@ export class MultiplayerAPI {
    * cancelAllSubscriptions() can clean it up at experiment end.
    */
   subscribe(callback: (data: GroupSessionData) => void): Unsubscribe {
-    const adapterUnsub = this.requireAdapter().subscribe(callback);
+    const adapter = this.requireAdapter();
+    const adapterUnsub = adapter.subscribe(callback);
 
     // Wrap so we can remove from the tracking Set on cancellation
     let cancelled = false;
@@ -121,6 +122,12 @@ export class MultiplayerAPI {
     };
 
     this.activeUnsubscribes.add(unsubscribe);
+
+    // Replay current state after the unsubscribe handle exists. The register-
+    // then-replay order prevents a TDZ crash: wait() references `unsubscribe`
+    // inside the callback, so it must be defined before the callback fires.
+    callback(adapter.getAll());
+
     return unsubscribe;
   }
 
