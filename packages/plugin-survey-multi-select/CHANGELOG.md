@@ -1,5 +1,11 @@
 # @jspsych/plugin-survey-multi-select
 
+## 2.1.1
+
+### Patch Changes
+
+- [#3691](https://github.com/jspsych/jsPsych/pull/3691) [`ff1fede92c6f996858624fe9a8fd238b343fedeb`](https://github.com/jspsych/jsPsych/commit/ff1fede92c6f996858624fe9a8fd238b343fedeb) Thanks [@Mandyx22](https://github.com/Mandyx22)! - Fix the `response` data field description, which was copied from the survey-likert plugin and incorrectly described responses as integers representing a position on a likert scale. The description now reflects what each plugin actually records: the entered text (survey-text), the selected option (survey-multi-choice), and the selected option(s) (survey-multi-select).
+
 ## 2.1.0
 
 ### Minor Changes
