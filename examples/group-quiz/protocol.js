@@ -1,5 +1,5 @@
-// Shared protocol for the Kahoot demo.
-// Loaded as a plain <script> by both host.html and player.html.
+// Shared protocol for the Group Quiz demo.
+// Loaded as a plain <script> by index.html.
 // questions.js (correct answers) is host-only and never loaded by players.
 
 const PHASES = Object.freeze({

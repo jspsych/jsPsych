@@ -1,4 +1,4 @@
-# Multiplayer Kahoot Clone — Build Plan
+# Group Quiz Multiplayer Demo — Build Plan
 
 A live quiz game built on the jsPsych multiplayer feature. Audience opens a URL (QR
 code), answers questions on their phones, and results appear live on a shared
@@ -42,19 +42,17 @@ This is the interface all three tracks build against. Lives in a shared module
 (`protocol.js`). Track C owns it; A and B import it.
 
 ### Game phases (the host's `phase` field)
-
 `lobby` → `question` → `reveal` → `leaderboard` → (next question…) → `ended`
 
-| phase         | host shows                               | player shows                |
-| ------------- | ---------------------------------------- | --------------------------- |
-| `lobby`       | joined player names, "Start" button      | name entry, then "waiting…" |
-| `question`    | the question + live answer count + timer | question + answer buttons   |
-| `reveal`      | correct answer + answer distribution     | "you were right/wrong"      |
-| `leaderboard` | top scores                               | their rank/score            |
-| `ended`       | final podium                             | final score                 |
+| phase | host shows | player shows |
+|---|---|---|
+| `lobby` | joined player names, "Start" button | name entry, then "waiting…" |
+| `question` | the question + live answer count + timer | question + answer buttons |
+| `reveal` | correct answer + answer distribution | "you were right/wrong" |
+| `leaderboard` | top scores | their rank/score |
+| `ended` | final podium | final score |
 
 ### Host's `gameState` object
-
 ```js
 {
   role: "host",
@@ -66,7 +64,6 @@ This is the interface all three tracks build against. Lives in a shared module
 ```
 
 ### Player's object
-
 ```js
 {
   role: "player",
@@ -79,7 +76,6 @@ This is the interface all three tracks build against. Lives in a shared module
 ```
 
 ### Questions data (host-only — see security note)
-
 ```js
 [
   { prompt: "Capital of France?", choices: ["Berlin","Paris","Rome","Madrid"], correct: 1 },
@@ -93,7 +89,6 @@ This is the interface all three tracks build against. Lives in a shared module
 > decides correctness at `reveal`.
 
 ### Scoring (pure function, Track C owns)
-
 `points = correct ? (base + speedBonus) : 0`, e.g. `base = 1000`,
 `speedBonus = round(1000 * (1 - timeMs / questionDurationMs))`. Host computes from
 player answers + the questions key at `reveal`.
@@ -147,13 +142,11 @@ Two unknowns can sink the live demo. Prove them before committing to the full bu
 
 ## Phase 2 — Parallel build (THREE TRACKS)
 
-### Track A — Player client (jsPsych timeline)
-
+### Track A — Player client  (jsPsych timeline)
 What the player sees on their phone. A jsPsych experiment, like the ultimatum game.
 Almost every step here is "do something, then wait for the host to advance the phase" —
 so it is built mostly from `multiplayer-sync` barrier trials. Model on
 `examples/multiplayer-ultimatum-game-sync.html`.
-
 - [ ] Name entry: an `html-keyboard-response`/survey trial to capture the name.
 - [ ] Lobby barrier: `multiplayer-sync` with `push_data: { role:"player", name, answers:{} }`
       and `wait_for: g => g[hostId]?.phase === "question"`.
@@ -167,36 +160,32 @@ so it is built mostly from `multiplayer-sync` barrier trials. Model on
 - [ ] Leaderboard / next-question barriers: more `multiplayer-sync` trials keyed on the
       next phase; loop with `conditional_function` until `phase === "ended"`.
 - [ ] Mobile-friendly CSS (big tap targets).
-- _Learns:_ jsPsych trials, `conditional_function`, the `multiplayer-sync` plugin, `push`,
-  reading group state in `on_finish`, lifecycle hooks.
-- _Note:_ the player needs `hostId` (the host's participant key). Decide in Phase 0 how
-  players learn it — e.g. the host writes `role:"host"` and players find the key whose
-  value has `role === "host"`.
+- *Learns:* jsPsych trials, `conditional_function`, the `multiplayer-sync` plugin, `push`,
+      reading group state in `on_finish`, lifecycle hooks.
+- *Note:* the player needs `hostId` (the host's participant key). Decide in Phase 0 how
+      players learn it — e.g. the host writes `role:"host"` and players find the key whose
+      value has `role === "host"`.
 
-### Track B — Host / presenter screen (standalone HTML page)
-
+### Track B — Host / presenter screen  (standalone HTML page)
 The big screen everyone watches. A plain page using the adapter directly (no jsPsych, and
 NOT the `multiplayer-sync` plugin — that's a timeline trial; the host reacts continuously
 via `subscribe`).
-
 - [ ] `connect` the adapter; `subscribe` to the whole board.
 - [ ] Lobby view: show names as players join; "Start" button.
 - [ ] Question view: big question text, live "N answered" counter, countdown timer.
 - [ ] Reveal view: bar chart of answer distribution + highlight correct answer.
 - [ ] Leaderboard view: sorted standings; final podium on `ended`.
 - [ ] Host controls: advance question (manual button and/or auto on timer).
-- _Learns:_ `subscribe`, `getAll`, the adapter directly, DOM rendering / a chart lib.
+- *Learns:* `subscribe`, `getAll`, the adapter directly, DOM rendering / a chart lib.
 
-### Track C — Game engine + content (shared logic, the "contract owner")
-
+### Track C — Game engine + content  (shared logic, the "contract owner")
 The brain that both A and B depend on. Pure, testable logic + data.
-
 - [ ] `protocol.js`: phase constants, `gameState`/player shapes, scoring function.
 - [ ] The state machine the host calls to advance phases and write `gameState`.
 - [ ] `questions.js`: the actual quiz content (keep `correct` host-only).
 - [ ] Timer logic; "have all players answered?" check.
 - [ ] Unit-test the scoring + state transitions (no network needed).
-- _Learns:_ the protocol, pure functions, testing, owning an interface others consume.
+- *Learns:* the protocol, pure functions, testing, owning an interface others consume.
 
 > Dependency: A and B both import C's `protocol.js`. That's why Phase 1 freezes it
 > first and C stubs it before anyone builds on top.
@@ -222,11 +211,11 @@ The brain that both A and B depend on. Pure, testable logic + data.
 
 ## Suggested track ownership
 
-| Track                | Focus                               | Good for someone who wants to learn… |
-| -------------------- | ----------------------------------- | ------------------------------------ |
-| A — Player client    | jsPsych timelines, mobile UI        | how jsPsych experiments are built    |
-| B — Presenter screen | live rendering, charts, the adapter | reactive UI + the network layer      |
-| C — Engine + content | protocol, scoring, tests            | clean interfaces + game logic        |
+| Track | Focus | Good for someone who wants to learn… |
+|---|---|---|
+| A — Player client | jsPsych timelines, mobile UI | how jsPsych experiments are built |
+| B — Presenter screen | live rendering, charts, the adapter | reactive UI + the network layer |
+| C — Engine + content | protocol, scoring, tests | clean interfaces + game logic |
 
 Rotate or pair if someone finishes early. The mock adapter (Phase 1) is what makes
 all three buildable at the same time without stepping on each other.

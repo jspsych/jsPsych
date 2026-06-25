@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Kahoot</title>
+    <title>Group Quiz</title>
     <script src="jatos.js"></script>
     <script src="jspsych.js"></script>
     <script src="plugin-call-function.js"></script>
@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="jspsych.css" />
     <style>
       * { box-sizing: border-box; margin: 0; padding: 0; }
-      body { font-family: sans-serif; background: #2d2b55; color: #fff; min-height: 100vh; }
+      body { font-family: sans-serif; background: #0f2b38; color: #fff; min-height: 100vh; }
 
       /* ── Selector ─────────────────────────────────────────── */
       #selector {
@@ -29,8 +29,8 @@
         padding: 20px 48px; font-size: 1.3rem; font-weight: bold;
         border: none; border-radius: 12px; cursor: pointer; width: 220px;
       }
-      #host-btn   { background: #e21b3c; color: #fff; }
-      #player-btn { background: #26890c; color: #fff; }
+      #host-btn   { background: #0e7490; color: #fff; }
+      #player-btn { background: #0f766e; color: #fff; }
 
       /* ── Host styles ──────────────────────────────────────── */
       #host-view {
@@ -38,20 +38,20 @@
         margin: 0 auto; padding: 24px;
       }
       .player-list { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
-      .player-chip { background: #46178f; border-radius: 8px; padding: 8px 16px; font-size: 1rem; }
+      .player-chip { background: #1e4558; border-radius: 8px; padding: 8px 16px; font-size: 1rem; }
       .question-text {
         font-size: 2rem; text-align: center; margin-bottom: 24px;
-        background: #46178f; border-radius: 12px; padding: 24px;
+        background: #1e4558; border-radius: 12px; padding: 24px;
       }
       .answer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
       .answer-tile {
         padding: 20px; border-radius: 10px; font-size: 1.2rem;
         font-weight: bold; text-align: center; color: #fff;
       }
-      .answer-tile.red    { background: #e21b3c; }
-      .answer-tile.blue   { background: #1368ce; }
-      .answer-tile.yellow { background: #d89e00; }
-      .answer-tile.green  { background: #26890c; }
+      .answer-tile.red    { background: #1d6fae; }
+      .answer-tile.blue   { background: #b85c00; }
+      .answer-tile.yellow { background: #6b3fae; }
+      .answer-tile.green  { background: #1a7a52; }
       .answer-tile.correct-highlight { outline: 6px solid #fff; }
       .counter { font-size: 1.5rem; text-align: center; margin-bottom: 8px; }
       .timer   { font-size: 4rem; font-weight: bold; text-align: center; margin-bottom: 24px; }
@@ -64,7 +64,7 @@
       .leaderboard-list li { display: flex; align-items: center; gap: 16px; background: rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 20px; margin-bottom: 10px; font-size: 1.2rem; }
       .rank  { font-size: 1.5rem; font-weight: bold; width: 36px; }
       .score { margin-left: auto; font-weight: bold; }
-      .ctrl-btn { padding: 14px 32px; font-size: 1.1rem; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; background: #fff; color: #2d2b55; }
+      .ctrl-btn { padding: 14px 32px; font-size: 1.1rem; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; background: #fff; color: #0f2b38; }
       .ctrl-btn:hover { background: #e0e0f0; }
       .btn-row { display: flex; justify-content: center; gap: 16px; margin-top: 20px; }
       .podium { display: flex; align-items: flex-end; justify-content: center; gap: 16px; margin: 24px 0; }
@@ -80,12 +80,12 @@
         padding: 28px 12px; font-size: 1.1rem; font-weight: bold;
         border: none; border-radius: 10px; color: #fff; width: 100%;
       }
-      .jspsych-btn.answer-btn.red    { background: #e21b3c; }
-      .jspsych-btn.answer-btn.blue   { background: #1368ce; }
-      .jspsych-btn.answer-btn.yellow { background: #d89e00; }
-      .jspsych-btn.answer-btn.green  { background: #26890c; }
-      .result-correct { color: #26890c; font-size: 2rem; font-weight: bold; }
-      .result-wrong   { color: #e21b3c; font-size: 2rem; font-weight: bold; }
+      .jspsych-btn.answer-btn.red    { background: #1d6fae; }
+      .jspsych-btn.answer-btn.blue   { background: #b85c00; }
+      .jspsych-btn.answer-btn.yellow { background: #6b3fae; }
+      .jspsych-btn.answer-btn.green  { background: #1a7a52; }
+      .result-correct { color: #1a7a52; font-size: 2rem; font-weight: bold; }
+      .result-wrong   { color: #c0392b; font-size: 2rem; font-weight: bold; }
       .points-earned  { font-size: 1.3rem; margin-top: 8px; }
       .total-score    { font-size: 1.1rem; opacity: 0.7; margin-top: 4px; }
     </style>
@@ -94,7 +94,7 @@
 
     <!-- ── Role selector ─────────────────────────────────────── -->
     <div id="selector">
-      <h1>📚 Kahoot!</h1>
+      <h1>Group Quiz</h1>
       <p>Are you running the game or playing?</p>
       <button class="role-btn" id="host-btn">🖥️ I'm the Host</button>
       <button class="role-btn" id="player-btn">📱 I'm a Player</button>
@@ -165,14 +165,14 @@
           const players = Object.values(group).filter(e => e?.role === "player");
           const answered = players.filter(p => p.answers?.[state.questionIndex] !== undefined).length;
           const colors  = ["red","blue","yellow","green"];
-          const symbols = ["▲","◆","●","■"];
+          const labels  = ["A","B","C","D"];
 
           view().innerHTML = `
             <p style="text-align:center;opacity:0.7;margin-bottom:8px">Question ${state.questionIndex + 1} of ${QUESTIONS.length}</p>
             <div class="question-text">${state.questionPrompt}</div>
             <div class="answer-grid">
               ${state.questionChoices.map((choice, idx) =>
-                `<div class="answer-tile ${colors[idx]}">${symbols[idx]} ${choice}</div>`
+                `<div class="answer-tile ${colors[idx]}">${labels[idx]}. ${choice}</div>`
               ).join("")}
             </div>
             <div class="counter">${answered} / ${players.length} answered</div>
@@ -207,7 +207,7 @@
           const state   = group[hostId];
           const players = Object.values(group).filter(e => e?.role === "player");
           const colors  = ["red","blue","yellow","green"];
-          const symbols = ["▲","◆","●","■"];
+          const labels  = ["A","B","C","D"];
           const tally   = [0,0,0,0];
           players.forEach(p => {
             const ans = p.answers?.[state.questionIndex];
@@ -220,14 +220,14 @@
             <div class="answer-grid">
               ${state.questionChoices.map((choice, idx) =>
                 `<div class="answer-tile ${colors[idx]} ${idx === state.correctChoice ? "correct-highlight" : ""}">
-                  ${idx === state.correctChoice ? "✓ " : ""}${symbols[idx]} ${choice}
+                  ${idx === state.correctChoice ? "✓ " : ""}${labels[idx]}. ${choice}
                 </div>`
               ).join("")}
             </div>
             <div class="bar-chart">
               ${tally.map((count, idx) => `
                 <div class="bar-row">
-                  <div class="bar-label">${symbols[idx]}</div>
+                  <div class="bar-label">${labels[idx]}</div>
                   <div class="bar-track">
                     <div class="bar-fill ${colors[idx]}" style="width:${Math.round(count/maxTally*100)}%">
                       ${count > 0 ? count : ""}
@@ -339,13 +339,13 @@
           stimulus: `
             <p style="font-size:1.4rem;margin-bottom:16px">Enter your name:</p>
             <input id="nameInput" type="text" maxlength="20" autofocus
-              oninput="window._kahootName = this.value.trim()"
+              oninput="window._playerName = this.value.trim()"
               style="font-size:1.3rem;padding:10px 16px;border-radius:8px;border:2px solid #ccc;width:240px;text-align:center" />
             <p style="margin-top:12px;opacity:0.6">Press Enter to join</p>`,
           choices: ["Enter"],
           on_finish: () => {
-            myName = window._kahootName || "Player";
-            delete window._kahootName;
+            myName = window._playerName || "Player";
+            delete window._playerName;
           },
         };
 
@@ -371,8 +371,8 @@
           choices: () => jsPsych.pluginAPI.get(hostId)?.questionChoices ?? [],
           button_html: (choice, choiceIndex) => {
             const colors  = ["red","blue","yellow","green"];
-            const symbols = ["▲","◆","●","■"];
-            return `<button class="jspsych-btn answer-btn ${colors[choiceIndex]}">${symbols[choiceIndex]} ${choice}</button>`;
+            const labels  = ["A","B","C","D"];
+            return `<button class="jspsych-btn answer-btn ${colors[choiceIndex]}">${labels[choiceIndex]}. ${choice}</button>`;
           },
           trial_duration: () => jsPsych.pluginAPI.get(hostId)?.questionDurationMs ?? QUESTION_DURATION_MS,
           on_finish: async (data) => {
