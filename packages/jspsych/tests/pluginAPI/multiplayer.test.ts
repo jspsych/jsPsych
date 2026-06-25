@@ -3,7 +3,7 @@ import {
   MultiplayerAdapter,
   Unsubscribe,
 } from "../../src/modules/plugin-api/MultiplayerAPI";
-import { MultiplayerAPI } from "../../src/modules/plugin-api/MultiplayerAPI";
+import { MultiplayerAPI, MultiplayerTimeoutError } from "../../src/modules/plugin-api/MultiplayerAPI";
 
 /** In-memory adapter that simulates two participants sharing a group session. */
 class MockAdapter implements MultiplayerAdapter {
@@ -157,6 +157,8 @@ describe("MultiplayerAPI mock run", () => {
     jest.advanceTimersByTime(1001);
 
     await expect(waitPromise).rejects.toThrow("timed out after 1000ms");
+    // Callers must be able to distinguish a timeout from other failures via instanceof.
+    await expect(waitPromise).rejects.toBeInstanceOf(MultiplayerTimeoutError);
 
     await api.disconnect();
     jest.useRealTimers();

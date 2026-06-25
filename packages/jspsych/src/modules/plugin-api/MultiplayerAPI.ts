@@ -7,6 +7,19 @@ export type GroupSessionData = Record<string, Record<string, unknown>>;
 export type Unsubscribe = () => void;
 
 /**
+ * Error rejected by {@link MultiplayerAPI.wait} when its timeout elapses before the
+ * condition is met. Exported so callers (e.g. plugins or adapters in separate packages)
+ * can reliably distinguish a timeout from other failures with `instanceof` rather than
+ * matching the error message string.
+ */
+export class MultiplayerTimeoutError extends Error {
+  constructor(timeout: number) {
+    super(`MultiplayerAPI.wait() timed out after ${timeout}ms`);
+    this.name = "MultiplayerTimeoutError";
+  }
+}
+
+/**
  * Contract that any multiplayer network backend must implement.
  * The core MultiplayerAPI calls these methods; adapters handle the network layer.
  * Plugin authors code against MultiplayerAPI and never touch the adapter directly.
@@ -139,8 +152,9 @@ export class MultiplayerAPI {
    * resolves without waiting if the condition is already met.
    *
    * @param condition Predicate evaluated on every group session update.
-   * @param timeout   Optional timeout in milliseconds. The promise rejects if
-   *                  the condition is not met within this window.
+   * @param timeout   Optional timeout in milliseconds. The promise rejects with a
+   *                  {@link MultiplayerTimeoutError} if the condition is not met
+   *                  within this window.
    */
   wait(
     condition: (data: GroupSessionData) => boolean,
@@ -173,7 +187,7 @@ export class MultiplayerAPI {
           if (!settled) {
             settled = true;
             unsubscribe();
-            reject(new Error(`MultiplayerAPI.wait() timed out after ${timeout}ms`));
+            reject(new MultiplayerTimeoutError(timeout));
           }
         }, timeout);
       }

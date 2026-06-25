@@ -67,3 +67,4 @@ export { ParameterType } from "./modules/plugins";
 export type { JsPsychExtension, JsPsychExtensionInfo } from "./modules/extensions";
 export { DataCollection } from "./modules/data/DataCollection";
 export type { GroupSessionData, MultiplayerAdapter, Unsubscribe } from "./modules/plugin-api";
+export { MultiplayerTimeoutError } from "./modules/plugin-api";
