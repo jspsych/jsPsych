@@ -74,6 +74,7 @@ nav:
   - 'jsPsych.turk': 'reference/jspsych-turk.md'
   - 'jsPsych.utils': 'reference/jspsych-utils.md'
   - 'jsPsych.pluginAPI': 'reference/jspsych-pluginAPI.md'
+  - 'jsPsych.pluginAPI — Multiplayer': 'reference/jspsych-multiplayer.md'
 - Plugins:
   - 'List of Plugins': 'plugins/list-of-plugins.md'
   - 'animation': 'plugins/animation.md'
@@ -129,6 +130,7 @@ nav:
   - 'webgazer-calibrate': 'plugins/webgazer-calibrate.md'
   - 'webgazer-init-camera': 'plugins/webgazer-init-camera.md'
   - 'webgazer-validate': 'plugins/webgazer-validate.md'
+  - 'multiplayer-sync': 'plugins/multiplayer-sync.md'
 - Extensions:
   - 'List of Extensions': 'extensions/list-of-extensions.md'
   - 'mouse-tracking': 'extensions/mouse-tracking.md'
@@ -140,6 +142,7 @@ nav:
   - 'Contributing to jsPsych': 'developers/contributing.md'
   - 'Plugin Development': 'developers/plugin-development.md'
   - 'Extension Development': 'developers/extension-development.md'
+  - 'Multiplayer Adapter Development': 'developers/adapter-development.md'
 - Support:
   - 'Getting Help': 'support/support.md'
   - 'Migrating from 6.x to 7.x': 'support/migration-v7.md'

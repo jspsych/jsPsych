@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="jatos.js"></script>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-button-response/dist/index.browser.js"></script>
+    <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+    <script src="../packages/adapter-multiplayer-jatos/dist/index.browser.js"></script>
+    <script src="../packages/plugin-multiplayer-sync/dist/index.browser.js"></script>
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
+  </head>
+  <body></body>
+  <script>
+    // Ultimatum game rewritten with plugin-multiplayer-sync. Compare with
+    // multiplayer-ultimatum-game.html: every synchronization point that used to be a
+    // call-function (async/done) or a NO_KEYS html-keyboard-response with on_start +
+    // manual finishTrial() is now a single declarative multiplayer-sync trial.
+    jatos.onLoad(async () => {
+      const jsPsych = initJsPsych({ on_finish: () => jatos.endStudy() });
+      await jsPsych.pluginAPI.connect(new jsPsychAdapterMultiplayerJatos());
+
+      const POT = 10;
+      let myRole; // "proposer" | "responder"
+      let proposerId;
+      let responderId;
+      let proposerOffer; // integer 0–10
+      let responderDecision; // "accept" | "reject"
+      let gameIsFull = false;
+
+      // ── Lobby ──────────────────────────────────────────────────────────
+      // Push a ready signal, wait for 2 members, then assign roles in on_finish
+      // by sorting participant IDs (role assignment stays experiment-specific).
+      // A 3rd+ participant sets gameIsFull and is routed to the full screen.
+      const lobbyTrial = {
+        type: jsPsychMultiplayerSync,
+        push_data: { status: "ready" },
+        wait_for: (group) => Object.keys(group).length >= 2,
+        message: "<p>Waiting for another player to join…</p>",
+        on_finish: (data) => {
+          const activePlayers = Object.keys(data.group).sort().slice(0, 2);
+          if (!activePlayers.includes(jsPsych.pluginAPI.participantId)) {
+            gameIsFull = true;
+            jsPsych.pluginAPI.disconnect();
+            return;
+          }
+          [proposerId, responderId] = activePlayers;
+          myRole = jsPsych.pluginAPI.participantId === proposerId ? "proposer" : "responder";
+        },
+      };
+
+      // Shown to a 3rd+ participant who arrives after the game is already full.
+      const gameFullTrial = {
+        timeline: [
+          {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: "<p>Sorry, this game is already full. Thank you for your interest.</p>",
+            choices: "NO_KEYS",
+            trial_duration: 4000,
+          },
+        ],
+        conditional_function: () => gameIsFull,
+      };
+
+      // ── Proposer: choose offer ──────────────────────────────────────────
+      const proposerOfferTrial = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `
+          <p>You are the <strong>Proposer</strong>.</p>
+          <p>There is <strong>$${POT}</strong> in the pot.</p>
+          <p>Choose how much to offer the Responder. You keep the rest.</p>
+        `,
+        choices: Array.from({ length: POT + 1 }, (_, index) => `$${index}`),
+        on_finish: (data) => {
+          proposerOffer = data.response; // button index equals dollar amount
+        },
+      };
+
+      // ── Proposer: send offer, then wait for the responder's decision ────
+      const proposerWaitTrial = {
+        type: jsPsychMultiplayerSync,
+        push_data: () => ({ offer: proposerOffer }),
+        wait_for: (group) => group[responderId]?.decision !== undefined,
+        message: () => `
+          <p>You offered the Responder <strong>$${proposerOffer}</strong> and kept $${POT - proposerOffer}.</p>
+          <p>Waiting for the Responder…</p>
+        `,
+        on_finish: (data) => {
+          responderDecision = data.group[responderId].decision;
+        },
+      };
+
+      const proposerTimeline = {
+        timeline: [proposerOfferTrial, proposerWaitTrial],
+        conditional_function: () => myRole === "proposer",
+      };
+
+      // ── Responder: wait for the proposer's offer ────────────────────────
+      const responderWaitTrial = {
+        type: jsPsychMultiplayerSync,
+        wait_for: (group) => group[proposerId]?.offer !== undefined,
+        message: "<p>Waiting for the Proposer's offer…</p>",
+        on_finish: (data) => {
+          proposerOffer = data.group[proposerId].offer;
+        },
+      };
+
+      // ── Responder: accept or reject ─────────────────────────────────────
+      const responderDecisionTrial = {
+        type: jsPsychHtmlButtonResponse,
+        stimulus: () => `
+          <p>You are the <strong>Responder</strong>.</p>
+          <p>The Proposer offered you <strong>$${proposerOffer}</strong> and kept $${POT - proposerOffer}.</p>
+          <p>Do you accept?</p>
+        `,
+        choices: ["Accept", "Reject"],
+        on_finish: (data) => {
+          responderDecision = data.response === 0 ? "accept" : "reject";
+        },
+      };
+
+      // ── Responder: send decision ────────────────────────────────────────
+      const responderSendDecisionTrial = {
+        type: jsPsychMultiplayerSync,
+        push_data: () => ({ decision: responderDecision }),
+        // Resolve as soon as our own decision is visible in the group session.
+        wait_for: (group) => group[responderId]?.decision !== undefined,
+        message: "<p>Sending your decision…</p>",
+      };
+
+      const responderTimeline = {
+        timeline: [responderWaitTrial, responderDecisionTrial, responderSendDecisionTrial],
+        conditional_function: () => myRole === "responder",
+      };
+
+      // ── Both: outcome ───────────────────────────────────────────────────
+      const outcomeTrial = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: () => {
+          const accepted = responderDecision === "accept";
+          const proposerEarns = accepted ? POT - proposerOffer : 0;
+          const responderEarns = accepted ? proposerOffer : 0;
+
+          const verdict = accepted
+            ? `<p style="color:green">The offer was <strong>accepted</strong>.</p>`
+            : `<p style="color:red">The offer was <strong>rejected</strong>. Both players earn $0.</p>`;
+
+          return myRole === "proposer"
+            ? `${verdict}
+               <p>You offered $${proposerOffer} and kept $${POT - proposerOffer}.</p>
+               <p>You earn: <strong>$${proposerEarns}</strong></p>`
+            : `${verdict}
+               <p>The Proposer offered you $${proposerOffer}.</p>
+               <p>You earn: <strong>$${responderEarns}</strong></p>`;
+        },
+        choices: " ",
+        prompt: "<p>Press space to finish.</p>",
+      };
+
+      // The game itself runs only for the two active players.
+      const gameTimeline = {
+        timeline: [proposerTimeline, responderTimeline, outcomeTrial],
+        conditional_function: () => !gameIsFull,
+      };
+
+      const timeline = [lobbyTrial, gameFullTrial, gameTimeline];
+
+      await jsPsych.run(timeline);
+    });
+  </script>
+</html>
