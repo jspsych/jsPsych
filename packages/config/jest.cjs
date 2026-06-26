@@ -7,6 +7,7 @@ module.exports.makePackageConfig = (dirname) => {
 
   return {
     transform: { "\\.(js|jsx|ts|tsx)$": "@sucrase/jest-plugin" },
+    transformIgnorePatterns: ["/node_modules/(?!auto-bind/)"],
     moduleNameMapper: hq.load(dirname + "/tsconfig.json").get("jest"),
 
     testEnvironment: "jsdom",
