@@ -1,0 +1,6 @@
+{
+  "pr_number": 3694,
+  "head_sha": "01b8ee427ec679056b76947c01321519a380087c",
+  "head_ref": "multiplayer",
+  "changed_packages": ["adapter-multiplayer-jatos","jspsych","plugin-multiplayer-sync"]
+}
