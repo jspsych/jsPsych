@@ -42,14 +42,26 @@ jobs:
             let prNumber = context.payload.workflow_run.pull_requests?.[0]?.number;
 
             if (!prNumber) {
-              const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              // workflow_run.pull_requests is empty for fork PRs. The
+              // commits-to-PRs API (listPullRequestsAssociatedWithCommit) also
+              // returns nothing for fork-PR head commits, since they don't live
+              // in a base-repo branch. Look the PR up by its head ref instead,
+              // using the head repo + branch from the trusted event payload.
+              const headOwner = context.payload.workflow_run.head_repository?.owner?.login;
+              const headBranch = context.payload.workflow_run.head_branch;
+              if (!headOwner || !headBranch) {
+                core.setFailed(`Missing head repository/branch in workflow_run payload for head SHA ${headSha}`);
+                return;
+              }
+              const { data: prs } = await github.rest.pulls.list({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                commit_sha: headSha,
+                state: 'open',
+                head: `${headOwner}:${headBranch}`,
               });
-              const match = prs.find(p => p.head.sha === headSha && p.state === 'open');
+              const match = prs.find(p => p.head.sha === headSha);
               if (!match) {
-                core.setFailed(`No open PR found for head SHA ${headSha}`);
+                core.setFailed(`No open PR found for ${headOwner}:${headBranch} at head SHA ${headSha}`);
                 return;
               }
               prNumber = match.number;
