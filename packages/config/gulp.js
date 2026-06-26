@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import { sep as pathSeparator } from "path";
 import { Readable } from "stream";
 
-import glob from "glob";
+import { globSync } from "glob";
 import gulp from "gulp";
 import file from "gulp-file";
 import rename from "gulp-rename";
@@ -26,10 +26,8 @@ const collectFiles = (stream) =>
 const readJsonFile = (filename) => JSON.parse(readFileSync(filename, "utf8"));
 
 const getAllPackages = () =>
-  glob
-    // Get an array of all package.json filenames
-    .sync("packages/*/package.json")
-
+  // Get an array of all package.json filenames
+  globSync("packages/*/package.json")
     // Map file names to package details
     .map((filename) => {
       const packageJson = readJsonFile(filename);
