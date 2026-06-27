@@ -8,6 +8,12 @@ The html-audio-response plugin displays HTML content and records audio from the 
 
 The audio data is recorded in base 64 format, which is a text representation of the audio that may be converted into others. Note that this plugin will _quickly_ generate large amounts of data, so if a large amount of audio needs to be recorded, consider storing the data on a server immediately and deleting it from the data object (This is shown in the documentation link below).
 
+In addition to the default base64 saving, this plugin now supports:
+- **Server upload** via the `save_via_api` parameter, which uploads the audio file to a specified API endpoint. A loading spinner and customizable `upload_wait_message` are shown during upload.
+- **Local file saving** via the `save_locally` parameter, which saves the audio file directly to the participant's default Downloads folder with a random UUID filename.
+
+These options can be used individually or together, and if neither is enabled, the original base64 behavior is preserved.
+
 ## Examples
 
 Several example experiments and plugin demonstrations are available in the `/examples` folder.
