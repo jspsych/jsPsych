@@ -104,6 +104,17 @@
     <div id="host-view"></div>
 
     <script>
+    // Player names are typed by participants and interpolated into innerHTML below —
+    // escape them so a player can't inject markup via their own display name.
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
     jatos.onLoad(async () => {
 
       document.getElementById("host-btn").onclick   = () => startHost();
@@ -153,7 +164,7 @@
           view().innerHTML = `
             <h1 style="text-align:center;margin-bottom:8px">Waiting for players…</h1>
             <p style="text-align:center;opacity:0.7;margin-bottom:16px">${players.length} joined</p>
-            <div class="player-list">${players.map(p => `<div class="player-chip">${p.name}</div>`).join("")}</div>
+            <div class="player-list">${players.map(p => `<div class="player-chip">${escapeHtml(p.name)}</div>`).join("")}</div>
             <div class="btn-row">
               <button class="ctrl-btn" id="startBtn" ${players.length === 0 ? "disabled" : ""}>Start Game</button>
             </div>`;
@@ -247,7 +258,7 @@
             <h1 style="text-align:center;margin-bottom:16px">Leaderboard</h1>
             <ul class="leaderboard-list">
               ${standings.map((entry, idx) =>
-                `<li><span class="rank">#${idx+1}</span><span>${entry.name}</span><span class="score">${entry.totalScore}</span></li>`
+                `<li><span class="rank">#${idx+1}</span><span>${escapeHtml(entry.name)}</span><span class="score">${entry.totalScore}</span></li>`
               ).join("")}
             </ul>
             <div class="btn-row">
@@ -267,7 +278,7 @@
                 const entry = top3[rank];
                 if (!entry) return "";
                 return `<div class="podium-slot">
-                  <div class="podium-name">${entry.name}</div>
+                  <div class="podium-name">${escapeHtml(entry.name)}</div>
                   <div class="podium-score">${entry.totalScore} pts</div>
                   <div class="podium-block" style="height:${heights[rank]}px">#${rank+1}</div>
                 </div>`;
@@ -444,7 +455,7 @@
             const myParticipantId = jsPsych.pluginAPI.participantId;
             const myRank         = standings.findIndex(entry => entry.participantId === myParticipantId) + 1;
             const topThree       = standings.slice(0, 3)
-              .map((entry, idx) => `<p style="font-size:1rem;opacity:0.8">#${idx+1} ${entry.name} — ${entry.totalScore} pts</p>`)
+              .map((entry, idx) => `<p style="font-size:1rem;opacity:0.8">#${idx+1} ${escapeHtml(entry.name)} — ${entry.totalScore} pts</p>`)
               .join("");
             return `<p style="font-size:1.4rem;font-weight:bold">You are #${myRank || "?"}</p>
                     <p style="font-size:1.2rem;margin-bottom:16px">${myTotalScore} points</p>

@@ -207,6 +207,32 @@ describe("MultiplayerAPI mock run", () => {
     await api2.disconnect();
   });
 
+  test("a throwing subscriber does not prevent other subscribers from being notified", async () => {
+    const api1 = new MultiplayerAPI();
+    const api2 = new MultiplayerAPI();
+    await api1.connect(new MockAdapter("p1"));
+    await api2.connect(new MockAdapter("p2"));
+
+    const consoleError = jest.spyOn(console, "error").mockImplementation(() => {});
+
+    const goodUpdates: GroupSessionData[] = [];
+    api1.subscribe(() => {
+      throw new Error("boom");
+    });
+    api1.subscribe((data) => goodUpdates.push(data));
+
+    await api2.push({ ready: true });
+
+    // Both subscribers replay immediately on registration, plus one push.
+    expect(goodUpdates).toHaveLength(2);
+    expect(goodUpdates[1]["p2"]).toEqual({ ready: true });
+    expect(consoleError).toHaveBeenCalled();
+
+    consoleError.mockRestore();
+    await api1.disconnect();
+    await api2.disconnect();
+  });
+
   test("getAll returns all participants' data", async () => {
     const api1 = new MultiplayerAPI();
     const api2 = new MultiplayerAPI();

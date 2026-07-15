@@ -9,11 +9,11 @@
 // any package source since the last build, run `npm run build` first or the
 // jzip will contain stale output.
 
-import { execSync } from "node:child_process";
-import { randomUUID } from "node:crypto";
-import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+
+import { buildAssetsAndMetadata, zipStudy } from "./lib/build-jatos-study.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const STUDY_DIR_NAME = "group-quiz-jatos";
@@ -40,97 +40,27 @@ const assets = [
   { src: "examples/group-quiz/questions.js", dest: "questions.js" },
 ];
 
-// ── JATOS study metadata ──────────────────────────────────────────────────────
-const metadata = {
-  version: "3",
-  data: {
-    uuid: randomUUID(),
+// ── Build ─────────────────────────────────────────────────────────────────────
+const { distDir, assetsDir, jasFileName } = buildAssetsAndMetadata({
+  root,
+  studyDirName: STUDY_DIR_NAME,
+  assets,
+  studyMeta: {
     title: "Group Quiz Multiplayer Demo",
     description: "Live quiz game demonstrating the jsPsych multiplayer adapter.",
-    groupStudy: true,
-    linearStudy: false,
-    allowPreview: false,
-    dirName: STUDY_DIR_NAME,
-    comments: "",
-    jsonData: null,
-    endRedirectUrl: null,
-    studyEntryMsg: null,
-    componentList: [
-      {
-        uuid: randomUUID(),
-        title: "Group Quiz",
-        htmlFilePath: "index.html",
-        reloadable: false,
-        active: true,
-        comments: "Share one link. Presenter clicks 'Host', participants click 'Player'.",
-        jsonData: null,
-      },
-    ],
-    batchList: [
-      {
-        uuid: randomUUID(),
-        title: "Default",
-        active: true,
-        maxActiveMembers: null,
-        maxTotalMembers: null,
-        maxTotalWorkers: null,
-        allowedWorkerTypes: ["Jatos", "GeneralSingle", "GeneralMultiple"],
-        comments: null,
-        jsonData: null,
-      },
-    ],
+    componentTitle: "Group Quiz",
+    componentComments: "Share one link. Presenter clicks 'Host', participants click 'Player'.",
   },
-};
-
-// ── Build ─────────────────────────────────────────────────────────────────────
-const distDir = resolve(root, "dist");
-const assetsDir = resolve(distDir, STUDY_DIR_NAME);
-
-rmSync(assetsDir, { recursive: true, force: true });
-mkdirSync(assetsDir, { recursive: true });
-
-for (const { src, dest } of assets) {
-  cpSync(resolve(root, src), resolve(assetsDir, dest));
-  console.log(`  copied  ${src} → ${STUDY_DIR_NAME}/${dest}`);
-}
+});
 
 // index.html references all assets by flat name already — no path rewrites needed.
 const indexHtml = readFileSync(resolve(root, "examples/group-quiz/index.html"), "utf8");
 writeFileSync(resolve(assetsDir, "index.html"), indexHtml);
 console.log(`  wrote   ${STUDY_DIR_NAME}/index.html`);
 
-const JAS_FILE_NAME = `${STUDY_DIR_NAME}.jas`;
-writeFileSync(resolve(distDir, JAS_FILE_NAME), JSON.stringify(metadata, null, 2));
-console.log(`  wrote   ${JAS_FILE_NAME}`);
-
 // ── Zip ───────────────────────────────────────────────────────────────────────
 const zipName = "group-quiz-jatos.jzip";
-const zipPath = resolve(distDir, zipName);
-rmSync(zipPath, { force: true });
-if (process.platform === "win32") {
-  // Compress-Archive uses backslash entry names, violating the ZIP spec.
-  // Use .NET's ZipFile API directly so we can force forward-slash entry names.
-  const metadataPath = resolve(distDir, JAS_FILE_NAME);
-  const psLines = [
-    "Add-Type -AssemblyName System.IO.Compression.FileSystem",
-    `$zip = [System.IO.Compression.ZipFile]::Open("${zipPath}", 'Create')`,
-    "$comp = [System.IO.Compression.CompressionLevel]::Optimal",
-    `[System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, "${metadataPath}", '${JAS_FILE_NAME}', $comp)`,
-    `Get-ChildItem -Path "${assetsDir}" -File | ForEach-Object {`,
-    `  [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $_.FullName, '${STUDY_DIR_NAME}/' + $_.Name, $comp)`,
-    "}",
-    "$zip.Dispose()",
-  ];
-  const tmpScript = resolve(distDir, "_build_zip.ps1");
-  writeFileSync(tmpScript, psLines.join("\n"), "utf8");
-  try {
-    execSync(`powershell -NoProfile -ExecutionPolicy Bypass -File "${tmpScript}"`);
-  } finally {
-    rmSync(tmpScript, { force: true });
-  }
-} else {
-  execSync(`cd "${distDir}" && zip -r ${zipName} ${JAS_FILE_NAME} ${STUDY_DIR_NAME}/`);
-}
-console.log(`\n  zipped  dist/${zipName}`);
+zipStudy({ distDir, assetsDir, jasFileName, studyDirName: STUDY_DIR_NAME, zipName });
+
 console.log(`\n  Import dist/${zipName} into JATOS.`);
 console.log(`  One study link for everyone — presenter clicks Host, participants click Player.`);

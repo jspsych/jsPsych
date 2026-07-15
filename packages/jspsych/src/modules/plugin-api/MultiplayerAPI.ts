@@ -126,7 +126,18 @@ export class MultiplayerAPI {
    */
   subscribe(callback: (data: GroupSessionData) => void): Unsubscribe {
     const adapter = this.requireAdapter();
-    const adapterUnsub = adapter.subscribe(callback);
+
+    // Guard the callback so a throwing subscriber can't escape into the adapter's
+    // own fan-out loop and abort notification of the other subscribers on that loop.
+    const guardedCallback = (data: GroupSessionData) => {
+      try {
+        callback(data);
+      } catch (e) {
+        console.error("MultiplayerAPI: subscriber callback threw", e);
+      }
+    };
+
+    const adapterUnsub = adapter.subscribe(guardedCallback);
 
     // Wrap so we can remove from the tracking Set on cancellation
     let cancelled = false;
@@ -143,7 +154,7 @@ export class MultiplayerAPI {
     // Replay current state after the unsubscribe handle exists. The register-
     // then-replay order prevents a TDZ crash: wait() references `unsubscribe`
     // inside the callback, so it must be defined before the callback fires.
-    callback(adapter.getAll());
+    guardedCallback(adapter.getAll());
 
     return unsubscribe;
   }
@@ -153,7 +164,10 @@ export class MultiplayerAPI {
    * returns true. Implemented on top of subscribe() — does not poll.
    *
    * Checks the current session state immediately before subscribing, so it
-   * resolves without waiting if the condition is already met.
+   * resolves without waiting if the condition is already met. This fast path
+   * also sidesteps a TDZ hazard: the callback passed to subscribe() below
+   * references its own `unsubscribe` handle, which doesn't exist yet during
+   * subscribe()'s synchronous replay-on-registration call.
    *
    * @param condition Predicate evaluated on every group session update.
    * @param timeout   Optional timeout in milliseconds. The promise rejects if

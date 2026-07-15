@@ -86,10 +86,11 @@ export default class JatosAdapter implements MultiplayerAdapter {
       try {
         await jatos.groupSession.set(this.participantId, data);
         return;
-      } catch {
+      } catch (e) {
         if (attempt === maxAttempts - 1) {
           throw new Error(
-            "JatosAdapter: push failed after retries (group session version conflict)"
+            "JatosAdapter: push failed after retries (likely a group session version conflict)",
+            { cause: e }
           );
         }
         const delayMs = 50 * Math.pow(2, attempt) + Math.random() * 50;

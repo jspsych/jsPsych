@@ -110,11 +110,14 @@ class MultiplayerSyncPlugin implements JsPsychPlugin<Info> {
       });
     };
 
-    try {
-      if (trial.push_data != null) {
-        await api.push(trial.push_data as Record<string, unknown>);
-      }
+    if (trial.push_data != null) {
+      // Pushing is not part of the wait/timeout contract below — let a push failure
+      // (e.g. the adapter exhausting its retries) propagate as a real trial error
+      // instead of being recorded as a timeout.
+      await api.push(trial.push_data as Record<string, unknown>);
+    }
 
+    try {
       const group = await api.wait(
         trial.wait_for as (data: Record<string, Record<string, unknown>>) => boolean,
         trial.timeout ?? undefined
@@ -127,8 +130,8 @@ class MultiplayerSyncPlugin implements JsPsychPlugin<Info> {
 
       finish(group, false);
     } catch (e) {
-      // The only rejection api.wait() produces is a timeout; surface it rather than the raw push
-      // error and let the experimenter react via on_timeout.
+      // The only rejection api.wait() produces is a timeout; surface it rather than a raw
+      // network error and let the experimenter react via on_timeout.
       if (typeof trial.on_timeout === "function") {
         trial.on_timeout(e);
       }

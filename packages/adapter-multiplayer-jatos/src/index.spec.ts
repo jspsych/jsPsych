@@ -9,10 +9,10 @@ import JatosAdapter from ".";
  *
  * Note on subscribe(): the adapter's subscribe() is intentionally *future-only* —
  * it fans out on every onGroupSession event and does not replay the current
- * snapshot on registration. Whether the core MultiplayerAPI should replay current
- * state on subscribe is a separate, open API-contract question (deferred pending
- * jsPsych maintainer input); if replay is ever adopted it belongs in core, so the
- * adapter contract asserted here holds regardless of that decision.
+ * snapshot on registration. Replay-on-registration is implemented one layer up,
+ * in core MultiplayerAPI.subscribe() (it calls the wrapped callback once with
+ * adapter.getAll() immediately after registering), so the adapter contract
+ * asserted here is unaffected and stays future-only by design.
  */
 
 /** Build a controllable mock of the jatos global plus helpers to drive its callbacks. */
