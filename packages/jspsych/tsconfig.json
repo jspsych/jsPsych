@@ -1,8 +1,7 @@
 {
   "extends": "@jspsych/config/tsconfig.core.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "types": ["jest", "node"]
+    "baseUrl": "."
   },
   "include": ["src", "tests", "package.json"]
 }

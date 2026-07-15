@@ -24,6 +24,8 @@ declare const jatos: {
     getAll(): Record<string, unknown> | null;
   };
   sendGroupMsg(msg: unknown): void;
+  /** Leave the joined group and close its channel. */
+  leaveGroup(onSuccess?: () => void, onError?: (errMsg: string) => void): void;
   onError(callback: (errMsg: string) => void): void;
 };
 
@@ -81,6 +83,10 @@ export default class JatosAdapter implements MultiplayerAdapter {
     // JATOS group session uses optimistic concurrency: concurrent writes from
     // multiple participants cause version conflicts. Retry with exponential
     // backoff + jitter so the retries spread out and don't re-collide.
+    // All rejections are retried, not just version conflicts — jatos.js does
+    // not expose a typed error to filter on, and guessing at message strings
+    // would risk failing fast on retryable conflicts. Worst case for a
+    // non-retryable error is ~13s of backoff before it surfaces.
     const maxAttempts = 8;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       try {
@@ -114,8 +120,26 @@ export default class JatosAdapter implements MultiplayerAdapter {
     };
   }
 
+  /**
+   * Leave the JATOS group and stop notifying subscribers. Terminal: rejoining
+   * after leaving would land this worker in a different group, so only call
+   * once the multiplayer phase is fully over. Leaving explicitly frees the
+   * participant's maxActiveMembers slot right away; participants who never
+   * call disconnect() (or close the tab) are still cleaned up by JATOS's
+   * automatic leave at the end of the study run.
+   */
   disconnect(): Promise<void> {
     this.subscribers.clear();
-    return Promise.resolve();
+    return new Promise((resolve) => {
+      // Resolve even if leaving fails: JATOS auto-leaves at study end anyway,
+      // and a failed leave must not wedge experiment teardown.
+      jatos.leaveGroup(
+        () => resolve(),
+        (errMsg) => {
+          console.error(`JatosAdapter: leaveGroup failed — ${errMsg}`);
+          resolve();
+        }
+      );
+    });
   }
 }

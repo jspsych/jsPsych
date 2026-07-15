@@ -149,6 +149,30 @@ describe("multiplayer-sync plugin", () => {
     expect(on_timeout).not.toHaveBeenCalled();
   });
 
+  test("a throwing wait_for predicate rejects the trial instead of being recorded as a timeout", async () => {
+    const jsPsych = await connectedJsPsych("p1");
+    const on_timeout = jest.fn();
+    const predicateError = new Error("predicate bug");
+
+    const plugin = new multiplayerSync(jsPsych);
+    const display = document.createElement("div");
+
+    await expect(
+      plugin.trial(display, {
+        push_data: null,
+        wait_for: () => {
+          throw predicateError;
+        },
+        message: "",
+        timeout: null,
+        on_timeout,
+        minimum_wait: 0,
+      } as any)
+    ).rejects.toBe(predicateError);
+
+    expect(on_timeout).not.toHaveBeenCalled();
+  });
+
   test("ends with timed_out and calls on_timeout when the timeout elapses", async () => {
     const jsPsych = await connectedJsPsych("p1");
     const on_timeout = jest.fn();

@@ -50,7 +50,6 @@
     "@fontsource/open-sans": "4.5.3",
     "@jspsych/config": "^3.3.0",
     "@types/dom-mediacapture-record": "^1.0.11",
-    "@types/jest": "^30.0.0",
     "base64-inline-loader": "^2.0.1",
     "css-loader": "^6.6.0",
     "mini-css-extract-plugin": "^2.5.3",

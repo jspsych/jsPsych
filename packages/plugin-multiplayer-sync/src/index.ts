@@ -88,7 +88,7 @@ type Info = typeof info;
  * `jsPsych.run()`. The resolved group session is stored in the trial's `group` data so peer reads
  * and role assignment can happen in a normal `on_finish`.
  *
- * @author jsPsych multiplayer
+ * @author Hannah Tsukamoto
  * @see {@link https://www.jspsych.org/latest/plugins/multiplayer-sync/ multiplayer-sync plugin documentation on jspsych.org}
  */
 class MultiplayerSyncPlugin implements JsPsychPlugin<Info> {
@@ -130,8 +130,13 @@ class MultiplayerSyncPlugin implements JsPsychPlugin<Info> {
 
       finish(group, false);
     } catch (e) {
-      // The only rejection api.wait() produces is a timeout; surface it rather than a raw
-      // network error and let the experimenter react via on_timeout.
+      // Only a genuine wait() timeout is part of the trial's timeout contract.
+      // Anything else (e.g. a throwing wait_for predicate) is a programming
+      // error — rethrow it instead of masking it as timed_out. Matched by name
+      // rather than instanceof so the check survives two loaded copies of jspsych.
+      if (!(e instanceof Error && e.name === "MultiplayerTimeoutError")) {
+        throw e;
+      }
       if (typeof trial.on_timeout === "function") {
         trial.on_timeout(e);
       }

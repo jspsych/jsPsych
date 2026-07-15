@@ -255,7 +255,7 @@ Returns a `Promise<GroupSessionData>` that resolves with the snapshot at the mom
 
 Waits until `condition(groupSession)` returns `true`, then resolves with the snapshot. Checks the current session state immediately (fast-path) — resolves right away if the condition is already met. Implemented on top of `subscribe()`; does not poll.
 
-The promise rejects with a timeout error if `timeout` is specified and elapses before the condition is met.
+The promise rejects with a `MultiplayerTimeoutError` (exported from the `jspsych` package) if `timeout` is specified and elapses before the condition is met. It also rejects if `condition` itself throws — a throwing predicate is treated as a programming error, not a timeout. To distinguish the two, check `error.name === "MultiplayerTimeoutError"`.
 
 #### Example
 

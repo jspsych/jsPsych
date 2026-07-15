@@ -148,6 +148,58 @@ describe("MultiplayerAPI mock run", () => {
     await api.disconnect();
   });
 
+  test("wait rejects when the condition throws on first evaluation", async () => {
+    const api = new MultiplayerAPI();
+    await api.connect(new MockAdapter("p1"));
+
+    const predicateError = new Error("boom");
+    await expect(
+      api.wait(() => {
+        throw predicateError;
+      })
+    ).rejects.toBe(predicateError);
+
+    await api.disconnect();
+  });
+
+  test("wait rejects (not hangs) when the condition throws on a later update", async () => {
+    const api1 = new MultiplayerAPI();
+    const api2 = new MultiplayerAPI();
+    await api1.connect(new MockAdapter("p1"));
+    await api2.connect(new MockAdapter("p2"));
+
+    // Passes the initial replay (empty session), throws once p2's data arrives —
+    // the classic buggy-predicate case (reading a key of a missing participant).
+    const waitPromise = api1.wait((data) => {
+      if ("p2" in data) {
+        throw new Error("predicate bug");
+      }
+      return false;
+    });
+
+    await api2.push({ ready: true });
+
+    await expect(waitPromise).rejects.toThrow("predicate bug");
+
+    await api1.disconnect();
+    await api2.disconnect();
+  });
+
+  test("wait timeout rejection is a MultiplayerTimeoutError", async () => {
+    jest.useFakeTimers();
+    const api = new MultiplayerAPI();
+    await api.connect(new MockAdapter("p1"));
+
+    const waitPromise = api.wait(() => false, 100);
+    waitPromise.catch(() => {});
+    jest.advanceTimersByTime(101);
+
+    await expect(waitPromise).rejects.toMatchObject({ name: "MultiplayerTimeoutError" });
+
+    await api.disconnect();
+    jest.useRealTimers();
+  });
+
   test("wait rejects on timeout", async () => {
     jest.useFakeTimers();
     const api = new MultiplayerAPI();

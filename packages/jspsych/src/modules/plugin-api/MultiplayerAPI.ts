@@ -7,6 +7,21 @@ export type GroupSessionData = Record<string, Record<string, unknown>>;
 export type Unsubscribe = () => void;
 
 /**
+ * Rejection produced by MultiplayerAPI.wait() when its timeout elapses before
+ * the condition is met. Exported so callers (e.g. plugin-multiplayer-sync) can
+ * distinguish a genuine timeout from a throwing predicate or network error.
+ * When checking across separately-bundled packages, prefer matching
+ * `error.name === "MultiplayerTimeoutError"` over instanceof, which fails if
+ * two copies of jspsych are loaded.
+ */
+export class MultiplayerTimeoutError extends Error {
+  constructor(timeout: number) {
+    super(`MultiplayerAPI.wait() timed out after ${timeout}ms`);
+    this.name = "MultiplayerTimeoutError";
+  }
+}
+
+/**
  * Contract that any multiplayer network backend must implement.
  * The core MultiplayerAPI calls these methods; adapters handle the network layer.
  * Plugin authors code against MultiplayerAPI and never touch the adapter directly.
@@ -103,6 +118,10 @@ export class MultiplayerAPI {
    * construction. Callers that need to merge into a nested key themselves
    * (e.g. a keyed collection within their slot) should read, merge, and
    * push directly.
+   *
+   * Not atomic against itself: two overlapping update() calls from the same
+   * client read the same base and the later push wins. Await each update()
+   * before issuing the next.
    */
   update(data: Record<string, unknown>): Promise<void> {
     const current = this.get(this.requireAdapter().participantId) ?? {};
@@ -161,50 +180,68 @@ export class MultiplayerAPI {
 
   /**
    * Returns a Promise that resolves with the group session data once condition
-   * returns true. Implemented on top of subscribe() — does not poll.
+   * returns true. Implemented on top of subscribe() — does not poll. Since
+   * subscribe() replays the current state on registration, the promise resolves
+   * without waiting if the condition is already met.
    *
-   * Checks the current session state immediately before subscribing, so it
-   * resolves without waiting if the condition is already met. This fast path
-   * also sidesteps a TDZ hazard: the callback passed to subscribe() below
-   * references its own `unsubscribe` handle, which doesn't exist yet during
-   * subscribe()'s synchronous replay-on-registration call.
+   * A throwing condition rejects the promise. wait() must handle that itself:
+   * subscribe()'s guard would otherwise swallow the throw (by design, to
+   * protect other subscribers), leaving the wait pending forever.
    *
    * @param condition Predicate evaluated on every group session update.
-   * @param timeout   Optional timeout in milliseconds. The promise rejects if
-   *                  the condition is not met within this window.
+   * @param timeout   Optional timeout in milliseconds. The promise rejects with
+   *                  a MultiplayerTimeoutError if the condition is not met
+   *                  within this window.
    */
   wait(
     condition: (data: GroupSessionData) => boolean,
     timeout?: number
   ): Promise<GroupSessionData> {
-    const adapter = this.requireAdapter();
+    this.requireAdapter();
 
     return new Promise((resolve, reject) => {
-      // Fast path: condition already met with current data
-      const current = adapter.getAll();
-      if (condition(current)) {
-        resolve(current);
-        return;
-      }
-
       let settled = false;
       let timeoutHandle: number | undefined;
+      let unsubscribe: Unsubscribe | undefined;
 
-      const unsubscribe = this.subscribe((data) => {
-        if (!settled && condition(data)) {
-          settled = true;
-          if (timeoutHandle !== undefined) clearTimeout(timeoutHandle);
-          unsubscribe();
-          resolve(data);
+      // `unsubscribe` is still undefined while subscribe()'s synchronous
+      // replay-on-registration runs, so settling from the replay defers the
+      // cleanup to the `if (settled)` check below.
+      const settle = (outcome: () => void) => {
+        settled = true;
+        if (timeoutHandle !== undefined) clearTimeout(timeoutHandle);
+        unsubscribe?.();
+        outcome();
+      };
+
+      const check = (data: GroupSessionData) => {
+        if (settled) {
+          return;
         }
-      });
+        let met: boolean;
+        try {
+          met = condition(data);
+        } catch (e) {
+          settle(() => reject(e));
+          return;
+        }
+        if (met) {
+          settle(() => resolve(data));
+        }
+      };
+
+      // Registers for future updates; the synchronous replay doubles as the
+      // "already met" fast path.
+      unsubscribe = this.subscribe(check);
+      if (settled) {
+        unsubscribe();
+        return;
+      }
 
       if (timeout !== undefined) {
         timeoutHandle = window.setTimeout(() => {
           if (!settled) {
-            settled = true;
-            unsubscribe();
-            reject(new Error(`MultiplayerAPI.wait() timed out after ${timeout}ms`));
+            settle(() => reject(new MultiplayerTimeoutError(timeout)));
           }
         }, timeout);
       }

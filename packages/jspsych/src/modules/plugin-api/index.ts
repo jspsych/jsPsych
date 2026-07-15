@@ -8,6 +8,7 @@ import { SimulationAPI } from "./SimulationAPI";
 import { TimeoutAPI } from "./TimeoutAPI";
 
 export type { GroupSessionData, MultiplayerAdapter, Unsubscribe } from "./MultiplayerAPI";
+export { MultiplayerTimeoutError } from "./MultiplayerAPI";
 
 export function createJointPluginAPIObject(jsPsych: JsPsych) {
   const settings = jsPsych.getInitSettings();

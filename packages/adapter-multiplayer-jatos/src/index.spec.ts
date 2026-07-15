@@ -33,6 +33,9 @@ function makeMockJatos(workerId: string | number = "w1") {
       getAll: jest.fn(() => ({ ...store })),
     },
     sendGroupMsg: jest.fn(),
+    leaveGroup: jest.fn((onSuccess?: () => void) => {
+      onSuccess?.();
+    }),
     onError: jest.fn(),
   };
 
@@ -208,5 +211,26 @@ describe("disconnect", () => {
     mock.fireGroupSession();
 
     expect(received).toHaveLength(0);
+  });
+
+  test("leaves the JATOS group", async () => {
+    const adapter = await connectedAdapter();
+    await adapter.disconnect();
+    expect(mock.jatos.leaveGroup).toHaveBeenCalledTimes(1);
+  });
+
+  test("resolves even when leaveGroup fails", async () => {
+    const adapter = await connectedAdapter();
+    mock.jatos.leaveGroup.mockImplementation(
+      (_onSuccess?: () => void, onError?: (errMsg: string) => void) => {
+        onError?.("group channel already closed");
+      }
+    );
+    const consoleError = jest.spyOn(console, "error").mockImplementation(() => {});
+
+    await expect(adapter.disconnect()).resolves.toBeUndefined();
+    expect(consoleError).toHaveBeenCalled();
+
+    consoleError.mockRestore();
   });
 });
