@@ -114,6 +114,35 @@ await jsPsych.pluginAPI.push({ answer: 2, rt: 542 });
 
 ---
 
+### update
+
+```javascript
+jsPsych.pluginAPI.update(data)
+```
+
+#### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+data | object | Key-value pairs to shallow-merge into this participant's slot in the shared group session.
+
+#### Return value
+
+Returns a `Promise<void>` that resolves when the write is confirmed by the backend.
+
+#### Description
+
+Convenience wrapper around a get→merge→push sequence: reads this participant's current slot, shallow-merges `data` on top of it, and pushes the result. Unlike `push()`, existing keys in the slot that aren't present in `data` are preserved. Equivalent to `push({ ...get(participantId), ...data })`.
+
+#### Example
+
+```javascript
+// Preserves any keys already in this participant's slot (e.g. { score: 1 })
+await jsPsych.pluginAPI.update({ round: 2 });
+```
+
+---
+
 ### get
 
 ```javascript

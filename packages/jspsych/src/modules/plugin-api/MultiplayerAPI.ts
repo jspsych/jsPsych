@@ -92,6 +92,23 @@ export class MultiplayerAPI {
     return this.requireAdapter().push(data);
   }
 
+  /**
+   * Shallow-merge partial data into this participant's own slot, then push
+   * the result. Equivalent to `push({ ...get(participantId), ...data })`,
+   * saving plugin authors from hand-rolling that get→merge→push sequence
+   * (every existing multiplayer plugin does it manually today).
+   *
+   * The merge is shallow (top-level keys only) since each participant only
+   * ever writes their own slot, which avoids cross-client conflicts by
+   * construction. Callers that need to merge into a nested key themselves
+   * (e.g. a keyed collection within their slot) should read, merge, and
+   * push directly.
+   */
+  update(data: Record<string, unknown>): Promise<void> {
+    const current = this.get(this.requireAdapter().participantId) ?? {};
+    return this.push({ ...current, ...data });
+  }
+
   /** Read the full current group session (all participants' data). */
   getAll(): GroupSessionData {
     return this.requireAdapter().getAll();

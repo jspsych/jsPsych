@@ -162,6 +162,51 @@ describe("MultiplayerAPI mock run", () => {
     jest.useRealTimers();
   });
 
+  test("update merges into own slot without clobbering existing keys", async () => {
+    const api = new MultiplayerAPI();
+    await api.connect(new MockAdapter("p1"));
+
+    await api.push({ score: 1, round: 1 });
+    await api.update({ round: 2 });
+
+    expect(api.get("p1")).toEqual({ score: 1, round: 2 });
+
+    await api.disconnect();
+  });
+
+  test("update against an empty slot behaves like push", async () => {
+    const api = new MultiplayerAPI();
+    await api.connect(new MockAdapter("p1"));
+
+    await api.update({ ready: true });
+    expect(api.get("p1")).toEqual({ ready: true });
+
+    await api.disconnect();
+  });
+
+  test("update before connect throws", () => {
+    const api = new MultiplayerAPI();
+    expect(() => api.update({ x: 1 })).toThrow("connect() must be called");
+  });
+
+  test("update merges into the caller's own slot, not another participant's", async () => {
+    const api1 = new MultiplayerAPI();
+    const api2 = new MultiplayerAPI();
+    await api1.connect(new MockAdapter("p1"));
+    await api2.connect(new MockAdapter("p2"));
+
+    await api1.push({ score: 1 });
+    await api2.push({ score: 100 });
+
+    await api1.update({ round: 2 });
+
+    expect(api1.get("p1")).toEqual({ score: 1, round: 2 });
+    expect(api1.get("p2")).toEqual({ score: 100 });
+
+    await api1.disconnect();
+    await api2.disconnect();
+  });
+
   test("getAll returns all participants' data", async () => {
     const api1 = new MultiplayerAPI();
     const api2 = new MultiplayerAPI();
