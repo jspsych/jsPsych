@@ -51,4 +51,4 @@ const lobby = {
 
 ## Scope
 
-A jsPsych plugin is a trial, so this plugin covers synchronization points that are their own timeline step (barriers, lobbies, send-then-wait handoffs). For communication *in the middle* of another interactive trial, use the raw `jsPsych.pluginAPI` (`push`, `wait`, `get`, `getAll`, `subscribe`, `communicate`) directly.
+A jsPsych plugin is a trial, so this plugin covers synchronization points that are their own timeline step (barriers, lobbies, send-then-wait handoffs). For communication *in the middle* of another interactive trial, use the raw `jsPsych.pluginAPI` (`push`, `wait`, `get`, `getAll`, `subscribe`) directly.

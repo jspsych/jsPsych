@@ -249,20 +249,6 @@ export class MultiplayerAPI {
   }
 
   /**
-   * Convenience wrapper for the Push → Wait → resolve sequence.
-   * Pushes local data, then waits until condition is met, then resolves
-   * with the full group session data.
-   */
-  async communicate(
-    data: Record<string, unknown>,
-    condition: (groupData: GroupSessionData) => boolean,
-    timeout?: number
-  ): Promise<GroupSessionData> {
-    await this.push(data);
-    return this.wait(condition, timeout);
-  }
-
-  /**
    * Cancel all active subscriptions. Parallel to
    * KeyboardListenerAPI.cancelAllKeyboardResponses() — call at experiment end
    * to prevent ghost listeners.

@@ -108,26 +108,6 @@ describe("MultiplayerAPI mock run", () => {
     await api2.disconnect();
   });
 
-  test("communicate: push then wait in one call", async () => {
-    const api1 = new MultiplayerAPI();
-    const api2 = new MultiplayerAPI();
-    await api1.connect(new MockAdapter("p1"));
-    await api2.connect(new MockAdapter("p2"));
-
-    // Both participants communicate simultaneously
-    const [result1, result2] = await Promise.all([
-      api1.communicate({ answer: 1 }, (data) => "p1" in data && "p2" in data),
-      api2.communicate({ answer: 2 }, (data) => "p1" in data && "p2" in data),
-    ]);
-
-    expect(result1["p1"]).toEqual({ answer: 1 });
-    expect(result1["p2"]).toEqual({ answer: 2 });
-    expect(result2).toEqual(result1);
-
-    await api1.disconnect();
-    await api2.disconnect();
-  });
-
   test("cancelAllSubscriptions cleans up listeners", async () => {
     const api = new MultiplayerAPI();
     const adapter = new MockAdapter("p1");

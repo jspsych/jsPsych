@@ -268,45 +268,6 @@ const group = await jsPsych.pluginAPI.wait(
 
 ---
 
-### communicate
-
-```javascript
-jsPsych.pluginAPI.communicate(data, condition, timeout)
-```
-
-#### Parameters
-
-Parameter | Type | Description
-----------|------|------------
-data | object | Data to push before waiting (passed directly to `push()`).
-condition | function | Predicate passed to `wait()`.
-timeout | number | *(optional)* Timeout in milliseconds passed to `wait()`.
-
-#### Return value
-
-Returns a `Promise<GroupSessionData>`.
-
-#### Description
-
-Convenience wrapper for the Push → Wait sequence. Pushes `data`, then waits until `condition` is met, then resolves with the group session. Equivalent to:
-
-```javascript
-await jsPsych.pluginAPI.push(data);
-return jsPsych.pluginAPI.wait(condition, timeout);
-```
-
-#### Example
-
-```javascript
-// Push this player's answer and wait until everyone has answered
-const group = await jsPsych.pluginAPI.communicate(
-  { answer: myChoice },
-  (g) => Object.values(g).every((p) => p.answer !== undefined)
-);
-```
-
----
-
 ### cancelAllSubscriptions
 
 ```javascript
