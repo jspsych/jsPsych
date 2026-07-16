@@ -70,6 +70,7 @@ nav:
 - Reference:
   - 'jsPsych': 'reference/jspsych.md'
   - 'jsPsych.data': 'reference/jspsych-data.md'
+  - 'jsPsych.multiplayer': 'reference/jspsych-multiplayer.md'
   - 'jsPsych.randomization': 'reference/jspsych-randomization.md'
   - 'jsPsych.turk': 'reference/jspsych-turk.md'
   - 'jsPsych.utils': 'reference/jspsych-utils.md'
