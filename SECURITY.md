@@ -8,7 +8,7 @@ jsPsych is developed as a collection of npm packages under active development. S
 
 Please do not report security vulnerabilities through public GitHub issues or discussions.
 
-Instead, please report them using [GitHub's private vulnerability reporting](https://github.com/jspsych/jsPsych/security/advisories/new). If that option is not available to you, email josh.deleeuw@gmail.com with details of the vulnerability.
+Instead, please report them using [GitHub's private vulnerability reporting](https://github.com/jspsych/jsPsych/security/advisories/new). If that option is not available to you, email jdeleeuw@vassar.edu with details of the vulnerability.
 
 Please include as much of the following as you can, to help us triage your report:
 
