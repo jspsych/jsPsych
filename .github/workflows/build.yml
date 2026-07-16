@@ -15,6 +15,8 @@ jobs:
   test:
     name: Build, lint, and test on Node.js ${{ matrix.node }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     strategy:
       matrix:
         node: [18, 20]
