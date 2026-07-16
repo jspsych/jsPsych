@@ -1,5 +1,7 @@
 ![jspsych logo](http://www.jspsych.org/7.0/img/jspsych-logo.jpg)
 
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9910/badge)](https://www.bestpractices.dev/projects/9910)
+
 jsPsych is a JavaScript framework for creating behavioral experiments that run in a web browser. 
 
 Experiments in jsPsych are created using [plugins](https://www.jspsych.org/latest/overview/plugins). 
