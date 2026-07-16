@@ -57,15 +57,20 @@ jobs:
           echo "packages=$changed" >> "$GITHUB_OUTPUT"
 
       - name: Write metadata
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          CHANGED_PACKAGES: ${{ steps.changed.outputs.packages }}
         run: |
-          cat > preview-dist/metadata.json <<EOF
-          {
-            "pr_number": ${{ github.event.pull_request.number }},
-            "head_sha": "${{ github.event.pull_request.head.sha }}",
-            "head_ref": "${{ github.event.pull_request.head.ref }}",
-            "changed_packages": ${{ steps.changed.outputs.packages }}
-          }
-          EOF
+          set -euo pipefail
+          jq -n \
+            --argjson pr_number "$PR_NUMBER" \
+            --arg head_sha "$HEAD_SHA" \
+            --arg head_ref "$HEAD_REF" \
+            --argjson changed_packages "$CHANGED_PACKAGES" \
+            '{pr_number: $pr_number, head_sha: $head_sha, head_ref: $head_ref, changed_packages: $changed_packages}' \
+            > preview-dist/metadata.json
 
       - uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
