@@ -9,21 +9,20 @@ on:
 # Runs in trusted context (base repo) and consumes the artifact produced by
 # preview-build.yml. Holds the write permissions needed to push the preview
 # branch and edit the PR comment.
-permissions:
-  contents: write
-  # `pull-requests: write` is required (despite PR comments using the issues
-  # API endpoint) because GitHub Actions enforces PR-targeted writes against
-  # the `pull-requests` scope. Without this, peter-evans/create-or-update-comment
-  # silently no-ops on PRs.
-  pull-requests: write
-  issues: write
-  actions: read
-
 jobs:
   publish:
     name: Publish preview & comment
     if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      # `pull-requests: write` is required (despite PR comments using the issues
+      # API endpoint) because GitHub Actions enforces PR-targeted writes against
+      # the `pull-requests` scope. Without this, peter-evans/create-or-update-comment
+      # silently no-ops on PRs.
+      pull-requests: write
+      issues: write
+      actions: read
     steps:
       - uses: actions/checkout@v4
         with:
