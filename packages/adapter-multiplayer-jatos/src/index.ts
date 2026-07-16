@@ -86,7 +86,7 @@ export default class JatosAdapter implements MultiplayerAdapter {
     // All rejections are retried, not just version conflicts — jatos.js does
     // not expose a typed error to filter on, and guessing at message strings
     // would risk failing fast on retryable conflicts. Worst case for a
-    // non-retryable error is ~13s of backoff before it surfaces.
+    // non-retryable error is ~6.5s of backoff before it surfaces.
     const maxAttempts = 8;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       try {
