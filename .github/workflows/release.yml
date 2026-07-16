@@ -18,6 +18,10 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      # Needed by actions/attest-build-provenance to mint a Sigstore signing
+      # cert from the workflow's OIDC identity and to record the attestation.
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
@@ -61,8 +65,21 @@ jobs:
       - name: Pack Dist Archive
         run: npm run build:archive
 
+      # Generates a SLSA build provenance attestation for dist.zip, signed
+      # keylessly via Sigstore using this workflow run's OIDC identity. The
+      # bundle is uploaded as a release asset below so downloads can be
+      # verified back to this exact commit and workflow run, e.g. with
+      # `gh attestation verify jspsych.zip --owner jspsych`.
+      - name: Attest build provenance
+        id: attest
+        uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
+        with:
+          subject-path: dist.zip
+
       - name: Upload Release Assets
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        env:
+          ATTESTATION_BUNDLE_PATH: ${{ steps.attest.outputs.bundle-path }}
         with:
           script: |
             const fs = require("fs");
@@ -70,6 +87,8 @@ jobs:
             const { owner, repo } = context.repo;
             const distFile = "dist.zip";
             const assetName = "jspsych.zip";
+            const attestationFile = process.env.ATTESTATION_BUNDLE_PATH;
+            const attestationAssetName = `${assetName}.intoto.jsonl`;
 
             /**
             * Returns all recent releases without a dist archive asset, up to (excluding) the first release
@@ -107,6 +126,13 @@ jobs:
             const distFileSize = fs.statSync(distFile).size;
             const distFileContents = fs.readFileSync(distFile);
 
+            const attestationContents = attestationFile && fs.existsSync(attestationFile)
+              ? fs.readFileSync(attestationFile)
+              : null;
+            if (!attestationContents) {
+              console.log("No attestation bundle found; uploading dist archive without provenance.");
+            }
+
             // Upload dist archive for each release without a dist archive, in reverse order so re-running an
             // aborted or failed job will pick up where it left off last time
             for (const release of releasesWithoutDistArchive.reverse()) {
@@ -125,4 +151,20 @@ jobs:
                 },
                 data: distFileContents,
               });
+
+              if (attestationContents) {
+                console.log(`Uploading build provenance attestation for ${release.tag_name}`);
+                await github.rest.repos.uploadReleaseAsset({
+                  owner,
+                  repo,
+                  release_id: release.id,
+                  name: attestationAssetName,
+                  label: "Build provenance attestation (SLSA)",
+                  headers: {
+                    "content-type": "application/json",
+                    "content-length": attestationContents.length,
+                  },
+                  data: attestationContents,
+                });
+              }
             }
