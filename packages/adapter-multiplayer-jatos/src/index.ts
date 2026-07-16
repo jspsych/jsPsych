@@ -34,7 +34,7 @@ declare const jatos: {
  *
  * Usage:
  *   const jsPsych = initJsPsych({ ... });
- *   await jsPsych.pluginAPI.connect(new JatosAdapter());
+ *   await jsPsych.multiplayer.connect(new JatosAdapter());
  *   await jsPsych.run(timeline);
  *
  * Each participant's pushed data is stored under groupSession[workerId],

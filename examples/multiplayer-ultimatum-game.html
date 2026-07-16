@@ -13,7 +13,7 @@
   <script>
     jatos.onLoad(async () => {
       const jsPsych = initJsPsych({ on_finish: () => jatos.endStudy() });
-      await jsPsych.pluginAPI.connect(new jsPsychAdapterMultiplayerJatos());
+      await jsPsych.multiplayer.connect(new jsPsychAdapterMultiplayerJatos());
 
       const POT = 10;
       let myRole;       // "proposer" | "responder"
@@ -31,23 +31,23 @@
           type: jsPsychCallFunction,
           async: true,
           func: async (done) => {
-            console.log("[lobby] my participantId:", jsPsych.pluginAPI.participantId);
-            await jsPsych.pluginAPI.push({ status: "ready" });
-            const group = await jsPsych.pluginAPI.wait(
+            console.log("[lobby] my participantId:", jsPsych.multiplayer.participantId);
+            await jsPsych.multiplayer.push({ status: "ready" });
+            const group = await jsPsych.multiplayer.wait(
               (group) => Object.keys(group).length >= 2
             );
             const sortedIds = Object.keys(group).sort();
             const activePlayers = sortedIds.slice(0, 2);
-            if (!activePlayers.includes(jsPsych.pluginAPI.participantId)) {
+            if (!activePlayers.includes(jsPsych.multiplayer.participantId)) {
               gameIsFull = true;
-              await jsPsych.pluginAPI.disconnect();
+              await jsPsych.multiplayer.disconnect();
               done();
               return;
             }
             proposerId = activePlayers[0];
             responderId = activePlayers[1];
             console.log("[lobby] group keys:", sortedIds, "proposerId:", proposerId, "responderId:", responderId);
-            myRole = jsPsych.pluginAPI.participantId === proposerId
+            myRole = jsPsych.multiplayer.participantId === proposerId
               ? "proposer"
               : "responder";
             console.log("[lobby] myRole:", myRole);
@@ -86,8 +86,8 @@
           `,
           choices: "NO_KEYS",
           on_start: async () => {
-            await jsPsych.pluginAPI.push({ offer: proposerOffer });
-            const group = await jsPsych.pluginAPI.wait(
+            await jsPsych.multiplayer.push({ offer: proposerOffer });
+            const group = await jsPsych.multiplayer.wait(
               (group) => group[responderId]?.decision !== undefined
             );
             responderDecision = group[responderId].decision;
@@ -106,7 +106,7 @@
           stimulus: "<p>Waiting for the Proposer's offer…</p>",
           choices: "NO_KEYS",
           on_start: async () => {
-            const group = await jsPsych.pluginAPI.wait(
+            const group = await jsPsych.multiplayer.wait(
               (group) => group[proposerId]?.offer !== undefined
             );
             proposerOffer = group[proposerId].offer;
@@ -133,7 +133,7 @@
           type: jsPsychCallFunction,
           async: true,
           func: async (done) => {
-            await jsPsych.pluginAPI.push({ decision: responderDecision });
+            await jsPsych.multiplayer.push({ decision: responderDecision });
             done();
           },
         }

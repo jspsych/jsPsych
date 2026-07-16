@@ -4,7 +4,7 @@ Current version: 0.1.0. [See version history](https://github.com/jspsych/jsPsych
 
 A synchronization barrier for multiplayer experiments. The plugin optionally pushes this participant's data into the shared group session, displays a waiting message, and ends the trial once a condition over the group session is satisfied (or an optional timeout elapses). It packages the common push → wait pattern as a single declarative trial.
 
-Requires a connected multiplayer adapter — call `await jsPsych.pluginAPI.connect(adapter)` before `jsPsych.run()`. See [jsPsych.pluginAPI.multiplayer](../reference/jspsych-multiplayer.md) for the full API and [Multiplayer Adapter Development](../developers/adapter-development.md) for how to implement or choose an adapter.
+Requires a connected multiplayer adapter — call `await jsPsych.multiplayer.connect(adapter)` before `jsPsych.run()`. See [jsPsych.multiplayer](../reference/jspsych-multiplayer.md) for the full API and [Multiplayer Adapter Development](../developers/adapter-development.md) for how to implement or choose an adapter.
 
 ## Parameters
 
@@ -12,7 +12,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 
 Parameter | Type | Default Value | Description
 ----------|------|---------------|------------
-wait_for | function | *undefined* | Predicate evaluated on every group session update. Receives the full group session (a `GroupSessionData` object keyed by `participantId`). The trial ends as soon as this returns `true`. This is the same condition you would pass to `jsPsych.pluginAPI.wait()`.
+wait_for | function | *undefined* | Predicate evaluated on every group session update. Receives the full group session (a `GroupSessionData` object keyed by `participantId`). The trial ends as soon as this returns `true`. This is the same condition you would pass to `jsPsych.multiplayer.wait()`.
 push_data | object or function | `null` | Data to push into the shared group session when the trial starts, before waiting. Supply `null` to wait without pushing. As with any jsPsych parameter, you may supply a function that returns the object — useful for reading state captured by earlier trials.
 message | HTML string | `"<p>Waiting for other players…</p>"` | HTML shown while waiting for the condition to be met.
 timeout | number | `null` | Maximum time to wait in milliseconds before giving up. When the timeout elapses the trial ends with `timed_out: true` and `on_timeout` is called. `null` waits indefinitely.
@@ -52,7 +52,7 @@ import MultiplayerSync from '@jspsych/plugin-multiplayer-sync';
     === "Code"
         ```javascript
         // Before jsPsych.run(), connect an adapter:
-        await jsPsych.pluginAPI.connect(new JatosAdapter());
+        await jsPsych.multiplayer.connect(new JatosAdapter());
 
         const lobbyBarrier = {
           type: jsPsychMultiplayerSync,

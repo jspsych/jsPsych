@@ -2,8 +2,8 @@ import {
   GroupSessionData,
   MultiplayerAdapter,
   Unsubscribe,
-} from "../../src/modules/plugin-api/MultiplayerAPI";
-import { MultiplayerAPI } from "../../src/modules/plugin-api/MultiplayerAPI";
+} from "../../src/modules/multiplayer";
+import { MultiplayerAPI } from "../../src/modules/multiplayer";
 
 /** In-memory adapter that simulates two participants sharing a group session. */
 class MockAdapter implements MultiplayerAdapter {

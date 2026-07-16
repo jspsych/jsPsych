@@ -17,7 +17,7 @@
     // manual finishTrial() is now a single declarative multiplayer-sync trial.
     jatos.onLoad(async () => {
       const jsPsych = initJsPsych({ on_finish: () => jatos.endStudy() });
-      await jsPsych.pluginAPI.connect(new jsPsychAdapterMultiplayerJatos());
+      await jsPsych.multiplayer.connect(new jsPsychAdapterMultiplayerJatos());
 
       const POT = 10;
       let myRole; // "proposer" | "responder"
@@ -38,13 +38,13 @@
         message: "<p>Waiting for another player to join…</p>",
         on_finish: (data) => {
           const activePlayers = Object.keys(data.group).sort().slice(0, 2);
-          if (!activePlayers.includes(jsPsych.pluginAPI.participantId)) {
+          if (!activePlayers.includes(jsPsych.multiplayer.participantId)) {
             gameIsFull = true;
-            jsPsych.pluginAPI.disconnect();
+            jsPsych.multiplayer.disconnect();
             return;
           }
           [proposerId, responderId] = activePlayers;
-          myRole = jsPsych.pluginAPI.participantId === proposerId ? "proposer" : "responder";
+          myRole = jsPsych.multiplayer.participantId === proposerId ? "proposer" : "responder";
         },
       };
 

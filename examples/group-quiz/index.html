@@ -331,7 +331,7 @@
         document.getElementById("selector").style.display = "none";
 
         const jsPsych = initJsPsych({ on_finish: () => jatos.endStudy() });
-        await jsPsych.pluginAPI.connect(new jsPsychAdapterMultiplayerJatos());
+        await jsPsych.multiplayer.connect(new jsPsychAdapterMultiplayerJatos());
 
         let myName         = "";
         let hostId         = null;
@@ -375,26 +375,26 @@
         const questionTrial = {
           type: jsPsychHtmlButtonResponse,
           stimulus: () => {
-            const state = jsPsych.pluginAPI.get(hostId);
+            const state = jsPsych.multiplayer.get(hostId);
             return `<p style="font-size:1.1rem;margin-bottom:4px;opacity:0.6">Question ${(state?.questionIndex ?? 0) + 1}</p>
                     <p style="font-size:1.4rem;font-weight:bold">${state?.questionPrompt ?? ""}</p>`;
           },
-          choices: () => jsPsych.pluginAPI.get(hostId)?.questionChoices ?? [],
+          choices: () => jsPsych.multiplayer.get(hostId)?.questionChoices ?? [],
           button_html: (choice, choiceIndex) => {
             const colors  = ["red","blue","yellow","green"];
             const labels  = ["A","B","C","D"];
             return `<button class="jspsych-btn answer-btn ${colors[choiceIndex]}">${labels[choiceIndex]}. ${choice}</button>`;
           },
-          trial_duration: () => jsPsych.pluginAPI.get(hostId)?.questionDurationMs ?? QUESTION_DURATION_MS,
+          trial_duration: () => jsPsych.multiplayer.get(hostId)?.questionDurationMs ?? QUESTION_DURATION_MS,
           on_finish: async (data) => {
-            const state       = jsPsych.pluginAPI.get(hostId);
+            const state       = jsPsych.multiplayer.get(hostId);
             lastQuestionIndex = state?.questionIndex ?? 0;
             lastChoice        = data.response;
             lastTimeMs        = data.response !== null
               ? Math.min(data.rt, state?.questionDurationMs ?? QUESTION_DURATION_MS)
               : state?.questionDurationMs ?? QUESTION_DURATION_MS;
             myAnswers         = { ...myAnswers, [lastQuestionIndex]: { choice: lastChoice, timeMs: lastTimeMs } };
-            await jsPsych.pluginAPI.push({ role: "player", name: myName, answers: myAnswers, totalScore: myTotalScore });
+            await jsPsych.multiplayer.push({ role: "player", name: myName, answers: myAnswers, totalScore: myTotalScore });
           },
         };
 
@@ -414,7 +414,7 @@
           type: jsPsychCallFunction,
           async: true,
           func: async (done) => {
-            await jsPsych.pluginAPI.push({ role: "player", name: myName, answers: myAnswers, totalScore: myTotalScore });
+            await jsPsych.multiplayer.push({ role: "player", name: myName, answers: myAnswers, totalScore: myTotalScore });
             done();
           },
         };
@@ -422,7 +422,7 @@
         const revealDisplay = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: () => {
-            const state       = jsPsych.pluginAPI.get(hostId);
+            const state       = jsPsych.multiplayer.get(hostId);
             const correctText = state?.questionChoices?.[state?.correctChoice] ?? "";
             if (lastChoice === null) {
               return `<p class="result-wrong">Time's up!</p>
@@ -451,8 +451,8 @@
         const leaderboardDisplay = {
           type: jsPsychHtmlKeyboardResponse,
           stimulus: () => {
-            const standings      = computeLeaderboard(jsPsych.pluginAPI.getAll());
-            const myParticipantId = jsPsych.pluginAPI.participantId;
+            const standings      = computeLeaderboard(jsPsych.multiplayer.getAll());
+            const myParticipantId = jsPsych.multiplayer.participantId;
             const myRank         = standings.findIndex(entry => entry.participantId === myParticipantId) + 1;
             const topThree       = standings.slice(0, 3)
               .map((entry, idx) => `<p style="font-size:1rem;opacity:0.8">#${idx+1} ${escapeHtml(entry.name)} — ${entry.totalScore} pts</p>`)
@@ -474,7 +474,7 @@
 
         const questionLoop = {
           timeline: [questionTrial, revealBarrier, pushScoreTrial, revealDisplay, leaderboardBarrier, leaderboardDisplay, nextQuestionBarrier],
-          loop_function: () => jsPsych.pluginAPI.get(hostId)?.phase !== PHASES.ENDED,
+          loop_function: () => jsPsych.multiplayer.get(hostId)?.phase !== PHASES.ENDED,
         };
 
         const endScreen = {

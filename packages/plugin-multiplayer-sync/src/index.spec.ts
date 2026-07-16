@@ -52,7 +52,7 @@ class MockAdapter implements MultiplayerAdapter {
 /** Build a JsPsych instance with a connected mock adapter for the given participant. */
 async function connectedJsPsych(participantId: string) {
   const jsPsych = new JsPsych({});
-  await jsPsych.pluginAPI.connect(new MockAdapter(participantId));
+  await jsPsych.multiplayer.connect(new MockAdapter(participantId));
   return jsPsych;
 }
 

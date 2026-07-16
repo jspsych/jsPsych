@@ -1,12 +1,12 @@
-# jsPsych.pluginAPI — Multiplayer
+# jsPsych.multiplayer
 
-The multiplayer module exposes a real-time group session API for synchronizing participants. All methods are accessible through `jsPsych.pluginAPI` after calling `connect()` with a backend adapter.
+The multiplayer module exposes a real-time group session API for synchronizing participants. All methods are accessible through `jsPsych.multiplayer` after calling `connect()` with a backend adapter.
 
 Before using any multiplayer method, connect an adapter:
 
 ```javascript
 const jsPsych = initJsPsych({ ... });
-await jsPsych.pluginAPI.connect(new JatosAdapter());
+await jsPsych.multiplayer.connect(new JatosAdapter());
 await jsPsych.run(timeline);
 ```
 
@@ -19,7 +19,7 @@ See [Multiplayer Adapter Development](../developers/adapter-development.md) for 
 ### participantId
 
 ```javascript
-jsPsych.pluginAPI.participantId
+jsPsych.multiplayer.participantId
 ```
 
 A string identifying this participant within the current group session. Set by `connect()` from the adapter; `null` before `connect()` is called or after `disconnect()`.
@@ -31,7 +31,7 @@ A string identifying this participant within the current group session. Set by `
 ### connect
 
 ```javascript
-jsPsych.pluginAPI.connect(adapter)
+jsPsych.multiplayer.connect(adapter)
 ```
 
 #### Parameters
@@ -54,7 +54,7 @@ Throws if `connect()` has already been called without a subsequent `disconnect()
 
 ```javascript
 const jsPsych = initJsPsych();
-await jsPsych.pluginAPI.connect(new JatosAdapter());
+await jsPsych.multiplayer.connect(new JatosAdapter());
 await jsPsych.run(timeline);
 ```
 
@@ -63,7 +63,7 @@ await jsPsych.run(timeline);
 ### disconnect
 
 ```javascript
-jsPsych.pluginAPI.disconnect()
+jsPsych.multiplayer.disconnect()
 ```
 
 #### Parameters
@@ -81,7 +81,7 @@ Cancels all active subscriptions and closes the communication channel. After thi
 #### Example
 
 ```javascript
-await jsPsych.pluginAPI.disconnect();
+await jsPsych.multiplayer.disconnect();
 ```
 
 ---
@@ -89,7 +89,7 @@ await jsPsych.pluginAPI.disconnect();
 ### push
 
 ```javascript
-jsPsych.pluginAPI.push(data)
+jsPsych.multiplayer.push(data)
 ```
 
 #### Parameters
@@ -109,7 +109,7 @@ Writes `data` into this participant's namespace in the shared group session. Oth
 #### Example
 
 ```javascript
-await jsPsych.pluginAPI.push({ answer: 2, rt: 542 });
+await jsPsych.multiplayer.push({ answer: 2, rt: 542 });
 ```
 
 ---
@@ -117,7 +117,7 @@ await jsPsych.pluginAPI.push({ answer: 2, rt: 542 });
 ### update
 
 ```javascript
-jsPsych.pluginAPI.update(data)
+jsPsych.multiplayer.update(data)
 ```
 
 #### Parameters
@@ -138,7 +138,7 @@ Convenience wrapper around a get→merge→push sequence: reads this participant
 
 ```javascript
 // Preserves any keys already in this participant's slot (e.g. { score: 1 })
-await jsPsych.pluginAPI.update({ round: 2 });
+await jsPsych.multiplayer.update({ round: 2 });
 ```
 
 ---
@@ -146,7 +146,7 @@ await jsPsych.pluginAPI.update({ round: 2 });
 ### get
 
 ```javascript
-jsPsych.pluginAPI.get(participantId)
+jsPsych.multiplayer.get(participantId)
 ```
 
 #### Parameters
@@ -166,7 +166,7 @@ Reads a single participant's current data from the local snapshot of the group s
 #### Example
 
 ```javascript
-const hostData = jsPsych.pluginAPI.get(hostId);
+const hostData = jsPsych.multiplayer.get(hostId);
 if (hostData?.phase === "question") { /* ... */ }
 ```
 
@@ -175,7 +175,7 @@ if (hostData?.phase === "question") { /* ... */ }
 ### getAll
 
 ```javascript
-jsPsych.pluginAPI.getAll()
+jsPsych.multiplayer.getAll()
 ```
 
 #### Parameters
@@ -193,7 +193,7 @@ Returns the full current group session snapshot. This is a synchronous read of t
 #### Example
 
 ```javascript
-const group = jsPsych.pluginAPI.getAll();
+const group = jsPsych.multiplayer.getAll();
 const allReady = Object.values(group).every((p) => p.ready === true);
 ```
 
@@ -202,7 +202,7 @@ const allReady = Object.values(group).every((p) => p.ready === true);
 ### subscribe
 
 ```javascript
-jsPsych.pluginAPI.subscribe(callback)
+jsPsych.multiplayer.subscribe(callback)
 ```
 
 #### Parameters
@@ -224,7 +224,7 @@ Subscriptions are tracked internally and are all cancelled automatically by `can
 #### Example
 
 ```javascript
-const stop = jsPsych.pluginAPI.subscribe((group) => {
+const stop = jsPsych.multiplayer.subscribe((group) => {
   renderScoreboard(group);
 });
 
@@ -237,7 +237,7 @@ stop();
 ### wait
 
 ```javascript
-jsPsych.pluginAPI.wait(condition, timeout)
+jsPsych.multiplayer.wait(condition, timeout)
 ```
 
 #### Parameters
@@ -261,7 +261,7 @@ The promise rejects with a `MultiplayerTimeoutError` (exported from the `jspsych
 
 ```javascript
 // Wait until all 4 players have submitted an answer
-const group = await jsPsych.pluginAPI.wait(
+const group = await jsPsych.multiplayer.wait(
   (g) => Object.values(g).filter((p) => p.answer !== undefined).length >= 4
 );
 ```
@@ -271,7 +271,7 @@ const group = await jsPsych.pluginAPI.wait(
 ### cancelAllSubscriptions
 
 ```javascript
-jsPsych.pluginAPI.cancelAllSubscriptions()
+jsPsych.multiplayer.cancelAllSubscriptions()
 ```
 
 #### Parameters
@@ -289,5 +289,5 @@ Cancels all currently active subscriptions created by `subscribe()`. Mirrors `ca
 #### Example
 
 ```javascript
-jsPsych.pluginAPI.cancelAllSubscriptions();
+jsPsych.multiplayer.cancelAllSubscriptions();
 ```

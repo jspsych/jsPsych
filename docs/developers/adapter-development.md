@@ -80,7 +80,7 @@ Register a callback that fires on every **future** group session update. Return 
 disconnect(): Promise<void>
 ```
 
-Close the channel cleanly and clear all subscribers. Called automatically by `jsPsych.pluginAPI.disconnect()`. After this, the adapter instance will not be used again.
+Close the channel cleanly and clear all subscribers. Called automatically by `jsPsych.multiplayer.disconnect()`. After this, the adapter instance will not be used again.
 
 ---
 
@@ -145,7 +145,7 @@ Usage:
 ```javascript
 // Before jsPsych.run():
 InMemoryAdapter.channel = [];
-await jsPsych.pluginAPI.connect(new InMemoryAdapter("participant-1"));
+await jsPsych.multiplayer.connect(new InMemoryAdapter("participant-1"));
 ```
 
 ## Real-world example
