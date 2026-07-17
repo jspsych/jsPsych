@@ -30,7 +30,7 @@
     "@jspsych/config": "^3.2.1",
     "husky": "^8.0.3",
     "import-sort-style-module": "^6.0.0",
-    "lint-staged": "^13.0.3",
+    "lint-staged": "^15.5.2",
     "prettier": "^2.7.1",
     "prettier-plugin-import-sort": "^0.0.7",
     "turbo": "^1.6.3"
