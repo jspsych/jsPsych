@@ -45,7 +45,7 @@
           choices: ['y','n'], 
           stimulus: jsPsych.timelineVariable('v1'),
           prompt: function() { 
-            return '<p>Have you seen '+jsPsych.evaluateTimelineVariable('v2')+ ' before? Press "y" or "n".</p>' 
+            return '<p>Have you seen '+jsPsych.evaluateTimelineVariable('v2')+ ' before? Press <span class="key">y</span> or <span class="key">n</span>.</p>'
           },
           stimulus_width: 300
         }

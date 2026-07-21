@@ -34,7 +34,7 @@
       type: jsPsychImageKeyboardResponse,
       choices: ['y','n'],
       stimulus_width: 300,
-      prompt: '<p>Press "y" to continue. Press "n" to end this node of the experiment.</p>',
+      prompt: '<p>Press <span class="key">y</span> to continue. Press <span class="key">n</span> to end this node of the experiment.</p>',
       on_finish: function(data) {
         if (jsPsych.pluginAPI.compareKeys(data.response, "n")) {
           jsPsych.abortCurrentTimeline();
