@@ -1,4 +1,4 @@
-import { keyDown, keyUp, pressKey, startTimeline } from "@jspsych/test-utils";
+import { flushPromises, keyDown, keyUp, pressKey, startTimeline } from "@jspsych/test-utils";
 
 import imageKeyboardResponse from ".";
 
@@ -223,5 +223,55 @@ describe("image-keyboard-response wait_for_key_release", () => {
     await expectFinished();
 
     expect(getData().values()[0].rt_key_duration).toBe(null);
+  });
+
+  test("a key held past trial_duration does not contaminate the next trial", async () => {
+    const { getData, expectRunning, expectFinished } = await startTimeline([
+      {
+        type: imageKeyboardResponse,
+        stimulus: "../media/blue.png",
+        choices: ["a"],
+        render_on_canvas: false,
+        wait_for_key_release: true,
+        trial_duration: 1000,
+      },
+      {
+        type: imageKeyboardResponse,
+        stimulus: "../media/blue.png",
+        choices: ["a"],
+        render_on_canvas: false,
+        wait_for_key_release: true,
+      },
+    ]);
+
+    // trial 1: press and hold the key, then let the trial time out
+    await keyDown("a");
+    jest.advanceTimersByTime(1000);
+    await flushPromises();
+
+    // trial 1 ended by duration with no response because the key was never released
+    expect(getData().values()[0].response).toBe(null);
+    expect(getData().values()[0].rt).toBe(null);
+    expect(getData().values()[0].rt_key_duration).toBe(null);
+
+    // trial 2 is now running with the key still held; a key-repeat must not register
+    await keyDown("a");
+    await expectRunning();
+
+    // releasing the held-over key must not register a response in trial 2
+    await keyUp("a");
+    await expectRunning();
+
+    // a fresh press/release cycle in trial 2 works normally
+    jest.advanceTimersByTime(200);
+    await keyDown("a");
+    jest.advanceTimersByTime(125);
+    await keyUp("a");
+
+    await expectFinished();
+
+    expect(getData().values()[1].response).toBe("a");
+    expect(getData().values()[1].rt).toBe(200);
+    expect(getData().values()[1].rt_key_duration).toBe(125);
   });
 });
