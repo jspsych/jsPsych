@@ -34,7 +34,7 @@
       type: jsPsychCanvasKeyboardResponse,
       stimulus: drawRect,
       choices: ['e','i'],
-      prompt: '<p>Is this a circle or a rectangle? Press <span class="key">e</span> for circle and <span class="key">i</span> for rectangle.</p>',
+      prompt: '<p>Is this a circle or a rectangle? Press <kbd>e</kbd> for circle and <kbd>i</kbd> for rectangle.</p>',
       data: {shape: 'rectangle'}
     };
 
@@ -42,7 +42,7 @@
       type: jsPsychCanvasKeyboardResponse,
       stimulus: drawCirc,
       choices: ['e','i'],
-      prompt: '<p>Is this a circle or a rectangle? Press <span class="key">e</span> for circle and <span class="key">i</span> for rectangle.</p>',
+      prompt: '<p>Is this a circle or a rectangle? Press <kbd>e</kbd> for circle and <kbd>i</kbd> for rectangle.</p>',
       data: {shape: 'circle'}
     };
 
@@ -64,7 +64,7 @@
           ctx.stroke();
         },
         choices: ['r','b'],
-        prompt: '<p>What color is the rectangle? Press <span class="key">r</span> for red and <span class="key">b</span> for blue.</p>',
+        prompt: '<p>What color is the rectangle? Press <kbd>r</kbd> for red and <kbd>b</kbd> for blue.</p>',
         data: {color: jsPsych.timelineVariable('color')}
       }],
       timeline_variables: [

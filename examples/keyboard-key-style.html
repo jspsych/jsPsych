@@ -16,7 +16,7 @@
 
   var trial_1 = {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: '<p>Press <span class="key">space</span> to continue.</p>',
+    stimulus: '<p>Press <kbd>space</kbd> to continue.</p>',
     choices: [' ']
   };
 
@@ -26,7 +26,13 @@
     choices: ['q', 'p']
   };
 
-  jsPsych.run([trial_1, trial_2]);
+  var trial_3 = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<p>The <span class="key">key</span> class works too, as an alternative to the <kbd> element.</p>',
+    choices: "ALL_KEYS"
+  };
+
+  jsPsych.run([trial_1, trial_2, trial_3]);
 
 </script>
 </html>
