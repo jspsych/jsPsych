@@ -13,7 +13,13 @@ export interface GetKeyboardResponseOptions {
   audio_context_start_time?: number;
   allow_held_key?: boolean;
   minimum_valid_rt?: number;
-  release_callback_function?: (info: { key: string; duration: number | null }) => void;
+  wait_for_key_release?: boolean;
+}
+
+interface PendingRelease {
+  key: string;
+  rt: number;
+  callback_function: any;
 }
 
 export class KeyboardListenerAPI {
@@ -29,10 +35,7 @@ export class KeyboardListenerAPI {
   private listeners = new Set<KeyboardListener>();
   private heldKeys = new Set<string>();
   private keyDownTimestamps = new Map<string, number>();
-  private releaseWatchers = new Map<
-    string,
-    (info: { key: string; duration: number | null }) => void
-  >();
+  private pendingReleases = new Map<KeyboardListener, PendingRelease>();
 
   private areRootListenersRegistered = false;
 
@@ -73,13 +76,14 @@ export class KeyboardListenerAPI {
   private rootKeyupListener(e: KeyboardEvent) {
     const key = this.toLowerCaseIfInsensitive(e.key);
 
-    const releaseWatcher = this.releaseWatchers.get(key);
-    if (releaseWatcher) {
-      const pressTimestamp = this.keyDownTimestamps.get(key);
-      const duration =
-        pressTimestamp === undefined ? null : Math.round(performance.now() - pressTimestamp);
-      releaseWatcher({ key: e.key, duration });
-      this.releaseWatchers.delete(key);
+    for (const [listener, pending] of this.pendingReleases) {
+      if (pending.key === key) {
+        const pressTimestamp = this.keyDownTimestamps.get(key);
+        const rt_key_duration =
+          pressTimestamp === undefined ? null : Math.round(performance.now() - pressTimestamp);
+        this.pendingReleases.delete(listener);
+        pending.callback_function({ key: e.key, rt: pending.rt, rt_key_duration });
+      }
     }
 
     this.keyDownTimestamps.delete(key);
@@ -111,7 +115,7 @@ export class KeyboardListenerAPI {
     audio_context_start_time,
     allow_held_key = false,
     minimum_valid_rt = this.minimumValidRt,
-    release_callback_function,
+    wait_for_key_release = false,
   }: GetKeyboardResponseOptions) {
     if (rt_method !== "performance" && rt_method !== "audio") {
       console.log(
@@ -150,14 +154,14 @@ export class KeyboardListenerAPI {
           this.cancelKeyboardResponse(listener);
         }
 
-        if (release_callback_function) {
-          // register a one-shot watcher that fires when this key is released. It is stored
-          // separately from `this.listeners` so that it survives cancelKeyboardResponse and
-          // cancelAllKeyboardResponses (the trial usually ends at keydown, before the keyup).
-          this.releaseWatchers.set(key, release_callback_function);
+        if (wait_for_key_release) {
+          // defer the callback until this key is released, keyed by the listener handle so that
+          // the pending release is cancelled together with the listener (see cancelKeyboardResponse
+          // and cancelAllKeyboardResponses).
+          this.pendingReleases.set(listener, { key, rt, callback_function });
+        } else {
+          callback_function({ key: e.key, rt });
         }
-
-        callback_function({ key: e.key, rt });
       }
     };
 
@@ -168,10 +172,13 @@ export class KeyboardListenerAPI {
   cancelKeyboardResponse(listener: KeyboardListener) {
     // remove the listener from the set of listeners if it is contained
     this.listeners.delete(listener);
+    // also drop any pending release so a deferred callback never fires after cancellation
+    this.pendingReleases.delete(listener);
   }
 
   cancelAllKeyboardResponses() {
     this.listeners.clear();
+    this.pendingReleases.clear();
   }
 
   compareKeys(key1: string | null, key2: string | null) {

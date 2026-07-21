@@ -26,6 +26,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | trial_duration                 | numeric          | null                    | How long to wait for the participant to make a response before ending the trial in milliseconds. If the participant fails to make a response before this timer is reached, the participant's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely. |
 | response_ends_trial            | boolean          | true                    | If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can set this parameter to `false` to force the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete. |
 | response_allowed_while_playing | boolean          | true                    | If true, then responses are allowed while the video is playing. If false, then the video must finish playing before a keyboard response is accepted. Once the video has played all the way through, a valid keyboard response is allowed (including while the video is being re-played via on-screen playback controls). |
+| wait_for_key_release           | boolean          | false                   | If true, the response is not registered until the participant releases the key. The response time (`rt`) still reflects when the key was pressed, and the additional data field `rt_key_duration` records how long the key was held down. Note that when this is true, the trial cannot end until the key is released: with `response_ends_trial: true` the trial ends at the key release, and if the trial ends for another reason (e.g., `trial_duration`) while the key is still held, no response is recorded for the trial. |
 
 ## Data Generated
 
@@ -36,7 +37,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | response  | string | Indicates which key the participant pressed. |
 | rt        | numeric | The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. |
 stimulus | array | The `stimulus` array. This will be encoded as a JSON string when data is saved using the `.json()` or `.csv()` functions. |
-| rt_key_duration | numeric | The duration in milliseconds that the response key was held down, measured from key press to key release. If the key was still held when the trial ended, this value is updated in the data when the key is released. The value is null if the key release is never detected (e.g., the experiment ends before the key is released). |
+| rt_key_duration | numeric | The duration in milliseconds that the response key was held down, measured from key press to key release. Only recorded when `wait_for_key_release` is true; null otherwise or when no response was made. |
 
 ## Simulation Mode
 

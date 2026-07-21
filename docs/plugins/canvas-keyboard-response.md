@@ -17,6 +17,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | stimulus_duration   | numeric          | null               | How long to display the stimulus in milliseconds. The visibility CSS property of the stimulus will be set to `hidden` after this time has elapsed. If this is null, then the stimulus will remain visible until the trial ends. |
 | trial_duration      | numeric          | null               | How long to wait for the participant to make a response before ending the trial in milliseconds. If the participant fails to make a response before this timer is reached, the participant's response will be recorded as null for the trial and the trial will end. If the value of this parameter is null, then the trial will wait for a response indefinitely. |
 | response_ends_trial | boolean          | true               | If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can use this parameter to force the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete. |
+| wait_for_key_release | boolean         | false              | If true, the response is not registered until the participant releases the key. The response time (`rt`) still reflects when the key was pressed, and the additional data field `rt_key_duration` records how long the key was held down. Note that when this is true, the trial cannot end until the key is released: with `response_ends_trial: true` the trial ends at the key release, and if the trial ends for another reason (e.g., `trial_duration`) while the key is still held, no response is recorded for the trial. |
 
 ## Data Generated
 
@@ -26,7 +27,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | --------- | ------- | ---------------------------------------- |
 | response  | string  | Indicates which key the participant pressed. |
 | rt        | numeric | The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. |
-| rt_key_duration | numeric | The duration in milliseconds that the response key was held down, measured from key press to key release. If the key was still held when the trial ended, this value is updated in the data when the key is released. The value is null if the key release is never detected (e.g., the experiment ends before the key is released). |
+| rt_key_duration | numeric | The duration in milliseconds that the response key was held down, measured from key press to key release. Only recorded when `wait_for_key_release` is true; null otherwise or when no response was made. |
 
 Note: the canvas stimulus is *not* included in the trial data because it is a function. Any stimulus information that should be saved in the trial data can be added via the `data` parameter.
 

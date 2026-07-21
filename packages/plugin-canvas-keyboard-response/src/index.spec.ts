@@ -27,6 +27,23 @@ describe("canvas-keyboard-response simulation", () => {
 
     expect(getData().values()[0].rt).toBeGreaterThan(0);
     expect(typeof getData().values()[0].response).toBe("string");
+    expect(getData().values()[0].rt_key_duration).toBe(null);
+  });
+
+  test("data mode records rt_key_duration when wait_for_key_release is true", async () => {
+    const timeline = [
+      {
+        type: canvasKeyboardResponse,
+        stimulus: drawRect,
+        wait_for_key_release: true,
+      },
+    ];
+
+    const { expectFinished, getData } = await simulateTimeline(timeline);
+
+    await expectFinished();
+
+    expect(getData().values()[0].rt).toBeGreaterThan(0);
     expect(typeof getData().values()[0].rt_key_duration).toBe("number");
   });
 

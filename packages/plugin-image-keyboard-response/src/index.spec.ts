@@ -136,35 +136,42 @@ describe("image-keyboard-response", () => {
   });
 });
 
-describe("image-keyboard-response rt_key_duration", () => {
-  test("records key hold duration when the response ends the trial", async () => {
-    const { getData, expectFinished } = await startTimeline([
+describe("image-keyboard-response wait_for_key_release", () => {
+  test("does not end the trial until the key is released and records the hold duration", async () => {
+    const { getData, expectRunning, expectFinished } = await startTimeline([
       {
         type: imageKeyboardResponse,
         stimulus: "../media/blue.png",
         choices: ["a"],
         render_on_canvas: false,
+        wait_for_key_release: true,
       },
     ]);
 
+    jest.advanceTimersByTime(100);
     await keyDown("a");
-    await expectFinished();
+
+    await expectRunning();
 
     jest.advanceTimersByTime(250);
     await keyUp("a");
 
+    await expectFinished();
+
+    expect(getData().values()[0].rt).toBe(100);
     expect(getData().values()[0].rt_key_duration).toBe(250);
   });
 
-  test("records key hold duration when the trial ends by duration", async () => {
+  test("records the hold duration when the trial ends by duration", async () => {
     const { getData, expectFinished } = await startTimeline([
       {
         type: imageKeyboardResponse,
         stimulus: "../media/blue.png",
         choices: ["a"],
+        render_on_canvas: false,
+        wait_for_key_release: true,
         response_ends_trial: false,
         trial_duration: 1000,
-        render_on_canvas: false,
       },
     ]);
 
@@ -178,18 +185,41 @@ describe("image-keyboard-response rt_key_duration", () => {
     expect(getData().values()[0].rt_key_duration).toBe(250);
   });
 
-  test("rt_key_duration is null when no response is given", async () => {
+  test("records a null response when the trial ends while the key is still held", async () => {
     const { getData, expectFinished } = await startTimeline([
       {
         type: imageKeyboardResponse,
         stimulus: "../media/blue.png",
         choices: ["a"],
+        render_on_canvas: false,
+        wait_for_key_release: true,
+        response_ends_trial: false,
         trial_duration: 1000,
+      },
+    ]);
+
+    await keyDown("a");
+    jest.advanceTimersByTime(1000);
+    await expectFinished();
+
+    expect(getData().values()[0].response).toBe(null);
+    expect(getData().values()[0].rt).toBe(null);
+    expect(getData().values()[0].rt_key_duration).toBe(null);
+
+    await keyUp("a");
+  });
+
+  test("rt_key_duration is null on default trials (wait_for_key_release false)", async () => {
+    const { getData, expectFinished } = await startTimeline([
+      {
+        type: imageKeyboardResponse,
+        stimulus: "../media/blue.png",
+        choices: ["a"],
         render_on_canvas: false,
       },
     ]);
 
-    jest.advanceTimersByTime(1000);
+    await keyDown("a");
     await expectFinished();
 
     expect(getData().values()[0].rt_key_duration).toBe(null);

@@ -72,6 +72,18 @@ const info = <const>{
       type: ParameterType.BOOL,
       default: true,
     },
+    /**
+     * If true, the response is not registered until the participant releases the key. The response
+     * time (`rt`) still reflects when the key was pressed, and the additional data field
+     * `rt_key_duration` records how long the key was held down. Note that when this is true, the
+     * trial cannot end until the key is released: with `response_ends_trial: true` the trial ends at
+     * the key release, and if the trial ends for another reason (e.g., `trial_duration`) while the
+     * key is still held, no response is recorded for the trial.
+     */
+    wait_for_key_release: {
+      type: ParameterType.BOOL,
+      default: false,
+    },
   },
   data: {
     /** The path of the image that was displayed. */
@@ -87,7 +99,7 @@ const info = <const>{
     rt: {
       type: ParameterType.INT,
     },
-    /** The duration in milliseconds that the response key was held down, measured from key press to key release. If the key was still held when the trial ended, this value is updated in the data when the key is released. The value is null if the key release is never detected (e.g., the experiment ends before the key is released). */
+    /** The duration in milliseconds that the response key was held down, measured from key press to key release. Only recorded when `wait_for_key_release` is true; null otherwise or when no response was made. */
     rt_key_duration: {
       type: ParameterType.INT,
     },
@@ -220,10 +232,6 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       rt_key_duration: null,
     };
 
-    // the global trial index, captured in end_trial so the release callback can update the data row
-    // if the response key is released after the trial has ended
-    var trial_index;
-
     // function to end trial when it is time
     const end_trial = () => {
       // kill keyboard listeners
@@ -231,16 +239,12 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
       }
 
-      // capture the trial index before the trial ends so that the release callback can update the
-      // data row if the response key is released after the trial has ended
-      trial_index = this.jsPsych.getProgress().current_trial_global;
-
       // gather the data to store for the trial
       var trial_data = {
         rt: response.rt,
         stimulus: trial.stimulus,
         response: response.key,
-        rt_key_duration: response.rt_key_duration ?? null,
+        rt_key_duration: response.rt_key_duration,
       };
 
       // move on to the next trial
@@ -256,30 +260,15 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
       // only record the first response
       if (response.key == null) {
-        response = info;
+        response = {
+          rt: info.rt,
+          key: info.key,
+          rt_key_duration: info.rt_key_duration ?? null,
+        };
       }
 
       if (trial.response_ends_trial) {
         end_trial();
-      }
-    };
-
-    // function to handle the release of the response key
-    const after_key_release = (info) => {
-      // only record the duration for the first recorded response key
-      if (!this.jsPsych.pluginAPI.compareKeys(info.key, response.key)) {
-        return;
-      }
-
-      if (typeof trial_index === "undefined") {
-        // trial is still running
-        response.rt_key_duration = info.duration;
-      } else {
-        // trial has already ended, so update the data row that was already written
-        const data = this.jsPsych.data.get().filter({ trial_index }).values()[0];
-        if (data) {
-          data.rt_key_duration = info.duration;
-        }
       }
     };
 
@@ -291,7 +280,7 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         rt_method: "performance",
         persist: false,
         allow_held_key: false,
-        release_callback_function: after_key_release,
+        wait_for_key_release: trial.wait_for_key_release,
       });
     }
 
@@ -358,7 +347,7 @@ class ImageKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       rt_key_duration: null,
     };
     default_data.rt_key_duration =
-      default_data.rt === null
+      default_data.rt === null || !trial.wait_for_key_release
         ? null
         : this.jsPsych.randomization.sampleExGaussian(150, 30, 1 / 100, true);
 
