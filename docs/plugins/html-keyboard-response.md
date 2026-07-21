@@ -27,6 +27,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | response  | string  | Indicates which key the participant pressed. |
 | rt        | numeric | The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first appears on the screen until the participant's response. |
 | stimulus  | string  | The HTML content that was displayed on the screen. |
+| rt_key_duration | numeric | The duration in milliseconds that the response key was held down, measured from key press to key release. If the key was still held when the trial ended, this value is updated in the data when the key is released. The value is null if the key release is never detected (e.g., the experiment ends before the key is released). |
 
 ## Install
 

@@ -13,6 +13,7 @@ export interface GetKeyboardResponseOptions {
   audio_context_start_time?: number;
   allow_held_key?: boolean;
   minimum_valid_rt?: number;
+  release_callback_function?: (info: { key: string; duration: number | null }) => void;
 }
 
 export class KeyboardListenerAPI {
@@ -27,6 +28,11 @@ export class KeyboardListenerAPI {
 
   private listeners = new Set<KeyboardListener>();
   private heldKeys = new Set<string>();
+  private keyDownTimestamps = new Map<string, number>();
+  private releaseWatchers = new Map<
+    string,
+    (info: { key: string; duration: number | null }) => void
+  >();
 
   private areRootListenersRegistered = false;
 
@@ -46,12 +52,18 @@ export class KeyboardListenerAPI {
   }
 
   private rootKeydownListener(e: KeyboardEvent) {
+    const key = this.toLowerCaseIfInsensitive(e.key);
+    // Record the press timestamp only for the initial keydown, not for key-repeat events of a key
+    // that is already held down.
+    if (!this.heldKeys.has(key)) {
+      this.keyDownTimestamps.set(key, performance.now());
+    }
     // Iterate over a static copy of the listeners set because listeners might add other listeners
     // that we do not want to be included in the loop
     for (const listener of [...this.listeners]) {
       listener(e);
     }
-    this.heldKeys.add(this.toLowerCaseIfInsensitive(e.key));
+    this.heldKeys.add(key);
   }
 
   private toLowerCaseIfInsensitive(string: string) {
@@ -59,7 +71,19 @@ export class KeyboardListenerAPI {
   }
 
   private rootKeyupListener(e: KeyboardEvent) {
-    this.heldKeys.delete(this.toLowerCaseIfInsensitive(e.key));
+    const key = this.toLowerCaseIfInsensitive(e.key);
+
+    const releaseWatcher = this.releaseWatchers.get(key);
+    if (releaseWatcher) {
+      const pressTimestamp = this.keyDownTimestamps.get(key);
+      const duration =
+        pressTimestamp === undefined ? null : Math.round(performance.now() - pressTimestamp);
+      releaseWatcher({ key: e.key, duration });
+      this.releaseWatchers.delete(key);
+    }
+
+    this.keyDownTimestamps.delete(key);
+    this.heldKeys.delete(key);
   }
 
   private isResponseValid(validResponses: ValidResponses, allowHeldKey: boolean, key: string) {
@@ -87,6 +111,7 @@ export class KeyboardListenerAPI {
     audio_context_start_time,
     allow_held_key = false,
     minimum_valid_rt = this.minimumValidRt,
+    release_callback_function,
   }: GetKeyboardResponseOptions) {
     if (rt_method !== "performance" && rt_method !== "audio") {
       console.log(
@@ -123,6 +148,13 @@ export class KeyboardListenerAPI {
         if (!persist) {
           // remove keyboard listener if it exists
           this.cancelKeyboardResponse(listener);
+        }
+
+        if (release_callback_function) {
+          // register a one-shot watcher that fires when this key is released. It is stored
+          // separately from `this.listeners` so that it survives cancelKeyboardResponse and
+          // cancelAllKeyboardResponses (the trial usually ends at keydown, before the keyup).
+          this.releaseWatchers.set(key, release_callback_function);
         }
 
         callback_function({ key: e.key, rt });

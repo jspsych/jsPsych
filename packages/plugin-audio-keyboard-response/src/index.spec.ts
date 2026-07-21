@@ -1,6 +1,13 @@
 jest.mock("../../jspsych/src/modules/plugin-api/AudioPlayer");
 
-import { flushPromises, pressKey, simulateTimeline, startTimeline } from "@jspsych/test-utils";
+import {
+  flushPromises,
+  keyDown,
+  keyUp,
+  pressKey,
+  simulateTimeline,
+  startTimeline,
+} from "@jspsych/test-utils";
 import { initJsPsych } from "jspsych";
 
 //@ts-expect-error mock
@@ -123,6 +130,78 @@ describe("audio-keyboard-response", () => {
     expect(mockStop).toHaveBeenCalled();
 
     await expectFinished();
+  });
+});
+
+describe("audio-keyboard-response rt_key_duration", () => {
+  it("records key hold duration when the response ends the trial", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { getData, expectFinished } = await startTimeline(
+      [
+        {
+          type: audioKeyboardResponse,
+          stimulus: "foo.mp3",
+          choices: ["a"],
+        },
+      ],
+      jsPsych
+    );
+
+    await keyDown("a");
+    await expectFinished();
+
+    jest.advanceTimersByTime(250);
+    await keyUp("a");
+
+    expect(getData().values()[0].rt_key_duration).toBe(250);
+  });
+
+  it("records key hold duration when the trial ends by duration", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { getData, expectFinished } = await startTimeline(
+      [
+        {
+          type: audioKeyboardResponse,
+          stimulus: "foo.mp3",
+          choices: ["a"],
+          response_ends_trial: false,
+          trial_duration: 1000,
+        },
+      ],
+      jsPsych
+    );
+
+    await keyDown("a");
+    jest.advanceTimersByTime(250);
+    await keyUp("a");
+
+    jest.advanceTimersByTime(750);
+    await expectFinished();
+
+    expect(getData().values()[0].rt_key_duration).toBe(250);
+  });
+
+  it("rt_key_duration is null when no response is given", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { getData, expectFinished } = await startTimeline(
+      [
+        {
+          type: audioKeyboardResponse,
+          stimulus: "foo.mp3",
+          choices: ["a"],
+          trial_duration: 1000,
+        },
+      ],
+      jsPsych
+    );
+
+    jest.advanceTimersByTime(1000);
+    await expectFinished();
+
+    expect(getData().values()[0].rt_key_duration).toBe(null);
   });
 });
 

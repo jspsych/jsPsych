@@ -79,6 +79,10 @@ const info = <const>{
     stimulus: {
       type: ParameterType.STRING,
     },
+    /** The duration in milliseconds that the response key was held down, measured from key press to key release. If the key was still held when the trial ended, this value is updated in the data when the key is released. The value is null if the key release is never detected (e.g., the experiment ends before the key is released). */
+    rt_key_duration: {
+      type: ParameterType.INT,
+    },
   },
   // prettier-ignore
   citations: '__CITATIONS__',
@@ -113,7 +117,12 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     var response = {
       rt: null,
       key: null,
+      rt_key_duration: null,
     };
+
+    // the global trial index, captured in end_trial so the release callback can update the data row
+    // if the response key is released after the trial has ended
+    var trial_index;
 
     // function to end trial when it is time
     const end_trial = () => {
@@ -122,11 +131,16 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         this.jsPsych.pluginAPI.cancelKeyboardResponse(keyboardListener);
       }
 
+      // capture the trial index before the trial ends so that the release callback can update the
+      // data row if the response key is released after the trial has ended
+      trial_index = this.jsPsych.getProgress().current_trial_global;
+
       // gather the data to store for the trial
       var trial_data = {
         rt: response.rt,
         stimulus: trial.stimulus,
         response: response.key,
+        rt_key_duration: response.rt_key_duration ?? null,
       };
 
       // move on to the next trial
@@ -150,6 +164,25 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       }
     };
 
+    // function to handle the release of the response key
+    const after_key_release = (info) => {
+      // only record the duration for the first recorded response key
+      if (!this.jsPsych.pluginAPI.compareKeys(info.key, response.key)) {
+        return;
+      }
+
+      if (typeof trial_index === "undefined") {
+        // trial is still running
+        response.rt_key_duration = info.duration;
+      } else {
+        // trial has already ended, so update the data row that was already written
+        const data = this.jsPsych.data.get().filter({ trial_index }).values()[0];
+        if (data) {
+          data.rt_key_duration = info.duration;
+        }
+      }
+    };
+
     // start the response listener
     if (trial.choices != "NO_KEYS") {
       var keyboardListener = this.jsPsych.pluginAPI.getKeyboardResponse({
@@ -158,6 +191,7 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         rt_method: "performance",
         persist: false,
         allow_held_key: false,
+        release_callback_function: after_key_release,
       });
     }
 
@@ -196,7 +230,12 @@ class HtmlKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       stimulus: trial.stimulus,
       rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
       response: this.jsPsych.pluginAPI.getValidKey(trial.choices),
+      rt_key_duration: null,
     };
+    default_data.rt_key_duration =
+      default_data.rt === null
+        ? null
+        : this.jsPsych.randomization.sampleExGaussian(150, 30, 1 / 100, true);
 
     const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
 

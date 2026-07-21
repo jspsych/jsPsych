@@ -27,6 +27,7 @@ describe("canvas-keyboard-response simulation", () => {
 
     expect(getData().values()[0].rt).toBeGreaterThan(0);
     expect(typeof getData().values()[0].response).toBe("string");
+    expect(typeof getData().values()[0].rt_key_duration).toBe("number");
   });
 
   // can't run this until we mock canvas elements.

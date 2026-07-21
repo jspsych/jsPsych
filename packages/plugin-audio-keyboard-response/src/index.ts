@@ -81,6 +81,10 @@ const info = <const>{
     stimulus: {
       type: ParameterType.STRING,
     },
+    /** The duration in milliseconds that the response key was held down, measured from key press to key release. If the key was still held when the trial ended, this value is updated in the data when the key is released. The value is null if the key release is never detected (e.g., the experiment ends before the key is released). */
+    rt_key_duration: {
+      type: ParameterType.INT,
+    },
   },
   // prettier-ignore
   citations: '__CITATIONS__',
@@ -110,9 +114,19 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   private audio: AudioPlayerInterface;
   private params: TrialType<Info>;
   private display: HTMLElement;
-  private response: { rt: number; key: string } = { rt: null, key: null };
+  private response: { rt: number; key: string; rt_key_duration?: number } = {
+    rt: null,
+    key: null,
+    rt_key_duration: null,
+  };
+  private trial_index: number;
   private startTime: number;
-  private finish: ({}: { rt: number; response: string; stimulus: string }) => void;
+  private finish: ({}: {
+    rt: number;
+    response: string;
+    stimulus: string;
+    rt_key_duration: number;
+  }) => void;
 
   constructor(private jsPsych: JsPsych) {
     autoBind(this);
@@ -176,11 +190,16 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     // kill keyboard listeners
     this.jsPsych.pluginAPI.cancelAllKeyboardResponses();
 
+    // capture the trial index before the trial ends so that the release callback can update the
+    // data row if the response key is released after the trial has ended
+    this.trial_index = this.jsPsych.getProgress().current_trial_global;
+
     // gather the data to store for the trial
     var trial_data = {
       rt: this.response.rt,
       response: this.response.key,
       stimulus: this.params.stimulus,
+      rt_key_duration: this.response.rt_key_duration ?? null,
     };
 
     // clear the display
@@ -197,6 +216,24 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     }
   }
 
+  private after_key_release(info: { key: string; duration: number | null }) {
+    // only record the duration for the first recorded response key
+    if (!this.jsPsych.pluginAPI.compareKeys(info.key, this.response.key)) {
+      return;
+    }
+
+    if (typeof this.trial_index === "undefined") {
+      // trial is still running
+      this.response.rt_key_duration = info.duration;
+    } else {
+      // trial has already ended, so update the data row that was already written
+      const data = this.jsPsych.data.get().filter({ trial_index: this.trial_index }).values()[0];
+      if (data) {
+        data.rt_key_duration = info.duration;
+      }
+    }
+  }
+
   private setup_keyboard_listener() {
     // start the response listener
     if (this.jsPsych.pluginAPI.useWebaudio) {
@@ -208,6 +245,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         allow_held_key: false,
         audio_context: this.jsPsych.pluginAPI.audioContext(),
         audio_context_start_time: this.startTime,
+        release_callback_function: this.after_key_release,
       });
     } else {
       this.jsPsych.pluginAPI.getKeyboardResponse({
@@ -216,6 +254,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         rt_method: "performance",
         persist: false,
         allow_held_key: false,
+        release_callback_function: this.after_key_release,
       });
     }
   }
@@ -273,7 +312,12 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       stimulus: trial.stimulus,
       rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
       response: this.jsPsych.pluginAPI.getValidKey(trial.choices),
+      rt_key_duration: null,
     };
+    default_data.rt_key_duration =
+      default_data.rt === null
+        ? null
+        : this.jsPsych.randomization.sampleExGaussian(150, 30, 1 / 100, true);
 
     const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
 
