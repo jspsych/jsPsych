@@ -112,6 +112,27 @@
   cursor: not-allowed;
 }
 
+/* Keyboard keys, e.g., press <span class="key">space</span> in instructions */
+
+.jspsych-display-element kbd,
+.jspsych-display-element .key {
+  display: inline-block;
+  min-width: 1em;
+  padding: 0.15em 0.5em;
+  margin: 0 0.1em 2px;
+  font-family: "Open Sans", "Arial", sans-serif;
+  font-size: 0.8em;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  color: #333;
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 0 #ccc;
+}
+
 /* custom style for input[type="range] (slider) to improve alignment between positions and labels */
 
 .jspsych-slider {

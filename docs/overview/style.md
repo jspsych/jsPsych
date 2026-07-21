@@ -274,6 +274,8 @@ As another example, most jsPsych buttons have the class "jspsych-btn", so you ca
 }
 ```
 
+jspsych.css also includes a style for rendering text as a keyboard key, which can be useful when writing instructions that refer to specific keys. Wrap the key name in a &lt;span&gt; with the class "key" (or use a &lt;kbd&gt; tag) to have it rendered like a keycap, e.g. `Press <span class="key">space</span> to continue.`
+
 You can also use the developer tools to change an element's CSS and immediately see the effect that the changes will have on the page. These changes are just temporary, so you will still need to use one of methods described above to add the CSS changes to your experiment. However, making changes in the developer tools is very useful for figuring out which CSS properties to change and which values to use. This area of the developer tools also shows what styles are currently applied to the element and where those style rules are coming from. 
 
 
