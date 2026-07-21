@@ -127,14 +127,14 @@ var instructions = {
   stimulus: `
     <p>In this experiment, a circle will appear in the center 
     of the screen.</p><p>If the circle is <strong>blue</strong>, 
-    press the letter F on the keyboard as fast as you can.</p>
-    <p>If the circle is <strong>orange</strong>, press the letter J 
+    press the letter <span class="key">F</span> on the keyboard as fast as you can.</p>
+    <p>If the circle is <strong>orange</strong>, press the letter <span class="key">J</span> 
     as fast as you can.</p>
     <div style='width: 700px;'>
     <div style='float: left;'><img src='img/blue.png'></img>
-    <p class='small'><strong>Press the F key</strong></p></div>
+    <p class='small'><strong>Press the <span class="key">F</span> key</strong></p></div>
     <div style='float: right;'><img src='img/orange.png'></img>
-    <p class='small'><strong>Press the J key</strong></p></div>
+    <p class='small'><strong>Press the <span class="key">J</span> key</strong></p></div>
     </div>
     <p>Press any key to begin.</p>
   `,
@@ -192,14 +192,14 @@ timeline.push(instructions);
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
-            press the letter F on the keyboard as fast as you can.</p>
-            <p>If the circle is <strong>orange</strong>, press the letter J 
+            press the letter <span class="key">F</span> on the keyboard as fast as you can.</p>
+            <p>If the circle is <strong>orange</strong>, press the letter <span class="key">J</span> 
             as fast as you can.</p>
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
-            <p class='small'><strong>Press the F key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">F</span> key</strong></p></div>
             <div style='float: right;'><img src='img/orange.png'></img>
-            <p class='small'><strong>Press the J key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">J</span> key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
           `,
@@ -288,14 +288,14 @@ timeline.push(blue_trial, orange_trial);
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
-            press the letter F on the keyboard as fast as you can.</p>
-            <p>If the circle is <strong>orange</strong>, press the letter J 
+            press the letter <span class="key">F</span> on the keyboard as fast as you can.</p>
+            <p>If the circle is <strong>orange</strong>, press the letter <span class="key">J</span> 
             as fast as you can.</p>
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
-            <p class='small'><strong>Press the F key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">F</span> key</strong></p></div>
             <div style='float: right;'><img src='img/orange.png'></img>
-            <p class='small'><strong>Press the J key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">J</span> key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
           `,
@@ -405,14 +405,14 @@ timeline.push(preload);
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
-            press the letter F on the keyboard as fast as you can.</p>
-            <p>If the circle is <strong>orange</strong>, press the letter J 
+            press the letter <span class="key">F</span> on the keyboard as fast as you can.</p>
+            <p>If the circle is <strong>orange</strong>, press the letter <span class="key">J</span> 
             as fast as you can.</p>
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
-            <p class='small'><strong>Press the F key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">F</span> key</strong></p></div>
             <div style='float: right;'><img src='img/orange.png'></img>
-            <p class='small'><strong>Press the J key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">J</span> key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
           `,
@@ -538,14 +538,14 @@ What happens when the experiment reaches the test procedure? jsPsych will run th
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
-            press the letter F on the keyboard as fast as you can.</p>
-            <p>If the circle is <strong>orange</strong>, press the letter J 
+            press the letter <span class="key">F</span> on the keyboard as fast as you can.</p>
+            <p>If the circle is <strong>orange</strong>, press the letter <span class="key">J</span> 
             as fast as you can.</p>
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
-            <p class='small'><strong>Press the F key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">F</span> key</strong></p></div>
             <div style='float: right;'><img src='img/orange.png'></img>
-            <p class='small'><strong>Press the J key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">J</span> key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
           `,
@@ -661,14 +661,14 @@ var test_procedure = {
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
-            press the letter F on the keyboard as fast as you can.</p>
-            <p>If the circle is <strong>orange</strong>, press the letter J 
+            press the letter <span class="key">F</span> on the keyboard as fast as you can.</p>
+            <p>If the circle is <strong>orange</strong>, press the letter <span class="key">J</span> 
             as fast as you can.</p>
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
-            <p class='small'><strong>Press the F key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">F</span> key</strong></p></div>
             <div style='float: right;'><img src='img/orange.png'></img>
-            <p class='small'><strong>Press the J key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">J</span> key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
           `,
@@ -773,14 +773,14 @@ In the code above, we replaced the `trial_duration: 1000` parameter in `fixation
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
-            press the letter F on the keyboard as fast as you can.</p>
-            <p>If the circle is <strong>orange</strong>, press the letter J 
+            press the letter <span class="key">F</span> on the keyboard as fast as you can.</p>
+            <p>If the circle is <strong>orange</strong>, press the letter <span class="key">J</span> 
             as fast as you can.</p>
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
-            <p class='small'><strong>Press the F key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">F</span> key</strong></p></div>
             <div style='float: right;'><img src='img/orange.png'></img>
-            <p class='small'><strong>Press the J key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">J</span> key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
           `,
@@ -886,14 +886,14 @@ var jsPsych = initJsPsych({
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
-            press the letter F on the keyboard as fast as you can.</p>
-            <p>If the circle is <strong>orange</strong>, press the letter J 
+            press the letter <span class="key">F</span> on the keyboard as fast as you can.</p>
+            <p>If the circle is <strong>orange</strong>, press the letter <span class="key">J</span> 
             as fast as you can.</p>
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
-            <p class='small'><strong>Press the F key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">F</span> key</strong></p></div>
             <div style='float: right;'><img src='img/orange.png'></img>
-            <p class='small'><strong>Press the J key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">J</span> key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
           `,
@@ -1043,14 +1043,14 @@ var fixation = {
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
-            press the letter F on the keyboard as fast as you can.</p>
-            <p>If the circle is <strong>orange</strong>, press the letter J 
+            press the letter <span class="key">F</span> on the keyboard as fast as you can.</p>
+            <p>If the circle is <strong>orange</strong>, press the letter <span class="key">J</span> 
             as fast as you can.</p>
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
-            <p class='small'><strong>Press the F key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">F</span> key</strong></p></div>
             <div style='float: right;'><img src='img/orange.png'></img>
-            <p class='small'><strong>Press the J key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">J</span> key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
           `,
@@ -1184,14 +1184,14 @@ The `data.response` value is a string representation of the key the participant 
           stimulus: `
             <p>In this experiment, a circle will appear in the center 
             of the screen.</p><p>If the circle is <strong>blue</strong>, 
-            press the letter F on the keyboard as fast as you can.</p>
-            <p>If the circle is <strong>orange</strong>, press the letter J 
+            press the letter <span class="key">F</span> on the keyboard as fast as you can.</p>
+            <p>If the circle is <strong>orange</strong>, press the letter <span class="key">J</span> 
             as fast as you can.</p>
             <div style='width: 700px;'>
             <div style='float: left;'><img src='img/blue.png'></img>
-            <p class='small'><strong>Press the F key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">F</span> key</strong></p></div>
             <div style='float: right;'><img src='img/orange.png'></img>
-            <p class='small'><strong>Press the J key</strong></p></div>
+            <p class='small'><strong>Press the <span class="key">J</span> key</strong></p></div>
             </div>
             <p>Press any key to begin.</p>
           `,
@@ -1334,14 +1334,14 @@ This code is available in the `/examples` folder in the jsPsych release download
       stimulus: `
         <p>In this experiment, a circle will appear in the center 
         of the screen.</p><p>If the circle is <strong>blue</strong>, 
-        press the letter F on the keyboard as fast as you can.</p>
-        <p>If the circle is <strong>orange</strong>, press the letter J 
+        press the letter <span class="key">F</span> on the keyboard as fast as you can.</p>
+        <p>If the circle is <strong>orange</strong>, press the letter <span class="key">J</span> 
         as fast as you can.</p>
         <div style='width: 700px;'>
         <div style='float: left;'><img src='img/blue.png'></img>
-        <p class='small'><strong>Press the F key</strong></p></div>
+        <p class='small'><strong>Press the <span class="key">F</span> key</strong></p></div>
         <div style='float: right;'><img src='img/orange.png'></img>
-        <p class='small'><strong>Press the J key</strong></p></div>
+        <p class='small'><strong>Press the <span class="key">J</span> key</strong></p></div>
         </div>
         <p>Press any key to begin.</p>
       `,
