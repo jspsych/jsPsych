@@ -80,8 +80,8 @@ import visualSearchCircle from '@jspsych/plugin-visual-search-circle';
         ```javascript
         var instructions = {
           type: jsPsychHtmlButtonResponse,
-          stimulus: `<p>Press J if there is a backwards N.</p>
-            <p>Press F if all the Ns are in the normal orientation.</p>`,
+          stimulus: `<p>Press <kbd>J</kbd> if there is a backwards N.</p>
+            <p>Press <kbd>F</kbd> if all the Ns are in the normal orientation.</p>`,
           choices: ['Continue']
         }
 
@@ -108,8 +108,8 @@ import visualSearchCircle from '@jspsych/plugin-visual-search-circle';
         ```javascript
         var instructions = {
           type: jsPsychHtmlButtonResponse,
-          stimulus: `<p>Press E if there is an elephant in the group.</p>
-            <p>Press N if there is no elephant in the group.</p>`,
+          stimulus: `<p>Press <kbd>E</kbd> if there is an elephant in the group.</p>
+            <p>Press <kbd>N</kbd> if there is no elephant in the group.</p>`,
           choices: ['Continue']
         }
 

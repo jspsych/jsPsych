@@ -62,7 +62,7 @@ import reconstruction from '@jspsych/plugin-reconstruction';
             var size = 50 + Math.floor(param*250);
             var html = '<div style="display: block; margin: auto; height: 300px; width: 300px; position: relative;">'+
             '<div style="display: block; position: absolute; top: '+(150 - size/2)+'px; left:'+(150 - size/2)+'px; background-color: #000000; '+
-            'width: '+size+'px; height: '+size+'px;"></div></div><p>Press "h" to make the square larger. Press "g" to make the square smaller.</p>'+
+            'width: '+size+'px; height: '+size+'px;"></div></div><p>Press <kbd>h</kbd> to make the square larger. Press <kbd>g</kbd> to make the square smaller.</p>'+
             '<p>When the square is the same size as the previous one, click Continue.</p>';
             return html;
         }
@@ -74,7 +74,7 @@ import reconstruction from '@jspsych/plugin-reconstruction';
             'width: 210px; height: 210px;"></div></div>',
             choices: ['c'],
             post_trial_gap: 1250,
-            prompt: '<p>Study the size of this square carefully. On the next screen you will have to recreate it. When you are ready, press "c".</p>'
+            prompt: '<p>Study the size of this square carefully. On the next screen you will have to recreate it. When you are ready, press <kbd>c</kbd>.</p>'
         }
 
         var reconstruction = {

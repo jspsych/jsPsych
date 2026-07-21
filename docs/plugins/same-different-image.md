@@ -74,8 +74,8 @@ import sameDifferentImage from '@jspsych/plugin-same-different-image';
             'img/happy_face_1.jpg', 
             'img/sad_face_3.jpg'
           ],
-          prompt: `<p>Press s if the faces had the same emotional expression.</p>
-            <p>Press d if the faces had different emotional expressions.</p>`,
+          prompt: `<p>Press <kbd>s</kbd> if the faces had the same emotional expression.</p>
+            <p>Press <kbd>d</kbd> if the faces had different emotional expressions.</p>`,
           same_key: 's',
           different_key: 'd',
           first_stim_duration: 800,
