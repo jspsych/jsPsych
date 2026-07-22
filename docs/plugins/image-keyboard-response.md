@@ -65,7 +65,7 @@ import imageKeyboardResponse from '@jspsych/plugin-image-keyboard-response';
             type: jsPsychImageKeyboardResponse,
             stimulus: 'img/happy_face_1.png',
             choices: ['e', 'i'],
-            prompt: "<p>Is this person happy or sad? Press 'e' for happy and 'i' for sad.</p>",
+            prompt: "<p>Is this person happy or sad? Press <kbd>e</kbd> for happy and <kbd>i</kbd> for sad.</p>",
         };
         ```
     === "Demo"

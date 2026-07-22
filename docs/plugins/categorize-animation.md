@@ -70,7 +70,7 @@ import categorizeAnimation from '@jspsych/plugin-categorize-animation';
                 'img/happy_face_3.jpg', 
                 'img/happy_face_4.jpg'
             ],
-            prompt: `Press the P or Q key.`,
+            prompt: `Press the <kbd>P</kbd> or <kbd>Q</kbd> key.`,
             choices: ['p', 'q'],
             key_answer: 'q', 
         };
@@ -96,7 +96,7 @@ import categorizeAnimation from '@jspsych/plugin-categorize-animation';
             type: jsPsychCategorizeAnimation,
             stimuli: images,
             choices: ['p', 'q'],
-            prompt: `Press the P or Q key.`,
+            prompt: `Press the <kbd>P</kbd> or <kbd>Q</kbd> key.`,
             key_answer: 'q', 
             text_answer: 'Dax', // the label for the sequence is 'Dax'
             correct_text: 'Correct! This was a %ANS%.',

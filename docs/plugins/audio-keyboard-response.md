@@ -72,7 +72,7 @@ import audioKeyboardResponse from '@jspsych/plugin-audio-keyboard-response';
 			type: jsPsychAudioKeyboardResponse,
 			stimulus: 'sound/tone.mp3',
 			choices: ['e', 'i'],
-			prompt: "<p>Is the pitch high or low? Press 'e' for low and 'i' for high.</p>",
+			prompt: "<p>Is the pitch high or low? Press <kbd>e</kbd> for low and <kbd>i</kbd> for high.</p>",
 			response_ends_trial: true
 		};
 		```

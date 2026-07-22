@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../packages/jspsych/dist/index.browser.js"></script>
+  <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+  <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+</head>
+<body></body>
+<script>
+
+  var jsPsych = initJsPsych({
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+
+  var trial_1 = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<p>Press <kbd>space</kbd> to continue.</p>',
+    choices: [' ']
+  };
+
+  var trial_2 = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<p>Press <kbd>Q</kbd> if you saw a match, or <kbd>P</kbd> if you did not.</p>',
+    choices: ['q', 'p']
+  };
+
+  var trial_3 = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: '<p>The <span class="jspsych-key">key</span> class works too, as an alternative to the &lt;kbd&gt; element.</p>',
+    choices: "ALL_KEYS"
+  };
+
+  jsPsych.run([trial_1, trial_2, trial_3]);
+
+</script>
+</html>

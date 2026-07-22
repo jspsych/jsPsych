@@ -69,7 +69,7 @@ import canvasKeyboardResponse from '@jspsych/plugin-canvas-keyboard-response';
             canvas_size: [300, 300],
             stimulus: drawRect,
             choices: ['e','i'],
-            prompt: '<p>Is this a circle or a rectangle? Press "e" for circle and "i" for rectangle.</p>',
+            prompt: '<p>Is this a circle or a rectangle? Press <kbd>e</kbd> for circle and <kbd>i</kbd> for rectangle.</p>',
             data: {shape: 'rectangle'}
         }
         ```

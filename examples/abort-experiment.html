@@ -28,7 +28,7 @@
     var block = {
       type: jsPsychImageKeyboardResponse,
       choices: ['y','n'],
-      prompt: '<p>Press "y" to continue. Press "n" to end the experiment.</p>',
+      prompt: '<p>Press <kbd>y</kbd> to continue. Press <kbd>n</kbd> to end the experiment.</p>',
       stimulus_width: 300,
       on_finish: function(data) {
         if (jsPsych.pluginAPI.compareKeys(data.response, 'n')) {

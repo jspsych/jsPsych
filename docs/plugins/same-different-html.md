@@ -75,8 +75,8 @@ import sameDifferentHtml from '@jspsych/plugin-same-different-html';
             '<p style="font-size:30px;">Climbing</p>', 
             '<p style="font-size:30px;">Walking</p>'
           ],
-          prompt: `<p>Press 's' if the activities require the same amount of physical exertion.</p>
-            <p>Press 'd' if the activities require different amount of physical exertion.</p>`,
+          prompt: `<p>Press <kbd>s</kbd> if the activities require the same amount of physical exertion.</p>
+            <p>Press <kbd>d</kbd> if the activities require different amount of physical exertion.</p>`,
           same_key: 's',
           different_key: 'd',
           first_stim_duration: 800,
