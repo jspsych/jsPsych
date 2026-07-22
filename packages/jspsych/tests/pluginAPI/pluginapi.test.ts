@@ -350,6 +350,51 @@ describe("#getKeyboardResponse wait_for_key_release", () => {
     );
   });
 
+  test("case-sensitive responses: the release is matched by physical key, so releasing Shift before the response key does not orphan the pending release", async () => {
+    new KeyboardListenerAPI(getRootElement, true).getKeyboardResponse({
+      callback_function: callback,
+      valid_responses: ["A"],
+      wait_for_key_release: true,
+    });
+
+    // press Shift+A, then release Shift first: the A key's keyup arrives as e.key = "a"
+    await keyDown("Shift", "ShiftLeft");
+    await keyDown("A", "KeyA");
+    expect(callback).toHaveBeenCalledTimes(0);
+
+    jest.advanceTimersByTime(100);
+    await keyUp("Shift", "ShiftLeft");
+    await keyUp("a", "KeyA");
+
+    // the release fires and reports the key as it was at keydown
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith({
+      key: "A",
+      rt: expect.any(Number),
+      rt_key_duration: 100,
+    });
+  });
+
+  test("reports the keydown's key value even if the shift state changes before the release", async () => {
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+    });
+
+    // press "a", then press Shift while holding it: the A key's keyup arrives as e.key = "A"
+    await keyDown("a", "KeyA");
+    jest.advanceTimersByTime(50);
+    await keyDown("Shift", "ShiftLeft");
+    await keyUp("A", "KeyA");
+
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith({
+      key: "a",
+      rt: expect.any(Number),
+      rt_key_duration: 50,
+    });
+  });
+
   test("persist: true: a second press before the first is released supersedes the first; only the latest press's release fires", async () => {
     new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
       callback_function: callback,
