@@ -1,5 +1,11 @@
 # @jspsych/config
 
+## 3.3.4
+
+### Patch Changes
+
+- [#3696](https://github.com/jspsych/jsPsych/pull/3696) [`972548ec4c71388919f39b701b515f1d5c2793d3`](https://github.com/jspsych/jsPsych/commit/972548ec4c71388919f39b701b515f1d5c2793d3) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Bump build-time dependencies to clear security advisories: `esbuild` to `^0.25.0` (dev-server CORS advisory), `rollup` to `^4.59.0` (path-traversal and DOM-clobbering advisories), and `rollup-plugin-esbuild` to `6.2.1`. These are build-tooling dependencies, so there is no change to runtime behavior.
+
 ## 3.3.3
 
 ### Patch Changes
