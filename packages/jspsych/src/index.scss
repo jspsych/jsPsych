@@ -115,7 +115,7 @@
 /* Keyboard keys, e.g., press <kbd>space</kbd> in instructions */
 
 .jspsych-display-element kbd,
-.jspsych-display-element .key {
+.jspsych-display-element .jspsych-key {
   display: inline-block;
   min-width: 1em;
   padding: 0.15em 0.5em;
