@@ -349,6 +349,31 @@ describe("#getKeyboardResponse wait_for_key_release", () => {
       expect.objectContaining({ key: "a", rt_key_duration: 250 })
     );
   });
+
+  test("persist: true: a second press before the first is released supersedes the first; only the latest press's release fires", async () => {
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+      persist: true,
+    });
+
+    // press "a", then press "b" before releasing "a"
+    await keyDown("a");
+    jest.advanceTimersByTime(100);
+    await keyDown("b");
+    jest.advanceTimersByTime(100);
+
+    // releasing "a" does not fire: it was superseded by the "b" press
+    await keyUp("a");
+    expect(callback).toHaveBeenCalledTimes(0);
+
+    // releasing "b" fires with the duration measured from the "b" press
+    await keyUp("b");
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ key: "b", rt_key_duration: 100 })
+    );
+  });
 });
 
 describe("#cancelKeyboardResponse", () => {

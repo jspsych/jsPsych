@@ -158,6 +158,12 @@ export class KeyboardListenerAPI {
           // defer the callback until this key is released, keyed by the listener handle so that
           // the pending release is cancelled together with the listener (see cancelKeyboardResponse
           // and cancelAllKeyboardResponses).
+          //
+          // Because the pending release is keyed by listener, each listener tracks only one pending
+          // release at a time. With persist: true, if a second valid key is pressed before the first
+          // is released, this overwrites the earlier pending release: only the most recent press's
+          // release fires the callback. This is intentional — a deferred response reflects the most
+          // recent key press, matching how the non-deferred path only reports the latest press.
           this.pendingReleases.set(listener, { key, rt, callback_function });
         } else {
           callback_function({ key: e.key, rt });
