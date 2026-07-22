@@ -1,5 +1,11 @@
 # jspsych
 
+## 8.3.0
+
+### Minor Changes
+
+- [#3708](https://github.com/jspsych/jsPsych/pull/3708) [`a69d7ad7aca8a0b0d97c5893ab09a368bd9dda25`](https://github.com/jspsych/jsPsych/commit/a69d7ad7aca8a0b0d97c5893ab09a368bd9dda25) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Added a CSS style to jspsych.css that renders `<kbd>` elements (or any element with class "jspsych-key") as a visual keycap. Wrapping a key name in `<kbd>` inside a trial renders it as a keycap, e.g. `Press <kbd>space</kbd> to continue.`
+
 ## 8.2.3
 
 ### Patch Changes
