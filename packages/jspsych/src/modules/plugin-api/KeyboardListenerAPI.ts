@@ -179,9 +179,10 @@ export class KeyboardListenerAPI {
           //
           // Because the pending release is keyed by listener, each listener tracks only one pending
           // release at a time. With persist: true, if a second valid key is pressed before the first
-          // is released, this overwrites the earlier pending release: only the most recent press's
-          // release fires the callback. This is intentional — a deferred response reflects the most
-          // recent key press, matching how the non-deferred path only reports the latest press.
+          // is released, this overwrites the earlier pending release: the superseded press is
+          // dropped and only the most recent press's release fires the callback. This is a
+          // deliberate trade-off of the single-slot design — note that it differs from the
+          // non-deferred persist path, which fires the callback for every valid press.
           this.pendingReleases.set(listener, {
             code: this.getPhysicalKey(e),
             key: e.key,
