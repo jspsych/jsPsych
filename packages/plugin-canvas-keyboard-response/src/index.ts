@@ -65,6 +65,17 @@ const info = <const>{
       array: true,
       default: [500, 500],
     },
+    /** If true, the response is not registered until the participant releases the key. The response
+     * time (`rt`) still reflects when the key was pressed, and the additional data field
+     * `rt_key_duration` records how long the key was held down. Note that when this is true, the
+     * trial cannot end until the key is released: with `response_ends_trial: true` the trial ends at
+     * the key release, and if the trial ends for another reason (e.g., `trial_duration`) while the
+     * key is still held, no response is recorded for the trial.
+     */
+    wait_for_key_release: {
+      type: ParameterType.BOOL,
+      default: false,
+    },
   },
   data: {
     /** Indicates which key the participant pressed. */
@@ -75,6 +86,10 @@ const info = <const>{
      * when the stimulus first appears on the screen until the participant's response.
      */
     rt: {
+      type: ParameterType.INT,
+    },
+    /** The duration in milliseconds that the response key was held down, measured from key press to key release. Only recorded when `wait_for_key_release` is true; null otherwise or when no response was made. */
+    rt_key_duration: {
       type: ParameterType.INT,
     },
   },
@@ -122,6 +137,7 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     var response = {
       rt: null,
       key: null,
+      rt_key_duration: null,
     };
 
     // function to end trial when it is time
@@ -135,6 +151,7 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       var trial_data = {
         rt: response.rt,
         response: response.key,
+        rt_key_duration: response.rt_key_duration,
       };
 
       // move on to the next trial
@@ -150,7 +167,11 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
 
       // only record the first response
       if (response.key == null) {
-        response = info;
+        response = {
+          rt: info.rt,
+          key: info.key,
+          rt_key_duration: info.rt_key_duration ?? null,
+        };
       }
 
       if (trial.response_ends_trial) {
@@ -166,6 +187,7 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         rt_method: "performance",
         persist: false,
         allow_held_key: false,
+        wait_for_key_release: trial.wait_for_key_release,
       });
     }
 
@@ -224,7 +246,12 @@ class CanvasKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     const default_data = {
       rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
       response: this.jsPsych.pluginAPI.getValidKey(trial.choices),
+      rt_key_duration: null,
     };
+    default_data.rt_key_duration =
+      default_data.rt === null || !trial.wait_for_key_release
+        ? null
+        : this.jsPsych.randomization.sampleExGaussian(150, 30, 1 / 100, true);
 
     const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
 

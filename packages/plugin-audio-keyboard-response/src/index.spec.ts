@@ -1,6 +1,13 @@
 jest.mock("../../jspsych/src/modules/plugin-api/AudioPlayer");
 
-import { flushPromises, pressKey, simulateTimeline, startTimeline } from "@jspsych/test-utils";
+import {
+  flushPromises,
+  keyDown,
+  keyUp,
+  pressKey,
+  simulateTimeline,
+  startTimeline,
+} from "@jspsych/test-utils";
 import { initJsPsych } from "jspsych";
 
 //@ts-expect-error mock
@@ -123,6 +130,167 @@ describe("audio-keyboard-response", () => {
     expect(mockStop).toHaveBeenCalled();
 
     await expectFinished();
+  });
+});
+
+describe("audio-keyboard-response wait_for_key_release", () => {
+  it("does not end the trial until the key is released and records the hold duration", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { getData, expectRunning, expectFinished } = await startTimeline(
+      [
+        {
+          type: audioKeyboardResponse,
+          stimulus: "foo.mp3",
+          choices: ["a"],
+          wait_for_key_release: true,
+        },
+      ],
+      jsPsych
+    );
+
+    jest.advanceTimersByTime(100);
+    await keyDown("a");
+
+    await expectRunning();
+
+    jest.advanceTimersByTime(250);
+    await keyUp("a");
+
+    await expectFinished();
+
+    expect(getData().values()[0].rt).toBe(100);
+    expect(getData().values()[0].rt_key_duration).toBe(250);
+  });
+
+  it("records the hold duration when the trial ends by duration", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { getData, expectFinished } = await startTimeline(
+      [
+        {
+          type: audioKeyboardResponse,
+          stimulus: "foo.mp3",
+          choices: ["a"],
+          wait_for_key_release: true,
+          response_ends_trial: false,
+          trial_duration: 1000,
+        },
+      ],
+      jsPsych
+    );
+
+    await keyDown("a");
+    jest.advanceTimersByTime(250);
+    await keyUp("a");
+
+    jest.advanceTimersByTime(750);
+    await expectFinished();
+
+    expect(getData().values()[0].rt_key_duration).toBe(250);
+  });
+
+  it("records a null response when the trial ends while the key is still held", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { getData, expectFinished } = await startTimeline(
+      [
+        {
+          type: audioKeyboardResponse,
+          stimulus: "foo.mp3",
+          choices: ["a"],
+          wait_for_key_release: true,
+          response_ends_trial: false,
+          trial_duration: 1000,
+        },
+      ],
+      jsPsych
+    );
+
+    await keyDown("a");
+    jest.advanceTimersByTime(1000);
+    await expectFinished();
+
+    expect(getData().values()[0].response).toBe(null);
+    expect(getData().values()[0].rt).toBe(null);
+    expect(getData().values()[0].rt_key_duration).toBe(null);
+
+    await keyUp("a");
+  });
+
+  it("rt_key_duration is null on default trials (wait_for_key_release false)", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { getData, expectFinished } = await startTimeline(
+      [
+        {
+          type: audioKeyboardResponse,
+          stimulus: "foo.mp3",
+          choices: ["a"],
+        },
+      ],
+      jsPsych
+    );
+
+    await keyDown("a");
+    await expectFinished();
+
+    expect(getData().values()[0].rt_key_duration).toBe(null);
+
+    await keyUp("a");
+  });
+
+  it("a key held past trial_duration does not contaminate the next trial", async () => {
+    const jsPsych = initJsPsych({ use_webaudio: false });
+
+    const { getData, expectRunning, expectFinished } = await startTimeline(
+      [
+        {
+          type: audioKeyboardResponse,
+          stimulus: "foo.mp3",
+          choices: ["a"],
+          wait_for_key_release: true,
+          trial_duration: 1000,
+        },
+        {
+          type: audioKeyboardResponse,
+          stimulus: "foo.mp3",
+          choices: ["a"],
+          wait_for_key_release: true,
+        },
+      ],
+      jsPsych
+    );
+
+    // trial 1: press and hold the key, then let the trial time out
+    await keyDown("a");
+    jest.advanceTimersByTime(1000);
+    await flushPromises();
+
+    // trial 1 ended by duration with no response because the key was never released
+    expect(getData().values()[0].response).toBe(null);
+    expect(getData().values()[0].rt).toBe(null);
+    expect(getData().values()[0].rt_key_duration).toBe(null);
+
+    // trial 2 is now running with the key still held; a key-repeat must not register
+    await keyDown("a");
+    await expectRunning();
+
+    // releasing the held-over key must not register a response in trial 2
+    await keyUp("a");
+    await expectRunning();
+
+    // a fresh press/release cycle in trial 2 works normally
+    jest.advanceTimersByTime(200);
+    await keyDown("a");
+    jest.advanceTimersByTime(125);
+    await keyUp("a");
+
+    await expectFinished();
+
+    expect(getData().values()[1].response).toBe("a");
+    expect(getData().values()[1].rt).toBe(200);
+    expect(getData().values()[1].rt_key_duration).toBe(125);
   });
 });
 

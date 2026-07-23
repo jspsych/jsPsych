@@ -64,6 +64,17 @@ const info = <const>{
       type: ParameterType.BOOL,
       default: true,
     },
+    /** If true, the response is not registered until the participant releases the key. The response
+     * time (`rt`) still reflects when the key was pressed, and the additional data field
+     * `rt_key_duration` records how long the key was held down. Note that when this is true, the
+     * trial cannot end until the key is released: with `response_ends_trial: true` the trial ends at
+     * the key release, and if the trial ends for another reason (e.g., `trial_duration`) while the
+     * key is still held, no response is recorded for the trial.
+     */
+    wait_for_key_release: {
+      type: ParameterType.BOOL,
+      default: false,
+    },
   },
   data: {
     /** Indicates which key the participant pressed. If no key was pressed before the trial ended, then the value will be `null`. */
@@ -80,6 +91,10 @@ const info = <const>{
     /** Path to the audio file that played during the trial. */
     stimulus: {
       type: ParameterType.STRING,
+    },
+    /** The duration in milliseconds that the response key was held down, measured from key press to key release. Only recorded when `wait_for_key_release` is true; null otherwise or when no response was made. */
+    rt_key_duration: {
+      type: ParameterType.INT,
     },
   },
   // prettier-ignore
@@ -110,9 +125,18 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
   private audio: AudioPlayerInterface;
   private params: TrialType<Info>;
   private display: HTMLElement;
-  private response: { rt: number; key: string } = { rt: null, key: null };
+  private response: { rt: number; key: string; rt_key_duration: number } = {
+    rt: null,
+    key: null,
+    rt_key_duration: null,
+  };
   private startTime: number;
-  private finish: ({}: { rt: number; response: string; stimulus: string }) => void;
+  private finish: ({}: {
+    rt: number;
+    response: string;
+    stimulus: string;
+    rt_key_duration: number;
+  }) => void;
 
   constructor(private jsPsych: JsPsych) {
     autoBind(this);
@@ -181,6 +205,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       rt: this.response.rt,
       response: this.response.key,
       stimulus: this.params.stimulus,
+      rt_key_duration: this.response.rt_key_duration,
     };
 
     // clear the display
@@ -190,8 +215,12 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
     this.finish(trial_data);
   }
 
-  private after_response(info: { key: string; rt: number }) {
-    this.response = info;
+  private after_response(info: { key: string; rt: number; rt_key_duration?: number }) {
+    this.response = {
+      rt: info.rt,
+      key: info.key,
+      rt_key_duration: info.rt_key_duration ?? null,
+    };
     if (this.params.response_ends_trial) {
       this.end_trial();
     }
@@ -208,6 +237,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         allow_held_key: false,
         audio_context: this.jsPsych.pluginAPI.audioContext(),
         audio_context_start_time: this.startTime,
+        wait_for_key_release: this.params.wait_for_key_release,
       });
     } else {
       this.jsPsych.pluginAPI.getKeyboardResponse({
@@ -216,6 +246,7 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
         rt_method: "performance",
         persist: false,
         allow_held_key: false,
+        wait_for_key_release: this.params.wait_for_key_release,
       });
     }
   }
@@ -273,7 +304,12 @@ class AudioKeyboardResponsePlugin implements JsPsychPlugin<Info> {
       stimulus: trial.stimulus,
       rt: this.jsPsych.randomization.sampleExGaussian(500, 50, 1 / 150, true),
       response: this.jsPsych.pluginAPI.getValidKey(trial.choices),
+      rt_key_duration: null,
     };
+    default_data.rt_key_duration =
+      default_data.rt === null || !trial.wait_for_key_release
+        ? null
+        : this.jsPsych.randomization.sampleExGaussian(150, 30, 1 / 100, true);
 
     const data = this.jsPsych.pluginAPI.mergeSimulationData(default_data, simulation_options);
 
