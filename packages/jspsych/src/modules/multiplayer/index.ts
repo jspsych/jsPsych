@@ -8,7 +8,7 @@ export type Unsubscribe = () => void;
 
 /**
  * Rejection produced by MultiplayerAPI.wait() when its timeout elapses before
- * the condition is met. Exported so callers (e.g. plugin-multiplayer-sync) can
+ * the condition is met. Exported so callers (e.g. multiplayer plugins) can
  * distinguish a genuine timeout from a throwing predicate or network error.
  * When checking across separately-bundled packages, prefer matching
  * `error.name === "MultiplayerTimeoutError"` over instanceof, which fails if

@@ -131,7 +131,6 @@ nav:
   - 'webgazer-calibrate': 'plugins/webgazer-calibrate.md'
   - 'webgazer-init-camera': 'plugins/webgazer-init-camera.md'
   - 'webgazer-validate': 'plugins/webgazer-validate.md'
-  - 'multiplayer-sync': 'plugins/multiplayer-sync.md'
 - Extensions:
   - 'List of Extensions': 'extensions/list-of-extensions.md'
   - 'mouse-tracking': 'extensions/mouse-tracking.md'

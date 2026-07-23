@@ -150,7 +150,7 @@ await jsPsych.multiplayer.connect(new InMemoryAdapter("participant-1"));
 
 ## Real-world example
 
-The official JATOS adapter (`@jspsych/adapter-multiplayer-jatos`) is a good reference for a production implementation. It maps the interface onto JATOS group sessions, with a retry loop for optimistic concurrency conflicts on `push()` and a single `onGroupSession` dispatcher that fans out to multiple `subscribe()` callbacks. The source is at `packages/adapter-multiplayer-jatos/src/index.ts` in the jsPsych repository.
+The official JATOS adapter (`@jspsych/adapter-multiplayer-jatos`) is a good reference for a production implementation. It maps the interface onto JATOS group sessions, with a retry loop for optimistic concurrency conflicts on `push()` and a single `onGroupSession` dispatcher that fans out to multiple `subscribe()` callbacks. Its source, along with other adapters (Firebase, local) and multiplayer plugins, lives in the [jspsych-multiplayer](https://github.com/jspsych/jspsych-multiplayer) ecosystem repository.
 
 ## Checklist for new adapters
 
