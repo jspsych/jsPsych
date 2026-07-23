@@ -1,0 +1,14 @@
+{
+  "pr_number": 3707,
+  "head_sha": "6d15e1735929813de6c4d277f9a9cfd588ff852f",
+  "head_ref": "feature/rt-key-duration",
+  "changed_packages": [
+    "jspsych",
+    "plugin-audio-keyboard-response",
+    "plugin-canvas-keyboard-response",
+    "plugin-html-keyboard-response",
+    "plugin-image-keyboard-response",
+    "plugin-video-keyboard-response",
+    "test-utils"
+  ]
+}
