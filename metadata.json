@@ -1,0 +1,8 @@
+{
+  "pr_number": 3694,
+  "head_sha": "eddf2f628de723669e7f5af0f0b2f32c2495ed1f",
+  "head_ref": "multiplayer",
+  "changed_packages": [
+    "jspsych"
+  ]
+}
