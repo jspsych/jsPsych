@@ -27,6 +27,11 @@ export async function pressKey(key: string) {
   await keyUp(key);
 }
 
+export async function windowBlur() {
+  window.dispatchEvent(new Event("blur"));
+  await flushPromises();
+}
+
 export async function mouseDownMouseUpTarget(target: Element) {
   await dispatchEvent(new MouseEvent("mousedown", { bubbles: true }), target);
   await dispatchEvent(new MouseEvent("mouseup", { bubbles: true }), target);

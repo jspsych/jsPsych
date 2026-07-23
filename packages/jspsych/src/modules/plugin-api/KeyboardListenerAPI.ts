@@ -54,6 +54,9 @@ export class KeyboardListenerAPI {
       if (rootElement) {
         rootElement.addEventListener("keydown", this.rootKeydownListener);
         rootElement.addEventListener("keyup", this.rootKeyupListener);
+        // When the window loses focus the browser stops delivering keyup events, so a key held at
+        // that moment would otherwise never be seen as released. Treat a blur as releasing all keys.
+        window.addEventListener("blur", this.rootBlurListener);
         this.areRootListenersRegistered = true;
       }
     }
@@ -106,6 +109,23 @@ export class KeyboardListenerAPI {
 
     this.keyDownTimestamps.delete(physicalKey);
     this.heldKeys.delete(this.toLowerCaseIfInsensitive(e.key));
+  }
+
+  /**
+   * When the window loses focus (`blur`), the browser will not deliver the `keyup` events for keys
+   * that are currently held, which would otherwise leave stale entries in `heldKeys` and
+   * `keyDownTimestamps` (making a key look permanently held) and orphan any pending releases. Treat
+   * the blur as a release of every held key: resolve each pending release with
+   * `rt_key_duration: null`, since the true hold duration cannot be measured once the release is
+   * never observed, then clear the tracked key state.
+   */
+  private rootBlurListener() {
+    for (const [listener, pending] of this.pendingReleases) {
+      this.pendingReleases.delete(listener);
+      pending.callback_function({ key: pending.key, rt: pending.rt, rt_key_duration: null });
+    }
+    this.heldKeys.clear();
+    this.keyDownTimestamps.clear();
   }
 
   private isResponseValid(validResponses: ValidResponses, allowHeldKey: boolean, key: string) {

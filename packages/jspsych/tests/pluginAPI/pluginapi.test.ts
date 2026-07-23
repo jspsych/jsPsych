@@ -1,4 +1,4 @@
-import { keyDown, keyUp, pressKey } from "@jspsych/test-utils";
+import { keyDown, keyUp, pressKey, windowBlur } from "@jspsych/test-utils";
 
 import { KeyboardListenerAPI } from "../../src/modules/plugin-api/KeyboardListenerAPI";
 import { TimeoutAPI } from "../../src/modules/plugin-api/TimeoutAPI";
@@ -393,6 +393,68 @@ describe("#getKeyboardResponse wait_for_key_release", () => {
       rt: expect.any(Number),
       rt_key_duration: 50,
     });
+  });
+
+  test("window blur while a key is held resolves the pending release with rt_key_duration: null", async () => {
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+    });
+
+    await keyDown("a");
+    jest.advanceTimersByTime(100);
+    expect(callback).toHaveBeenCalledTimes(0);
+
+    // the window loses focus before the key is released: the browser never delivers the keyup
+    await windowBlur();
+
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith({
+      key: "a",
+      rt: expect.any(Number),
+      rt_key_duration: null,
+    });
+  });
+
+  test("blur clears held-key state so a later keyup does not fire the already-resolved release again", async () => {
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+    });
+
+    await keyDown("a");
+    await windowBlur();
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    // a stray keyup arriving after focus returns must not fire the callback a second time
+    jest.advanceTimersByTime(500);
+    await keyUp("a");
+    expect(callback).toHaveBeenCalledTimes(1);
+  });
+
+  test("blur clears held state so a fresh press after refocus measures its own duration, not the pre-blur press", async () => {
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+      persist: true,
+    });
+
+    // press and hold, then blur before release
+    await keyDown("a");
+    jest.advanceTimersByTime(1000);
+    await windowBlur();
+    expect(callback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ key: "a", rt_key_duration: null })
+    );
+
+    // after refocus, a fresh press/release cycle measures only its own hold time
+    await keyDown("a");
+    jest.advanceTimersByTime(120);
+    await keyUp("a");
+    expect(callback).toHaveBeenCalledTimes(2);
+    expect(callback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ key: "a", rt_key_duration: 120 })
+    );
   });
 
   test("persist: true: a second press before the first is released supersedes the first; only the latest press's release fires", async () => {
