@@ -21,9 +21,7 @@ export function createJointPluginAPIObject(jsPsych: JsPsych) {
   );
   return Object.assign(
     {},
-    ...[keyboardListenerAPI, timeoutAPI, mediaAPI, simulationAPI].map((object) =>
-      autoBind(object)
-    )
+    ...[keyboardListenerAPI, timeoutAPI, mediaAPI, simulationAPI].map((object) => autoBind(object))
   ) as KeyboardListenerAPI & TimeoutAPI & MediaAPI & SimulationAPI;
 }
 
