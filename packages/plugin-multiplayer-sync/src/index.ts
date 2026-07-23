@@ -125,7 +125,9 @@ class MultiplayerSyncPlugin implements JsPsychPlugin<Info> {
 
       const elapsed = performance.now() - start;
       if (elapsed < trial.minimum_wait) {
-        await new Promise((resolve) => setTimeout(resolve, trial.minimum_wait - elapsed));
+        await new Promise((resolve) =>
+          this.jsPsych.pluginAPI.setTimeout(resolve, trial.minimum_wait - elapsed)
+        );
       }
 
       finish(group, false);
