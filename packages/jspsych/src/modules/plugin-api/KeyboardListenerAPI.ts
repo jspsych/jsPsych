@@ -17,6 +17,11 @@ export interface GetKeyboardResponseOptions {
 }
 
 interface PendingRelease {
+  /**
+   * physical key (`KeyboardEvent.code`) whose release is being awaited; falls back to the
+   * case-normalized key value for synthetic events that do not set `code`.
+   */
+  code: string;
   key: string;
   rt: number;
   callback_function: any;
@@ -55,39 +60,52 @@ export class KeyboardListenerAPI {
   }
 
   private rootKeydownListener(e: KeyboardEvent) {
-    const key = this.toLowerCaseIfInsensitive(e.key);
+    const physicalKey = this.getPhysicalKey(e);
     // Record the press timestamp only for the initial keydown, not for key-repeat events of a key
-    // that is already held down.
-    if (!this.heldKeys.has(key)) {
-      this.keyDownTimestamps.set(key, performance.now());
+    // that is already held down (the timestamp is only removed again by the key's keyup).
+    if (!this.keyDownTimestamps.has(physicalKey)) {
+      this.keyDownTimestamps.set(physicalKey, performance.now());
     }
     // Iterate over a static copy of the listeners set because listeners might add other listeners
     // that we do not want to be included in the loop
     for (const listener of [...this.listeners]) {
       listener(e);
     }
-    this.heldKeys.add(key);
+    this.heldKeys.add(this.toLowerCaseIfInsensitive(e.key));
   }
 
   private toLowerCaseIfInsensitive(string: string) {
     return this.areResponsesCaseSensitive ? string : string.toLowerCase();
   }
 
-  private rootKeyupListener(e: KeyboardEvent) {
-    const key = this.toLowerCaseIfInsensitive(e.key);
+  /**
+   * identifies physical key of a keyboard event, for matching a keydown event with
+   * its corresponding keyup event, in the case of a change of shift state while
+   * the key is being held.
+   */
+  private getPhysicalKey(e: KeyboardEvent) {
+    return e.code || this.toLowerCaseIfInsensitive(e.key);
+  }
 
+  private rootKeyupListener(e: KeyboardEvent) {
+    const physicalKey = this.getPhysicalKey(e);
+
+    // match pending releases by physical key so that a change in shift state while the key is held
+    // (which changes `e.key`, but not `e.code`) cannot orphan a pending release.
     for (const [listener, pending] of this.pendingReleases) {
-      if (pending.key === key) {
-        const pressTimestamp = this.keyDownTimestamps.get(key);
+      if (pending.code === physicalKey) {
+        const pressTimestamp = this.keyDownTimestamps.get(physicalKey);
         const rt_key_duration =
           pressTimestamp === undefined ? null : Math.round(performance.now() - pressTimestamp);
         this.pendingReleases.delete(listener);
-        pending.callback_function({ key: e.key, rt: pending.rt, rt_key_duration });
+        // report the key as it was at keydown, so that the deferred and immediate paths record
+        // the same response for the same key press
+        pending.callback_function({ key: pending.key, rt: pending.rt, rt_key_duration });
       }
     }
 
-    this.keyDownTimestamps.delete(key);
-    this.heldKeys.delete(key);
+    this.keyDownTimestamps.delete(physicalKey);
+    this.heldKeys.delete(this.toLowerCaseIfInsensitive(e.key));
   }
 
   private isResponseValid(validResponses: ValidResponses, allowHeldKey: boolean, key: string) {
@@ -161,10 +179,16 @@ export class KeyboardListenerAPI {
           //
           // Because the pending release is keyed by listener, each listener tracks only one pending
           // release at a time. With persist: true, if a second valid key is pressed before the first
-          // is released, this overwrites the earlier pending release: only the most recent press's
-          // release fires the callback. This is intentional — a deferred response reflects the most
-          // recent key press, matching how the non-deferred path only reports the latest press.
-          this.pendingReleases.set(listener, { key, rt, callback_function });
+          // is released, this overwrites the earlier pending release: the superseded press is
+          // dropped and only the most recent press's release fires the callback. This is a
+          // deliberate trade-off of the single-slot design — note that it differs from the
+          // non-deferred persist path, which fires the callback for every valid press.
+          this.pendingReleases.set(listener, {
+            code: this.getPhysicalKey(e),
+            key: e.key,
+            rt,
+            callback_function,
+          });
         } else {
           callback_function({ key: e.key, rt });
         }
