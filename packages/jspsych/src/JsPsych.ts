@@ -6,6 +6,7 @@ import { version } from "../package.json";
 import { ExtensionManager, ExtensionManagerDependencies } from "./ExtensionManager";
 import { JsPsychData, JsPsychDataDependencies } from "./modules/data";
 import { JsPsychExtension } from "./modules/extensions";
+import { MultiplayerAPI } from "./modules/multiplayer";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
@@ -30,6 +31,7 @@ export class JsPsych {
   randomization = randomization;
   utils = utils;
   data: JsPsychData;
+  multiplayer: MultiplayerAPI;
   pluginAPI: PluginAPI;
 
   version() {
@@ -110,6 +112,7 @@ export class JsPsych {
 
     // initialize modules
     this.data = new JsPsychData(this.dataDependencies);
+    this.multiplayer = new MultiplayerAPI();
     this.pluginAPI = createJointPluginAPIObject(this);
 
     this.extensionManager = new ExtensionManager(
