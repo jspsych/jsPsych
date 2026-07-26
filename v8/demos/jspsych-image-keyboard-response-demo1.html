@@ -2,11 +2,11 @@
 <html>
   <head>
     <script src="docs-demo-timeline.js"></script>
-    <script src="https://unpkg.com/jspsych@8.2.3"></script>
+    <script src="https://unpkg.com/jspsych@8.3.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
-    <link rel="stylesheet" href="https://unpkg.com/jspsych@8.2.3/css/jspsych.css" />
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.2.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@8.3.0/css/jspsych.css" />
     <link rel="stylesheet" href="docs-demo.css" type="text/css">
   </head>
   <body></body>
@@ -23,7 +23,7 @@
       type: jsPsychImageKeyboardResponse,
       stimulus: 'img/happy_face_1.jpg',
       choices: ['e', 'i'],
-      prompt: "<p>Is this person happy or sad? Press 'e' for happy and 'i' for sad.</p>",
+      prompt: "<p>Is this person happy or sad? Press <kbd>e</kbd> for happy and <kbd>i</kbd> for sad.</p>",
     };
 
     const timeline = [trial];

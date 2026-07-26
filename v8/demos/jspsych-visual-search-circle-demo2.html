@@ -2,11 +2,11 @@
 <html>
   <head>
     <script src="docs-demo-timeline.js"></script>
-    <script src="https://unpkg.com/jspsych@8.2.3"></script>
+    <script src="https://unpkg.com/jspsych@8.3.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-visual-search-circle@2.2.0"></script>
-    <link rel="stylesheet" href="https://unpkg.com/jspsych@8.2.3/css/jspsych.css" />
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@8.3.0/css/jspsych.css" />
     <link rel="stylesheet" href="docs-demo.css" type="text/css">
   </head>
   <body></body>
@@ -21,8 +21,8 @@
 
     const instructions = {
       type: jsPsychHtmlButtonResponse,
-      stimulus: `<p>Press E if there is an elephant in the group.</p>
-        <p>Press N if there is no elephant in the group.</p>`,
+      stimulus: `<p>Press <kbd>E</kbd> if there is an elephant in the group.</p>
+        <p>Press <kbd>N</kbd> if there is no elephant in the group.</p>`,
       choices: ['Continue']
     }
 

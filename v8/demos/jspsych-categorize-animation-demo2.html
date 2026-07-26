@@ -2,11 +2,11 @@
 <html>
   <head>
     <script src="docs-demo-timeline.js"></script>
-    <script src="https://unpkg.com/jspsych@8.2.3"></script>
+    <script src="https://unpkg.com/jspsych@8.3.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-categorize-animation@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
-    <link rel="stylesheet" href="https://unpkg.com/jspsych@8.2.3/css/jspsych.css" />
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@8.3.0/css/jspsych.css" />
     <style>
       #jspsych-categorize-animation-stimulus {
         height: 80% !important;
@@ -38,7 +38,7 @@
       type: jsPsychCategorizeAnimation,
       stimuli: images,
       choices: ['p', 'q'],
-      prompt: `Press the P or Q key.`,
+      prompt: `Press the <kbd>P</kbd> or <kbd>Q</kbd> key.`,
       key_answer: 'q',
       text_answer: 'Dax', // the label for the sequence is 'Dax'
       correct_text: 'Correct! This was a %ANS%.',

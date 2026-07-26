@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../img/jspsych-favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -3706,7 +3706,7 @@
 
 
 <h1 id="html-keyboard-response">html-keyboard-response<a class="headerlink" href="#html-keyboard-response" title="Permanent link">&para;</a></h1>
-<p>Current version: 2.1.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-keyboard-response/CHANGELOG.md">See version history</a>.</p>
+<p>Current version: 2.2.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-html-keyboard-response/CHANGELOG.md">See version history</a>.</p>
 <p>This plugin displays HTML content and records responses generated with the keyboard.The stimulus can be displayed until a response is given, or for a pre-determined amount of time. The trial can be ended automatically if the participant has failed to respond within a fixed length of time.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <p>In addition to the <a href="../../overview/plugins/#parameters-available-in-all-plugins">parameters available in all plugins</a>, this plugin accepts the following parameters. Parameters with a default value of undefined must be specified. Other parameters can be left unspecified if the default value is acceptable.</p>
@@ -3756,6 +3756,12 @@
 <td>true</td>
 <td>If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the <code>trial_duration</code> parameter). If false, then the trial will continue until the value for <code>trial_duration</code> is reached. You can set this parameter to <code>false</code> to force the participant to view a stimulus for a fixed amount of time, even if they respond before the time is complete.</td>
 </tr>
+<tr>
+<td>wait_for_key_release</td>
+<td>boolean</td>
+<td>false</td>
+<td>If true, the response is not registered until the participant releases the key. The response time (<code>rt</code>) still reflects when the key was pressed, and the additional data field <code>rt_key_duration</code> records how long the key was held down. Note that when this is true, the trial cannot end until the key is released: with <code>response_ends_trial: true</code> the trial ends at the key release, and if the trial ends for another reason (e.g., <code>trial_duration</code>) while the key is still held, no response is recorded for the trial.</td>
+</tr>
 </tbody>
 </table>
 <h2 id="data-generated">Data Generated<a class="headerlink" href="#data-generated" title="Permanent link">&para;</a></h2>
@@ -3784,11 +3790,16 @@
 <td>string</td>
 <td>The HTML content that was displayed on the screen.</td>
 </tr>
+<tr>
+<td>rt_key_duration</td>
+<td>numeric</td>
+<td>The duration in milliseconds that the response key was held down, measured from key press to key release. Only recorded when <code>wait_for_key_release</code> is true; null otherwise or when no response was made.</td>
+</tr>
 </tbody>
 </table>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.2.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-html-keyboard-response.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
@@ -3928,7 +3939,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

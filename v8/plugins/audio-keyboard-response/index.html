@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../img/jspsych-favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -3728,7 +3728,7 @@
 
 
 <h1 id="audio-keyboard-response">audio-keyboard-response<a class="headerlink" href="#audio-keyboard-response" title="Permanent link">&para;</a></h1>
-<p>Current version: 2.1.1. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-keyboard-response/CHANGELOG.md">See version history</a>.</p>
+<p>Current version: 2.2.0. <a href="https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-keyboard-response/CHANGELOG.md">See version history</a>.</p>
 <p>This plugin plays audio files and records responses generated with the keyboard.</p>
 <p>If the browser supports it, audio files are played using the WebAudio API. This allows for reasonably precise timing of the playback. The timing of responses generated is measured against the WebAudio specific clock, improving the measurement of response times. If the browser does not support the WebAudio API, then the audio file is played with HTML5 audio. </p>
 <p>Audio files can be automatically preloaded by jsPsych using the <a href="../preload/"><code>preload</code> plugin</a>. However, if you are using timeline variables or another dynamic method to specify the audio stimulus, then you will need to <a href="../../overview/media-preloading/#manual-preloading">manually preload</a> the audio.</p>
@@ -3787,6 +3787,12 @@
 <td>true</td>
 <td>If true, then responses are allowed while the audio is playing. If false, then the audio must finish playing before a keyboard response is accepted. Once the audio has played all the way through, a valid keyboard response is allowed (including while the audio is being re-played via on-screen playback controls).</td>
 </tr>
+<tr>
+<td>wait_for_key_release</td>
+<td>boolean</td>
+<td>false</td>
+<td>If true, the response is not registered until the participant releases the key. The response time (<code>rt</code>) still reflects when the key was pressed, and the additional data field <code>rt_key_duration</code> records how long the key was held down. Note that when this is true, the trial cannot end until the key is released: with <code>response_ends_trial: true</code> the trial ends at the key release, and if the trial ends for another reason (e.g., <code>trial_duration</code>) while the key is still held, no response is recorded for the trial.</td>
+</tr>
 </tbody>
 </table>
 <h2 id="data-generated">Data Generated<a class="headerlink" href="#data-generated" title="Permanent link">&para;</a></h2>
@@ -3815,6 +3821,11 @@
 <td>string</td>
 <td>Path to the audio file that played during the trial.</td>
 </tr>
+<tr>
+<td>rt_key_duration</td>
+<td>numeric</td>
+<td>The duration in milliseconds that the response key was held down, measured from key press to key release. Only recorded when <code>wait_for_key_release</code> is true; null otherwise or when no response was made.</td>
+</tr>
 </tbody>
 </table>
 <h2 id="simulation-mode">Simulation Mode<a class="headerlink" href="#simulation-mode" title="Permanent link">&para;</a></h2>
@@ -3823,7 +3834,7 @@ This is because the audio file is not loaded in <code>data-only</code> mode and 
 This may change in a future version as we improve the simulation modes.</p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <p>Using the CDN-hosted JavaScript file:</p>
-<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-audio-keyboard-response@2.1.1&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;https://unpkg.com/@jspsych/plugin-audio-keyboard-response@2.2.0&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
 </code></pre></div>
 <p>Using the JavaScript file downloaded from a GitHub release dist archive:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;</span><span class="nx">script</span><span class="w"> </span><span class="nx">src</span><span class="o">=</span><span class="s2">&quot;jspsych/plugin-audio-keyboard-response.js&quot;</span><span class="o">&gt;&lt;</span><span class="err">/script&gt;</span>
@@ -3843,7 +3854,7 @@ This may change in a future version as we improve the simulation modes.</p>
 <span class="w">    </span><span class="nx">type</span><span class="o">:</span><span class="w"> </span><span class="nx">jsPsychAudioKeyboardResponse</span><span class="p">,</span>
 <span class="w">    </span><span class="nx">stimulus</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;sound/tone.mp3&#39;</span><span class="p">,</span>
 <span class="w">    </span><span class="nx">choices</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;e&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;i&#39;</span><span class="p">],</span>
-<span class="w">    </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;&lt;p&gt;Is the pitch high or low? Press &#39;e&#39; for low and &#39;i&#39; for high.&lt;/p&gt;&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">prompt</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;&lt;p&gt;Is the pitch high or low? Press &lt;kbd&gt;e&lt;/kbd&gt; for low and &lt;kbd&gt;i&lt;/kbd&gt; for high.&lt;/p&gt;&quot;</span><span class="p">,</span>
 <span class="w">    </span><span class="nx">response_ends_trial</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
 <span class="p">};</span>
 </code></pre></div>
@@ -3964,7 +3975,7 @@ This may change in a future version as we improve the simulation modes.</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
