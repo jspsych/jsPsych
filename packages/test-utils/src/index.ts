@@ -14,17 +14,22 @@ export function dispatchEvent(event: Event, target: Element = document.body) {
   return flushPromises();
 }
 
-export async function keyDown(key: string) {
-  await dispatchEvent(new KeyboardEvent("keydown", { key }));
+export async function keyDown(key: string, code?: string) {
+  await dispatchEvent(new KeyboardEvent("keydown", { key, code }));
 }
 
-export async function keyUp(key: string) {
-  await dispatchEvent(new KeyboardEvent("keyup", { key }));
+export async function keyUp(key: string, code?: string) {
+  await dispatchEvent(new KeyboardEvent("keyup", { key, code }));
 }
 
 export async function pressKey(key: string) {
   await keyDown(key);
   await keyUp(key);
+}
+
+export async function windowBlur() {
+  window.dispatchEvent(new Event("blur"));
+  await flushPromises();
 }
 
 export async function mouseDownMouseUpTarget(target: Element) {

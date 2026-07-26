@@ -1,4 +1,4 @@
-import { pressKey, startTimeline } from "@jspsych/test-utils";
+import { flushPromises, keyDown, keyUp, pressKey, startTimeline } from "@jspsych/test-utils";
 
 import imageKeyboardResponse from ".";
 
@@ -133,5 +133,145 @@ describe("image-keyboard-response", () => {
 
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
+  });
+});
+
+describe("image-keyboard-response wait_for_key_release", () => {
+  test("does not end the trial until the key is released and records the hold duration", async () => {
+    const { getData, expectRunning, expectFinished } = await startTimeline([
+      {
+        type: imageKeyboardResponse,
+        stimulus: "../media/blue.png",
+        choices: ["a"],
+        render_on_canvas: false,
+        wait_for_key_release: true,
+      },
+    ]);
+
+    jest.advanceTimersByTime(100);
+    await keyDown("a");
+
+    await expectRunning();
+
+    jest.advanceTimersByTime(250);
+    await keyUp("a");
+
+    await expectFinished();
+
+    expect(getData().values()[0].rt).toBe(100);
+    expect(getData().values()[0].rt_key_duration).toBe(250);
+  });
+
+  test("records the hold duration when the trial ends by duration", async () => {
+    const { getData, expectFinished } = await startTimeline([
+      {
+        type: imageKeyboardResponse,
+        stimulus: "../media/blue.png",
+        choices: ["a"],
+        render_on_canvas: false,
+        wait_for_key_release: true,
+        response_ends_trial: false,
+        trial_duration: 1000,
+      },
+    ]);
+
+    await keyDown("a");
+    jest.advanceTimersByTime(250);
+    await keyUp("a");
+
+    jest.advanceTimersByTime(750);
+    await expectFinished();
+
+    expect(getData().values()[0].rt_key_duration).toBe(250);
+  });
+
+  test("records a null response when the trial ends while the key is still held", async () => {
+    const { getData, expectFinished } = await startTimeline([
+      {
+        type: imageKeyboardResponse,
+        stimulus: "../media/blue.png",
+        choices: ["a"],
+        render_on_canvas: false,
+        wait_for_key_release: true,
+        response_ends_trial: false,
+        trial_duration: 1000,
+      },
+    ]);
+
+    await keyDown("a");
+    jest.advanceTimersByTime(1000);
+    await expectFinished();
+
+    expect(getData().values()[0].response).toBe(null);
+    expect(getData().values()[0].rt).toBe(null);
+    expect(getData().values()[0].rt_key_duration).toBe(null);
+
+    await keyUp("a");
+  });
+
+  test("rt_key_duration is null on default trials (wait_for_key_release false)", async () => {
+    const { getData, expectFinished } = await startTimeline([
+      {
+        type: imageKeyboardResponse,
+        stimulus: "../media/blue.png",
+        choices: ["a"],
+        render_on_canvas: false,
+      },
+    ]);
+
+    await keyDown("a");
+    await expectFinished();
+
+    expect(getData().values()[0].rt_key_duration).toBe(null);
+  });
+
+  test("a key held past trial_duration does not contaminate the next trial", async () => {
+    const { getData, expectRunning, expectFinished } = await startTimeline([
+      {
+        type: imageKeyboardResponse,
+        stimulus: "../media/blue.png",
+        choices: ["a"],
+        render_on_canvas: false,
+        wait_for_key_release: true,
+        trial_duration: 1000,
+      },
+      {
+        type: imageKeyboardResponse,
+        stimulus: "../media/blue.png",
+        choices: ["a"],
+        render_on_canvas: false,
+        wait_for_key_release: true,
+      },
+    ]);
+
+    // trial 1: press and hold the key, then let the trial time out
+    await keyDown("a");
+    jest.advanceTimersByTime(1000);
+    await flushPromises();
+
+    // trial 1 ended by duration with no response because the key was never released
+    expect(getData().values()[0].response).toBe(null);
+    expect(getData().values()[0].rt).toBe(null);
+    expect(getData().values()[0].rt_key_duration).toBe(null);
+
+    // trial 2 is now running with the key still held; a key-repeat must not register
+    await keyDown("a");
+    await expectRunning();
+
+    // releasing the held-over key must not register a response in trial 2
+    await keyUp("a");
+    await expectRunning();
+
+    // a fresh press/release cycle in trial 2 works normally
+    jest.advanceTimersByTime(200);
+    await keyDown("a");
+    jest.advanceTimersByTime(125);
+    await keyUp("a");
+
+    await expectFinished();
+
+    expect(getData().values()[1].response).toBe("a");
+    expect(getData().values()[1].rt).toBe(200);
+    expect(getData().values()[1].rt_key_duration).toBe(125);
   });
 });

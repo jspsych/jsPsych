@@ -23,6 +23,7 @@ In addition to the [parameters available in all plugins](../overview/plugins.md#
 | response_ends_trial            | boolean          | true               | If true, then the trial will end whenever the participant makes a response (assuming they make their response before the cutoff specified by the `trial_duration` parameter). If false, then the trial will continue until the value for `trial_duration` is reached. You can use set this parameter to `false` to force the participant to listen to the stimulus for a fixed amount of time, even if they respond before the time is complete. |
 | trial_ends_after_audio         | boolean          | false              | If true, then the trial will end as soon as the audio file finishes playing. |
 | response_allowed_while_playing | boolean          | true               | If true, then responses are allowed while the audio is playing. If false, then the audio must finish playing before a keyboard response is accepted. Once the audio has played all the way through, a valid keyboard response is allowed (including while the audio is being re-played via on-screen playback controls). |
+| wait_for_key_release           | boolean          | false              | If true, the response is not registered until the participant releases the key. The response time (`rt`) still reflects when the key was pressed, and the additional data field `rt_key_duration` records how long the key was held down. Note that when this is true, the trial cannot end until the key is released: with `response_ends_trial: true` the trial ends at the key release, and if the trial ends for another reason (e.g., `trial_duration`) while the key is still held, no response is recorded for the trial. |
 
 ## Data Generated
 
@@ -33,6 +34,7 @@ In addition to the [default data collected by all plugins](../overview/plugins.m
 | response  | string  | Indicates which key the participant pressed. If no key was pressed before the trial ended, then the value will be `null`. |
 | rt        | numeric | The response time in milliseconds for the participant to make a response. The time is measured from when the stimulus first began playing until the participant made a key response. If no key was pressed before the trial ended, then the value will be `null`. |
 | stimulus  | string  | Path to the audio file that played during the trial. |
+| rt_key_duration | numeric | The duration in milliseconds that the response key was held down, measured from key press to key release. Only recorded when `wait_for_key_release` is true; null otherwise or when no response was made. |
 
 ## Simulation Mode
 

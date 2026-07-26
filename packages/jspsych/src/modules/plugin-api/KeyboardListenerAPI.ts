@@ -13,6 +13,18 @@ export interface GetKeyboardResponseOptions {
   audio_context_start_time?: number;
   allow_held_key?: boolean;
   minimum_valid_rt?: number;
+  wait_for_key_release?: boolean;
+}
+
+interface PendingRelease {
+  /**
+   * physical key (`KeyboardEvent.code`) whose release is being awaited; falls back to the
+   * case-normalized key value for synthetic events that do not set `code`.
+   */
+  code: string;
+  key: string;
+  rt: number;
+  callback_function: any;
 }
 
 export class KeyboardListenerAPI {
@@ -27,6 +39,8 @@ export class KeyboardListenerAPI {
 
   private listeners = new Set<KeyboardListener>();
   private heldKeys = new Set<string>();
+  private keyDownTimestamps = new Map<string, number>();
+  private pendingReleases = new Map<KeyboardListener, PendingRelease>();
 
   private areRootListenersRegistered = false;
 
@@ -40,12 +54,21 @@ export class KeyboardListenerAPI {
       if (rootElement) {
         rootElement.addEventListener("keydown", this.rootKeydownListener);
         rootElement.addEventListener("keyup", this.rootKeyupListener);
+        // When the window loses focus the browser stops delivering keyup events, so a key held at
+        // that moment would otherwise never be seen as released. Treat a blur as releasing all keys.
+        window.addEventListener("blur", this.rootBlurListener);
         this.areRootListenersRegistered = true;
       }
     }
   }
 
   private rootKeydownListener(e: KeyboardEvent) {
+    const physicalKey = this.getPhysicalKey(e);
+    // Record the press timestamp only for the initial keydown, not for key-repeat events of a key
+    // that is already held down (the timestamp is only removed again by the key's keyup).
+    if (!this.keyDownTimestamps.has(physicalKey)) {
+      this.keyDownTimestamps.set(physicalKey, performance.now());
+    }
     // Iterate over a static copy of the listeners set because listeners might add other listeners
     // that we do not want to be included in the loop
     for (const listener of [...this.listeners]) {
@@ -58,8 +81,51 @@ export class KeyboardListenerAPI {
     return this.areResponsesCaseSensitive ? string : string.toLowerCase();
   }
 
+  /**
+   * identifies physical key of a keyboard event, for matching a keydown event with
+   * its corresponding keyup event, in the case of a change of shift state while
+   * the key is being held.
+   */
+  private getPhysicalKey(e: KeyboardEvent) {
+    return e.code || this.toLowerCaseIfInsensitive(e.key);
+  }
+
   private rootKeyupListener(e: KeyboardEvent) {
+    const physicalKey = this.getPhysicalKey(e);
+
+    // match pending releases by physical key so that a change in shift state while the key is held
+    // (which changes `e.key`, but not `e.code`) cannot orphan a pending release.
+    for (const [listener, pending] of this.pendingReleases) {
+      if (pending.code === physicalKey) {
+        const pressTimestamp = this.keyDownTimestamps.get(physicalKey);
+        const rt_key_duration =
+          pressTimestamp === undefined ? null : Math.round(performance.now() - pressTimestamp);
+        this.pendingReleases.delete(listener);
+        // report the key as it was at keydown, so that the deferred and immediate paths record
+        // the same response for the same key press
+        pending.callback_function({ key: pending.key, rt: pending.rt, rt_key_duration });
+      }
+    }
+
+    this.keyDownTimestamps.delete(physicalKey);
     this.heldKeys.delete(this.toLowerCaseIfInsensitive(e.key));
+  }
+
+  /**
+   * When the window loses focus (`blur`), the browser will not deliver the `keyup` events for keys
+   * that are currently held, which would otherwise leave stale entries in `heldKeys` and
+   * `keyDownTimestamps` (making a key look permanently held) and orphan any pending releases. Treat
+   * the blur as a release of every held key: resolve each pending release with
+   * `rt_key_duration: null`, since the true hold duration cannot be measured once the release is
+   * never observed, then clear the tracked key state.
+   */
+  private rootBlurListener() {
+    for (const [listener, pending] of this.pendingReleases) {
+      this.pendingReleases.delete(listener);
+      pending.callback_function({ key: pending.key, rt: pending.rt, rt_key_duration: null });
+    }
+    this.heldKeys.clear();
+    this.keyDownTimestamps.clear();
   }
 
   private isResponseValid(validResponses: ValidResponses, allowHeldKey: boolean, key: string) {
@@ -87,6 +153,7 @@ export class KeyboardListenerAPI {
     audio_context_start_time,
     allow_held_key = false,
     minimum_valid_rt = this.minimumValidRt,
+    wait_for_key_release = false,
   }: GetKeyboardResponseOptions) {
     if (rt_method !== "performance" && rt_method !== "audio") {
       console.log(
@@ -125,7 +192,26 @@ export class KeyboardListenerAPI {
           this.cancelKeyboardResponse(listener);
         }
 
-        callback_function({ key: e.key, rt });
+        if (wait_for_key_release) {
+          // defer the callback until this key is released, keyed by the listener handle so that
+          // the pending release is cancelled together with the listener (see cancelKeyboardResponse
+          // and cancelAllKeyboardResponses).
+          //
+          // Because the pending release is keyed by listener, each listener tracks only one pending
+          // release at a time. With persist: true, if a second valid key is pressed before the first
+          // is released, this overwrites the earlier pending release: the superseded press is
+          // dropped and only the most recent press's release fires the callback. This is a
+          // deliberate trade-off of the single-slot design — note that it differs from the
+          // non-deferred persist path, which fires the callback for every valid press.
+          this.pendingReleases.set(listener, {
+            code: this.getPhysicalKey(e),
+            key: e.key,
+            rt,
+            callback_function,
+          });
+        } else {
+          callback_function({ key: e.key, rt });
+        }
       }
     };
 
@@ -136,10 +222,13 @@ export class KeyboardListenerAPI {
   cancelKeyboardResponse(listener: KeyboardListener) {
     // remove the listener from the set of listeners if it is contained
     this.listeners.delete(listener);
+    // also drop any pending release so a deferred callback never fires after cancellation
+    this.pendingReleases.delete(listener);
   }
 
   cancelAllKeyboardResponses() {
     this.listeners.clear();
+    this.pendingReleases.clear();
   }
 
   compareKeys(key1: string | null, key2: string | null) {

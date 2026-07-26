@@ -1,4 +1,4 @@
-import { keyDown, keyUp, pressKey } from "@jspsych/test-utils";
+import { keyDown, keyUp, pressKey, windowBlur } from "@jspsych/test-utils";
 
 import { KeyboardListenerAPI } from "../../src/modules/plugin-api/KeyboardListenerAPI";
 import { TimeoutAPI } from "../../src/modules/plugin-api/TimeoutAPI";
@@ -213,6 +213,273 @@ describe("#getKeyboardResponse", () => {
     expect(callback_2).toHaveBeenCalledTimes(1);
 
     await keyUp("a");
+  });
+});
+
+describe("#getKeyboardResponse wait_for_key_release", () => {
+  let callback: jest.Mock;
+
+  beforeEach(() => {
+    callback = jest.fn();
+  });
+
+  test("does not fire at keydown; fires at keyup with { key, rt, rt_key_duration }", async () => {
+    jest.advanceTimersByTime(100);
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+    });
+
+    // rt is measured relative to the call above; advance before keydown to set rt.
+    jest.advanceTimersByTime(100);
+    await keyDown("a");
+    expect(callback).toHaveBeenCalledTimes(0);
+
+    jest.advanceTimersByTime(300);
+    await keyUp("a");
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith({ key: "a", rt: 100, rt_key_duration: 300 });
+  });
+
+  test("default (no option): fires at keydown with no rt_key_duration property", async () => {
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+    });
+
+    await keyDown("a");
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith({ key: "a", rt: expect.any(Number) });
+    expect(callback).not.toHaveBeenCalledWith(
+      expect.objectContaining({ rt_key_duration: expect.anything() })
+    );
+
+    await keyUp("a");
+    expect(callback).toHaveBeenCalledTimes(1);
+  });
+
+  test("cancelKeyboardResponse(handle) between keydown and keyup: callback never fires", async () => {
+    const api = new KeyboardListenerAPI(getRootElement);
+    const listener = api.getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+    });
+
+    await keyDown("a");
+    expect(callback).toHaveBeenCalledTimes(0);
+
+    api.cancelKeyboardResponse(listener);
+
+    jest.advanceTimersByTime(200);
+    await keyUp("a");
+    expect(callback).toHaveBeenCalledTimes(0);
+  });
+
+  test("cancelAllKeyboardResponses between keydown and keyup: callback never fires", async () => {
+    const api = new KeyboardListenerAPI(getRootElement);
+    api.getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+    });
+
+    await keyDown("a");
+    expect(callback).toHaveBeenCalledTimes(0);
+
+    api.cancelAllKeyboardResponses();
+
+    jest.advanceTimersByTime(200);
+    await keyUp("a");
+    expect(callback).toHaveBeenCalledTimes(0);
+  });
+
+  test("invalid (non-choice) key: nothing fires on keydown or keyup", async () => {
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+      valid_responses: ["a"],
+      wait_for_key_release: true,
+    });
+
+    await keyDown("b");
+    expect(callback).toHaveBeenCalledTimes(0);
+    jest.advanceTimersByTime(100);
+    await keyUp("b");
+    expect(callback).toHaveBeenCalledTimes(0);
+  });
+
+  test("key-repeat while held does not reset the press timestamp", async () => {
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+    });
+
+    await keyDown("a");
+    jest.advanceTimersByTime(100);
+    // key-repeat: a second keydown while the key is still held
+    await keyDown("a");
+    jest.advanceTimersByTime(100);
+
+    await keyUp("a");
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith({
+      key: "a",
+      rt: expect.any(Number),
+      rt_key_duration: 200,
+    });
+  });
+
+  test("persist: true: two press-release cycles produce two callbacks with correct durations", async () => {
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+      persist: true,
+    });
+
+    await keyDown("a");
+    jest.advanceTimersByTime(150);
+    await keyUp("a");
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ key: "a", rt_key_duration: 150 })
+    );
+
+    await keyDown("a");
+    jest.advanceTimersByTime(250);
+    await keyUp("a");
+    expect(callback).toHaveBeenCalledTimes(2);
+    expect(callback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ key: "a", rt_key_duration: 250 })
+    );
+  });
+
+  test("case-sensitive responses: the release is matched by physical key, so releasing Shift before the response key does not orphan the pending release", async () => {
+    new KeyboardListenerAPI(getRootElement, true).getKeyboardResponse({
+      callback_function: callback,
+      valid_responses: ["A"],
+      wait_for_key_release: true,
+    });
+
+    // press Shift+A, then release Shift first: the A key's keyup arrives as e.key = "a"
+    await keyDown("Shift", "ShiftLeft");
+    await keyDown("A", "KeyA");
+    expect(callback).toHaveBeenCalledTimes(0);
+
+    jest.advanceTimersByTime(100);
+    await keyUp("Shift", "ShiftLeft");
+    await keyUp("a", "KeyA");
+
+    // the release fires and reports the key as it was at keydown
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith({
+      key: "A",
+      rt: expect.any(Number),
+      rt_key_duration: 100,
+    });
+  });
+
+  test("reports the keydown's key value even if the shift state changes before the release", async () => {
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+    });
+
+    // press "a", then press Shift while holding it: the A key's keyup arrives as e.key = "A"
+    await keyDown("a", "KeyA");
+    jest.advanceTimersByTime(50);
+    await keyDown("Shift", "ShiftLeft");
+    await keyUp("A", "KeyA");
+
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith({
+      key: "a",
+      rt: expect.any(Number),
+      rt_key_duration: 50,
+    });
+  });
+
+  test("window blur while a key is held resolves the pending release with rt_key_duration: null", async () => {
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+    });
+
+    await keyDown("a");
+    jest.advanceTimersByTime(100);
+    expect(callback).toHaveBeenCalledTimes(0);
+
+    // the window loses focus before the key is released: the browser never delivers the keyup
+    await windowBlur();
+
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith({
+      key: "a",
+      rt: expect.any(Number),
+      rt_key_duration: null,
+    });
+  });
+
+  test("blur clears held-key state so a later keyup does not fire the already-resolved release again", async () => {
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+    });
+
+    await keyDown("a");
+    await windowBlur();
+    expect(callback).toHaveBeenCalledTimes(1);
+
+    // a stray keyup arriving after focus returns must not fire the callback a second time
+    jest.advanceTimersByTime(500);
+    await keyUp("a");
+    expect(callback).toHaveBeenCalledTimes(1);
+  });
+
+  test("blur clears held state so a fresh press after refocus measures its own duration, not the pre-blur press", async () => {
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+      persist: true,
+    });
+
+    // press and hold, then blur before release
+    await keyDown("a");
+    jest.advanceTimersByTime(1000);
+    await windowBlur();
+    expect(callback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ key: "a", rt_key_duration: null })
+    );
+
+    // after refocus, a fresh press/release cycle measures only its own hold time
+    await keyDown("a");
+    jest.advanceTimersByTime(120);
+    await keyUp("a");
+    expect(callback).toHaveBeenCalledTimes(2);
+    expect(callback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ key: "a", rt_key_duration: 120 })
+    );
+  });
+
+  test("persist: true: a second press before the first is released supersedes the first; only the latest press's release fires", async () => {
+    new KeyboardListenerAPI(getRootElement).getKeyboardResponse({
+      callback_function: callback,
+      wait_for_key_release: true,
+      persist: true,
+    });
+
+    // press "a", then press "b" before releasing "a"
+    await keyDown("a");
+    jest.advanceTimersByTime(100);
+    await keyDown("b");
+    jest.advanceTimersByTime(100);
+
+    // releasing "a" does not fire: it was superseded by the "b" press
+    await keyUp("a");
+    expect(callback).toHaveBeenCalledTimes(0);
+
+    // releasing "b" fires with the duration measured from the "b" press
+    await keyUp("b");
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenLastCalledWith(
+      expect.objectContaining({ key: "b", rt_key_duration: 100 })
+    );
   });
 });
 
