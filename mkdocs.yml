@@ -70,6 +70,7 @@ nav:
 - Reference:
   - 'jsPsych': 'reference/jspsych.md'
   - 'jsPsych.data': 'reference/jspsych-data.md'
+  - 'jsPsych.multiplayer': 'reference/jspsych-multiplayer.md'
   - 'jsPsych.randomization': 'reference/jspsych-randomization.md'
   - 'jsPsych.turk': 'reference/jspsych-turk.md'
   - 'jsPsych.utils': 'reference/jspsych-utils.md'
@@ -140,6 +141,7 @@ nav:
   - 'Contributing to jsPsych': 'developers/contributing.md'
   - 'Plugin Development': 'developers/plugin-development.md'
   - 'Extension Development': 'developers/extension-development.md'
+  - 'Multiplayer Adapter Development': 'developers/adapter-development.md'
 - Support:
   - 'Getting Help': 'support/support.md'
   - 'Migrating from 6.x to 7.x': 'support/migration-v7.md'
