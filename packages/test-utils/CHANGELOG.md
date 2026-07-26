@@ -1,5 +1,11 @@
 # @jspsych/test-utils
 
+## 1.3.0
+
+### Minor Changes
+
+- [#3707](https://github.com/jspsych/jsPsych/pull/3707) [`f14e9784fd49f36ac9051c6d5cdbd7223f391a9b`](https://github.com/jspsych/jsPsych/commit/f14e9784fd49f36ac9051c6d5cdbd7223f391a9b) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - The `keyDown()` and `keyUp()` helpers accept an optional second argument that sets the `code` property (the physical key) on the dispatched `KeyboardEvent`, in addition to the existing `key` argument. A new `windowBlur()` helper dispatches a `blur` event on `window` and flushes pending promises, for testing behavior that depends on the page losing focus.
+
 ## 1.2.0
 
 ### Minor Changes
