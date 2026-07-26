@@ -1,6 +1,6 @@
 # audio-keyboard-response
 
-Current version: 2.1.1. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-keyboard-response/CHANGELOG.md).
+Current version: 2.2.0. [See version history](https://github.com/jspsych/jsPsych/blob/main/packages/plugin-audio-keyboard-response/CHANGELOG.md).
 
 This plugin plays audio files and records responses generated with the keyboard.
 
@@ -47,7 +47,7 @@ This may change in a future version as we improve the simulation modes.
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/plugin-audio-keyboard-response@2.1.1"></script>
+<script src="https://unpkg.com/@jspsych/plugin-audio-keyboard-response@2.2.0"></script>
 ```
 
 Using the JavaScript file downloaded from a GitHub release dist archive:
