@@ -20,6 +20,10 @@
       "import": "./rollup.js",
       "require": null
     },
+    "./generatePluginDocs": {
+      "import": "./generatePluginDocs.js",
+      "require": null
+    },
     "./tsconfig.json": "./tsconfig.json",
     "./tsconfig.core.json": "./tsconfig.core.json",
     "./tsconfig.contrib.json": "./tsconfig.contrib.json"
