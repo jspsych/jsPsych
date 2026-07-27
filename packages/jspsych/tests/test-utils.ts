@@ -14,6 +14,7 @@ export class TimelineNodeDependenciesMock implements TimelineNodeDependencies {
   private displayElement = document.createElement("div");
 
   onTrialStart = jest.fn();
+  onTrialLoad = jest.fn();
   onTrialResultAvailable = jest.fn();
   onTrialFinished = jest.fn();
 
