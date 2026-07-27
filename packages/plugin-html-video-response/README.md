@@ -6,11 +6,21 @@ jsPsych is a JavaScript framework for creating behavioral experiments that run i
 
 The html-video-response plugin displays HTML content and records video from the participant via a webcam. In order to get access to the webcam, use the [initialize-camera plugin](https://www.jspsych.org/7.3/plugins/initialize-camera/) before this plugin.
 
-The video data is recorded in base 64 format, which is a text representation of the video that may be converted into others. Note that this plugin will _quickly_ generate large amounts of data, so if a large amount of video needs to be recorded, consider storing the data on a server immediately and deleting it from the data object (This is shown in the documentation link below).
+The video data is by default recorded in base 64 format, which is a text representation of the video that may be converted into others. Note that this plugin will _quickly_ generate large amounts of data, so if a large amount of video needs to be recorded, consider storing the data on a server immediately and deleting it from the data object (This is shown in the documentation link below).
+
+Optionally, in addition to saving video data in the trial’s `response` field in base 64 format, this plugin can:
+- **Upload recordings directly to a server API endpoint** via the `save_via_api` parameter.
+- **Save recordings locally** to the participant’s default Downloads folder via the `save_locally` parameter.
+
+Both options automatically generate a unique filename for each recording (e.g., `a7fj2sd9.webm`). If `save_via_api` is used, the plugin expects the server to return a JSON object containing a `ref_id` field, which will be stored in the trial data for linking the trial to the saved file.  
+If neither option is enabled, the plugin behaves as before, storing the base 64 string in the trial data.
+
+Note that this plugin will _quickly_ generate large amounts of data, so if a large amount of video needs to be recorded, consider storing the data on a server immediately and deleting it from the data object (This is shown in the documentation link below).
 
 ## Examples
 
 Several example experiments and plugin demonstrations are available in the `/examples` folder.
+
 After you've downloaded the [latest release](https://github.com/jspsych/jsPsych/releases), double-click on an example HTML file to run it in your web browser, and open it with a programming-friendly text editor to see how it works.
 
 ## Documentation

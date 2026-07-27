@@ -27,6 +27,20 @@
     allow_playback: true
   }
 
+  // optional version that shows how to save the video both locally and via an API endpoint
+  // NOTE: you have to have your own API endpoint to test that feature here.
+  // const record_and_save_via_api = {
+  //   type: jsPsychHtmlVideoResponse,
+  //   stimulus: `<div style="width:100vw; height:100vh; position: relative;">
+  //     <div style="width:20px; height:20px; border-radius: 20px; background-color:red; position: absolute; top:10%; left:10%; transform: translate(-50%, -50%);"></div>
+  //     </div>`,
+  //   show_done_button: false,
+  //   recording_duration: 2000,
+  //   allow_playback: true,
+  //   save_locally: true,
+  //   // save_via_api: "https://yourserver.com/upload",
+  // }
+
   jsPsych.run([init_camera, record]);
 
 </script>
