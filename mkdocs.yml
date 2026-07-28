@@ -144,6 +144,7 @@ nav:
   - 'Getting Help': 'support/support.md'
   - 'Migrating from 6.x to 7.x': 'support/migration-v7.md'
   - 'Migrating from 7.x to 8.x': 'support/migration-v8.md'
+  - 'Migrating from 8.x to 9.x': 'support/migration-v9.md'
 - About:
   - 'About jsPsych': 'about/about.md'
   - 'License': 'about/license.md'
