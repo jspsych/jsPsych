@@ -52,9 +52,12 @@
 
 /* Form elements like input fields and buttons */
 
+/* 16px rather than 14px: iOS Safari zooms the viewport when a text field below
+ * that size receives focus, leaving the participant on a partial view of the
+ * trial. */
 .jspsych-display-element input[type="text"] {
   font-family: "Open Sans", "Arial", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 /* Buttons and Button Groups */
@@ -72,11 +75,15 @@
   margin-left: auto;
 }
 
+/* Sized so that the button clears a 44px minimum target — the figure given by
+ * WCAG 2.5.5 and the Apple Human Interface Guidelines — without needing a
+ * separate rule for touch devices. 16px text at 1.4 line-height plus 12px of
+ * vertical padding and the border computes to roughly 48px. */
 .jspsych-btn {
   display: inline-block;
-  padding: 8px 12px;
+  padding: 12px 16px;
   margin: 0.75em;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   font-family: "Open Sans", "Arial", sans-serif;
   cursor: pointer;
