@@ -395,7 +395,7 @@ describe("resume on reload", () => {
     const timeline = [trial("one"), trial("two")];
 
     const firstInstance = initJsPsych(resumeOptions());
-    const seed = firstInstance.state.rng_seed;
+    const seed = firstInstance.state._rng_seed;
     expect(typeof seed).toBe("string");
 
     // A shuffle that happens while the timeline is being built, i.e. after `initJsPsych()` but
@@ -404,11 +404,11 @@ describe("resume on reload", () => {
 
     const first = await startTimeline(timeline, firstInstance);
     await pressKey("a");
-    expect(readSession(storage).state.rng_seed).toBe(seed);
+    expect(readSession(storage).state._rng_seed).toBe(seed);
     simulateReload(first.jsPsych);
 
     const secondInstance = initJsPsych(resumeOptions());
-    expect(secondInstance.state.rng_seed).toBe(seed);
+    expect(secondInstance.state._rng_seed).toBe(seed);
     expect(secondInstance.randomization.shuffle(items)).toEqual(firstShuffle);
 
     const second = await startTimeline(timeline, secondInstance);
@@ -426,7 +426,7 @@ describe("resume on reload", () => {
     setSeed(userSeed);
     const jsPsych = initJsPsych(resumeOptions());
 
-    expect(jsPsych.state.rng_seed).toBe(userSeed);
+    expect(jsPsych.state._rng_seed).toBe(userSeed);
     expect(Math.random()).toBe(firstDraw);
   });
 
@@ -448,7 +448,7 @@ describe("resume on reload", () => {
     await pressKey("b");
     simulateReload(first.jsPsych);
 
-    expect(readSession(storage).state.data_properties).toEqual({ condition: "loud" });
+    expect(readSession(storage).state._data_properties).toEqual({ condition: "loud" });
 
     jsPsychInstance = initJsPsych(resumeOptions());
     const second = await startTimeline(timeline, jsPsychInstance);
@@ -485,7 +485,7 @@ describe("resume on reload", () => {
     jsPsychInstance = initJsPsych(progressBarOptions());
     const first = await startTimeline(timeline, jsPsychInstance);
     await pressKey("a");
-    expect(jsPsychInstance.state.progress).toBe(0.5);
+    expect(jsPsychInstance.state._progress).toBe(0.5);
     simulateReload(first.jsPsych);
 
     jsPsychInstance = initJsPsych(progressBarOptions());
@@ -508,7 +508,7 @@ describe("resume on reload", () => {
 
     await pressKey("a");
     expect(jsPsych.progressBar.progress).toBe(0.5);
-    expect(jsPsych.state.progress).toBeUndefined();
+    expect(jsPsych.state._progress).toBeUndefined();
 
     await pressKey("b");
     await experiment.expectFinished();
@@ -522,16 +522,16 @@ describe("resume on reload", () => {
     });
 
     // The seed is the only reserved key that is always present
-    expect(Object.keys(jsPsych.state)).toEqual(["rng_seed"]);
+    expect(Object.keys(jsPsych.state)).toEqual(["_rng_seed"]);
 
     const experiment = await startTimeline([trial("one")], jsPsych);
     jsPsych.data.addProperties({ subject_id: "s1" });
     jsPsych.progressBar.progress = 0.25;
 
     expect(jsPsych.state).toEqual({
-      rng_seed: expect.any(String),
-      data_properties: { subject_id: "s1" },
-      progress: 0.25,
+      _rng_seed: expect.any(String),
+      _data_properties: { subject_id: "s1" },
+      _progress: 0.25,
     });
 
     await pressKey("a");
@@ -732,7 +732,7 @@ describe("resume on reload", () => {
     const experiment = await startTimeline([trial("one")], jsPsych);
 
     // `jsPsych.state` works in memory (including the seed) and `clear()` is a no-op
-    expect(typeof jsPsych.state.rng_seed).toBe("string");
+    expect(typeof jsPsych.state._rng_seed).toBe("string");
     jsPsych.state.foo = "bar";
     expect(jsPsych.state.foo).toBe("bar");
     jsPsych.resume.clear();

@@ -125,11 +125,11 @@ Do not overwrite these keys:
 
 | Key | What jsPsych stores in it |
 | --- | ------------------------- |
-| `rng_seed` | The seed of the random number generator. See [Randomization is reproduced](#randomization-is-reproduced) below. |
-| `data_properties` | The properties added with [`jsPsych.data.addProperties()`](../reference/jspsych-data.md#jspsychdataaddproperties), so that they are applied to the trials that run after a resume. |
-| `progress` | The position of the [progress bar](progress-bar.md), when it is set manually with `jsPsych.progressBar.progress`. Automatic progress bar updates are not stored, because they are recomputed from the timeline. |
+| `_rng_seed` | The seed of the random number generator. See [Randomization is reproduced](#randomization-is-reproduced) below. |
+| `_data_properties` | The properties added with [`jsPsych.data.addProperties()`](../reference/jspsych-data.md#jspsychdataaddproperties), so that they are applied to the trials that run after a resume. |
+| `_progress` | The position of the [progress bar](progress-bar.md), when it is set manually with `jsPsych.progressBar.progress`. Automatic progress bar updates are not stored, because they are recomputed from the timeline. |
 
-Reading these values is fine, and `jsPsych.state.rng_seed` is a convenient thing to add to your data.
+Reading these values is fine, and `jsPsych.state._rng_seed` is a convenient thing to add to your data.
 
 ### Recomputing state with `on_resume`
 
@@ -157,7 +157,7 @@ It does not run when the experiment starts from the beginning.
 
 ## Randomization is reproduced
 
-jsPsych seeds the random number generator when you call `initJsPsych()` and stores the seed in `jsPsych.state.rng_seed`.
+jsPsych seeds the random number generator when you call `initJsPsych()` and stores the seed in `jsPsych.state._rng_seed`.
 When a saved session is resumed, the stored seed is applied again before your code runs, so every random draw that your experiment made while it was being built comes out the same way it did in the interrupted session.
 
 This matters because the saved session only describes the timeline that jsPsych ran; it does not describe the timeline that your code creates.
@@ -168,7 +168,7 @@ Seeding at `initJsPsych()` makes the reloaded page rebuild the identical timelin
     Seeding replaces `Math.random()` for the entire page, and it happens whether or not you use the `resume` option.
     Any code on the page that uses `Math.random()`, including code that is not part of jsPsych, will get numbers from the seeded generator.
 
-If the generator has already been seeded when `initJsPsych()` runs, jsPsych adopts that seed and stores it in `jsPsych.state.rng_seed` instead of generating a new one.
+If the generator has already been seeded when `initJsPsych()` runs, jsPsych adopts that seed and stores it in `jsPsych.state._rng_seed` instead of generating a new one.
 
 You can still choose the seed yourself with [`jsPsych.randomization.setSeed()`](../reference/jspsych-randomization.md#jspsychrandomizationsetseed), which is the way to use a seed that is derived from a participant ID, for example.
 
@@ -182,7 +182,7 @@ const jsPsych = initJsPsych({
 jsPsych.randomization.setSeed(participant_id);
 ```
 
-jsPsych does not keep track of a seed that is set this way; `jsPsych.state.rng_seed` still holds the seed from `initJsPsych()`.
+jsPsych does not keep track of a seed that is set this way; `jsPsych.state._rng_seed` still holds the seed from `initJsPsych()`.
 Resuming works anyway, as long as the `setSeed()` call happens at the same point in your code on every page load, because everything that runs before it is reproduced by the stored seed.
 What does break the alignment is a seed that is different on the reloaded page, such as one derived from `Date.now()`, or a `setSeed()` call that only happens on some page loads.
 The randomization that happens while the timeline is built would then differ from the timeline that the saved session describes.

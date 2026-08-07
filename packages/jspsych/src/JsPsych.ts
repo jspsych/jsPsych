@@ -90,8 +90,8 @@ export class JsPsych {
   /**
    * A JSON-serializable object for storing the state of the experiment. When the `resume` option is
    * used, it is persisted with the session and restored when the session is resumed; otherwise it
-   * is an ordinary in-memory store. jsPsych itself writes the reserved `rng_seed`,
-   * `data_properties`, and `progress` keys.
+   * is an ordinary in-memory store. jsPsych itself writes the reserved `_rng_seed`,
+   * `_data_properties`, and `_progress` keys.
    *
    * https://www.jspsych.org/latest/overview/resume/
    */
@@ -177,7 +177,7 @@ export class JsPsych {
   }
 
   /**
-   * Seeds the random number generator and stores the seed in `state.rng_seed`, so that a page that
+   * Seeds the random number generator and stores the seed in `state._rng_seed`, so that a page that
    * is reloaded reproduces the random draws of the interrupted session.
    *
    * Seeding happens at construction, before the user's code builds the timeline, because that is
@@ -194,15 +194,15 @@ export class JsPsych {
     if (typeof trackedSeed === "string" && trackedSeed !== lastAutoAppliedSeed) {
       // The user seeded the generator themselves before creating this instance; adopt their seed
       // instead of overriding it
-      this.state.rng_seed = trackedSeed;
-    } else if (typeof this.state.rng_seed === "string") {
+      this.state._rng_seed = trackedSeed;
+    } else if (typeof this.state._rng_seed === "string") {
       // Restored from a saved session
-      randomization.setSeed(this.state.rng_seed);
+      randomization.setSeed(this.state._rng_seed);
     } else {
-      this.state.rng_seed = randomization.setSeed();
+      this.state._rng_seed = randomization.setSeed();
     }
 
-    lastAutoAppliedSeed = this.state.rng_seed;
+    lastAutoAppliedSeed = this.state._rng_seed;
   }
 
   private endMessage?: string;
@@ -238,10 +238,10 @@ export class JsPsych {
       if (
         this.progressBar &&
         !this.options.auto_update_progress_bar &&
-        typeof this.state.progress === "number"
+        typeof this.state._progress === "number"
       ) {
         // Restore a position that was set manually before the session was interrupted
-        this.progressBar.setProgress(this.state.progress);
+        this.progressBar.setProgress(this.state._progress);
       }
 
       const restoredElapsedTime = this.sessionRecorder.getRestoredElapsedTime();
@@ -496,7 +496,7 @@ export class JsPsych {
         progressBarContainer,
         this.options.message_progress_bar,
         (progress) => {
-          this.state.progress = progress;
+          this.state._progress = progress;
         }
       );
 
@@ -596,10 +596,10 @@ export class JsPsych {
     getDisplayElement: () => this.getDisplayElement(),
 
     getInitialDataProperties: () =>
-      isPlainObject(this.state.data_properties) ? this.state.data_properties : {},
+      isPlainObject(this.state._data_properties) ? this.state._data_properties : {},
 
     onDataPropertiesChanged: (properties) => {
-      this.state.data_properties = { ...properties };
+      this.state._data_properties = { ...properties };
     },
   };
 }
