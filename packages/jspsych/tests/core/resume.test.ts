@@ -735,7 +735,7 @@ describe("resume on reload", () => {
     expect(typeof jsPsych.state._rng_seed).toBe("string");
     jsPsych.state.foo = "bar";
     expect(jsPsych.state.foo).toBe("bar");
-    jsPsych.resume.clear();
+    jsPsych.clearSavedSession();
     expect(jsPsych.state.foo).toBe("bar");
 
     await pressKey("a");

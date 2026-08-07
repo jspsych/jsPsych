@@ -230,6 +230,40 @@ const memoryTestProcedure = {
 ```
 
 ---
+
+## jsPsych.clearSavedSession
+
+```javascript
+jsPsych.clearSavedSession()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+None.
+
+### Description
+
+Deletes the session that jsPsych saved for [resuming the experiment after a page reload](../overview/resume.md). Reloading the page after calling this method will start the experiment from the beginning. jsPsych calls this method itself when the experiment ends, so it is only needed when you want to discard a saved session while the experiment is still running.
+
+Note that jsPsych saves the session again whenever a trial finishes, so if the experiment continues after this method is called, a new session will be recorded from that point on.
+
+This method has no effect if the `resume` option was not specified in `initJsPsych()`.
+
+### Example
+
+```javascript
+// a "start over" button that is part of the page, outside of the experiment
+document.querySelector('#start-over').addEventListener('click', function(){
+  jsPsych.clearSavedSession();
+  location.reload();
+});
+```
+
+---
 ## jsPsych.evaluateTimelineVariable
 
 ```js
@@ -547,40 +581,6 @@ var trial = {
     }
   }
 }
-```
-
----
-
-## jsPsych.resume.clear
-
-```javascript
-jsPsych.resume.clear()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-None.
-
-### Description
-
-Deletes the session that jsPsych saved for [resuming the experiment after a page reload](../overview/resume.md). Reloading the page after calling this method will start the experiment from the beginning. jsPsych calls this method itself when the experiment ends, so it is only needed when you want to discard a saved session while the experiment is still running.
-
-Note that jsPsych saves the session again whenever a trial finishes, so if the experiment continues after this method is called, a new session will be recorded from that point on.
-
-This method has no effect if the `resume` option was not specified in `initJsPsych()`.
-
-### Example
-
-```javascript
-// a "start over" button that is part of the page, outside of the experiment
-document.querySelector('#start-over').addEventListener('click', function(){
-  jsPsych.resume.clear();
-  location.reload();
-});
 ```
 
 ---

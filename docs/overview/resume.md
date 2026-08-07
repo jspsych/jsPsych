@@ -272,20 +272,20 @@ If storage is unavailable or a write fails, for example because the browser bloc
 
 ## Starting over
 
-`jsPsych.resume.clear()` deletes the saved session.
+`jsPsych.clearSavedSession()` deletes the saved session.
 Reloading the page after that starts the experiment from the beginning.
 This is useful during development, and for giving a participant (or yourself) a way out of a session that should not be continued.
 
 ```javascript
 // a "start over" button that is part of the page, outside of the experiment
 document.querySelector('#start-over').addEventListener('click', function(){
-  jsPsych.resume.clear();
+  jsPsych.clearSavedSession();
   location.reload();
 });
 ```
 
 Clear the session at a moment when no further trial finishes afterwards, because jsPsych saves the session again every time a trial finishes.
-If the experiment keeps running after you call `clear()`, jsPsych starts recording a new session from that point on, and the next reload will resume that new session.
+If the experiment keeps running after you call `clearSavedSession()`, jsPsych starts recording a new session from that point on, and the next reload will resume that new session.
 
 You do not need to clear the session at the end of the experiment.
 jsPsych does that itself when the experiment ends, whether it runs to completion or is stopped with [`jsPsych.abortExperiment()`](../reference/jspsych.md#jspsychabortexperiment), so a participant who finishes and then reloads the page starts a new experiment rather than landing on the end screen.

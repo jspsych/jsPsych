@@ -9,7 +9,7 @@ import { JsPsychExtension } from "./modules/extensions";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
-import { ResumeAPI, SessionRecorder, isPlainObject } from "./modules/resume";
+import { SessionRecorder, isPlainObject } from "./modules/resume";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
 import { ProgressBar } from "./ProgressBar";
@@ -77,11 +77,14 @@ export class JsPsych {
   /** Records and replays the session when the `resume` option is used */
   private sessionRecorder?: SessionRecorder;
 
-  private resumeAPI = new ResumeAPI(() => this.sessionRecorder);
-
-  /** https://www.jspsych.org/latest/overview/resume/ */
-  get resume() {
-    return this.resumeAPI;
+  /**
+   * Discards the saved session so that a page reload starts the experiment from the beginning.
+   * Does nothing when the `resume` option is not used.
+   *
+   * https://www.jspsych.org/latest/overview/resume/
+   */
+  clearSavedSession() {
+    this.sessionRecorder?.clear();
   }
 
   /** The state object that is used when the `resume` option is not set */

@@ -304,16 +304,3 @@ export class SessionRecorder {
     }
   }
 }
-
-/**
- * The object exposed as `jsPsych.resume`. When the resume feature is disabled, `clear()` is a
- * no-op.
- */
-export class ResumeAPI {
-  constructor(private readonly getRecorder: () => SessionRecorder | undefined) {}
-
-  /** Discards the saved session so that a page reload starts the experiment from the beginning */
-  clear() {
-    this.getRecorder()?.clear();
-  }
-}
