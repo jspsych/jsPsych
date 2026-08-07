@@ -29,6 +29,8 @@ const trial = {
 }
 ```
 
+A position that is set this way is part of the state that jsPsych saves when [resuming after a page reload](resume.md) is enabled, so the progress bar is where the participant left it after a reload.
+
 You can also get the current value of the progress bar as `jsPsych.progressBar.progress`
 
 ```js

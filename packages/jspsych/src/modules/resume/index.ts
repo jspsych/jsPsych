@@ -62,7 +62,7 @@ function getDefaultStorage(): StorageLike | undefined {
   }
 }
 
-function isPlainObject(value: any) {
+export function isPlainObject(value: any) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
@@ -306,27 +306,11 @@ export class SessionRecorder {
 }
 
 /**
- * The object exposed as `jsPsych.resume`. When the resume feature is disabled, `state` still works
- * as an in-memory store and `clear()` is a no-op.
+ * The object exposed as `jsPsych.resume`. When the resume feature is disabled, `clear()` is a
+ * no-op.
  */
 export class ResumeAPI {
-  private inMemoryState: Record<string, any> = {};
-
   constructor(private readonly getRecorder: () => SessionRecorder | undefined) {}
-
-  /** A JSON-serializable object that is persisted with the session and restored when resuming */
-  get state() {
-    return this.getRecorder()?.state ?? this.inMemoryState;
-  }
-
-  set state(state: Record<string, any>) {
-    const recorder = this.getRecorder();
-    if (recorder) {
-      recorder.state = state;
-    } else {
-      this.inMemoryState = state;
-    }
-  }
 
   /** Discards the saved session so that a page reload starts the experiment from the beginning */
   clear() {

@@ -1,6 +1,7 @@
 import { pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType, initJsPsych } from "../../src";
+import { setSeed } from "../../src/modules/randomization";
 import { SessionLogEntry, StorageLike } from "../../src/modules/resume";
 
 /** An in-memory `Storage` implementation that is shared between "page loads" */
@@ -353,17 +354,17 @@ describe("resume on reload", () => {
     ).toEqual([0, 1, 2]);
   });
 
-  it("persists and restores the `resume.state` object and fires `on_resume` once", async () => {
+  it("persists and restores the `jsPsych.state` object and fires `on_resume` once", async () => {
     let jsPsychInstance: JsPsych;
     const timeline = [
       trial("one", {
         on_finish: (data: any) => {
-          jsPsychInstance.resume.state.responses = [data.response];
+          jsPsychInstance.state.responses = [data.response];
         },
       }),
       trial("two", {
         on_finish: (data: any) => {
-          jsPsychInstance.resume.state.responses.push(data.response);
+          jsPsychInstance.state.responses.push(data.response);
         },
       }),
       trial("three"),
@@ -373,20 +374,168 @@ describe("resume on reload", () => {
     const first = await startTimeline(timeline, jsPsychInstance);
     await pressKey("a");
     await pressKey("b");
-    expect(jsPsychInstance.resume.state).toEqual({ responses: ["a", "b"] });
+    expect(jsPsychInstance.state.responses).toEqual(["a", "b"]);
     simulateReload(first.jsPsych);
 
     const onResume = jest.fn();
     jsPsychInstance = initJsPsych(resumeOptions({ on_resume: onResume }));
     const second = await startTimeline(timeline, jsPsychInstance);
 
-    expect(jsPsychInstance.resume.state).toEqual({ responses: ["a", "b"] });
+    expect(jsPsychInstance.state.responses).toEqual(["a", "b"]);
     expect(onResume).toHaveBeenCalledTimes(1);
     expect(onResume.mock.calls[0][0].values().map((t: any) => t.response)).toEqual(["a", "b"]);
 
     await pressKey("c");
     await second.expectFinished();
     expect(onResume).toHaveBeenCalledTimes(1);
+  });
+
+  it("generates and persists a seed and reproduces build-time randomization after a resume", async () => {
+    const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const timeline = [trial("one"), trial("two")];
+
+    const firstInstance = initJsPsych(resumeOptions());
+    const seed = firstInstance.state.rng_seed;
+    expect(typeof seed).toBe("string");
+
+    // A shuffle that happens while the timeline is being built, i.e. after `initJsPsych()` but
+    // before `run()`
+    const firstShuffle = firstInstance.randomization.shuffle(items);
+
+    const first = await startTimeline(timeline, firstInstance);
+    await pressKey("a");
+    expect(readSession(storage).state.rng_seed).toBe(seed);
+    simulateReload(first.jsPsych);
+
+    const secondInstance = initJsPsych(resumeOptions());
+    expect(secondInstance.state.rng_seed).toBe(seed);
+    expect(secondInstance.randomization.shuffle(items)).toEqual(firstShuffle);
+
+    const second = await startTimeline(timeline, secondInstance);
+    await pressKey("b");
+    await second.expectFinished();
+  });
+
+  it("adopts a seed that was set before `initJsPsych()` instead of generating one", async () => {
+    const userSeed = "a-seed-of-my-own";
+
+    setSeed(userSeed);
+    const firstDraw = Math.random();
+
+    // Restart the stream so that the assertion below can tell whether jsPsych re-seeded it
+    setSeed(userSeed);
+    const jsPsych = initJsPsych(resumeOptions());
+
+    expect(jsPsych.state.rng_seed).toBe(userSeed);
+    expect(Math.random()).toBe(firstDraw);
+  });
+
+  it("restores data properties that were added in the interrupted session", async () => {
+    let jsPsychInstance: JsPsych;
+    const timeline = [
+      trial("one", {
+        on_finish: () => {
+          jsPsychInstance.data.addProperties({ condition: "loud" });
+        },
+      }),
+      trial("two"),
+      trial("three"),
+    ];
+
+    jsPsychInstance = initJsPsych(resumeOptions());
+    const first = await startTimeline(timeline, jsPsychInstance);
+    await pressKey("a");
+    await pressKey("b");
+    simulateReload(first.jsPsych);
+
+    expect(readSession(storage).state.data_properties).toEqual({ condition: "loud" });
+
+    jsPsychInstance = initJsPsych(resumeOptions());
+    const second = await startTimeline(timeline, jsPsychInstance);
+
+    // The live trial gets the property even though `addProperties()` was called in a callback that
+    // does not run again
+    await pressKey("c");
+    await second.expectFinished();
+
+    expect(
+      second
+        .getData()
+        .values()
+        .map((t) => t.condition)
+    ).toEqual(["loud", "loud", "loud"]);
+  });
+
+  it("restores a manually set progress bar position", async () => {
+    let jsPsychInstance: JsPsych;
+    const progressBarOptions = () => ({
+      ...resumeOptions(),
+      show_progress_bar: true,
+      auto_update_progress_bar: false,
+    });
+    const timeline = [
+      trial("one", {
+        on_finish: () => {
+          jsPsychInstance.progressBar.progress = 0.5;
+        },
+      }),
+      trial("two"),
+    ];
+
+    jsPsychInstance = initJsPsych(progressBarOptions());
+    const first = await startTimeline(timeline, jsPsychInstance);
+    await pressKey("a");
+    expect(jsPsychInstance.state.progress).toBe(0.5);
+    simulateReload(first.jsPsych);
+
+    jsPsychInstance = initJsPsych(progressBarOptions());
+    const second = await startTimeline(timeline, jsPsychInstance);
+
+    expect(jsPsychInstance.progressBar.progress).toBe(0.5);
+    expect(
+      second.jsPsych
+        .getDisplayContainerElement()
+        .querySelector<HTMLElement>("#jspsych-progressbar-inner").style.width
+    ).toBe("50%");
+
+    await pressKey("b");
+    await second.expectFinished();
+  });
+
+  it("does not store automatic progress bar updates", async () => {
+    const jsPsych = initJsPsych({ ...resumeOptions(), show_progress_bar: true });
+    const experiment = await startTimeline([trial("one"), trial("two")], jsPsych);
+
+    await pressKey("a");
+    expect(jsPsych.progressBar.progress).toBe(0.5);
+    expect(jsPsych.state.progress).toBeUndefined();
+
+    await pressKey("b");
+    await experiment.expectFinished();
+  });
+
+  it("writes the reserved keys of `jsPsych.state` and nothing else", async () => {
+    const jsPsych = initJsPsych({
+      ...resumeOptions(),
+      show_progress_bar: true,
+      auto_update_progress_bar: false,
+    });
+
+    // The seed is the only reserved key that is always present
+    expect(Object.keys(jsPsych.state)).toEqual(["rng_seed"]);
+
+    const experiment = await startTimeline([trial("one")], jsPsych);
+    jsPsych.data.addProperties({ subject_id: "s1" });
+    jsPsych.progressBar.progress = 0.25;
+
+    expect(jsPsych.state).toEqual({
+      rng_seed: expect.any(String),
+      data_properties: { subject_id: "s1" },
+      progress: 0.25,
+    });
+
+    await pressKey("a");
+    await experiment.expectFinished();
   });
 
   it("fires `on_resume` when the saved session ends exactly at the end of the experiment", async () => {
@@ -582,11 +731,12 @@ describe("resume on reload", () => {
     const jsPsych = initJsPsych();
     const experiment = await startTimeline([trial("one")], jsPsych);
 
-    // `state` works in memory and `clear()` is a no-op
-    jsPsych.resume.state.foo = "bar";
-    expect(jsPsych.resume.state).toEqual({ foo: "bar" });
+    // `jsPsych.state` works in memory (including the seed) and `clear()` is a no-op
+    expect(typeof jsPsych.state.rng_seed).toBe("string");
+    jsPsych.state.foo = "bar";
+    expect(jsPsych.state.foo).toBe("bar");
     jsPsych.resume.clear();
-    expect(jsPsych.resume.state).toEqual({ foo: "bar" });
+    expect(jsPsych.state.foo).toBe("bar");
 
     await pressKey("a");
     await experiment.expectFinished();

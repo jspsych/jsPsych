@@ -9,7 +9,7 @@ import { JsPsychExtension } from "./modules/extensions";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
-import { ResumeAPI, SessionRecorder } from "./modules/resume";
+import { ResumeAPI, SessionRecorder, isPlainObject } from "./modules/resume";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
 import { ProgressBar } from "./ProgressBar";
@@ -25,6 +25,13 @@ import {
 import { Timeline } from "./timeline/Timeline";
 import { Trial } from "./timeline/Trial";
 import { PromiseWrapper } from "./timeline/util";
+
+/**
+ * The seed that a `JsPsych` instance most recently applied on its own. `Math.random()` is global,
+ * so this is tracked at the module level: it lets a second instance created in the same page tell a
+ * seed that the user set apart from the one that a previous instance applied automatically.
+ */
+let lastAutoAppliedSeed: string | undefined;
 
 export class JsPsych {
   turk = turk;
@@ -77,6 +84,29 @@ export class JsPsych {
     return this.resumeAPI;
   }
 
+  /** The state object that is used when the `resume` option is not set */
+  private inMemoryState: Record<string, any> = {};
+
+  /**
+   * A JSON-serializable object for storing the state of the experiment. When the `resume` option is
+   * used, it is persisted with the session and restored when the session is resumed; otherwise it
+   * is an ordinary in-memory store. jsPsych itself writes the reserved `rng_seed`,
+   * `data_properties`, and `progress` keys.
+   *
+   * https://www.jspsych.org/latest/overview/resume/
+   */
+  get state(): Record<string, any> {
+    return this.sessionRecorder?.state ?? this.inMemoryState;
+  }
+
+  set state(state: Record<string, any>) {
+    if (this.sessionRecorder) {
+      this.sessionRecorder.state = state;
+    } else {
+      this.inMemoryState = state;
+    }
+  }
+
   constructor(options?) {
     // override default options if user specifies an option
     options = {
@@ -110,7 +140,13 @@ export class JsPsych {
           options.resume.on_resume?.(this.data.get());
         },
       });
+
+      // Loading here rather than in `run()` makes the saved state (including the seed below)
+      // available while the user's code builds the timeline
+      this.sessionRecorder.load();
     }
+
+    this.initializeSeed();
 
     autoBind(this); // so we can pass JsPsych methods as callbacks and `this` remains the JsPsych instance
 
@@ -138,6 +174,35 @@ export class JsPsych {
       this.extensionManagerDependencies,
       options.extensions
     );
+  }
+
+  /**
+   * Seeds the random number generator and stores the seed in `state.rng_seed`, so that a page that
+   * is reloaded reproduces the random draws of the interrupted session.
+   *
+   * Seeding happens at construction, before the user's code builds the timeline, because that is
+   * the only way to make build-time randomization (a shuffled array of timeline variables, for
+   * instance) come out the same way twice. A reloaded page therefore reconstructs an identical
+   * timeline and the replay of the saved session stays aligned with it.
+   *
+   * Note that this replaces `Math.random()` for the whole page, and that it happens whether or not
+   * the `resume` option is used.
+   */
+  private initializeSeed() {
+    const trackedSeed = randomization.getSeed();
+
+    if (typeof trackedSeed === "string" && trackedSeed !== lastAutoAppliedSeed) {
+      // The user seeded the generator themselves before creating this instance; adopt their seed
+      // instead of overriding it
+      this.state.rng_seed = trackedSeed;
+    } else if (typeof this.state.rng_seed === "string") {
+      // Restored from a saved session
+      randomization.setSeed(this.state.rng_seed);
+    } else {
+      this.state.rng_seed = randomization.setSeed();
+    }
+
+    lastAutoAppliedSeed = this.state.rng_seed;
   }
 
   private endMessage?: string;
@@ -170,7 +235,14 @@ export class JsPsych {
     this.experimentStartTime = new Date();
 
     if (this.sessionRecorder) {
-      this.sessionRecorder.load();
+      if (
+        this.progressBar &&
+        !this.options.auto_update_progress_bar &&
+        typeof this.state.progress === "number"
+      ) {
+        // Restore a position that was set manually before the session was interrupted
+        this.progressBar.setProgress(this.state.progress);
+      }
 
       const restoredElapsedTime = this.sessionRecorder.getRestoredElapsedTime();
       if (restoredElapsedTime > 0) {
@@ -420,7 +492,13 @@ export class JsPsych {
       const progressBarContainer = document.createElement("div");
       progressBarContainer.id = "jspsych-progressbar-container";
 
-      this.progressBar = new ProgressBar(progressBarContainer, this.options.message_progress_bar);
+      this.progressBar = new ProgressBar(
+        progressBarContainer,
+        this.options.message_progress_bar,
+        (progress) => {
+          this.state.progress = progress;
+        }
+      );
 
       this.getDisplayContainerElement().insertAdjacentElement("afterbegin", progressBarContainer);
     }
@@ -462,7 +540,9 @@ export class JsPsych {
       }
 
       if (this.progressBar && this.options.auto_update_progress_bar) {
-        this.progressBar.progress = this.timeline.getNaiveProgress();
+        // `setProgress()` instead of the `progress` setter: automatic updates are recomputed from
+        // the timeline after a resume, so there is no need to persist them
+        this.progressBar.setProgress(this.timeline.getNaiveProgress());
       }
 
       // Persisted here (rather than in `onTrialResultAvailable`) so that data added by extensions
@@ -514,5 +594,12 @@ export class JsPsych {
     },
 
     getDisplayElement: () => this.getDisplayElement(),
+
+    getInitialDataProperties: () =>
+      isPlainObject(this.state.data_properties) ? this.state.data_properties : {},
+
+    onDataPropertiesChanged: (properties) => {
+      this.state.data_properties = { ...properties };
+    },
   };
 }

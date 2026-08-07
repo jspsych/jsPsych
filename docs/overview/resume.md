@@ -1,5 +1,5 @@
 # Resuming an Experiment After a Page Reload
-*Added in 8.4*
+*Added in 9.0*
 
 Participants sometimes reload the page in the middle of an experiment.
 They refresh by accident, their browser crashes, they close the tab and come back later, or the connection drops and they hit reload to see if that fixes it.
@@ -61,10 +61,13 @@ If a dynamic parameter computes something that is not saved to the data, that va
 The order in which timeline variables are sampled is part of the saved session, so a `randomize_order: true` timeline or a `sample` block presents the remaining trials in exactly the order that was chosen before the reload.
 The randomization is not repeated, and a custom `sample` function is not called again.
 
-**`jsPsych.resume.state`.**
+**`jsPsych.state`.**
 This is an object you can put anything JSON-serializable into.
-It is saved with the session after every trial and restored when the experiment resumes.
+It is a general-purpose store that exists whether or not the `resume` option is used; what `resume` adds is durability.
+With `resume` enabled, `jsPsych.state` is saved with the session after every trial and restored when the experiment resumes.
 This is where variables that track the state of your experiment belong.
+
+Some values that jsPsych itself needs after a reload are kept in `jsPsych.state` too, under [reserved keys](#reserved-keys) that your experiment should not overwrite.
 
 ### An example: a staircase
 
@@ -90,30 +93,43 @@ const trial = {
 After a reload this variable is back to `5`.
 Worse, it stays at `5`: the `on_finish` callbacks of the replayed trials do not run, so nothing updates it as the session is replayed.
 
-Keeping the same value in `jsPsych.resume.state` fixes both problems:
+Keeping the same value in `jsPsych.state` fixes both problems:
 
 ```javascript
 // the starting value, used only when there is no saved session to restore
-jsPsych.resume.state.difficulty = 5;
+jsPsych.state.difficulty = 5;
 
 const trial = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: function(){
-    return generate_stimulus(jsPsych.resume.state.difficulty);
+    return generate_stimulus(jsPsych.state.difficulty);
   },
   choices: ['f', 'j'],
   on_finish: function(data){
-    jsPsych.resume.state.difficulty += data.correct ? 1 : -1;
+    jsPsych.state.difficulty += data.correct ? 1 : -1;
   }
 };
 
 jsPsych.run(timeline);
 ```
 
-Values assigned to `jsPsych.resume.state` before `jsPsych.run()` act as defaults: they are used when the experiment starts fresh, and they are replaced by the saved values when a session is resumed.
+Values assigned to `jsPsych.state` before `jsPsych.run()` act as defaults: they are used when the experiment starts fresh, and they are replaced by the saved values when a session is resumed.
 
-`jsPsych.resume.state` is a plain object, so you can read and write it anywhere in your experiment code.
+`jsPsych.state` is a plain object, so you can read and write it anywhere in your experiment code.
 It must be JSON-serializable, so it can hold numbers, strings, booleans, arrays, and plain objects, but not functions, DOM elements, or class instances.
+
+### Reserved keys
+
+jsPsych stores a few things in `jsPsych.state` itself, so that they survive a reload just like the rest of your state.
+Do not overwrite these keys:
+
+| Key | What jsPsych stores in it |
+| --- | ------------------------- |
+| `rng_seed` | The seed of the random number generator. See [Randomization is reproduced](#randomization-is-reproduced) below. |
+| `data_properties` | The properties added with [`jsPsych.data.addProperties()`](../reference/jspsych-data.md#jspsychdataaddproperties), so that they are applied to the trials that run after a resume. |
+| `progress` | The position of the [progress bar](progress-bar.md), when it is set manually with `jsPsych.progressBar.progress`. Automatic progress bar updates are not stored, because they are recomputed from the timeline. |
+
+Reading these values is fine, and `jsPsych.state.rng_seed` is a convenient thing to add to your data.
 
 ### Recomputing state with `on_resume`
 
@@ -138,6 +154,38 @@ const jsPsych = initJsPsych({
 
 `on_resume` only runs when there was a saved session to restore.
 It does not run when the experiment starts from the beginning.
+
+## Randomization is reproduced
+
+jsPsych seeds the random number generator when you call `initJsPsych()` and stores the seed in `jsPsych.state.rng_seed`.
+When a saved session is resumed, the stored seed is applied again before your code runs, so every random draw that your experiment made while it was being built comes out the same way it did in the interrupted session.
+
+This matters because the saved session only describes the timeline that jsPsych ran; it does not describe the timeline that your code creates.
+If you shuffle an array of stimuli, pick a counterbalancing condition, or generate the timeline variables of a block yourself, that happens before `jsPsych.run()` and is not part of the log.
+Seeding at `initJsPsych()` makes the reloaded page rebuild the identical timeline, so the replay of the saved session lines up with it.
+
+!!! warning
+    Seeding replaces `Math.random()` for the entire page, and it happens whether or not you use the `resume` option.
+    Any code on the page that uses `Math.random()`, including code that is not part of jsPsych, will get numbers from the seeded generator.
+
+If the generator has already been seeded when `initJsPsych()` runs, jsPsych adopts that seed and stores it in `jsPsych.state.rng_seed` instead of generating a new one.
+
+You can still choose the seed yourself with [`jsPsych.randomization.setSeed()`](../reference/jspsych-randomization.md#jspsychrandomizationsetseed), which is the way to use a seed that is derived from a participant ID, for example.
+
+```javascript
+const jsPsych = initJsPsych({
+  resume: {
+    key: 'flanker-task-v1'
+  }
+});
+
+jsPsych.randomization.setSeed(participant_id);
+```
+
+jsPsych does not keep track of a seed that is set this way; `jsPsych.state.rng_seed` still holds the seed from `initJsPsych()`.
+Resuming works anyway, as long as the `setSeed()` call happens at the same point in your code on every page load, because everything that runs before it is reproduced by the stored seed.
+What does break the alignment is a seed that is different on the reloaded page, such as one derived from `Date.now()`, or a `setSeed()` call that only happens on some page loads.
+The randomization that happens while the timeline is built would then differ from the timeline that the saved session describes.
 
 ## Re-running a trial after a reload: `run_on_resume`
 
@@ -247,6 +295,6 @@ jsPsych does that itself when the experiment ends, whether it runs to completion
 * **Only JSON-serializable data is saved.** The session is stored as JSON. Data that a plugin records as a function, a DOM element, a `Blob`, or a class instance will not survive a reload.
 * **Storage is limited.** `localStorage` typically allows about 5 MB per origin. Experiments that store large per-trial data, such as base64-encoded audio or video recordings or dense eye-tracking samples, can exceed this. When a write fails, jsPsych warns in the console and keeps running, but the saved session will be out of date from that point on.
 * **Side effects happen only once.** Because callbacks do not run for replayed trials, anything you do in `on_finish` or `on_data_update`, such as saving a trial to a server, happened during the original run and does not happen again. This is usually what you want (data is not saved twice), but it is worth checking against your own callbacks.
-* **The timeline has to be the same.** jsPsych replays the decisions it recorded, so the timeline has to be built the same way on the reloaded page. A timeline that is shuffled or filtered by your own code at load time, or modified at runtime somewhere other than the `conditional_function`, `loop_function`, and timeline variable sampling that jsPsych logs, will not line up with the saved session. jsPsych detects the mismatch and falls back to running live, but the participant loses the progress after that point.
+* **The timeline has to be the same.** jsPsych replays the decisions it recorded, so the timeline has to be built the same way on the reloaded page. Randomization that your own code does while it builds the timeline is reproduced, because [the seed is restored](#randomization-is-reproduced), but a timeline that depends on something else that differs between page loads (the current time, a fresh request to a server, or a modification made at runtime somewhere other than the `conditional_function`, `loop_function`, and timeline variable sampling that jsPsych logs) will not line up with the saved session. jsPsych detects the mismatch and falls back to running live, but the participant loses the progress after that point.
 * **Interaction data is not restored.** The focus, blur, and fullscreen events recorded by [`jsPsych.data.getInteractionData()`](../reference/jspsych-data.md#jspsychdatagetinteractiondata) before a reload are not part of the saved session. After resuming, the interaction data only contains events from the current page load.
 * **The session is tied to one browser.** `localStorage` is specific to a browser and an origin. A participant who switches devices or browsers, clears their browsing data, or works in a private window that discards storage on close, will start over.

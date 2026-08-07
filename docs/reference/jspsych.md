@@ -585,38 +585,6 @@ document.querySelector('#start-over').addEventListener('click', function(){
 
 ---
 
-## jsPsych.resume.state
-
-```javascript
-jsPsych.resume.state
-```
-
-### Description
-
-An object that is saved along with the session when [resuming the experiment after a page reload](../overview/resume.md) is enabled, and restored when a saved session is resumed. Use it to store variables that describe the state of your experiment (e.g., the current difficulty level in a staircase procedure), so that they still have the right value after the participant reloads the page. Ordinary JavaScript variables in your experiment file are reset by a reload; the properties of this object are not.
-
-The value must be JSON-serializable. Values assigned before `jsPsych.run()` act as defaults: they are used when the experiment starts fresh and are replaced by the saved values when a session is resumed.
-
-If the `resume` option was not specified in `initJsPsych()`, this object still works as an in-memory store, but its contents are not saved.
-
-### Example
-
-```javascript
-jsPsych.resume.state.difficulty = 5;
-
-var trial = {
-  type: jsPsychMyPlugin,
-  difficulty: function(){
-    return jsPsych.resume.state.difficulty;
-  },
-  on_finish: function(data){
-    jsPsych.resume.state.difficulty += data.correct ? 1 : -1;
-  }
-}
-```
-
----
-
 ## jsPsych.resumeExperiment
 
 ```javascript
@@ -679,6 +647,40 @@ Start the jsPsych experiment with the specified timeline.
 var timeline = [trial1, trial2, trial3];
 
 jsPsych.run(timeline);
+```
+
+---
+
+## jsPsych.state
+
+```javascript
+jsPsych.state
+```
+
+### Description
+
+An object for storing the state of your experiment. Use it for variables that describe where the experiment stands (e.g., the current difficulty level in a staircase procedure), rather than ordinary JavaScript variables in your experiment file.
+
+When [resuming the experiment after a page reload](../overview/resume.md) is enabled with the `resume` option of `initJsPsych()`, this object is saved along with the session and restored when a saved session is resumed. Ordinary JavaScript variables are reset by a reload; the properties of this object are not. Values assigned before `jsPsych.run()` act as defaults: they are used when the experiment starts fresh and are replaced by the saved values when a session is resumed.
+
+The value must be JSON-serializable. If the `resume` option was not specified, this object still works as an in-memory store, but its contents are not saved.
+
+jsPsych stores a few values of its own in this object. The reserved keys are `rng_seed` (the seed of the random number generator, see [jsPsych.randomization.setSeed](jspsych-randomization.md#jspsychrandomizationsetseed)), `data_properties` (the properties added with [jsPsych.data.addProperties](jspsych-data.md#jspsychdataaddproperties)), and `progress` (the position of the progress bar, when it is set manually). You can read these values, but you should not overwrite them.
+
+### Example
+
+```javascript
+jsPsych.state.difficulty = 5;
+
+var trial = {
+  type: jsPsychMyPlugin,
+  difficulty: function(){
+    return jsPsych.state.difficulty;
+  },
+  on_finish: function(data){
+    jsPsych.state.difficulty += data.correct ? 1 : -1;
+  }
+}
 ```
 
 ---
