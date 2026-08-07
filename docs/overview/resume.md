@@ -9,7 +9,7 @@ The `resume` option makes jsPsych save the state of the experiment as it runs, s
 The trials that were already completed are restored, including their data, and the experiment continues from the trial that was interrupted.
 
 The saved session lives in the participant's browser, so resuming only works if the participant returns to the same URL in the same browser (and not in a private window that discards storage).
-The session is deleted automatically when the experiment finishes.
+The session is deleted automatically when the experiment finishes, unless you [ask jsPsych to remember that it was completed](#what-happens-when-a-participant-returns).
 
 !!! warning
     Resuming is not a substitute for saving data as the experiment runs.
@@ -216,7 +216,85 @@ Like other parameters, it can be set on a nested timeline to apply to all of the
 Use it only for trials that establish something the experiment needs, not for trials that collect data.
 A trial with `run_on_resume: true` will be presented to the participant again every time they reload the page.
 
-## Invalidating saved sessions with `key`
+## What happens when a participant returns
+
+By default a participant who reloads the page continues where they left off, and a participant who has already finished the experiment starts a new run.
+Two options change that, one for each of the two situations.
+
+| Option | Value | What happens on the next page load |
+| ------ | ----- | ---------------------------------- |
+| `incomplete_session` | `'resume'` (default) | The experiment continues at the trial that was interrupted. |
+| | `'restart'` | The saved session is discarded and the experiment starts from the beginning. |
+| | `'block'` | The experiment does not run at all, and `block_message` is displayed instead. |
+| `completed_session` | `'restart'` (default) | The saved session is deleted when the experiment ends, so the participant can take the experiment again. |
+| | `'block'` | jsPsych records that the experiment was completed, and every later page load displays `block_message` instead of running the experiment. |
+
+The two options are independent, so all six combinations are available.
+
+```javascript
+// one attempt, and it has to be finished in one sitting
+const jsPsych = initJsPsych({
+  resume: {
+    key: 'flanker-task-v1',
+    incomplete_session: 'block',
+    completed_session: 'block'
+  }
+});
+```
+
+`block_message` is the HTML that is displayed in the display element when either option blocks the run.
+It defaults to `<p>This experiment is no longer available to you.</p>`.
+A blocked page load does not build the timeline and does not run anything: no trial, no `on_finish`, and no `on_resume`.
+
+```javascript
+const jsPsych = initJsPsych({
+  resume: {
+    key: 'flanker-task-v1',
+    completed_session: 'block',
+    block_message: '<p>You have already completed this study. Thank you!</p>'
+  }
+});
+```
+
+`incomplete_session: 'block'` is the "one sitting" mode: any saved trial data means that the participant can neither continue nor start over.
+The saved session stays in the browser in this case, because deleting it would let the next page load start the experiment again.
+For the same reason it never expires, so `max_age` does not apply to it.
+
+`completed_session: 'block'` replaces the saved session with a small marker when the experiment ends, instead of deleting it.
+The marker records only that the experiment was completed and when.
+The log and `jsPsych.state` are dropped, so no participant data is left behind in the browser.
+This happens whether the experiment runs to the end or is stopped with [`jsPsych.abortExperiment()`](../reference/jspsych.md#jspsychabortexperiment), so a participant who is screened out partway through is locked out too.
+
+`jsPsych.clearSavedSession()` removes both kinds of record, which is how you unblock a browser while you are developing the experiment.
+Changing the `key` has the same effect, because a record that was saved under a different key is ignored.
+
+!!! warning
+    Blocking is a deterrent, not a security measure.
+    The record lives in the participant's browser, so clearing browsing data, opening a private window, or switching to another browser or device gets around it.
+    If it really matters that a person takes part only once, use the tools of the platform that you recruit on, such as Prolific's screening and custom allowlists or an MTurk qualification.
+    Treat these options as a way to keep honest participants from accidentally taking the experiment twice.
+
+## Expiring saved sessions with `max_age`
+
+A participant who reloads the page a minute later is usually in a different situation than one who comes back a week later.
+`max_age` sets how long a saved session can be resumed for, in milliseconds.
+A session that was saved longer ago than that is discarded, and the experiment starts from the beginning.
+
+```javascript
+const jsPsych = initJsPsych({
+  resume: {
+    key: 'flanker-task-v1',
+    max_age: 24 * 60 * 60 * 1000 // 24 hours
+  }
+});
+```
+
+The age is measured from the moment the session was last saved, which is the end of the last trial the participant finished, not from the start of the experiment.
+There is no expiry by default.
+`max_age` only affects sessions that would otherwise be resumed.
+It has no effect on a session that `incomplete_session: 'block'` blocks with, and none on the record of a completed session.
+
+## Choosing a key
 
 The saved session describes the experiment that produced it.
 If you change the experiment while a participant has a saved session, for example by adding a trial, reordering a block, or changing what a `conditional_function` does, then the old session no longer describes the new timeline.
@@ -233,8 +311,9 @@ const jsPsych = initJsPsych({
 });
 ```
 
-The key can also be used to keep sessions apart when more than one person uses the same browser, or when the same participant does several sessions of a study.
-Anything you know at page load can go into it, such as a participant ID from the URL.
+Fold a participant ID into the key whenever you have one at page load, such as one that the recruitment platform puts in the URL.
+Two people who use the same browser, or one participant who does several sessions of a study, otherwise share a single saved session, and jsPsych has no way of telling that the person in front of the screen has changed.
+Participant B would resume participant A's session and the two would end up in one data file, which is a mistake that nothing in the experiment can detect.
 
 ```javascript
 const participant_id = new URLSearchParams(window.location.search).get('PROLIFIC_PID');
@@ -245,6 +324,8 @@ const jsPsych = initJsPsych({
   }
 });
 ```
+
+A key that includes the participant ID also scopes `incomplete_session` and `completed_session` to that participant, which is usually what you want on a shared computer.
 
 If jsPsych does load a session that turns out not to match the timeline it is replaying, it does not fail.
 It prints a warning to the console, discards the rest of the saved session, and continues the experiment live from that point.
@@ -272,7 +353,7 @@ If storage is unavailable or a write fails, for example because the browser bloc
 
 ## Starting over
 
-`jsPsych.clearSavedSession()` deletes the saved session.
+`jsPsych.clearSavedSession()` deletes whatever jsPsych has saved under the key, whether that is an interrupted session or the record of a completed one.
 Reloading the page after that starts the experiment from the beginning.
 This is useful during development, and for giving a participant (or yourself) a way out of a session that should not be continued.
 
@@ -289,6 +370,7 @@ If the experiment keeps running after you call `clearSavedSession()`, jsPsych st
 
 You do not need to clear the session at the end of the experiment.
 jsPsych does that itself when the experiment ends, whether it runs to completion or is stopped with [`jsPsych.abortExperiment()`](../reference/jspsych.md#jspsychabortexperiment), so a participant who finishes and then reloads the page starts a new experiment rather than landing on the end screen.
+With `completed_session: 'block'`, jsPsych keeps a record that the experiment was completed instead, and the reloaded page shows `block_message`.
 
 ## Limitations
 

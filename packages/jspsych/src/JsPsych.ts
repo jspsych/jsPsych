@@ -9,7 +9,7 @@ import { JsPsychExtension } from "./modules/extensions";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
-import { SessionRecorder, isPlainObject } from "./modules/resume";
+import { DEFAULT_BLOCK_MESSAGE, SessionRecorder, isPlainObject } from "./modules/resume";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
 import { ProgressBar } from "./ProgressBar";
@@ -227,6 +227,16 @@ export class JsPsych {
       );
     }
 
+    if (this.sessionRecorder?.isBlocked()) {
+      // A saved session that the `incomplete_session` or `completed_session` policy blocks was found,
+      // so the experiment is not run at all
+      await this.prepareDom();
+      this.getDisplayElement().innerHTML =
+        this.options.resume.block_message ?? DEFAULT_BLOCK_MESSAGE;
+      this.data.removeInteractionListeners();
+      return;
+    }
+
     // create experiment timeline
     this.timeline = new Timeline(this.timelineDependencies, timeline);
 
@@ -259,7 +269,7 @@ export class JsPsych {
     if (this.sessionRecorder) {
       // In case the saved session ended exactly at the end of the experiment
       this.sessionRecorder.checkReplayTransition();
-      this.sessionRecorder.clear();
+      this.sessionRecorder.end();
     }
 
     await Promise.resolve(this.options.on_finish(this.data.get()));

@@ -9,6 +9,9 @@ export const RESUME_FORMAT_VERSION = 1;
 
 const STORAGE_KEY_PREFIX = "jspsych-resume:";
 
+/** The message that is displayed instead of the experiment when a saved session blocks the run */
+export const DEFAULT_BLOCK_MESSAGE = "<p>This experiment is no longer available to you.</p>";
+
 /**
  * An entry of the session log. Each entry records the outcome of one nondeterministic decision that
  * the timeline engine made while running the experiment. Replaying the log therefore reproduces the
@@ -40,6 +43,39 @@ export interface ResumeOptions {
 
   /** Where to store the session. Defaults to `window.localStorage`. */
   storage?: StorageLike;
+
+  /**
+   * How long a saved session may be resumed for, in milliseconds. A session that was saved longer
+   * ago than this is discarded and the experiment starts from the beginning. Defaults to
+   * `undefined`, which means that a saved session never expires. Only applies to the `"resume"`
+   * value of `incomplete_session`.
+   */
+  max_age?: number;
+
+  /**
+   * What happens when the page is loaded and jsPsych finds a session that was interrupted before the
+   * experiment finished.
+   *
+   * - `"resume"` (default) continues the experiment where it was interrupted.
+   * - `"restart"` discards the saved session and starts the experiment from the beginning.
+   * - `"block"` does not run the experiment and displays `block_message` instead. The saved session
+   *   stays in storage, so every further page load is blocked as well.
+   */
+  incomplete_session?: "resume" | "restart" | "block";
+
+  /**
+   * What happens when the page is loaded and jsPsych finds that the experiment has already been
+   * completed in this browser.
+   *
+   * - `"restart"` (default) deletes the saved session when the experiment ends, so the participant
+   *   can take the experiment again.
+   * - `"block"` records that the experiment was completed instead of deleting the saved session, and
+   *   displays `block_message` instead of running the experiment on every further page load.
+   */
+  completed_session?: "restart" | "block";
+
+  /** The HTML that is displayed instead of the experiment when a saved session blocks the run. */
+  block_message?: string;
 
   /** Invoked once when a saved session has been replayed and the experiment continues live. */
   on_resume?: (data: DataCollection) => void;
@@ -91,9 +127,15 @@ export class SessionRecorder {
 
   private restoredElapsedTime = 0;
 
+  /** Whether the saved session that was found forbids running the experiment */
+  private blocked = false;
+
   private readonly key: string;
   private readonly storageKey: string;
   private readonly storage?: StorageLike;
+  private readonly maxAge?: number;
+  private readonly incompletePolicy: "resume" | "restart" | "block";
+  private readonly completedPolicy: "restart" | "block";
   private readonly getElapsedTime: () => number;
   private readonly onReplayComplete?: () => void;
 
@@ -101,6 +143,9 @@ export class SessionRecorder {
     this.key = options.key;
     this.storageKey = STORAGE_KEY_PREFIX + options.key;
     this.storage = options.storage ?? getDefaultStorage();
+    this.maxAge = options.max_age;
+    this.incompletePolicy = options.incomplete_session ?? "resume";
+    this.completedPolicy = options.completed_session ?? "restart";
     this.getElapsedTime = options.getElapsedTime ?? (() => 0);
     this.onReplayComplete = options.onReplayComplete;
   }
@@ -205,6 +250,7 @@ export class SessionRecorder {
           log: this.log,
           state: this.state,
           elapsedTime: this.getElapsedTime(),
+          savedAt: Date.now(),
         })
       );
     } catch (error) {
@@ -245,9 +291,45 @@ export class SessionRecorder {
     if (
       !isPlainObject(session) ||
       session.formatVersion !== RESUME_FORMAT_VERSION ||
-      session.key !== this.key ||
-      !Array.isArray(session.log)
+      session.key !== this.key
     ) {
+      this.clear();
+      return false;
+    }
+
+    if (session.completed === true) {
+      // A marker that the experiment has been completed in this browser, not a replayable session.
+      // It only matters while completed sessions are blocked, so it is discarded otherwise.
+      if (this.completedPolicy === "block") {
+        this.blocked = true;
+      } else {
+        this.clear();
+      }
+      return false;
+    }
+
+    if (!Array.isArray(session.log)) {
+      this.clear();
+      return false;
+    }
+
+    if (this.incompletePolicy === "block") {
+      // The record of the interrupted session is what blocks the experiment, so it is deliberately
+      // left in storage (and never expires) rather than being cleared
+      this.blocked = true;
+      return false;
+    }
+
+    if (this.incompletePolicy === "restart") {
+      this.clear();
+      return false;
+    }
+
+    if (typeof this.maxAge === "number" && !this.isWithinMaxAge(session.savedAt)) {
+      console.info(
+        "jsPsych: the saved session is older than `max_age` and will be discarded. " +
+          "The experiment will start from the beginning."
+      );
       this.clear();
       return false;
     }
@@ -262,12 +344,56 @@ export class SessionRecorder {
     return this.isReplayCompletePending;
   }
 
+  /**
+   * Whether the session that was found in storage forbids running the experiment, according to the
+   * `incomplete_session` and `completed_session` policies
+   */
+  isBlocked() {
+    return this.blocked;
+  }
+
+  /**
+   * Ends the session, either by removing it from storage or, when completed sessions are blocked, by
+   * replacing it with a marker that the experiment has been completed.
+   */
+  end() {
+    if (this.completedPolicy === "block") {
+      this.markCompleted();
+    } else {
+      this.clear();
+    }
+  }
+
+  /**
+   * Replaces the saved session with a marker that the experiment has been completed. The log and
+   * the state are deliberately dropped, so that no participant data is left behind in storage.
+   */
+  markCompleted() {
+    this.resetLog();
+
+    if (!this.storage) {
+      return;
+    }
+
+    try {
+      this.storage.setItem(
+        this.storageKey,
+        JSON.stringify({
+          formatVersion: RESUME_FORMAT_VERSION,
+          key: this.key,
+          completed: true,
+          completedAt: Date.now(),
+        })
+      );
+    } catch (error) {
+      console.warn("jsPsych: failed to save the completed session.", error);
+    }
+  }
+
   /** Removes the saved session from storage and resets the in-memory log */
   clear() {
-    this.log = [];
-    this.pointer = 0;
-    this.lastConsumedIndex = undefined;
-    this.isReplayCompletePending = false;
+    this.resetLog();
+    this.blocked = false;
 
     if (this.storage) {
       try {
@@ -276,6 +402,19 @@ export class SessionRecorder {
         console.warn("jsPsych: failed to clear the saved session.", error);
       }
     }
+  }
+
+  private resetLog() {
+    this.log = [];
+    this.pointer = 0;
+    this.lastConsumedIndex = undefined;
+    this.isReplayCompletePending = false;
+  }
+
+  /** Whether a session that was saved at `savedAt` may still be resumed. `maxAge` is set. */
+  private isWithinMaxAge(savedAt: any) {
+    // A session without a timestamp cannot be shown to be recent enough, so it is treated as expired
+    return typeof savedAt === "number" && Date.now() - savedAt <= this.maxAge;
   }
 
   private discardRemainingLog() {

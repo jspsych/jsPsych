@@ -2,7 +2,12 @@ import { pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType, initJsPsych } from "../../src";
 import { setSeed } from "../../src/modules/randomization";
-import { SessionLogEntry, StorageLike } from "../../src/modules/resume";
+import {
+  DEFAULT_BLOCK_MESSAGE,
+  RESUME_FORMAT_VERSION,
+  SessionLogEntry,
+  StorageLike,
+} from "../../src/modules/resume";
 
 /** An in-memory `Storage` implementation that is shared between "page loads" */
 class MockStorage implements StorageLike {
@@ -98,15 +103,18 @@ const stableData = (jsPsych: JsPsych) =>
 describe("resume on reload", () => {
   let storage: MockStorage;
   let warnSpy: jest.SpyInstance;
+  let infoSpy: jest.SpyInstance;
 
   beforeEach(() => {
     storage = new MockStorage();
     trialSpy.mockClear();
     warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+    infoSpy = jest.spyOn(console, "info").mockImplementation(() => {});
   });
 
   afterEach(() => {
     warnSpy.mockRestore();
+    infoSpy.mockRestore();
   });
 
   const resumeOptions = (overrides: Record<string, any> = {}) => ({
@@ -635,6 +643,489 @@ describe("resume on reload", () => {
     await aborted.expectFinished();
 
     expect(storage.items).toEqual({});
+  });
+
+  describe("max_age", () => {
+    /** Runs a session that is interrupted after one trial and backdates it by `age` milliseconds */
+    const saveInterruptedSession = async (timeline: any[], age: number, options = {}) => {
+      const first = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+      await pressKey("a");
+      simulateReload(first.jsPsych);
+
+      const session = readSession(storage);
+      session.savedAt = Date.now() - age;
+      writeSession(storage, session);
+      trialSpy.mockClear();
+    };
+
+    it("saves the time at which the session was written", async () => {
+      const before = Date.now();
+      const experiment = await startTimeline(
+        [trial("one"), trial("two")],
+        initJsPsych(resumeOptions())
+      );
+      await pressKey("a");
+
+      const { savedAt } = readSession(storage);
+      expect(savedAt).toBeGreaterThanOrEqual(before);
+      expect(savedAt).toBeLessThanOrEqual(Date.now());
+
+      await pressKey("b");
+      await experiment.expectFinished();
+    });
+
+    it("discards a saved session that is older than `max_age`", async () => {
+      const timeline = [trial("one"), trial("two")];
+      await saveInterruptedSession(timeline, 5000, { max_age: 1000 });
+
+      const second = await startTimeline(timeline, initJsPsych(resumeOptions({ max_age: 1000 })));
+
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+      expect(second.getData().count()).toBe(0);
+      expect(second.getHTML()).toMatch("one");
+      expect(infoSpy).toHaveBeenCalledWith(expect.stringContaining("max_age"));
+
+      await pressKey("y");
+      await pressKey("z");
+      await second.expectFinished();
+      expect(
+        second
+          .getData()
+          .values()
+          .map((t) => t.response)
+      ).toEqual(["y", "z"]);
+    });
+
+    it("resumes a saved session that is younger than `max_age`", async () => {
+      const timeline = [trial("one"), trial("two")];
+      await saveInterruptedSession(timeline, 5000, { max_age: 60000 });
+
+      const second = await startTimeline(timeline, initJsPsych(resumeOptions({ max_age: 60000 })));
+
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["two"]);
+      expect(second.getData().count()).toBe(1);
+
+      await pressKey("b");
+      await second.expectFinished();
+    });
+
+    it("never expires a saved session when `max_age` is not set", async () => {
+      const timeline = [trial("one"), trial("two")];
+      await saveInterruptedSession(timeline, 1000 * 60 * 60 * 24 * 365);
+
+      const second = await startTimeline(timeline, initJsPsych(resumeOptions()));
+
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["two"]);
+      expect(second.getData().count()).toBe(1);
+
+      await pressKey("b");
+      await second.expectFinished();
+    });
+
+    it("discards a saved session without a timestamp when `max_age` is set", async () => {
+      const timeline = [trial("one"), trial("two")];
+      await saveInterruptedSession(timeline, 0, { max_age: 60000 });
+
+      const { savedAt, ...sessionWithoutTimestamp } = readSession(storage);
+      writeSession(storage, sessionWithoutTimestamp);
+
+      const second = await startTimeline(timeline, initJsPsych(resumeOptions({ max_age: 60000 })));
+
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+      expect(second.getData().count()).toBe(0);
+    });
+  });
+
+  describe("incomplete_session", () => {
+    const timeline = [trial("one"), trial("two")];
+
+    /** Runs the timeline until it is interrupted after the first trial, and returns the session */
+    const interruptSession = async (options = {}) => {
+      const first = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+      await pressKey("a");
+      simulateReload(first.jsPsych);
+      trialSpy.mockClear();
+      return readSession(storage);
+    };
+
+    it("resumes the saved session with `resume`", async () => {
+      await interruptSession();
+
+      const second = await startTimeline(
+        timeline,
+        initJsPsych(resumeOptions({ incomplete_session: "resume" }))
+      );
+
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["two"]);
+      expect(second.getData().count()).toBe(1);
+
+      await pressKey("b");
+      await second.expectFinished();
+    });
+
+    it("discards the saved session and starts fresh with `restart`", async () => {
+      await interruptSession();
+
+      const onResume = jest.fn();
+      const second = await startTimeline(
+        timeline,
+        initJsPsych(resumeOptions({ incomplete_session: "restart", on_resume: onResume }))
+      );
+
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+      expect(second.getData().count()).toBe(0);
+      expect(onResume).not.toHaveBeenCalled();
+
+      // A new session is recorded from the start of the restarted run
+      await pressKey("y");
+      expect(getLoggedTrials(storage).map((entry) => entry.result.response)).toEqual(["y"]);
+
+      await pressKey("z");
+      await second.expectFinished();
+      expect(
+        second
+          .getData()
+          .values()
+          .map((t) => t.response)
+      ).toEqual(["y", "z"]);
+      expect(storage.items).toEqual({});
+    });
+
+    it("does not run the experiment with `block` and leaves the saved session untouched", async () => {
+      const savedSession = await interruptSession();
+
+      const onFinish = jest.fn();
+      const onTrialStart = jest.fn();
+      const onResume = jest.fn();
+      const second = await startTimeline(timeline, {
+        ...resumeOptions({ incomplete_session: "block", on_resume: onResume }),
+        on_finish: onFinish,
+        on_trial_start: onTrialStart,
+      });
+      await second.expectFinished();
+
+      expect(second.getHTML()).toBe(DEFAULT_BLOCK_MESSAGE);
+      expect(trialSpy).not.toHaveBeenCalled();
+      expect(onFinish).not.toHaveBeenCalled();
+      expect(onTrialStart).not.toHaveBeenCalled();
+      expect(onResume).not.toHaveBeenCalled();
+      expect(second.getData().count()).toBe(0);
+
+      // The record of the interrupted session is what blocks the experiment, so it must survive
+      expect(readSession(storage)).toEqual(savedSession);
+      simulateReload(second.jsPsych);
+
+      const third = await startTimeline(
+        timeline,
+        initJsPsych(resumeOptions({ incomplete_session: "block" }))
+      );
+      await third.expectFinished();
+
+      expect(third.getHTML()).toBe(DEFAULT_BLOCK_MESSAGE);
+      expect(trialSpy).not.toHaveBeenCalled();
+      expect(readSession(storage)).toEqual(savedSession);
+    });
+
+    it("displays a custom `block_message` for a blocked partial session", async () => {
+      await interruptSession();
+
+      const second = await startTimeline(
+        timeline,
+        initJsPsych(
+          resumeOptions({ incomplete_session: "block", block_message: "<p>Come back later.</p>" })
+        )
+      );
+      await second.expectFinished();
+
+      expect(second.getHTML()).toBe("<p>Come back later.</p>");
+    });
+
+    it("does not expire a blocking session with `max_age`", async () => {
+      await interruptSession();
+
+      const session = readSession(storage);
+      session.savedAt = Date.now() - 1000 * 60 * 60 * 24 * 365;
+      writeSession(storage, session);
+
+      const second = await startTimeline(
+        timeline,
+        initJsPsych(resumeOptions({ incomplete_session: "block", max_age: 1000 }))
+      );
+      await second.expectFinished();
+
+      expect(second.getHTML()).toBe(DEFAULT_BLOCK_MESSAGE);
+      expect(trialSpy).not.toHaveBeenCalled();
+      expect(readSession(storage)).toEqual(session);
+    });
+
+    it("unblocks a partial session with `clearSavedSession()`", async () => {
+      await interruptSession();
+
+      const jsPsych = initJsPsych(resumeOptions({ incomplete_session: "block" }));
+      jsPsych.clearSavedSession();
+      expect(storage.items).toEqual({});
+
+      const second = await startTimeline(timeline, jsPsych);
+
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+      expect(second.getData().count()).toBe(0);
+
+      await pressKey("y");
+      await pressKey("z");
+      await second.expectFinished();
+      expect(second.getData().count()).toBe(2);
+    });
+  });
+
+  describe("completed_session", () => {
+    const completedMarker = {
+      formatVersion: RESUME_FORMAT_VERSION,
+      key: "test-key",
+      completed: true,
+      completedAt: expect.any(Number),
+    };
+
+    /** Completes an experiment and detaches it from the DOM */
+    const completeExperiment = async (options = {}) => {
+      const first = await startTimeline([trial("one")], initJsPsych(resumeOptions(options)));
+      await pressKey("a");
+      await first.expectFinished();
+      simulateReload(first.jsPsych);
+      trialSpy.mockClear();
+    };
+
+    it("clears the saved session with `restart`", async () => {
+      await completeExperiment({ completed_session: "restart" });
+
+      expect(storage.items).toEqual({});
+    });
+
+    it("writes a completed marker with `block` when the experiment finishes", async () => {
+      await completeExperiment({ completed_session: "block" });
+
+      // The log and the state are dropped, so no participant data is left in storage
+      expect(Object.keys(storage.items)).toEqual(["jspsych-resume:test-key"]);
+      expect(readSession(storage)).toEqual(completedMarker);
+    });
+
+    it("writes a completed marker with `block` when the experiment is aborted", async () => {
+      const jsPsych = initJsPsych(resumeOptions({ completed_session: "block" }));
+      const aborted = await startTimeline([trial("one"), trial("two")], jsPsych);
+      await pressKey("a");
+      jsPsych.abortExperiment();
+      await aborted.expectFinished();
+
+      expect(readSession(storage)).toEqual(completedMarker);
+    });
+
+    it("does not run the experiment again once it has been completed", async () => {
+      await completeExperiment({ completed_session: "block" });
+
+      const onFinish = jest.fn();
+      const onTrialStart = jest.fn();
+      const second = await startTimeline([trial("one")], {
+        ...resumeOptions({ completed_session: "block" }),
+        on_finish: onFinish,
+        on_trial_start: onTrialStart,
+      });
+      await second.expectFinished();
+
+      expect(second.getHTML()).toBe(DEFAULT_BLOCK_MESSAGE);
+      expect(second.getHTML()).toBe("<p>This experiment is no longer available to you.</p>");
+      expect(trialSpy).not.toHaveBeenCalled();
+      expect(onFinish).not.toHaveBeenCalled();
+      expect(onTrialStart).not.toHaveBeenCalled();
+      expect(second.getData().count()).toBe(0);
+
+      // The marker survives, so a further page load is blocked as well
+      expect(readSession(storage)).toEqual(completedMarker);
+    });
+
+    it("displays a custom `block_message` for a completed session", async () => {
+      await completeExperiment({ completed_session: "block" });
+
+      const second = await startTimeline(
+        [trial("one")],
+        initJsPsych(
+          resumeOptions({ completed_session: "block", block_message: "<p>Thanks, but no.</p>" })
+        )
+      );
+      await second.expectFinished();
+
+      expect(second.getHTML()).toBe("<p>Thanks, but no.</p>");
+      expect(trialSpy).not.toHaveBeenCalled();
+    });
+
+    it("discards a completed marker when `completed_session` is `restart`", async () => {
+      await completeExperiment({ completed_session: "block" });
+
+      const second = await startTimeline([trial("one")], initJsPsych(resumeOptions()));
+
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+
+      await pressKey("b");
+      await second.expectFinished();
+      expect(second.getData().count()).toBe(1);
+      expect(storage.items).toEqual({});
+    });
+
+    it("removes a completed marker with `clearSavedSession()`", async () => {
+      await completeExperiment({ completed_session: "block" });
+
+      const jsPsych = initJsPsych(resumeOptions({ completed_session: "block" }));
+      jsPsych.clearSavedSession();
+      expect(storage.items).toEqual({});
+
+      const second = await startTimeline([trial("one")], jsPsych);
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+
+      await pressKey("b");
+      await second.expectFinished();
+      expect(second.getData().count()).toBe(1);
+      expect(readSession(storage)).toEqual(completedMarker);
+    });
+
+    it("still resumes an interrupted session when completed sessions are blocked", async () => {
+      const timeline = [trial("one"), trial("two")];
+      const options = { completed_session: "block" };
+
+      const first = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+      await pressKey("a");
+      simulateReload(first.jsPsych);
+      trialSpy.mockClear();
+
+      const second = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["two"]);
+      expect(second.getData().count()).toBe(1);
+
+      await pressKey("b");
+      await second.expectFinished();
+      expect(readSession(storage)).toEqual(completedMarker);
+    });
+  });
+
+  describe("combinations of the two policies", () => {
+    const timeline = [trial("one"), trial("two")];
+
+    /** Runs the timeline until it is interrupted after the first trial */
+    const interruptSession = async (options: Record<string, any>) => {
+      const first = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+      await pressKey("a");
+      simulateReload(first.jsPsych);
+      trialSpy.mockClear();
+    };
+
+    /** Runs the timeline to completion */
+    const completeTimeline = async (options: Record<string, any>) => {
+      const experiment = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+      await pressKey("a");
+      await pressKey("b");
+      await experiment.expectFinished();
+      simulateReload(experiment.jsPsych);
+      trialSpy.mockClear();
+    };
+
+    it("resume + restart: resumes an interruption and clears the session at the end", async () => {
+      const options = { incomplete_session: "resume", completed_session: "restart" };
+      await interruptSession(options);
+
+      const second = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["two"]);
+
+      await pressKey("b");
+      await second.expectFinished();
+      expect(storage.items).toEqual({});
+    });
+
+    it("resume + block: resumes an interruption and locks out after completion", async () => {
+      const options = { incomplete_session: "resume", completed_session: "block" };
+      await interruptSession(options);
+
+      const second = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["two"]);
+
+      await pressKey("b");
+      await second.expectFinished();
+      expect(readSession(storage).completed).toBe(true);
+      simulateReload(second.jsPsych);
+      trialSpy.mockClear();
+
+      const third = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+      await third.expectFinished();
+      expect(third.getHTML()).toBe(DEFAULT_BLOCK_MESSAGE);
+      expect(trialSpy).not.toHaveBeenCalled();
+    });
+
+    it("restart + restart: starts over after an interruption and clears the session", async () => {
+      const options = { incomplete_session: "restart", completed_session: "restart" };
+      await interruptSession(options);
+
+      const second = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+
+      await pressKey("y");
+      await pressKey("z");
+      await second.expectFinished();
+      expect(storage.items).toEqual({});
+    });
+
+    it("restart + block: retry until finished once, then locked out", async () => {
+      const options = { incomplete_session: "restart", completed_session: "block" };
+      await interruptSession(options);
+
+      // The partial session is discarded and the experiment starts over
+      const second = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+
+      await pressKey("y");
+      await pressKey("z");
+      await second.expectFinished();
+      expect(readSession(storage).completed).toBe(true);
+      simulateReload(second.jsPsych);
+      trialSpy.mockClear();
+
+      const third = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+      await third.expectFinished();
+      expect(third.getHTML()).toBe(DEFAULT_BLOCK_MESSAGE);
+      expect(trialSpy).not.toHaveBeenCalled();
+    });
+
+    it("block + restart: one sitting, but a completed experiment can be taken again", async () => {
+      const options = { incomplete_session: "block", completed_session: "restart" };
+      await completeTimeline(options);
+
+      expect(storage.items).toEqual({});
+
+      const second = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+
+      await pressKey("y");
+      await pressKey("z");
+      await second.expectFinished();
+    });
+
+    it("block + block: one attempt in one sitting", async () => {
+      const options = { incomplete_session: "block", completed_session: "block" };
+
+      // An interruption locks the experiment
+      await interruptSession(options);
+      const second = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+      await second.expectFinished();
+      expect(second.getHTML()).toBe(DEFAULT_BLOCK_MESSAGE);
+      expect(trialSpy).not.toHaveBeenCalled();
+      simulateReload(second.jsPsych);
+
+      // A run that finishes in one sitting locks the experiment too
+      storage.items = {};
+      await completeTimeline(options);
+      expect(readSession(storage).completed).toBe(true);
+
+      const third = await startTimeline(timeline, initJsPsych(resumeOptions(options)));
+      await third.expectFinished();
+      expect(third.getHTML()).toBe(DEFAULT_BLOCK_MESSAGE);
+      expect(trialSpy).not.toHaveBeenCalled();
+    });
   });
 
   it("ignores a saved session that was stored under a different key", async () => {
