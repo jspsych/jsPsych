@@ -33,6 +33,7 @@ The settings object can contain several parameters. None of the parameters are r
 | minimum_valid_rt           | numeric  | The minimum valid response time for key presses during the experiment. Any key press response time that is less than this value will be treated as invalid and ignored. Note that this parameter only applies to _keyboard responses_, and not to other response types such as buttons and sliders. The default value is 0. |
 | override_safe_mode         | boolean  | Running a jsPsych experiment directly in a web browser (e.g., by double clicking on a local HTML file) will load the page using the `file://` protocol. Some features of jsPsych don't work with this protocol. By default, when jsPsych detects that it's running on a page loaded via the `file://` protocol, it runs in _safe mode_, which automatically disables features that don't work in this context. Specifically, the use of Web Audio is disabled (audio will be played using HTML5 audio instead, even if `use_webaudio` is `true`) and video preloading is disabled. The `override_safe_mode` parameter defaults to `false`, but you can set it to `true` to force these features to operate under the `file://` protocol. In order for this to work, you will need to disable web security (CORS) features in your browser - this is safe to do if you know what you are doing. Note that this parameter has no effect when you are running the experiment on a web server, because the page will be loaded via the `http://` or `https://` protocol. |
 | case_sensitive_responses   | boolean  | If `true`, then jsPsych will make a distinction between uppercase and lowercase keys when evaluating keyboard responses, e.g. "A" (uppercase) will not be recognized as a valid response if the trial only accepts "a" (lowercase). If false, then jsPsych will not make a distinction between uppercase and lowercase keyboard responses, e.g. both "a" and "A" responses will be valid when the trial's key choice parameter is "a". Setting this parameter to false is useful if you want key responses to be treated the same way when CapsLock is turned on or the Shift key is held down. The default value is `false`. |
+| resume                     | object   | If specified, jsPsych saves the state of the experiment as it runs so that the experiment can continue where it left off if the participant reloads the page. The object has three properties: `key` (required, string) identifies the saved session, and a session is only restored if it was saved under the same key; `storage` (optional) is an object with `getItem()`, `setItem()`, and `removeItem()` methods to store the session in, defaulting to `window.localStorage`; and `on_resume` (optional, function) is called once with the restored data when a saved session has been replayed and the experiment continues live. The default value is `undefined`, which disables the feature. See [Resuming After a Page Reload](../overview/resume.md) for details. |
 extensions | array | Array containing information about one or more jsPsych extensions that are used during the experiment. Each extension should be specified as an object with `type` (required), which is the name of the extension, and `params` (optional), which is an object containing any parameter-value pairs to be passed to the extension's `initialize` function. Default value is an empty array. |
 
 ### Return value
@@ -544,6 +545,72 @@ var trial = {
       jsPsych.pauseExperiment();
       setTimeout(jsPsych.resumeExperiment, 30000);
     }
+  }
+}
+```
+
+---
+
+## jsPsych.resume.clear
+
+```javascript
+jsPsych.resume.clear()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+None.
+
+### Description
+
+Deletes the session that jsPsych saved for [resuming the experiment after a page reload](../overview/resume.md). Reloading the page after calling this method will start the experiment from the beginning. jsPsych calls this method itself when the experiment ends, so it is only needed when you want to discard a saved session while the experiment is still running.
+
+Note that jsPsych saves the session again whenever a trial finishes, so if the experiment continues after this method is called, a new session will be recorded from that point on.
+
+This method has no effect if the `resume` option was not specified in `initJsPsych()`.
+
+### Example
+
+```javascript
+// a "start over" button that is part of the page, outside of the experiment
+document.querySelector('#start-over').addEventListener('click', function(){
+  jsPsych.resume.clear();
+  location.reload();
+});
+```
+
+---
+
+## jsPsych.resume.state
+
+```javascript
+jsPsych.resume.state
+```
+
+### Description
+
+An object that is saved along with the session when [resuming the experiment after a page reload](../overview/resume.md) is enabled, and restored when a saved session is resumed. Use it to store variables that describe the state of your experiment (e.g., the current difficulty level in a staircase procedure), so that they still have the right value after the participant reloads the page. Ordinary JavaScript variables in your experiment file are reset by a reload; the properties of this object are not.
+
+The value must be JSON-serializable. Values assigned before `jsPsych.run()` act as defaults: they are used when the experiment starts fresh and are replaced by the saved values when a session is resumed.
+
+If the `resume` option was not specified in `initJsPsych()`, this object still works as an in-memory store, but its contents are not saved.
+
+### Example
+
+```javascript
+jsPsych.resume.state.difficulty = 5;
+
+var trial = {
+  type: jsPsychMyPlugin,
+  difficulty: function(){
+    return jsPsych.resume.state.difficulty;
+  },
+  on_finish: function(data){
+    jsPsych.resume.state.difficulty += data.correct ? 1 : -1;
   }
 }
 ```

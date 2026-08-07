@@ -9,6 +9,7 @@ import { JsPsychExtension } from "./modules/extensions";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
+import { ResumeAPI, SessionRecorder } from "./modules/resume";
 import * as turk from "./modules/turk";
 import * as utils from "./modules/utils";
 import { ProgressBar } from "./ProgressBar";
@@ -66,6 +67,16 @@ export class JsPsych {
 
   private extensionManager: ExtensionManager;
 
+  /** Records and replays the session when the `resume` option is used */
+  private sessionRecorder?: SessionRecorder;
+
+  private resumeAPI = new ResumeAPI(() => this.sessionRecorder);
+
+  /** https://www.jspsych.org/latest/overview/resume/ */
+  get resume() {
+    return this.resumeAPI;
+  }
+
   constructor(options?) {
     // override default options if user specifies an option
     options = {
@@ -86,9 +97,20 @@ export class JsPsych {
       override_safe_mode: false,
       case_sensitive_responses: false,
       extensions: [],
+      resume: undefined,
       ...options,
     };
     this.options = options;
+
+    if (options.resume) {
+      this.sessionRecorder = new SessionRecorder({
+        ...options.resume,
+        getElapsedTime: () => this.getTotalTime(),
+        onReplayComplete: () => {
+          options.resume.on_resume?.(this.data.get());
+        },
+      });
+    }
 
     autoBind(this); // so we can pass JsPsych methods as callbacks and `this` remains the JsPsych instance
 
@@ -147,7 +169,24 @@ export class JsPsych {
 
     this.experimentStartTime = new Date();
 
+    if (this.sessionRecorder) {
+      this.sessionRecorder.load();
+
+      const restoredElapsedTime = this.sessionRecorder.getRestoredElapsedTime();
+      if (restoredElapsedTime > 0) {
+        // Continue the experiment clock where the interrupted session left off
+        this.experimentStartTime = new Date(Date.now() - restoredElapsedTime);
+      }
+    }
+
     await this.timeline.run();
+
+    if (this.sessionRecorder) {
+      // In case the saved session ended exactly at the end of the experiment
+      this.sessionRecorder.checkReplayTransition();
+      this.sessionRecorder.clear();
+    }
+
     await Promise.resolve(this.options.on_finish(this.data.get()));
 
     if (this.endMessage) {
@@ -405,7 +444,11 @@ export class JsPsych {
     onTrialResultAvailable: (trial: Trial) => {
       const result = trial.getResult();
       if (result) {
-        result.time_elapsed = this.getTotalTime();
+        if (!trial.wasResultReplayed()) {
+          // Replayed results carry the `time_elapsed` value of the original run. Re-stamping it
+          // would replace the actual trial timing with the time it took to replay the session.
+          result.time_elapsed = this.getTotalTime();
+        }
         this.data.write(trial);
       }
     },
@@ -420,6 +463,13 @@ export class JsPsych {
 
       if (this.progressBar && this.options.auto_update_progress_bar) {
         this.progressBar.progress = this.timeline.getNaiveProgress();
+      }
+
+      // Persisted here (rather than in `onTrialResultAvailable`) so that data added by extensions
+      // and `on_finish` callbacks is part of the saved result
+      if (this.sessionRecorder) {
+        this.sessionRecorder.recordTrial(result ?? null, trial.getRerunLogIndex());
+        this.sessionRecorder.persist();
       }
     },
 
@@ -445,6 +495,8 @@ export class JsPsych {
     finishTrialPromise: this.finishTrialPromise,
 
     clearAllTimeouts: () => this.pluginAPI.clearAllTimeouts(),
+
+    getSessionRecorder: () => this.sessionRecorder,
   };
 
   private extensionManagerDependencies: ExtensionManagerDependencies = {
