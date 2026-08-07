@@ -1,4 +1,4 @@
-import { pressKey, startTimeline } from "@jspsych/test-utils";
+import { flushPromises, pressKey, startTimeline } from "@jspsych/test-utils";
 
 import { JsPsych, JsPsychPlugin, ParameterType, TrialType, initJsPsych } from "../../src";
 import { setSeed } from "../../src/modules/randomization";
@@ -1035,22 +1035,34 @@ describe("resume on reload", () => {
       expect(readSession(storage)).toEqual(session);
     });
 
-    it("unblocks a partial session with `clearSavedSession()`", async () => {
+    it("replaces the block message with the experiment when `resetSession()` is called", async () => {
       await interruptSession();
 
       const jsPsych = initJsPsych(resumeOptions({ incomplete_session: "block" }));
-      jsPsych.clearSavedSession();
+      const blocked = await startTimeline(timeline, jsPsych);
+      expect(blocked.getHTML()).toBe(DEFAULT_BLOCK_MESSAGE);
+
+      jsPsych.resetSession();
+      await flushPromises();
+
       expect(storage.items).toEqual({});
-
-      const second = await startTimeline(timeline, jsPsych);
-
       expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
-      expect(second.getData().count()).toBe(0);
+      expect(blocked.getHTML()).toMatch("one");
+      expect(blocked.getData().count()).toBe(0);
 
+      // The restarted run is recorded as a new session
       await pressKey("y");
+      expect(getLoggedTrials(storage).map((entry) => entry.result.response)).toEqual(["y"]);
+
       await pressKey("z");
-      await second.expectFinished();
-      expect(second.getData().count()).toBe(2);
+      await flushPromises();
+      expect(
+        blocked
+          .getData()
+          .values()
+          .map((t) => t.response)
+      ).toEqual(["y", "z"]);
+      expect(storage.items).toEqual({});
     });
   });
 
@@ -1146,19 +1158,24 @@ describe("resume on reload", () => {
       expect(storage.items).toEqual({});
     });
 
-    it("removes a completed marker with `clearSavedSession()`", async () => {
+    it("runs the experiment again when `resetSession()` is called on a blocked page", async () => {
       await completeExperiment({ completed_session: "block" });
 
       const jsPsych = initJsPsych(resumeOptions({ completed_session: "block" }));
-      jsPsych.clearSavedSession();
-      expect(storage.items).toEqual({});
+      const blocked = await startTimeline([trial("one")], jsPsych);
+      expect(blocked.getHTML()).toBe(DEFAULT_BLOCK_MESSAGE);
 
-      const second = await startTimeline([trial("one")], jsPsych);
+      jsPsych.resetSession();
+      await flushPromises();
+
+      expect(storage.items).toEqual({});
       expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
 
       await pressKey("b");
-      await second.expectFinished();
-      expect(second.getData().count()).toBe(1);
+      await flushPromises();
+      expect(blocked.getData().count()).toBe(1);
+
+      // The recorder is re-armed, so the completed run writes a fresh marker
       expect(readSession(storage)).toEqual(completedMarker);
     });
 
@@ -1397,19 +1414,246 @@ describe("resume on reload", () => {
 
   it("does nothing when the `resume` option is not used", async () => {
     const jsPsych = initJsPsych();
-    const experiment = await startTimeline([trial("one")], jsPsych);
 
-    // `jsPsych.state` works in memory (including the seed) and `clear()` is a no-op
+    // `jsPsych.state` works in memory (including the seed) and `resetSession()` is a no-op before
+    // the experiment runs
     expect(typeof jsPsych.state._rng_seed).toBe("string");
     jsPsych.state.foo = "bar";
-    expect(jsPsych.state.foo).toBe("bar");
-    jsPsych.clearSavedSession();
+    jsPsych.resetSession();
     expect(jsPsych.state.foo).toBe("bar");
 
+    const experiment = await startTimeline([trial("one")], jsPsych);
     await pressKey("a");
     await experiment.expectFinished();
 
     expect(storage.items).toEqual({});
     expect(warnSpy).not.toHaveBeenCalled();
+  });
+
+  describe("resetSession", () => {
+    const timeline = [trial("one"), trial("two")];
+
+    /**
+     * Builds a timeline whose first trial calls `resetSession()` in its `on_finish` callback, once
+     */
+    const resettingTimeline = (getJsPsych: () => JsPsych) => {
+      let resetCount = 0;
+      return [
+        trial("one", {
+          on_finish: () => {
+            if (resetCount++ === 0) {
+              getJsPsych().resetSession();
+            }
+          },
+        }),
+        trial("two"),
+      ];
+    };
+
+    it("restarts the experiment from the first trial when called mid-run", async () => {
+      let jsPsych: JsPsych;
+      const onFinish = jest.fn();
+
+      jsPsych = initJsPsych({ ...resumeOptions(), on_finish: onFinish });
+      jsPsych.data.addProperties({ subject_id: "s1" });
+      const seed = jsPsych.state._rng_seed;
+
+      const experiment = await startTimeline(
+        resettingTimeline(() => jsPsych),
+        jsPsych
+      );
+
+      // The trial that is in flight when `resetSession()` is called must not be saved: it belongs
+      // to the run that is being discarded
+      const setItemSpy = jest.spyOn(storage, "setItem");
+
+      await pressKey("a");
+      await experiment.expectRunning();
+
+      // The experiment is back at trial 0, and nothing of the discarded run is left
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one", "one"]);
+      expect(experiment.getHTML()).toMatch("one");
+      expect(experiment.getData().count()).toBe(0);
+      expect(onFinish).not.toHaveBeenCalled();
+      expect(setItemSpy).not.toHaveBeenCalled();
+      expect(storage.items).toEqual({});
+      setItemSpy.mockRestore();
+
+      expect(jsPsych.state._resumes).toBeUndefined();
+      expect(jsPsych.state._rng_seed).toBe(seed);
+      expect(jsPsych.state._data_properties).toEqual({ subject_id: "s1" });
+
+      // A new session is recorded from the first trial of the restarted run
+      await pressKey("y");
+      expect(getLoggedTrials(storage).map((entry) => entry.result.response)).toEqual(["y"]);
+
+      await pressKey("z");
+      await experiment.expectFinished();
+
+      expect(onFinish).toHaveBeenCalledTimes(1);
+      expect(
+        experiment
+          .getData()
+          .values()
+          .map((t) => [t.response, t.trial_index, t.subject_id])
+      ).toEqual([
+        ["y", 0, "s1"],
+        ["z", 1, "s1"],
+      ]);
+      expect(storage.items).toEqual({});
+    });
+
+    it("discards the saved session right away when a trial is in flight", async () => {
+      const jsPsych = initJsPsych(resumeOptions());
+      const experiment = await startTimeline(timeline, jsPsych);
+
+      await pressKey("a");
+      expect(getLoggedTrials(storage)).toHaveLength(1);
+      trialSpy.mockClear();
+
+      // As a button somewhere on the page would do it, while the second trial is on the screen. The
+      // session is gone before anything is awaited, so that reloading the page here would not
+      // resume it either.
+      jsPsych.resetSession();
+      expect(storage.items).toEqual({});
+
+      await flushPromises();
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+      expect(experiment.getData().count()).toBe(0);
+      expect(storage.items).toEqual({});
+
+      await pressKey("y");
+      await pressKey("z");
+      await experiment.expectFinished();
+      expect(
+        experiment
+          .getData()
+          .values()
+          .map((t) => t.response)
+      ).toEqual(["y", "z"]);
+    });
+
+    it("discards a saved session when called before `run()`", async () => {
+      const first = await startTimeline(timeline, initJsPsych(resumeOptions()));
+      await pressKey("a");
+      simulateReload(first.jsPsych);
+      trialSpy.mockClear();
+
+      const jsPsych = initJsPsych(resumeOptions());
+      expect(jsPsych.state._resumes).toHaveLength(1);
+
+      jsPsych.resetSession();
+      expect(storage.items).toEqual({});
+      expect(jsPsych.state._resumes).toBeUndefined();
+
+      const second = await startTimeline(timeline, jsPsych);
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+      expect(second.getData().count()).toBe(0);
+
+      await pressKey("y");
+      expect(getLoggedTrials(storage).map((entry) => entry.result.response)).toEqual(["y"]);
+
+      await pressKey("z");
+      await second.expectFinished();
+      expect(
+        second
+          .getData()
+          .values()
+          .map((t) => t.response)
+      ).toEqual(["y", "z"]);
+    });
+
+    it("restarts an experiment that has already finished", async () => {
+      const onFinish = jest.fn();
+      const jsPsych = initJsPsych({ ...resumeOptions(), on_finish: onFinish });
+
+      const experiment = await startTimeline([trial("one")], jsPsych);
+      await pressKey("a");
+      await experiment.expectFinished();
+      expect(storage.items).toEqual({});
+      expect(onFinish).toHaveBeenCalledTimes(1);
+
+      trialSpy.mockClear();
+      jsPsych.resetSession();
+      await flushPromises();
+
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+      expect(experiment.getData().count()).toBe(0);
+
+      await pressKey("b");
+      await flushPromises();
+
+      expect(onFinish).toHaveBeenCalledTimes(2);
+      expect(
+        experiment
+          .getData()
+          .values()
+          .map((t) => t.response)
+      ).toEqual(["b"]);
+      expect(storage.items).toEqual({});
+    });
+
+    it("stops a replay and restarts the experiment live", async () => {
+      const first = await startTimeline(timeline, initJsPsych(resumeOptions()));
+      await pressKey("a");
+      simulateReload(first.jsPsych);
+      trialSpy.mockClear();
+
+      let jsPsych: JsPsych;
+      jsPsych = initJsPsych(
+        resumeOptions({
+          on_resume: () => {
+            jsPsych.resetSession();
+          },
+        })
+      );
+
+      const second = await startTimeline(timeline, jsPsych);
+
+      // The replayed trial is gone and the experiment runs live from the beginning
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+      expect(second.getData().count()).toBe(0);
+      expect(storage.items).toEqual({});
+      expect(jsPsych.state._resumes).toBeUndefined();
+
+      await pressKey("y");
+      expect(getLoggedTrials(storage).map((entry) => entry.result.response)).toEqual(["y"]);
+
+      await pressKey("z");
+      await second.expectFinished();
+      expect(
+        second
+          .getData()
+          .values()
+          .map((t) => t.response)
+      ).toEqual(["y", "z"]);
+    });
+
+    it("restarts the experiment when the `resume` option is not used", async () => {
+      let jsPsych: JsPsych;
+      jsPsych = initJsPsych();
+
+      const experiment = await startTimeline(
+        resettingTimeline(() => jsPsych),
+        jsPsych
+      );
+      await pressKey("a");
+      await experiment.expectRunning();
+
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one", "one"]);
+      expect(experiment.getData().count()).toBe(0);
+
+      await pressKey("y");
+      await pressKey("z");
+      await experiment.expectFinished();
+
+      expect(
+        experiment
+          .getData()
+          .values()
+          .map((t) => t.response)
+      ).toEqual(["y", "z"]);
+      expect(storage.items).toEqual({});
+    });
   });
 });

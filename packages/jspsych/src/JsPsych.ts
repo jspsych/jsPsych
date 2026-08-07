@@ -77,14 +77,114 @@ export class JsPsych {
   /** Records and replays the session when the `resume` option is used */
   private sessionRecorder?: SessionRecorder;
 
+  /** The timeline description that `run()` was called with */
+  private timelineDescription?: TimelineDescription | TimelineArray;
+
+  /** Whether the experiment is currently being run by `runExperiment()` */
+  private isRunning = false;
+
+  /** Whether `resetSession()` has asked the experiment to start over */
+  private isRestartRequested = false;
+
+  /** Whether `prepareDom()` has set up the display element already */
+  private isDomPrepared = false;
+
+  /** Whether the extensions have been initialized already */
+  private areExtensionsInitialized = false;
+
   /**
-   * Discards the saved session so that a page reload starts the experiment from the beginning.
-   * Does nothing when the `resume` option is not used.
+   * Discards the saved session and starts the experiment over from the beginning, without a page
+   * reload.
+   *
+   * Everything that jsPsych controls is reset: the data, `jsPsych.state`, the experiment clock, the
+   * progress bar, and the session that the `resume` option saves. The timeline is then run again
+   * from its first trial. Variables in your own code, and the timeline arrays that your code has
+   * already built, are not affected.
+   *
+   * The method can be called at any point: before `run()` (where it only discards the saved
+   * session), while the experiment is running, on a page that the `resume` option blocked, and
+   * after the experiment has ended. It returns immediately; the restart happens once the running
+   * timeline has unwound.
    *
    * https://www.jspsych.org/latest/overview/resume/
    */
-  clearSavedSession() {
+  resetSession() {
+    if (this.isRunning) {
+      // The rest of the reset is carried out by the run loop in `runExperiment()`, once the aborted
+      // timeline has unwound and the trial that is in flight has finished. The saved session is
+      // discarded right away, so that reloading the page immediately after this call (rather than
+      // letting the experiment restart in place) does not resume the abandoned session.
+      this.isRestartRequested = true;
+      this.sessionRecorder?.clear();
+
+      // There is no timeline to abort while the run is still being set up
+      this.timeline?.abort();
+      this.pluginAPI.cancelAllKeyboardResponses();
+      this.pluginAPI.clearAllTimeouts();
+      this.finishTrial();
+      return;
+    }
+
+    if (!this.timelineDescription) {
+      // `run()` has not been called yet, so there is no experiment to restart. Discarding the saved
+      // session is all it takes for the upcoming run to start from the beginning and to record a
+      // new session.
+      if (this.sessionRecorder) {
+        this.sessionRecorder.clear();
+        this.resetState();
+      }
+      return;
+    }
+
+    // The experiment has ended, or it was blocked by the `resume` option and never started. Either
+    // way, it is run again in place of the end screen or the block message.
+    this.resetExperiment();
+    void this.runExperiment();
+  }
+
+  /**
+   * Resets everything that jsPsych controls to the state of a fresh run: the saved session,
+   * `jsPsych.state`, the data, the experiment clock, and the progress bar. The display element,
+   * the extensions, and the timeline description are left alone, because they are set up once per
+   * page load.
+   */
+  private resetExperiment() {
     this.sessionRecorder?.clear();
+    this.resetState();
+
+    // Note that this keeps the properties added with `data.addProperties()`, which `state`'s
+    // `_data_properties` key mirrors
+    this.data.reset();
+
+    this.experimentStartTime = new Date();
+    this.progressBar?.setProgress(0);
+    this.endMessage = undefined;
+  }
+
+  /**
+   * Replaces `jsPsych.state` with the object that a fresh run starts out with. `_progress` and
+   * `_resumes` describe the run that is being discarded, so they are dropped; the two other
+   * reserved keys have to survive.
+   */
+  private resetState() {
+    const state: Record<string, any> = {};
+
+    // The seed is deliberately kept as it is rather than being regenerated: the timeline that the
+    // restarted run executes was built with the draws of this seed, so it has to stay the seed that
+    // a later page reload applies. That reload then rebuilds an identical timeline, which is what
+    // the replay of the newly recorded session has to line up with.
+    if (typeof this.state._rng_seed === "string") {
+      state._rng_seed = this.state._rng_seed;
+    }
+
+    // `data.reset()` does not discard the properties added with `data.addProperties()` (they are
+    // page-load configuration, such as a participant ID, that the experiment cannot apply again),
+    // so their mirror in the state is preserved along with them
+    if (isPlainObject(this.state._data_properties)) {
+      state._data_properties = this.state._data_properties;
+    }
+
+    this.state = state;
   }
 
   /** The state object that is used when the `resume` option is not set */
@@ -227,44 +327,78 @@ export class JsPsych {
       );
     }
 
+    // Stored so that `resetSession()` can run the timeline again at any later point, including
+    // after a blocked run has returned without running anything
+    this.timelineDescription = timeline;
+
     if (this.sessionRecorder?.isBlocked()) {
       // A saved session that the `incomplete_session` or `completed_session` policy blocks was found,
-      // so the experiment is not run at all
+      // so the experiment is not run at all. `resetSession()` can still start it later.
       await this.prepareDom();
       this.getDisplayElement().innerHTML =
         this.options.resume.block_message ?? DEFAULT_BLOCK_MESSAGE;
-      this.data.removeInteractionListeners();
       return;
     }
 
-    // create experiment timeline
-    this.timeline = new Timeline(this.timelineDependencies, timeline);
+    await this.runExperiment();
+  }
+
+  /**
+   * Runs the timeline description that `run()` was called with, and applies the effects that end a
+   * run once it is done. A `resetSession()` call that is made while the timeline runs starts the
+   * loop over instead of ending the run.
+   */
+  private async runExperiment() {
+    // Set before the first `await` so that a `resetSession()` call that is made while the run is
+    // being set up is recognized as one that happens during a run
+    this.isRunning = true;
 
     await this.prepareDom();
-    await this.extensionManager.initializeExtensions();
+
+    if (!this.areExtensionsInitialized) {
+      this.areExtensionsInitialized = true;
+      await this.extensionManager.initializeExtensions();
+    }
 
     document.documentElement.setAttribute("jspsych", "present");
 
-    this.experimentStartTime = new Date();
+    this.data.createInteractionListeners();
 
-    if (this.sessionRecorder) {
-      if (
-        this.progressBar &&
-        !this.options.auto_update_progress_bar &&
-        typeof this.state._progress === "number"
-      ) {
-        // Restore a position that was set manually before the session was interrupted
-        this.progressBar.setProgress(this.state._progress);
+    do {
+      this.isRestartRequested = false;
+
+      // create experiment timeline
+      this.timeline = new Timeline(this.timelineDependencies, this.timelineDescription);
+
+      this.experimentStartTime = new Date();
+
+      if (this.sessionRecorder) {
+        if (
+          this.progressBar &&
+          !this.options.auto_update_progress_bar &&
+          typeof this.state._progress === "number"
+        ) {
+          // Restore a position that was set manually before the session was interrupted
+          this.progressBar.setProgress(this.state._progress);
+        }
+
+        const restoredElapsedTime = this.sessionRecorder.getRestoredElapsedTime();
+        if (restoredElapsedTime > 0) {
+          // Continue the experiment clock where the interrupted session left off
+          this.experimentStartTime = new Date(Date.now() - restoredElapsedTime);
+        }
       }
 
-      const restoredElapsedTime = this.sessionRecorder.getRestoredElapsedTime();
-      if (restoredElapsedTime > 0) {
-        // Continue the experiment clock where the interrupted session left off
-        this.experimentStartTime = new Date(Date.now() - restoredElapsedTime);
-      }
-    }
+      await this.timeline.run();
 
-    await this.timeline.run();
+      if (this.isRestartRequested) {
+        // `resetSession()` was called while the experiment was running, so none of the effects that
+        // end a run apply. Everything jsPsych controls is reset and the timeline is run again.
+        this.resetExperiment();
+      }
+    } while (this.isRestartRequested);
+
+    this.isRunning = false;
 
     if (this.sessionRecorder) {
       // In case the saved session ended exactly at the end of the experiment
@@ -273,6 +407,12 @@ export class JsPsych {
     }
 
     await Promise.resolve(this.options.on_finish(this.data.get()));
+
+    if (this.isRunning) {
+      // `on_finish` called `resetSession()`, so the experiment is running again and this run must
+      // not clean up after itself anymore
+      return;
+    }
 
     if (this.endMessage) {
       this.getDisplayElement().innerHTML = this.endMessage;
@@ -433,6 +573,11 @@ export class JsPsych {
   }
 
   private async prepareDom() {
+    if (this.isDomPrepared) {
+      // The display element is set up once per page load and reused by a restarted experiment
+      return;
+    }
+
     // Wait until the document is ready
     if (document.readyState !== "complete") {
       await new Promise((resolve) => {
@@ -495,9 +640,6 @@ export class JsPsych {
     this.displayContainerElement.classList.add("jspsych-display-element");
     this.displayElement.classList.add("jspsych-content");
 
-    // create listeners for user browser interaction
-    this.data.createInteractionListeners();
-
     // add event for closing window
     window.addEventListener("beforeunload", options.on_close);
 
@@ -515,6 +657,8 @@ export class JsPsych {
 
       this.getDisplayContainerElement().insertAdjacentElement("afterbegin", progressBarContainer);
     }
+
+    this.isDomPrepared = true;
   }
 
   private finishTrialPromise = new PromiseWrapper<TrialResult | void>();
@@ -559,8 +703,10 @@ export class JsPsych {
       }
 
       // Persisted here (rather than in `onTrialResultAvailable`) so that data added by extensions
-      // and `on_finish` callbacks is part of the saved result
-      if (this.sessionRecorder) {
+      // and `on_finish` callbacks is part of the saved result. A pending `resetSession()` discards
+      // the session that this trial belongs to, so recording it would write the session that is
+      // about to be deleted back to storage.
+      if (this.sessionRecorder && !this.isRestartRequested) {
         this.sessionRecorder.recordTrial(result ?? null, trial.getRerunLogIndex());
         this.sessionRecorder.persist();
       }

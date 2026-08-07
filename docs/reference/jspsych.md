@@ -231,39 +231,6 @@ const memoryTestProcedure = {
 
 ---
 
-## jsPsych.clearSavedSession
-
-```javascript
-jsPsych.clearSavedSession()
-```
-
-### Parameters
-
-None.
-
-### Return value
-
-None.
-
-### Description
-
-Deletes the session that jsPsych saved for [resuming the experiment after a page reload](../overview/resume.md), including the record of a completed session that `completed_session: 'block'` writes. Reloading the page after calling this method will start the experiment from the beginning. jsPsych calls this method itself when the experiment ends, unless `completed_session` is set to `'block'`, so it is mainly needed when you want to discard a saved session while the experiment is still running.
-
-Note that jsPsych saves the session again whenever a trial finishes, so if the experiment continues after this method is called, a new session will be recorded from that point on.
-
-This method has no effect if the `resume` option was not specified in `initJsPsych()`.
-
-### Example
-
-```javascript
-// a "start over" button that is part of the page, outside of the experiment
-document.querySelector('#start-over').addEventListener('click', function(){
-  jsPsych.clearSavedSession();
-  location.reload();
-});
-```
-
----
 ## jsPsych.evaluateTimelineVariable
 
 ```js
@@ -581,6 +548,57 @@ var trial = {
     }
   }
 }
+```
+
+---
+
+## jsPsych.resetSession
+
+```javascript
+jsPsych.resetSession()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+None.
+
+### Description
+
+Discards the session that jsPsych saved for [resuming the experiment after a page reload](../overview/resume.md) and starts the experiment over from the beginning, in the same page and without a reload.
+
+Everything that jsPsych controls is reset: the data in `jsPsych.data`, [`jsPsych.state`](#jspsychstate), the experiment clock that `jsPsych.getTotalTime()` reports, the progress bar, and the saved session. The timeline is then run again from its first trial. Variables in your own code are not touched, and neither are the timeline arrays that your code has already built, so randomization that happened while the timeline was being built is not repeated. Reload the page after resetting if you want a completely fresh experiment.
+
+Two things deliberately survive the reset: the value of `jsPsych.state._rng_seed`, because the timeline that the restarted run executes was built with the random draws of that seed, and the properties added with [`jsPsych.data.addProperties()`](jspsych-data.md#jspsychdataaddproperties), because they are page-load configuration (such as a participant ID) that the experiment has no way of applying again. The `_progress` and `_resumes` keys of `jsPsych.state` describe the discarded run and are dropped.
+
+The method returns immediately and the restart happens asynchronously, once the running timeline has unwound. It is safe to call from anywhere, including from a trial's `on_finish` callback, a button handler, or while a saved session is being replayed. What it does depends on where the experiment is:
+
+| When it is called | What happens |
+| ----------------- | ------------ |
+| Before `jsPsych.run()` | The saved session is discarded, along with the `jsPsych.state` that was restored from it. There is nothing to restart, so the experiment simply starts from the beginning when `run()` is called, and a new session is recorded. Set default values of `jsPsych.state` after calling this, not before. |
+| While the experiment is running | The current timeline is aborted, everything is reset, and the timeline runs again from the first trial. The `on_finish` callback of `initJsPsych()` does not run, no end message is displayed, and no completed session is recorded; the trial that was in flight is not saved to the new session. |
+| On a page that a `resume` policy blocked | The record that blocks the experiment is deleted and the experiment runs in place of `block_message`. |
+| After the experiment has finished | The record of the completed experiment is deleted and the experiment runs again in place of the end screen. The `on_finish` callback of `initJsPsych()` runs again when the restarted run finishes. |
+
+Without the `resume` option in `initJsPsych()` there is no session to discard, but the rest still applies: calling this while the experiment runs (or after it has finished) restarts it and resets the data, `jsPsych.state`, and the clock. Calling it before `run()` does nothing.
+
+### Example
+
+```javascript
+// a "start over" trial
+const start_over = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: '<p>Do you want to start this experiment over?</p>',
+  choices: ['Start over', 'Continue'],
+  on_finish: function(data){
+    if(data.response === 0){
+      jsPsych.resetSession();
+    }
+  }
+};
 ```
 
 ---

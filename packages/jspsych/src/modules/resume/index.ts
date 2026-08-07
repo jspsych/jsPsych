@@ -419,10 +419,15 @@ export class SessionRecorder {
     }
   }
 
-  /** Removes the saved session from storage and resets the in-memory log */
+  /**
+   * Removes the saved session from storage and returns the recorder to the state it is in at the
+   * start of a fresh run, so that a new session is recorded from the next trial on. `state` is not
+   * touched here; jsPsych resets it, because it decides which of the reserved keys have to survive.
+   */
   clear() {
     this.resetLog();
     this.blocked = false;
+    this.restoredElapsedTime = 0;
 
     if (this.storage) {
       try {

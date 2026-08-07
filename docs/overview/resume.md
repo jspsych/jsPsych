@@ -301,8 +301,8 @@ The marker records only that the experiment was completed and when.
 The log and `jsPsych.state` are dropped, so no participant data is left behind in the browser.
 This happens whether the experiment runs to the end or is stopped with [`jsPsych.abortExperiment()`](../reference/jspsych.md#jspsychabortexperiment), so a participant who is screened out partway through is locked out too.
 
-`jsPsych.clearSavedSession()` removes both kinds of record, which is how you unblock a browser while you are developing the experiment.
-Changing the `key` has the same effect, because a record that was saved under a different key is ignored.
+[`jsPsych.resetSession()`](#starting-over) removes both kinds of record and starts the experiment, which is how you unblock a browser while you are developing the experiment.
+Changing the `key` has the same effect on the next page load, because a record that was saved under a different key is ignored.
 
 !!! warning
     Blocking is a deterrent, not a security measure.
@@ -389,20 +389,77 @@ If storage is unavailable or a write fails, for example because the browser bloc
 
 ## Starting over
 
-`jsPsych.clearSavedSession()` deletes whatever jsPsych has saved under the key, whether that is an interrupted session or the record of a completed one.
-Reloading the page after that starts the experiment from the beginning.
+[`jsPsych.resetSession()`](../reference/jspsych.md#jspsychresetsession) deletes whatever jsPsych has saved under the key, whether that is an interrupted session or the record of a completed one, and starts the experiment over from its first trial.
+No page reload is involved: the experiment restarts in place, and jsPsych records the restarted run as a new session.
 This is useful during development, and for giving a participant (or yourself) a way out of a session that should not be continued.
+
+```javascript
+// a "start over" trial
+const start_over = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: '<p>Do you want to start this experiment over?</p>',
+  choices: ['Start over', 'Continue'],
+  on_finish: function(data){
+    if(data.response === 0){
+      jsPsych.resetSession();
+    }
+  }
+};
+```
+
+The method is safe to call from anywhere, including from a trial's `on_finish` callback, from a button somewhere else on the page, and while a saved session is being replayed.
+It returns immediately; jsPsych finishes the trial that is in flight, discards it, and then starts the timeline again.
+That trial is not written to the new session, so no record of the abandoned run is left behind.
 
 ```javascript
 // a "start over" button that is part of the page, outside of the experiment
 document.querySelector('#start-over').addEventListener('click', function(){
-  jsPsych.clearSavedSession();
-  location.reload();
+  jsPsych.resetSession();
 });
 ```
 
-Clear the session at a moment when no further trial finishes afterwards, because jsPsych saves the session again every time a trial finishes.
-If the experiment keeps running after you call `clearSavedSession()`, jsPsych starts recording a new session from that point on, and the next reload will resume that new session.
+The same method also gets a page out of a state where the `resume` option [blocks the experiment](#what-happens-when-a-participant-returns).
+A blocked page load displays `block_message` instead of running anything, and calling `jsPsych.resetSession()` deletes the record that blocks it and runs the experiment in its place.
+
+```javascript
+const jsPsych = initJsPsych({
+  resume: {
+    key: 'flanker-task-v1',
+    incomplete_session: 'block',
+    block_message: `
+      <p>This experiment is no longer available to you.</p>
+      <button id="reset">Researcher: reset this browser</button>`
+  }
+});
+
+jsPsych.run(timeline).then(function(){
+  // the block message has been displayed by now, so its button can be wired up
+  document.querySelector('#reset')?.addEventListener('click', function(){
+    jsPsych.resetSession();
+  });
+});
+```
+
+### What is reset and what is not
+
+Everything that jsPsych controls goes back to the state it is in at the start of a run: the data in `jsPsych.data`, `jsPsych.state`, the experiment clock that `jsPsych.getTotalTime()` reports, the progress bar, and the saved session.
+The `on_finish` callback of `initJsPsych()` does not run, no end message is displayed, and no completed session is recorded, because the run is discarded rather than finished.
+
+Two of the [reserved keys](#reserved-keys) of `jsPsych.state` survive on purpose.
+`_rng_seed` keeps its value, because the timeline that the restarted run executes was built with the random draws of that seed and a later reload has to reproduce them.
+`_data_properties` survives too, so the properties added with [`jsPsych.data.addProperties()`](../reference/jspsych-data.md#jspsychdataaddproperties) are still applied to the trials of the restarted run; they are usually page-load configuration, such as a participant ID, that the experiment has no way of applying again.
+`_progress` and `_resumes` describe the discarded run and are dropped.
+
+Two things are *not* reset, because jsPsych does not control them.
+The first is your own JavaScript: variables in your script keep their values, so anything you track outside of `jsPsych.state` has to be reset by your own code.
+The second is randomization that happened while the timeline was being built.
+The timeline arrays already exist by the time the experiment runs, so a list of stimuli that your code shuffled before `jsPsych.run()`, or a counterbalancing condition that it picked, stays as it was; only the randomization that jsPsych itself does while the timeline runs, such as `randomize_order` and `sample`, happens anew.
+Reload the page after resetting if you want the build-time randomization to be redone as well:
+
+```javascript
+jsPsych.resetSession();
+location.reload();
+```
 
 You do not need to clear the session at the end of the experiment.
 jsPsych does that itself when the experiment ends, whether it runs to completion or is stopped with [`jsPsych.abortExperiment()`](../reference/jspsych.md#jspsychabortexperiment), so a participant who finishes and then reloads the page starts a new experiment rather than landing on the end screen.
