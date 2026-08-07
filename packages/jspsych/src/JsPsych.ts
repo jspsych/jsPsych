@@ -94,7 +94,7 @@ export class JsPsych {
    * A JSON-serializable object for storing the state of the experiment. When the `resume` option is
    * used, it is persisted with the session and restored when the session is resumed; otherwise it
    * is an ordinary in-memory store. jsPsych itself writes the reserved `_rng_seed`,
-   * `_data_properties`, and `_progress` keys.
+   * `_data_properties`, `_progress`, and `_resumes` keys.
    *
    * https://www.jspsych.org/latest/overview/resume/
    */

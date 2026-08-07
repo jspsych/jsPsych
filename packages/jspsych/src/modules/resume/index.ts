@@ -341,7 +341,36 @@ export class SessionRecorder {
     this.restoredElapsedTime = typeof session.elapsedTime === "number" ? session.elapsedTime : 0;
     this.isReplayCompletePending = this.log.length > 0;
 
+    if (this.isReplayCompletePending) {
+      this.recordResume(session.savedAt);
+    }
+
     return this.isReplayCompletePending;
+  }
+
+  /**
+   * Appends an entry to the reserved `_resumes` array of the state, which records every time that
+   * this session was restored and continued. It is appended after the saved state has been
+   * restored, so that the entries of earlier interruptions are preserved.
+   */
+  private recordResume(savedAt: any) {
+    const now = Date.now();
+
+    // The trials of the restored log occupy the indices `0..n-1`, so the experiment continues at
+    // index `n`
+    const trialCount = this.log.filter(
+      (entry) => isPlainObject(entry) && entry.type === "trial"
+    ).length;
+
+    if (!Array.isArray(this.state._resumes)) {
+      this.state._resumes = [];
+    }
+
+    this.state._resumes.push({
+      trial_index: trialCount,
+      time_away: typeof savedAt === "number" ? now - savedAt : null,
+      resumed_at: now,
+    });
   }
 
   /**

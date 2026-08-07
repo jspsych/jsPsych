@@ -546,6 +546,183 @@ describe("resume on reload", () => {
     await experiment.expectFinished();
   });
 
+  describe("_resumes", () => {
+    const timeline = [trial("one"), trial("two"), trial("three")];
+
+    /**
+     * Creates a jsPsych instance as if the page were loaded `timeAway` milliseconds after the saved
+     * session was last written, so that the recorded `time_away` is deterministic
+     */
+    const reloadAfter = (
+      timeAway: number,
+      resumeOverrides: Record<string, any> = {},
+      initOptions: Record<string, any> = {}
+    ) => {
+      const { savedAt } = readSession(storage);
+      const nowSpy = jest.spyOn(Date, "now").mockReturnValue(savedAt + timeAway);
+      const jsPsych = initJsPsych({ ...resumeOptions(resumeOverrides), ...initOptions });
+      nowSpy.mockRestore();
+      trialSpy.mockClear();
+      return { jsPsych, savedAt };
+    };
+
+    /** Runs the timeline until it is interrupted after `trialCount` trials */
+    const interruptAfter = async (trialCount: number) => {
+      const first = await startTimeline(timeline, initJsPsych(resumeOptions()));
+      for (const key of ["a", "b", "c"].slice(0, trialCount)) {
+        await pressKey(key);
+      }
+      simulateReload(first.jsPsych);
+    };
+
+    it("records the resume in `jsPsych.state._resumes`", async () => {
+      await interruptAfter(2);
+
+      const { jsPsych, savedAt } = reloadAfter(5000);
+      expect(jsPsych.state._resumes).toEqual([
+        { trial_index: 2, time_away: 5000, resumed_at: savedAt + 5000 },
+      ]);
+
+      const second = await startTimeline(timeline, jsPsych);
+      await pressKey("c");
+      await second.expectFinished();
+    });
+
+    it("appends an entry for every interruption of the same session", async () => {
+      await interruptAfter(1);
+
+      const { jsPsych: secondInstance, savedAt: firstSavedAt } = reloadAfter(1000);
+      const second = await startTimeline(timeline, secondInstance);
+      await pressKey("b");
+      simulateReload(second.jsPsych);
+
+      const { jsPsych: thirdInstance, savedAt: secondSavedAt } = reloadAfter(2000);
+      expect(thirdInstance.state._resumes).toEqual([
+        { trial_index: 1, time_away: 1000, resumed_at: firstSavedAt + 1000 },
+        { trial_index: 2, time_away: 2000, resumed_at: secondSavedAt + 2000 },
+      ]);
+
+      const third = await startTimeline(timeline, thirdInstance);
+      await pressKey("c");
+      await third.expectFinished();
+    });
+
+    it("does not add the key when the experiment starts fresh", async () => {
+      const jsPsych = initJsPsych(resumeOptions());
+      expect(jsPsych.state._resumes).toBeUndefined();
+
+      const experiment = await startTimeline(timeline, jsPsych);
+      await pressKey("a");
+      await pressKey("b");
+      await pressKey("c");
+      await experiment.expectFinished();
+
+      expect(jsPsych.state._resumes).toBeUndefined();
+    });
+
+    it("does not record a resume when the saved session expires with `max_age`", async () => {
+      await interruptAfter(1);
+
+      const { jsPsych } = reloadAfter(5000, { max_age: 1000 });
+      expect(jsPsych.state._resumes).toBeUndefined();
+
+      const second = await startTimeline(timeline, jsPsych);
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+      expect(second.getData().count()).toBe(0);
+      expect(jsPsych.state._resumes).toBeUndefined();
+    });
+
+    it("does not record a resume when the saved session is discarded by `incomplete_session: 'restart'`", async () => {
+      await interruptAfter(1);
+
+      const { jsPsych } = reloadAfter(1000, { incomplete_session: "restart" });
+      expect(jsPsych.state._resumes).toBeUndefined();
+
+      const second = await startTimeline(timeline, jsPsych);
+      expect(trialSpy.mock.calls.map(([stimulus]) => stimulus)).toEqual(["one"]);
+      expect(second.getData().count()).toBe(0);
+      expect(jsPsych.state._resumes).toBeUndefined();
+    });
+
+    it("does not record a resume when the run is blocked", async () => {
+      await interruptAfter(1);
+
+      const { jsPsych } = reloadAfter(1000, { incomplete_session: "block" });
+      expect(jsPsych.state._resumes).toBeUndefined();
+
+      const second = await startTimeline(timeline, jsPsych);
+      await second.expectFinished();
+
+      expect(second.getHTML()).toBe(DEFAULT_BLOCK_MESSAGE);
+      expect(trialSpy).not.toHaveBeenCalled();
+      expect(jsPsych.state._resumes).toBeUndefined();
+    });
+
+    it("has recorded the resume before `on_resume` fires", async () => {
+      await interruptAfter(2);
+
+      let jsPsychInstance: JsPsych;
+      let resumesInCallback: any;
+      const { jsPsych, savedAt } = reloadAfter(1500, {
+        on_resume: () => {
+          resumesInCallback = jsPsychInstance.state._resumes;
+        },
+      });
+      jsPsychInstance = jsPsych;
+
+      const second = await startTimeline(timeline, jsPsych);
+      expect(resumesInCallback).toEqual([
+        { trial_index: 2, time_away: 1500, resumed_at: savedAt + 1500 },
+      ]);
+
+      await pressKey("c");
+      await second.expectFinished();
+    });
+
+    it("keeps the entry in the state of a run that is completed after the resume", async () => {
+      await interruptAfter(2);
+
+      let jsPsychInstance: JsPsych;
+      let resumesAtFinish: any;
+      const { jsPsych, savedAt } = reloadAfter(
+        4000,
+        {},
+        {
+          on_finish: () => {
+            resumesAtFinish = jsPsychInstance.state._resumes;
+          },
+        }
+      );
+      jsPsychInstance = jsPsych;
+
+      const second = await startTimeline(timeline, jsPsych);
+      await pressKey("c");
+      await second.expectFinished();
+
+      expect(resumesAtFinish).toEqual([
+        { trial_index: 2, time_away: 4000, resumed_at: savedAt + 4000 },
+      ]);
+      expect(jsPsych.state._resumes).toEqual(resumesAtFinish);
+    });
+
+    it("records a `null` `time_away` for a session without a timestamp", async () => {
+      await interruptAfter(1);
+
+      const { savedAt, ...sessionWithoutTimestamp } = readSession(storage);
+      writeSession(storage, sessionWithoutTimestamp);
+
+      const jsPsych = initJsPsych(resumeOptions());
+      expect(jsPsych.state._resumes).toEqual([
+        { trial_index: 1, time_away: null, resumed_at: expect.any(Number) },
+      ]);
+
+      const second = await startTimeline(timeline, jsPsych);
+      await pressKey("b");
+      await pressKey("c");
+      await second.expectFinished();
+    });
+  });
+
   it("fires `on_resume` when the saved session ends exactly at the end of the experiment", async () => {
     const first = await startTimeline(
       [trial("one"), trial("two"), trial("three")],

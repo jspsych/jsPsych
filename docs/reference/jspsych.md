@@ -665,7 +665,7 @@ When [resuming the experiment after a page reload](../overview/resume.md) is ena
 
 The value must be JSON-serializable. If the `resume` option was not specified, this object still works as an in-memory store, but its contents are not saved.
 
-jsPsych stores a few values of its own in this object. The reserved keys are `_rng_seed` (the seed of the random number generator, see [jsPsych.randomization.setSeed](jspsych-randomization.md#jspsychrandomizationsetseed)), `_data_properties` (the properties added with [jsPsych.data.addProperties](jspsych-data.md#jspsychdataaddproperties)), and `_progress` (the position of the progress bar, when it is set manually). You can read these values, but you should not overwrite them.
+jsPsych stores a few values of its own in this object. The reserved keys are `_rng_seed` (the seed of the random number generator, see [jsPsych.randomization.setSeed](jspsych-randomization.md#jspsychrandomizationsetseed)), `_data_properties` (the properties added with [jsPsych.data.addProperties](jspsych-data.md#jspsychdataaddproperties)), `_progress` (the position of the progress bar, when it is set manually), and `_resumes` (one entry for [every time the session was resumed](../overview/resume.md#knowing-that-a-resume-happened)). You can read these values, but you should not overwrite them.
 
 ### Example
 

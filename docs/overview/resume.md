@@ -128,6 +128,7 @@ Do not overwrite these keys:
 | `_rng_seed` | The seed of the random number generator. See [Randomization is reproduced](#randomization-is-reproduced) below. |
 | `_data_properties` | The properties added with [`jsPsych.data.addProperties()`](../reference/jspsych-data.md#jspsychdataaddproperties), so that they are applied to the trials that run after a resume. |
 | `_progress` | The position of the [progress bar](progress-bar.md), when it is set manually with `jsPsych.progressBar.progress`. Automatic progress bar updates are not stored, because they are recomputed from the timeline. |
+| `_resumes` | One entry for every time the session was resumed. See [Knowing that a resume happened](#knowing-that-a-resume-happened) below. |
 
 Reading these values is fine, and `jsPsych.state._rng_seed` is a convenient thing to add to your data.
 
@@ -154,6 +155,41 @@ const jsPsych = initJsPsych({
 
 `on_resume` only runs when there was a saved session to restore.
 It does not run when the experiment starts from the beginning.
+
+### Knowing that a resume happened
+
+jsPsych keeps a record of every resume in `jsPsych.state._resumes`.
+The array is created the first time a saved session is restored, and one entry is added on every later page load that resumes the session, so its length is the number of times the participant was interrupted.
+
+```javascript
+[
+  {
+    trial_index: 12,          // the trial the experiment continued at
+    time_away: 843000,        // milliseconds between the last save and this page load
+    resumed_at: 1717171717171 // the value of Date.now() when the session was restored
+  }
+]
+```
+
+`time_away` is wall-clock time, measured from the moment the session was last saved to the moment the page was loaded again.
+This is the only place where the length of the break is visible: the experiment clock that `jsPsych.getTotalTime()` and the `time_elapsed` data field report continues across the reload as if the break had not happened, because a resumed session picks up the elapsed time of the interrupted one.
+`time_away` is `null` in the rare case that the saved session has no timestamp.
+
+Entries are added before your code runs, so `jsPsych.state._resumes` is already up to date inside `on_resume` and anywhere else in your experiment.
+Adding a summary of them to the data is a good way to be able to tell later which participants were interrupted.
+
+```javascript
+const jsPsych = initJsPsych({
+  resume: {
+    key: 'flanker-task-v1'
+  },
+  on_finish: function(){
+    jsPsych.data.addProperties({
+      resume_count: (jsPsych.state._resumes || []).length
+    });
+  }
+});
+```
 
 ## Randomization is reproduced
 
