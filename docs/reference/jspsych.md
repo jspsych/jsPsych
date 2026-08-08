@@ -33,6 +33,7 @@ The settings object can contain several parameters. None of the parameters are r
 | minimum_valid_rt           | numeric  | The minimum valid response time for key presses during the experiment. Any key press response time that is less than this value will be treated as invalid and ignored. Note that this parameter only applies to _keyboard responses_, and not to other response types such as buttons and sliders. The default value is 0. |
 | override_safe_mode         | boolean  | Running a jsPsych experiment directly in a web browser (e.g., by double clicking on a local HTML file) will load the page using the `file://` protocol. Some features of jsPsych don't work with this protocol. By default, when jsPsych detects that it's running on a page loaded via the `file://` protocol, it runs in _safe mode_, which automatically disables features that don't work in this context. Specifically, the use of Web Audio is disabled (audio will be played using HTML5 audio instead, even if `use_webaudio` is `true`) and video preloading is disabled. The `override_safe_mode` parameter defaults to `false`, but you can set it to `true` to force these features to operate under the `file://` protocol. In order for this to work, you will need to disable web security (CORS) features in your browser - this is safe to do if you know what you are doing. Note that this parameter has no effect when you are running the experiment on a web server, because the page will be loaded via the `http://` or `https://` protocol. |
 | case_sensitive_responses   | boolean  | If `true`, then jsPsych will make a distinction between uppercase and lowercase keys when evaluating keyboard responses, e.g. "A" (uppercase) will not be recognized as a valid response if the trial only accepts "a" (lowercase). If false, then jsPsych will not make a distinction between uppercase and lowercase keyboard responses, e.g. both "a" and "A" responses will be valid when the trial's key choice parameter is "a". Setting this parameter to false is useful if you want key responses to be treated the same way when CapsLock is turned on or the Shift key is held down. The default value is `false`. |
+| resume                     | object   | If specified, jsPsych saves the state of the experiment as it runs, so that a reloaded page continues where the participant left off. `key` (required, string) identifies the saved session; a session is only restored if it was saved under the same key. `storage` (optional) is an object with `getItem()`, `setItem()`, and `removeItem()` methods that the session is stored in; defaults to `window.localStorage`. `max_age` (optional, number) is how long a saved session can be resumed for, in milliseconds; there is no expiry by default. `incomplete_session` (optional, string) is what happens when an interrupted session is found: `'resume'` (default) continues the experiment, `'restart'` discards the session and starts over, and `'block'` displays `block_message` instead of running the experiment. `completed_session` (optional, string) is what happens after the experiment has been completed once: `'restart'` (default) lets the participant take the experiment again, and `'block'` records the completion and displays `block_message` on every later page load. `block_message` (optional, string) is the HTML displayed when either policy blocks the run; defaults to `<p>This experiment is no longer available to you.</p>`. `on_resume` (optional, function) is called once with the restored data when a saved session has been replayed and the experiment continues live. The default value is `undefined`, which disables the feature. See [Resuming After a Page Reload](../overview/resume.md) for details. |
 extensions | array | Array containing information about one or more jsPsych extensions that are used during the experiment. Each extension should be specified as an object with `type` (required), which is the name of the extension, and `params` (optional), which is an object containing any parameter-value pairs to be passed to the extension's `initialize` function. Default value is an empty array. |
 
 ### Return value
@@ -229,6 +230,7 @@ const memoryTestProcedure = {
 ```
 
 ---
+
 ## jsPsych.evaluateTimelineVariable
 
 ```js
@@ -550,6 +552,57 @@ var trial = {
 
 ---
 
+## jsPsych.resetSession
+
+```javascript
+jsPsych.resetSession()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+None.
+
+### Description
+
+Discards the session that jsPsych saved for [resuming the experiment after a page reload](../overview/resume.md) and starts the experiment over from the beginning, in the same page and without a reload.
+
+Everything that jsPsych controls is reset: the data in `jsPsych.data`, [`jsPsych.state`](#jspsychstate), the experiment clock that `jsPsych.getTotalTime()` reports, the progress bar, and the saved session. The timeline is then run again from its first trial. Variables in your own code are not touched, and neither are the timeline arrays that your code has already built, so randomization that happened while the timeline was being built is not repeated. Reload the page after resetting if you want a completely fresh experiment.
+
+Two things deliberately survive the reset: the value of `jsPsych.state._rng_seed`, because the timeline that the restarted run executes was built with the random draws of that seed, and the properties added with [`jsPsych.data.addProperties()`](jspsych-data.md#jspsychdataaddproperties), because they are page-load configuration (such as a participant ID) that the experiment has no way of applying again. The `_progress` and `_resumes` keys of `jsPsych.state` describe the discarded run and are dropped.
+
+The method returns immediately and the restart happens asynchronously, once the running timeline has unwound. It is safe to call from anywhere, including from a trial's `on_finish` callback, a button handler, or while a saved session is being replayed. What it does depends on where the experiment is:
+
+| When it is called | What happens |
+| ----------------- | ------------ |
+| Before `jsPsych.run()` | The saved session is discarded, along with the `jsPsych.state` that was restored from it. There is nothing to restart, so the experiment simply starts from the beginning when `run()` is called, and a new session is recorded. Set default values of `jsPsych.state` after calling this, not before. |
+| While the experiment is running | The current timeline is aborted, everything is reset, and the timeline runs again from the first trial. The `on_finish` callback of `initJsPsych()` does not run, no end message is displayed, and no completed session is recorded; the trial that was in flight is not saved to the new session. |
+| On a page that a `resume` policy blocked | The record that blocks the experiment is deleted and the experiment runs in place of `block_message`. |
+| After the experiment has finished | The record of the completed experiment is deleted and the experiment runs again in place of the end screen. The `on_finish` callback of `initJsPsych()` runs again when the restarted run finishes. |
+
+Without the `resume` option in `initJsPsych()` there is no session to discard, but the rest still applies: calling this while the experiment runs (or after it has finished) restarts it and resets the data, `jsPsych.state`, and the clock. Calling it before `run()` does nothing.
+
+### Example
+
+```javascript
+// a "start over" trial
+const start_over = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: '<p>Do you want to start this experiment over?</p>',
+  choices: ['Start over', 'Continue'],
+  on_finish: function(data){
+    if(data.response === 0){
+      jsPsych.resetSession();
+    }
+  }
+};
+```
+
+---
+
 ## jsPsych.resumeExperiment
 
 ```javascript
@@ -612,6 +665,40 @@ Start the jsPsych experiment with the specified timeline.
 var timeline = [trial1, trial2, trial3];
 
 jsPsych.run(timeline);
+```
+
+---
+
+## jsPsych.state
+
+```javascript
+jsPsych.state
+```
+
+### Description
+
+An object for storing the state of your experiment. Use it for variables that describe where the experiment stands (e.g., the current difficulty level in a staircase procedure), rather than ordinary JavaScript variables in your experiment file.
+
+When [resuming the experiment after a page reload](../overview/resume.md) is enabled with the `resume` option of `initJsPsych()`, this object is saved along with the session and restored when a saved session is resumed. Ordinary JavaScript variables are reset by a reload; the properties of this object are not. Values assigned before `jsPsych.run()` act as defaults: they are used when the experiment starts fresh and are replaced by the saved values when a session is resumed.
+
+The value must be JSON-serializable. If the `resume` option was not specified, this object still works as an in-memory store, but its contents are not saved.
+
+jsPsych stores a few values of its own in this object. The reserved keys are `_rng_seed` (the seed of the random number generator, see [jsPsych.randomization.setSeed](jspsych-randomization.md#jspsychrandomizationsetseed)), `_data_properties` (the properties added with [jsPsych.data.addProperties](jspsych-data.md#jspsychdataaddproperties)), `_progress` (the position of the progress bar, when it is set manually), and `_resumes` (one entry for [every time the session was resumed](../overview/resume.md#knowing-that-a-resume-happened)). You can read these values, but you should not overwrite them.
+
+### Example
+
+```javascript
+jsPsych.state.difficulty = 5;
+
+var trial = {
+  type: jsPsychMyPlugin,
+  difficulty: function(){
+    return jsPsych.state.difficulty;
+  },
+  on_finish: function(data){
+    jsPsych.state.difficulty += data.correct ? 1 : -1;
+  }
+}
 ```
 
 ---

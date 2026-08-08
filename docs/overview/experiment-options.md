@@ -126,6 +126,18 @@ initJsPsych({
 });
 ```
 
+## Resume the experiment if the participant reloads the page
+
+Specifying the `resume` parameter in `initJsPsych()` makes jsPsych save the state of the experiment as it runs, so that a reloaded page continues where the participant left off instead of starting over. The `key` identifies the saved session and should be changed whenever you change the experiment. See the [resuming after a page reload page](resume.md) for more details.
+
+```js
+initJsPsych({
+    resume: {
+        key: 'flanker-task-v1'
+    }
+});
+```
+
 ## Add extensions
 
 [Extensions](extensions.md) are jsPsych modules that can run throughout the experiment and interface with any plugin to extend the functionality of the plugin. One example of an extension is eye tracking, which allows you to gather gaze data during any trial and add it to that trial's data object. If you want to use extensions in your experiment, you must specify this when you initialize the experiment with `initJsPsych`. The `extensions` parameter in `initJsPsych` is an array of objects, where each object specifies the extension that you'd like to use in the experiment. Below is an example of adding the webgazer extension.

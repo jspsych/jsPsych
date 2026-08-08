@@ -2,6 +2,7 @@ import { Class } from "type-fest";
 
 import { JsPsychExtension } from "../modules/extensions";
 import { JsPsychPlugin, PluginInfo } from "../modules/plugins";
+import { SessionRecorder } from "../modules/resume";
 import { Trial } from "./Trial";
 import { PromiseWrapper } from "./util";
 
@@ -59,6 +60,12 @@ export interface TrialDescription extends Record<string, any> {
    * Whether to record the data of this trial. Defaults to `true`.
    */
   record_data?: Parameter<boolean>;
+
+  /**
+   * Whether this trial should be executed again when a saved session is resumed, instead of having
+   * its saved result replayed. Defaults to `false`.
+   */
+  run_on_resume?: Parameter<boolean>;
 
   // Events
 
@@ -226,6 +233,12 @@ export interface TimelineNodeDependencies {
    * Clear all of the timeouts
    */
   clearAllTimeouts: () => void;
+
+  /**
+   * Returns the `SessionRecorder` that records and replays nondeterministic outcomes for the
+   * resume-on-reload feature, or `undefined` if the feature is disabled.
+   */
+  getSessionRecorder?: () => SessionRecorder | undefined;
 }
 
 export type TrialResult = Record<string, any>;
