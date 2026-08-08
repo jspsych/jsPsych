@@ -117,7 +117,7 @@ Because `initJsPsych()` seeds the random number generator itself, this function 
 
 ```javascript
 jsPsych.data.addProperties({
-	_rng_seed: jsPsych.randomization.getSeed()
+	rng_seed: jsPsych.randomization.getSeed()
 });
 ```
 
@@ -543,7 +543,7 @@ The seed that is currently in effect can be read with [`jsPsych.randomization.ge
 
 ```javascript
 jsPsych.data.addProperties({
-	_rng_seed: jsPsych.state._rng_seed
+	rng_seed: jsPsych.state._rng_seed
 });
 ```
 

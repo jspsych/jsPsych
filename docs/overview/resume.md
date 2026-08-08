@@ -53,7 +53,8 @@ The general rule is that anything jsPsych can see is restored, and anything that
 There are three places where information can live and survive a reload.
 
 **Trial data.**
-Everything in `jsPsych.data` is restored, so anything that reads previous data behaves the same way after a reload. This includes a `loop_function` that checks accuracy, a [dynamic parameter](dynamic-parameters.md) that displays a score, or a debrief trial that summarizes performance.
+Everything in `jsPsych.data` is restored, so anything that reads previous data behaves the same way after a reload.
+This includes a `loop_function` that checks accuracy, a [dynamic parameter](dynamic-parameters.md) that displays a score, or a debrief trial that summarizes performance.
 Note that this only includes values that made it into the data.
 If a dynamic parameter computes something that is not saved to the data, that value is gone after a reload; use the [`data`](plugins.md#the-data-parameter) or [`save_trial_parameters`](plugins.md#parameters-available-in-all-plugins) parameters to record it.
 
@@ -159,7 +160,7 @@ It does not run when the experiment starts from the beginning.
 ### Knowing that a resume happened
 
 jsPsych keeps a record of every resume in `jsPsych.state._resumes`.
-The array is created the first time a saved session is restored, and one entry is added on every later page load that resumes the session, so its length is the number of times the participant was interrupted.
+The array is created the first time a saved session is restored, and one entry is added on every later page load that resumes the session, so its length is the number of times the session was resumed.
 
 ```javascript
 [
@@ -176,7 +177,7 @@ This is the only place where the length of the break is visible: the experiment 
 `time_away` is `null` in the rare case that the saved session has no timestamp.
 
 Entries are added before your code runs, so `jsPsych.state._resumes` is already up to date inside `on_resume` and anywhere else in your experiment.
-Adding a summary of them to the data is a good way to be able to tell later which participants were interrupted.
+Adding a summary of them to the data lets you tell later which participants were interrupted and came back.
 
 ```javascript
 const jsPsych = initJsPsych({
@@ -196,9 +197,9 @@ const jsPsych = initJsPsych({
 jsPsych seeds the random number generator when you call `initJsPsych()` and stores the seed in `jsPsych.state._rng_seed`.
 When a saved session is resumed, the stored seed is applied again before your code runs, so every random draw that your experiment made while it was being built comes out the same way it did in the interrupted session.
 
-This matters because the saved session only describes the timeline that jsPsych ran; it does not describe the timeline that your code creates.
-If you shuffle an array of stimuli, pick a counterbalancing condition, or generate the timeline variables of a block yourself, that happens before `jsPsych.run()` and is not part of the log.
-Seeding at `initJsPsych()` makes the reloaded page rebuild the identical timeline, so the replay of the saved session lines up with it.
+This matters because the saved session records the decisions jsPsych made while *running* the experiment, but not the randomization your code used while *building* the timeline.
+If you shuffle an array of stimuli, pick a counterbalancing condition, or generate the timeline variables of a block yourself, that happens before `jsPsych.run()` and is not part of the saved session.
+Restoring the seed makes the reloaded page rebuild the identical timeline, so the replay of the saved session lines up with it.
 
 !!! warning
     Seeding replaces `Math.random()` for the entire page, and it happens whether or not you use the `resume` option.
@@ -254,7 +255,7 @@ A trial with `run_on_resume: true` will be presented to the participant again ev
 
 ## What happens when a participant returns
 
-By default a participant who reloads the page continues where they left off, and a participant who has already finished the experiment starts a new run.
+By default a participant who reloads the page continues where they left off, and a participant who has already finished the experiment starts the experiment again from the beginning.
 Two options change that, one for each of the two situations.
 
 | Option | Value | What happens on the next page load |
@@ -262,7 +263,7 @@ Two options change that, one for each of the two situations.
 | `incomplete_session` | `'resume'` (default) | The experiment continues at the trial that was interrupted. |
 | | `'restart'` | The saved session is discarded and the experiment starts from the beginning. |
 | | `'block'` | The experiment does not run at all, and `block_message` is displayed instead. |
-| `completed_session` | `'restart'` (default) | The saved session is deleted when the experiment ends, so the participant can take the experiment again. |
+| `completed_session` | `'restart'` (default) | The experiment starts from the beginning (the saved session was deleted when the experiment ended). |
 | | `'block'` | jsPsych records that the experiment was completed, and every later page load displays `block_message` instead of running the experiment. |
 
 The two options are independent, so all six combinations are available.
@@ -328,7 +329,7 @@ const jsPsych = initJsPsych({
 The age is measured from the moment the session was last saved, which is the end of the last trial the participant finished, not from the start of the experiment.
 There is no expiry by default.
 `max_age` only affects sessions that would otherwise be resumed.
-It has no effect on a session that `incomplete_session: 'block'` blocks with, and none on the record of a completed session.
+It does not expire the record that blocks the experiment under `incomplete_session: 'block'`, and it does not expire the record of a completed session.
 
 ## Choosing a key
 
