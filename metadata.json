@@ -1,0 +1,8 @@
+{
+  "pr_number": 3713,
+  "head_sha": "8e643ea9de7435f79ead5c8c24ee117f366cc6f4",
+  "head_ref": "feature/resume-on-reload",
+  "changed_packages": [
+    "jspsych"
+  ]
+}
