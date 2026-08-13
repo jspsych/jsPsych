@@ -1,0 +1,8 @@
+{
+  "pr_number": 3715,
+  "head_sha": "4a2af135eba37f88c2cb4a5e732eed5ab363ceeb",
+  "head_ref": "fix/nested-data-parameter-override",
+  "changed_packages": [
+    "jspsych"
+  ]
+}
