@@ -157,6 +157,39 @@ describe("The data parameter", () => {
     expect(getData().filter({ added: true, foo: 1 }).count()).toBe(2);
   });
 
+  test("nested trial's data property should override same-named property from parent timeline (issue #3714)", async () => {
+    const { finished, getData } = await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        data: { exp_trial_type: "press_a_trial" },
+        timeline: [{ stimulus: "a" }, { stimulus: "b", data: { exp_trial_type: "press_b_trial" } }],
+      },
+    ]);
+
+    await pressKey("a");
+    await pressKey("a");
+    await finished;
+
+    expect(getData().values()[0].exp_trial_type).toBe("press_a_trial");
+    expect(getData().values()[1].exp_trial_type).toBe("press_b_trial");
+  });
+
+  test("nested trial's data property fully replaces (does not deep-merge with) same-named object property from parent timeline", async () => {
+    const { finished, getData } = await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "a",
+        data: { meta: { session: 1, extra: "foo" } },
+        timeline: [{ stimulus: "a", data: { meta: { session: 2 } } }],
+      },
+    ]);
+
+    await pressKey("a");
+    await finished;
+
+    expect(getData().values()[0].meta).toEqual({ session: 2 });
+  });
+
   test("should accept a function as a parameter", async () => {
     const { finished, getData } = await startTimeline([
       {

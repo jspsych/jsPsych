@@ -163,12 +163,12 @@ export abstract class TimelineNode {
     const data = this.getParameterValue("data", { recursive: false });
 
     return {
+      ...this.parent?.getDataParameter(),
       ...Object.fromEntries(
         typeof data === "object"
           ? Object.keys(data).map((key) => [key, this.getParameterValue(["data", key])])
           : []
       ),
-      ...this.parent?.getDataParameter(),
     };
   }
 }
