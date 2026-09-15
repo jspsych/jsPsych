@@ -194,6 +194,16 @@ class PipeExtension implements JsPsychExtension {
       display.innerHTML = this.params.wait_message ?? DEFAULT_WAIT_MESSAGE;
     }
 
+    // BEFORE reading sessionId, and before submitting. Two reasons, and the
+    // first is not obvious: `flush()` waits for the session's start request to
+    // settle, and until it has, `sessionId` is still empty. A short experiment
+    // can reach the end inside that round trip, and submitting without the id
+    // would leave DataPipe unable to match the file to the staged copy -- which
+    // it would then recover a second time, as a spurious `.partial.json`.
+    // The second is the plain one: it makes the staged copy as complete as it
+    // can be if the submission below fails.
+    await this.session?.flush().catch(() => undefined);
+
     let result: SaveResult;
     try {
       result = await saveData({

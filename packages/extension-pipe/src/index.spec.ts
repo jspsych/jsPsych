@@ -15,9 +15,9 @@ const session = {
   flush: jest.fn().mockResolvedValue(undefined),
   close: jest.fn().mockResolvedValue(undefined),
 };
-const createSession = jest.fn(() => session);
-const saveData = jest.fn().mockResolvedValue({ ok: true, status: 201, body: {} });
-const setBaseURL = jest.fn();
+const createSession = jest.fn((..._args: any[]) => session);
+const saveData = jest.fn((..._args: any[]) => Promise.resolve({ ok: true, status: 201, body: {} }));
+const setBaseURL = jest.fn((..._args: any[]) => undefined);
 
 // `virtual` because datapipe-client is published from the DataPipe repository
 // and is not installed in this monorepo's node_modules during development.
@@ -120,6 +120,39 @@ describe("the final save", () => {
       data: jsPsych.data.get().csv(),
       sessionId: "SESSION_ID",
     });
+  });
+
+  test("waits for the session to start before reading its id", async () => {
+    // createSession() returns synchronously and the /api/session round trip
+    // finishes later, so sessionId is empty until it does. A short experiment
+    // can reach the end inside that window. Submitting without the id would
+    // leave the staged copy unmatched, and DataPipe would recover it a second
+    // time as a spurious .partial.json.
+    let sessionId = "";
+    const pending = {
+      ...session,
+      get sessionId() {
+        return sessionId;
+      },
+      flush: jest.fn().mockImplementation(async () => {
+        sessionId = "ARRIVED_LATE";
+      }),
+    };
+    createSession.mockReturnValueOnce(pending as any);
+
+    await run(PARAMS, 1);
+
+    expect(pending.flush).toHaveBeenCalled();
+    expect(saveData).toHaveBeenCalledWith(expect.objectContaining({ sessionId: "ARRIVED_LATE" }));
+  });
+
+  test("a failing flush does not stop the submission", async () => {
+    const broken = { ...session, flush: jest.fn().mockRejectedValue(new Error("offline")) };
+    createSession.mockReturnValueOnce(broken as any);
+
+    await run(PARAMS, 1);
+
+    expect(saveData).toHaveBeenCalledTimes(1);
   });
 
   test("format: json submits JSON", async () => {
