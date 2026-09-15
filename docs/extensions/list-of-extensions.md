@@ -10,5 +10,6 @@ For an overview of what extensions are and how they work, see our [extensions ov
 Extension | Description
 ------ | -----------
 [mouse&#8209;tracking](../extensions/mouse-tracking.md) | Enables tracking of mouse events and recording location of objects on screen.
+[pipe](../extensions/pipe.md) | Send data to [DataPipe](https://pipe.jspsych.org) as the experiment runs, and submit the complete dataset when it ends.
 [record&#8209;video](../extensions/record-video.md) | Record video data from the participant's webcam during a trial.
 [webgazer](../extensions/webgazer.md) | Enables eye tracking using the [WebGazer](https://webgazer.cs.brown.edu/) library.
