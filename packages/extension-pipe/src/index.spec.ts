@@ -318,6 +318,51 @@ describe("static helpers", () => {
   });
 });
 
+describe("enabled: false", () => {
+  test("does nothing at all", async () => {
+    // The escape hatch for jsPsych.simulate(), which reaches this extension
+    // exactly like a real run and which the extension cannot detect: jsPsych
+    // keeps simulationMode private with no public accessor.
+    const onDataUpdate = jest.fn();
+    await run({ ...PARAMS, enabled: false }, 2, { on_data_update: onDataUpdate });
+
+    expect(createSession).not.toHaveBeenCalled();
+    expect(saveData).not.toHaveBeenCalled();
+    expect(session.record).not.toHaveBeenCalled();
+    // And the researcher's own callbacks are untouched.
+    expect(onDataUpdate).toHaveBeenCalledTimes(2);
+  });
+
+  test("leaves the researcher's on_finish alone", async () => {
+    const onFinish = jest.fn();
+    await run({ ...PARAMS, enabled: false }, 1, { on_finish: onFinish });
+    expect(onFinish).toHaveBeenCalledTimes(1);
+    expect(saveData).not.toHaveBeenCalled();
+  });
+});
+
+describe("registered twice", () => {
+  test("wraps the callbacks once and submits once", async () => {
+    // initialize() is called once per entry in the extensions array, and the
+    // same instance answers each time. Wrapping twice would double-record and
+    // double-submit.
+    const jsPsych = initJsPsych({
+      extensions: [
+        { type: PipeExtension, params: PARAMS },
+        { type: PipeExtension, params: PARAMS },
+      ],
+    });
+    const api = await startTimeline(trials(2), jsPsych);
+    await pressKey("a");
+    await pressKey("a");
+    await api.expectFinished();
+
+    expect(createSession).toHaveBeenCalledTimes(1);
+    expect(session.record).toHaveBeenCalledTimes(2);
+    expect(saveData).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe("misconfiguration", () => {
   test("warns and does nothing without an experiment_id", async () => {
     const warn = jest.spyOn(console, "warn").mockImplementation(() => {});

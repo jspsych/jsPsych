@@ -63,6 +63,27 @@ interface InitializeParameters {
    * @default true
    */
   stream?: boolean;
+  /**
+   * Set to `false` to turn the extension off entirely: no session, no staging,
+   * and no submission. Nothing else in your experiment changes.
+   *
+   * THIS IS WHAT YOU NEED FOR `jsPsych.simulate()`. A simulated run reaches
+   * this extension exactly like a real one -- `simulate()` calls `run()`
+   * internally, so extensions initialize the same way -- and jsPsych keeps its
+   * simulation mode private, with no public accessor, so there is no way for
+   * the extension to notice on its own. Left on, simulating an experiment
+   * consumes one of its sessions and writes a real file of fake data into the
+   * researcher's dataset.
+   *
+   * ```js
+   * const SIMULATE = new URLSearchParams(location.search).has("simulate");
+   * // ...
+   * params: { experiment_id: "...", filename: ..., enabled: !SIMULATE }
+   * ```
+   *
+   * @default true
+   */
+  enabled?: boolean;
   /** HTML shown to the participant while the final upload is in progress. */
   wait_message?: string;
   /**
@@ -150,9 +171,18 @@ class PipeExtension implements JsPsychExtension {
   private filename = "";
   /** Set once the session has been closed, so it is never closed twice. */
   private closed = false;
+  /** Set once the global callbacks are wrapped, so they are never wrapped twice. */
+  private installed = false;
 
   initialize = async (params: InitializeParameters): Promise<void> => {
     this.params = params;
+
+    // jsPsych calls initialize() once per entry in the `extensions` array, and
+    // the same instance answers each time -- so registering this extension
+    // twice would wrap the global callbacks twice and submit the data twice.
+    if (this.installed) return;
+
+    if (params?.enabled === false) return;
 
     if (!params?.experiment_id) {
       console.warn(
@@ -190,6 +220,7 @@ class PipeExtension implements JsPsychExtension {
   on_finish = (): Record<string, any> => ({});
 
   private installHooks(): void {
+    this.installed = true;
     const settings = this.jsPsych.getInitSettings();
 
     const downstreamDataUpdate = settings.on_data_update;

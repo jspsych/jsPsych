@@ -39,6 +39,7 @@ There is no save trial, no `await`, and no session variable to thread through th
 | `format` | `"csv"` \| `"json"` | `"csv"` | The format to submit the data in. Ignored when `data_string` is given. |
 | `data_string` | function | | Returns the data to submit. Use instead of `format` to filter or transform first. |
 | `stream` | boolean | `true` | Whether to stage each trial as it finishes. `false` submits only at the end and opens no connection to the staging database. |
+| `enabled` | boolean | `true` | `false` turns the extension off entirely. Needed for `jsPsych.simulate()` — see below. |
 | `wait_message` | string | | HTML shown while the final upload is in progress. |
 | `on_save` | function | | Called with the result of the final upload. |
 | `base_url` | string | | Point the experiment at a different DataPipe deployment. Only useful for testing. |
@@ -68,6 +69,22 @@ params: {
 ```
 
 A failed submission does not mean the data is lost: the staged trials stay on DataPipe's servers and are recovered as a `.partial.json` file.
+
+## Turn it off when simulating
+
+`jsPsych.simulate()` reaches this extension exactly like a real run — `simulate()` calls `run()` internally, so extensions initialize the same way — and jsPsych keeps its simulation mode private with no public accessor, so the extension cannot notice on its own.
+
+Left on, simulating your experiment consumes one of its sessions and writes a real file of fake data into your dataset. Gate it:
+
+```js
+const SIMULATE = new URLSearchParams(location.search).has("simulate");
+
+params: {
+  experiment_id: "YOUR_EXPERIMENT_ID",
+  filename: () => `${subject_id}.csv`,
+  enabled: !SIMULATE,
+}
+```
 
 ## Do not also add a save trial
 

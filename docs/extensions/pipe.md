@@ -27,6 +27,7 @@ filename | string \| function | *undefined* | The name of the file to save. Ever
 format | string | `"csv"` | The format to submit the data in, either `"csv"` or `"json"`. Ignored when `data_string` is given.
 data_string | function | `null` | A function that returns the data to submit, for filtering or transforming the data first. Overrides `format`.
 stream | boolean | `true` | Whether to stage each trial as it finishes, so that an abandoned session can be recovered. When `false`, the data is submitted only at the end and no connection to DataPipe's staging database is opened.
+enabled | boolean | `true` | When `false`, the extension does nothing at all: no session, no staging, no submission. See [Turn it off when simulating](#turn-it-off-when-simulating).
 wait_message | string | `"<p>Saving data. Please do not close this page.</p>"` | HTML shown to the participant while the final upload is in progress.
 on_save | function | `null` | Called with the result of the final upload. See [Reacting to a failed save](#reacting-to-a-failed-save).
 base_url | string | *undefined* | Point the experiment at a different DataPipe deployment. Only useful for testing.
@@ -101,6 +102,29 @@ params: {
 ```
 
 A failed submission does not necessarily mean the data is lost. While `stream` is on, the trials that were staged stay on DataPipe's servers and are recovered as a `.partial.json` file.
+
+## Turn it off when simulating
+
+`jsPsych.simulate()` reaches this extension exactly like a real run. `simulate()` calls `run()` internally, so extensions initialize the same way, and jsPsych keeps its simulation mode private with no public accessor — the extension cannot notice on its own.
+
+Left on, simulating your experiment consumes one of its sessions and writes a real file of fake data into your dataset. Gate it with `enabled`:
+
+```js
+const SIMULATE = new URLSearchParams(location.search).has("simulate");
+
+const jsPsych = initJsPsych({
+  extensions: [
+    {
+      type: jsPsychExtensionPipe,
+      params: {
+        experiment_id: "YOUR_EXPERIMENT_ID",
+        filename: () => `${subject_id}.csv`,
+        enabled: !SIMULATE
+      }
+    }
+  ]
+});
+```
 
 ## Do not also add a save trial
 
