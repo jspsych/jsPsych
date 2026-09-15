@@ -103,6 +103,43 @@ params: {
 
 A failed submission does not necessarily mean the data is lost. While `stream` is on, the trials that were staged stay on DataPipe's servers and are recovered as a `.partial.json` file.
 
+## Condition assignment
+
+`jsPsychExtensionPipe.getCondition()` is a static method, because a condition usually decides which timeline to build and so has to be known before `initJsPsych()` is called.
+
+It **throws** if the condition cannot be obtained. There is no safe value to fall back to: a participant sent down the wrong branch, or an empty one, looks like a successful run until someone reads the data. Decide what they should see.
+
+```js
+let condition;
+try {
+  condition = await jsPsychExtensionPipe.getCondition("YOUR_EXPERIMENT_ID");
+} catch (error) {
+  document.body.innerHTML = "<p>The experiment could not be started.</p>";
+  throw error;
+}
+
+const timeline = condition === 0 ? condition_1_timeline : condition_2_timeline;
+```
+
+## Saving media files
+
+`jsPsychExtensionPipe.saveBase64Data()` uploads audio, video, or images. Returning its promise from a trial's `on_finish` makes the timeline wait for the upload.
+
+```js
+const trial = {
+  type: jsPsychHtmlAudioResponse,
+  stimulus: "<p>Record a few seconds of audio.</p>",
+  recording_duration: 15000,
+  on_finish: async (data) => {
+    const filename = `${subject_id}_${jsPsych.getProgress().current_trial_global}_audio.webm`;
+    await jsPsychExtensionPipe.saveBase64Data("YOUR_EXPERIMENT_ID", filename, data.response);
+    data.response = filename;
+  }
+};
+```
+
+Unlike `getCondition`, this does not throw — check `result.ok`.
+
 ## Ending an experiment early
 
 The final save also runs after [`jsPsych.abortExperiment()`](../reference/jspsych.md#abortexperiment), which unwinds the timeline and then finishes the experiment normally. A participant who is failed out by an attention check therefore still has their data submitted.

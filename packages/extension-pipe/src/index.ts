@@ -1,4 +1,4 @@
-import { createSession, saveData, setBaseURL } from "datapipe-client";
+import { createSession, getCondition, saveBase64Data, saveData, setBaseURL } from "datapipe-client";
 import type { DataPipeSession, SaveResult } from "datapipe-client";
 import { JsPsych, JsPsychExtension, JsPsychExtensionInfo } from "jspsych";
 
@@ -98,6 +98,57 @@ class PipeExtension implements JsPsychExtension {
     // and sends it; it does not add to it.
     data: {},
   };
+
+  /**
+   * Request this participant's condition assignment.
+   *
+   * Static, because a condition usually decides which timeline to build, and
+   * so has to be known before `initJsPsych()` is called -- long before this
+   * extension is initialized. It is here rather than in a separate package
+   * only so that an experiment needs one script tag instead of two.
+   *
+   * THROWS if the condition cannot be obtained. There is no safe value to fall
+   * back to: a participant sent down the wrong branch, or an empty one, looks
+   * like a successful run until someone reads the data.
+   *
+   * ```js
+   * let condition;
+   * try {
+   *   condition = await jsPsychExtensionPipe.getCondition("EXPERIMENT_ID");
+   * } catch (error) {
+   *   document.body.innerHTML = "<p>The experiment could not be started.</p>";
+   *   throw error;
+   * }
+   * ```
+   */
+  static async getCondition(
+    experiment_id: string,
+    options: { base_url?: string } = {}
+  ): Promise<number> {
+    return getCondition({ experimentID: experiment_id, baseURL: options.base_url });
+  }
+
+  /**
+   * Save a base64-encoded file: audio, video, or an image.
+   *
+   * Static and callable from a trial's `on_finish`, which jsPsych awaits, so
+   * the timeline waits for the upload if you return the promise.
+   *
+   * Unlike `getCondition`, this does not throw -- check `result.ok`.
+   */
+  static async saveBase64Data(
+    experiment_id: string,
+    filename: string,
+    data: string,
+    options: { base_url?: string } = {}
+  ): Promise<SaveResult> {
+    return saveBase64Data({
+      experimentID: experiment_id,
+      filename,
+      data,
+      baseURL: options.base_url,
+    });
+  }
 
   constructor(private jsPsych: JsPsych) {}
 

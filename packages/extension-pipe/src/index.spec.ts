@@ -18,6 +18,10 @@ const session = {
 const createSession = jest.fn((..._args: any[]) => session);
 const saveData = jest.fn((..._args: any[]) => Promise.resolve({ ok: true, status: 201, body: {} }));
 const setBaseURL = jest.fn((..._args: any[]) => undefined);
+const getCondition = jest.fn((..._args: any[]) => Promise.resolve(2));
+const saveBase64Data = jest.fn((..._args: any[]) =>
+  Promise.resolve({ ok: true, status: 201, body: {} })
+);
 
 // `virtual` because datapipe-client is published from the DataPipe repository
 // and is not installed in this monorepo's node_modules during development.
@@ -27,6 +31,8 @@ jest.mock(
     createSession: (...args: any[]) => createSession(...args),
     saveData: (...args: any[]) => saveData(...args),
     setBaseURL: (...args: any[]) => setBaseURL(...args),
+    getCondition: (...args: any[]) => getCondition(...args),
+    saveBase64Data: (...args: any[]) => saveBase64Data(...args),
   }),
   { virtual: true }
 );
@@ -281,6 +287,34 @@ describe("save_at_end: false", () => {
     await run({ ...PARAMS, save_at_end: false }, 1);
     expect(saveData).not.toHaveBeenCalled();
     expect(session.close).toHaveBeenCalledWith({ submitted: false });
+  });
+});
+
+describe("static helpers", () => {
+  test("getCondition passes the experiment id through", async () => {
+    await expect(PipeExtension.getCondition("EXP123")).resolves.toBe(2);
+    expect(getCondition).toHaveBeenCalledWith({ experimentID: "EXP123", baseURL: undefined });
+  });
+
+  test("getCondition propagates the failure instead of returning a fallback", async () => {
+    // A participant sent down the wrong branch looks like a successful run
+    // until someone reads the data, so this must reach the caller.
+    getCondition.mockRejectedValueOnce(new Error("datapipe: could not reach DataPipe"));
+    await expect(PipeExtension.getCondition("EXP123")).rejects.toThrow(/could not reach/);
+  });
+
+  test("saveBase64Data passes the file through and reports the outcome", async () => {
+    const result = await PipeExtension.saveBase64Data("EXP123", "clip.webm", "BASE64", {
+      base_url: "https://datapipe-test.web.app",
+    });
+
+    expect(saveBase64Data).toHaveBeenCalledWith({
+      experimentID: "EXP123",
+      filename: "clip.webm",
+      data: "BASE64",
+      baseURL: "https://datapipe-test.web.app",
+    });
+    expect(result.ok).toBe(true);
   });
 });
 

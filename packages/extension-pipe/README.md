@@ -70,6 +70,24 @@ params: {
 
 A failed submission does not mean the data is lost: the staged trials stay on DataPipe's servers and are recovered as a `.partial.json` file.
 
+## Static methods
+
+Both are static because they are needed outside the extension's own lifecycle, and they are here only so that an experiment needs one script tag rather than two.
+
+`jsPsychExtensionPipe.getCondition(experiment_id)` requests this participant's condition assignment. A condition usually decides which timeline to build, so it has to be known before `initJsPsych()` is called. It **throws** on failure — a participant sent down the wrong branch looks like a successful run until someone reads the data.
+
+```js
+let condition;
+try {
+  condition = await jsPsychExtensionPipe.getCondition("YOUR_EXPERIMENT_ID");
+} catch (error) {
+  document.body.innerHTML = "<p>The experiment could not be started.</p>";
+  throw error;
+}
+```
+
+`jsPsychExtensionPipe.saveBase64Data(experiment_id, filename, data)` uploads audio, video, or images. Return its promise from a trial's `on_finish` to make the timeline wait for the upload. It does not throw; check `result.ok`.
+
 ## Compatibility
 
 jsPsych v8.0.0 and later.
