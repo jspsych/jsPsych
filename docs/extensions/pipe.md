@@ -27,7 +27,6 @@ filename | string \| function | *undefined* | The name of the file to save. Ever
 format | string | `"csv"` | The format to submit the data in, either `"csv"` or `"json"`. Ignored when `data_string` is given.
 data_string | function | `null` | A function that returns the data to submit, for filtering or transforming the data first. Overrides `format`.
 stream | boolean | `true` | Whether to stage each trial as it finishes, so that an abandoned session can be recovered. When `false`, the data is submitted only at the end and no connection to DataPipe's staging database is opened.
-save_at_end | boolean | `true` | Whether to submit the complete dataset when the experiment ends. Set to `false` if you would rather place a `jsPsychPipe` save trial in your timeline yourself.
 wait_message | string | `"<p>Saving data. Please do not close this page.</p>"` | HTML shown to the participant while the final upload is in progress.
 on_save | function | `null` | Called with the result of the final upload. See [Reacting to a failed save](#reacting-to-a-failed-save).
 base_url | string | *undefined* | Point the experiment at a different DataPipe deployment. Only useful for testing.
@@ -102,6 +101,14 @@ params: {
 ```
 
 A failed submission does not necessarily mean the data is lost. While `stream` is on, the trials that were staged stay on DataPipe's servers and are recovered as a `.partial.json` file.
+
+## Do not also add a save trial
+
+The extension submits your data. If you are migrating from `@jspsych-contrib/plugin-pipe`, delete the `jsPsychPipe` save trial from your timeline.
+
+Leaving it in submits twice. The first submission wins and the second is refused as a duplicate filename, which the extension then treats as a failed save — so it marks the session abandoned and DataPipe recovers your staged trials as a `.partial.json` you did not want.
+
+A `saveBase64` trial for media is fine to keep. It is only the `save` action that collides.
 
 ## Condition assignment
 

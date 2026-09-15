@@ -263,30 +263,30 @@ describe("abandonment", () => {
   });
 });
 
-describe("save_at_end: false", () => {
-  test("does not submit, and closes on the save trial's result", async () => {
-    const jsPsych = initJsPsych({
-      extensions: [{ type: PipeExtension, params: { ...PARAMS, save_at_end: false } }],
-    });
+describe("the extension always owns the submission", () => {
+  // There is no option to defer to a jsPsychPipe save trial, and there must
+  // not be. The plugin cannot send a sessionId -- it has no session -- so
+  // DataPipe could not tell that such a submission completes the staged copy.
+  // Nothing would discard the staging node, and the sweep's 24-hour expiry
+  // backstop would write those same trials out again as a .partial.json,
+  // duplicating data the researcher already has.
+  test("submits even when a pipe save trial is present in the timeline", async () => {
+    const jsPsych = initJsPsych({ extensions: [{ type: PipeExtension, params: PARAMS }] });
     const api = await startTimeline(trials(2), jsPsych);
     await pressKey("a");
 
-    // Stand in for a jsPsychPipe save trial finishing successfully part-way
-    // through the timeline, which is where a researcher would place it.
+    // Stand in for a leftover jsPsychPipe save trial, the thing a researcher
+    // migrating from the plugin is most likely to forget to delete.
     jsPsych.getInitSettings().on_data_update({ trial_type: "pipe", success: true });
 
     await pressKey("a");
     await api.expectFinished();
 
-    expect(saveData).not.toHaveBeenCalled();
+    expect(saveData).toHaveBeenCalledTimes(1);
+    expect(saveData).toHaveBeenCalledWith(expect.objectContaining({ sessionId: "SESSION_ID" }));
+    // Closed exactly once, on the extension's own result -- not on the trial's.
     expect(session.close).toHaveBeenCalledTimes(1);
     expect(session.close).toHaveBeenCalledWith({ submitted: true });
-  });
-
-  test("recovers the staged trials when no save trial ran", async () => {
-    await run({ ...PARAMS, save_at_end: false }, 1);
-    expect(saveData).not.toHaveBeenCalled();
-    expect(session.close).toHaveBeenCalledWith({ submitted: false });
   });
 });
 

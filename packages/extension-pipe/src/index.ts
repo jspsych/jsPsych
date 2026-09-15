@@ -63,13 +63,6 @@ interface InitializeParameters {
    * @default true
    */
   stream?: boolean;
-  /**
-   * Whether to submit the complete dataset when the experiment ends. Set to
-   * `false` if you would rather place a `jsPsychPipe` save trial in the
-   * timeline yourself; the session is then closed based on that trial's result.
-   * @default true
-   */
-  save_at_end?: boolean;
   /** HTML shown to the participant while the final upload is in progress. */
   wait_message?: string;
   /**
@@ -203,7 +196,6 @@ class PipeExtension implements JsPsychExtension {
     settings.on_data_update = (data: Record<string, any>) => {
       try {
         this.session?.record(data);
-        if (this.params.save_at_end === false) this.observeSaveTrial(data);
       } catch (error) {
         // Never let a staging failure break the researcher's own callback,
         // which is the next thing to run.
@@ -229,17 +221,17 @@ class PipeExtension implements JsPsychExtension {
    * which unwinds the timeline and falls through to `on_finish`. That is worth
    * noting: a save *trial* is never reached on an abort, so a participant
    * failed out by an attention check used to lose everything. Here they do not.
+   *
+   * THE EXTENSION ALWAYS OWNS THE SUBMISSION. There is deliberately no option
+   * to hand it back to a `jsPsychPipe` save trial, because that combination
+   * silently duplicates data: the plugin cannot send a `sessionId` (it has no
+   * session), so DataPipe has no way to tell that the submission completes the
+   * staged copy, nothing discards the staging node, and the sweep's 24-hour
+   * expiry backstop eventually writes those same trials out a second time as a
+   * `.partial.json`. Linking the two would mean giving the plugin the session
+   * back, which is the coupling splitting the client out removed.
    */
   private async finish(): Promise<void> {
-    if (this.params.save_at_end === false) {
-      // A save trial in the timeline owns the submission. If it ran, its result
-      // has already closed the session in observeSaveTrial(); if the experiment
-      // ended before reaching it, nothing was submitted and the staged trials
-      // should be recovered.
-      await this.closeSession(false);
-      return;
-    }
-
     const display = this.jsPsych.getDisplayElement();
     if (display) {
       display.innerHTML = this.params.wait_message ?? DEFAULT_WAIT_MESSAGE;
@@ -305,18 +297,6 @@ class PipeExtension implements JsPsychExtension {
     } catch (error) {
       console.warn("extension-pipe: could not close the staging session", error);
     }
-  }
-
-  /**
-   * Watch for a `jsPsychPipe` save trial's result, when the researcher has
-   * chosen to keep the save in their timeline (`save_at_end: false`).
-   *
-   * The plugin records `success` on a trial whose `trial_type` is `"pipe"`;
-   * both are stable, documented fields.
-   */
-  private observeSaveTrial(data: Record<string, any>): void {
-    if (data?.trial_type !== "pipe" || typeof data.success !== "boolean") return;
-    void this.closeSession(data.success);
   }
 
   private dataString(): string {
