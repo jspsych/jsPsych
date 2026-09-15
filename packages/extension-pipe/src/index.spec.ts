@@ -23,19 +23,16 @@ const saveBase64Data = jest.fn((..._args: any[]) =>
   Promise.resolve({ ok: true, status: 201, body: {} })
 );
 
-// `virtual` because datapipe-client is published from the DataPipe repository
-// and is not installed in this monorepo's node_modules during development.
-jest.mock(
-  "datapipe-client",
-  () => ({
-    createSession: (...args: any[]) => createSession(...args),
-    saveData: (...args: any[]) => saveData(...args),
-    setBaseURL: (...args: any[]) => setBaseURL(...args),
-    getCondition: (...args: any[]) => getCondition(...args),
-    saveBase64Data: (...args: any[]) => saveBase64Data(...args),
-  }),
-  { virtual: true }
-);
+// Not `virtual`: datapipe-client is a real dependency and must resolve, so a
+// mock that stops matching the package it stands in for fails here rather than
+// passing against a module that no longer exists.
+jest.mock("datapipe-client", () => ({
+  createSession: (...args: any[]) => createSession(...args),
+  saveData: (...args: any[]) => saveData(...args),
+  setBaseURL: (...args: any[]) => setBaseURL(...args),
+  getCondition: (...args: any[]) => getCondition(...args),
+  saveBase64Data: (...args: any[]) => saveBase64Data(...args),
+}));
 
 const PARAMS = { experiment_id: "EXP123", filename: "subject-01.csv" };
 
