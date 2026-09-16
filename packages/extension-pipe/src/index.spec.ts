@@ -404,6 +404,27 @@ describe("registered twice", () => {
     expect(session.record).toHaveBeenCalledTimes(2);
     expect(saveData).toHaveBeenCalledTimes(1);
   });
+
+  test("uses only the first entry's params", async () => {
+    const onSave = jest.fn();
+    const jsPsych = initJsPsych({
+      extensions: [
+        { type: PipeExtension, params: PARAMS },
+        {
+          type: PipeExtension,
+          params: { experiment_id: "OTHER", filename: "other.csv", on_save: onSave },
+        },
+      ],
+    });
+    const api = await startTimeline(trials(1), jsPsych);
+    await pressKey("a");
+    await api.expectFinished();
+
+    expect(saveData).toHaveBeenCalledWith(
+      expect.objectContaining({ experimentID: "EXP123", filename: "subject-01.csv" })
+    );
+    expect(onSave).not.toHaveBeenCalled();
+  });
 });
 
 describe("misconfiguration", () => {
@@ -415,6 +436,46 @@ describe("misconfiguration", () => {
     expect(saveData).not.toHaveBeenCalled();
     expect(warn).toHaveBeenCalledWith(expect.stringContaining("no experiment_id"));
     warn.mockRestore();
+  });
+
+  test("still saves when the filename function throws at the start", async () => {
+    // A filename function carried over from a save trial, which could read the
+    // data because it ran at the end.
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+    let jsPsych: any;
+    const filename = () => `${jsPsych.data.get().values()[0].subject}.csv`;
+    jsPsych = initJsPsych({
+      extensions: [{ type: PipeExtension, params: { ...PARAMS, filename } }],
+    });
+    jsPsych.data.addProperties({ subject: "s42" });
+    const api = await startTimeline(trials(2), jsPsych);
+    await pressKey("a");
+    await pressKey("a");
+    await api.expectFinished();
+
+    expect(createSession).toHaveBeenCalledWith(expect.objectContaining({ filename: undefined }));
+    expect(session.record).toHaveBeenCalledTimes(2);
+    expect(saveData).toHaveBeenCalledWith(expect.objectContaining({ filename: "s42.csv" }));
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining("filename function threw"),
+      expect.anything()
+    );
+    warn.mockRestore();
+  });
+
+  test("saves under a random name when the filename function always throws", async () => {
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+    const error = jest.spyOn(console, "error").mockImplementation(() => {});
+    const filename = () => {
+      throw new Error("nope");
+    };
+    await run({ ...PARAMS, filename, format: "json" }, 1);
+
+    expect(saveData).toHaveBeenCalledWith(
+      expect.objectContaining({ filename: expect.stringMatching(/^\w{10}\.json$/) })
+    );
+    warn.mockRestore();
+    error.mockRestore();
   });
 
   test("base_url is applied to the client", async () => {

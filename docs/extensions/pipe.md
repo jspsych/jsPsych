@@ -73,7 +73,7 @@ There is no save trial, no `await`, and no session variable to thread through yo
 
 !!! tip "Why `filename` is usually a function"
 
-    The participant ID normally comes from `jsPsych.randomization`, which does not exist yet at the point where `initJsPsych()` is called. A function is not evaluated until the experiment starts, by which time it does. A plain string works too, if the filename is known that early.
+    The participant ID normally comes from `jsPsych.randomization`, which does not exist yet at the point where `initJsPsych()` is called. A function is not evaluated until the experiment starts, by which time it does. A plain string works too, if the filename is known that early. If the function throws at that point, for example because it reads trial data that does not exist yet, it is called again when the experiment ends, and the data is still saved.
 
 ### Saving only part of the data
 

@@ -195,12 +195,16 @@ class PipeExtension implements JsPsychExtension {
   private shownWaitMessage: string | null = null;
 
   initialize = async (params: InitializeParameters): Promise<void> => {
-    this.params = params;
-
     // jsPsych calls initialize() once per entry in the `extensions` array, and
     // the same instance answers each time -- so registering this extension
     // twice would wrap the global callbacks twice and submit the data twice.
+    // Checked BEFORE the params are stored: the hooks and the session already
+    // belong to the first entry, and a second entry's params would otherwise
+    // be half-applied, submitting under its settings with the first's filename
+    // and session.
     if (this.installed) return;
+
+    this.params = params;
 
     if (params?.enabled === false) return;
 
@@ -215,19 +219,34 @@ class PipeExtension implements JsPsychExtension {
       setBaseURL(params.base_url);
     }
 
-    this.filename = typeof params.filename === "function" ? params.filename() : params.filename;
-
     // INSTALLED BEFORE ANYTHING ELSE, AND SYNCHRONOUSLY. jsPsych 8 does not
     // await the promise this method returns, so a trial can finish while the
     // rest of this function is still running. The hooks have to be in place
     // before that can happen; `createSession` is deliberately synchronous for
     // the same reason, and buffers whatever arrives before it is ready.
+    //
+    // And before the filename function is called, because that is researcher
+    // code that can throw. Nothing handles this method's rejection, so a throw
+    // ahead of this line would leave the experiment running with no saving at
+    // all and nothing but an unhandled rejection in the console to show for it.
     this.installHooks();
+
+    try {
+      this.filename = this.resolveFilename();
+    } catch (error) {
+      // The likeliest cause is a filename function carried over from a save
+      // trial, which ran at the end and could read the data. It gets another
+      // chance at the end here too; meanwhile the session is simply unnamed.
+      console.warn(
+        "extension-pipe: the filename function threw when the experiment started. It will be called again when the experiment ends.",
+        error
+      );
+    }
 
     if (params.stream !== false) {
       this.session = createSession({
         experimentID: params.experiment_id,
-        filename: this.filename,
+        filename: this.filename || undefined,
       });
     }
   };
@@ -301,6 +320,10 @@ class PipeExtension implements JsPsychExtension {
     // can be if the submission below fails.
     await this.session?.flush().catch(() => undefined);
 
+    if (!this.filename) {
+      this.filename = this.finalFilename();
+    }
+
     let result: SaveResult;
     try {
       result = await saveData({
@@ -367,6 +390,31 @@ class PipeExtension implements JsPsychExtension {
     } catch (error) {
       console.warn("extension-pipe: could not close the staging session", error);
     }
+  }
+
+  private resolveFilename(): string {
+    const { filename } = this.params;
+    return typeof filename === "function" ? filename() : filename;
+  }
+
+  /**
+   * The filename to submit under when none could be resolved at the start.
+   *
+   * Never throws. If the filename function fails a second time, the data goes
+   * out under a random name rather than not at all: a file the researcher has
+   * to rename is recoverable, and data that was never sent is not.
+   */
+  private finalFilename(): string {
+    try {
+      const filename = this.resolveFilename();
+      if (filename) return filename;
+    } catch (error) {
+      console.error("extension-pipe: the filename function threw", error);
+    }
+    const extension = this.params.format === "json" ? "json" : "csv";
+    const fallback = `${this.jsPsych.randomization.randomID(10)}.${extension}`;
+    console.error(`extension-pipe: no filename could be determined, so saving as "${fallback}".`);
+    return fallback;
   }
 
   private dataString(): string {

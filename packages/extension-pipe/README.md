@@ -28,7 +28,7 @@ jsPsych.run([
 
 There is no save trial, no `await`, and no session variable to thread through the timeline. You do not add `extensions` to any trial or timeline — registering it in `initJsPsych` is enough.
 
-`filename` usually needs to be a function, because the participant ID normally comes from `jsPsych.randomization`, which does not exist yet when `initJsPsych` is called. A function is evaluated when the experiment starts.
+`filename` usually needs to be a function, because the participant ID normally comes from `jsPsych.randomization`, which does not exist yet when `initJsPsych` is called. A function is evaluated when the experiment starts. If the function throws at that point, for example because it reads trial data that does not exist yet, it is called again when the experiment ends, and the data is still saved.
 
 ## Parameters
 
