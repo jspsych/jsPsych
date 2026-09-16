@@ -178,7 +178,7 @@ The final save also runs after [`jsPsych.abortExperiment()`](../reference/jspsyc
 Using the CDN-hosted JavaScript file:
 
 ```js
-<script src="https://unpkg.com/@jspsych/extension-pipe@0.1.0"></script>
+<script src="https://unpkg.com/@jspsych/extension-pipe@0.2.0"></script>
 ```
 
 Using NPM:

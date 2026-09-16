@@ -1,5 +1,13 @@
 # @jspsych/config
 
+## 3.4.0
+
+### Minor Changes
+
+- [#3719](https://github.com/jspsych/jsPsych/pull/3719) [`7a2bee7ce54e16eb3ab3d060767ee928cd4a6078`](https://github.com/jspsych/jsPsych/commit/7a2bee7ce54e16eb3ab3d060767ee928cd4a6078) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Require Node 20 or later. Node 18 reached end of life in April 2025, and parts of the ecosystem have moved past it — the Firebase v12 SDK, for one, declares `node >= 20` throughout, so a package depending on it could not be installed in a repository that still claimed Node 18 support.
+
+  A `minor` rather than a `major`: raising a runtime floor is breaking in the strict sense, but `@jspsych/config` is a build-time dependency of jsPsych's own packages and never reaches an experiment, so a major here would churn every package in the monorepo for an advisory field.
+
 ## 3.3.4
 
 ### Patch Changes
