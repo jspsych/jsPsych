@@ -1,0 +1,485 @@
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { pressKey, startTimeline } from "@jspsych/test-utils";
+import { initJsPsych } from "jspsych";
+
+import PipeExtension from ".";
+
+// The library is mocked throughout: what is under test here is the wiring into
+// jsPsych -- which callbacks get taken, in what order, and what the session is
+// told about the outcome. The staging protocol itself is the library's problem
+// and has its own tests.
+const session = {
+  sessionId: "SESSION_ID",
+  enabled: true,
+  record: jest.fn(),
+  flush: jest.fn().mockResolvedValue(undefined),
+  close: jest.fn().mockResolvedValue(undefined),
+};
+const createSession = jest.fn((..._args: any[]) => session);
+const saveData = jest.fn((..._args: any[]) => Promise.resolve({ ok: true, status: 201, body: {} }));
+const setBaseURL = jest.fn((..._args: any[]) => undefined);
+const getCondition = jest.fn((..._args: any[]) => Promise.resolve(2));
+const saveBase64Data = jest.fn((..._args: any[]) =>
+  Promise.resolve({ ok: true, status: 201, body: {} })
+);
+
+// Not `virtual`: datapipe-client is a real dependency and must resolve, so a
+// mock that stops matching the package it stands in for fails here rather than
+// passing against a module that no longer exists.
+jest.mock("datapipe-client", () => ({
+  createSession: (...args: any[]) => createSession(...args),
+  saveData: (...args: any[]) => saveData(...args),
+  setBaseURL: (...args: any[]) => setBaseURL(...args),
+  getCondition: (...args: any[]) => getCondition(...args),
+  saveBase64Data: (...args: any[]) => saveBase64Data(...args),
+}));
+
+const PARAMS = { experiment_id: "EXP123", filename: "subject-01.csv" };
+
+/** A timeline of `n` trials, each advanced by pressing a key. */
+const trials = (n: number) =>
+  Array.from({ length: n }, () => ({ type: htmlKeyboardResponse, stimulus: "hello" }));
+
+async function run(params: Record<string, any>, n = 2, initOptions = {}) {
+  const jsPsych = initJsPsych({
+    ...initOptions,
+    extensions: [{ type: PipeExtension, params }],
+  });
+  const api = await startTimeline(trials(n), jsPsych);
+  for (let i = 0; i < n; i++) await pressKey("a");
+  await api.expectFinished();
+  return { jsPsych, ...api };
+}
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  saveData.mockResolvedValue({ ok: true, status: 201, body: {} });
+});
+
+describe("streaming", () => {
+  test("starts a session and stages every trial", async () => {
+    await run(PARAMS, 3);
+
+    expect(createSession).toHaveBeenCalledWith({
+      experimentID: "EXP123",
+      filename: "subject-01.csv",
+    });
+    expect(session.record).toHaveBeenCalledTimes(3);
+  });
+
+  test("evaluates a function filename when the experiment starts", async () => {
+    // The usual case: the participant ID comes from jsPsych.randomization,
+    // which does not exist when initJsPsych is called.
+    let subjectId = "";
+    const jsPsych = initJsPsych({
+      extensions: [
+        {
+          type: PipeExtension,
+          params: { experiment_id: "EXP123", filename: () => `${subjectId}.csv` },
+        },
+      ],
+    });
+    subjectId = "assigned-after-init";
+
+    const api = await startTimeline(trials(1), jsPsych);
+    await pressKey("a");
+    await api.expectFinished();
+
+    expect(createSession).toHaveBeenCalledWith(
+      expect.objectContaining({ filename: "assigned-after-init.csv" })
+    );
+    expect(saveData).toHaveBeenCalledWith(
+      expect.objectContaining({ filename: "assigned-after-init.csv" })
+    );
+  });
+
+  test("stream: false submits at the end without opening a session", async () => {
+    await run({ ...PARAMS, stream: false });
+
+    expect(createSession).not.toHaveBeenCalled();
+    expect(saveData).toHaveBeenCalledWith(expect.objectContaining({ sessionId: undefined }));
+  });
+
+  test("a staging failure does not break the researcher's on_data_update", async () => {
+    session.record.mockImplementationOnce(() => {
+      throw new Error("staging is down");
+    });
+    const onDataUpdate = jest.fn();
+
+    await run(PARAMS, 2, { on_data_update: onDataUpdate });
+
+    expect(onDataUpdate).toHaveBeenCalledTimes(2);
+    expect(saveData).toHaveBeenCalled();
+  });
+});
+
+describe("the final save", () => {
+  test("submits the complete dataset with the session id", async () => {
+    const { jsPsych } = await run(PARAMS, 2);
+
+    expect(saveData).toHaveBeenCalledWith({
+      experimentID: "EXP123",
+      filename: "subject-01.csv",
+      data: jsPsych.data.get().csv(),
+      sessionId: "SESSION_ID",
+    });
+  });
+
+  test("waits for the session to start before reading its id", async () => {
+    // createSession() returns synchronously and the /api/session round trip
+    // finishes later, so sessionId is empty until it does. A short experiment
+    // can reach the end inside that window. Submitting without the id would
+    // leave the staged copy unmatched, and DataPipe would recover it a second
+    // time as a spurious .partial.json.
+    let sessionId = "";
+    const pending = {
+      ...session,
+      get sessionId() {
+        return sessionId;
+      },
+      flush: jest.fn().mockImplementation(async () => {
+        sessionId = "ARRIVED_LATE";
+      }),
+    };
+    createSession.mockReturnValueOnce(pending as any);
+
+    await run(PARAMS, 1);
+
+    expect(pending.flush).toHaveBeenCalled();
+    expect(saveData).toHaveBeenCalledWith(expect.objectContaining({ sessionId: "ARRIVED_LATE" }));
+  });
+
+  test("a failing flush does not stop the submission", async () => {
+    const broken = { ...session, flush: jest.fn().mockRejectedValue(new Error("offline")) };
+    createSession.mockReturnValueOnce(broken as any);
+
+    await run(PARAMS, 1);
+
+    expect(saveData).toHaveBeenCalledTimes(1);
+  });
+
+  test("format: json submits JSON", async () => {
+    const { jsPsych } = await run({ ...PARAMS, format: "json" });
+    expect(saveData).toHaveBeenCalledWith(
+      expect.objectContaining({ data: jsPsych.data.get().json() })
+    );
+  });
+
+  test("data_string overrides format", async () => {
+    await run({ ...PARAMS, format: "json", data_string: () => "custom" });
+    expect(saveData).toHaveBeenCalledWith(expect.objectContaining({ data: "custom" }));
+  });
+
+  test("closes the session as submitted when the save succeeds", async () => {
+    await run(PARAMS);
+    expect(session.close).toHaveBeenCalledWith({ submitted: true });
+  });
+
+  test("closes the session as unsubmitted when the save is refused", async () => {
+    saveData.mockResolvedValue({ ok: false, status: 400, body: { error: "nope" } });
+    await run(PARAMS);
+    // The staged trials must survive so the sweep recovers them as a partial,
+    // rather than waiting out the 24-hour expiry.
+    expect(session.close).toHaveBeenCalledWith({ submitted: false });
+  });
+
+  test("closes the session as unsubmitted when saveData throws", async () => {
+    saveData.mockRejectedValue(new Error("network gone"));
+    await run(PARAMS);
+    expect(session.close).toHaveBeenCalledWith({ submitted: false });
+  });
+
+  test("reports the result through on_save", async () => {
+    const onSave = jest.fn();
+    saveData.mockResolvedValue({ ok: false, status: 413, body: null });
+    await run({ ...PARAMS, on_save: onSave });
+    expect(onSave).toHaveBeenCalledWith({ ok: false, status: 413, body: null });
+  });
+
+  test("shows a wait message while the upload is in progress", async () => {
+    let displayDuringSave = "";
+    const jsPsych = initJsPsych({
+      extensions: [{ type: PipeExtension, params: { ...PARAMS, wait_message: "<p>Hang on</p>" } }],
+    });
+    saveData.mockImplementation(async () => {
+      displayDuringSave = jsPsych.getDisplayElement().innerHTML;
+      return { ok: true, status: 201, body: {} };
+    });
+
+    const api = await startTimeline(trials(1), jsPsych);
+    await pressKey("a");
+    await api.expectFinished();
+
+    expect(displayDuringSave).toBe("<p>Hang on</p>");
+  });
+});
+
+describe("done message", () => {
+  test("replaces the wait message once the upload has finished", async () => {
+    const { jsPsych } = await run(PARAMS, 1);
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("<p>Done. You may close this page.</p>");
+  });
+
+  test("is shown even when the upload fails", async () => {
+    saveData.mockResolvedValue({ ok: false, status: 500, body: null });
+    const { jsPsych } = await run(PARAMS, 1);
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("<p>Done. You may close this page.</p>");
+  });
+
+  test("can be replaced, e.g. to translate it", async () => {
+    const { jsPsych } = await run(
+      { ...PARAMS, wait_message: "<p>Guardando datos…</p>", done_message: "<p>Listo.</p>" },
+      1
+    );
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("<p>Listo.</p>");
+  });
+
+  test("leaves the page alone if the researcher's on_finish changed it", async () => {
+    const jsPsych = initJsPsych({
+      extensions: [{ type: PipeExtension, params: PARAMS }],
+      on_finish: () => {
+        jsPsych.getDisplayElement().innerHTML = "<p>Your code is ABC123</p>";
+      },
+    });
+    const api = await startTimeline(trials(1), jsPsych);
+    await pressKey("a");
+    await api.expectFinished();
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("<p>Your code is ABC123</p>");
+  });
+
+  test("leaves the abortExperiment() end message in place", async () => {
+    const jsPsych = initJsPsych({ extensions: [{ type: PipeExtension, params: PARAMS }] });
+    const api = await startTimeline(trials(3), jsPsych);
+
+    await pressKey("a");
+    jsPsych.abortExperiment("Thanks anyway.");
+    await api.expectFinished();
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("Thanks anyway.");
+  });
+});
+
+describe("hook ordering", () => {
+  test("saves before the researcher's on_finish, which is where redirects live", async () => {
+    const order: string[] = [];
+    saveData.mockImplementation(async () => {
+      order.push("save");
+      return { ok: true, status: 201, body: {} };
+    });
+
+    await run(PARAMS, 1, {
+      on_finish: () => {
+        order.push("researcher on_finish");
+      },
+    });
+
+    expect(order).toEqual(["save", "researcher on_finish"]);
+  });
+
+  test("the researcher's on_data_update still receives every trial", async () => {
+    const seen: any[] = [];
+    await run(PARAMS, 3, { on_data_update: (d: any) => seen.push(d) });
+    expect(seen).toHaveLength(3);
+  });
+
+  test("works without any researcher callbacks at all", async () => {
+    await expect(run(PARAMS, 1)).resolves.toBeDefined();
+    expect(saveData).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("abandonment", () => {
+  test("submits when the experiment is aborted part-way", async () => {
+    // abortExperiment() unwinds the timeline and falls through to on_finish, so
+    // an extension-owned save still runs. A save *trial* would never be
+    // reached, which is why an attention-check failure used to lose everything.
+    const jsPsych = initJsPsych({ extensions: [{ type: PipeExtension, params: PARAMS }] });
+    const api = await startTimeline(trials(5), jsPsych);
+
+    await pressKey("a");
+    jsPsych.abortExperiment("Thanks anyway.");
+    await api.expectFinished();
+
+    expect(saveData).toHaveBeenCalledTimes(1);
+    expect(session.close).toHaveBeenCalledWith({ submitted: true });
+  });
+});
+
+describe("the extension always owns the submission", () => {
+  // There is no option to defer to a jsPsychPipe save trial, and there must
+  // not be. The plugin cannot send a sessionId -- it has no session -- so
+  // DataPipe could not tell that such a submission completes the staged copy.
+  // Nothing would discard the staging node, and the sweep's 24-hour expiry
+  // backstop would write those same trials out again as a .partial.json,
+  // duplicating data the researcher already has.
+  test("submits even when a pipe save trial is present in the timeline", async () => {
+    const jsPsych = initJsPsych({ extensions: [{ type: PipeExtension, params: PARAMS }] });
+    const api = await startTimeline(trials(2), jsPsych);
+    await pressKey("a");
+
+    // Stand in for a leftover jsPsychPipe save trial, the thing a researcher
+    // migrating from the plugin is most likely to forget to delete.
+    jsPsych.getInitSettings().on_data_update({ trial_type: "pipe", success: true });
+
+    await pressKey("a");
+    await api.expectFinished();
+
+    expect(saveData).toHaveBeenCalledTimes(1);
+    expect(saveData).toHaveBeenCalledWith(expect.objectContaining({ sessionId: "SESSION_ID" }));
+    // Closed exactly once, on the extension's own result -- not on the trial's.
+    expect(session.close).toHaveBeenCalledTimes(1);
+    expect(session.close).toHaveBeenCalledWith({ submitted: true });
+  });
+});
+
+describe("static helpers", () => {
+  test("getCondition passes the experiment id through", async () => {
+    await expect(PipeExtension.getCondition("EXP123")).resolves.toBe(2);
+    expect(getCondition).toHaveBeenCalledWith({ experimentID: "EXP123", baseURL: undefined });
+  });
+
+  test("getCondition propagates the failure instead of returning a fallback", async () => {
+    // A participant sent down the wrong branch looks like a successful run
+    // until someone reads the data, so this must reach the caller.
+    getCondition.mockRejectedValueOnce(new Error("datapipe: could not reach DataPipe"));
+    await expect(PipeExtension.getCondition("EXP123")).rejects.toThrow(/could not reach/);
+  });
+
+  test("saveBase64Data passes the file through and reports the outcome", async () => {
+    const result = await PipeExtension.saveBase64Data("EXP123", "clip.webm", "BASE64", {
+      base_url: "https://datapipe-test.web.app",
+    });
+
+    expect(saveBase64Data).toHaveBeenCalledWith({
+      experimentID: "EXP123",
+      filename: "clip.webm",
+      data: "BASE64",
+      baseURL: "https://datapipe-test.web.app",
+    });
+    expect(result.ok).toBe(true);
+  });
+});
+
+describe("enabled: false", () => {
+  test("does nothing at all", async () => {
+    // The escape hatch for jsPsych.simulate(), which reaches this extension
+    // exactly like a real run and which the extension cannot detect: jsPsych
+    // keeps simulationMode private with no public accessor.
+    const onDataUpdate = jest.fn();
+    await run({ ...PARAMS, enabled: false }, 2, { on_data_update: onDataUpdate });
+
+    expect(createSession).not.toHaveBeenCalled();
+    expect(saveData).not.toHaveBeenCalled();
+    expect(session.record).not.toHaveBeenCalled();
+    // And the researcher's own callbacks are untouched.
+    expect(onDataUpdate).toHaveBeenCalledTimes(2);
+  });
+
+  test("leaves the researcher's on_finish alone", async () => {
+    const onFinish = jest.fn();
+    await run({ ...PARAMS, enabled: false }, 1, { on_finish: onFinish });
+    expect(onFinish).toHaveBeenCalledTimes(1);
+    expect(saveData).not.toHaveBeenCalled();
+  });
+});
+
+describe("registered twice", () => {
+  test("wraps the callbacks once and submits once", async () => {
+    // initialize() is called once per entry in the extensions array, and the
+    // same instance answers each time. Wrapping twice would double-record and
+    // double-submit.
+    const jsPsych = initJsPsych({
+      extensions: [
+        { type: PipeExtension, params: PARAMS },
+        { type: PipeExtension, params: PARAMS },
+      ],
+    });
+    const api = await startTimeline(trials(2), jsPsych);
+    await pressKey("a");
+    await pressKey("a");
+    await api.expectFinished();
+
+    expect(createSession).toHaveBeenCalledTimes(1);
+    expect(session.record).toHaveBeenCalledTimes(2);
+    expect(saveData).toHaveBeenCalledTimes(1);
+  });
+
+  test("uses only the first entry's params", async () => {
+    const onSave = jest.fn();
+    const jsPsych = initJsPsych({
+      extensions: [
+        { type: PipeExtension, params: PARAMS },
+        {
+          type: PipeExtension,
+          params: { experiment_id: "OTHER", filename: "other.csv", on_save: onSave },
+        },
+      ],
+    });
+    const api = await startTimeline(trials(1), jsPsych);
+    await pressKey("a");
+    await api.expectFinished();
+
+    expect(saveData).toHaveBeenCalledWith(
+      expect.objectContaining({ experimentID: "EXP123", filename: "subject-01.csv" })
+    );
+    expect(onSave).not.toHaveBeenCalled();
+  });
+});
+
+describe("misconfiguration", () => {
+  test("warns and does nothing without an experiment_id", async () => {
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+    await run({ filename: "x.csv" } as any, 1);
+
+    expect(createSession).not.toHaveBeenCalled();
+    expect(saveData).not.toHaveBeenCalled();
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("no experiment_id"));
+    warn.mockRestore();
+  });
+
+  test("still saves when the filename function throws at the start", async () => {
+    // A filename function carried over from a save trial, which could read the
+    // data because it ran at the end.
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+    let jsPsych: any;
+    const filename = () => `${jsPsych.data.get().values()[0].subject}.csv`;
+    jsPsych = initJsPsych({
+      extensions: [{ type: PipeExtension, params: { ...PARAMS, filename } }],
+    });
+    jsPsych.data.addProperties({ subject: "s42" });
+    const api = await startTimeline(trials(2), jsPsych);
+    await pressKey("a");
+    await pressKey("a");
+    await api.expectFinished();
+
+    expect(createSession).toHaveBeenCalledWith(expect.objectContaining({ filename: undefined }));
+    expect(session.record).toHaveBeenCalledTimes(2);
+    expect(saveData).toHaveBeenCalledWith(expect.objectContaining({ filename: "s42.csv" }));
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining("filename function threw"),
+      expect.anything()
+    );
+    warn.mockRestore();
+  });
+
+  test("saves under a random name when the filename function always throws", async () => {
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+    const error = jest.spyOn(console, "error").mockImplementation(() => {});
+    const filename = () => {
+      throw new Error("nope");
+    };
+    await run({ ...PARAMS, filename, format: "json" }, 1);
+
+    expect(saveData).toHaveBeenCalledWith(
+      expect.objectContaining({ filename: expect.stringMatching(/^\w{10}\.json$/) })
+    );
+    warn.mockRestore();
+    error.mockRestore();
+  });
+
+  test("base_url is applied to the client", async () => {
+    await run({ ...PARAMS, base_url: "https://datapipe-test.web.app" }, 1);
+    expect(setBaseURL).toHaveBeenCalledWith("https://datapipe-test.web.app");
+  });
+});

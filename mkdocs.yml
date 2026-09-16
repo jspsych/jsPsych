@@ -132,6 +132,7 @@ nav:
 - Extensions:
   - 'List of Extensions': 'extensions/list-of-extensions.md'
   - 'mouse-tracking': 'extensions/mouse-tracking.md'
+  - 'pipe': 'extensions/pipe.md'
   - 'record-video': 'extensions/record-video.md'
   - 'webgazer': 'extensions/webgazer.md'
 - Developers:
