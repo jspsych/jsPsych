@@ -69,7 +69,10 @@ jobs:
         env:
           # No NPM_TOKEN: without it, changesets/action leaves .npmrc alone and
           # npm publish authenticates through the trusted publisher configured
-          # for each package (see scripts/npm-trust.sh).
+          # for each package. Trust can only be added to a package that exists,
+          # so publish a new package once by hand, then run (npm >= 11.15.0):
+          #   npm trust github <package> --file release.yml --repo jspsych/jsPsych --allow-publish
+          # Otherwise its publish here fails with E404.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pack Dist Archive
