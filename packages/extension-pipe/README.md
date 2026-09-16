@@ -1,8 +1,8 @@
 # @jspsych/extension-pipe
 
-Send an experiment's data to [DataPipe](https://pipe.jspsych.org) without writing any DataPipe code.
+This extension sends an experiment's data to [DataPipe](https://pipe.jspsych.org), a free service that forwards data from online experiments to a storage provider such as Zenodo, Google Drive, or Dataverse.
 
-Registering the extension is the whole integration. It stages each trial as it finishes — so a participant who closes the tab at trial 199 of 200 does not take all 199 with them — and submits the complete dataset when the experiment ends.
+The extension sends data after each trial so that partial completions are still recorded. It submits the complete dataset when the experiment ends.
 
 ## Example
 
@@ -35,7 +35,7 @@ There is no save trial, no `await`, and no session variable to thread through th
 | Parameter | Type | Default | Description |
 | --- | --- | --- | --- |
 | `experiment_id` | string | *required* | The 12-character experiment ID from your DataPipe dashboard. |
-| `filename` | string \| function | *required* | The name of the file to save. Must be unique within the experiment. |
+| `filename` | string \| function | *required* | The name of the file to save. Must be unique within the experiment. This can be a function if you are generating a subject ID that is not known at the moment of initializing jsPsych. |
 | `format` | `"csv"` \| `"json"` | `"csv"` | The format to submit the data in. Ignored when `data_string` is given. |
 | `data_string` | function | | Returns the data to submit. Use instead of `format` to filter or transform first. |
 | `stream` | boolean | `true` | Whether to stage each trial as it finishes. `false` submits only at the end and opens no connection to the staging database. |
@@ -49,7 +49,7 @@ There is no save trial, no `await`, and no session variable to thread through th
 
 The extension takes jsPsych's two global callbacks, `on_data_update` and `on_finish`, through the public `getInitSettings()`. Both are wrapped rather than replaced, so anything you passed to `initJsPsych` still runs.
 
-It does not use the per-trial extension callbacks. Those fire only for trials whose own `extensions` parameter names the extension — which is a different thing from the array passed to `initJsPsych`, and which a nested timeline can shadow without merging. An extension relying on them would silently miss trials.
+It does not use the per-trial extension callbacks. Those fire only for trials whose own `extensions` parameter names the extension.
 
 The final save also runs after `jsPsych.abortExperiment()`, which unwinds the timeline and falls through to `on_finish`. A save *trial* is never reached on an abort, so a participant failed out by an attention check would otherwise lose everything.
 
@@ -121,7 +121,7 @@ Leaving it in submits twice. The first submission wins and the second is refused
 
 Both are static because they are needed outside the extension's own lifecycle, and they are here only so that an experiment needs one script tag rather than two.
 
-`jsPsychExtensionPipe.getCondition(experiment_id)` requests this participant's condition assignment. A condition usually decides which timeline to build, so it has to be known before `initJsPsych()` is called. It **throws** on failure — a participant sent down the wrong branch looks like a successful run until someone reads the data.
+`jsPsychExtensionPipe.getCondition(experiment_id)` requests this participant's condition assignment. A condition usually decides which timeline to build, so it has to be known before `initJsPsych()` is called. It **throws an error** if the condition cannot be obtained. There is no safe value to fall back to: a participant sent down the wrong branch, or an empty one, looks like a successful run until someone reads the data. Decide what they should see.
 
 ```js
 let condition;
