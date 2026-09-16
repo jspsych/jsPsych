@@ -1,6 +1,6 @@
 {
   "name": "@jspsych/extension-pipe",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "jsPsych extension for sending data to DataPipe",
   "type": "module",
   "main": "dist/index.cjs",
@@ -40,7 +40,7 @@
     "jspsych": ">=8.0.0"
   },
   "devDependencies": {
-    "@jspsych/config": "^3.2.0",
+    "@jspsych/config": "^3.4.0",
     "@jspsych/test-utils": "^1.2.0"
   }
 }
