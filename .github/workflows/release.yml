@@ -18,8 +18,9 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      # Needed by actions/attest-build-provenance to mint a Sigstore signing
-      # cert from the workflow's OIDC identity and to record the attestation.
+      # Needed for npm trusted publishing (OIDC), which replaces NPM_TOKEN, and
+      # by actions/attest-build-provenance to mint a Sigstore signing cert from
+      # the workflow's OIDC identity.
       id-token: write
       attestations: write
     steps:
@@ -28,8 +29,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3.9.1
         with:
-          node-version: 20
+          # Trusted publishing requires Node >= 22.14.0 and npm >= 11.5.1
+          node-version: 22
           cache: npm
+          # No registry-url: setup-node would write an `_authToken` line to
+          # .npmrc, which breaks OIDC when no token is set
+          # (https://github.com/actions/setup-node/issues/1551).
+
+      - name: Upgrade npm for trusted publishing
+        run: npm install -g npm@^11.5.1
 
       - name: Install dependencies
         run: npm ci
@@ -38,9 +46,9 @@ jobs:
         uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c # v3.5.0
         with:
           path: node_modules/.cache/turbo
-          key: ${{ runner.os }}-node-20-turbo-${{ hashFiles('node_modules/.cache/turbo') }}
+          key: ${{ runner.os }}-node-22-turbo-${{ hashFiles('node_modules/.cache/turbo') }}
           restore-keys: |
-            ${{ runner.os }}-node-20-turbo-
+            ${{ runner.os }}-node-22-turbo-
 
       - name: Check types
         run: npm run tsc
@@ -59,7 +67,9 @@ jobs:
           publish: npm run changeset:publish
           commit: "chore(release): version packages"
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # No NPM_TOKEN: without it, changesets/action leaves .npmrc alone and
+          # npm publish authenticates through the trusted publisher configured
+          # for each package (see scripts/npm-trust.sh).
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pack Dist Archive
