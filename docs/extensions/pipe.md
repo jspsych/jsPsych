@@ -128,29 +128,6 @@ const jsPsych = initJsPsych({
 
 If `on_finish` puts its own content on the page instead, such as a completion code, the done message is not shown.
 
-## Turn it off when simulating
-
-`jsPsych.simulate()` reaches this extension exactly like a real run. `simulate()` calls `run()` internally, so extensions initialize the same way, and jsPsych keeps its simulation mode private with no public accessor — the extension cannot notice on its own.
-
-Left on, simulating your experiment consumes one of its sessions and writes a real file of fake data into your dataset. Gate it with `enabled`:
-
-```js
-const SIMULATE = new URLSearchParams(location.search).has("simulate");
-
-const jsPsych = initJsPsych({
-  extensions: [
-    {
-      type: jsPsychExtensionPipe,
-      params: {
-        experiment_id: "YOUR_EXPERIMENT_ID",
-        filename: () => `${subject_id}.csv`,
-        enabled: !SIMULATE
-      }
-    }
-  ]
-});
-```
-
 ## Do not also add a save trial
 
 The extension submits your data. If you are migrating from `@jspsych-contrib/plugin-pipe`, delete the `jsPsychPipe` save trial from your timeline.
