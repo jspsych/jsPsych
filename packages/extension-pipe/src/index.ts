@@ -84,8 +84,22 @@ interface InitializeParameters {
    * @default true
    */
   enabled?: boolean;
-  /** HTML shown to the participant while the final upload is in progress. */
+  /**
+   * HTML shown to the participant while the final upload is in progress.
+   * Change it to translate or reword it.
+   * @default "<p>Saving data. Please do not close this page.</p>"
+   */
   wait_message?: string;
+  /**
+   * HTML shown to the participant once the upload has finished, whether or not
+   * it succeeded. Change it to translate or reword it.
+   *
+   * It is shown after your own `on_finish` has run, and only if the wait
+   * message is still on screen, so anything your `on_finish` puts on the page
+   * -- or the message passed to `abortExperiment()` -- is left in place.
+   * @default "<p>Done. You may close this page.</p>"
+   */
+  done_message?: string;
   /**
    * Called with the result of the final upload. The result cannot be recorded
    * in the data, because the data has already been sent by the time it is
@@ -100,6 +114,7 @@ interface InitializeParameters {
 }
 
 const DEFAULT_WAIT_MESSAGE = "<p>Saving data. Please do not close this page.</p>";
+const DEFAULT_DONE_MESSAGE = "<p>Done. You may close this page.</p>";
 
 /**
  * https://www.jspsych.org/latest/extensions/pipe
@@ -173,6 +188,11 @@ class PipeExtension implements JsPsychExtension {
   private closed = false;
   /** Set once the global callbacks are wrapped, so they are never wrapped twice. */
   private installed = false;
+  /**
+   * The wait message as the display element reports it back, which is not
+   * always the string that was assigned: the browser normalizes the markup.
+   */
+  private shownWaitMessage: string | null = null;
 
   initialize = async (params: InitializeParameters): Promise<void> => {
     this.params = params;
@@ -241,7 +261,9 @@ class PipeExtension implements JsPsychExtension {
       // Prolific or MTurk usually lives. Running after it would mean racing a
       // page navigation with the upload.
       await this.finish();
-      return downstreamFinish?.(data);
+      const result = await downstreamFinish?.(data);
+      this.showDoneMessage();
+      return result;
     };
   }
 
@@ -266,6 +288,7 @@ class PipeExtension implements JsPsychExtension {
     const display = this.jsPsych.getDisplayElement();
     if (display) {
       display.innerHTML = this.params.wait_message ?? DEFAULT_WAIT_MESSAGE;
+      this.shownWaitMessage = display.innerHTML;
     }
 
     // BEFORE reading sessionId, and before submitting. Two reasons, and the
@@ -308,6 +331,22 @@ class PipeExtension implements JsPsychExtension {
       this.params.on_save?.(result);
     } catch (error) {
       console.error("extension-pipe: the on_save callback threw", error);
+    }
+  }
+
+  /**
+   * Replace the wait message, which would otherwise tell the participant not to
+   * close the page forever.
+   *
+   * Left alone if anything else has taken over the display since, which is how
+   * the researcher's `on_finish` and `abortExperiment()` keep the last word.
+   * (The end message from `abortExperiment()` is written by `jsPsych.run()`
+   * after this runs, so it wins regardless.)
+   */
+  private showDoneMessage(): void {
+    const display = this.jsPsych.getDisplayElement();
+    if (display && display.innerHTML === this.shownWaitMessage) {
+      display.innerHTML = this.params.done_message ?? DEFAULT_DONE_MESSAGE;
     }
   }
 

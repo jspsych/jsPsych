@@ -40,7 +40,8 @@ There is no save trial, no `await`, and no session variable to thread through th
 | `data_string` | function | | Returns the data to submit. Use instead of `format` to filter or transform first. |
 | `stream` | boolean | `true` | Whether to stage each trial as it finishes. `false` submits only at the end and opens no connection to the staging database. |
 | `enabled` | boolean | `true` | `false` turns the extension off entirely. Needed for `jsPsych.simulate()` — see below. |
-| `wait_message` | string | | HTML shown while the final upload is in progress. |
+| `wait_message` | string | `"<p>Saving data. Please do not close this page.</p>"` | HTML shown while the final upload is in progress. Change it to translate or reword it. |
+| `done_message` | string | `"<p>Done. You may close this page.</p>"` | HTML shown once the final upload has finished. Not shown if your `on_finish` changes the page. If it redirects, see below. |
 | `on_save` | function | | Called with the result of the final upload. |
 | `base_url` | string | | Point the experiment at a different DataPipe deployment. Only useful for testing. |
 
@@ -69,6 +70,30 @@ params: {
 ```
 
 A failed submission does not mean the data is lost: the staged trials stay on DataPipe's servers and are recovered as a `.partial.json` file.
+
+## Redirecting participants at the end
+
+When the upload finishes, the extension replaces the wait message with `done_message`, which by default tells the participant they may close the page. That happens after your own `on_finish` runs. If `on_finish` sends the participant to another site, such as Prolific, the done message stays on screen while that site loads, and a participant who closes the page then never reaches it. Set `done_message` to say what is about to happen instead.
+
+```js
+const jsPsych = initJsPsych({
+  on_finish: () => {
+    window.location = "https://app.prolific.com/submissions/complete?cc=YOUR_CODE";
+  },
+  extensions: [
+    {
+      type: jsPsychExtensionPipe,
+      params: {
+        experiment_id: "YOUR_EXPERIMENT_ID",
+        filename: () => `${subject_id}.csv`,
+        done_message: "<p>Returning you to Prolific. Please do not close this page.</p>"
+      }
+    }
+  ]
+});
+```
+
+If `on_finish` puts its own content on the page instead, such as a completion code, the done message is not shown.
 
 ## Turn it off when simulating
 

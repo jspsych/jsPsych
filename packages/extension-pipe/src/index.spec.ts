@@ -214,6 +214,52 @@ describe("the final save", () => {
   });
 });
 
+describe("done message", () => {
+  test("replaces the wait message once the upload has finished", async () => {
+    const { jsPsych } = await run(PARAMS, 1);
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("<p>Done. You may close this page.</p>");
+  });
+
+  test("is shown even when the upload fails", async () => {
+    saveData.mockResolvedValue({ ok: false, status: 500, body: null });
+    const { jsPsych } = await run(PARAMS, 1);
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("<p>Done. You may close this page.</p>");
+  });
+
+  test("can be replaced, e.g. to translate it", async () => {
+    const { jsPsych } = await run(
+      { ...PARAMS, wait_message: "<p>Guardando datos…</p>", done_message: "<p>Listo.</p>" },
+      1
+    );
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("<p>Listo.</p>");
+  });
+
+  test("leaves the page alone if the researcher's on_finish changed it", async () => {
+    const jsPsych = initJsPsych({
+      extensions: [{ type: PipeExtension, params: PARAMS }],
+      on_finish: () => {
+        jsPsych.getDisplayElement().innerHTML = "<p>Your code is ABC123</p>";
+      },
+    });
+    const api = await startTimeline(trials(1), jsPsych);
+    await pressKey("a");
+    await api.expectFinished();
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("<p>Your code is ABC123</p>");
+  });
+
+  test("leaves the abortExperiment() end message in place", async () => {
+    const jsPsych = initJsPsych({ extensions: [{ type: PipeExtension, params: PARAMS }] });
+    const api = await startTimeline(trials(3), jsPsych);
+
+    await pressKey("a");
+    jsPsych.abortExperiment("Thanks anyway.");
+    await api.expectFinished();
+
+    expect(jsPsych.getDisplayElement().innerHTML).toBe("Thanks anyway.");
+  });
+});
+
 describe("hook ordering", () => {
   test("saves before the researcher's on_finish, which is where redirects live", async () => {
     const order: string[] = [];

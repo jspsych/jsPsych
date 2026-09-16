@@ -28,7 +28,8 @@ format | string | `"csv"` | The format to submit the data in, either `"csv"` or 
 data_string | function | `null` | A function that returns the data to submit, for filtering or transforming the data first. Overrides `format`.
 stream | boolean | `true` | Whether to stage each trial as it finishes, so that an abandoned session can be recovered. When `false`, the data is submitted only at the end and no connection to DataPipe's staging database is opened.
 enabled | boolean | `true` | When `false`, the extension does nothing at all: no session, no staging, no submission. See [Turn it off when simulating](#turn-it-off-when-simulating).
-wait_message | string | `"<p>Saving data. Please do not close this page.</p>"` | HTML shown to the participant while the final upload is in progress.
+wait_message | string | `"<p>Saving data. Please do not close this page.</p>"` | HTML shown to the participant while the final upload is in progress. Change it to translate or reword the message.
+done_message | string | `"<p>Done. You may close this page.</p>"` | HTML shown to the participant once the final upload has finished, whether or not it succeeded. It is shown after your own `on_finish` runs, and only if nothing else has changed the page, so a message your `on_finish` displays, or one passed to `abortExperiment()`, is left in place. Change it to translate or reword the message. If your `on_finish` redirects the participant, see [Redirecting participants at the end](#redirecting-participants-at-the-end).
 on_save | function | `null` | Called with the result of the final upload. See [Reacting to a failed save](#reacting-to-a-failed-save).
 base_url | string | *undefined* | Point the experiment at a different DataPipe deployment. Only useful for testing.
 
@@ -102,6 +103,30 @@ params: {
 ```
 
 A failed submission does not necessarily mean the data is lost. While `stream` is on, the trials that were staged stay on DataPipe's servers and are recovered as a `.partial.json` file.
+
+### Redirecting participants at the end
+
+When the upload finishes, the extension replaces the wait message with `done_message`, which by default tells the participant they may close the page. That happens after your own `on_finish` runs. If `on_finish` sends the participant to another site, such as Prolific, the done message stays on screen while that site loads, and a participant who closes the page then never reaches it. Set `done_message` to say what is about to happen instead.
+
+```js
+const jsPsych = initJsPsych({
+  on_finish: () => {
+    window.location = "https://app.prolific.com/submissions/complete?cc=YOUR_CODE";
+  },
+  extensions: [
+    {
+      type: jsPsychExtensionPipe,
+      params: {
+        experiment_id: "YOUR_EXPERIMENT_ID",
+        filename: () => `${subject_id}.csv`,
+        done_message: "<p>Returning you to Prolific. Please do not close this page.</p>"
+      }
+    }
+  ]
+});
+```
+
+If `on_finish` puts its own content on the page instead, such as a completion code, the done message is not shown.
 
 ## Turn it off when simulating
 
