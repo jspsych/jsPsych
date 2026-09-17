@@ -1,6 +1,6 @@
 import { Class } from "type-fest";
 
-import { JsPsychExtension } from "../modules/extensions";
+import { JsPsychExtension, JsPsychExtensionInfo } from "../modules/extensions";
 import { JsPsychPlugin, PluginInfo } from "../modules/plugins";
 import { Trial } from "./Trial";
 import { PromiseWrapper } from "./util";
@@ -12,7 +12,7 @@ export class TimelineVariable {
 export type Parameter<T> = T | (() => T) | TimelineVariable;
 
 export type TrialExtensionsConfiguration = Array<{
-  type: Class<JsPsychExtension>;
+  type: Class<JsPsychExtension> & { info: JsPsychExtensionInfo };
   params?: Record<string, any>;
 }>;
 
