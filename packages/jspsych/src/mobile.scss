@@ -1,0 +1,48 @@
+/*
+ * Optional mobile layout for jsPsych experiments.
+ *
+ * Load this stylesheet after jspsych.css to move response buttons into a bar
+ * fixed to the bottom of the screen on touch devices, where they are within
+ * reach of a thumb rather than requiring a stretch to the middle of the page.
+ *
+ *   <link rel="stylesheet" href=".../jspsych/css/jspsych.css" />
+ *   <link rel="stylesheet" href=".../jspsych/css/jspsych-mobile.css" />
+ *
+ * It is opt-in rather than part of jspsych.css because it changes trial layout
+ * substantially, and a fixed bar is the wrong choice for tasks that position
+ * their response options spatially.
+ *
+ * Everything here is inside a `pointer: coarse` query, so loading it has no
+ * effect on mouse-driven devices.
+ */
+
+@media (pointer: coarse) {
+  /* The button group rendered by the *-button-response plugins. Targeting the
+   * layout classes rather than a plugin's element id covers audio, canvas,
+   * html, image, and video button responses alike.
+   *
+   * `display` is deliberately left alone: the grid layout sets
+   * grid-template-columns and grid-template-rows as inline styles, which a
+   * rule here could not override anyway. Centering also still comes from
+   * jspsych.css, via `justify-content` for flex and `auto` margins for grid. */
+  .jspsych-btn-group-flex,
+  .jspsych-btn-group-grid {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+
+    /* Opaque so that trial content scrolling underneath is hidden. `Canvas` is
+     * the browser's default page background, which keeps the bar correct in
+     * both light and dark mode. Experiments that set their own page background
+     * should override this to match. */
+    background: Canvas;
+  }
+
+  /* Keep trial content clear of the bar. This figure assumes default button
+   * metrics; increase it if you enlarge the buttons. */
+  .jspsych-content {
+    padding-bottom: 112px;
+  }
+}
