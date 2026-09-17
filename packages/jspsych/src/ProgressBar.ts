@@ -4,7 +4,12 @@
 export class ProgressBar {
   constructor(
     private readonly containerElement: HTMLDivElement,
-    private readonly message: string | ((progress: number) => string)
+    private readonly message: string | ((progress: number) => string),
+    /**
+     * Invoked whenever the `progress` setter is used, but not by `setProgress()`. jsPsych uses this
+     * to persist positions that were set by the experiment code.
+     */
+    private readonly onProgressSet?: (progress: number) => void
   ) {
     this.setupElements();
   }
@@ -46,6 +51,15 @@ export class ProgressBar {
    * progress bar accordingly.
    */
   set progress(progress: number) {
+    this.setProgress(progress);
+    this.onProgressSet?.(this._progress);
+  }
+
+  /**
+   * Sets the bar's position without invoking the `onProgressSet` callback. jsPsych uses this for
+   * updates that it derives from the timeline itself and that therefore do not have to be stored.
+   */
+  setProgress(progress: number) {
     if (typeof progress !== "number" || progress < 0 || progress > 1) {
       throw new Error("jsPsych.progressBar.progress must be a number between 0 and 1");
     }
