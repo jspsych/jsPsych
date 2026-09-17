@@ -1,8 +1,8 @@
-import {
-  GroupSessionData,
-  MultiplayerAdapter,
-  Unsubscribe,
-} from "../../src/modules/multiplayer";
+import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
+import { pressKey, startTimeline } from "@jspsych/test-utils";
+
+import { initJsPsych } from "../../src";
+import { GroupSessionData, MultiplayerAdapter, Unsubscribe } from "../../src/modules/multiplayer";
 import { MultiplayerAPI } from "../../src/modules/multiplayer";
 
 /** In-memory adapter that simulates two participants sharing a group session. */
@@ -27,7 +27,8 @@ class MockAdapter implements MultiplayerAdapter {
     // Write to every connected adapter's store and notify their subscribers
     for (const peer of MockAdapter.channel) {
       peer.store = { ...peer.store, [this.participantId]: data };
-      for (const cb of peer.subscribers) {
+      // Iterate over a copy, as real adapters (e.g. Firebase) do
+      for (const cb of [...peer.subscribers]) {
         cb(peer.store);
       }
     }
@@ -368,5 +369,233 @@ describe("MultiplayerAPI mock run", () => {
     expect(api.participantId).toBe("p2");
 
     await api.disconnect();
+  });
+});
+
+/** Returns a promise plus its resolve/reject functions. */
+function deferred() {
+  let resolve: () => void;
+  let reject: (e: unknown) => void;
+  const promise = new Promise<void>((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+  return { promise, resolve, reject };
+}
+
+describe("MultiplayerAPI lifecycle edge cases", () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  test("cancelAllSubscriptions rejects a pending wait with MultiplayerCancelledError", async () => {
+    const api = new MultiplayerAPI();
+    await api.connect(new MockAdapter("p1"));
+
+    const waitPromise = api.wait(() => false);
+    api.cancelAllSubscriptions();
+
+    await expect(waitPromise).rejects.toMatchObject({ name: "MultiplayerCancelledError" });
+    await api.disconnect();
+  });
+
+  test("disconnect rejects a pending wait and its timeout never fires", async () => {
+    jest.useFakeTimers();
+    const api = new MultiplayerAPI();
+    await api.connect(new MockAdapter("p1"));
+
+    const waitPromise = api.wait(() => false, 1000);
+    waitPromise.catch(() => {});
+    await api.disconnect();
+    jest.advanceTimersByTime(2000);
+
+    await expect(waitPromise).rejects.toMatchObject({ name: "MultiplayerCancelledError" });
+    expect(jest.getTimerCount()).toBe(0);
+  });
+
+  test.each([null, Infinity, NaN, 2 ** 31])(
+    "wait with timeout %p does not time out",
+    async (timeout) => {
+      jest.useFakeTimers();
+      const api1 = new MultiplayerAPI();
+      const api2 = new MultiplayerAPI();
+      await api1.connect(new MockAdapter("p1"));
+      await api2.connect(new MockAdapter("p2"));
+
+      let rejected = false;
+      const waitPromise = api1.wait((data) => "p2" in data, timeout);
+      waitPromise.catch(() => {
+        rejected = true;
+      });
+      jest.advanceTimersByTime(10000);
+      await Promise.resolve();
+      expect(rejected).toBe(false);
+
+      await api2.push({ ready: true });
+      await expect(waitPromise).resolves.toHaveProperty("p2");
+
+      await api1.disconnect();
+      await api2.disconnect();
+    }
+  );
+
+  test("a rejecting adapter disconnect still leaves the API disconnected", async () => {
+    const api = new MultiplayerAPI();
+    const failing = new MockAdapter("p1");
+    failing.disconnect = () => Promise.reject(new Error("leave failed"));
+    await api.connect(failing);
+
+    await expect(api.disconnect()).rejects.toThrow("leave failed");
+
+    expect(api.participantId).toBeNull();
+    expect(() => api.push({ x: 1 })).toThrow("connect() must be called");
+    await api.connect(new MockAdapter("p2"));
+    expect(api.participantId).toBe("p2");
+    await api.disconnect();
+  });
+
+  test("overlapping disconnect calls only disconnect the adapter once", async () => {
+    const api = new MultiplayerAPI();
+    const adapter = new MockAdapter("p1");
+    const spy = jest.spyOn(adapter, "disconnect");
+    await api.connect(adapter);
+
+    await Promise.all([api.disconnect(), api.disconnect()]);
+
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+
+  test("methods throw while connect() is still pending", async () => {
+    const api = new MultiplayerAPI();
+    const adapter = new MockAdapter("p1");
+    const joined = deferred();
+    adapter.connect = () => joined.promise;
+
+    const connectPromise = api.connect(adapter);
+
+    expect(api.participantId).toBeNull();
+    expect(() => api.push({ x: 1 })).toThrow("connect() must be called");
+    expect(() => api.subscribe(() => {})).toThrow("connect() must be called");
+    await expect(api.connect(new MockAdapter("p2"))).rejects.toThrow(
+      "connect() has already been called"
+    );
+
+    joined.resolve();
+    await connectPromise;
+    expect(api.participantId).toBe("p1");
+    await api.disconnect();
+  });
+
+  test("disconnect during a pending connect abandons that connection", async () => {
+    const api = new MultiplayerAPI();
+    const adapter = new MockAdapter("p1");
+    const joined = deferred();
+    adapter.connect = () => joined.promise;
+    const disconnectSpy = jest.spyOn(adapter, "disconnect");
+
+    const connectPromise = api.connect(adapter);
+    await api.disconnect();
+    joined.resolve();
+
+    await expect(connectPromise).rejects.toThrow("disconnect() was called");
+    expect(api.participantId).toBeNull();
+    expect(() => api.push({ x: 1 })).toThrow("connect() must be called");
+    expect(disconnectSpy).toHaveBeenCalled();
+  });
+
+  test("an abandoned connect that later fails does not tear down a newer connection", async () => {
+    const api = new MultiplayerAPI();
+    const first = new MockAdapter("p1");
+    const joined = deferred();
+    first.connect = () => joined.promise;
+
+    const firstConnect = api.connect(first);
+    firstConnect.catch(() => {});
+    await api.disconnect();
+    await api.connect(new MockAdapter("p2"));
+
+    joined.reject(new Error("join failed"));
+    await expect(firstConnect).rejects.toThrow();
+
+    expect(api.participantId).toBe("p2");
+    await expect(api.push({ x: 1 })).resolves.toBeUndefined();
+    await api.disconnect();
+  });
+
+  test("a subscriber cancelled during a notification does not receive that update", async () => {
+    const api1 = new MultiplayerAPI();
+    const api2 = new MultiplayerAPI();
+    await api1.connect(new MockAdapter("p1"));
+    await api2.connect(new MockAdapter("p2"));
+
+    const lateUpdates: GroupSessionData[] = [];
+    api1.subscribe((data) => {
+      if ("p2" in data) api1.cancelAllSubscriptions();
+    });
+    api1.subscribe((data) => lateUpdates.push(data));
+
+    await api2.push({ done: true });
+
+    // Only the replay on registration, not the update that triggered cancellation
+    expect(lateUpdates).toHaveLength(1);
+
+    await api1.disconnect();
+    await api2.disconnect();
+  });
+
+  test("abortExperiment cancels subscriptions and pending waits", async () => {
+    const jsPsych = initJsPsych();
+    const other = new MultiplayerAPI();
+    await jsPsych.multiplayer.connect(new MockAdapter("p1"));
+    await other.connect(new MockAdapter("p2"));
+
+    const received: GroupSessionData[] = [];
+    jsPsych.multiplayer.subscribe((data) => received.push(data));
+    const waitPromise = jsPsych.multiplayer.wait(() => false);
+    waitPromise.catch(() => {});
+
+    const { expectFinished } = await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "trial 1",
+          on_finish: () => jsPsych.abortExperiment("the end"),
+        },
+        { type: htmlKeyboardResponse, stimulus: "trial 2" },
+      ],
+      jsPsych
+    );
+    await pressKey("a");
+    await expectFinished();
+
+    await expect(waitPromise).rejects.toMatchObject({ name: "MultiplayerCancelledError" });
+    await other.push({ late: true });
+    expect(received).toHaveLength(1);
+
+    await jsPsych.multiplayer.disconnect();
+    await other.disconnect();
+  });
+
+  test("subscriptions are cancelled when the experiment finishes", async () => {
+    const jsPsych = initJsPsych();
+    const other = new MultiplayerAPI();
+    await jsPsych.multiplayer.connect(new MockAdapter("p1"));
+    await other.connect(new MockAdapter("p2"));
+
+    const received: GroupSessionData[] = [];
+    jsPsych.multiplayer.subscribe((data) => received.push(data));
+
+    const { expectFinished } = await startTimeline(
+      [{ type: htmlKeyboardResponse, stimulus: "trial 1" }],
+      jsPsych
+    );
+    await pressKey("a");
+    await expectFinished();
+
+    await other.push({ late: true });
+    expect(received).toHaveLength(1);
+
+    await jsPsych.multiplayer.disconnect();
+    await other.disconnect();
   });
 });

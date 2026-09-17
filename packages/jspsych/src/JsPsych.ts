@@ -152,6 +152,7 @@ export class JsPsych {
 
     await this.timeline.run();
     await Promise.resolve(this.options.on_finish(this.data.get()));
+    this.multiplayer.cancelAllSubscriptions();
 
     if (this.endMessage) {
       this.getDisplayElement().innerHTML = this.endMessage;
@@ -204,6 +205,7 @@ export class JsPsych {
     this.timeline.abort();
     this.pluginAPI.cancelAllKeyboardResponses();
     this.pluginAPI.clearAllTimeouts();
+    this.multiplayer.cancelAllSubscriptions();
     this.finishTrial(data);
   }
 

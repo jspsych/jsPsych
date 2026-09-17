@@ -22,7 +22,7 @@ See [Multiplayer Adapter Development](../developers/adapter-development.md) for 
 jsPsych.multiplayer.participantId
 ```
 
-A string identifying this participant within the current group session. Set by `connect()` from the adapter; `null` before `connect()` is called or after `disconnect()`.
+A string identifying this participant within the current group session. Read from the adapter once `connect()` resolves; `null` before that and after `disconnect()`. Read-only.
 
 ---
 
@@ -48,7 +48,7 @@ Returns a `Promise<void>` that resolves when the channel is open and `participan
 
 Registers a backend adapter and opens the communication channel. Must be called (and awaited) before `jsPsych.run()` and before any other multiplayer method.
 
-Throws if `connect()` has already been called without a subsequent `disconnect()`. If the adapter's `connect()` rejects (e.g., network error), the API rolls back to its initial state so the call can be retried.
+Throws if `connect()` has already been called without a subsequent `disconnect()`. Other multiplayer methods throw until the returned promise resolves. If the adapter's `connect()` rejects (e.g., network error), the API rolls back to its initial state so the call can be retried. If `disconnect()` is called while `connect()` is still pending, the adapter is disconnected as soon as it finishes connecting and `connect()` rejects.
 
 #### Example
 
@@ -76,7 +76,7 @@ Returns a `Promise<void>`.
 
 #### Description
 
-Cancels all active subscriptions and closes the communication channel. After this call, `participantId` is `null` and all multiplayer methods throw until `connect()` is called again.
+Cancels all active subscriptions (rejecting any pending `wait()` calls) and closes the communication channel. The API is detached from the adapter before the adapter's `disconnect()` runs, so even if that call rejects, `participantId` is `null` afterward, all multiplayer methods throw, and `connect()` can be called again.
 
 #### Example
 
@@ -245,7 +245,7 @@ jsPsych.multiplayer.wait(condition, timeout)
 Parameter | Type | Description
 ----------|------|------------
 condition | function | Predicate evaluated with the group session snapshot (`GroupSessionData`). The promise resolves when this returns `true`.
-timeout | number | *(optional)* Maximum time to wait in milliseconds. The promise rejects if the condition is not met within this window.
+timeout | number | *(optional)* Maximum time to wait in milliseconds. The promise rejects if the condition is not met within this window. `null`, `undefined`, negative, and non-finite values mean no timeout.
 
 #### Return value
 
@@ -255,7 +255,7 @@ Returns a `Promise<GroupSessionData>` that resolves with the snapshot at the mom
 
 Waits until `condition(groupSession)` returns `true`, then resolves with the snapshot. Checks the current session state immediately (fast-path) — resolves right away if the condition is already met. Implemented on top of `subscribe()`; does not poll.
 
-The promise rejects with a `MultiplayerTimeoutError` (exported from the `jspsych` package) if `timeout` is specified and elapses before the condition is met. It also rejects if `condition` itself throws — a throwing predicate is treated as a programming error, not a timeout. To distinguish the two, check `error.name === "MultiplayerTimeoutError"`.
+The promise rejects with a `MultiplayerTimeoutError` (exported from the `jspsych` package) if `timeout` is specified and elapses before the condition is met. It also rejects if `condition` itself throws — a throwing predicate is treated as a programming error, not a timeout. If the wait is cancelled first, by `cancelAllSubscriptions()`, `disconnect()`, or the experiment finishing or being aborted, it rejects with a `MultiplayerCancelledError`. To tell these cases apart, check `error.name` for `"MultiplayerTimeoutError"` or `"MultiplayerCancelledError"`.
 
 #### Example
 
@@ -284,7 +284,7 @@ Returns nothing.
 
 #### Description
 
-Cancels all currently active subscriptions created by `subscribe()`. Mirrors `cancelAllKeyboardResponses()` — call at experiment end (or in `on_finish`) to prevent ghost listeners. `disconnect()` calls this automatically.
+Cancels all currently active subscriptions created by `subscribe()` and rejects any pending `wait()` calls with a `MultiplayerCancelledError`. Mirrors `cancelAllKeyboardResponses()`. jsPsych calls this automatically after `on_finish` when the experiment ends and when `abortExperiment()` is called, and `disconnect()` calls it too, so you only need to call it yourself to stop listening partway through an experiment.
 
 #### Example
 

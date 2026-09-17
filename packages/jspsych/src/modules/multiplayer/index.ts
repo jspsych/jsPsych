@@ -22,6 +22,22 @@ export class MultiplayerTimeoutError extends Error {
 }
 
 /**
+ * Rejection produced by MultiplayerAPI.wait() when the wait is cancelled before
+ * the condition is met, by cancelAllSubscriptions(), disconnect(), or the
+ * experiment ending. Like MultiplayerTimeoutError, match on
+ * `error.name === "MultiplayerCancelledError"` across bundles.
+ */
+export class MultiplayerCancelledError extends Error {
+  constructor() {
+    super("MultiplayerAPI.wait() was cancelled before its condition was met");
+    this.name = "MultiplayerCancelledError";
+  }
+}
+
+/** Largest delay setTimeout accepts; larger values overflow and fire immediately. */
+const MAX_TIMEOUT = 2 ** 31 - 1;
+
+/**
  * Contract that any multiplayer network backend must implement.
  * The core MultiplayerAPI calls these methods; adapters handle the network layer.
  * Plugin authors code against MultiplayerAPI and never touch the adapter directly.
@@ -53,7 +69,11 @@ export interface MultiplayerAdapter {
 }
 
 export class MultiplayerAPI {
+  /** Set only once the adapter's connect() has resolved. */
   private adapter: MultiplayerAdapter | null = null;
+
+  /** The adapter whose connect() is in flight, if any. */
+  private connectingAdapter: MultiplayerAdapter | null = null;
 
   /**
    * Tracks every active unsubscribe handle so cancelAllSubscriptions() can clean
@@ -61,11 +81,16 @@ export class MultiplayerAPI {
    */
   private activeUnsubscribes = new Set<Unsubscribe>();
 
-  /** This participant's ID within the group. Set by connect(); null before that. */
-  participantId: string | null = null;
+  /** Cancel functions for pending wait() calls, run by cancelAllSubscriptions(). */
+  private pendingWaits = new Set<() => void>();
 
   constructor() {
     autoBind(this);
+  }
+
+  /** This participant's ID within the group. Null until connect() resolves and after disconnect(). */
+  get participantId(): string | null {
+    return this.adapter?.participantId ?? null;
   }
 
   private requireAdapter(): MultiplayerAdapter {
@@ -83,23 +108,30 @@ export class MultiplayerAPI {
    * multiplayer method.
    */
   async connect(adapter: MultiplayerAdapter): Promise<void> {
-    if (this.adapter) {
+    if (this.adapter || this.connectingAdapter) {
       throw new Error(
         "MultiplayerAPI: connect() has already been called. " +
           "Call disconnect() first before registering a new adapter."
       );
     }
-    this.adapter = adapter;
+    this.connectingAdapter = adapter;
     try {
       await adapter.connect();
-      this.participantId = adapter.participantId;
     } catch (e) {
-      // Roll back so a failed connection doesn't leave the API in a
-      // half-connected state that blocks a retry.
-      this.adapter = null;
-      this.participantId = null;
+      // Roll back so a failed connection doesn't block a retry, unless
+      // disconnect() already abandoned this attempt and a newer one is running.
+      if (this.connectingAdapter === adapter) {
+        this.connectingAdapter = null;
+      }
       throw e;
     }
+    if (this.connectingAdapter !== adapter) {
+      // disconnect() was called while this adapter was connecting
+      await adapter.disconnect();
+      throw new Error("MultiplayerAPI: disconnect() was called before connect() finished.");
+    }
+    this.connectingAdapter = null;
+    this.adapter = adapter;
   }
 
   /** Write this participant's data to the shared group session. */
@@ -148,7 +180,13 @@ export class MultiplayerAPI {
 
     // Guard the callback so a throwing subscriber can't escape into the adapter's
     // own fan-out loop and abort notification of the other subscribers on that loop.
+    let cancelled = false;
     const guardedCallback = (data: GroupSessionData) => {
+      // Adapters that fan out over a copy of their subscriber list can still
+      // deliver an in-flight update after unsubscribe.
+      if (cancelled) {
+        return;
+      }
       try {
         callback(data);
       } catch (e) {
@@ -159,7 +197,6 @@ export class MultiplayerAPI {
     const adapterUnsub = adapter.subscribe(guardedCallback);
 
     // Wrap so we can remove from the tracking Set on cancellation
-    let cancelled = false;
     const unsubscribe: Unsubscribe = () => {
       if (!cancelled) {
         cancelled = true;
@@ -189,13 +226,17 @@ export class MultiplayerAPI {
    * protect other subscribers), leaving the wait pending forever.
    *
    * @param condition Predicate evaluated on every group session update.
+   * cancelAllSubscriptions() and disconnect() reject a pending wait with a
+   * MultiplayerCancelledError.
+   *
    * @param timeout   Optional timeout in milliseconds. The promise rejects with
    *                  a MultiplayerTimeoutError if the condition is not met
-   *                  within this window.
+   *                  within this window. null, undefined, and non-finite values
+   *                  mean no timeout.
    */
   wait(
     condition: (data: GroupSessionData) => boolean,
-    timeout?: number
+    timeout?: number | null
   ): Promise<GroupSessionData> {
     this.requireAdapter();
 
@@ -207,9 +248,12 @@ export class MultiplayerAPI {
       // `unsubscribe` is still undefined while subscribe()'s synchronous
       // replay-on-registration runs, so settling from the replay defers the
       // cleanup to the `if (settled)` check below.
+      const cancel = () => settle(() => reject(new MultiplayerCancelledError()));
+
       const settle = (outcome: () => void) => {
         settled = true;
         if (timeoutHandle !== undefined) clearTimeout(timeoutHandle);
+        this.pendingWaits.delete(cancel);
         unsubscribe?.();
         outcome();
       };
@@ -238,11 +282,11 @@ export class MultiplayerAPI {
         return;
       }
 
-      if (timeout !== undefined) {
+      this.pendingWaits.add(cancel);
+
+      if (typeof timeout === "number" && timeout >= 0 && timeout <= MAX_TIMEOUT) {
         timeoutHandle = window.setTimeout(() => {
-          if (!settled) {
-            settle(() => reject(new MultiplayerTimeoutError(timeout)));
-          }
+          settle(() => reject(new MultiplayerTimeoutError(timeout)));
         }, timeout);
       }
     });
@@ -251,9 +295,14 @@ export class MultiplayerAPI {
   /**
    * Cancel all active subscriptions. Parallel to
    * KeyboardListenerAPI.cancelAllKeyboardResponses() — call at experiment end
-   * to prevent ghost listeners.
+   * to prevent ghost listeners. Pending wait() calls reject with a
+   * MultiplayerCancelledError. jsPsych calls this automatically when the
+   * experiment finishes or is aborted.
    */
   cancelAllSubscriptions(): void {
+    for (const cancel of [...this.pendingWaits]) {
+      cancel();
+    }
     for (const unsubscribe of [...this.activeUnsubscribes]) {
       unsubscribe();
     }
@@ -262,10 +311,12 @@ export class MultiplayerAPI {
   /** Cancel all subscriptions and close the communication channel. */
   async disconnect(): Promise<void> {
     this.cancelAllSubscriptions();
-    if (this.adapter) {
-      await this.adapter.disconnect();
-      this.adapter = null;
-      this.participantId = null;
-    }
+    // Detach before awaiting so a rejecting adapter can't leave the API stuck
+    // connected, and an overlapping disconnect() doesn't disconnect it twice.
+    // A pending connect() sees connectingAdapter cleared and disconnects itself.
+    this.connectingAdapter = null;
+    const adapter = this.adapter;
+    this.adapter = null;
+    await adapter?.disconnect();
   }
 }
