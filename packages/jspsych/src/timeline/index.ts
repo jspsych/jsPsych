@@ -161,6 +161,12 @@ export interface TimelineNodeDependencies {
   onTrialStart: (trial: Trial) => void;
 
   /**
+   * Called after a trial's plugin has rendered its initial DOM (immediately
+   * before per-trial `on_load` and extension `on_load` callbacks fire).
+   */
+  onTrialLoad: (trial: Trial) => void;
+
+  /**
    * Called when a trial's result data is available, before invoking `onTrialFinished()`.
    */
   onTrialResultAvailable: (trial: Trial) => void;
