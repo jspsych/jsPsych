@@ -38,6 +38,16 @@ export class MultiplayerCancelledError extends Error {
 const MAX_TIMEOUT = 2 ** 31 - 1;
 
 /**
+ * Copies data handed out to callers, so they can't mutate the adapter's cache and
+ * later updates can't change a snapshot they hold. A JSON round-trip matches what
+ * other participants receive over the network, and works where structuredClone
+ * is unavailable (e.g. jsdom).
+ */
+function copy<T>(data: T): T {
+  return data === undefined ? data : JSON.parse(JSON.stringify(data));
+}
+
+/**
  * Contract that any multiplayer network backend must implement.
  * The core MultiplayerAPI calls these methods; adapters handle the network layer.
  * Plugin authors code against MultiplayerAPI and never touch the adapter directly.
@@ -84,6 +94,15 @@ export class MultiplayerAPI {
   /** Cancel functions for pending wait() calls, run by cancelAllSubscriptions(). */
   private pendingWaits = new Set<() => void>();
 
+  /**
+   * This participant's most recent successful push. update() merges onto it
+   * rather than the adapter's cache, which may not reflect the push yet.
+   */
+  private lastPushed: Record<string, unknown> | null = null;
+
+  /** Tail of the update() chain; each update() runs after the previous one settles. */
+  private updateQueue: Promise<void> = Promise.resolve();
+
   constructor() {
     autoBind(this);
   }
@@ -91,6 +110,15 @@ export class MultiplayerAPI {
   /** This participant's ID within the group. Null until connect() resolves and after disconnect(). */
   get participantId(): string | null {
     return this.adapter?.participantId ?? null;
+  }
+
+  /** Call an unsubscribe handle, logging rather than propagating an adapter error. */
+  private safeUnsubscribe(unsubscribe: Unsubscribe) {
+    try {
+      unsubscribe();
+    } catch (e) {
+      console.error("MultiplayerAPI: adapter unsubscribe threw", e);
+    }
   }
 
   private requireAdapter(): MultiplayerAdapter {
@@ -132,11 +160,17 @@ export class MultiplayerAPI {
     }
     this.connectingAdapter = null;
     this.adapter = adapter;
+    this.lastPushed = null;
   }
 
   /** Write this participant's data to the shared group session. */
-  push(data: Record<string, unknown>): Promise<void> {
-    return this.requireAdapter().push(data);
+  async push(data: Record<string, unknown>): Promise<void> {
+    const adapter = this.requireAdapter();
+    const pushed = copy(data);
+    await adapter.push(data);
+    if (this.adapter === adapter) {
+      this.lastPushed = pushed;
+    }
   }
 
   /**
@@ -151,28 +185,36 @@ export class MultiplayerAPI {
    * (e.g. a keyed collection within their slot) should read, merge, and
    * push directly.
    *
-   * Not atomic against itself: two overlapping update() calls from the same
-   * client read the same base and the later push wins. Await each update()
-   * before issuing the next.
+   * The merge base is this client's last successful push (falling back to
+   * the adapter's copy of the slot before the first push), so it doesn't
+   * depend on when the adapter's cache reflects a write. update() calls run
+   * one at a time in call order, so overlapping calls don't lose keys. A
+   * direct push() issued while updates are queued is not part of that order.
    */
-  update(data: Record<string, unknown>): Promise<void> {
-    const current = this.get(this.requireAdapter().participantId) ?? {};
-    return this.push({ ...current, ...data });
+  async update(data: Record<string, unknown>): Promise<void> {
+    this.requireAdapter();
+    const run = async () => {
+      const base = this.lastPushed ?? this.get(this.requireAdapter().participantId) ?? {};
+      await this.push({ ...base, ...data });
+    };
+    const result = this.updateQueue.then(run);
+    this.updateQueue = result.catch(() => {});
+    return result;
   }
 
-  /** Read the full current group session (all participants' data). */
+  /** Read a copy of the full current group session (all participants' data). */
   getAll(): GroupSessionData {
-    return this.requireAdapter().getAll();
+    return copy(this.requireAdapter().getAll());
   }
 
-  /** Read one participant's data. Returns undefined if they haven't pushed yet. */
+  /** Read a copy of one participant's data. Returns undefined if they haven't pushed yet. */
   get(participantId: string): Record<string, unknown> | undefined {
-    return this.requireAdapter().get(participantId);
+    return copy(this.requireAdapter().get(participantId));
   }
 
   /**
-   * Register a callback that fires on every group session update.
-   * Returns an unsubscribe function. The handle is tracked internally so
+   * Register a callback that fires on every group session update. Each call
+   * receives its own copy of the session data. Returns an unsubscribe function. The handle is tracked internally so
    * cancelAllSubscriptions() can clean it up at experiment end.
    */
   subscribe(callback: (data: GroupSessionData) => void): Unsubscribe {
@@ -188,7 +230,7 @@ export class MultiplayerAPI {
         return;
       }
       try {
-        callback(data);
+        callback(copy(data));
       } catch (e) {
         console.error("MultiplayerAPI: subscriber callback threw", e);
       }
@@ -197,11 +239,13 @@ export class MultiplayerAPI {
     const adapterUnsub = adapter.subscribe(guardedCallback);
 
     // Wrap so we can remove from the tracking Set on cancellation
+    // Mark cancelled and untrack before calling the adapter, so a throwing
+    // adapter unsubscribe still leaves the subscription cancelled on our side.
     const unsubscribe: Unsubscribe = () => {
       if (!cancelled) {
         cancelled = true;
-        adapterUnsub();
         this.activeUnsubscribes.delete(unsubscribe);
+        adapterUnsub();
       }
     };
 
@@ -210,7 +254,15 @@ export class MultiplayerAPI {
     // Replay current state after the unsubscribe handle exists. The register-
     // then-replay order prevents a TDZ crash: wait() references `unsubscribe`
     // inside the callback, so it must be defined before the callback fires.
-    guardedCallback(adapter.getAll());
+    let snapshot: GroupSessionData;
+    try {
+      snapshot = adapter.getAll();
+    } catch (e) {
+      // Don't leave a registration behind that the caller has no handle for
+      this.safeUnsubscribe(unsubscribe);
+      throw e;
+    }
+    guardedCallback(snapshot);
 
     return unsubscribe;
   }
@@ -225,16 +277,16 @@ export class MultiplayerAPI {
    * subscribe()'s guard would otherwise swallow the throw (by design, to
    * protect other subscribers), leaving the wait pending forever.
    *
-   * @param condition Predicate evaluated on every group session update.
    * cancelAllSubscriptions() and disconnect() reject a pending wait with a
    * MultiplayerCancelledError.
    *
+   * @param condition Predicate evaluated on every group session update.
    * @param timeout   Optional timeout in milliseconds. The promise rejects with
    *                  a MultiplayerTimeoutError if the condition is not met
-   *                  within this window. null, undefined, and non-finite values
-   *                  mean no timeout.
+   *                  within this window. null, undefined, negative, and
+   *                  non-finite values mean no timeout.
    */
-  wait(
+  async wait(
     condition: (data: GroupSessionData) => boolean,
     timeout?: number | null
   ): Promise<GroupSessionData> {
@@ -254,7 +306,7 @@ export class MultiplayerAPI {
         settled = true;
         if (timeoutHandle !== undefined) clearTimeout(timeoutHandle);
         this.pendingWaits.delete(cancel);
-        unsubscribe?.();
+        if (unsubscribe) this.safeUnsubscribe(unsubscribe);
         outcome();
       };
 
@@ -278,7 +330,7 @@ export class MultiplayerAPI {
       // "already met" fast path.
       unsubscribe = this.subscribe(check);
       if (settled) {
-        unsubscribe();
+        this.safeUnsubscribe(unsubscribe);
         return;
       }
 
@@ -304,7 +356,7 @@ export class MultiplayerAPI {
       cancel();
     }
     for (const unsubscribe of [...this.activeUnsubscribes]) {
-      unsubscribe();
+      this.safeUnsubscribe(unsubscribe);
     }
   }
 
@@ -317,6 +369,7 @@ export class MultiplayerAPI {
     this.connectingAdapter = null;
     const adapter = this.adapter;
     this.adapter = null;
+    this.lastPushed = null;
     await adapter?.disconnect();
   }
 }

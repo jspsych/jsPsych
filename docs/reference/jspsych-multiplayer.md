@@ -100,7 +100,7 @@ data | object | Key-value pairs to write into this participant's slot in the sha
 
 #### Return value
 
-Returns a `Promise<void>` that resolves when the write is confirmed by the backend.
+Returns a `Promise<void>` that resolves when the write is confirmed by the backend. Rejects if `connect()` has not finished.
 
 #### Description
 
@@ -128,11 +128,13 @@ data | object | Key-value pairs to shallow-merge into this participant's slot in
 
 #### Return value
 
-Returns a `Promise<void>` that resolves when the write is confirmed by the backend.
+Returns a `Promise<void>` that resolves when the write is confirmed by the backend. Rejects if `connect()` has not finished.
 
 #### Description
 
-Convenience wrapper around a get→merge→push sequence: reads this participant's current slot, shallow-merges `data` on top of it, and pushes the result. Unlike `push()`, existing keys in the slot that aren't present in `data` are preserved. Equivalent to `push({ ...get(participantId), ...data })`.
+Convenience wrapper around a get→merge→push sequence: shallow-merges `data` on top of this participant's current slot and pushes the result. Unlike `push()`, existing keys in the slot that aren't present in `data` are preserved.
+
+The merge starts from this participant's last successful `push()` or `update()`, or from the slot's current contents before the first write, so it doesn't depend on how quickly the backend echoes writes back. `update()` calls run one at a time in the order they were made, so you don't need to await one before starting the next. A direct `push()` made while updates are still queued is not part of that ordering.
 
 #### Example
 
@@ -157,7 +159,7 @@ participantId | string | The participant whose data to retrieve.
 
 #### Return value
 
-Returns the participant's current data object, or `undefined` if they have not pushed yet.
+Returns a copy of the participant's current data object, or `undefined` if they have not pushed yet.
 
 #### Description
 
@@ -188,7 +190,7 @@ Returns a `GroupSessionData` object — a record keyed by `participantId`, where
 
 #### Description
 
-Returns the full current group session snapshot. This is a synchronous read of the local cache maintained by the adapter.
+Returns the full current group session snapshot. This is a synchronous read of the local cache maintained by the adapter. The returned object is a copy, so changing it doesn't affect the session or later reads.
 
 #### Example
 
@@ -219,7 +221,9 @@ Returns an `Unsubscribe` function. Calling it removes the subscription.
 
 Registers a callback that fires whenever the group session changes. The callback is also called once synchronously on registration with the current snapshot — this ensures the subscriber always sees the present state regardless of join order.
 
-Subscriptions are tracked internally and are all cancelled automatically by `cancelAllSubscriptions()` and `disconnect()`.
+Each call receives its own copy of the snapshot, so a callback can modify or keep its argument without affecting the session or other subscribers.
+
+Subscriptions are tracked internally and are all cancelled automatically by `cancelAllSubscriptions()` and `disconnect()`. If the adapter throws while reading the current snapshot, `subscribe()` throws and nothing stays registered.
 
 #### Example
 
@@ -249,7 +253,7 @@ timeout | number | *(optional)* Maximum time to wait in milliseconds. The promis
 
 #### Return value
 
-Returns a `Promise<GroupSessionData>` that resolves with the snapshot at the moment the condition first becomes true.
+Returns a `Promise<GroupSessionData>` that resolves with a copy of the snapshot at the moment the condition first becomes true. Later updates don't change it. Rejects if `connect()` has not finished.
 
 #### Description
 

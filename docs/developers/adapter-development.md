@@ -50,6 +50,8 @@ getAll(): GroupSessionData
 
 Return the full current group session as a synchronous snapshot. The return type is `Record<string, Record<string, unknown>>` — a map from `participantId` to that participant's data. If the backend has no data yet, return `{}`.
 
+`MultiplayerAPI` copies what `getAll()`, `get()`, and subscriber notifications return before handing it to experiment code, so returning your internal cache directly is safe. Data must be JSON-serializable, since that copy is a JSON round-trip.
+
 ---
 
 ### get
