@@ -38,7 +38,7 @@ push(data: Record<string, unknown>): Promise<void>
 
 Write `data` into the shared group session under this participant's `participantId`. Resolves when the write is confirmed by the backend. Each call replaces the participant's entire data object, not a merge.
 
-If your backend uses optimistic concurrency (like JATOS group sessions), implement a retry loop with exponential backoff — see the JATOS adapter source for a reference implementation.
+If your backend uses optimistic concurrency (like JATOS group sessions), implement a retry loop with exponential backoff — see the [JATOS adapter source](https://github.com/jspsych/jspsych-multiplayer/tree/main/packages/adapter-multiplayer-jatos) for a reference implementation.
 
 ---
 
@@ -145,14 +145,19 @@ export class InMemoryAdapter implements MultiplayerAdapter {
 Usage:
 
 ```javascript
-// Before jsPsych.run():
 InMemoryAdapter.channel = [];
-await jsPsych.multiplayer.connect(new InMemoryAdapter("participant-1"));
+
+async function runExperiment() {
+  await jsPsych.multiplayer.connect(new InMemoryAdapter("participant-1"));
+  await jsPsych.run(timeline);
+}
+
+runExperiment();
 ```
 
 ## Real-world example
 
-The official JATOS adapter (`@jspsych/adapter-multiplayer-jatos`) is a good reference for a production implementation. It maps the interface onto JATOS group sessions, with a retry loop for optimistic concurrency conflicts on `push()` and a single `onGroupSession` dispatcher that fans out to multiple `subscribe()` callbacks. Its source, along with other adapters (Firebase, local) and multiplayer plugins, lives in the [jspsych-multiplayer](https://github.com/jspsych/jspsych-multiplayer) ecosystem repository.
+The official JATOS adapter ([`@jspsych-multiplayer/adapter-multiplayer-jatos`](https://github.com/jspsych/jspsych-multiplayer/tree/main/packages/adapter-multiplayer-jatos)) is a good reference for a production implementation. It maps the interface onto JATOS group sessions, with a retry loop for optimistic concurrency conflicts on `push()` and a single `onGroupSession` dispatcher that fans out to multiple `subscribe()` callbacks. Its source, along with other adapters (Firebase, local) and multiplayer plugins, lives in the [jspsych-multiplayer](https://github.com/jspsych/jspsych-multiplayer) ecosystem repository.
 
 ## Checklist for new adapters
 

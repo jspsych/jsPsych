@@ -6,9 +6,16 @@ Before using any multiplayer method, connect an adapter:
 
 ```javascript
 const jsPsych = initJsPsych({ ... });
-await jsPsych.multiplayer.connect(new JatosAdapter());
-await jsPsych.run(timeline);
+
+async function runExperiment() {
+  await jsPsych.multiplayer.connect(new JatosAdapter());
+  await jsPsych.run(timeline);
+}
+
+runExperiment();
 ```
+
+Wrapping the calls in an `async` function lets this work in a regular `<script>` tag. Top-level `await` is only allowed in `<script type="module">`.
 
 See [Multiplayer Adapter Development](../developers/adapter-development.md) for how to implement or choose an adapter.
 
@@ -54,8 +61,13 @@ Throws if `connect()` has already been called without a subsequent `disconnect()
 
 ```javascript
 const jsPsych = initJsPsych();
-await jsPsych.multiplayer.connect(new JatosAdapter());
-await jsPsych.run(timeline);
+
+async function runExperiment() {
+  await jsPsych.multiplayer.connect(new JatosAdapter());
+  await jsPsych.run(timeline);
+}
+
+runExperiment();
 ```
 
 ---

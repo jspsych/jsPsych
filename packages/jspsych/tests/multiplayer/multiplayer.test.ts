@@ -59,6 +59,12 @@ beforeEach(() => {
   MockAdapter.channel = [];
 });
 
+// Restore in afterEach so a failing assertion can't leak fake timers or mocks into later tests
+afterEach(() => {
+  jest.useRealTimers();
+  jest.restoreAllMocks();
+});
+
 describe("MultiplayerAPI mock run", () => {
   test("connect sets participantId", async () => {
     const api = new MultiplayerAPI();
@@ -178,7 +184,6 @@ describe("MultiplayerAPI mock run", () => {
     await expect(waitPromise).rejects.toMatchObject({ name: "MultiplayerTimeoutError" });
 
     await api.disconnect();
-    jest.useRealTimers();
   });
 
   test("wait rejects on timeout", async () => {
@@ -192,7 +197,6 @@ describe("MultiplayerAPI mock run", () => {
     await expect(waitPromise).rejects.toThrow("timed out after 1000ms");
 
     await api.disconnect();
-    jest.useRealTimers();
   });
 
   test("update merges into own slot without clobbering existing keys", async () => {
@@ -261,7 +265,6 @@ describe("MultiplayerAPI mock run", () => {
     expect(goodUpdates[1]["p2"]).toEqual({ ready: true });
     expect(consoleError).toHaveBeenCalled();
 
-    consoleError.mockRestore();
     await api1.disconnect();
     await api2.disconnect();
   });
@@ -385,10 +388,6 @@ function deferred() {
 }
 
 describe("MultiplayerAPI lifecycle edge cases", () => {
-  afterEach(() => {
-    jest.useRealTimers();
-  });
-
   test("cancelAllSubscriptions rejects a pending wait with MultiplayerCancelledError", async () => {
     const api = new MultiplayerAPI();
     await api.connect(new MockAdapter("p1"));
@@ -664,9 +663,6 @@ describe("MultiplayerAPI contract", () => {
   let consoleError: jest.SpyInstance;
   beforeEach(() => {
     consoleError = jest.spyOn(console, "error").mockImplementation(() => {});
-  });
-  afterEach(() => {
-    consoleError.mockRestore();
   });
 
   test("promise-returning methods reject rather than throw, so .catch() handles the error", async () => {
