@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>jsPsychPluginInitializeMediaRecording Example</title>
+    <script src="https://unpkg.com/jspsych@8"></script>
+    <!-- Load the published plugin package here, e.g.
+    <script src="https://unpkg.com/plugin-initialize-media-recording"></script>
+    <script src="../dist/index.global.js"></script> -->
+    <script src="../dist/index.browser.js"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-video-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-audio-response@2.1.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@8/css/jspsych.css" />
+  </head>
+
+  <body></body>
+  <script>
+    const jsPsych = initJsPsych({
+      on_finish: () => {
+        jsPsych.data.displayData();
+      },
+    });
+
+    const recordVideo = {
+      type: jsPsychHtmlVideoResponse,
+      stimulus: "jsPsych is now recording video.",
+      recording_duration: 3500,
+      allow_playback: true,
+    };
+
+    const recordAudio = {
+      type: jsPsychHtmlAudioResponse,
+      stimulus: "<p>Now let's record audio.</p>",
+      recording_duration: 5000,
+      allow_playback: true,
+    };
+
+    // **⚠️ Note:** To use this plugin, your experiment must be served over HTTPS.
+    // Browsers block access to camera and microphone devices when served over HTTP or `file://` protocols due to security restrictions.
+    // See https://blog.mozilla.org/webrtc/camera-microphone-require-https-in-firefox-68/ for details.
+    // E.G., IF YOU WANT TO RUN THIS LOCALLY:
+    // cd /path/to/plugin-directory
+    //    python -m http.server 8000
+    // in your browser: http://localhost:8000/examples/index.html
+    const initialiseMedia = {
+      type: jsPsychPluginInitializeMediaRecording,
+      initialize_camera: true,
+      initialize_microphone: true,
+      permission_reject_message:
+        "Thank you for participating; we noticed you've declined audio/video access, which is essential to proceed. Please update your settings to allow these permissions and restart the experiment if you wish to continue.",
+    };
+
+    jsPsych.run([initialiseMedia, recordVideo, recordAudio]);
+  </script>
+</html>
