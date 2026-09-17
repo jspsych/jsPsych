@@ -861,3 +861,155 @@ describe("MultiplayerAPI contract", () => {
     await api.disconnect();
   });
 });
+
+/** Adapter whose push() resolves only when the test releases it. */
+class GatedAdapter implements MultiplayerAdapter {
+  readonly participantId = "p1";
+  store: GroupSessionData = {};
+  pushes: Record<string, unknown>[] = [];
+  private gates: Array<(error?: Error) => void> = [];
+
+  connect() {
+    return Promise.resolve();
+  }
+
+  push(data: Record<string, unknown>): Promise<void> {
+    this.pushes.push(data);
+    return new Promise<void>((resolve, reject) => {
+      this.gates.push((error) => {
+        if (error) {
+          reject(error);
+        } else {
+          this.store[this.participantId] = data;
+          resolve();
+        }
+      });
+    });
+  }
+
+  /** Settle the oldest in-flight push. */
+  releaseNextPush(error?: Error) {
+    const gate = this.gates.shift();
+    if (!gate) throw new Error("no push in flight");
+    gate(error);
+  }
+
+  getAll() {
+    return this.store;
+  }
+
+  get(participantId: string) {
+    return this.store[participantId];
+  }
+
+  subscribe(): Unsubscribe {
+    return () => {};
+  }
+
+  disconnect() {
+    return Promise.resolve();
+  }
+}
+
+describe("MultiplayerAPI update coalescing", () => {
+  test("updates made while a push is in flight are merged into one push", async () => {
+    const api = new MultiplayerAPI();
+    const adapter = new GatedAdapter();
+    await api.connect(adapter);
+
+    const first = api.update({ a: 1 });
+    await Promise.resolve();
+    expect(adapter.pushes).toHaveLength(1);
+
+    const second = api.update({ b: 2 });
+    const third = api.update({ c: 3 });
+    adapter.releaseNextPush();
+    await first;
+    await Promise.resolve();
+
+    // One merged push for the two queued updates, not one each
+    expect(adapter.pushes).toHaveLength(2);
+    adapter.releaseNextPush();
+    await Promise.all([second, third]);
+
+    expect(adapter.pushes[1]).toEqual({ a: 1, b: 2, c: 3 });
+    expect(api.get("p1")).toEqual({ a: 1, b: 2, c: 3 });
+    await api.disconnect();
+  });
+
+  test("a burst of updates during a slow push does not queue up behind each other", async () => {
+    const api = new MultiplayerAPI();
+    const adapter = new GatedAdapter();
+    await api.connect(adapter);
+
+    const first = api.update({ tick: 0 });
+    await Promise.resolve();
+
+    const burst = [1, 2, 3, 4, 5].map((tick) => api.update({ tick, [`k${tick}`]: true }));
+    adapter.releaseNextPush();
+    await first;
+    await Promise.resolve();
+    adapter.releaseNextPush();
+    await Promise.all(burst);
+
+    expect(adapter.pushes).toHaveLength(2);
+    // The last write wins for a repeated key; every key still arrives
+    expect(adapter.pushes[1]).toMatchObject({ tick: 5, k1: true, k5: true });
+    await api.disconnect();
+  });
+
+  test("every caller in a merged batch sees the same failure", async () => {
+    const api = new MultiplayerAPI();
+    const adapter = new GatedAdapter();
+    await api.connect(adapter);
+
+    const first = api.update({ a: 1 });
+    await Promise.resolve();
+    const second = api.update({ b: 2 });
+    const third = api.update({ c: 3 });
+    second.catch(() => {});
+    third.catch(() => {});
+
+    adapter.releaseNextPush();
+    await first;
+    await Promise.resolve();
+    adapter.releaseNextPush(new Error("write failed"));
+
+    await expect(second).rejects.toThrow("write failed");
+    await expect(third).rejects.toThrow("write failed");
+
+    // A failed batch must not block later updates
+    const fourth = api.update({ d: 4 });
+    await Promise.resolve();
+    adapter.releaseNextPush();
+    await fourth;
+    expect(adapter.pushes.at(-1)).toMatchObject({ a: 1, d: 4 });
+    await api.disconnect();
+  });
+
+  test("disconnecting while an update is pending rejects it", async () => {
+    const api = new MultiplayerAPI();
+    const adapter = new GatedAdapter();
+    await api.connect(adapter);
+
+    const first = api.update({ a: 1 });
+    await Promise.resolve();
+    const pending = api.update({ b: 2 });
+    pending.catch(() => {});
+
+    adapter.releaseNextPush();
+    await first;
+    await api.disconnect();
+
+    await expect(pending).rejects.toThrow("MultiplayerAPI");
+
+    // Reconnecting must not be stuck behind the abandoned push
+    const next = new GatedAdapter();
+    await api.connect(next);
+    const after = api.update({ c: 3 });
+    next.releaseNextPush();
+    await after;
+    expect(next.pushes).toEqual([{ c: 3 }]);
+    await api.disconnect();
+  });
+});

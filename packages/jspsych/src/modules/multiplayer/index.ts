@@ -78,6 +78,14 @@ export interface MultiplayerAdapter {
   disconnect(): Promise<void>;
 }
 
+/** A batch of update() calls merged together, waiting to be pushed. */
+interface PendingUpdate {
+  data: Record<string, unknown>;
+  promise: Promise<void>;
+  resolve: () => void;
+  reject: (e: unknown) => void;
+}
+
 export class MultiplayerAPI {
   /** Set only once the adapter's connect() has resolved. */
   private adapter: MultiplayerAdapter | null = null;
@@ -100,8 +108,20 @@ export class MultiplayerAPI {
    */
   private lastPushed: Record<string, unknown> | null = null;
 
-  /** Tail of the update() chain; each update() runs after the previous one settles. */
-  private updateQueue: Promise<void> = Promise.resolve();
+  /**
+   * Updates waiting to be pushed. They merge into one batch, so a caller that
+   * updates faster than the backend confirms writes can't build a queue.
+   */
+  private pendingUpdate: PendingUpdate | null = null;
+
+  /** The batch whose push is in flight, if any. */
+  private inFlightUpdate: PendingUpdate | null = null;
+
+  /** True while pushPendingUpdates() is running. */
+  private pushingUpdates = false;
+
+  /** Bumped by disconnect() so an abandoned push loop stops touching update state. */
+  private updateEpoch = 0;
 
   constructor() {
     autoBind(this);
@@ -187,19 +207,79 @@ export class MultiplayerAPI {
    *
    * The merge base is this client's last successful push (falling back to
    * the adapter's copy of the slot before the first push), so it doesn't
-   * depend on when the adapter's cache reflects a write. update() calls run
-   * one at a time in call order, so overlapping calls don't lose keys. A
-   * direct push() issued while updates are queued is not part of that order.
+   * depend on when the adapter's cache reflects a write.
+   *
+   * One push is in flight at a time. Calls made while it is in flight merge
+   * into a single follow-up push (later calls win per key) and share its
+   * promise, so updating faster than the backend confirms writes coalesces
+   * instead of queueing. A direct push() issued while updates are pending is
+   * not part of that ordering.
    */
   async update(data: Record<string, unknown>): Promise<void> {
     this.requireAdapter();
-    const run = async () => {
-      const base = this.lastPushed ?? this.get(this.requireAdapter().participantId) ?? {};
-      await this.push({ ...base, ...data });
-    };
-    const result = this.updateQueue.then(run);
-    this.updateQueue = result.catch(() => {});
-    return result;
+
+    if (this.pendingUpdate) {
+      Object.assign(this.pendingUpdate.data, data);
+      return this.pendingUpdate.promise;
+    }
+
+    let settle: { resolve: () => void; reject: (e: unknown) => void };
+    const promise = new Promise<void>((resolve, reject) => {
+      settle = { resolve, reject };
+    });
+    this.pendingUpdate = { data: { ...data }, promise, ...settle! };
+
+    if (!this.pushingUpdates) {
+      this.pushingUpdates = true;
+      // Runs synchronously up to the adapter's push, so an idle update() doesn't
+      // wait a turn before reaching the backend.
+      void this.pushPendingUpdates(this.updateEpoch);
+    }
+    return promise;
+  }
+
+  /** Push batches of pending updates, one at a time, until none are left. */
+  private async pushPendingUpdates(epoch: number): Promise<void> {
+    try {
+      while (this.pendingUpdate && this.updateEpoch === epoch) {
+        // Close this batch before pushing: updates made from here on form the next one
+        const batch = this.pendingUpdate;
+        this.pendingUpdate = null;
+        this.inFlightUpdate = batch;
+        try {
+          const base = this.lastPushed ?? this.get(this.requireAdapter().participantId) ?? {};
+          await this.push({ ...base, ...batch.data });
+          batch.resolve();
+        } catch (e) {
+          // One failed batch must not block the updates behind it
+          batch.reject(e);
+        } finally {
+          if (this.inFlightUpdate === batch) {
+            this.inFlightUpdate = null;
+          }
+        }
+      }
+    } finally {
+      // A newer loop owns the flag if disconnect() abandoned this one
+      if (this.updateEpoch === epoch) {
+        this.pushingUpdates = false;
+      }
+    }
+  }
+
+  /**
+   * Settle update() callers that can no longer be pushed and abandon the push
+   * loop, which may be parked on an adapter push that will never resolve.
+   */
+  private cancelUpdates(error: Error) {
+    this.updateEpoch++;
+    this.pushingUpdates = false;
+    const abandoned = [this.inFlightUpdate, this.pendingUpdate];
+    this.inFlightUpdate = null;
+    this.pendingUpdate = null;
+    for (const batch of abandoned) {
+      batch?.reject(error);
+    }
   }
 
   /** Read a copy of the full current group session (all participants' data). */
@@ -370,6 +450,10 @@ export class MultiplayerAPI {
     const adapter = this.adapter;
     this.adapter = null;
     this.lastPushed = null;
+    // Pending and in-flight updates can't complete now; don't leave their callers waiting
+    this.cancelUpdates(
+      new Error("MultiplayerAPI: disconnect() was called before this update() completed.")
+    );
     await adapter?.disconnect();
   }
 }

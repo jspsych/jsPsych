@@ -146,7 +146,9 @@ Returns a `Promise<void>` that resolves when the write is confirmed by the backe
 
 Convenience wrapper around a get→merge→push sequence: shallow-merges `data` on top of this participant's current slot and pushes the result. Unlike `push()`, existing keys in the slot that aren't present in `data` are preserved.
 
-The merge starts from this participant's last successful `push()` or `update()`, or from the slot's current contents before the first write, so it doesn't depend on how quickly the backend echoes writes back. `update()` calls run one at a time in the order they were made, so you don't need to await one before starting the next. A direct `push()` made while updates are still queued is not part of that ordering.
+The merge starts from this participant's last successful `push()` or `update()`, or from the slot's current contents before the first write, so it doesn't depend on how quickly the backend echoes writes back.
+
+One write is in flight at a time. Calls made while a write is in flight are merged into a single follow-up write and share its promise, so a trial that updates faster than the backend confirms writes (a drawing or chat plugin, say) coalesces instead of building a queue. When two merged calls set the same key, the later one wins. A direct `push()` made while updates are pending is not part of this ordering.
 
 #### Example
 
