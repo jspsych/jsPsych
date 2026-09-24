@@ -38,6 +38,19 @@ export interface SessionOptions {
   /** Called once when another participant reaches the `left` presence status. */
   onParticipantLeft?: (participantId: string) => void;
 
+  /**
+   * Called when a participant who had `left` comes back from the same page
+   * load, so their experiment is still where they left it.
+   */
+  onParticipantRejoined?: (participantId: string) => void;
+
+  /**
+   * Called when a participant comes back from a new page load (a reload or a
+   * new tab) under the same ID. Their experiment restarted, so they are out of
+   * step with the group and stay `left`.
+   */
+  onParticipantRestarted?: (participantId: string) => void;
+
   /** Called whenever this client's connection status changes. */
   onStatusChange?: (status: ConnectionStatus) => void;
 }
@@ -102,9 +115,66 @@ function fromJson<T>(json: string): T {
   return deepFreeze(JSON.parse(json));
 }
 
+/**
+ * Slot key the session reserves for its own bookkeeping. It is added to every
+ * push and removed from every snapshot, so readers never see it.
+ */
+export const RESERVED_KEY = "$mp";
+
+/** Identifies one page load. Shared by every session made from one jsPsych.multiplayer. */
+export interface SessionIdentity {
+  /** Random, and new on every page load. */
+  instance: string;
+  /** Goes up every time this page (re)announces itself to the group. */
+  epoch: number;
+}
+
+/** What each participant's slot carries under RESERVED_KEY. */
+interface SlotMeta extends SessionIdentity {
+  /** Whether the participant has written any data of their own. */
+  written: boolean;
+}
+
+function isSlotMeta(value: unknown): value is SlotMeta {
+  const meta = value as SlotMeta;
+  return (
+    typeof meta === "object" &&
+    meta !== null &&
+    typeof meta.instance === "string" &&
+    typeof meta.epoch === "number"
+  );
+}
+
+/** Separate the reserved bookkeeping from each participant's data. */
+function splitMeta(raw: GroupSessionData): {
+  data: GroupSessionData;
+  metas: Record<string, SlotMeta>;
+} {
+  const data: GroupSessionData = {};
+  const metas: Record<string, SlotMeta> = {};
+  for (const [id, slot] of Object.entries(raw)) {
+    if (slot === null || typeof slot !== "object" || !(RESERVED_KEY in slot)) {
+      data[id] = slot;
+      continue;
+    }
+    const { [RESERVED_KEY]: meta, ...rest } = slot;
+    if (isSlotMeta(meta)) {
+      metas[id] = meta;
+    }
+    // A participant who has only announced themselves hasn't written anything yet
+    if (!isSlotMeta(meta) || meta.written) {
+      data[id] = Object.freeze(rest);
+    }
+  }
+  return { data, metas };
+}
+
 function assertRecord(data: unknown): asserts data is Record<string, unknown> {
   if (data === null || typeof data !== "object" || Array.isArray(data)) {
     throw new TypeError("MultiplayerAPI: data must be a plain object of JSON values.");
+  }
+  if (Object.prototype.hasOwnProperty.call(data, RESERVED_KEY)) {
+    throw new TypeError(`MultiplayerAPI: "${RESERVED_KEY}" is reserved for the multiplayer API.`);
   }
 }
 
@@ -134,9 +204,22 @@ export class MultiplayerSession {
   /** Memoized so overlapping disconnect() calls close the connection once. */
   private closing: Promise<void> | null = null;
 
-  /** The adapter's latest session data, as a frozen copy, and its JSON text. */
+  /**
+   * The adapter's latest session data as a frozen copy with the reserved key
+   * removed, the JSON text of the raw and the cleaned data, and each
+   * participant's reserved bookkeeping.
+   */
   private remote: GroupSessionData = {};
   private remoteJson = "{}";
+  private remoteDataJson = "{}";
+  private metas: Record<string, SlotMeta> = {};
+
+  /**
+   * The page load this participant's slot came from before this page, if it
+   * wasn't this one: this participant reloaded or opened the study again, so
+   * their experiment restarted. Null otherwise.
+   */
+  readonly previousInstance: string | null;
 
   /**
    * This participant's own data. The session is its source of truth: writes
@@ -155,6 +238,21 @@ export class MultiplayerSession {
   private presenceStatus = new Map<string, PresenceStatus>();
   private awayTimers = new Map<string, number>();
   private readonly dropoutTimeout: number | null;
+
+  /** Each participant's page load, as last seen while they were connected. */
+  private knownInstance = new Map<string, string>();
+
+  /**
+   * Each absent participant's bookkeeping as of when they dropped out (null if
+   * they had none). They count as back only after a write made since then.
+   */
+  private dropMeta = new Map<string, SlotMeta | null>();
+
+  /** `${id}\n${instance}` for every restart already reported. */
+  private restartsReported = new Set<string>();
+
+  /** Callbacks to researcher code, run once the session's state is settled. */
+  private events: Array<() => void> = [];
 
   private listeners = new Set<Listener>();
   private pendingWaits = new Set<(error: Error) => void>();
@@ -180,7 +278,8 @@ export class MultiplayerSession {
   static async open(
     adapter: MultiplayerAdapter,
     signal: AbortSignal,
-    options: SessionOptions
+    options: SessionOptions,
+    identity: SessionIdentity
   ): Promise<MultiplayerSession> {
     const cancelled = () =>
       new MultiplayerCancelledError("MultiplayerAPI: connect() was cancelled before it finished.");
@@ -214,17 +313,20 @@ export class MultiplayerSession {
       throw cancelled();
     }
     try {
-      session = new MultiplayerSession(connection, options);
+      session = new MultiplayerSession(connection, options, identity);
     } catch (e) {
       await closeQuietly();
       throw e;
     }
+    // Tell the group which page load this participant is on
+    session.announce();
     return session;
   }
 
   private constructor(
     private readonly connection: MultiplayerConnection,
-    private readonly options: SessionOptions
+    private readonly options: SessionOptions,
+    private readonly identity: SessionIdentity
   ) {
     autoBind(this);
     this.participantId = connection.participantId;
@@ -233,9 +335,15 @@ export class MultiplayerSession {
         ? DEFAULT_DROPOUT_TIMEOUT
         : toTimeout(options.dropoutTimeout);
     this.remoteJson = JSON.stringify(connection.getAll() ?? {});
-    this.remote = fromJson(this.remoteJson);
+    const { data, metas } = splitMeta(fromJson(this.remoteJson));
+    this.remote = data;
+    this.remoteDataJson = JSON.stringify(data);
+    this.metas = metas;
     this.slot = this.remote[this.participantId];
     this.slotJson = this.slot === undefined ? undefined : JSON.stringify(this.slot);
+    const ownMeta = metas[this.participantId];
+    this.previousInstance =
+      ownMeta && ownMeta.instance !== identity.instance ? ownMeta.instance : null;
     this.refreshPresence();
     this.rebuild();
   }
@@ -323,6 +431,35 @@ export class MultiplayerSession {
     return promise;
   }
 
+  /**
+   * Push this page's identity with a new epoch, so the group can tell that this
+   * participant is (back) on this page load. Runs on connect and whenever the
+   * connection recovers.
+   */
+  private announce() {
+    if (this.isClosed) {
+      return;
+    }
+    this.identity.epoch++;
+    this.slotConfirmed = false;
+    if (!this.nextBatch) {
+      this.nextBatch = newBatch();
+      // Nobody may be waiting on an announcement; a failure is retried by the next write
+      this.nextBatch.promise.catch(() => {});
+    }
+    this.requestSend();
+  }
+
+  /** The slot as pushed: this participant's data plus the reserved bookkeeping. */
+  private payload(): Record<string, unknown> {
+    const meta: SlotMeta = {
+      instance: this.identity.instance,
+      epoch: this.identity.epoch,
+      written: this.slot !== undefined,
+    };
+    return deepFreeze({ ...this.slot, [RESERVED_KEY]: meta });
+  }
+
   /** Start the sender if it's idle; a running sender picks up the change itself. */
   private requestSend() {
     this.hasUnsentChanges = true;
@@ -342,14 +479,15 @@ export class MultiplayerSession {
     this.sending = true;
     try {
       while (this.hasUnsentChanges && !this.isClosed) {
-        const snapshot = this.slot!;
+        const slot = this.slot;
+        const epoch = this.identity.epoch;
         const batch = this.nextBatch!;
         this.hasUnsentChanges = false;
         this.nextBatch = null;
         this.inFlightBatch = batch;
         try {
-          await this.connection.push(snapshot);
-          if (snapshot === this.slot) {
+          await this.connection.push(this.payload());
+          if (slot === this.slot && epoch === this.identity.epoch) {
             this.slotConfirmed = true;
           }
           batch.resolve();
@@ -561,9 +699,15 @@ export class MultiplayerSession {
     try {
       const json = JSON.stringify(this.connection.getAll() ?? {});
       if (json !== this.remoteJson) {
-        this.remote = fromJson(json);
         this.remoteJson = json;
-        dataChanged = true;
+        const { data, metas } = splitMeta(fromJson(json));
+        this.metas = metas;
+        const dataJson = JSON.stringify(data);
+        if (dataJson !== this.remoteDataJson) {
+          this.remote = data;
+          this.remoteDataJson = dataJson;
+          dataChanged = true;
+        }
       }
     } catch (e) {
       console.error("MultiplayerAPI: could not read the adapter's session data", e);
@@ -574,6 +718,7 @@ export class MultiplayerSession {
       this.rebuild();
       this.notify();
     }
+    this.flushEvents();
   }
 
   private handleStatus(status: ConnectionStatus) {
@@ -593,10 +738,13 @@ export class MultiplayerSession {
         if (presence === "away") this.startAwayTimer(id);
       }
       this.refreshPresence();
+      // Others may have seen us drop out: show them we're back on the same page
+      this.announce();
     }
     this.rebuild();
     this.notify();
     this.reportStatus();
+    this.flushEvents();
   }
 
   private reportStatus() {
@@ -635,22 +783,83 @@ export class MultiplayerSession {
     let changed = false;
     for (const id of ids) {
       const current = this.presenceStatus.get(id);
-      if (current === "left") {
-        continue;
-      }
-      if (connectedNow.has(id)) {
-        if (current !== "connected") {
-          this.presenceStatus.set(id, "connected");
-          this.clearAwayTimer(id);
+      const meta = this.metas[id];
+      if (!connectedNow.has(id)) {
+        if (current === undefined || current === "connected") {
+          this.presenceStatus.set(id, "away");
+          this.dropMeta.set(id, meta ?? null);
+          this.startAwayTimer(id);
           changed = true;
         }
-      } else if (current !== "away") {
-        this.presenceStatus.set(id, "away");
-        this.startAwayTimer(id);
+        continue;
+      }
+      if (current === undefined) {
+        this.presenceStatus.set(id, "connected");
+        if (meta) this.knownInstance.set(id, meta.instance);
         changed = true;
+      } else if (current === "connected") {
+        // A new page load can take over the ID without the drop ever being visible
+        const known = this.knownInstance.get(id);
+        if (meta && known !== undefined && meta.instance !== known) {
+          changed = this.markRestarted(id, meta, known) || changed;
+        } else if (meta) {
+          this.knownInstance.set(id, meta.instance);
+        }
+      } else {
+        // Away or left: presence alone could be a reloaded page whose new identity
+        // hasn't arrived yet, so wait for a write made since the drop.
+        const drop = this.dropMeta.get(id) ?? null;
+        if (!meta) {
+          continue;
+        }
+        if (drop && meta.instance !== drop.instance) {
+          changed = this.markRestarted(id, meta, drop.instance) || changed;
+        } else if (!drop || meta.epoch > drop.epoch) {
+          this.presenceStatus.set(id, "connected");
+          this.clearAwayTimer(id);
+          this.dropMeta.delete(id);
+          this.knownInstance.set(id, meta.instance);
+          if (current === "left") {
+            this.events.push(() => this.options.onParticipantRejoined?.(id));
+          }
+          changed = true;
+        }
       }
     }
     return changed;
+  }
+
+  /**
+   * A participant came back from a new page load, so their experiment restarted.
+   * They stay (or become) `left`. Returns whether their presence changed.
+   */
+  private markRestarted(id: string, meta: SlotMeta, previous: string): boolean {
+    const key = `${id}\n${meta.instance}`;
+    if (this.restartsReported.has(key)) {
+      return false;
+    }
+    this.restartsReported.add(key);
+    // Keep comparing later writes against the page load they left from
+    this.dropMeta.set(id, { instance: previous, epoch: Infinity, written: true });
+    this.clearAwayTimer(id);
+    const wasLeft = this.presenceStatus.get(id) === "left";
+    this.presenceStatus.set(id, "left");
+    if (!wasLeft) {
+      this.events.push(() => this.options.onParticipantLeft?.(id));
+    }
+    this.events.push(() => this.options.onParticipantRestarted?.(id));
+    return !wasLeft;
+  }
+
+  /** Run queued researcher callbacks, after the session's state and snapshots are settled. */
+  private flushEvents() {
+    for (const event of this.events.splice(0)) {
+      try {
+        event();
+      } catch (e) {
+        console.error("MultiplayerAPI: a participant callback threw", e);
+      }
+    }
   }
 
   private startAwayTimer(id: string) {
@@ -686,11 +895,8 @@ export class MultiplayerSession {
     this.presenceStatus.set(id, "left");
     this.rebuild();
     this.notify();
-    try {
-      this.options.onParticipantLeft?.(id);
-    } catch (e) {
-      console.error("MultiplayerAPI: onParticipantLeft threw", e);
-    }
+    this.events.push(() => this.options.onParticipantLeft?.(id));
+    this.flushEvents();
   }
 
   // ---------------------------------------------------------------- closing

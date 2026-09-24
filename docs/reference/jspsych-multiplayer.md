@@ -38,6 +38,7 @@ Slots must contain plain JSON. Each write is copied as JSON when you make it, wh
 - `BigInt` values and circular references make the write reject.
 - `Date` values become strings.
 - Keys whose value is `undefined` are dropped.
+- The key `$mp` is reserved. The session stores its own bookkeeping there (see [Rejoining](#rejoining)) and removes it from everything you read; writing it makes the write reject.
 
 All reads return one frozen object that is shared by every reader. Modifying it throws a `TypeError`, so copy it first if you need a changed version.
 
@@ -49,9 +50,20 @@ Status | Meaning
 -------|--------
 `connected` | The participant is connected.
 `away` | The participant's connection dropped. Brief network interruptions show up this way.
-`left` | The participant has been away for longer than the dropout timeout (10 seconds by default). This status is permanent: a participant who has left stays `left` even if they reconnect.
+`left` | The participant has been away for longer than the dropout timeout (10 seconds by default).
 
 While your own connection is down, the session pauses everyone else's dropout timers, because it can't tell whether they are still there.
+
+### Rejoining
+
+A participant who drops out can come back, but only from the same page. The session tells the two cases apart:
+
+- **Same page.** Their connection dropped and recovered, for example after a network outage or a laptop going to sleep. Their experiment is still where they left it, so they become `connected` again. If they had reached `left`, `onParticipantRejoined` is called.
+- **New page load.** They reloaded, or opened the study again in a new tab, under the same ID. Their experiment started over, so it is out of step with the group. They stay `left` (or become `left` at once, if they were `away`), and `onParticipantRestarted` is called. On their side, `jsPsych.multiplayer.previousInstance` is set, so the experiment can explain that they can't rejoin.
+
+To tell the cases apart, each page load writes a random ID and a counter into its slot under the reserved `$mp` key, and writes them again whenever its connection recovers. A participant counts as back only once a write made since they dropped out arrives. Being back in the adapter's list of connected participants isn't enough, because a reloaded page connects before its first write arrives.
+
+Trials that already ended because a participant left stay ended; rejoining affects only what happens next. To give a participant time to come back before moving on, wait on their presence, for example with a `wait()` whose condition is `presence[partnerId] === "connected"` and a `timeout`.
 
 ---
 
@@ -85,8 +97,23 @@ The state of this participant's connection:
 jsPsych.multiplayer.session
 ```
 
-The current `MultiplayerSession`, which is the object `connect()` returns. `null` until `connect()` resolves and after `disconnect()`. A session has `participantId` and `status` properties and every method listed below except `connect()`.
+The current `MultiplayerSession`, which is the object `connect()` returns. `null` until `connect()` resolves and after `disconnect()`. A session has `participantId`, `status`, and `previousInstance` properties and every method listed below except `connect()`.
 
+
+### previousInstance
+
+```javascript
+jsPsych.multiplayer.previousInstance
+```
+
+Set when this participant's slot came from an earlier page load: they reloaded or reopened the study, so their experiment started over while the group moved on. `null` otherwise, and when there is no session. Other participants see this participant as `left`. Read-only.
+
+```javascript
+await jsPsych.multiplayer.connect(adapter);
+if (jsPsych.multiplayer.previousInstance) {
+  // Show a message instead of starting the experiment again
+}
+```
 ---
 
 ## Methods
@@ -108,6 +135,8 @@ Option | Type | Description
 -------|------|------------
 dropoutTimeout | number | How long, in milliseconds, a participant can stay disconnected before they count as having left. Defaults to `10000`. Use `null` or `Infinity` to never mark participants as left.
 onParticipantLeft | function | Called with a participant's ID when that participant's status becomes `left`.
+onParticipantRejoined | function | Called with a participant's ID when a participant who had `left` comes back from the same page. See [Rejoining](#rejoining).
+onParticipantRestarted | function | Called with a participant's ID when a participant comes back from a new page load, so their experiment started over. They stay `left`.
 onStatusChange | function | Called with the new status whenever this participant's connection status changes.
 signal | `AbortSignal` | Aborting this signal cancels a `connect()` that hasn't finished.
 

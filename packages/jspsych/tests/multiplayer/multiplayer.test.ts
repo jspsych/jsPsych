@@ -9,6 +9,7 @@ import {
   MultiplayerAPI,
   MultiplayerAdapter,
   MultiplayerConnection,
+  RESERVED_KEY,
 } from "../../src/modules/multiplayer";
 
 function deferred<T = void>() {
@@ -26,6 +27,20 @@ async function flushPromises() {
   for (let i = 0; i < 10; i++) {
     await Promise.resolve();
   }
+}
+
+/** A slot as stored on the backend, without the session's reserved bookkeeping. */
+function stripMeta(slot: Record<string, unknown> | undefined) {
+  if (!slot) return slot;
+  const { [RESERVED_KEY]: _meta, ...data } = slot;
+  return data;
+}
+
+/** The pushes that carried this participant's data, without the reserved bookkeeping. */
+function userPushes(connection: MockConnection) {
+  return connection.pushes
+    .filter((push) => (push[RESERVED_KEY] as { written: boolean }).written)
+    .map(stripMeta);
 }
 
 /** A shared backend that every MockConnection on it reads and writes. */
@@ -80,9 +95,13 @@ class MockConnection implements MultiplayerConnection {
     this.hub.broadcast();
   }
 
-  /** Simulate this participant's network dropping or recovering, as the others see it. */
+  /**
+   * Simulate this participant's network dropping or recovering. Like a real
+   * adapter, the connection reports its own drop and recovery.
+   */
   setOnline(online: boolean) {
     this.online = online;
+    this.options.onStatus(online ? "connected" : "reconnecting");
     this.hub.broadcast();
   }
 }
@@ -269,7 +288,7 @@ describe("connecting and disconnecting", () => {
     expect(live.disconnectCalls).toBe(0);
     expect(api.session).toBe(session);
     await api.update({ ok: true });
-    expect(hub.data.p1).toEqual({ ok: true });
+    expect(stripMeta(hub.data.p1)).toEqual({ ok: true });
   });
 
   test("a rejecting adapter disconnect still leaves the API disconnected", async () => {
@@ -296,7 +315,7 @@ describe("connecting and disconnecting", () => {
 
     await expect(old.update({ stale: true })).rejects.toThrow("disconnected");
     await api.update({ fresh: true });
-    expect(hub.data.p1).toEqual({ fresh: true });
+    expect(stripMeta(hub.data.p1)).toEqual({ fresh: true });
   });
 });
 
@@ -305,16 +324,16 @@ describe("writing", () => {
     const { api } = await join("p1");
     await api.push({ a: 1, b: 2 });
     await api.update({ b: 3, c: 4 });
-    expect(hub.data.p1).toEqual({ a: 1, b: 3, c: 4 });
+    expect(stripMeta(hub.data.p1)).toEqual({ a: 1, b: 3, c: 4 });
     await api.push({ z: 0 });
-    expect(hub.data.p1).toEqual({ z: 0 });
+    expect(stripMeta(hub.data.p1)).toEqual({ z: 0 });
   });
 
   test("update merges onto slot data already on the backend when connecting", async () => {
     hub.data = { p1: { score: 5 } };
     const { api } = await join("p1");
     await api.update({ round: 2 });
-    expect(hub.data.p1).toEqual({ score: 5, round: 2 });
+    expect(stripMeta(hub.data.p1)).toEqual({ score: 5, round: 2 });
   });
 
   test("the adapter never receives the caller's object", async () => {
@@ -326,8 +345,8 @@ describe("writing", () => {
     data.round = 2;
     data.nested.x = 2;
 
-    expect(connection.pushes[0]).not.toBe(data);
-    expect(hub.data.p1).toEqual({ round: 1, nested: { x: 1 } });
+    expect(userPushes(connection)[0]).not.toBe(data);
+    expect(stripMeta(hub.data.p1)).toEqual({ round: 1, nested: { x: 1 } });
     expect(peer.api.get("p1")).toEqual({ round: 1, nested: { x: 1 } });
   });
 
@@ -358,12 +377,12 @@ describe("writing", () => {
     const second = api.update({ b: 1 });
     const third = api.update({ b: 2, c: 3 });
 
-    expect(connection.pushes).toEqual([{ a: 1 }]);
+    expect(userPushes(connection)).toEqual([{ a: 1 }]);
     ack.resolve();
     await Promise.all([first, second, third]);
 
-    expect(connection.pushes).toEqual([{ a: 1 }, { a: 1, b: 2, c: 3 }]);
-    expect(hub.data.p1).toEqual({ a: 1, b: 2, c: 3 });
+    expect(userPushes(connection)).toEqual([{ a: 1 }, { a: 1, b: 2, c: 3 }]);
+    expect(stripMeta(hub.data.p1)).toEqual({ a: 1, b: 2, c: 3 });
   });
 
   test("callers whose writes share a push share its outcome", async () => {
@@ -406,7 +425,7 @@ describe("writing", () => {
 
     connection.pushImpl = async (data) => connection.write(data);
     await api.update({ x: 1 });
-    expect(hub.data.p1).toEqual({ phase: "b", x: 1 });
+    expect(stripMeta(hub.data.p1)).toEqual({ phase: "b", x: 1 });
   });
 
   test("a merged update keeps nested values as they were when update() was called", async () => {
@@ -423,7 +442,7 @@ describe("writing", () => {
 
     ack.resolve();
     await Promise.all([first, second]);
-    expect(hub.data.p1).toEqual({ a: 0, strokes: [1] });
+    expect(stripMeta(hub.data.p1)).toEqual({ a: 0, strokes: [1] });
   });
 
   test("a write that doesn't change the slot sends nothing", async () => {
@@ -431,7 +450,7 @@ describe("writing", () => {
     await api.update({ a: 1 });
     await api.update({ a: 1 });
     await api.push({ a: 1 });
-    expect(connection.pushes).toHaveLength(1);
+    expect(userPushes(connection)).toHaveLength(1);
   });
 
   test("repeating the data of a failed push sends it again", async () => {
@@ -443,7 +462,7 @@ describe("writing", () => {
     await expect(api.update({ a: 1 })).rejects.toThrow("conflict");
     connection.pushImpl = send;
     await api.update({ a: 1 });
-    expect(hub.data.p1).toEqual({ a: 1 });
+    expect(stripMeta(hub.data.p1)).toEqual({ a: 1 });
   });
 
   test("a failed push rejects, and its data goes out with the next write", async () => {
@@ -457,7 +476,7 @@ describe("writing", () => {
 
     connection.pushImpl = send;
     await api.update({ b: 2 });
-    expect(hub.data.p1).toEqual({ a: 1, b: 2 });
+    expect(stripMeta(hub.data.p1)).toEqual({ a: 1, b: 2 });
   });
 
   test("a push that resolves after a reconnect doesn't affect the new session", async () => {
@@ -474,7 +493,7 @@ describe("writing", () => {
     ack.resolve();
     await flushPromises();
     await api.update({ fresh: true });
-    expect(hub.data.p1).toEqual({ fresh: true });
+    expect(stripMeta(hub.data.p1)).toEqual({ fresh: true });
   });
 
   test("data must be a plain object of JSON values", async () => {
@@ -590,7 +609,7 @@ describe("reading and subscribing", () => {
     await b.api.push({ n: 1 });
     await b.api.push({ n: 2 });
     await flushPromises();
-    expect(a.connection.pushes).toEqual([{ seen: true }]);
+    expect(userPushes(a.connection)).toEqual([{ seen: true }]);
   });
 
   test("a subscriber that writes new data every time is stopped instead of hanging", async () => {
@@ -614,7 +633,7 @@ describe("reading and subscribing", () => {
     await b.api.push({ n: 1 });
     expect(seen).toEqual([undefined]);
     await a.api.update({ still: "open" });
-    expect(hub.data.p1).toEqual({ still: "open" });
+    expect(stripMeta(hub.data.p1)).toEqual({ still: "open" });
   });
 });
 
@@ -825,6 +844,143 @@ describe("presence", () => {
   });
 });
 
+describe("rejoining", () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  test("a participant who comes back from the same page after leaving rejoins", async () => {
+    const left = jest.fn();
+    const rejoined = jest.fn();
+    const a = await join("p1", {
+      dropoutTimeout: 5000,
+      onParticipantLeft: left,
+      onParticipantRejoined: rejoined,
+    });
+    const b = await join("p2");
+    await b.api.update({ score: 3 });
+
+    b.connection.setOnline(false);
+    jest.advanceTimersByTime(5000);
+    expect(a.api.presence().p2).toBe("left");
+    expect(left).toHaveBeenCalledWith("p2");
+
+    b.connection.setOnline(true);
+    expect(a.api.presence().p2).toBe("connected");
+    expect(rejoined).toHaveBeenCalledTimes(1);
+    expect(rejoined).toHaveBeenCalledWith("p2");
+    expect(a.api.get("p2")).toEqual({ score: 3 });
+  });
+
+  test("presence alone doesn't count as coming back", async () => {
+    const rejoined = jest.fn();
+    const a = await join("p1", { dropoutTimeout: 5000, onParticipantRejoined: rejoined });
+    const b = await join("p2");
+
+    b.connection.setOnline(false);
+    jest.advanceTimersByTime(5000);
+    // Back in the connected list, but no write from this page since the drop
+    b.connection.online = true;
+    hub.broadcast();
+    expect(a.api.presence().p2).toBe("left");
+    expect(rejoined).not.toHaveBeenCalled();
+  });
+
+  test("a participant who reloads after leaving has restarted and stays left", async () => {
+    const rejoined = jest.fn();
+    const restarted = jest.fn();
+    const a = await join("p1", {
+      dropoutTimeout: 5000,
+      onParticipantRejoined: rejoined,
+      onParticipantRestarted: restarted,
+    });
+    const b = await join("p2");
+    await b.api.update({ round: 4 });
+    expect(b.api.previousInstance).toBeNull();
+
+    await b.api.disconnect();
+    jest.advanceTimersByTime(5000);
+    expect(a.api.presence().p2).toBe("left");
+
+    // A reload: a new page (new jsPsych.multiplayer) connects under the same ID
+    const reloaded = new MultiplayerAPI();
+    await reloaded.connect(b.adapter);
+    expect(a.api.presence().p2).toBe("left");
+    expect(restarted).toHaveBeenCalledTimes(1);
+    expect(restarted).toHaveBeenCalledWith("p2");
+    expect(rejoined).not.toHaveBeenCalled();
+    // The reloaded page can tell that the group is ahead of it
+    expect(reloaded.previousInstance).not.toBeNull();
+    expect(reloaded.get("p2")).toEqual({ round: 4 });
+  });
+
+  test("a reload within the dropout timeout counts as leaving", async () => {
+    const left = jest.fn();
+    const restarted = jest.fn();
+    const a = await join("p1", {
+      dropoutTimeout: 5000,
+      onParticipantLeft: left,
+      onParticipantRestarted: restarted,
+    });
+    const b = await join("p2");
+    const waiting = a.api.wait(() => false, { participants: ["p2"] });
+
+    await b.api.disconnect();
+    expect(a.api.presence().p2).toBe("away");
+    const reloaded = new MultiplayerAPI();
+    await reloaded.connect(b.adapter);
+
+    expect(a.api.presence().p2).toBe("left");
+    expect(left).toHaveBeenCalledWith("p2");
+    expect(restarted).toHaveBeenCalledWith("p2");
+    await expect(waiting).rejects.toMatchObject({ name: "MultiplayerParticipantLeftError" });
+    // No dropout clock is left running for them
+    jest.advanceTimersByTime(5000);
+    expect(left).toHaveBeenCalledTimes(1);
+  });
+
+  test("reconnecting on the same page with connect() is a rejoin, not a restart", async () => {
+    const rejoined = jest.fn();
+    const restarted = jest.fn();
+    const a = await join("p1", {
+      dropoutTimeout: 5000,
+      onParticipantRejoined: rejoined,
+      onParticipantRestarted: restarted,
+    });
+    const b = await join("p2");
+
+    await b.api.disconnect();
+    jest.advanceTimersByTime(5000);
+    await b.api.connect(b.adapter);
+
+    expect(b.api.previousInstance).toBeNull();
+    expect(a.api.presence().p2).toBe("connected");
+    expect(rejoined).toHaveBeenCalledTimes(1);
+    expect(restarted).not.toHaveBeenCalled();
+  });
+
+  test("the session's bookkeeping never shows up in the data", async () => {
+    const a = await join("p1");
+    const b = await join("p2");
+    // p2 has connected but written nothing, so it has no entry yet
+    expect(a.api.getAll()).toEqual({});
+    expect(a.api.get("p2")).toBeUndefined();
+    expect(hub.data.p2).toHaveProperty(RESERVED_KEY);
+
+    await b.api.push({ x: 1 });
+    expect(a.api.get("p2")).toEqual({ x: 1 });
+    expect(a.api.getAll()).toEqual({ p2: { x: 1 } });
+    await expect(b.api.update({ [RESERVED_KEY]: 1 })).rejects.toThrow("reserved");
+  });
+
+  test("an empty slot someone wrote still shows up", async () => {
+    const a = await join("p1");
+    const b = await join("p2");
+    await b.api.push({});
+    expect(a.api.get("p2")).toEqual({});
+  });
+});
+
 describe("losing the connection", () => {
   test("a closed connection fails pending work and keeps the last snapshot readable", async () => {
     const statuses: string[] = [];
@@ -934,6 +1090,6 @@ describe("jsPsych integration", () => {
     );
     await pressKey("a");
     await expectFinished();
-    expect(hub.data.p1).toEqual({ done: true });
+    expect(stripMeta(hub.data.p1)).toEqual({ done: true });
   });
 });

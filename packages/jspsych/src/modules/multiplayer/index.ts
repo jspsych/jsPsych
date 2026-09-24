@@ -3,6 +3,7 @@ import autoBind from "auto-bind";
 import { MultiplayerCancelledError } from "./errors";
 import {
   MultiplayerSession,
+  SessionIdentity,
   SessionListener,
   SessionOptions,
   SubscribeOptions,
@@ -18,7 +19,7 @@ import {
 
 export * from "./errors";
 export * from "./types";
-export { DEFAULT_DROPOUT_TIMEOUT, MultiplayerSession } from "./session";
+export { DEFAULT_DROPOUT_TIMEOUT, MultiplayerSession, RESERVED_KEY } from "./session";
 export type { SessionListener, SubscribeOptions, WaitOptions } from "./session";
 
 export interface ConnectOptions extends SessionOptions {
@@ -44,6 +45,15 @@ export class MultiplayerAPI {
   private current: MultiplayerSession | null = null;
   private connecting: ConnectAttempt | null = null;
 
+  /**
+   * This page load's identity, shared by every session opened from it, so the
+   * group can tell a reconnect of this page from a reload.
+   */
+  private readonly identity: SessionIdentity = {
+    instance: Math.random().toString(36).slice(2) + Date.now().toString(36),
+    epoch: 0,
+  };
+
   constructor() {
     autoBind(this);
   }
@@ -56,6 +66,15 @@ export class MultiplayerAPI {
   /** This participant's ID within the group. Null until connect() resolves and after disconnect(). */
   get participantId(): string | null {
     return this.current?.participantId ?? null;
+  }
+
+  /**
+   * Set when this participant's slot came from an earlier page load: they
+   * reloaded or reopened the study, so the group is ahead of them. Null
+   * otherwise, and when there is no session.
+   */
+  get previousInstance(): string | null {
+    return this.current?.previousInstance ?? null;
   }
 
   /** The current session's connection status, or null when there is no session. */
@@ -100,7 +119,7 @@ export class MultiplayerAPI {
 
     const connecting: ConnectAttempt = {
       controller,
-      attempt: MultiplayerSession.open(adapter, controller.signal, sessionOptions),
+      attempt: MultiplayerSession.open(adapter, controller.signal, sessionOptions, this.identity),
     };
     this.connecting = connecting;
     try {

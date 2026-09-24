@@ -38,7 +38,7 @@ Option | Description
 -------|------------
 `signal` | An `AbortSignal` that is aborted if the experiment cancels the connection attempt. When it's aborted, stop connecting, close anything you opened, and reject. If your backend can't be interrupted, you can ignore the signal: the multiplayer module closes any connection that arrives after the attempt was cancelled.
 `onChange()` | Call this whenever the results of `getAll()` or `connectedParticipants()` may have changed: another participant wrote data, joined, or dropped out. The module then reads both methods and notifies subscribers only if something actually changed, so extra calls are harmless. A missed call means participants don't see an update.
-`onStatus(status)` | Call this with `"reconnecting"` when your connection drops, `"connected"` when it recovers, and `"closed"` when it is gone for good. After `"closed"`, the module calls `disconnect()` and stops using the connection.
+`onStatus(status)` | Call this with `"reconnecting"` when your connection drops, `"connected"` when it recovers, and `"closed"` when it is gone for good. After `"closed"`, the module calls `disconnect()` and stops using the connection. Report a drop whenever other participants may have seen this participant as disconnected, even if your own channel stayed open (for example, a missed heartbeat): the module rewrites this participant's identity on `"connected"`, and other participants count them as back only after that write.
 
 The module ignores calls to `onChange()` and `onStatus()` made before `connect()` resolves. It reads the initial state once `connect()` returns the connection.
 
@@ -52,7 +52,7 @@ readonly participantId: string;
 
 A stable ID for this participant within the group. It is also the key of the participant's slot in the shared data (`data[participantId]`). Set it before `connect()` resolves.
 
-The multiplayer module treats a participant who stays away longer than the dropout timeout as gone for good. If that participant returns, give them a new ID.
+Use the same ID for every connection made from the same page, so a participant whose connection drops and recovers can rejoin. A reloaded page may reuse the ID or get a new one: the module tells a reload from a reconnect with its own bookkeeping, stored in each slot under the reserved key `$mp`. Store and return that key like any other data.
 
 ### getAll
 

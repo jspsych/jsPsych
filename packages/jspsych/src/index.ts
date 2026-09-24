@@ -86,4 +86,5 @@ export {
   MultiplayerParticipantLeftError,
   MultiplayerSession,
   MultiplayerTimeoutError,
+  RESERVED_KEY as MULTIPLAYER_RESERVED_KEY,
 } from "./modules/multiplayer";
