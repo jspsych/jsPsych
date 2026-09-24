@@ -157,7 +157,7 @@ A `Promise<void>` that resolves when the adapter has closed the connection.
 
 #### Description
 
-Closes the current session, or cancels a `connect()` that hasn't finished. Pending `wait()` calls reject with a `MultiplayerCancelledError`, and writes the backend hasn't confirmed reject.
+Closes the current session, or cancels a `connect()` that hasn't finished. Subscribers are called one last time and then removed, pending `wait()` calls reject with a `MultiplayerCancelledError`, and writes the backend hasn't confirmed reject.
 
 `participantId` and `session` become `null` as soon as you call `disconnect()`, even if the adapter then fails to disconnect. You can always call `connect()` again afterward.
 
@@ -327,6 +327,8 @@ An `Unsubscribe` function. Call it to remove the subscription.
 
 Calls `callback` immediately with the current state, then again after every change: another participant's write, your own write, or a change in anyone's presence.
 
+When the session closes, because of `disconnect()` or a lost connection, each callback is called one last time, with this participant's presence set to `"left"`, and then removed. A plugin that only subscribes can use this call to find out that the session has closed.
+
 If a callback throws, the error is logged and the other callbacks still run. If a callback writes data, the other callbacks still see each change in order.
 
 A callback that writes the same data every time it runs is safe, because unchanged writes do nothing. A callback that writes *different* data every time it runs never stops sending. If it loops without waiting for the network, the session stops it after 100 rounds and logs an error.
@@ -359,7 +361,7 @@ jsPsych.multiplayer.wait(condition, options)
 Parameter | Type | Description
 ----------|------|------------
 condition | function | Called with `(data, presence)` after every change. The wait ends when it returns `true`.
-options | object | *(optional)* Any of the options below.
+options | object | *(optional)* Any of the options below. Passing a number, as in the older `wait(condition, timeout)` form, makes the promise reject with a `TypeError`.
 
 Option | Type | Description
 -------|------|------------

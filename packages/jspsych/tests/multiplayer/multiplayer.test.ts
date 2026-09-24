@@ -665,6 +665,11 @@ describe("wait", () => {
     }
   );
 
+  test("the old wait(condition, timeout) form rejects instead of waiting forever", async () => {
+    const { api } = await join("p1");
+    await expect(api.wait(() => false, 1000 as any)).rejects.toThrow("options object");
+  });
+
   test("a throwing condition rejects the wait", async () => {
     const a = await join("p1");
     const b = await join("p2");
@@ -841,6 +846,32 @@ describe("losing the connection", () => {
     expect(a.api.get("p1")).toEqual({ x: 1 });
     expect(a.connection.disconnectCalls).toBe(1);
     expect(statuses).toEqual(["closed"]);
+  });
+
+  test("subscribers get one last call when the connection is lost", async () => {
+    const a = await join("p1");
+    const seen: string[] = [];
+    a.api.subscribe((_data, presence) => seen.push(presence.p1));
+    a.connection.options.onStatus("closed");
+    a.connection.options.onChange();
+    expect(seen).toEqual(["connected", "left"]);
+  });
+
+  test("subscribers get one last call on disconnect", async () => {
+    const { api } = await join("p1");
+    const seen: string[] = [];
+    api.subscribe((_data, presence) => seen.push(presence.p1));
+    await api.disconnect();
+    expect(seen).toEqual(["connected", "left"]);
+  });
+
+  test("a subscriber that disconnects during the last call doesn't close twice", async () => {
+    const { api, session, connection } = await join("p1");
+    session.subscribe(() => {
+      if (session.status === "closed") void session.disconnect();
+    });
+    await api.disconnect();
+    expect(connection.disconnectCalls).toBe(1);
   });
 
   test("a session whose connection closed can be replaced without disconnect()", async () => {

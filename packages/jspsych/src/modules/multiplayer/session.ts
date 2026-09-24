@@ -402,6 +402,14 @@ export class MultiplayerSession {
     condition: (data: GroupSessionData, presence: PresenceData) => boolean,
     options: WaitOptions = {}
   ): Promise<GroupSessionData> {
+    if (options === null || typeof options !== "object") {
+      // Catches the old wait(condition, timeout) form, which would otherwise mean no timeout
+      return Promise.reject(
+        new TypeError(
+          "MultiplayerAPI: wait()'s second argument must be an options object, e.g. { timeout: 5000 }."
+        )
+      );
+    }
     const { signal, participants = [] } = options;
     const timeout = toTimeout(options.timeout);
 
@@ -688,8 +696,9 @@ export class MultiplayerSession {
   // ---------------------------------------------------------------- closing
 
   /**
-   * Close the connection. Pending waits reject with a MultiplayerCancelledError
-   * and unsent writes reject. Reads keep returning the last snapshot.
+   * Close the connection. Subscribers are called one last time, then removed.
+   * Pending waits reject with a MultiplayerCancelledError and unsent writes
+   * reject. Reads keep returning the last snapshot.
    */
   disconnect(): Promise<void> {
     return this.close(new MultiplayerCancelledError());
@@ -701,6 +710,13 @@ export class MultiplayerSession {
       this.currentStatus = "closed";
       this.closeReason = reason;
       this.clearAwayTimers();
+
+      // Set `closing` before anything below can call back into the session
+      const disconnecting = (async () => this.connection.disconnect())();
+      // A lost connection is closed on nobody's behalf, so log instead of rejecting
+      this.closing = lost
+        ? disconnecting.catch((e) => console.error("MultiplayerAPI: adapter disconnect threw", e))
+        : disconnecting;
 
       // The in-flight push may never settle, so don't leave its callers waiting
       const writeError = lost
@@ -714,15 +730,12 @@ export class MultiplayerSession {
         batch?.reject(writeError);
       }
 
-      this.cancelListeners(reason);
+      // One last call, with this participant's presence now `left`, so a
+      // plugin that only subscribes learns the session has closed
       this.rebuild();
+      this.notify();
+      this.cancelListeners(reason);
       this.reportStatus();
-
-      const disconnecting = (async () => this.connection.disconnect())();
-      // A lost connection is closed on nobody's behalf, so log instead of rejecting
-      this.closing = lost
-        ? disconnecting.catch((e) => console.error("MultiplayerAPI: adapter disconnect threw", e))
-        : disconnecting;
     }
     return this.closing;
   }
