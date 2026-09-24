@@ -6,6 +6,7 @@ import {
   MultiplayerParticipantLeftError,
   MultiplayerTimeoutError,
 } from "./errors";
+import { SharedRandom } from "./random";
 import {
   ConnectionStatus,
   GroupSessionData,
@@ -34,6 +35,13 @@ export interface SessionOptions {
    * left, in milliseconds. Defaults to 10000. null or Infinity means never.
    */
   dropoutTimeout?: number | null;
+
+  /**
+   * Seed for random(), randomInt(), shuffle(), and sample() in place of the
+   * session ID. Every participant in the group must pass the same value. Use
+   * it to make the random values the same in every session.
+   */
+  randomSeed?: string;
 
   /** Called once when another participant reaches the `left` presence status. */
   onParticipantLeft?: (participantId: string) => void;
@@ -196,6 +204,12 @@ function newBatch(): Batch {
 export class MultiplayerSession {
   readonly participantId: string;
 
+  /** Identifies the group session; the same for every participant in the group. */
+  readonly sessionId: string;
+
+  /** Seeded with `options.randomSeed`, or else the session ID. */
+  private readonly rng: SharedRandom;
+
   private currentStatus: ConnectionStatus = "connected";
 
   /** Why the session closed; pending and later waits reject with it. */
@@ -330,6 +344,17 @@ export class MultiplayerSession {
   ) {
     autoBind(this);
     this.participantId = connection.participantId;
+    if (typeof connection.sessionId !== "string" || connection.sessionId === "") {
+      throw new TypeError(
+        "MultiplayerAPI: the adapter's connection must have a non-empty sessionId."
+      );
+    }
+    this.sessionId = connection.sessionId;
+    const { randomSeed } = options;
+    if (randomSeed !== undefined && typeof randomSeed !== "string") {
+      throw new TypeError("MultiplayerAPI: randomSeed must be a string.");
+    }
+    this.rng = new SharedRandom(randomSeed ?? this.sessionId);
     this.dropoutTimeout =
       options.dropoutTimeout === undefined
         ? DEFAULT_DROPOUT_TIMEOUT
@@ -372,6 +397,31 @@ export class MultiplayerSession {
   /** The presence status of every participant seen in the session, including this one. Frozen. */
   presence(): PresenceData {
     return this.presenceData;
+  }
+
+  // ---------------------------------------------------------- randomness
+
+  /**
+   * A float in [0, 1) that is the same for every participant who asks with the
+   * same `key`. Asking again with the same key returns the same value.
+   */
+  random(key: string): number {
+    return this.rng.random(key);
+  }
+
+  /** An integer from `lower` to `upper`, inclusive, shared like random(). */
+  randomInt(key: string, lower: number, upper: number): number {
+    return this.rng.randomInt(key, lower, upper);
+  }
+
+  /** A shuffled copy of `array`, in the same order for every participant who uses `key`. */
+  shuffle<T>(key: string, array: readonly T[]): T[] {
+    return this.rng.shuffle(key, array);
+  }
+
+  /** `size` items drawn from `array` without replacement, shared like shuffle(). */
+  sample<T>(key: string, array: readonly T[], size: number): T[] {
+    return this.rng.sample(key, array, size);
   }
 
   // ---------------------------------------------------------------- writing

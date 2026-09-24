@@ -69,6 +69,14 @@ export class MultiplayerAPI {
   }
 
   /**
+   * The group session's ID, the same for every participant in the group. Null
+   * until connect() resolves and after disconnect().
+   */
+  get sessionId(): string | null {
+    return this.current?.sessionId ?? null;
+  }
+
+  /**
    * Set when this participant's slot came from an earlier page load: they
    * reloaded or reopened the study, so the group is ahead of them. Null
    * otherwise, and when there is no session.
@@ -198,6 +206,29 @@ export class MultiplayerAPI {
     options?: WaitOptions
   ): Promise<GroupSessionData> {
     return this.requireSession().wait(condition, options);
+  }
+
+  /**
+   * A float in [0, 1) that is the same for every participant who asks with the
+   * same `key`. Asking again with the same key returns the same value.
+   */
+  random(key: string): number {
+    return this.requireSession().random(key);
+  }
+
+  /** An integer from `lower` to `upper`, inclusive, shared like random(). */
+  randomInt(key: string, lower: number, upper: number): number {
+    return this.requireSession().randomInt(key, lower, upper);
+  }
+
+  /** A shuffled copy of `array`, in the same order for every participant who uses `key`. */
+  shuffle<T>(key: string, array: readonly T[]): T[] {
+    return this.requireSession().shuffle(key, array);
+  }
+
+  /** `size` items drawn from `array` without replacement, shared like shuffle(). */
+  sample<T>(key: string, array: readonly T[], size: number): T[] {
+    return this.requireSession().sample(key, array, size);
   }
 
   /**

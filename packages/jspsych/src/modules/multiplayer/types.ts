@@ -60,6 +60,14 @@ export interface MultiplayerConnection {
   /** Stable identifier for this participant within the group session namespace. */
   readonly participantId: string;
 
+  /**
+   * Identifies the group session. Every participant in the group gets the same
+   * non-empty value, it stays the same across reconnects and reloads, and a
+   * different group gets a different value. The API seeds shared randomness
+   * with it.
+   */
+  readonly sessionId: string;
+
   /** Read the full current group session (all participants). Return `{}` when empty. */
   getAll(): GroupSessionData;
 

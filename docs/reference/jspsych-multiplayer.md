@@ -65,6 +65,23 @@ To tell the cases apart, each page load writes a random ID and a counter into it
 
 Trials that already ended because a participant left stay ended; rejoining affects only what happens next. To give a participant time to come back before moving on, wait on their presence, for example with a `wait()` whose condition is `presence[partnerId] === "connected"` and a `timeout`.
 
+### Shared randomness
+
+`random()`, `randomInt()`, `shuffle()`, and `sample()` return the same values for every participant in the group, without sending anything. Use them for anything random the group must agree on, such as a condition or a stimulus order. `Math.random()` and `jsPsych.randomization` give each participant different values.
+
+Each call takes a *key*, a string that names what the value is for:
+
+```javascript
+const condition = jsPsych.multiplayer.sample("condition", ["cooperate", "compete"], 1)[0];
+const order = jsPsych.multiplayer.shuffle(`round-${round}-stimuli`, stimuli);
+```
+
+A value depends only on the key, the method, and the session's seed. It doesn't matter how many other calls a participant makes or in what order, and calling again with the same key returns the same value. A participant who reloads the page therefore gets the values they had before.
+
+- **Use a different key for each random event.** Two calls with the same key and method return the same value, so put the round or trial number in the key when you need a new value each time.
+- **Every participant must use the same key.** If one participant asks for `"offer"` and another for `"offer-1"`, they get different values.
+- **The seed is the session ID** that the adapter reports, so each group gets different values. To get the same values in every session, for example to reproduce a study exactly, pass the same `randomSeed` to `connect()` for every participant.
+
 ---
 
 ## Properties
@@ -76,6 +93,14 @@ jsPsych.multiplayer.participantId
 ```
 
 This participant's ID within the group. `null` until `connect()` resolves and after `disconnect()`. Read-only.
+
+### sessionId
+
+```javascript
+jsPsych.multiplayer.sessionId
+```
+
+The ID of the group session, reported by the adapter. It is the same for every participant in the group and stays the same when a participant reconnects or reloads. Shared randomness uses it as its seed. `null` until `connect()` resolves and after `disconnect()`. Read-only.
 
 ### status
 
@@ -97,7 +122,7 @@ The state of this participant's connection:
 jsPsych.multiplayer.session
 ```
 
-The current `MultiplayerSession`, which is the object `connect()` returns. `null` until `connect()` resolves and after `disconnect()`. A session has `participantId`, `status`, and `previousInstance` properties and every method listed below except `connect()`.
+The current `MultiplayerSession`, which is the object `connect()` returns. `null` until `connect()` resolves and after `disconnect()`. A session has `participantId`, `sessionId`, `status`, and `previousInstance` properties and every method listed below except `connect()`.
 
 
 ### previousInstance
@@ -134,6 +159,7 @@ options | object | *(optional)* Any of the options below.
 Option | Type | Description
 -------|------|------------
 dropoutTimeout | number | How long, in milliseconds, a participant can stay disconnected before they count as having left. Defaults to `10000`. Use `null` or `Infinity` to never mark participants as left.
+randomSeed | string | Seed for [shared randomness](#shared-randomness) in place of the session ID. Every participant in the group must pass the same value.
 onParticipantLeft | function | Called with a participant's ID when that participant's status becomes `left`.
 onParticipantRejoined | function | Called with a participant's ID when a participant who had `left` comes back from the same page. See [Rejoining](#rejoining).
 onParticipantRestarted | function | Called with a participant's ID when a participant comes back from a new page load, so their experiment started over. They stay `left`.
@@ -279,7 +305,8 @@ The participant's slot (frozen), or `undefined` if they haven't written anything
 
 ```javascript
 const host = jsPsych.multiplayer.get(hostId);
-if (host?.phase === "question") {
+// host is undefined until the host writes something
+if (host !== undefined && host.phase === "question") {
   // ...
 }
 ```
@@ -304,7 +331,14 @@ The shared data (frozen): an object that maps each participant ID to that partic
 
 ```javascript
 const group = jsPsych.multiplayer.getAll();
-const allReady = Object.values(group).every((slot) => slot.ready === true);
+
+// Check whether every participant has set ready to true
+let allReady = true;
+for (const id in group) {
+  if (group[id].ready !== true) {
+    allReady = false;
+  }
+}
 ```
 
 ---
@@ -421,7 +455,10 @@ All of these error classes are exported from `jspsych`. Compare `error.name` ins
 // Wait up to a minute for the partner's answer, and stop early if they leave
 try {
   const group = await jsPsych.multiplayer.wait(
-    (data) => data[partnerId]?.answer !== undefined,
+    (data) => {
+      const partner = data[partnerId];
+      return partner !== undefined && partner.answer !== undefined;
+    },
     { participants: [partnerId], timeout: 60000 }
   );
 } catch (error) {
@@ -429,6 +466,128 @@ try {
     // End the trial and record that the partner left
   }
 }
+```
+
+---
+
+### random
+
+```javascript
+jsPsych.multiplayer.random(key)
+```
+
+#### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+key | string | Names what the value is for. Every participant who uses the same key gets the same value.
+
+#### Return value
+
+A number from 0 (inclusive) to 1 (exclusive).
+
+#### Description
+
+The shared counterpart of `Math.random()`. See [Shared randomness](#shared-randomness). Throws if `key` isn't a non-empty string.
+
+#### Example
+
+```javascript
+const bonusRound = jsPsych.multiplayer.random("bonus") < 0.25;
+```
+
+---
+
+### randomInt
+
+```javascript
+jsPsych.multiplayer.randomInt(key, lower, upper)
+```
+
+#### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+key | string | Names what the value is for.
+lower | integer | The smallest possible value.
+upper | integer | The largest possible value. Must be at least `lower`.
+
+#### Return value
+
+An integer from `lower` to `upper`, inclusive.
+
+#### Description
+
+The shared counterpart of `jsPsych.randomization.randomInt()`. See [Shared randomness](#shared-randomness).
+
+#### Example
+
+```javascript
+const endowment = jsPsych.multiplayer.randomInt(`round-${round}-endowment`, 5, 15);
+```
+
+---
+
+### shuffle
+
+```javascript
+jsPsych.multiplayer.shuffle(key, array)
+```
+
+#### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+key | string | Names what the order is for.
+array | array | The items to shuffle.
+
+#### Return value
+
+A shuffled copy of `array`. The array itself is not changed.
+
+#### Description
+
+The shared counterpart of `jsPsych.randomization.shuffle()`: every participant who passes the same key and the same array gets the same order. See [Shared randomness](#shared-randomness).
+
+#### Example
+
+```javascript
+const order = jsPsych.multiplayer.shuffle("trial-order", stimuli);
+
+const trials = [];
+for (const stimulus of order) {
+  trials.push({ type: jsPsychMultiplayerChoice, stimulus: stimulus });
+}
+```
+
+---
+
+### sample
+
+```javascript
+jsPsych.multiplayer.sample(key, array, size)
+```
+
+#### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+key | string | Names what the sample is for.
+array | array | The items to draw from.
+size | integer | How many items to draw, from 0 to the length of `array`.
+
+#### Return value
+
+An array of `size` items drawn from `array` without replacement, in random order.
+
+#### Description
+
+The shared counterpart of `jsPsych.randomization.sampleWithoutReplacement()`. See [Shared randomness](#shared-randomness).
+
+#### Example
+
+```javascript
+const condition = jsPsych.multiplayer.sample("condition", ["gain", "loss"], 1)[0];
 ```
 
 ---

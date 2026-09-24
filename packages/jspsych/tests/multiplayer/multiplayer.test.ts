@@ -45,6 +45,7 @@ function userPushes(connection: MockConnection) {
 
 /** A shared backend that every MockConnection on it reads and writes. */
 class MockHub {
+  sessionId = "session-1";
   data: GroupSessionData = {};
   connections = new Set<MockConnection>();
 
@@ -61,6 +62,8 @@ class MockConnection implements MultiplayerConnection {
   pushes: Record<string, unknown>[] = [];
   disconnectCalls = 0;
 
+  readonly sessionId: string;
+
   /** Replace to control when and how pushes settle. */
   pushImpl: (data: Record<string, unknown>) => Promise<void> = async (data) => this.write(data);
 
@@ -68,7 +71,9 @@ class MockConnection implements MultiplayerConnection {
     readonly hub: MockHub,
     readonly participantId: string,
     readonly options: AdapterConnectOptions
-  ) {}
+  ) {
+    this.sessionId = hub.sessionId;
+  }
 
   /** Store data on the backend and broadcast it, as a confirmed push does. */
   write(data: Record<string, unknown>) {
@@ -1036,6 +1041,175 @@ describe("losing the connection", () => {
     const session = await a.api.connect(a.adapter);
     expect(a.api.session).toBe(session);
     expect(a.api.status).toBe("connected");
+  });
+});
+
+/** Shared randomness from the seed "golden" and the key "x"; see the test that uses it. */
+const GOLDEN = {
+  random: 0.9987728749401867,
+  randomInt: 63,
+  shuffle: ["c", "g", "b", "h", "f", "e", "a", "d"],
+  sample: ["g", "d", "b"],
+};
+
+describe("session ID", () => {
+  test("sessionId comes from the connection and is null without a session", async () => {
+    const api = new MultiplayerAPI();
+    expect(api.sessionId).toBeNull();
+    const session = await api.connect(new MockAdapter(hub, "p1"));
+    expect(session.sessionId).toBe("session-1");
+    expect(api.sessionId).toBe("session-1");
+    await api.disconnect();
+    expect(api.sessionId).toBeNull();
+  });
+
+  test.each([undefined, "", 42])(
+    "connect() rejects and disconnects when the connection's sessionId is %p",
+    async (sessionId) => {
+      hub.sessionId = sessionId as string;
+      const api = new MultiplayerAPI();
+      const adapter = new MockAdapter(hub, "p1");
+      await expect(api.connect(adapter)).rejects.toThrow("sessionId");
+      expect(adapter.connection.disconnectCalls).toBe(1);
+      expect(api.session).toBeNull();
+    }
+  );
+
+  test("connect() rejects a randomSeed that isn't a string", async () => {
+    await expect(join("p1", { randomSeed: 7 as unknown as string })).rejects.toThrow("randomSeed");
+  });
+});
+
+describe("shared randomness", () => {
+  const items = ["a", "b", "c", "d", "e", "f", "g", "h"];
+
+  test("every participant gets the same values for the same key", async () => {
+    const a = await join("p1");
+    const b = await join("p2");
+    expect(a.api.random("x")).toBe(b.api.random("x"));
+    expect(a.api.randomInt("x", 1, 1000)).toBe(b.api.randomInt("x", 1, 1000));
+    expect(a.api.shuffle("x", items)).toEqual(b.api.shuffle("x", items));
+    expect(a.api.sample("x", items, 3)).toEqual(b.api.sample("x", items, 3));
+  });
+
+  test("values don't depend on call order or on earlier calls", async () => {
+    const a = await join("p1");
+    const b = await join("p2");
+    const first = [a.api.random("one"), a.api.random("two")];
+    b.api.random("unrelated");
+    b.api.shuffle("unrelated", items);
+    expect([b.api.random("one"), b.api.random("two")]).toEqual(first);
+    // Asking again returns the same value
+    expect(a.api.random("one")).toBe(first[0]);
+  });
+
+  test("a new page load in the same session gets the same values", async () => {
+    const before = await join("p1");
+    const value = before.api.random("x");
+    const order = before.api.shuffle("x", items);
+    await before.api.disconnect();
+    const after = await join("p1");
+    expect(after.api.random("x")).toBe(value);
+    expect(after.api.shuffle("x", items)).toEqual(order);
+  });
+
+  test("different sessions get different values", async () => {
+    const a = await join("p1");
+    hub = new MockHub();
+    hub.sessionId = "session-2";
+    const b = await join("p1");
+    expect(a.api.random("x")).not.toBe(b.api.random("x"));
+  });
+
+  test("randomSeed replaces the session ID as the seed", async () => {
+    const a = await join("p1", { randomSeed: "fixed" });
+    hub = new MockHub();
+    hub.sessionId = "session-2";
+    const b = await join("p1", { randomSeed: "fixed" });
+    const c = await join("p2");
+    expect(a.api.random("x")).toBe(b.api.random("x"));
+    expect(c.api.random("x")).not.toBe(b.api.random("x"));
+  });
+
+  test("different keys and different methods give unrelated values", async () => {
+    const { api } = await join("p1");
+    expect(api.random("x")).not.toBe(api.random("y"));
+    // shuffle("x") isn't just the sample("x") order extended
+    const shuffles = ["k1", "k2", "k3", "k4", "k5"].map((key) => api.shuffle(key, items));
+    const samples = ["k1", "k2", "k3", "k4", "k5"].map((key) => api.sample(key, items, 8));
+    expect(shuffles).not.toEqual(samples);
+  });
+
+  test("results have the right shape", async () => {
+    const { api } = await join("p1");
+    for (let i = 0; i < 200; i++) {
+      const value = api.random(`r${i}`);
+      expect(value).toBeGreaterThanOrEqual(0);
+      expect(value).toBeLessThan(1);
+      const int = api.randomInt(`r${i}`, -2, 2);
+      expect(Number.isInteger(int) && int >= -2 && int <= 2).toBe(true);
+    }
+    expect(api.randomInt("x", 5, 5)).toBe(5);
+    expect([...api.shuffle("x", items)].sort()).toEqual(items);
+    const sample = api.sample("x", items, 3);
+    expect(new Set(sample).size).toBe(3);
+    expect(sample.every((item) => items.includes(item))).toBe(true);
+    expect(api.sample("x", items, 0)).toEqual([]);
+    expect([...api.sample("x", items, items.length)].sort()).toEqual(items);
+    expect(api.shuffle("x", [])).toEqual([]);
+  });
+
+  test("randomInt reaches every value in its range", async () => {
+    const { api } = await join("p1");
+    const seen = new Set<number>();
+    for (let i = 0; i < 200; i++) seen.add(api.randomInt(`r${i}`, 1, 6));
+    expect([...seen].sort()).toEqual([1, 2, 3, 4, 5, 6]);
+  });
+
+  test("shuffle and sample copy the array, and accept frozen arrays", async () => {
+    const { api } = await join("p1");
+    const frozen = Object.freeze([...items]);
+    expect(api.shuffle("x", frozen)).not.toBe(frozen);
+    expect(api.sample("x", frozen, 2)).toHaveLength(2);
+    expect(frozen).toEqual(items);
+  });
+
+  test("bad arguments throw", async () => {
+    const { api } = await join("p1");
+    expect(() => api.random("")).toThrow("key");
+    expect(() => api.random(3 as unknown as string)).toThrow("key");
+    expect(() => api.randomInt("x", 1.5, 3)).toThrow("integers");
+    expect(() => api.randomInt("x", 3, 1)).toThrow("upper bound");
+    expect(() => api.shuffle("x", "abc" as unknown as string[])).toThrow("array");
+    expect(() => api.sample("x", items, 9)).toThrow("size");
+    expect(() => api.sample("x", items, -1)).toThrow("size");
+    expect(() => api.sample("x", items, 1.5)).toThrow("size");
+  });
+
+  test("methods throw before connect", () => {
+    const api = new MultiplayerAPI();
+    expect(() => api.random("x")).toThrow("connect()");
+    expect(() => api.randomInt("x", 1, 2)).toThrow("connect()");
+    expect(() => api.shuffle("x", items)).toThrow("connect()");
+    expect(() => api.sample("x", items, 1)).toThrow("connect()");
+  });
+
+  test("values still work after the session closes", async () => {
+    const { session } = await join("p1");
+    const value = session.random("x");
+    await session.disconnect();
+    expect(session.random("x")).toBe(value);
+  });
+
+  // Every participant must compute identical values, including participants on
+  // different versions of jsPsych. If this test fails, the algorithm changed:
+  // that is a breaking change, not a snapshot to update.
+  test("values match the published algorithm", async () => {
+    const { api } = await join("p1", { randomSeed: "golden" });
+    expect(api.random("x")).toBe(GOLDEN.random);
+    expect(api.randomInt("x", 1, 100)).toBe(GOLDEN.randomInt);
+    expect(api.shuffle("x", items)).toEqual(GOLDEN.shuffle);
+    expect(api.sample("x", items, 3)).toEqual(GOLDEN.sample);
   });
 });
 

@@ -54,6 +54,21 @@ A stable ID for this participant within the group. It is also the key of the par
 
 Use the same ID for every connection made from the same page, so a participant whose connection drops and recovers can rejoin. A reloaded page may reuse the ID or get a new one: the module tells a reload from a reconnect with its own bookkeeping, stored in each slot under the reserved key `$mp`. Store and return that key like any other data.
 
+### sessionId
+
+```typescript
+readonly sessionId: string;
+```
+
+Identifies the group session. Set it before `connect()` resolves. It must be:
+
+- **the same for every participant in the group**, because shared randomness (`jsPsych.multiplayer.random()` and related methods) uses it as its seed. Participants with different session IDs get different random values;
+- **stable**: the same for every connection and every page load in the same group, so a participant who reconnects or reloads gets the values they had before;
+- **different for each group**, so that groups don't all get the same random values;
+- **a non-empty string**. `connect()` rejects otherwise.
+
+Use the backend's own name for the group, such as the session path or room name the connections share, rather than generating one. Don't include anything that differs between participants, like the participant ID.
+
 ### getAll
 
 ```typescript
@@ -111,6 +126,8 @@ import {
 } from "jspsych";
 
 export class InMemoryHub {
+  constructor(readonly sessionId: string) {}
+
   data: GroupSessionData = {};
   connections = new Set<InMemoryConnection>();
 
@@ -122,11 +139,15 @@ export class InMemoryHub {
 }
 
 class InMemoryConnection implements MultiplayerConnection {
+  readonly sessionId: string;
+
   constructor(
     private hub: InMemoryHub,
     readonly participantId: string,
     readonly options: AdapterConnectOptions
-  ) {}
+  ) {
+    this.sessionId = hub.sessionId;
+  }
 
   getAll(): GroupSessionData {
     return this.hub.data;
@@ -162,7 +183,7 @@ export class InMemoryAdapter implements MultiplayerAdapter {
 To use it:
 
 ```javascript
-const hub = new InMemoryHub();
+const hub = new InMemoryHub("pilot-group");
 
 async function runExperiment() {
   await jsPsych.multiplayer.connect(new InMemoryAdapter(hub, "participant-1"));
@@ -180,6 +201,7 @@ The official adapters for JATOS, Firebase, and local testing are in the [jspsych
 
 - Each `connect()` call returns a new connection object that shares no state with other connections.
 - `participantId` is set before `connect()` resolves.
+- `sessionId` is set before `connect()` resolves, is the same for everyone in the group and across reloads, and differs between groups.
 - `getAll()` returns a plain object, and `{}` rather than `null` when there is no data.
 - `connectedParticipants()` lists open connections, not participants who have data, and changes when someone drops out.
 - The connection calls `onChange()` after every change to data or membership.
