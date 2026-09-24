@@ -1,15 +1,17 @@
 # Multiplayer Adapter Development
 
-A *multiplayer adapter* connects jsPsych's [multiplayer API](../reference/jspsych-multiplayer.md) to a real-time backend (JATOS group sessions, Firebase Realtime Database, a WebSocket server, etc.). The API handles everything above the network: subscriptions, `wait()`, merging updates, sending one write at a time, copying and freezing data, and turning raw connection events into presence statuses. The adapter only needs to move data and report who is connected.
+A *multiplayer adapter* connects jsPsych's [multiplayer module](../reference/jspsych-multiplayer.md) to a backend that relays data between participants, such as JATOS group sessions, Firebase Realtime Database, or your own WebSocket server.
+
+The multiplayer module does most of the work: it handles subscriptions and `wait()`, merges updates, sends one write at a time, copies and freezes data, and tracks presence. An adapter has two jobs: move each participant's data to and from the backend, and report which participants are connected.
 
 ## Overview
 
-An adapter has two parts, both exported as types from `jspsych`:
+An adapter has two parts. The `jspsych` package exports a TypeScript type for each:
 
-- **`MultiplayerAdapter`** holds configuration only. Its `connect()` opens a new channel and returns it.
-- **`MultiplayerConnection`** is one open channel. Every `connect()` call returns a new, independent connection, so an experiment can reuse the same adapter object to reconnect without the old and new connections sharing state.
+- A **`MultiplayerAdapter`** holds configuration, such as a server URL. Its `connect()` method opens a connection and returns it.
+- A **`MultiplayerConnection`** is one open connection. Each call to `connect()` must return a new connection object. This lets an experiment reconnect with the same adapter without the old and new connections sharing state.
 
-The API talks to a connection in two directions. It *calls* the connection to read and write, and the connection *notifies* the API through two callbacks passed to `connect()`: `onChange()` when data or membership changes, and `onStatus()` when the channel itself drops, recovers, or closes.
+Communication runs both ways. The multiplayer module calls the connection's methods to read and write data. The connection calls two functions that the module passes to `connect()`: `onChange()` when data or membership changes, and `onStatus()` when its own connection drops, recovers, or closes.
 
 ```typescript
 import {
@@ -28,17 +30,17 @@ import {
 connect(options: AdapterConnectOptions): Promise<MultiplayerConnection>
 ```
 
-Open the channel, join the group, and resolve with the connection. Reject if the connection fails; the experiment can then call `connect()` again.
+Open a connection, join the group, and resolve with the connection. If the connection fails, reject; the experiment can then call `connect()` again.
 
 `options` contains:
 
 Option | Description
 -------|------------
-`signal` | An `AbortSignal` that is aborted if the experiment cancels the connection attempt. Stop connecting, close anything you opened, then reject. If your backend can't be interrupted, it's fine to ignore it: the API closes a connection that arrives after cancellation.
-`onChange()` | Call whenever `getAll()` or `connectedParticipants()` may have changed: another participant wrote data, joined, or dropped out. The API re-reads both, so calling it too often is harmless; calling it too rarely means updates are missed.
-`onStatus(status)` | Call with `"reconnecting"` when your own channel drops, `"connected"` when it recovers, and `"closed"` when it is gone for good. After `"closed"`, the API calls `disconnect()` and stops using the connection.
+`signal` | An `AbortSignal` that is aborted if the experiment cancels the connection attempt. When it's aborted, stop connecting, close anything you opened, and reject. If your backend can't be interrupted, you can ignore the signal: the multiplayer module closes any connection that arrives after the attempt was cancelled.
+`onChange()` | Call this whenever the results of `getAll()` or `connectedParticipants()` may have changed: another participant wrote data, joined, or dropped out. The module then reads both methods and notifies subscribers only if something actually changed, so extra calls are harmless. A missed call means participants don't see an update.
+`onStatus(status)` | Call this with `"reconnecting"` when your connection drops, `"connected"` when it recovers, and `"closed"` when it is gone for good. After `"closed"`, the module calls `disconnect()` and stops using the connection.
 
-Calls to `onChange()` and `onStatus()` made before `connect()` resolves are ignored; the API reads the initial state once the connection is returned.
+The module ignores calls to `onChange()` and `onStatus()` made before `connect()` resolves. It reads the initial state once `connect()` returns the connection.
 
 ## MultiplayerConnection
 
@@ -48,9 +50,9 @@ Calls to `onChange()` and `onStatus()` made before `connect()` resolves are igno
 readonly participantId: string;
 ```
 
-A stable identifier for this participant within the group session, and the key under which their data is stored (`groupSession[participantId]`). Must be set when `connect()` resolves.
+A stable ID for this participant within the group. It is also the key of the participant's slot in the shared data (`data[participantId]`). Set it before `connect()` resolves.
 
-The API treats a participant who has been away longer than the dropout timeout as having left for good, so a participant who returns after that should get a new ID.
+The multiplayer module treats a participant who stays away longer than the dropout timeout as gone for good. If that participant returns, give them a new ID.
 
 ### getAll
 
@@ -58,9 +60,9 @@ The API treats a participant who has been away longer than the dropout timeout a
 getAll(): GroupSessionData
 ```
 
-Return the full group session synchronously: a map from `participantId` to that participant's data. Return `{}` when it is empty, never `null`.
+Return the shared data synchronously: an object that maps each participant ID to that participant's slot. Return `{}` when there is no data, never `null`.
 
-The API copies the result on every `onChange()`, so returning your internal cache directly is safe. Data must be JSON-serializable.
+You can return your internal cache directly. The module copies the data before anyone else sees it. The data must be serializable as JSON.
 
 ### connectedParticipants
 
@@ -68,15 +70,15 @@ The API copies the result on every `onChange()`, so returning your internal cach
 connectedParticipants(): string[]
 ```
 
-Return the IDs of the participants whose channels are currently open. It may include this participant's own ID.
+Return the IDs of the participants whose connections are currently open. The list may include this participant's own ID.
 
-This is how the API detects dropouts: a participant who disappears from this list becomes `away`, and `left` if they don't come back within the dropout timeout. Report what your backend actually knows about connections, not who has data. Most backends provide this directly:
+This is how the module detects dropouts. A participant missing from this list is `away`, and becomes `left` if they don't return before the dropout timeout. Report what your backend knows about connections, not which participants have data. Most backends track this already:
 
-Backend | Source
---------|-------
-JATOS | `jatos.groupMembers` or `jatos.groupChannels`, kept current with the `onMemberOpen` and `onMemberClose` callbacks of `jatos.joinGroup()`.
-Firebase Realtime Database | A presence node per participant, removed with `onDisconnect().remove()`. Keep it separate from data slots so a network blip doesn't delete data.
-Custom WebSocket | The server's list of open sockets, with a heartbeat to catch clients that vanish without closing their socket.
+Backend | Where to get the list
+--------|----------------------
+JATOS | `jatos.groupChannels`, the group members with an open channel. The `onMemberOpen` and `onMemberClose` callbacks of `jatos.joinGroup()` tell you when to call `onChange()`.
+Firebase Realtime Database | A presence node for each participant, removed by `onDisconnect().remove()`. Keep presence separate from the data slots so that a network interruption doesn't delete a participant's data.
+Custom WebSocket server | The server's list of open sockets. Add a heartbeat to catch clients that disappear without closing their socket.
 
 ### push
 
@@ -84,9 +86,9 @@ Custom WebSocket | The server's list of open sockets, with a heartbeat to catch 
 push(data: Record<string, unknown>): Promise<void>
 ```
 
-Store `data` as this participant's data, replacing the previous value, and resolve when the backend confirms the write. Other participants should then see it through `getAll()` and `onChange()`.
+Store `data` as this participant's slot, replacing the previous slot, and resolve when the backend confirms the write. Other participants should then see the new slot through `getAll()` and `onChange()`.
 
-The API sends one push at a time, so you don't need to guard against overlapping writes from the same client. `data` is a frozen object the API owns; send it as is, but don't modify it. If your backend uses optimistic concurrency (like JATOS group sessions), retry on conflicts before rejecting; see the [JATOS adapter source](https://github.com/jspsych/jspsych-multiplayer/tree/main/packages/adapter-multiplayer-jatos) for an example.
+The module sends one push at a time, so you don't need to handle overlapping writes from the same participant. `data` is a frozen object that belongs to the module: send it as it is, and don't modify it. If your backend rejects writes that conflict with other writes, as JATOS group sessions do, retry before rejecting. The [JATOS adapter](https://github.com/jspsych/jspsych-multiplayer/tree/main/packages/adapter-multiplayer-jatos) shows one way to do this.
 
 ### disconnect
 
@@ -94,11 +96,11 @@ The API sends one push at a time, so you don't need to guard against overlapping
 disconnect(): Promise<void>
 ```
 
-Close the channel cleanly and stop calling `onChange()` and `onStatus()`. The API calls this once and doesn't use the connection afterward.
+Close the connection and stop calling `onChange()` and `onStatus()`. The module calls `disconnect()` once and doesn't use the connection afterward.
 
-## Minimal example
+## Example
 
-An in-memory adapter for local testing. Every connection made from adapters sharing one `InMemoryHub` sees the same group session:
+This adapter keeps the shared data in memory, which is useful for local testing. All connections made through adapters that share one `InMemoryHub` belong to the same group:
 
 ```typescript
 import {
@@ -157,7 +159,7 @@ export class InMemoryAdapter implements MultiplayerAdapter {
 }
 ```
 
-Usage:
+To use it:
 
 ```javascript
 const hub = new InMemoryHub();
@@ -170,18 +172,18 @@ async function runExperiment() {
 runExperiment();
 ```
 
-## Real-world examples
+## Production adapters
 
-The official adapters live in the [jspsych-multiplayer](https://github.com/jspsych/jspsych-multiplayer) repository, along with multiplayer plugins. The [JATOS adapter](https://github.com/jspsych/jspsych-multiplayer/tree/main/packages/adapter-multiplayer-jatos) shows how to handle optimistic-concurrency conflicts on `push()` and map one `onGroupSession` callback onto `onChange()`.
+The official adapters for JATOS, Firebase, and local testing are in the [jspsych-multiplayer](https://github.com/jspsych/jspsych-multiplayer) repository, along with the multiplayer plugins. The [JATOS adapter](https://github.com/jspsych/jspsych-multiplayer/tree/main/packages/adapter-multiplayer-jatos) shows how to retry conflicting writes and how to connect JATOS's single `onGroupSession` callback to `onChange()`.
 
-## Checklist for new adapters
+## Checklist
 
-- Each `connect()` returns a new connection object; no state is shared between connections.
-- `participantId` is set when `connect()` resolves.
-- `getAll()` returns a plain object, never `null` (`{}` when empty).
-- `connectedParticipants()` reflects open channels, not who has data, and changes when someone drops out.
-- `onChange()` is called after every change to data or membership.
-- `onStatus()` reports your own channel dropping, recovering, and closing for good.
-- `push()` resolves only after the backend **confirms** the write, not when it is queued locally.
-- `disconnect()` closes the channel and stops all callbacks.
-- A cancelled `connect()` (aborted `signal`) closes anything it opened before rejecting.
+- Each `connect()` call returns a new connection object that shares no state with other connections.
+- `participantId` is set before `connect()` resolves.
+- `getAll()` returns a plain object, and `{}` rather than `null` when there is no data.
+- `connectedParticipants()` lists open connections, not participants who have data, and changes when someone drops out.
+- The connection calls `onChange()` after every change to data or membership.
+- The connection calls `onStatus()` when its own connection drops, recovers, or closes for good.
+- `push()` resolves only after the backend confirms the write, not when the write is queued.
+- `disconnect()` closes the connection and stops all callbacks.
+- A cancelled `connect()` (aborted `signal`) closes anything it opened before it rejects.
