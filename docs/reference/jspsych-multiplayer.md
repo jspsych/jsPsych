@@ -65,6 +65,35 @@ To tell the cases apart, each page load writes a random ID and a counter into it
 
 Trials that already ended because a participant left stay ended; rejoining affects only what happens next. To give a participant time to come back before moving on, wait on their presence, for example with a `wait()` whose condition is `presence[partnerId] === "connected"` and a `timeout`.
 
+### Groups
+
+Some backends put arriving participants into groups for you: everyone opens the same link, and the backend fills each group as people arrive. JATOS group studies work this way. With these backends, `connect()` resolves once the participant has a group, and `group()` reports how the group stands:
+
+Property | Meaning
+---------|--------
+`size` | The most participants the group can hold, or `null` if the backend doesn't say.
+`members` | The participants in the group, including you.
+`sealed` | `true` once nobody new can join.
+
+A group is *forming* until it is sealed. While it forms, a participant who leaves frees their place, and the backend can give it to someone new. Once it is sealed, `members` is the final roster: a member who leaves stays on it and counts as a dropout, and new arrivals go to another group. A sealed group never becomes unsealed.
+
+Adapters seal a group when it is full. To hold participants in a waiting room until then, wait for the seal:
+
+```javascript
+try {
+  const group = await jsPsych.multiplayer.waitForGroup({ timeout: 5 * 60000 });
+  // group.members is the final roster
+} catch (error) {
+  if (error.name === "MultiplayerTimeoutError") {
+    // The group didn't fill in time: end the study for this participant
+  }
+}
+```
+
+To start with fewer participants than the group can hold, call `sealGroup()` yourself, for example after the waiting room times out with enough participants present.
+
+With backends that don't form groups, you assign the groups, for example by giving each group its own link. Then `group()` lists everyone who has shown up, the group is never sealed, and `sealGroup()` and `waitForGroup()` reject. Wait for a number of participants with `wait()` instead.
+
 ### Shared randomness
 
 `random()`, `randomInt()`, `shuffle()`, and `sample()` return the same values for every participant in the group, without sending anything. Use them for anything random the group must agree on, such as a condition or a stimulus order. `Math.random()` and `jsPsych.randomization` give each participant different values.
@@ -369,6 +398,100 @@ const partnerLeft = jsPsych.multiplayer.presence()[partnerId] === "left";
 
 ---
 
+### group
+
+```javascript
+jsPsych.multiplayer.group()
+```
+
+#### Parameters
+
+None.
+
+#### Return value
+
+An object (frozen) with the group's `size`, `members`, and `sealed` properties. See [Groups](#groups).
+
+#### Description
+
+`members` lists participant IDs in sorted order, so every participant in a sealed group sees the same list. With an adapter that doesn't form groups, `size` is `null`, `members` is everyone who has shown up in the session, and `sealed` is `false`.
+
+#### Example
+
+```javascript
+const { members, sealed } = jsPsych.multiplayer.group();
+if (sealed) {
+  const partners = members.filter((id) => id !== jsPsych.multiplayer.participantId);
+}
+```
+
+---
+
+### sealGroup
+
+```javascript
+jsPsych.multiplayer.sealGroup()
+```
+
+#### Parameters
+
+None.
+
+#### Return value
+
+A `Promise` that resolves once the backend confirms the group is sealed.
+
+#### Description
+
+Stops new participants from joining the group, so it is sealed with the members it has now. Adapters seal a group automatically when it is full, so call this only to start with fewer participants. The seal reaches every member of the group, and `waitForGroup()` resolves for all of them.
+
+Resolves at once if the group is already sealed. Rejects if the adapter can't seal groups, or if the session is closed.
+
+#### Example
+
+```javascript
+// After five minutes in the waiting room, start with whoever is here, if there are enough
+try {
+  await jsPsych.multiplayer.waitForGroup({ timeout: 5 * 60000 });
+} catch (error) {
+  if (error.name !== "MultiplayerTimeoutError") throw error;
+  const presence = jsPsych.multiplayer.presence();
+  const here = Object.values(presence).filter((status) => status === "connected").length;
+  if (here < 3) throw error;
+  await jsPsych.multiplayer.sealGroup();
+}
+```
+
+---
+
+### waitForGroup
+
+```javascript
+jsPsych.multiplayer.waitForGroup(options)
+```
+
+#### Parameters
+
+Parameter | Type | Description
+----------|------|------------
+options | object | *(optional)* `{ timeout, signal }`, as for [`wait()`](#wait).
+
+#### Return value
+
+A `Promise` that resolves with the group's state, as returned by `group()`, once the group is sealed.
+
+#### Description
+
+Resolves at once if the group is already sealed. Rejects for the same reasons as `wait()`. It also rejects at once if the adapter doesn't form groups, since the group would then never be sealed.
+
+#### Example
+
+```javascript
+const { members } = await jsPsych.multiplayer.waitForGroup({ timeout: 300000 });
+```
+
+---
+
 ### subscribe
 
 ```javascript
@@ -379,7 +502,7 @@ jsPsych.multiplayer.subscribe(callback, options)
 
 Parameter | Type | Description
 ----------|------|------------
-callback | function | Called with `(data, presence)`: the shared data and the presence of every participant.
+callback | function | Called with `(data, presence, group)`: the shared data, the presence of every participant, and the group's state (see [`group()`](#group)).
 options | object | *(optional)* `{ signal }`. Aborting `signal` removes the subscription.
 
 #### Return value
@@ -388,7 +511,7 @@ An `Unsubscribe` function. Call it to remove the subscription.
 
 #### Description
 
-Calls `callback` immediately with the current state, then again after every change: another participant's write, your own write, or a change in anyone's presence.
+Calls `callback` immediately with the current state, then again after every change: another participant's write, your own write, a change in anyone's presence, or a change in the group.
 
 When the session closes, because of `disconnect()` or a lost connection, each callback is called one last time, with this participant's presence set to `"left"`, and then removed. A plugin that only subscribes can use this call to find out that the session has closed.
 
@@ -423,7 +546,7 @@ jsPsych.multiplayer.wait(condition, options)
 
 Parameter | Type | Description
 ----------|------|------------
-condition | function | Called with `(data, presence)` after every change. The wait ends when it returns `true`.
+condition | function | Called with `(data, presence, group)` after every change. The wait ends when it returns `true`.
 options | object | *(optional)* Any of the options below. Passing a number, as in the older `wait(condition, timeout)` form, makes the promise reject with a `TypeError`.
 
 Option | Type | Description

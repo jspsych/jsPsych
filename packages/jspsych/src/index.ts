@@ -71,6 +71,8 @@ export type {
   ConnectionStatus,
   ConnectOptions,
   GroupSessionData,
+  GroupState,
+  GroupWaitOptions,
   MultiplayerAdapter,
   MultiplayerConnection,
   PresenceData,

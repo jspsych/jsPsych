@@ -2,6 +2,7 @@ import autoBind from "auto-bind";
 
 import { MultiplayerCancelledError } from "./errors";
 import {
+  GroupWaitOptions,
   MultiplayerSession,
   SessionIdentity,
   SessionListener,
@@ -12,6 +13,7 @@ import {
 import {
   ConnectionStatus,
   GroupSessionData,
+  GroupState,
   MultiplayerAdapter,
   PresenceData,
   Unsubscribe,
@@ -20,7 +22,7 @@ import {
 export * from "./errors";
 export * from "./types";
 export { DEFAULT_DROPOUT_TIMEOUT, MultiplayerSession, RESERVED_KEY } from "./session";
-export type { SessionListener, SubscribeOptions, WaitOptions } from "./session";
+export type { GroupWaitOptions, SessionListener, SubscribeOptions, WaitOptions } from "./session";
 
 export interface ConnectOptions extends SessionOptions {
   /**
@@ -195,14 +197,32 @@ export class MultiplayerAPI {
     return this.requireSession().presence();
   }
 
-  /** Call `callback` now and after every change to the group session or presence. */
+  /** The group's size, members, and whether it is sealed. Frozen. */
+  group(): GroupState {
+    return this.requireSession().group();
+  }
+
+  /**
+   * Stop new participants from joining, sealing the group with the members it
+   * has now. Rejects if the adapter can't seal groups.
+   */
+  async sealGroup(): Promise<void> {
+    return this.requireSession().sealGroup();
+  }
+
+  /** Resolve with the group's state once it is sealed. */
+  async waitForGroup(options?: GroupWaitOptions): Promise<GroupState> {
+    return this.requireSession().waitForGroup(options);
+  }
+
+  /** Call `callback` now and after every change to the group session, presence, or group. */
   subscribe(callback: SessionListener, options?: SubscribeOptions): Unsubscribe {
     return this.requireSession().subscribe(callback, options);
   }
 
   /** Resolve with the group session once `condition` returns true. */
   async wait(
-    condition: (data: GroupSessionData, presence: PresenceData) => boolean,
+    condition: (data: GroupSessionData, presence: PresenceData, group: GroupState) => boolean,
     options?: WaitOptions
   ): Promise<GroupSessionData> {
     return this.requireSession().wait(condition, options);

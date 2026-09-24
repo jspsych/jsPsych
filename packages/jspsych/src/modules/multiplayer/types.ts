@@ -23,6 +23,23 @@ export type PresenceStatus = "connected" | "away" | "left";
 /** Presence of every participant seen in the session, keyed by participantId. */
 export type PresenceData = Record<string, PresenceStatus>;
 
+/**
+ * How the group's membership stands.
+ * - `size`: the most participants the group can hold, or null when the backend
+ *   doesn't say.
+ * - `members`: the participants assigned to the group, including this one.
+ *   Once the group is sealed, this is the final roster: a member who drops out
+ *   stays on it, and nobody is added.
+ * - `sealed`: true once nobody new can join. Before that, a member who leaves
+ *   frees their place for someone new; after it, they count as a dropout. A
+ *   sealed group never becomes unsealed.
+ */
+export interface GroupState {
+  size: number | null;
+  members: string[];
+  sealed: boolean;
+}
+
 /** What the MultiplayerAPI passes to MultiplayerAdapter.connect(). */
 export interface AdapterConnectOptions {
   /**
@@ -32,8 +49,9 @@ export interface AdapterConnectOptions {
   signal: AbortSignal;
 
   /**
-   * Call whenever the connection's getAll() or connectedParticipants() may have
-   * changed. The API re-reads both, so extra calls are harmless.
+   * Call whenever the connection's getAll(), connectedParticipants(), or
+   * group() may have changed. The API re-reads them all, so extra calls are
+   * harmless.
    */
   onChange(): void;
 
@@ -51,7 +69,12 @@ export interface AdapterConnectOptions {
  * never touch the adapter directly.
  */
 export interface MultiplayerAdapter {
-  /** Open the communication channel and establish group membership. */
+  /**
+   * Open the communication channel and establish group membership. The
+   * backend, not the client, decides which group an arriving participant
+   * joins, so two participants who arrive together can't both take the last
+   * place. connect() resolves once this participant has a group.
+   */
   connect(options: AdapterConnectOptions): Promise<MultiplayerConnection>;
 }
 
@@ -83,6 +106,21 @@ export interface MultiplayerConnection {
    * one push at a time and passes an object it owns; treat it as read-only.
    */
   push(data: Record<string, unknown>): Promise<void>;
+
+  /**
+   * Optional. The group's membership as the backend reports it. Omit it when
+   * the backend doesn't form groups, e.g. when the researcher gives each group
+   * its own link. Report `sealed` only once the backend has confirmed that
+   * nobody new can join, and never go back to false.
+   */
+  group?(): GroupState;
+
+  /**
+   * Optional. Ask the backend to stop letting new participants join this
+   * group. Resolves once the backend confirms. Sealing an already sealed group
+   * succeeds. Omit it when the backend can't seal groups.
+   */
+  sealGroup?(): Promise<void>;
 
   /** Close the channel cleanly. The connection is not used afterward. */
   disconnect(): Promise<void>;

@@ -6,9 +6,11 @@ import {
   AdapterConnectOptions,
   ConnectOptions,
   GroupSessionData,
+  GroupState,
   MultiplayerAPI,
   MultiplayerAdapter,
   MultiplayerConnection,
+  MultiplayerTimeoutError,
   RESERVED_KEY,
 } from "../../src/modules/multiplayer";
 
@@ -49,6 +51,17 @@ class MockHub {
   data: GroupSessionData = {};
   connections = new Set<MockConnection>();
 
+  /**
+   * Set to make the backend form groups. With `tellsEveryone` false, only a
+   * member who sealed the group hears that it is sealed, as in JATOS.
+   */
+  groups: { size: number | null; sealed: boolean; tellsEveryone: boolean } | null = null;
+  sealCalls = 0;
+  sealedBy = new Set<string>();
+
+  /** Everyone who has joined, as a backend that forms groups tracks them. */
+  members = new Set<string>();
+
   /** Tell every open connection that something changed. */
   broadcast() {
     for (const connection of [...this.connections]) {
@@ -64,6 +77,9 @@ class MockConnection implements MultiplayerConnection {
 
   readonly sessionId: string;
 
+  group?: () => GroupState;
+  sealGroup?: () => Promise<void>;
+
   /** Replace to control when and how pushes settle. */
   pushImpl: (data: Record<string, unknown>) => Promise<void> = async (data) => this.write(data);
 
@@ -73,6 +89,20 @@ class MockConnection implements MultiplayerConnection {
     readonly options: AdapterConnectOptions
   ) {
     this.sessionId = hub.sessionId;
+    const { groups } = hub;
+    if (groups) {
+      this.group = () => ({
+        size: groups.size,
+        members: [...hub.members],
+        sealed: groups.sealed && (groups.tellsEveryone || hub.sealedBy.has(participantId)),
+      });
+      this.sealGroup = async () => {
+        hub.sealCalls++;
+        groups.sealed = true;
+        hub.sealedBy.add(participantId);
+        hub.broadcast();
+      };
+    }
   }
 
   /** Store data on the backend and broadcast it, as a confirmed push does. */
@@ -134,6 +164,7 @@ class MockAdapter implements MultiplayerAdapter {
     const connection = new MockConnection(this.hub, this.participantId, options);
     this.connections.push(connection);
     this.hub.connections.add(connection);
+    this.hub.members.add(this.participantId);
     this.hub.broadcast();
     return connection;
   }
@@ -1210,6 +1241,129 @@ describe("shared randomness", () => {
     expect(api.randomInt("x", 1, 100)).toBe(GOLDEN.randomInt);
     expect(api.shuffle("x", items)).toEqual(GOLDEN.shuffle);
     expect(api.sample("x", items, 3)).toEqual(GOLDEN.sample);
+  });
+});
+
+describe("group formation", () => {
+  test("without group support, the group is whoever has shown up and can't be sealed", async () => {
+    const a = await join("p1");
+    await join("p2");
+    expect(a.api.group()).toEqual({ size: null, members: ["p1", "p2"], sealed: false });
+    await expect(a.api.sealGroup()).rejects.toThrow("can't seal groups");
+    await expect(a.api.waitForGroup()).rejects.toThrow("doesn't form groups");
+  });
+
+  test("group methods throw or reject before connect", async () => {
+    const api = new MultiplayerAPI();
+    expect(() => api.group()).toThrow("connect()");
+    await expect(api.sealGroup()).rejects.toThrow("connect()");
+    await expect(api.waitForGroup()).rejects.toThrow("connect()");
+  });
+
+  test("the group's size and members come from the adapter", async () => {
+    hub.groups = { size: 3, sealed: false, tellsEveryone: true };
+    const a = await join("p1");
+    await join("p2");
+    expect(a.api.group()).toEqual({ size: 3, members: ["p1", "p2"], sealed: false });
+    expect(Object.isFrozen(a.api.group())).toBe(true);
+  });
+
+  test("waitForGroup resolves once the backend seals the group", async () => {
+    hub.groups = { size: 2, sealed: false, tellsEveryone: true };
+    const a = await join("p1");
+    let group: GroupState | undefined;
+    const waiting = a.api.waitForGroup().then((g) => (group = g));
+    await join("p2");
+    await flushPromises();
+    expect(group).toBeUndefined();
+
+    hub.groups.sealed = true;
+    hub.broadcast();
+    await waiting;
+    expect(group).toEqual({ size: 2, members: ["p1", "p2"], sealed: true });
+  });
+
+  test("waitForGroup rejects on timeout", async () => {
+    jest.useFakeTimers();
+    hub.groups = { size: 2, sealed: false, tellsEveryone: true };
+    const a = await join("p1");
+    const waiting = a.api.waitForGroup({ timeout: 1000 });
+    jest.advanceTimersByTime(1000);
+    await expect(waiting).rejects.toBeInstanceOf(MultiplayerTimeoutError);
+  });
+
+  test("subscribers and wait conditions get the group", async () => {
+    hub.groups = { size: 2, sealed: false, tellsEveryone: true };
+    const a = await join("p1");
+    const seen: GroupState[] = [];
+    a.api.subscribe((_data, _presence, group) => seen.push(group));
+    await join("p2");
+    expect(seen[seen.length - 1].members).toEqual(["p1", "p2"]);
+    await a.api.wait((_data, _presence, group) => group.members.length === 2);
+  });
+
+  test("a seal only the sealer hears about reaches everyone through the group's data", async () => {
+    hub.groups = { size: 3, sealed: false, tellsEveryone: false };
+    const a = await join("p1");
+    const b = await join("p2");
+    const waiting = b.api.waitForGroup();
+
+    await a.api.sealGroup();
+    expect(a.api.group().sealed).toBe(true);
+    await expect(waiting).resolves.toEqual({ size: 3, members: ["p1", "p2"], sealed: true });
+    expect(b.api.getAll()).toEqual({});
+  });
+
+  test("sealGroup asks the backend once and resolves at once when already sealed", async () => {
+    hub.groups = { size: 3, sealed: false, tellsEveryone: false };
+    const a = await join("p1");
+    await Promise.all([a.api.sealGroup(), a.api.sealGroup()]);
+    expect(hub.sealCalls).toBe(1);
+    await a.api.sealGroup();
+    expect(hub.sealCalls).toBe(1);
+  });
+
+  test("the roster is fixed once sealed", async () => {
+    hub.groups = { size: 2, sealed: true, tellsEveryone: true };
+    const a = await join("p1");
+    const b = await join("p2");
+    expect(a.api.group().members).toEqual(["p1", "p2"]);
+
+    // A member who drops out stays on the roster, and the group stays sealed
+    await b.api.disconnect();
+    hub.members.delete("p2");
+    hub.groups.sealed = false;
+    hub.broadcast();
+    expect(a.api.group()).toEqual({ size: 2, members: ["p1", "p2"], sealed: true });
+  });
+
+  test("a reloaded page sees that its group was sealed", async () => {
+    hub.groups = { size: 3, sealed: false, tellsEveryone: false };
+    const a = await join("p1");
+    await join("p2");
+    await a.api.sealGroup();
+    await flushPromises();
+
+    // p1's new page load: its backend doesn't say the group is sealed, but its old slot does
+    await a.api.disconnect();
+    hub.sealedBy.clear();
+    const reloaded = await join("p1");
+    expect(reloaded.api.group()).toEqual({ size: 3, members: ["p1", "p2"], sealed: true });
+    // and it keeps telling the group
+    const meta = hub.data.p1[RESERVED_KEY] as { sealed?: string[] };
+    expect(meta.sealed).toEqual(["p1", "p2"]);
+  });
+
+  test("a malformed group() report is ignored", async () => {
+    const error = jest.spyOn(console, "error").mockImplementation(() => {});
+    hub.groups = { size: 2, sealed: false, tellsEveryone: true };
+    const api = new MultiplayerAPI();
+    const adapter = new MockAdapter(hub, "p1");
+    const session = await api.connect(adapter);
+    adapter.connection.group = () => null as unknown as GroupState;
+    hub.broadcast();
+    expect(session.group().sealed).toBe(false);
+    expect(error).toHaveBeenCalled();
   });
 });
 
