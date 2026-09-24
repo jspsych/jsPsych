@@ -150,9 +150,14 @@ export class JsPsych {
 
     this.experimentStartTime = new Date();
 
-    await this.timeline.run();
+    try {
+      await this.timeline.run();
+    } finally {
+      // Before on_finish, so partner updates can't redraw over the end screen.
+      // The connection stays open, so on_finish can still write final data.
+      this.multiplayer.cancelAllSubscriptions();
+    }
     await Promise.resolve(this.options.on_finish(this.data.get()));
-    this.multiplayer.cancelAllSubscriptions();
 
     if (this.endMessage) {
       this.getDisplayElement().innerHTML = this.endMessage;
