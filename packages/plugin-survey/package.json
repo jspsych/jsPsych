@@ -1,0 +1,59 @@
+{
+  "name": "@jspsych/plugin-survey",
+  "version": "4.0.0",
+  "description": "A jsPsych plugin for complex surveys",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./css/survey.css": "./css/survey.css",
+    "./css/survey.min.css": "./css/survey.min.css",
+    "./css/survey.scss": "./css/survey.scss"
+  },
+  "typings": "dist/index.d.ts",
+  "unpkg": "dist/index.browser.min.js",
+  "files": [
+    "src",
+    "dist",
+    "css"
+  ],
+  "source": "src/index.ts",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "npm test -- --watch",
+    "tsc": "tsc",
+    "build:js": "rollup --config",
+    "build:styles": "run-p build:css build:css:min",
+    "build:css": "sass --load-path ./node_modules --load-path ../../node_modules css/survey.scss css/survey.css",
+    "build:css:min": "sass --style=compressed --load-path ./node_modules --load-path ../../node_modules css/survey.scss css/survey.min.css",
+    "build": "run-p build:js build:styles",
+    "build:watch": "run-p \"build:js -- --watch\" \"build:styles -- --watch\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jspsych/jsPsych.git",
+    "directory": "packages/plugin-survey"
+  },
+  "author": "Becky Gilbert",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jspsych/jsPsych/issues"
+  },
+  "homepage": "https://www.jspsych.org/latest/plugins/survey",
+  "peerDependencies": {
+    "jspsych": ">=7.0.0"
+  },
+  "devDependencies": {
+    "@jspsych/config": "^3.3.1",
+    "@jspsych/test-utils": "^1.2.0",
+    "npm-run-all": "^4.1.5",
+    "sass": "^1.43.5"
+  },
+  "dependencies": {
+    "survey-core": "^2.3.12",
+    "survey-js-ui": "^2.3.12"
+  }
+}
