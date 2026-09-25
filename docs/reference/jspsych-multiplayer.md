@@ -1,6 +1,6 @@
 # jsPsych.multiplayer
 
-The multiplayer module lets participants in a group share data while an experiment runs. Each participant has a *slot*: an object that only they write to and that everyone in the group can read. Together, the slots form the group's *shared data*, an object keyed by participant ID (type `GroupSessionData`).
+The multiplayer module lets participants in a group share data while an experiment runs. Each participant has their own data, which only they write to and everyone in the group can read. Reads return the group's *shared data*: an object that maps each participant ID to that participant's data (type `GroupSessionData`).
 
 Connect to a backend with an adapter before running the experiment:
 
@@ -23,24 +23,127 @@ The `async` function lets this code run in an ordinary `<script>` tag; top-level
 
 `connect()` opens a *session*: one connection to the backend. `jsPsych.multiplayer` passes every method call to the current session, so plugins can call `jsPsych.multiplayer.update()` without holding a reference to the session. Work still in progress when a session closes stays with that session and cannot affect a later one.
 
+After a session closes, `getAll()`, `get()`, `presence()`, and `group()` keep returning the last state they saw. Writes and `wait()` stop working.
+
 ### Writing data
 
-`push()` replaces your slot and `update()` merges into it. Both change your slot immediately, so your own reads, subscribers, and `wait()` calls see the new data at once. The session then sends your slot to the backend, and the promise returned by the write resolves when the backend confirms it.
+`update()` merges into your data and `replace()` replaces it:
 
-The session sends one write at a time. Writes made while a send is in progress are combined into the next send. Other participants always end up with your latest data, but they may never see a value that you replaced before it was sent. Store *state* in your slot ("my current answer is 3"). For *events* that every participant must see, such as chat messages or individual clicks, append them to a list in your slot or keep a counter that others can compare against.
+```javascript
+await jsPsych.multiplayer.update({ score: 1 });         // { score: 1 }
+await jsPsych.multiplayer.update({ round: 2 });         // { score: 1, round: 2 }
+await jsPsych.multiplayer.update({ score: undefined }); // { round: 2 }
+await jsPsych.multiplayer.replace({ done: true });      // { done: true }
+```
 
-A write that leaves your slot unchanged sends nothing and doesn't notify subscribers.
+Both change your data immediately, so your own reads, subscribers, and `wait()` calls see the new data at once. The session then sends it to the backend, and the promise returned by the write resolves when the backend confirms it. If the backend rejects a write, the session tries again, waiting a little longer each time, until it succeeds or the connection closes.
+
+The session sends one write at a time. Writes made while a send is in progress are combined into the next send. Other participants always end up with your latest data, but they may never see a value that you replaced before it was sent. Store *state* in your data ("my current answer is 3"). For *events* that every participant must see, such as chat messages or individual clicks, append them to a list or keep a counter that others can compare against.
+
+For the same reason, write `wait()` conditions that stay true once they become true. If the host moves through phases, a partner may never see the phase `"feedback"` if the host moved on to `"results"` before that write went out, and a wait for `phase === "feedback"` would never end. Have the host count steps instead, and wait for `step >= 3`.
+
+A write that leaves your data unchanged sends nothing and doesn't notify subscribers.
+
+### Scopes
+
+The shared data is divided into *scopes*. During a trial, every read, write, subscription, and wait uses that trial's own scope unless you say otherwise. Data written in one trial doesn't appear in the next one, so a plugin can write `{ choice: "left" }` in every round without an answer from an earlier round satisfying a new `wait()`.
+
+**The trial scope's name.** By default, a trial's scope is named after the trial's position in the timeline, such as `#3` or `#2.1`. Every participant running the same timeline gets the same name for the same trial, so they share that trial's data. Each repetition and each pass through a loop counts as a new position, so a repeated trial gets a new scope every time. A conditional timeline that is skipped still counts, so skipping it for some participants doesn't change the names of later trials.
+
+**The `multiplayer_scope` parameter.** Every trial accepts a `multiplayer_scope` parameter that names its scope instead. You need it when participants' timelines differ in shape, for example when some run more trials than others inside the same timeline, or when two trials should deliberately share data. The name is used exactly as written. Trials with the same name share one scope, even when one is a repetition of the other, so a trial that repeats needs a name that changes with each repetition. Build the name from a timeline variable:
+
+```javascript
+const round = {
+  timeline: [
+    {
+      type: jsPsychMultiplayerChoice,
+      choices: ["Cooperate", "Defect"],
+      multiplayer_scope: () => `round-${jsPsych.evaluateTimelineVariable("round")}`,
+    },
+  ],
+  timeline_variables: [{ round: 1 }, { round: 2 }, { round: 3 }],
+};
+```
+
+The name must be a non-empty string. `multiplayer_scope: jsPsych.timelineVariable("round")` works on its own only when the variable holds a string that is different in each repetition. If you set `multiplayer_scope` on a timeline rather than a trial, every trial in that timeline uses the same scope.
+
+**The session scope.** Data that must last the whole session, such as a nickname or a role, belongs in the *session scope*. Pass `{ scope: "session" }` to use it during a trial. Outside a trial, calls use the session scope by default. That includes code that runs before `jsPsych.run()`, in `on_timeline_start` or `on_timeline_finish`, in `conditional_function` or `loop_function`, in the experiment's `on_finish`, and in dynamic parameters (functions used as trial parameters), which run just before the trial starts. The trial scope starts when the trial's `on_start` runs and lasts until its `on_finish` has finished.
+
+```javascript
+const nickname = {
+  type: jsPsychSurveyText,
+  questions: [{ prompt: "Choose a nickname", name: "nickname" }],
+  on_finish: async (data) => {
+    await jsPsych.multiplayer.update(
+      { nickname: data.response.nickname },
+      { scope: "session" }
+    );
+  },
+};
+
+// Later, in any trial or between trials:
+const partnerName = jsPsych.multiplayer.get(partnerId, { scope: "session" })?.nickname;
+```
+
+Pass `{ scope: "trial" }` to insist on the current trial's scope. It throws a `TypeError` outside a trial.
+
+**Using an earlier trial's results.** A later trial can't see an earlier trial's scope. Record what later trials need in jsPsych's data, and read it from there. A trial's `on_finish` still uses the trial's scope, so it can copy what the group wrote into the trial's data:
+
+```javascript
+const choice = {
+  type: jsPsychMultiplayerChoice,
+  choices: ["Cooperate", "Defect"],
+  data: { task: "round" },
+  on_finish: (data) => {
+    data.shared = jsPsych.multiplayer.getAll();
+  },
+};
+
+// In a later trial:
+const lastRound = jsPsych.data.get().filter({ task: "round" }).last(1).values()[0];
+```
+
+Multiplayer plugins usually record their results in the trial's data already; see each plugin's documentation.
+
+### Lifetimes of subscriptions and waits
+
+A subscription or `wait()` made during a trial belongs to the trial. When the trial ends, its subscriptions are removed and its pending waits reject with a `cancelled` error. A plugin doesn't need to clean them up.
+
+To make a subscription that lasts the whole experiment, such as a scoreboard or a "your partner left" message, use the session scope: create it before `jsPsych.run()`, where the session scope is the default, or pass `{ scope: "session" }` inside a trial. It lasts until the experiment ends. It sees only session-scope data, not what trials write in their own scopes; presence and the group are the same in every scope.
+
+```javascript
+await jsPsych.multiplayer.connect(adapter);
+jsPsych.multiplayer.subscribe((data, presence) => {
+  updateScoreboard(data, presence);
+});
+await jsPsych.run(timeline);
+```
+
+When the experiment ends, or `abortExperiment()` is called, every subscription is removed and every pending wait rejects with a `cancelled` error. This happens before the experiment's `on_finish` runs, and the connection stays open, so `on_finish` can still write final data.
 
 ### Data format
 
-Slots must contain plain JSON. Each write is copied as JSON when you make it, which matches what other participants receive over the network:
+Shared data must be plain JSON. Each write is copied as JSON when you make it, which matches what other participants receive over the network:
 
-- `BigInt` values and circular references make the write reject.
+- The data you write must be a plain object. `BigInt` values and circular references make the write reject with a `TypeError`.
 - `Date` values become strings.
 - Keys whose value is `undefined` are dropped.
-- The key `$mp` is reserved. The session stores its own bookkeeping there (see [Rejoining](#rejoining)) and removes it from everything you read; writing it makes the write reject.
 
 All reads return one frozen object that is shared by every reader. Modifying it throws a `TypeError`, so copy it first if you need a changed version.
+
+### How much data you can share
+
+Every write sends all of your data to the backend, not only what changed: your session-scope data plus the data of every trial scope you have written to so far. Other participants receive all of it too. Scopes from finished trials stay in your data until the session ends, so the longer the experiment and the more you write, the larger each write becomes.
+
+Share only what other participants need to see, such as a choice, a score, or a short message. Keep everything else, such as response times and full trial records, in jsPsych's own data, which isn't sent to the group.
+
+Each backend limits how much data it accepts. A write over the limit is rejected, and because the session keeps retrying it, none of your later writes reach the group either. Choose a backend with room for your study:
+
+Backend | Limit
+--------|------
+Firebase | The adapter's recommended security rules allow each participant up to 128 KB. You can raise this in your rules; Firebase itself allows values of several megabytes.
+JATOS | The whole group's data is stored together in one JATOS group session. Its size limit is set in the JATOS server's configuration; ask your JATOS administrator.
+Local testing | Every participant's data is stored together in the browser's `localStorage`, which holds about 5 MB per site in most browsers.
 
 ### Presence
 
@@ -49,21 +152,20 @@ The session tracks whether each participant is still in the group:
 Status | Meaning
 -------|--------
 `connected` | The participant is connected.
-`away` | The participant's connection dropped. Brief network interruptions show up this way.
-`left` | The participant has been away for longer than the dropout timeout (10 seconds by default).
+`away` | The participant's connection dropped. Brief network interruptions show up this way, and the participant can still come back.
+`left` | The participant was away for longer than the dropout timeout (10 seconds by default), or reloaded the page.
+
+`left` is final: a participant who has left stays `left`, even if their connection comes back. The group agrees on it. When one participant sees someone leave, they tell the rest of the group, and the others who have also lost sight of that participant count them as left at once, without waiting for their own dropout timers. A participant the group counted as left finds out when their connection recovers: their session closes with a `connection_lost` error.
 
 While your own connection is down, the session pauses everyone else's dropout timers, because it can't tell whether they are still there.
 
-### Rejoining
+To give participants more time to come back, choose a longer `dropoutTimeout` when you connect.
 
-A participant who drops out can come back, but only from the same page. The session tells the two cases apart:
+### Reconnecting and reloading
 
-- **Same page.** Their connection dropped and recovered, for example after a network outage or a laptop going to sleep. Their experiment is still where they left it, so they become `connected` again. If they had reached `left`, `onParticipantRejoined` is called.
-- **New page load.** They reloaded, or opened the study again in a new tab, under the same ID. Their experiment started over, so it is out of step with the group. They stay `left` (or become `left` at once, if they were `away`), and `onParticipantRestarted` is called. On their side, `jsPsych.multiplayer.previousInstance` is set, so the experiment can explain that they can't rejoin.
+A participant whose connection drops and recovers on the same page, for example after a network outage or a laptop going to sleep, is `connected` again as long as they return before the dropout timeout. Their experiment is still where they left it.
 
-To tell the cases apart, each page load writes a random ID and a counter into its slot under the reserved `$mp` key, and writes them again whenever its connection recovers. A participant counts as back only once a write made since they dropped out arrives. Being back in the adapter's list of connected participants isn't enough, because a reloaded page connects before its first write arrives.
-
-Trials that already ended because a participant left stay ended; rejoining affects only what happens next. To give a participant time to come back before moving on, wait on their presence, for example with a `wait()` whose condition is `presence[partnerId] === "connected"` and a `timeout`.
+A participant who reloads the page, or opens the study again in a new tab, can't rejoin. Their experiment started over, so it is out of step with the group, and the rest of the group counts them as `left`. On the reloaded page, `jsPsych.multiplayer.restarted` is `true`, and the session closes with a `connection_lost` error once the group has seen the reload. Check `restarted` after connecting, so the experiment can explain what happened instead of starting over (see the [`connect()` example](#connect)).
 
 ### Groups
 
@@ -77,6 +179,8 @@ Property | Meaning
 
 A group is *forming* until it is sealed. While it forms, a participant who leaves frees their place, and the backend can give it to someone new. Once it is sealed, `members` is the final roster: a member who leaves stays on it and counts as a dropout, and new arrivals go to another group. A sealed group never becomes unsealed. Every member of a sealed group appears in `presence()`, even one who never connected: they start out `away` and become `left` after the dropout timeout, so nobody waits for them forever.
 
+With these backends, reads include only the group members' data.
+
 Adapters seal a group when it is full. To hold participants in a waiting room until then, wait for the seal:
 
 ```javascript
@@ -84,7 +188,7 @@ try {
   const group = await jsPsych.multiplayer.waitForGroup({ timeout: 5 * 60000 });
   // group.members is the final roster
 } catch (error) {
-  if (error.name === "MultiplayerTimeoutError") {
+  if (error.name === "MultiplayerError" && error.code === "timeout") {
     // The group didn't fill in time: end the study for this participant
   }
 }
@@ -92,7 +196,7 @@ try {
 
 To start with fewer participants than the group can hold, call `sealGroup()` yourself, for example after the waiting room times out with enough participants present.
 
-With backends that don't form groups, you assign the groups, for example by giving each group its own link. Then `group()` lists everyone who has shown up, the group is never sealed, and `sealGroup()` and `waitForGroup()` reject. Wait for a number of participants with `wait()` instead.
+With backends that don't form groups, you assign the groups, for example by giving each group its own link. Then `group()` lists everyone who has shown up, the group is never sealed, and `sealGroup()` and `waitForGroup()` reject with an `unsupported` error. Wait for a number of participants with `wait()` instead.
 
 ### Shared randomness
 
@@ -111,6 +215,37 @@ A value depends only on the key, the method, and the session's seed. It doesn't 
 - **Every participant must use the same key.** If one participant asks for `"offer"` and another for `"offer-1"`, they get different values.
 - **The seed is the session ID** that the adapter reports, so each group gets different values. To get the same values in every session, for example to reproduce a study exactly, pass the same `randomSeed` to `connect()` for every participant.
 
+### Errors
+
+When a multiplayer operation fails, it throws or rejects with a `MultiplayerError`. Its `name` is `"MultiplayerError"`, and its `code` says why:
+
+Code | Cause
+-----|------
+`timeout` | A `wait()`, `waitForGroup()`, or `connect()` ran out of time.
+`cancelled` | The operation was cancelled on purpose: by its `signal`, by `disconnect()`, or because its trial or the experiment ended.
+`participant_left` | A participant listed in a `wait()`'s `participants` left. The error's `participantId` property says who.
+`connection_lost` | This participant's connection was lost for good, or the group counted this participant as having left.
+`not_connected` | There is no open session: `connect()` hasn't finished, or the session was disconnected.
+`unsupported` | The adapter can't do what was asked, such as seal a group.
+
+Check an error by comparing `error.name` and `error.code`:
+
+```javascript
+if (error.name === "MultiplayerError" && error.code === "participant_left") {
+  // error.participantId says who left
+}
+```
+
+Don't use `instanceof MultiplayerError`. Plugins are bundled separately from jsPsych, and `instanceof` fails when a page loads more than one copy of jsPsych.
+
+Mistakes in the arguments, such as a scope other than `"trial"` or `"session"` or a timeout of `0`, throw or reject with a `TypeError` or `RangeError` instead.
+
+### Timeouts
+
+Every timeout option (`timeout`, `connectTimeout`, `dropoutTimeout`, and `reconnectTimeout`) takes a positive number of milliseconds, or `null` for no limit. Leaving the option out uses its default. `Infinity` also means no limit.
+
+Any other value, including `0`, a negative number, `NaN`, or a string such as `"5000"`, is treated as a mistake: the call throws or rejects with a `TypeError` rather than guessing what you meant. Some plugins accept `0` in their own parameters to mean "no limit"; that is up to each plugin.
+
 ---
 
 ## Properties
@@ -121,7 +256,7 @@ A value depends only on the key, the method, and the session's seed. It doesn't 
 jsPsych.multiplayer.participantId
 ```
 
-This participant's ID within the group. `null` until `connect()` resolves and after `disconnect()`. Read-only.
+This participant's ID within the group. `null` until `connect()` resolves. It keeps its value after the session closes. Read-only.
 
 ### sessionId
 
@@ -129,7 +264,7 @@ This participant's ID within the group. `null` until `connect()` resolves and af
 jsPsych.multiplayer.sessionId
 ```
 
-The ID of the group session, reported by the adapter. It is the same for every participant in the group and stays the same when a participant reconnects or reloads. Shared randomness uses it as its seed. `null` until `connect()` resolves and after `disconnect()`. Read-only.
+The ID of the group session, reported by the adapter. It is the same for every participant in the group and stays the same when a participant reconnects or reloads. Shared randomness uses it as its seed. `null` until `connect()` resolves. It keeps its value after the session closes. Read-only.
 
 ### status
 
@@ -141,33 +276,18 @@ The state of this participant's connection:
 
 - `"connected"`: the connection is open.
 - `"reconnecting"`: the connection dropped, and the adapter is trying to restore it.
-- `"closed"`: the connection is gone for good.
+- `"closed"`: the connection is gone for good, either lost or closed by `disconnect()`.
 
-`null` when there is no session. Read-only.
+`null` until `connect()` resolves. Read-only.
 
-### session
-
-```javascript
-jsPsych.multiplayer.session
-```
-
-The current `MultiplayerSession`, which is the object `connect()` returns. `null` until `connect()` resolves and after `disconnect()`. A session has `participantId`, `sessionId`, `status`, and `previousInstance` properties and every method listed below except `connect()`.
-
-
-### previousInstance
+### restarted
 
 ```javascript
-jsPsych.multiplayer.previousInstance
+jsPsych.multiplayer.restarted
 ```
 
-Set when this participant's slot came from an earlier page load: they reloaded or reopened the study, so their experiment started over while the group moved on. `null` otherwise, and when there is no session. Other participants see this participant as `left`. Read-only.
+`true` when this participant reloaded or reopened the study after joining the group: their experiment started over, the group has moved on, and the other participants count them as having left. `false` otherwise. See [Reconnecting and reloading](#reconnecting-and-reloading). Read-only.
 
-```javascript
-await jsPsych.multiplayer.connect(adapter);
-if (jsPsych.multiplayer.previousInstance) {
-  // Show a message instead of starting the experiment again
-}
-```
 ---
 
 ## Methods
@@ -187,25 +307,28 @@ options | object | *(optional)* Any of the options below.
 
 Option | Type | Description
 -------|------|------------
-dropoutTimeout | number | How long, in milliseconds, a participant can stay disconnected before they count as having left. Defaults to `10000`. Use `null` or `Infinity` to never mark participants as left.
+dropoutTimeout | number | How long, in milliseconds, a participant can stay disconnected before they count as having left. Defaults to `10000`. `null` means participants are never marked as left.
+reconnectTimeout | number | How long, in milliseconds, this participant's own connection can stay `"reconnecting"` before the session gives up and closes with a `connection_lost` error. Defaults to `null`: keep trying as long as the adapter does.
+connectTimeout | number | How long, in milliseconds, to wait for the adapter to connect before rejecting with a `timeout` error. Defaults to `20000`. `null` means no limit.
 randomSeed | string | Seed for [shared randomness](#shared-randomness) in place of the session ID. Every participant in the group must pass the same value.
-onParticipantLeft | function | Called with a participant's ID when that participant's status becomes `left`.
-onParticipantRejoined | function | Called with a participant's ID when a participant who had `left` comes back from the same page. See [Rejoining](#rejoining).
-onParticipantRestarted | function | Called with a participant's ID when a participant comes back from a new page load, so their experiment started over. They stay `left`.
+recordIds | boolean | Whether to add `multiplayer_participant_id` and `multiplayer_session_id` to every row of jsPsych's data, so you can match up the data from the members of a group. Defaults to `true`.
+onParticipantLeft | function | Called with a participant's ID once, when that participant's status becomes `left`.
 onStatusChange | function | Called with the new status whenever this participant's connection status changes.
 signal | `AbortSignal` | Aborting this signal cancels a `connect()` that hasn't finished.
 
+See [Timeouts](#timeouts) for the values the timeout options accept.
+
 #### Return value
 
-A `Promise<MultiplayerSession>` that resolves when the connection is open.
+A `Promise<void>` that resolves when the connection is open.
 
 #### Description
 
-Opens a session and makes it the current session. Call and await `connect()` before `jsPsych.run()`; until it resolves, every other method throws or rejects.
+Opens a session and makes it the current session. Call and await `connect()` before `jsPsych.run()`; until it resolves, every other method throws or rejects with a `not_connected` error.
 
-`connect()` rejects if a session is already open or connecting, so call `disconnect()` first. The exception is a session whose connection was lost (status `"closed"`), which `connect()` replaces. If the adapter fails to connect, `connect()` rejects and you can call it again.
+`connect()` rejects if a session is already open or connecting, so call `disconnect()` first. The exception is a session whose status is `"closed"`, which `connect()` replaces. If the adapter fails to connect, `connect()` rejects and you can call it again.
 
-If the attempt is cancelled, by aborting `signal` or by calling `disconnect()`, `connect()` rejects with a `MultiplayerCancelledError`. It waits to reject until the adapter has closed anything it opened.
+If the attempt is cancelled, by aborting `signal` or by calling `disconnect()`, `connect()` rejects with a `cancelled` error. If it takes longer than `connectTimeout`, it rejects with a `timeout` error. Either way, it waits to reject until the adapter has closed anything it opened.
 
 You decide what the experiment does when a participant leaves. `onParticipantLeft` is a good place to end the experiment or show a message. Multiplayer plugins handle departures within their own trials by passing `participants` to `wait()`.
 
@@ -219,6 +342,11 @@ async function runExperiment() {
       jsPsych.abortExperiment("Your partner left the study. Thank you for participating.");
     },
   });
+  if (jsPsych.multiplayer.restarted) {
+    document.body.innerHTML =
+      "<p>You reloaded the page, so you can't rejoin your group. Thank you for participating.</p>";
+    return;
+  }
   await jsPsych.run(timeline);
 }
 ```
@@ -241,9 +369,9 @@ A `Promise<void>` that resolves when the adapter has closed the connection.
 
 #### Description
 
-Closes the current session, or cancels a `connect()` that hasn't finished. Subscribers are called one last time and then removed, pending `wait()` calls reject with a `MultiplayerCancelledError`, and writes the backend hasn't confirmed reject.
+Closes the current session, or cancels a `connect()` that hasn't finished. Subscribers are called one last time and then removed. Pending `wait()` calls, and writes the backend hasn't confirmed, reject with a `cancelled` error.
 
-`participantId` and `session` become `null` as soon as you call `disconnect()`, even if the adapter then fails to disconnect. You can always call `connect()` again afterward.
+Reads keep returning the last state, and `status` becomes `"closed"`. You can call `connect()` again afterward. Reconnecting from the same page this way is not a reload, so `restarted` stays `false`.
 
 #### Example
 
@@ -253,17 +381,18 @@ await jsPsych.multiplayer.disconnect();
 
 ---
 
-### push
+### update
 
 ```javascript
-jsPsych.multiplayer.push(data)
+jsPsych.multiplayer.update(data, options)
 ```
 
 #### Parameters
 
 Parameter | Type | Description
 ----------|------|------------
-data | object | A plain object of JSON values that replaces this participant's slot.
+data | object | A plain object of JSON values to merge into this participant's data.
+options | object | *(optional)* `{ scope }`: `"trial"` or `"session"`. See [Scopes](#scopes).
 
 #### Return value
 
@@ -271,45 +400,49 @@ A `Promise<void>` that resolves when the backend confirms a write that includes 
 
 #### Description
 
-Replaces this participant's slot. Reads show the new data immediately.
+Merges `data` into this participant's data in the scope. Top-level keys in `data` replace the same keys, other keys are kept, and a key set to `undefined` is removed. The merge is shallow: a nested object in `data` replaces the whole nested object.
 
-The promise rejects if the backend rejects the write, if `data` isn't plain JSON, or if the session is closed. When the backend rejects a write, your slot keeps the data and sends it again with your next write.
+If the backend already holds data for this participant when the session opens, for example after reconnecting, `update()` merges into that data.
+
+The promise rejects with a `TypeError` if `data` isn't a plain object of JSON values, and with a `MultiplayerError` if the session is closed.
 
 #### Example
 
 ```javascript
-await jsPsych.multiplayer.push({ answer: 2, rt: 542 });
+// With this participant's data at { score: 1 }, this produces { score: 1, round: 2 }
+await jsPsych.multiplayer.update({ round: 2 });
+
+// Session-scope data lasts beyond the current trial
+await jsPsych.multiplayer.update({ role: "sender" }, { scope: "session" });
 ```
 
 ---
 
-### update
+### replace
 
 ```javascript
-jsPsych.multiplayer.update(data)
+jsPsych.multiplayer.replace(data, options)
 ```
 
 #### Parameters
 
 Parameter | Type | Description
 ----------|------|------------
-data | object | A plain object of JSON values to merge into this participant's slot.
+data | object | A plain object of JSON values that replaces this participant's data in the scope.
+options | object | *(optional)* `{ scope }`, as for `update()`.
 
 #### Return value
 
-A `Promise<void>`, as for `push()`.
+A `Promise<void>`, as for `update()`.
 
 #### Description
 
-Merges `data` into this participant's slot. Top-level keys in `data` replace the same keys in the slot, and other keys in the slot are kept. The merge is shallow: a nested object in `data` replaces the whole nested object in the slot.
-
-If the backend already holds data for this participant when the session opens, for example after a page reload, `update()` merges into that data.
+Replaces this participant's data in the scope with `data`, dropping every key that `data` leaves out. Other scopes are not affected.
 
 #### Example
 
 ```javascript
-// With the slot at { score: 1 }, this produces { score: 1, round: 2 }
-await jsPsych.multiplayer.update({ round: 2 });
+await jsPsych.multiplayer.replace({ answer: 2 });
 ```
 
 ---
@@ -317,25 +450,26 @@ await jsPsych.multiplayer.update({ round: 2 });
 ### get
 
 ```javascript
-jsPsych.multiplayer.get(participantId)
+jsPsych.multiplayer.get(participantId, options)
 ```
 
 #### Parameters
 
 Parameter | Type | Description
 ----------|------|------------
-participantId | string | The participant whose slot to read.
+participantId | string | The participant whose data to read.
+options | object | *(optional)* `{ scope }`, as for `update()`.
 
 #### Return value
 
-The participant's slot (frozen), or `undefined` if they haven't written anything.
+The participant's data in the scope (frozen), or `undefined` if they haven't written anything there.
 
 #### Example
 
 ```javascript
 const host = jsPsych.multiplayer.get(hostId);
-// host is undefined until the host writes something
-if (host !== undefined && host.phase === "question") {
+// host is undefined until the host writes something in this trial
+if (host !== undefined && host.step >= 2) {
   // ...
 }
 ```
@@ -345,29 +479,27 @@ if (host !== undefined && host.phase === "question") {
 ### getAll
 
 ```javascript
-jsPsych.multiplayer.getAll()
+jsPsych.multiplayer.getAll(options)
 ```
 
 #### Parameters
 
-None.
+Parameter | Type | Description
+----------|------|------------
+options | object | *(optional)* `{ scope }`, as for `update()`.
 
 #### Return value
 
-The shared data (frozen): an object that maps each participant ID to that participant's slot.
+The shared data in the scope (frozen): an object that maps each participant ID to that participant's data. Participants who haven't written anything in the scope are left out. With a backend that forms groups, only the group's members are included.
 
 #### Example
 
 ```javascript
-const group = jsPsych.multiplayer.getAll();
+const data = jsPsych.multiplayer.getAll();
 
-// Check whether every participant has set ready to true
-let allReady = true;
-for (const id in group) {
-  if (group[id].ready !== true) {
-    allReady = false;
-  }
-}
+// Check whether every group member has set ready to true
+const { members } = jsPsych.multiplayer.group();
+const allReady = members.every((id) => data[id]?.ready === true);
 ```
 
 ---
@@ -384,11 +516,11 @@ None.
 
 #### Return value
 
-An object (frozen) that maps each participant ID to that participant's presence status: `"connected"`, `"away"`, or `"left"`.
+An object (frozen) that maps each participant ID to that participant's presence status: `"connected"`, `"away"`, or `"left"`. See [Presence](#presence).
 
 #### Description
 
-The object includes this participant. Your own status follows your connection: `"away"` while reconnecting and `"left"` once the connection is closed.
+The object includes this participant. Your own status follows your connection: `"away"` while reconnecting and `"left"` once the connection is closed. Presence is the same in every scope.
 
 #### Example
 
@@ -439,13 +571,13 @@ None.
 
 #### Return value
 
-A `Promise` that resolves once the backend confirms the group is sealed.
+A `Promise<void>` that resolves once the backend confirms the group is sealed.
 
 #### Description
 
-Stops new participants from joining the group, so it is sealed with the members it has now. Adapters seal a group automatically when it is full, so call this only to start with fewer participants. The seal reaches every member of the group, and `waitForGroup()` resolves for all of them.
+Stops new participants from joining the group, so it is sealed with the members it has now. Adapters seal a group automatically when it is full, so call this only to start with fewer participants. Every member of the group sees the seal, and `waitForGroup()` resolves for all of them.
 
-Resolves at once if the group is already sealed. Rejects if the adapter can't seal groups, or if the session is closed.
+Resolves at once if the group is already sealed. Rejects with an `unsupported` error if the adapter can't seal groups, and with a `not_connected` or `connection_lost` error if the session is closed.
 
 #### Example
 
@@ -454,7 +586,7 @@ Resolves at once if the group is already sealed. Rejects if the adapter can't se
 try {
   await jsPsych.multiplayer.waitForGroup({ timeout: 5 * 60000 });
 } catch (error) {
-  if (error.name !== "MultiplayerTimeoutError") throw error;
+  if (error.name !== "MultiplayerError" || error.code !== "timeout") throw error;
   const presence = jsPsych.multiplayer.presence();
   const here = Object.values(presence).filter((status) => status === "connected").length;
   if (here < 3) throw error;
@@ -482,7 +614,7 @@ A `Promise` that resolves with the group's state, as returned by `group()`, once
 
 #### Description
 
-Resolves at once if the group is already sealed. Rejects for the same reasons as `wait()`. It also rejects at once if the adapter doesn't form groups, since the group would then never be sealed.
+Resolves at once if the group is already sealed. Rejects for the same reasons as `wait()`, and, if it was called during a trial, is cancelled when the trial ends. It rejects at once with an `unsupported` error if the adapter doesn't form groups, since the group would then never be sealed.
 
 #### Example
 
@@ -502,8 +634,13 @@ jsPsych.multiplayer.subscribe(callback, options)
 
 Parameter | Type | Description
 ----------|------|------------
-callback | function | Called with `(data, presence, group)`: the shared data, the presence of every participant, and the group's state (see [`group()`](#group)).
-options | object | *(optional)* `{ signal }`. Aborting `signal` removes the subscription.
+callback | function | Called with `(data, presence, group)`: the shared data in the scope, the presence of every participant, and the group's state (see [`group()`](#group)).
+options | object | *(optional)* Any of the options below.
+
+Option | Type | Description
+-------|------|------------
+scope | string | `"trial"` or `"session"`. See [Scopes](#scopes).
+signal | `AbortSignal` | Aborting this signal removes the subscription.
 
 #### Return value
 
@@ -513,25 +650,21 @@ An `Unsubscribe` function. Call it to remove the subscription.
 
 Calls `callback` immediately with the current state, then again after every change: another participant's write, your own write, a change in anyone's presence, or a change in the group.
 
+A subscription made during a trial with the trial scope is removed when the trial ends. One that uses the session scope lasts until the experiment ends. See [Lifetimes](#lifetimes-of-subscriptions-and-waits).
+
 When the session closes, because of `disconnect()` or a lost connection, each callback is called one last time, with this participant's presence set to `"left"`, and then removed. A plugin that only subscribes can use this call to find out that the session has closed.
 
 If a callback throws, the error is logged and the other callbacks still run. If a callback writes data, the other callbacks still see each change in order.
 
 A callback that writes the same data every time it runs is safe, because unchanged writes do nothing. A callback that writes *different* data every time it runs never stops sending. If it loops without waiting for the network, the session stops it after 100 rounds and logs an error.
 
-A `signal` lets a plugin remove all of a trial's subscriptions at once: create an `AbortController` when the trial starts and abort it when the trial ends.
-
 #### Example
 
 ```javascript
-const controller = new AbortController();
-jsPsych.multiplayer.subscribe(
-  (group, presence) => renderScoreboard(group, presence),
-  { signal: controller.signal }
-);
-
-// When the trial ends:
-controller.abort();
+// Inside a plugin's trial(): the subscription ends with the trial
+jsPsych.multiplayer.subscribe((data, presence) => {
+  renderChoices(display_element, data, presence);
+});
 ```
 
 ---
@@ -551,8 +684,9 @@ options | object | *(optional)* Any of the options below. Passing a number, as i
 
 Option | Type | Description
 -------|------|------------
-timeout | number | The longest time to wait, in milliseconds. `null`, `undefined`, negative, and non-finite values mean no limit.
-participants | string[] | Participants the wait depends on. If any of them leaves before `condition` returns `true`, the wait rejects.
+timeout | number | The longest time to wait, in milliseconds, or `null` for no limit (the default). See [Timeouts](#timeouts).
+participants | string[] | Participants the wait depends on. If any of them leaves before `condition` returns `true`, the wait rejects with a `participant_left` error.
+scope | string | `"trial"` or `"session"`. See [Scopes](#scopes).
 signal | `AbortSignal` | Aborting this signal cancels the wait.
 
 #### Return value
@@ -561,31 +695,23 @@ A `Promise<GroupSessionData>` that resolves with the shared data at the moment `
 
 #### Description
 
-`wait()` checks `condition` against the current state first, so it resolves immediately if the condition already holds. If `condition` throws, the promise rejects with that error. Otherwise, the promise rejects with one of these errors:
+`wait()` checks `condition` against the current state first, so it resolves immediately if the condition already holds, even if a participant in `participants` has already left. Write conditions that stay true once they become true, because another participant's in-between values may never arrive (see [Writing data](#writing-data)).
 
-Error name | Cause
------------|------
-`MultiplayerTimeoutError` | `timeout` elapsed.
-`MultiplayerParticipantLeftError` | A participant listed in `participants` left. The error's `participantId` property says who.
-`MultiplayerCancelledError` | The wait was cancelled by `signal`, `cancelAllSubscriptions()`, `disconnect()`, or the end of the experiment.
-`MultiplayerConnectionClosedError` | This participant's connection was lost for good.
+If `condition` throws, the promise rejects with that error. Otherwise it rejects with a `MultiplayerError` whose `code` is `timeout`, `participant_left`, `cancelled` (the signal was aborted, the trial or experiment ended, or `disconnect()` was called), or `connection_lost`. See [Errors](#errors).
 
-All of these error classes are exported from `jspsych`. Compare `error.name` instead of using `instanceof`, which fails when a page loads two copies of jsPsych.
+A wait made during a trial with the trial scope is cancelled when the trial ends. One that uses the session scope lasts until the experiment ends.
 
 #### Example
 
 ```javascript
 // Wait up to a minute for the partner's answer, and stop early if they leave
 try {
-  const group = await jsPsych.multiplayer.wait(
-    (data) => {
-      const partner = data[partnerId];
-      return partner !== undefined && partner.answer !== undefined;
-    },
+  const data = await jsPsych.multiplayer.wait(
+    (data) => data[partnerId]?.answer !== undefined,
     { participants: [partnerId], timeout: 60000 }
   );
 } catch (error) {
-  if (error.name === "MultiplayerParticipantLeftError") {
+  if (error.name === "MultiplayerError" && error.code === "participant_left") {
     // End the trial and record that the partner left
   }
 }
@@ -679,7 +805,7 @@ const order = jsPsych.multiplayer.shuffle("trial-order", stimuli);
 
 const trials = [];
 for (const stimulus of order) {
-  trials.push({ type: jsPsychMultiplayerChoice, stimulus: stimulus });
+  trials.push({ type: jsPsychMultiplayerChoice, prompt: stimulus, choices: ["A", "B"] });
 }
 ```
 
@@ -711,32 +837,4 @@ The shared counterpart of `jsPsych.randomization.sampleWithoutReplacement()`. Se
 
 ```javascript
 const condition = jsPsych.multiplayer.sample("condition", ["gain", "loss"], 1)[0];
-```
-
----
-
-### cancelAllSubscriptions
-
-```javascript
-jsPsych.multiplayer.cancelAllSubscriptions()
-```
-
-#### Parameters
-
-None.
-
-#### Return value
-
-None.
-
-#### Description
-
-Removes every subscription on the current session and rejects its pending `wait()` calls with a `MultiplayerCancelledError`. The connection stays open. This method mirrors `cancelAllKeyboardResponses()`.
-
-jsPsych calls this method when the timeline finishes and when `abortExperiment()` is called. At the end of the timeline, it runs before `on_finish`, so `on_finish` can still write final data. Call it yourself only to stop listening partway through an experiment.
-
-#### Example
-
-```javascript
-jsPsych.multiplayer.cancelAllSubscriptions();
 ```
