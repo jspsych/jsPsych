@@ -65,7 +65,7 @@ const round = {
 };
 ```
 
-The name must be a non-empty string. `multiplayer_scope: jsPsych.timelineVariable("round")` works on its own only when the variable holds a string that is different in each repetition. If you set `multiplayer_scope` on a timeline rather than a trial, every trial in that timeline uses the same scope.
+The name must be a non-empty string or a number. `multiplayer_scope: jsPsych.timelineVariable("round")` works on its own when the variable is different in each repetition. If you set `multiplayer_scope` on a timeline rather than a trial, every trial in that timeline uses the same scope.
 
 **The session scope.** Data that must last the whole session, such as a nickname or a role, belongs in the *session scope*. Pass `{ scope: "session" }` to use it during a trial. Outside a trial, calls use the session scope by default. That includes code that runs before `jsPsych.run()`, in `on_timeline_start` or `on_timeline_finish`, in `conditional_function` or `loop_function`, in the experiment's `on_finish`, and in dynamic parameters (functions used as trial parameters), which run just before the trial starts. The trial scope starts when the trial's `on_start` runs and lasts until its `on_finish` has finished.
 
