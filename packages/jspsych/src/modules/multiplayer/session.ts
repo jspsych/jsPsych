@@ -287,7 +287,9 @@ export class MultiplayerSession {
   private groupData: GroupState = Object.freeze({ size: null, members: [], sealed: false });
 
   /**
-   * When the adapter forms groups, its members; only their data is shown. Null when it doesn't.
+   * When the adapter forms groups, everyone it has ever reported as a member; only their data is
+   * shown. It only grows, so a member who leaves before the group is sealed keeps the data they
+   * shared. Null when the adapter doesn't form groups.
    */
   private memberFilter: Set<string> | null = null;
 
@@ -1286,7 +1288,12 @@ export class MultiplayerSession {
         sealed: false,
       };
     }
-    this.memberFilter = reported ? new Set(next.members) : null;
+    if (reported) {
+      this.memberFilter ??= new Set();
+      for (const id of next.members) this.memberFilter.add(id);
+    } else {
+      this.memberFilter = null;
+    }
     if (JSON.stringify(next) === JSON.stringify(this.groupData)) {
       return false;
     }

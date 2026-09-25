@@ -1470,6 +1470,19 @@ describe("group formation", () => {
     expect(a.api.presence().outsider).toBeUndefined();
   });
 
+  test("a member who leaves before the seal keeps the data they shared", async () => {
+    hub.groups = { size: 3, sealed: false };
+    const a = await join("p1");
+    const b = await join("p2");
+    await b.api.update({ said: "hi" });
+    // The backend frees their place
+    await b.api.disconnect();
+    hub.members.delete("p2");
+    hub.broadcast();
+    expect(a.api.group().members).toEqual(["p1"]);
+    expect(a.api.get("p2")).toEqual({ said: "hi" });
+  });
+
   test("waitForGroup resolves once the backend seals the group", async () => {
     hub.groups = { size: 2, sealed: false };
     const a = await join("p1");
