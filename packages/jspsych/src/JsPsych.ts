@@ -6,7 +6,7 @@ import { version } from "../package.json";
 import { ExtensionManager, ExtensionManagerDependencies } from "./ExtensionManager";
 import { JsPsychData, JsPsychDataDependencies } from "./modules/data";
 import { JsPsychExtension } from "./modules/extensions";
-import { MultiplayerAPI } from "./modules/multiplayer";
+import { MultiplayerAPI, timelineHooks } from "./modules/multiplayer";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
@@ -112,7 +112,9 @@ export class JsPsych {
 
     // initialize modules
     this.data = new JsPsychData(this.dataDependencies);
-    this.multiplayer = new MultiplayerAPI();
+    this.multiplayer = new MultiplayerAPI({
+      addDataProperties: (properties) => this.data.addProperties(properties),
+    });
     this.pluginAPI = createJointPluginAPIObject(this);
 
     this.extensionManager = new ExtensionManager(
@@ -155,7 +157,7 @@ export class JsPsych {
     } finally {
       // Before on_finish, so partner updates can't redraw over the end screen.
       // The connection stays open, so on_finish can still write final data.
-      this.multiplayer.cancelAllSubscriptions();
+      this.multiplayer[timelineHooks].experimentEnded();
     }
     await Promise.resolve(this.options.on_finish(this.data.get()));
 
@@ -210,7 +212,7 @@ export class JsPsych {
     this.timeline.abort();
     this.pluginAPI.cancelAllKeyboardResponses();
     this.pluginAPI.clearAllTimeouts();
-    this.multiplayer.cancelAllSubscriptions();
+    this.multiplayer[timelineHooks].experimentEnded();
     this.finishTrial(data);
   }
 
@@ -404,6 +406,7 @@ export class JsPsych {
 
   private timelineDependencies: TimelineNodeDependencies = {
     onTrialStart: (trial: Trial) => {
+      this.multiplayer[timelineHooks].trialStarted(trial.getMultiplayerScope());
       this.options.on_trial_start(trial.trialObject);
 
       // apply the focus to the element containing the experiment.
@@ -413,6 +416,7 @@ export class JsPsych {
     },
 
     onTrialResultAvailable: (trial: Trial) => {
+      this.multiplayer[timelineHooks].trialEnded();
       const result = trial.getResult();
       if (result) {
         result.time_elapsed = this.getTotalTime();
@@ -421,6 +425,7 @@ export class JsPsych {
     },
 
     onTrialFinished: (trial: Trial) => {
+      this.multiplayer[timelineHooks].trialFinished();
       const result = trial.getResult();
       this.options.on_trial_finish(result);
 

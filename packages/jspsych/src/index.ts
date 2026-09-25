@@ -75,18 +75,13 @@ export type {
   GroupWaitOptions,
   MultiplayerAdapter,
   MultiplayerConnection,
+  MultiplayerErrorCode,
   PresenceData,
   PresenceStatus,
+  ScopeOptions,
   SessionListener,
   SubscribeOptions,
   Unsubscribe,
   WaitOptions,
 } from "./modules/multiplayer";
-export {
-  MultiplayerCancelledError,
-  MultiplayerConnectionClosedError,
-  MultiplayerParticipantLeftError,
-  MultiplayerSession,
-  MultiplayerTimeoutError,
-  RESERVED_KEY as MULTIPLAYER_RESERVED_KEY,
-} from "./modules/multiplayer";
+export { MultiplayerError } from "./modules/multiplayer";

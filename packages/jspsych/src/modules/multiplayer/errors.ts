@@ -1,39 +1,40 @@
-// Callers checking across separately-bundled packages should match on
-// `error.name` rather than instanceof, which fails if two copies of jspsych
-// are loaded.
-
-/** wait() rejects with this when its timeout elapses before the condition is met. */
-export class MultiplayerTimeoutError extends Error {
-  constructor(timeout: number) {
-    super(`MultiplayerAPI.wait() timed out after ${timeout}ms`);
-    this.name = "MultiplayerTimeoutError";
-  }
-}
+/**
+ * Why a multiplayer operation failed.
+ * - `timeout`: a wait() or connect() ran out of time.
+ * - `cancelled`: the operation was cancelled on purpose: by its signal, by disconnect(), or
+ *   because its trial or the experiment ended.
+ * - `participant_left`: a participant the wait depended on left the session.
+ * - `connection_lost`: this participant's connection was lost for good.
+ * - `not_connected`: there is no open session to use.
+ * - `unsupported`: the adapter can't do what was asked, e.g. seal a group.
+ */
+export type MultiplayerErrorCode =
+  | "timeout"
+  | "cancelled"
+  | "participant_left"
+  | "connection_lost"
+  | "not_connected"
+  | "unsupported";
 
 /**
- * An operation was cancelled on purpose: a wait() by its signal,
- * cancelAllSubscriptions(), disconnect(), or the experiment ending, or a
- * connect() by its signal or disconnect().
+ * Every error the multiplayer API raises on its own account; `code` says why. Invalid arguments
+ * throw a TypeError or RangeError instead.
+ *
+ * Code checking errors from separately bundled packages should compare `error.name` to
+ * "MultiplayerError" rather than use instanceof, which fails if two copies of jspsych are loaded.
  */
-export class MultiplayerCancelledError extends Error {
-  constructor(message = "MultiplayerAPI.wait() was cancelled before its condition was met") {
-    super(message);
-    this.name = "MultiplayerCancelledError";
-  }
-}
+export class MultiplayerError extends Error {
+  readonly code: MultiplayerErrorCode;
 
-/** wait() rejects with this when a participant it depends on leaves the session. */
-export class MultiplayerParticipantLeftError extends Error {
-  constructor(readonly participantId: string) {
-    super(`MultiplayerAPI.wait() failed because participant ${participantId} left the session`);
-    this.name = "MultiplayerParticipantLeftError";
-  }
-}
+  /** With `participant_left`, the participant who left. */
+  readonly participantId?: string;
 
-/** Pending waits and writes reject with this when the connection is lost for good. */
-export class MultiplayerConnectionClosedError extends Error {
-  constructor() {
-    super("MultiplayerAPI: the connection to the multiplayer backend was lost");
-    this.name = "MultiplayerConnectionClosedError";
+  constructor(code: MultiplayerErrorCode, message: string, participantId?: string) {
+    super(`MultiplayerAPI: ${message}`);
+    this.name = "MultiplayerError";
+    this.code = code;
+    if (participantId !== undefined) {
+      this.participantId = participantId;
+    }
   }
 }

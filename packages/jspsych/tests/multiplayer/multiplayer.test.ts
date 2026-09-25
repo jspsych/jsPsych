@@ -10,8 +10,8 @@ import {
   MultiplayerAPI,
   MultiplayerAdapter,
   MultiplayerConnection,
-  MultiplayerTimeoutError,
-  RESERVED_KEY,
+  PROTOCOL_VERSION,
+  timelineHooks,
 } from "../../src/modules/multiplayer";
 
 function deferred<T = void>() {
@@ -31,33 +31,46 @@ async function flushPromises() {
   }
 }
 
-/** A slot as stored on the backend, without the session's reserved bookkeeping. */
-function stripMeta(slot: Record<string, unknown> | undefined) {
-  if (!slot) return slot;
-  const { [RESERVED_KEY]: _meta, ...data } = slot;
-  return data;
+/** A participant's pushed data, as the backend stores it. */
+type WireSlot = {
+  $mp: { v: number; instance: string; epoch: number; left?: string[] };
+  session?: Record<string, unknown>;
+  scopes: Record<string, Record<string, unknown>>;
+};
+
+/** Pushed data from an earlier page load, for seeding the backend. */
+function wire(
+  session?: Record<string, unknown>,
+  { instance = "earlier-page", epoch = 1, scopes = {} } = {}
+): WireSlot {
+  return {
+    $mp: { v: PROTOCOL_VERSION, instance, epoch },
+    scopes,
+    ...(session === undefined ? {} : { session }),
+  };
 }
 
-/** The pushes that carried this participant's data, without the reserved bookkeeping. */
+/** A participant's session-scope data as stored on the backend. */
+function stored(id: string) {
+  return (hub.data[id] as WireSlot | undefined)?.session;
+}
+
+/** The session-scope data of each push that carried any. */
 function userPushes(connection: MockConnection) {
   return connection.pushes
-    .filter((push) => (push[RESERVED_KEY] as { written: boolean }).written)
-    .map(stripMeta);
+    .map((push) => (push as WireSlot).session)
+    .filter((session) => session !== undefined);
 }
 
 /** A shared backend that every MockConnection on it reads and writes. */
 class MockHub {
   sessionId = "session-1";
-  data: GroupSessionData = {};
+  data: Record<string, unknown> = {};
   connections = new Set<MockConnection>();
 
-  /**
-   * Set to make the backend form groups. With `tellsEveryone` false, only a
-   * member who sealed the group hears that it is sealed, as in JATOS.
-   */
-  groups: { size: number | null; sealed: boolean; tellsEveryone: boolean } | null = null;
+  /** Set to make the backend form groups. */
+  groups: { size: number | null; sealed: boolean } | null = null;
   sealCalls = 0;
-  sealedBy = new Set<string>();
 
   /** Everyone who has joined, as a backend that forms groups tracks them. */
   members = new Set<string>();
@@ -91,15 +104,10 @@ class MockConnection implements MultiplayerConnection {
     this.sessionId = hub.sessionId;
     const { groups } = hub;
     if (groups) {
-      this.group = () => ({
-        size: groups.size,
-        members: [...hub.members],
-        sealed: groups.sealed && (groups.tellsEveryone || hub.sealedBy.has(participantId)),
-      });
+      this.group = () => ({ size: groups.size, members: [...hub.members], sealed: groups.sealed });
       this.sealGroup = async () => {
         hub.sealCalls++;
         groups.sealed = true;
-        hub.sealedBy.add(participantId);
         hub.broadcast();
       };
     }
@@ -131,8 +139,8 @@ class MockConnection implements MultiplayerConnection {
   }
 
   /**
-   * Simulate this participant's network dropping or recovering. Like a real
-   * adapter, the connection reports its own drop and recovery.
+   * Simulate this participant's network dropping or recovering. Like a real adapter, the
+   * connection reports its own drop and recovery.
    */
   setOnline(online: boolean) {
     this.online = online;
@@ -190,36 +198,36 @@ afterEach(() => {
 async function join(participantId: string, options?: ConnectOptions) {
   const api = new MultiplayerAPI();
   const adapter = new MockAdapter(hub, participantId);
-  const session = await api.connect(adapter, options);
-  return { api, adapter, session, connection: adapter.connection };
+  await api.connect(adapter, options);
+  return { api, adapter, connection: adapter.connection };
 }
 
+const code = (code: string) => ({ name: "MultiplayerError", code });
+
 describe("connecting and disconnecting", () => {
-  test("connect returns the session and sets participantId and status", async () => {
-    const { api, session } = await join("p1");
-    expect(api.session).toBe(session);
+  test("connect sets participantId and status", async () => {
+    const { api } = await join("p1");
     expect(api.participantId).toBe("p1");
     expect(api.status).toBe("connected");
-    await api.disconnect();
-    expect(api.session).toBeNull();
-    expect(api.participantId).toBeNull();
-    expect(api.status).toBeNull();
+    expect(api.restarted).toBe(false);
   });
 
   test("two participants see each other's data", async () => {
     const a = await join("p1");
     const b = await join("p2");
-    await a.api.push({ choice: "left" });
-    await b.api.push({ choice: "right" });
+    await a.api.update({ choice: "left" });
+    await b.api.update({ choice: "right" });
     expect(a.api.get("p2")).toEqual({ choice: "right" });
     expect(b.api.get("p1")).toEqual({ choice: "left" });
   });
 
-  test("methods throw or reject before connect", async () => {
+  test("methods throw or reject with not_connected before connect", async () => {
     const api = new MultiplayerAPI();
-    await expect(api.push({})).rejects.toThrow("connect()");
-    await expect(api.update({})).rejects.toThrow("connect()");
-    await expect(api.wait(() => true)).rejects.toThrow("connect()");
+    expect(api.participantId).toBeNull();
+    expect(api.status).toBeNull();
+    await expect(api.update({})).rejects.toMatchObject(code("not_connected"));
+    await expect(api.replace({})).rejects.toMatchObject(code("not_connected"));
+    await expect(api.wait(() => true)).rejects.toMatchObject(code("not_connected"));
     expect(() => api.get("p1")).toThrow("connect()");
     expect(() => api.getAll()).toThrow("connect()");
     expect(() => api.presence()).toThrow("connect()");
@@ -267,18 +275,46 @@ describe("connecting and disconnecting", () => {
     expect(adapter.signals[0].aborted).toBe(true);
     gate.resolve();
 
-    await expect(connecting).rejects.toMatchObject({ name: "MultiplayerCancelledError" });
+    await expect(connecting).rejects.toMatchObject(code("cancelled"));
     expect(adapter.connections[0].disconnectCalls).toBe(1);
-    expect(api.session).toBeNull();
+    expect(api.participantId).toBeNull();
   });
 
   test("an already-aborted signal rejects without calling the adapter", async () => {
     const api = new MultiplayerAPI();
     const adapter = new MockAdapter(hub, "p1");
-    await expect(api.connect(adapter, { signal: AbortSignal.abort() })).rejects.toMatchObject({
-      name: "MultiplayerCancelledError",
-    });
+    await expect(api.connect(adapter, { signal: AbortSignal.abort() })).rejects.toMatchObject(
+      code("cancelled")
+    );
     expect(adapter.signals).toHaveLength(0);
+  });
+
+  test("connect() gives up after connectTimeout", async () => {
+    jest.useFakeTimers();
+    const api = new MultiplayerAPI();
+    const adapter = new MockAdapter(hub, "p1");
+    const gate = deferred();
+    adapter.gate = gate.promise;
+
+    const connecting = api.connect(adapter, { connectTimeout: 1000 });
+    connecting.catch(() => {});
+    jest.advanceTimersByTime(1000);
+    expect(adapter.signals[0].aborted).toBe(true);
+    gate.resolve();
+    await expect(connecting).rejects.toMatchObject(code("timeout"));
+    expect(adapter.connections[0].disconnectCalls).toBe(1);
+  });
+
+  test("the default connectTimeout is 20 seconds", async () => {
+    jest.useFakeTimers();
+    const api = new MultiplayerAPI();
+    const adapter = new MockAdapter(hub, "p1");
+    adapter.gate = new Promise(() => {});
+    api.connect(adapter).catch(() => {});
+    jest.advanceTimersByTime(19999);
+    expect(adapter.signals[0].aborted).toBe(false);
+    jest.advanceTimersByTime(1);
+    expect(adapter.signals[0].aborted).toBe(true);
   });
 
   test("disconnect during a pending connect waits until the adapter has closed it", async () => {
@@ -299,7 +335,7 @@ describe("connecting and disconnecting", () => {
     await disconnecting;
     expect(adapter.connections[0].disconnectCalls).toBe(1);
     expect(hub.connections.size).toBe(0);
-    await expect(connecting).rejects.toMatchObject({ name: "MultiplayerCancelledError" });
+    await expect(connecting).rejects.toMatchObject(code("cancelled"));
   });
 
   test("reusing an adapter object after a cancelled connect doesn't close the new connection", async () => {
@@ -316,15 +352,14 @@ describe("connecting and disconnecting", () => {
 
     gate.resolve();
     await disconnecting;
-    const session = await second;
-    await expect(first).rejects.toMatchObject({ name: "MultiplayerCancelledError" });
+    await second;
+    await expect(first).rejects.toMatchObject(code("cancelled"));
 
     const [stale, live] = adapter.connections;
     expect(stale.disconnectCalls).toBe(1);
     expect(live.disconnectCalls).toBe(0);
-    expect(api.session).toBe(session);
     await api.update({ ok: true });
-    expect(stripMeta(hub.data.p1)).toEqual({ ok: true });
+    expect(stored("p1")).toEqual({ ok: true });
   });
 
   test("a rejecting adapter disconnect still leaves the API disconnected", async () => {
@@ -333,43 +368,80 @@ describe("connecting and disconnecting", () => {
       throw new Error("boom");
     };
     await expect(api.disconnect()).rejects.toThrow("boom");
-    expect(api.participantId).toBeNull();
+    expect(api.status).toBe("closed");
     await api.connect(adapter);
-    expect(api.participantId).toBe("p1");
+    expect(api.status).toBe("connected");
   });
 
   test("overlapping disconnect calls close the connection once", async () => {
-    const { api, session, connection } = await join("p1");
-    await Promise.all([api.disconnect(), api.disconnect(), session.disconnect()]);
+    const { api, connection } = await join("p1");
+    await Promise.all([api.disconnect(), api.disconnect()]);
     expect(connection.disconnectCalls).toBe(1);
   });
 
-  test("a session held after disconnect rejects writes and leaves the new session alone", async () => {
-    const { api, adapter, session: old } = await join("p1");
+  test("after disconnect, reads return the last state and writes reject", async () => {
+    const a = await join("p1");
+    const b = await join("p2");
+    await a.api.update({ mine: 1 });
+    await b.api.update({ theirs: 2 });
+    await a.api.disconnect();
+
+    expect(a.api.status).toBe("closed");
+    expect(a.api.participantId).toBe("p1");
+    expect(a.api.sessionId).toBe("session-1");
+    expect(a.api.getAll()).toEqual({ p1: { mine: 1 }, p2: { theirs: 2 } });
+    expect(a.api.get("p2")).toEqual({ theirs: 2 });
+    expect(a.api.presence().p1).toBe("left");
+    expect(a.api.group().members).toEqual(["p1", "p2"]);
+    await expect(a.api.update({ more: 1 })).rejects.toMatchObject(code("not_connected"));
+  });
+
+  test("connecting again after disconnect starts a fresh session", async () => {
+    const { api, adapter } = await join("p1");
+    await api.update({ first: true });
     await api.disconnect();
     await api.connect(adapter);
+    await api.update({ second: true });
+    expect(stored("p1")).toEqual({ first: true, second: true });
+  });
 
-    await expect(old.update({ stale: true })).rejects.toThrow("disconnected");
-    await api.update({ fresh: true });
-    expect(stripMeta(hub.data.p1)).toEqual({ fresh: true });
+  test("recordIds adds the IDs to jsPsych's data by default", async () => {
+    const properties: Record<string, unknown>[] = [];
+    const api = new MultiplayerAPI({ addDataProperties: (p) => properties.push(p) });
+    await api.connect(new MockAdapter(hub, "p1"));
+    expect(properties).toEqual([
+      { multiplayer_participant_id: "p1", multiplayer_session_id: "session-1" },
+    ]);
+
+    const quiet = new MultiplayerAPI({ addDataProperties: (p) => properties.push(p) });
+    await quiet.connect(new MockAdapter(hub, "p2"), { recordIds: false });
+    expect(properties).toHaveLength(1);
   });
 });
 
 describe("writing", () => {
-  test("push replaces the slot and update merges into it", async () => {
+  test("update merges, replace replaces", async () => {
     const { api } = await join("p1");
-    await api.push({ a: 1, b: 2 });
+    await api.update({ a: 1, b: 2 });
     await api.update({ b: 3, c: 4 });
-    expect(stripMeta(hub.data.p1)).toEqual({ a: 1, b: 3, c: 4 });
-    await api.push({ z: 0 });
-    expect(stripMeta(hub.data.p1)).toEqual({ z: 0 });
+    expect(stored("p1")).toEqual({ a: 1, b: 3, c: 4 });
+    await api.replace({ z: 0 });
+    expect(stored("p1")).toEqual({ z: 0 });
   });
 
-  test("update merges onto slot data already on the backend when connecting", async () => {
-    hub.data = { p1: { score: 5 } };
+  test("update with an undefined value removes the key", async () => {
+    const { api } = await join("p1");
+    await api.update({ a: 1, b: 2 });
+    await api.update({ a: undefined });
+    expect(api.get("p1")).toEqual({ b: 2 });
+    expect(stored("p1")).toEqual({ b: 2 });
+  });
+
+  test("update merges onto data already on the backend when connecting", async () => {
+    hub.data = { p1: wire({ score: 5 }) };
     const { api } = await join("p1");
     await api.update({ round: 2 });
-    expect(stripMeta(hub.data.p1)).toEqual({ score: 5, round: 2 });
+    expect(stored("p1")).toEqual({ score: 5, round: 2 });
   });
 
   test("the adapter never receives the caller's object", async () => {
@@ -377,13 +449,21 @@ describe("writing", () => {
     const peer = await join("p2");
     const data = { round: 1, nested: { x: 1 } };
 
-    await api.push(data);
+    await api.update(data);
     data.round = 2;
     data.nested.x = 2;
 
     expect(userPushes(connection)[0]).not.toBe(data);
-    expect(stripMeta(hub.data.p1)).toEqual({ round: 1, nested: { x: 1 } });
+    expect(stored("p1")).toEqual({ round: 1, nested: { x: 1 } });
     expect(peer.api.get("p1")).toEqual({ round: 1, nested: { x: 1 } });
+  });
+
+  test("each push carries the protocol version", async () => {
+    const { api, connection } = await join("p1");
+    await api.update({ a: 1 });
+    for (const push of connection.pushes) {
+      expect((push as WireSlot).$mp.v).toBe(PROTOCOL_VERSION);
+    }
   });
 
   test("reads show a write before the backend confirms it", async () => {
@@ -404,6 +484,7 @@ describe("writing", () => {
 
   test("writes made during a push go out together in the next one", async () => {
     const { api, connection } = await join("p1");
+    await flushPromises();
     const ack = deferred();
     const send = connection.pushImpl;
     connection.pushImpl = () => ack.promise;
@@ -418,29 +499,12 @@ describe("writing", () => {
     await Promise.all([first, second, third]);
 
     expect(userPushes(connection)).toEqual([{ a: 1 }, { a: 1, b: 2, c: 3 }]);
-    expect(stripMeta(hub.data.p1)).toEqual({ a: 1, b: 2, c: 3 });
-  });
-
-  test("callers whose writes share a push share its outcome", async () => {
-    const { api, connection } = await join("p1");
-    const ack = deferred();
-    connection.pushImpl = () => ack.promise;
-    const first = api.update({ a: 1 });
-
-    connection.pushImpl = async () => {
-      throw new Error("conflict");
-    };
-    const second = api.update({ b: 1 });
-    const third = api.update({ c: 1 });
-
-    ack.resolve();
-    await first;
-    await expect(second).rejects.toThrow("conflict");
-    await expect(third).rejects.toThrow("conflict");
+    expect(stored("p1")).toEqual({ a: 1, b: 2, c: 3 });
   });
 
   test("writes reach the backend in call order", async () => {
     const { api, connection } = await join("p1");
+    await flushPromises();
     const acks: Array<() => void> = [];
     connection.pushImpl = (data) =>
       new Promise((resolve) =>
@@ -450,8 +514,8 @@ describe("writing", () => {
         })
       );
 
-    const a = api.push({ phase: "a" });
-    const b = api.push({ phase: "b" });
+    const a = api.replace({ phase: "a" });
+    const b = api.replace({ phase: "b" });
     // Only one push is in flight, so "b" can't overtake "a"
     expect(acks).toHaveLength(1);
     acks[0]();
@@ -461,11 +525,12 @@ describe("writing", () => {
 
     connection.pushImpl = async (data) => connection.write(data);
     await api.update({ x: 1 });
-    expect(stripMeta(hub.data.p1)).toEqual({ phase: "b", x: 1 });
+    expect(stored("p1")).toEqual({ phase: "b", x: 1 });
   });
 
   test("a merged update keeps nested values as they were when update() was called", async () => {
     const { api, connection } = await join("p1");
+    await flushPromises();
     const ack = deferred();
     const send = connection.pushImpl;
     connection.pushImpl = () => ack.promise;
@@ -478,84 +543,116 @@ describe("writing", () => {
 
     ack.resolve();
     await Promise.all([first, second]);
-    expect(stripMeta(hub.data.p1)).toEqual({ a: 0, strokes: [1] });
+    expect(stored("p1")).toEqual({ a: 0, strokes: [1] });
   });
 
-  test("a write that doesn't change the slot sends nothing", async () => {
+  test("a write that doesn't change the data sends nothing", async () => {
     const { api, connection } = await join("p1");
     await api.update({ a: 1 });
     await api.update({ a: 1 });
-    await api.push({ a: 1 });
+    await api.replace({ a: 1 });
     expect(userPushes(connection)).toHaveLength(1);
   });
 
-  test("repeating the data of a failed push sends it again", async () => {
+  test("a failed push is retried until it succeeds, and its write resolves then", async () => {
+    jest.useFakeTimers();
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
     const { api, connection } = await join("p1");
+    await flushPromises();
     const send = connection.pushImpl;
-    connection.pushImpl = async () => {
-      throw new Error("conflict");
+    let failures = 0;
+    connection.pushImpl = async (data) => {
+      if (failures < 3) {
+        failures++;
+        throw new Error("conflict");
+      }
+      return send(data);
     };
-    await expect(api.update({ a: 1 })).rejects.toThrow("conflict");
-    connection.pushImpl = send;
-    await api.update({ a: 1 });
-    expect(stripMeta(hub.data.p1)).toEqual({ a: 1 });
-  });
 
-  test("a failed push rejects, and its data goes out with the next write", async () => {
-    const { api, connection } = await join("p1");
-    const send = connection.pushImpl;
-    connection.pushImpl = async () => {
-      throw new Error("conflict");
-    };
-    await expect(api.update({ a: 1 })).rejects.toThrow("conflict");
+    let settled = false;
+    const writing = api.update({ a: 1 }).finally(() => (settled = true));
+    await flushPromises();
+    expect(settled).toBe(false);
     expect(api.get("p1")).toEqual({ a: 1 });
 
+    // Backs off: 250, 500, 1000 ms
+    for (const delay of [250, 500, 1000]) {
+      jest.advanceTimersByTime(delay);
+      await flushPromises();
+    }
+    await writing;
+    expect(stored("p1")).toEqual({ a: 1 });
+    // Warned once for the whole run of failures
+    expect(warn).toHaveBeenCalledTimes(1);
+  });
+
+  test("a new write during the retry delay goes out at once with the failed data", async () => {
+    jest.useFakeTimers();
+    jest.spyOn(console, "warn").mockImplementation(() => {});
+    const { api, connection } = await join("p1");
+    await flushPromises();
+    const send = connection.pushImpl;
+    connection.pushImpl = async () => {
+      throw new Error("conflict");
+    };
+    const first = api.update({ a: 1 });
+    await flushPromises();
+
     connection.pushImpl = send;
-    await api.update({ b: 2 });
-    expect(stripMeta(hub.data.p1)).toEqual({ a: 1, b: 2 });
+    const second = api.update({ b: 2 });
+    await Promise.all([first, second]);
+    expect(stored("p1")).toEqual({ a: 1, b: 2 });
   });
 
   test("a push that resolves after a reconnect doesn't affect the new session", async () => {
     const { api, adapter, connection } = await join("p1");
+    await flushPromises();
     const ack = deferred();
     connection.pushImpl = () => ack.promise;
     const stale = api.update({ old: true });
     stale.catch(() => {});
 
     await api.disconnect();
-    await expect(stale).rejects.toThrow("disconnect()");
+    await expect(stale).rejects.toMatchObject(code("cancelled"));
     await api.connect(adapter);
 
     ack.resolve();
     await flushPromises();
-    await api.update({ fresh: true });
-    expect(stripMeta(hub.data.p1)).toEqual({ fresh: true });
+    await api.replace({ fresh: true });
+    expect(stored("p1")).toEqual({ fresh: true });
   });
 
   test("data must be a plain object of JSON values", async () => {
     const { api } = await join("p1");
-    await expect(api.push(null)).rejects.toThrow("plain object");
+    await expect(api.replace(null)).rejects.toThrow("plain object");
     await expect(api.update([1] as any)).rejects.toThrow("plain object");
-    await expect(api.push({ n: BigInt(1) })).rejects.toThrow(TypeError);
+    await expect(api.replace({ n: BigInt(1) })).rejects.toThrow(TypeError);
     const circular: Record<string, unknown> = {};
     circular.self = circular;
-    await expect(api.push(circular)).rejects.toThrow(TypeError);
+    await expect(api.replace(circular)).rejects.toThrow(TypeError);
 
-    await api.push({ when: new Date(0), gone: undefined });
+    await api.replace({ when: new Date(0), gone: undefined });
     expect(api.get("p1")).toEqual({ when: "1970-01-01T00:00:00.000Z" });
   });
 
-  test("disconnect rejects unsent writes, and later writes reject", async () => {
-    const { api, session, connection } = await join("p1");
+  test("any key can be written, including $mp", async () => {
+    const a = await join("p1");
+    const b = await join("p2");
+    await a.api.update({ $mp: "mine" });
+    expect(b.api.get("p1")).toEqual({ $mp: "mine" });
+  });
+
+  test("disconnect rejects unsent writes with cancelled", async () => {
+    const { api, connection } = await join("p1");
+    await flushPromises();
     const ack = deferred();
     connection.pushImpl = () => ack.promise;
     const inFlight = api.update({ a: 1 });
     const queued = api.update({ b: 1 });
 
     await api.disconnect();
-    await expect(inFlight).rejects.toThrow("disconnect()");
-    await expect(queued).rejects.toThrow("disconnect()");
-    await expect(session.update({ c: 1 })).rejects.toThrow("disconnected");
+    await expect(inFlight).rejects.toMatchObject(code("cancelled"));
+    await expect(queued).rejects.toMatchObject(code("cancelled"));
   });
 });
 
@@ -567,7 +664,7 @@ describe("reading and subscribing", () => {
     a.api.subscribe((data) => received[0].push(data));
     a.api.subscribe((data) => received[1].push(data));
 
-    await b.api.push({ nested: { x: 1 } });
+    await b.api.update({ nested: { x: 1 } });
     const snapshot = received[0][received[0].length - 1];
     expect(received[1][received[1].length - 1]).toBe(snapshot);
     expect(a.api.getAll()).toBe(snapshot);
@@ -580,13 +677,13 @@ describe("reading and subscribing", () => {
   test("subscribe replays the current state, then fires on every change", async () => {
     const a = await join("p1");
     const b = await join("p2");
-    await b.api.push({ n: 1 });
+    await b.api.update({ n: 1 });
 
     const seen: unknown[] = [];
     const stop = a.api.subscribe((data) => seen.push(data.p2?.n));
-    await b.api.push({ n: 2 });
+    await b.api.update({ n: 2 });
     stop();
-    await b.api.push({ n: 3 });
+    await b.api.update({ n: 3 });
     expect(seen).toEqual([1, 2]);
   });
 
@@ -598,6 +695,26 @@ describe("reading and subscribing", () => {
     expect(presence).toEqual({ p1: "connected", p2: "connected" });
   });
 
+  test("a participant who has written nothing has no entry", async () => {
+    const a = await join("p1");
+    await join("p2");
+    expect(a.api.getAll()).toEqual({});
+    expect(a.api.get("p2")).toBeUndefined();
+  });
+
+  test("an empty object someone wrote still shows up", async () => {
+    const a = await join("p1");
+    const b = await join("p2");
+    await b.api.replace({});
+    expect(a.api.get("p2")).toEqual({});
+  });
+
+  test("data in a format this client doesn't know is ignored", async () => {
+    hub.data = { stray: { hello: "world" }, junk: 7 };
+    const a = await join("p1");
+    expect(a.api.getAll()).toEqual({});
+  });
+
   test("aborting a subscription's signal removes it", async () => {
     const a = await join("p1");
     const b = await join("p2");
@@ -605,7 +722,7 @@ describe("reading and subscribing", () => {
     const seen: unknown[] = [];
     a.api.subscribe((data) => seen.push(data.p2?.n), { signal: controller.signal });
     controller.abort();
-    await b.api.push({ n: 1 });
+    await b.api.update({ n: 1 });
     expect(seen).toEqual([undefined]);
   });
 
@@ -618,7 +735,7 @@ describe("reading and subscribing", () => {
     });
     const seen: unknown[] = [];
     a.api.subscribe((data) => seen.push(data.p2?.n));
-    await b.api.push({ n: 1 });
+    await b.api.update({ n: 1 });
     expect(seen).toEqual([undefined, 1]);
     expect(console.error).toHaveBeenCalled();
   });
@@ -632,7 +749,7 @@ describe("reading and subscribing", () => {
     const seen: unknown[] = [];
     a.api.subscribe((data) => seen.push(data.p1?.seen));
 
-    await b.api.push({ hello: true });
+    await b.api.update({ hello: true });
     await flushPromises();
     expect(seen[0]).toBeUndefined();
     expect(seen.slice(seen.indexOf(true))).not.toContain(undefined);
@@ -642,8 +759,8 @@ describe("reading and subscribing", () => {
     const a = await join("p1");
     const b = await join("p2");
     a.api.subscribe(() => void a.api.update({ seen: true }));
-    await b.api.push({ n: 1 });
-    await b.api.push({ n: 2 });
+    await b.api.update({ n: 1 });
+    await b.api.update({ n: 2 });
     await flushPromises();
     expect(userPushes(a.connection)).toEqual([{ seen: true }]);
   });
@@ -657,26 +774,33 @@ describe("reading and subscribing", () => {
     a.api.subscribe(() => void a.api.update({ count: count++ }).catch(() => {}));
     expect(count).toBeLessThanOrEqual(101);
     expect(console.error).toHaveBeenCalledWith(expect.stringContaining("stopped notifying"));
-    a.api.cancelAllSubscriptions();
+    a.api[timelineHooks].experimentEnded();
   });
 
-  test("cancelAllSubscriptions removes subscribers and keeps the connection open", async () => {
+  test("the experiment ending removes subscribers and keeps the connection open", async () => {
     const a = await join("p1");
     const b = await join("p2");
     const seen: unknown[] = [];
     a.api.subscribe((data) => seen.push(data.p2?.n));
-    a.api.cancelAllSubscriptions();
-    await b.api.push({ n: 1 });
+    a.api[timelineHooks].experimentEnded();
+    await b.api.update({ n: 1 });
     expect(seen).toEqual([undefined]);
     await a.api.update({ still: "open" });
-    expect(stripMeta(hub.data.p1)).toEqual({ still: "open" });
+    expect(stored("p1")).toEqual({ still: "open" });
+  });
+
+  test("cancelAllSubscriptions and push are gone from the public API", async () => {
+    const { api } = await join("p1");
+    expect((api as any).cancelAllSubscriptions).toBeUndefined();
+    expect((api as any).push).toBeUndefined();
+    expect((api as any).previousInstance).toBeUndefined();
   });
 });
 
 describe("wait", () => {
   test("resolves at once when the condition already holds", async () => {
     const { api } = await join("p1");
-    await api.push({ ready: true });
+    await api.update({ ready: true });
     await expect(api.wait((data) => data.p1?.ready === true)).resolves.toEqual({
       p1: { ready: true },
     });
@@ -686,7 +810,7 @@ describe("wait", () => {
     const a = await join("p1");
     const b = await join("p2");
     const waiting = a.api.wait((data) => data.p2?.ready === true);
-    await b.api.push({ ready: true });
+    await b.api.update({ ready: true });
     expect((await waiting).p2).toEqual({ ready: true });
   });
 
@@ -697,15 +821,15 @@ describe("wait", () => {
     await waiting;
   });
 
-  test("rejects with MultiplayerTimeoutError when the timeout elapses", async () => {
+  test("rejects with a timeout error when the timeout elapses", async () => {
     jest.useFakeTimers();
     const { api } = await join("p1");
     const waiting = api.wait(() => false, { timeout: 1000 });
     jest.advanceTimersByTime(1000);
-    await expect(waiting).rejects.toMatchObject({ name: "MultiplayerTimeoutError" });
+    await expect(waiting).rejects.toMatchObject(code("timeout"));
   });
 
-  test.each([null, undefined, -1, Infinity, NaN, 2 ** 31])(
+  test.each([null, undefined, Infinity, 2 ** 31])(
     "timeout %p means no timeout",
     async (timeout) => {
       jest.useFakeTimers();
@@ -716,9 +840,16 @@ describe("wait", () => {
       jest.advanceTimersByTime(2 ** 31);
       await flushPromises();
       expect(settled).toBe(false);
-      api.cancelAllSubscriptions();
+      api[timelineHooks].experimentEnded();
     }
   );
+
+  test.each([0, -1, NaN, "5000", true])("timeout %p is rejected as a mistake", async (timeout) => {
+    const { api } = await join("p1");
+    await expect(api.wait(() => false, { timeout: timeout as number })).rejects.toThrow(
+      "positive number"
+    );
+  });
 
   test("the old wait(condition, timeout) form rejects instead of waiting forever", async () => {
     const { api } = await join("p1");
@@ -732,29 +863,29 @@ describe("wait", () => {
       if (data.p2) throw new Error("bad condition");
       return false;
     });
-    await b.api.push({ n: 1 });
+    await b.api.update({ n: 1 });
     await expect(waiting).rejects.toThrow("bad condition");
   });
 
-  test("aborting the wait's signal rejects it with MultiplayerCancelledError", async () => {
+  test("aborting the wait's signal rejects it with cancelled", async () => {
     const { api } = await join("p1");
     const controller = new AbortController();
     const waiting = api.wait(() => false, { signal: controller.signal });
     controller.abort();
-    await expect(waiting).rejects.toMatchObject({ name: "MultiplayerCancelledError" });
+    await expect(waiting).rejects.toMatchObject(code("cancelled"));
   });
 
-  test("cancelAllSubscriptions and disconnect reject pending waits", async () => {
+  test("the experiment ending and disconnect reject pending waits", async () => {
     jest.useFakeTimers();
     const { api } = await join("p1");
     const first = api.wait(() => false);
-    api.cancelAllSubscriptions();
-    await expect(first).rejects.toMatchObject({ name: "MultiplayerCancelledError" });
+    api[timelineHooks].experimentEnded();
+    await expect(first).rejects.toMatchObject(code("cancelled"));
 
     const second = api.wait(() => false, { timeout: 1000 });
     await api.disconnect();
     jest.advanceTimersByTime(1000);
-    await expect(second).rejects.toMatchObject({ name: "MultiplayerCancelledError" });
+    await expect(second).rejects.toMatchObject(code("cancelled"));
   });
 });
 
@@ -786,20 +917,33 @@ describe("presence", () => {
     expect(left).not.toHaveBeenCalled();
   });
 
+  test("presence alone doesn't count as coming back", async () => {
+    const a = await join("p1", { dropoutTimeout: 5000 });
+    const b = await join("p2");
+    b.connection.setOnline(false);
+    // Back in the connected list, but no write from this page since the drop
+    b.connection.online = true;
+    hub.broadcast();
+    expect(a.api.presence().p2).toBe("away");
+  });
+
   test("a participant away longer than the dropout timeout has left, for good", async () => {
     const left = jest.fn();
     const a = await join("p1", { dropoutTimeout: 5000, onParticipantLeft: left });
     const b = await join("p2");
+    await b.api.update({ score: 3 });
 
-    await b.api.disconnect();
+    b.connection.setOnline(false);
     expect(a.api.presence().p2).toBe("away");
     jest.advanceTimersByTime(5000);
     expect(a.api.presence().p2).toBe("left");
     expect(left).toHaveBeenCalledTimes(1);
     expect(left).toHaveBeenCalledWith("p2");
 
-    await join("p2");
+    // Coming back from the same page doesn't undo it
+    b.connection.setOnline(true);
     expect(a.api.presence().p2).toBe("left");
+    expect(a.api.get("p2")).toEqual({ score: 3 });
   });
 
   test("the default dropout timeout is 10 seconds", async () => {
@@ -820,15 +964,19 @@ describe("presence", () => {
     expect(a.api.presence().p2).toBe("away");
   });
 
+  test("an invalid dropout timeout rejects connect()", async () => {
+    await expect(join("p1", { dropoutTimeout: 0 })).rejects.toThrow("dropoutTimeout");
+  });
+
   test("a participant with data who isn't connected at join starts out away", async () => {
-    hub.data = { ghost: { x: 1 } };
+    hub.data = { ghost: wire({ x: 1 }) };
     const a = await join("p1", { dropoutTimeout: 5000 });
     expect(a.api.presence().ghost).toBe("away");
     jest.advanceTimersByTime(5000);
     expect(a.api.presence().ghost).toBe("left");
   });
 
-  test("a wait on a participant who leaves rejects with MultiplayerParticipantLeftError", async () => {
+  test("a wait on a participant who leaves rejects with participant_left", async () => {
     const a = await join("p1", { dropoutTimeout: 5000 });
     const b = await join("p2");
     const waiting = a.api.wait((data) => data.p2?.ready === true, { participants: ["p2"] });
@@ -836,17 +984,17 @@ describe("presence", () => {
     await b.api.disconnect();
     jest.advanceTimersByTime(5000);
     await expect(waiting).rejects.toMatchObject({
-      name: "MultiplayerParticipantLeftError",
+      ...code("participant_left"),
       participantId: "p2",
     });
   });
 
   test("a wait whose condition holds resolves even if the participant has left", async () => {
-    const a = await join("p1", { dropoutTimeout: 0 });
+    const a = await join("p1", { dropoutTimeout: 1 });
     const b = await join("p2");
-    await b.api.push({ answer: 42 });
+    await b.api.update({ answer: 42 });
     await b.api.disconnect();
-    jest.advanceTimersByTime(0);
+    jest.advanceTimersByTime(1);
     expect(a.api.presence().p2).toBe("left");
 
     const data = await a.api.wait((d) => d.p2?.answer === 42, { participants: ["p2"] });
@@ -878,142 +1026,135 @@ describe("presence", () => {
     expect(a.api.presence().p2).toBe("left");
     expect(statuses).toEqual(["reconnecting", "connected"]);
   });
+
+  test("onResumed tells the group this participant is still on the same page", async () => {
+    const a = await join("p1", { dropoutTimeout: 5000 });
+    const b = await join("p2");
+    // Others lose sight of p2 without p2's own channel noticing
+    b.connection.online = false;
+    hub.broadcast();
+    expect(a.api.presence().p2).toBe("away");
+
+    b.connection.online = true;
+    b.connection.options.onResumed();
+    await flushPromises();
+    expect(a.api.presence().p2).toBe("connected");
+  });
 });
 
-describe("rejoining", () => {
+describe("agreeing on who left", () => {
   beforeEach(() => {
     jest.useFakeTimers();
   });
 
-  test("a participant who comes back from the same page after leaving rejoins", async () => {
+  test("a participant who sees someone leave tells the group", async () => {
+    const a = await join("p1", { dropoutTimeout: 5000 });
+    const b = await join("p2");
+    b.connection.setOnline(false);
+    jest.advanceTimersByTime(5000);
+    await flushPromises();
+    expect((hub.data.p1 as WireSlot).$mp.left).toEqual(["p2"]);
+    expect(a.api.presence().p2).toBe("left");
+  });
+
+  test("others who have also lost sight of them agree at once", async () => {
     const left = jest.fn();
-    const rejoined = jest.fn();
-    const a = await join("p1", {
-      dropoutTimeout: 5000,
-      onParticipantLeft: left,
-      onParticipantRejoined: rejoined,
-    });
+    const a = await join("p1", { dropoutTimeout: 5000 });
+    const c = await join("p3", { dropoutTimeout: 60000, onParticipantLeft: left });
     const b = await join("p2");
-    await b.api.update({ score: 3 });
 
     b.connection.setOnline(false);
+    expect(c.api.presence().p2).toBe("away");
     jest.advanceTimersByTime(5000);
+    await flushPromises();
+    // p3's own clock has a long way to go, but p1 has told the group
     expect(a.api.presence().p2).toBe("left");
+    expect(c.api.presence().p2).toBe("left");
     expect(left).toHaveBeenCalledWith("p2");
-
-    b.connection.setOnline(true);
-    expect(a.api.presence().p2).toBe("connected");
-    expect(rejoined).toHaveBeenCalledTimes(1);
-    expect(rejoined).toHaveBeenCalledWith("p2");
-    expect(a.api.get("p2")).toEqual({ score: 3 });
   });
 
-  test("presence alone doesn't count as coming back", async () => {
-    const rejoined = jest.fn();
-    const a = await join("p1", { dropoutTimeout: 5000, onParticipantRejoined: rejoined });
-    const b = await join("p2");
+  test("a participant who can still see them doesn't believe it", async () => {
+    const a = await join("p1", { dropoutTimeout: 5000 });
+    const c = await join("p3");
+    await join("p2");
+    // Only p1 thinks p2 is gone, e.g. a buggy or malicious client
+    a.connection.write({
+      ...(hub.data.p1 as WireSlot),
+      $mp: { ...(hub.data.p1 as WireSlot).$mp, left: ["p2"] },
+    });
+    expect(c.api.presence().p2).toBe("connected");
+  });
+
+  test("a participant the group gave up on is told their connection was lost", async () => {
+    const statuses: string[] = [];
+    await join("p1", { dropoutTimeout: 5000 });
+    const b = await join("p2", { onStatusChange: (s) => statuses.push(s) });
+    const waiting = b.api.wait(() => false);
 
     b.connection.setOnline(false);
     jest.advanceTimersByTime(5000);
-    // Back in the connected list, but no write from this page since the drop
-    b.connection.online = true;
-    hub.broadcast();
-    expect(a.api.presence().p2).toBe("left");
-    expect(rejoined).not.toHaveBeenCalled();
+    await flushPromises();
+    b.connection.setOnline(true);
+    await flushPromises();
+
+    await expect(waiting).rejects.toMatchObject(code("connection_lost"));
+    expect(b.api.status).toBe("closed");
+    expect(statuses[statuses.length - 1]).toBe("closed");
   });
 
-  test("a participant who reloads after leaving has restarted and stays left", async () => {
-    const rejoined = jest.fn();
-    const restarted = jest.fn();
-    const a = await join("p1", {
-      dropoutTimeout: 5000,
-      onParticipantRejoined: rejoined,
-      onParticipantRestarted: restarted,
-    });
+  test("a participant who was never away can't be evicted", async () => {
+    await join("p1");
+    const b = await join("p2");
+    hub.data = {
+      ...hub.data,
+      p1: { ...(hub.data.p1 as WireSlot), $mp: { v: 1, instance: "x", epoch: 9, left: ["p2"] } },
+    };
+    hub.broadcast();
+    expect(b.api.status).toBe("connected");
+  });
+});
+
+describe("reloading", () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  test("a participant who reloads has restarted, counts as left, and is told so", async () => {
+    const left = jest.fn();
+    const a = await join("p1", { dropoutTimeout: 5000, onParticipantLeft: left });
     const b = await join("p2");
     await b.api.update({ round: 4 });
-    expect(b.api.previousInstance).toBeNull();
-
-    await b.api.disconnect();
-    jest.advanceTimersByTime(5000);
-    expect(a.api.presence().p2).toBe("left");
-
-    // A reload: a new page (new jsPsych.multiplayer) connects under the same ID
-    const reloaded = new MultiplayerAPI();
-    await reloaded.connect(b.adapter);
-    expect(a.api.presence().p2).toBe("left");
-    expect(restarted).toHaveBeenCalledTimes(1);
-    expect(restarted).toHaveBeenCalledWith("p2");
-    expect(rejoined).not.toHaveBeenCalled();
-    // The reloaded page can tell that the group is ahead of it
-    expect(reloaded.previousInstance).not.toBeNull();
-    expect(reloaded.get("p2")).toEqual({ round: 4 });
-  });
-
-  test("a reload within the dropout timeout counts as leaving", async () => {
-    const left = jest.fn();
-    const restarted = jest.fn();
-    const a = await join("p1", {
-      dropoutTimeout: 5000,
-      onParticipantLeft: left,
-      onParticipantRestarted: restarted,
-    });
-    const b = await join("p2");
     const waiting = a.api.wait(() => false, { participants: ["p2"] });
 
+    // A reload: a new page (new jsPsych.multiplayer) connects under the same ID
     await b.api.disconnect();
     expect(a.api.presence().p2).toBe("away");
     const reloaded = new MultiplayerAPI();
     await reloaded.connect(b.adapter);
+    await flushPromises();
 
     expect(a.api.presence().p2).toBe("left");
-    expect(left).toHaveBeenCalledWith("p2");
-    expect(restarted).toHaveBeenCalledWith("p2");
-    await expect(waiting).rejects.toMatchObject({ name: "MultiplayerParticipantLeftError" });
+    expect(left).toHaveBeenCalledTimes(1);
+    await expect(waiting).rejects.toMatchObject(code("participant_left"));
+    // The reloaded page can tell that the group is ahead of it
+    expect(reloaded.restarted).toBe(true);
+    expect(reloaded.status).toBe("closed");
+    expect(reloaded.get("p2")).toEqual({ round: 4 });
     // No dropout clock is left running for them
     jest.advanceTimersByTime(5000);
     expect(left).toHaveBeenCalledTimes(1);
   });
 
-  test("reconnecting on the same page with connect() is a rejoin, not a restart", async () => {
-    const rejoined = jest.fn();
-    const restarted = jest.fn();
-    const a = await join("p1", {
-      dropoutTimeout: 5000,
-      onParticipantRejoined: rejoined,
-      onParticipantRestarted: restarted,
-    });
+  test("reconnecting on the same page with connect() is not a restart", async () => {
+    const a = await join("p1", { dropoutTimeout: 5000 });
     const b = await join("p2");
 
     await b.api.disconnect();
-    jest.advanceTimersByTime(5000);
+    jest.advanceTimersByTime(4000);
     await b.api.connect(b.adapter);
 
-    expect(b.api.previousInstance).toBeNull();
+    expect(b.api.restarted).toBe(false);
     expect(a.api.presence().p2).toBe("connected");
-    expect(rejoined).toHaveBeenCalledTimes(1);
-    expect(restarted).not.toHaveBeenCalled();
-  });
-
-  test("the session's bookkeeping never shows up in the data", async () => {
-    const a = await join("p1");
-    const b = await join("p2");
-    // p2 has connected but written nothing, so it has no entry yet
-    expect(a.api.getAll()).toEqual({});
-    expect(a.api.get("p2")).toBeUndefined();
-    expect(hub.data.p2).toHaveProperty(RESERVED_KEY);
-
-    await b.api.push({ x: 1 });
-    expect(a.api.get("p2")).toEqual({ x: 1 });
-    expect(a.api.getAll()).toEqual({ p2: { x: 1 } });
-    await expect(b.api.update({ [RESERVED_KEY]: 1 })).rejects.toThrow("reserved");
-  });
-
-  test("an empty slot someone wrote still shows up", async () => {
-    const a = await join("p1");
-    const b = await join("p2");
-    await b.api.push({});
-    expect(a.api.get("p2")).toEqual({});
   });
 });
 
@@ -1021,6 +1162,7 @@ describe("losing the connection", () => {
   test("a closed connection fails pending work and keeps the last snapshot readable", async () => {
     const statuses: string[] = [];
     const a = await join("p1", { onStatusChange: (status) => statuses.push(status) });
+    await flushPromises();
     const waiting = a.api.wait(() => false);
     const ack = deferred();
     a.connection.pushImpl = () => ack.promise;
@@ -1028,16 +1170,38 @@ describe("losing the connection", () => {
 
     a.connection.options.onStatus("closed");
 
-    const closed = { name: "MultiplayerConnectionClosedError" };
-    await expect(waiting).rejects.toMatchObject(closed);
-    await expect(writing).rejects.toMatchObject(closed);
-    await expect(a.api.update({ y: 1 })).rejects.toMatchObject(closed);
-    await expect(a.api.wait(() => false)).rejects.toMatchObject(closed);
+    const lost = code("connection_lost");
+    await expect(waiting).rejects.toMatchObject(lost);
+    await expect(writing).rejects.toMatchObject(lost);
+    await expect(a.api.update({ y: 1 })).rejects.toMatchObject(lost);
+    await expect(a.api.wait(() => false)).rejects.toMatchObject(lost);
     expect(a.api.status).toBe("closed");
     expect(a.api.presence().p1).toBe("left");
     expect(a.api.get("p1")).toEqual({ x: 1 });
     expect(a.connection.disconnectCalls).toBe(1);
     expect(statuses).toEqual(["closed"]);
+  });
+
+  test("reconnectTimeout gives up on a connection that stays down", async () => {
+    jest.useFakeTimers();
+    const a = await join("p1", { reconnectTimeout: 3000 });
+    const waiting = a.api.wait(() => false);
+    a.connection.options.onStatus("reconnecting");
+    jest.advanceTimersByTime(2999);
+    expect(a.api.status).toBe("reconnecting");
+    jest.advanceTimersByTime(1);
+    await expect(waiting).rejects.toMatchObject(code("connection_lost"));
+    expect(a.api.status).toBe("closed");
+  });
+
+  test("recovering before reconnectTimeout keeps the connection", async () => {
+    jest.useFakeTimers();
+    const a = await join("p1", { reconnectTimeout: 3000 });
+    a.connection.options.onStatus("reconnecting");
+    jest.advanceTimersByTime(2000);
+    a.connection.options.onStatus("connected");
+    jest.advanceTimersByTime(5000);
+    expect(a.api.status).toBe("connected");
   });
 
   test("subscribers get one last call when the connection is lost", async () => {
@@ -1058,9 +1222,9 @@ describe("losing the connection", () => {
   });
 
   test("a subscriber that disconnects during the last call doesn't close twice", async () => {
-    const { api, session, connection } = await join("p1");
-    session.subscribe(() => {
-      if (session.status === "closed") void session.disconnect();
+    const { api, connection } = await join("p1");
+    api.subscribe(() => {
+      if (api.status === "closed") void api.disconnect();
     });
     await api.disconnect();
     expect(connection.disconnectCalls).toBe(1);
@@ -1069,8 +1233,7 @@ describe("losing the connection", () => {
   test("a session whose connection closed can be replaced without disconnect()", async () => {
     const a = await join("p1");
     a.connection.options.onStatus("closed");
-    const session = await a.api.connect(a.adapter);
-    expect(a.api.session).toBe(session);
+    await a.api.connect(a.adapter);
     expect(a.api.status).toBe("connected");
   });
 });
@@ -1084,14 +1247,11 @@ const GOLDEN = {
 };
 
 describe("session ID", () => {
-  test("sessionId comes from the connection and is null without a session", async () => {
+  test("sessionId comes from the connection and is null before connecting", async () => {
     const api = new MultiplayerAPI();
     expect(api.sessionId).toBeNull();
-    const session = await api.connect(new MockAdapter(hub, "p1"));
-    expect(session.sessionId).toBe("session-1");
+    await api.connect(new MockAdapter(hub, "p1"));
     expect(api.sessionId).toBe("session-1");
-    await api.disconnect();
-    expect(api.sessionId).toBeNull();
   });
 
   test.each([undefined, "", 42])(
@@ -1102,7 +1262,7 @@ describe("session ID", () => {
       const adapter = new MockAdapter(hub, "p1");
       await expect(api.connect(adapter)).rejects.toThrow("sessionId");
       expect(adapter.connection.disconnectCalls).toBe(1);
-      expect(api.session).toBeNull();
+      expect(api.sessionId).toBeNull();
     }
   );
 
@@ -1226,10 +1386,10 @@ describe("shared randomness", () => {
   });
 
   test("values still work after the session closes", async () => {
-    const { session } = await join("p1");
-    const value = session.random("x");
-    await session.disconnect();
-    expect(session.random("x")).toBe(value);
+    const { api } = await join("p1");
+    const value = api.random("x");
+    await api.disconnect();
+    expect(api.random("x")).toBe(value);
   });
 
   // Every participant must compute identical values, including participants on
@@ -1249,8 +1409,8 @@ describe("group formation", () => {
     const a = await join("p1");
     await join("p2");
     expect(a.api.group()).toEqual({ size: null, members: ["p1", "p2"], sealed: false });
-    await expect(a.api.sealGroup()).rejects.toThrow("can't seal groups");
-    await expect(a.api.waitForGroup()).rejects.toThrow("doesn't form groups");
+    await expect(a.api.sealGroup()).rejects.toMatchObject(code("unsupported"));
+    await expect(a.api.waitForGroup()).rejects.toMatchObject(code("unsupported"));
   });
 
   test("group methods throw or reject before connect", async () => {
@@ -1261,15 +1421,25 @@ describe("group formation", () => {
   });
 
   test("the group's size and members come from the adapter", async () => {
-    hub.groups = { size: 3, sealed: false, tellsEveryone: true };
+    hub.groups = { size: 3, sealed: false };
     const a = await join("p1");
     await join("p2");
     expect(a.api.group()).toEqual({ size: 3, members: ["p1", "p2"], sealed: false });
     expect(Object.isFrozen(a.api.group())).toBe(true);
   });
 
+  test("only members' data shows when the adapter forms groups", async () => {
+    hub.groups = { size: 2, sealed: false };
+    hub.data = { outsider: wire({ x: 1 }) };
+    const a = await join("p1");
+    const b = await join("p2");
+    await b.api.update({ y: 2 });
+    expect(a.api.getAll()).toEqual({ p2: { y: 2 } });
+    expect(a.api.presence().outsider).toBeUndefined();
+  });
+
   test("waitForGroup resolves once the backend seals the group", async () => {
-    hub.groups = { size: 2, sealed: false, tellsEveryone: true };
+    hub.groups = { size: 2, sealed: false };
     const a = await join("p1");
     let group: GroupState | undefined;
     const waiting = a.api.waitForGroup().then((g) => (group = g));
@@ -1285,15 +1455,15 @@ describe("group formation", () => {
 
   test("waitForGroup rejects on timeout", async () => {
     jest.useFakeTimers();
-    hub.groups = { size: 2, sealed: false, tellsEveryone: true };
+    hub.groups = { size: 2, sealed: false };
     const a = await join("p1");
     const waiting = a.api.waitForGroup({ timeout: 1000 });
     jest.advanceTimersByTime(1000);
-    await expect(waiting).rejects.toBeInstanceOf(MultiplayerTimeoutError);
+    await expect(waiting).rejects.toMatchObject(code("timeout"));
   });
 
   test("subscribers and wait conditions get the group", async () => {
-    hub.groups = { size: 2, sealed: false, tellsEveryone: true };
+    hub.groups = { size: 2, sealed: false };
     const a = await join("p1");
     const seen: GroupState[] = [];
     a.api.subscribe((_data, _presence, group) => seen.push(group));
@@ -1302,8 +1472,8 @@ describe("group formation", () => {
     await a.api.wait((_data, _presence, group) => group.members.length === 2);
   });
 
-  test("a seal only the sealer hears about reaches everyone through the group's data", async () => {
-    hub.groups = { size: 3, sealed: false, tellsEveryone: false };
+  test("sealGroup seals the group and everyone sees it", async () => {
+    hub.groups = { size: 3, sealed: false };
     const a = await join("p1");
     const b = await join("p2");
     const waiting = b.api.waitForGroup();
@@ -1311,11 +1481,10 @@ describe("group formation", () => {
     await a.api.sealGroup();
     expect(a.api.group().sealed).toBe(true);
     await expect(waiting).resolves.toEqual({ size: 3, members: ["p1", "p2"], sealed: true });
-    expect(b.api.getAll()).toEqual({});
   });
 
   test("sealGroup asks the backend once and resolves at once when already sealed", async () => {
-    hub.groups = { size: 3, sealed: false, tellsEveryone: false };
+    hub.groups = { size: 3, sealed: false };
     const a = await join("p1");
     await Promise.all([a.api.sealGroup(), a.api.sealGroup()]);
     expect(hub.sealCalls).toBe(1);
@@ -1323,13 +1492,30 @@ describe("group formation", () => {
     expect(hub.sealCalls).toBe(1);
   });
 
+  test("peers can't seal the group through their data", async () => {
+    hub.groups = { size: 3, sealed: false };
+    const a = await join("p1");
+    await join("p2");
+    // What an earlier version relayed, or a malicious client might write
+    hub.data = {
+      ...hub.data,
+      p2: {
+        ...(hub.data.p2 as WireSlot),
+        $mp: { v: 1, instance: "x", epoch: 5, sealed: ["p2", "fake"] },
+      },
+    };
+    hub.broadcast();
+    expect(a.api.group()).toEqual({ size: 3, members: ["p1", "p2"], sealed: false });
+  });
+
   test("the roster is fixed once sealed", async () => {
-    hub.groups = { size: 2, sealed: true, tellsEveryone: true };
+    hub.groups = { size: 2, sealed: true };
     const a = await join("p1");
     const b = await join("p2");
     expect(a.api.group().members).toEqual(["p1", "p2"]);
 
-    // A member who drops out stays on the roster, and the group stays sealed
+    // A member who drops out stays on the roster, and the group stays sealed, even if the
+    // backend stops saying so
     await b.api.disconnect();
     hub.members.delete("p2");
     hub.groups.sealed = false;
@@ -1337,27 +1523,10 @@ describe("group formation", () => {
     expect(a.api.group()).toEqual({ size: 2, members: ["p1", "p2"], sealed: true });
   });
 
-  test("a reloaded page sees that its group was sealed", async () => {
-    hub.groups = { size: 3, sealed: false, tellsEveryone: false };
-    const a = await join("p1");
-    await join("p2");
-    await a.api.sealGroup();
-    await flushPromises();
-
-    // p1's new page load: its backend doesn't say the group is sealed, but its old slot does
-    await a.api.disconnect();
-    hub.sealedBy.clear();
-    const reloaded = await join("p1");
-    expect(reloaded.api.group()).toEqual({ size: 3, members: ["p1", "p2"], sealed: true });
-    // and it keeps telling the group
-    const meta = hub.data.p1[RESERVED_KEY] as { sealed?: string[] };
-    expect(meta.sealed).toEqual(["p1", "p2"]);
-  });
-
   test("a roster member who never shows up becomes away, then left", async () => {
     jest.useFakeTimers();
     const left = jest.fn();
-    hub.groups = { size: 2, sealed: true, tellsEveryone: true };
+    hub.groups = { size: 2, sealed: true };
     // The backend assigned p2 a place, but p2 never connected
     hub.members.add("p2");
     const a = await join("p1", { dropoutTimeout: 5000, onParticipantLeft: left });
@@ -1370,14 +1539,90 @@ describe("group formation", () => {
 
   test("a malformed group() report is ignored", async () => {
     const error = jest.spyOn(console, "error").mockImplementation(() => {});
-    hub.groups = { size: 2, sealed: false, tellsEveryone: true };
+    hub.groups = { size: 2, sealed: false };
     const api = new MultiplayerAPI();
     const adapter = new MockAdapter(hub, "p1");
-    const session = await api.connect(adapter);
+    await api.connect(adapter);
     adapter.connection.group = () => null as unknown as GroupState;
     hub.broadcast();
-    expect(session.group().sealed).toBe(false);
+    expect(api.group().sealed).toBe(false);
     expect(error).toHaveBeenCalled();
+  });
+});
+
+describe("scopes", () => {
+  test("a trial's writes and reads use its own scope", async () => {
+    const a = await join("p1");
+    const b = await join("p2");
+    await a.api.update({ name: "Sam" });
+
+    a.api[timelineHooks].trialStarted("round-1");
+    b.api[timelineHooks].trialStarted("round-1");
+    await a.api.update({ choice: "left" });
+    expect(b.api.getAll()).toEqual({ p1: { choice: "left" } });
+    // The session scope is still there when asked for
+    expect(b.api.get("p1", { scope: "session" })).toEqual({ name: "Sam" });
+    expect((hub.data.p1 as WireSlot).scopes).toEqual({ "round-1": { choice: "left" } });
+
+    // The next trial starts empty, so an old answer can't satisfy a new wait
+    a.api[timelineHooks].trialFinished();
+    b.api[timelineHooks].trialFinished();
+    b.api[timelineHooks].trialStarted("round-2");
+    expect(b.api.getAll()).toEqual({});
+    expect(b.api.getAll({ scope: "session" })).toEqual({ p1: { name: "Sam" } });
+  });
+
+  test("participants in different trials each read their own trial's scope", async () => {
+    const a = await join("p1");
+    const b = await join("p2");
+    a.api[timelineHooks].trialStarted("round-1");
+    await a.api.update({ choice: "left" });
+    a.api[timelineHooks].trialFinished();
+    a.api[timelineHooks].trialStarted("round-2");
+    await a.api.update({ choice: "right" });
+
+    // p2 is still in round 1 and sees p1's round-1 answer
+    b.api[timelineHooks].trialStarted("round-1");
+    expect(b.api.get("p1")).toEqual({ choice: "left" });
+  });
+
+  test("outside a trial, calls use the session scope", async () => {
+    const { api } = await join("p1");
+    await api.update({ a: 1 });
+    expect(api.getAll({ scope: "session" })).toEqual({ p1: { a: 1 } });
+    expect(() => api.getAll({ scope: "trial" })).toThrow("during a trial");
+    expect(() => api.getAll({ scope: "round" as any })).toThrow('"trial" or "session"');
+  });
+
+  test("subscriptions and waits made during a trial end with it", async () => {
+    const a = await join("p1");
+    const b = await join("p2");
+    a.api[timelineHooks].trialStarted("t");
+    b.api[timelineHooks].trialStarted("t");
+    const seen: unknown[] = [];
+    a.api.subscribe((data) => seen.push(data.p2?.n));
+    const waiting = a.api.wait(() => false);
+
+    a.api[timelineHooks].trialEnded();
+    await expect(waiting).rejects.toMatchObject(code("cancelled"));
+    await b.api.update({ n: 1 });
+    expect(seen).toEqual([undefined]);
+  });
+
+  test("a session-scope subscription made during a trial outlives it", async () => {
+    const a = await join("p1");
+    const b = await join("p2");
+    a.api[timelineHooks].trialStarted("t");
+    const seen: unknown[] = [];
+    a.api.subscribe((data) => seen.push(data.p2?.name), { scope: "session" });
+    a.api[timelineHooks].trialEnded();
+    a.api[timelineHooks].trialFinished();
+
+    await b.api.update({ name: "Alex" });
+    expect(seen).toEqual([undefined, "Alex"]);
+    a.api[timelineHooks].experimentEnded();
+    await b.api.update({ name: "Sam" });
+    expect(seen).toEqual([undefined, "Alex"]);
   });
 });
 
@@ -1406,9 +1651,9 @@ describe("jsPsych integration", () => {
     await pressKey("a");
     await expectFinished();
 
-    await expect(waiting).rejects.toMatchObject({ name: "MultiplayerCancelledError" });
+    await expect(waiting).rejects.toMatchObject(code("cancelled"));
     const count = received.length;
-    await other.api.push({ late: true });
+    await other.api.update({ late: true });
     expect(received).toHaveLength(count);
   });
 
@@ -1416,7 +1661,7 @@ describe("jsPsych integration", () => {
     const jsPsych = initJsPsych({
       on_finish: async () => {
         const count = received.length;
-        await other.api.push({ late: true });
+        await other.api.update({ late: true });
         expect(received).toHaveLength(count);
         await jsPsych.multiplayer.update({ done: true });
       },
@@ -1432,6 +1677,59 @@ describe("jsPsych integration", () => {
     );
     await pressKey("a");
     await expectFinished();
-    expect(stripMeta(hub.data.p1)).toEqual({ done: true });
+    expect(stored("p1")).toEqual({ done: true });
+  });
+
+  test("each trial gets a scope named by its position in the timeline", async () => {
+    const jsPsych = initJsPsych();
+    await jsPsych.multiplayer.connect(new MockAdapter(hub, "p1"));
+    const write = (value: string) => () => void jsPsych.multiplayer.update({ value });
+
+    const { expectFinished } = await startTimeline(
+      [
+        { type: htmlKeyboardResponse, stimulus: "a", on_start: write("a") },
+        {
+          timeline: [{ type: htmlKeyboardResponse, stimulus: "b", on_start: write("b") }],
+          repetitions: 2,
+        },
+        {
+          timeline: [{ type: htmlKeyboardResponse, stimulus: "skipped" }],
+          conditional_function: () => false,
+        },
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "c",
+          multiplayer_scope: "named",
+          on_start: write("c"),
+        },
+      ],
+      jsPsych
+    );
+    for (let i = 0; i < 4; i++) await pressKey("a");
+    await expectFinished();
+    await jsPsych.multiplayer.update({ done: true });
+
+    expect((hub.data.p1 as WireSlot).scopes).toEqual({
+      "#0": { value: "a" },
+      "#1.0": { value: "b" },
+      "#1.1": { value: "b" },
+      named: { value: "c" },
+    });
+    expect(stored("p1")).toEqual({ done: true });
+  });
+
+  test("the IDs are recorded in every row of data", async () => {
+    const jsPsych = initJsPsych();
+    await jsPsych.multiplayer.connect(new MockAdapter(hub, "p1"));
+    const { expectFinished, getData } = await startTimeline(
+      [{ type: htmlKeyboardResponse, stimulus: "a" }],
+      jsPsych
+    );
+    await pressKey("a");
+    await expectFinished();
+    expect(getData().values()[0]).toMatchObject({
+      multiplayer_participant_id: "p1",
+      multiplayer_session_id: "session-1",
+    });
   });
 });

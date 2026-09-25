@@ -1,11 +1,6 @@
 import autoBind from "auto-bind";
 
-import {
-  MultiplayerCancelledError,
-  MultiplayerConnectionClosedError,
-  MultiplayerParticipantLeftError,
-  MultiplayerTimeoutError,
-} from "./errors";
+import { MultiplayerError } from "./errors";
 import { SharedRandom } from "./random";
 import {
   ConnectionStatus,
@@ -22,72 +17,76 @@ import {
 const MAX_TIMEOUT = 2 ** 31 - 1;
 
 /**
- * Safety valve for subscribers that write different data on every
- * notification, which would otherwise loop forever.
+ * Safety valve for subscribers that write different data on every notification, which would
+ * otherwise loop forever.
  */
 const MAX_NOTIFY_ROUNDS = 100;
 
 /** How long a participant can be away before they count as having left, in ms. */
 export const DEFAULT_DROPOUT_TIMEOUT = 10000;
 
+/** Delays between retries of a failed push, in ms. Each failure doubles the delay up to the max. */
+const RETRY_DELAY_MIN = 250;
+const RETRY_DELAY_MAX = 10000;
+
+/**
+ * Version of the format each participant's pushed data is in. Later versions only add fields, so
+ * a client reads what it understands of a newer peer's data.
+ */
+export const PROTOCOL_VERSION = 1;
+
+/**
+ * Read a timeout option: null or undefined means none, and a positive number is milliseconds.
+ * Infinity, and delays too long for setTimeout, also mean none. Anything else throws, so a typo
+ * like "5000" can't silently mean "wait forever".
+ */
+export function parseTimeout(value: unknown, name: string): number | null {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  if (typeof value !== "number" || Number.isNaN(value) || value <= 0) {
+    throw new TypeError(
+      `MultiplayerAPI: ${name} must be a positive number of milliseconds, or null for none.`
+    );
+  }
+  return value > MAX_TIMEOUT ? null : value;
+}
+
+/**
+ * Which part of the shared data a call reads or writes: a trial's scope, by name, or null for
+ * the session scope that lasts the whole session.
+ */
+export type ScopeName = string | null;
+
 export interface SessionOptions {
   /**
-   * How long a participant can stay disconnected before they count as having
-   * left, in milliseconds. Defaults to 10000. null or Infinity means never.
+   * How long a participant can stay disconnected before they count as having left, in
+   * milliseconds. Defaults to 10000. null means never.
    */
   dropoutTimeout?: number | null;
 
   /**
-   * Seed for random(), randomInt(), shuffle(), and sample() in place of the
-   * session ID. Every participant in the group must pass the same value. Use
-   * it to make the random values the same in every session.
+   * How long this participant's own connection can stay `reconnecting` before the API gives up
+   * and closes it, in milliseconds. Defaults to null: keep trying for as long as the adapter does.
+   */
+  reconnectTimeout?: number | null;
+
+  /**
+   * Seed for random(), randomInt(), shuffle(), and sample() in place of the session ID. Every
+   * participant in the group must pass the same value. Use it to make the random values the
+   * same in every session.
    */
   randomSeed?: string;
 
-  /** Called once when another participant reaches the `left` presence status. */
+  /**
+   * Called once when another participant reaches the `left` presence status, whether their
+   * connection dropped for longer than the dropout timeout or they reloaded the page.
+   */
   onParticipantLeft?: (participantId: string) => void;
-
-  /**
-   * Called when a participant who had `left` comes back from the same page
-   * load, so their experiment is still where they left it.
-   */
-  onParticipantRejoined?: (participantId: string) => void;
-
-  /**
-   * Called when a participant comes back from a new page load (a reload or a
-   * new tab) under the same ID. Their experiment restarted, so they are out of
-   * step with the group and stay `left`.
-   */
-  onParticipantRestarted?: (participantId: string) => void;
 
   /** Called whenever this client's connection status changes. */
   onStatusChange?: (status: ConnectionStatus) => void;
 }
-
-export interface SubscribeOptions {
-  /** Aborting this signal removes the subscription. */
-  signal?: AbortSignal;
-}
-
-export interface WaitOptions {
-  /**
-   * Maximum time to wait in milliseconds. null, undefined, negative, and
-   * non-finite values mean no timeout.
-   */
-  timeout?: number | null;
-
-  /** Aborting this signal rejects the wait with a MultiplayerCancelledError. */
-  signal?: AbortSignal;
-
-  /**
-   * Participants the wait depends on. If one of them leaves before the
-   * condition is met, the wait rejects with a MultiplayerParticipantLeftError.
-   */
-  participants?: string[];
-}
-
-/** Options for waitForGroup(). */
-export type GroupWaitOptions = Omit<WaitOptions, "participants">;
 
 export type SessionListener = (
   data: GroupSessionData,
@@ -95,20 +94,31 @@ export type SessionListener = (
   group: GroupState
 ) => void;
 
+interface ListenerOptions {
+  scope: ScopeName;
+  signal?: AbortSignal;
+  /** Removed when the trial it was created in ends. */
+  trialBound: boolean;
+}
+
+export interface SessionWaitOptions extends ListenerOptions {
+  timeout?: unknown;
+  participants?: string[];
+}
+
 interface Listener {
   callback: SessionListener;
   active: boolean;
+  scope: ScopeName;
+  trialBound: boolean;
+  /** For a wait(), rejects it. */
+  cancel?: (error: Error) => void;
 }
 
-interface Batch {
-  promise: Promise<void>;
+/** A caller waiting for the backend to confirm their write. */
+interface Caller {
   resolve: () => void;
   reject: (e: unknown) => void;
-}
-
-/** A delay in ms that setTimeout can honor, or null for "never". */
-function toTimeout(value: number | null | undefined): number | null {
-  return typeof value === "number" && value >= 0 && value <= MAX_TIMEOUT ? value : null;
 }
 
 function deepFreeze<T>(value: T): T {
@@ -122,20 +132,29 @@ function deepFreeze<T>(value: T): T {
 }
 
 /**
- * Data is stored as a frozen JSON round-trip, which matches what other
- * participants receive over the network. JSON.stringify throws on BigInt and
- * circular data, so bad data fails at the call that wrote it, and comparing
- * the JSON text tells whether anything changed.
+ * Data is stored as a frozen JSON round-trip, which matches what other participants receive
+ * over the network. JSON.stringify throws on BigInt and circular data, so bad data fails at the
+ * call that wrote it, and comparing the JSON text tells whether anything changed.
  */
 function fromJson<T>(json: string): T {
   return deepFreeze(JSON.parse(json));
 }
 
-/**
- * Slot key the session reserves for its own bookkeeping. It is added to every
- * push and removed from every snapshot, so readers never see it.
- */
-export const RESERVED_KEY = "$mp";
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function isIdList(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((id) => typeof id === "string");
+}
+
+/** Sorted, without duplicates, so every participant lists a roster the same way. */
+function sortedIds(ids: Iterable<string>): string[] {
+  return [...new Set(ids)].sort();
+}
+
+/** Key of the session's bookkeeping in each participant's pushed data. */
+const META_KEY = "$mp";
 
 /** Identifies one page load. Shared by every session made from one jsPsych.multiplayer. */
 export interface SessionIdentity {
@@ -145,84 +164,71 @@ export interface SessionIdentity {
   epoch: number;
 }
 
-/** What each participant's slot carries under RESERVED_KEY. */
+/** The session's bookkeeping, pushed with each participant's data. */
 interface SlotMeta extends SessionIdentity {
-  /** Whether the participant has written any data of their own. */
-  written: boolean;
-  /**
-   * The group's roster, once this participant's backend confirmed the group is
-   * sealed. Carried in the slot because not every backend tells every member,
-   * and so a reloaded page can see it.
-   */
-  sealed?: string[];
+  v: number;
+  /** Participants this one has seen leave, so the rest of the group can agree. */
+  left?: string[];
 }
 
-function isSlotMeta(value: unknown): value is SlotMeta {
-  const meta = value as SlotMeta;
-  return (
-    typeof meta === "object" &&
-    meta !== null &&
-    typeof meta.instance === "string" &&
-    typeof meta.epoch === "number"
-  );
+/** One participant's data, as the session keeps it. */
+interface SlotData {
+  /** The session scope; undefined until they write to it. */
+  session?: Record<string, unknown>;
+  /** Each trial scope they have written to, by name. */
+  scopes: Record<string, Record<string, unknown>>;
 }
 
-/** Separate the reserved bookkeeping from each participant's data. */
-function splitMeta(raw: GroupSessionData): {
-  data: GroupSessionData;
-  metas: Record<string, SlotMeta>;
-} {
-  const data: GroupSessionData = {};
-  const metas: Record<string, SlotMeta> = {};
-  for (const [id, slot] of Object.entries(raw)) {
-    if (slot === null || typeof slot !== "object" || !(RESERVED_KEY in slot)) {
-      data[id] = slot;
-      continue;
-    }
-    const { [RESERVED_KEY]: meta, ...rest } = slot;
-    if (isSlotMeta(meta)) {
-      metas[id] = meta;
-    }
-    // A participant who has only announced themselves hasn't written anything yet
-    if (!isSlotMeta(meta) || meta.written) {
-      data[id] = Object.freeze(rest);
+interface Slot extends SlotData {
+  meta: SlotMeta;
+}
+
+/** Read one participant's pushed data, or null if it isn't in a format this client knows. */
+function parseSlot(raw: unknown): Slot | null {
+  if (!isRecord(raw)) {
+    return null;
+  }
+  const meta = raw[META_KEY];
+  if (
+    !isRecord(meta) ||
+    typeof meta.v !== "number" ||
+    typeof meta.instance !== "string" ||
+    typeof meta.epoch !== "number"
+  ) {
+    return null;
+  }
+  const scopes: Record<string, Record<string, unknown>> = {};
+  if (isRecord(raw.scopes)) {
+    for (const [name, data] of Object.entries(raw.scopes)) {
+      if (isRecord(data)) scopes[name] = data;
     }
   }
-  return { data, metas };
+  return {
+    meta: {
+      v: meta.v,
+      instance: meta.instance,
+      epoch: meta.epoch,
+      left: isIdList(meta.left) ? meta.left : undefined,
+    },
+    session: isRecord(raw.session) ? raw.session : undefined,
+    scopes,
+  };
 }
 
-/** Sorted, without duplicates, so every participant lists a roster the same way. */
-function sortedIds(ids: Iterable<string>): string[] {
-  return [...new Set(ids)].sort();
-}
-
-function isIdList(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((id) => typeof id === "string");
+function scopeData(slot: SlotData, scope: ScopeName): Record<string, unknown> | undefined {
+  return scope === null ? slot.session : slot.scopes[scope];
 }
 
 function assertRecord(data: unknown): asserts data is Record<string, unknown> {
-  if (data === null || typeof data !== "object" || Array.isArray(data)) {
+  if (!isRecord(data)) {
     throw new TypeError("MultiplayerAPI: data must be a plain object of JSON values.");
   }
-  if (Object.prototype.hasOwnProperty.call(data, RESERVED_KEY)) {
-    throw new TypeError(`MultiplayerAPI: "${RESERVED_KEY}" is reserved for the multiplayer API.`);
-  }
-}
-
-function newBatch(): Batch {
-  let resolve: () => void;
-  let reject: (e: unknown) => void;
-  const promise = new Promise<void>((res, rej) => {
-    resolve = res;
-    reject = rej;
-  });
-  return { promise, resolve: resolve!, reject: reject! };
 }
 
 /**
- * One connection to a multiplayer backend, returned by
- * jsPsych.multiplayer.connect(). All state belongs to the session, so work
- * left over from an earlier connection can never touch a later one.
+ * One connection to a multiplayer backend. jsPsych.multiplayer opens it and forwards to it. All
+ * state belongs to the session, so work left over from an earlier connection can never touch a
+ * later one.
  */
 export class MultiplayerSession {
   readonly participantId: string;
@@ -230,46 +236,50 @@ export class MultiplayerSession {
   /** Identifies the group session; the same for every participant in the group. */
   readonly sessionId: string;
 
+  /**
+   * True when this participant's data came from an earlier page load: they reloaded or opened
+   * the study again, so their experiment restarted while the group moved on.
+   */
+  readonly restarted: boolean;
+
   /** Seeded with `options.randomSeed`, or else the session ID. */
   private readonly rng: SharedRandom;
 
   private currentStatus: ConnectionStatus = "connected";
 
   /** Why the session closed; pending and later waits reject with it. */
-  private closeReason: Error | null = null;
+  private closeReason: MultiplayerError | null = null;
 
   /** Memoized so overlapping disconnect() calls close the connection once. */
   private closing: Promise<void> | null = null;
 
-  /**
-   * The adapter's latest session data as a frozen copy with the reserved key
-   * removed, the JSON text of the raw and the cleaned data, and each
-   * participant's reserved bookkeeping.
-   */
-  private remote: GroupSessionData = {};
+  /** JSON of the adapter's latest getAll(), to skip reads that change nothing. */
   private remoteJson = "{}";
+
+  /** JSON of every other participant's data, without bookkeeping, to tell whether it changed. */
   private remoteDataJson = "{}";
-  private metas: Record<string, SlotMeta> = {};
+
+  /** Every other participant's data and bookkeeping, frozen. */
+  private slots: Record<string, Slot> = {};
 
   /**
-   * The page load this participant's slot came from before this page, if it
-   * wasn't this one: this participant reloaded or opened the study again, so
-   * their experiment restarted. Null otherwise.
+   * This participant's own data. The session is its source of truth: writes change it at once
+   * and the backend is brought up to date after.
    */
-  readonly previousInstance: string | null;
+  private own: SlotData = { scopes: {} };
+  private ownJson: string;
 
-  /**
-   * This participant's own data. The session is its source of truth: writes
-   * change it at once and the backend is brought up to date after.
-   */
-  private slot: Record<string, unknown> | undefined;
-  private slotJson: string | undefined;
+  /** Participants this one has seen leave, sent to the group. */
+  private ownLeft: string[] = [];
 
-  /** True when the backend is known to hold the current slot. */
+  /** Bumped whenever the bookkeeping changes, so a push of older bookkeeping doesn't count. */
+  private metaVersion = 0;
+
+  /** True when the backend is known to hold the current data and bookkeeping. */
   private slotConfirmed = true;
 
-  /** Frozen snapshot shared by every reader: `remote` with `slot` on top. */
-  private data: GroupSessionData = {};
+  /** Frozen view of each scope's data that readers have asked for, rebuilt on every change. */
+  private views = new Map<ScopeName, GroupSessionData>();
 
   private presenceData: PresenceData = {};
 
@@ -277,62 +287,66 @@ export class MultiplayerSession {
   private groupData: GroupState = Object.freeze({ size: null, members: [], sealed: false });
 
   /**
-   * The roster this participant's own backend confirmed as sealed, sent to the
-   * group in the reserved key. Null until then.
+   * When the adapter forms groups, its members; only their data is shown. Null when it doesn't.
    */
-  private ownRoster: string[] | null = null;
+  private memberFilter: Set<string> | null = null;
 
   /**
-   * Every roster seen so far, from this backend or any participant's slot.
-   * Non-null means the group is sealed. It only grows, so a sealed group
-   * never becomes unsealed and nobody drops off the roster.
+   * Every member the adapter has reported since it sealed the group. Non-null means the group is
+   * sealed. It only grows, so a sealed group never becomes unsealed and nobody drops off the
+   * roster, even if the backend stops listing them.
    */
   private roster: Set<string> | null = null;
 
-  /** Set by the first announce(); pushes wait for it. */
-  private announced = false;
-
   /** Memoized so overlapping sealGroup() calls ask the backend once. */
   private sealing: Promise<void> | null = null;
+
   private presenceStatus = new Map<string, PresenceStatus>();
   private awayTimers = new Map<string, number>();
   private readonly dropoutTimeout: number | null;
+  private readonly reconnectTimeout: number | null;
+  private reconnectTimer: number | undefined;
 
   /** Each participant's page load, as last seen while they were connected. */
   private knownInstance = new Map<string, string>();
 
   /**
-   * Each absent participant's bookkeeping as of when they dropped out (null if
-   * they had none). They count as back only after a write made since then.
+   * Each absent participant's bookkeeping as of when they dropped out (null if they had none).
+   * They count as back only after a write made since then.
    */
   private dropMeta = new Map<string, SlotMeta | null>();
 
-  /** `${id}\n${instance}` for every restart already reported. */
-  private restartsReported = new Set<string>();
+  /** False until open() announces this page load; nothing is pushed before then. */
+  private announced = false;
+
+  /** True once other participants may have seen this one drop out. */
+  private hasBeenAway = false;
 
   /** Callbacks to researcher code, run once the session's state is settled. */
   private events: Array<() => void> = [];
 
   private listeners = new Set<Listener>();
-  private pendingWaits = new Set<(error: Error) => void>();
   private notifying = false;
   private notifyAgain = false;
 
-  /** True when `slot` has changed since it was last handed to the connection. */
+  /** True when own data or bookkeeping has changed since it was last handed to the connection. */
   private hasUnsentChanges = false;
 
-  /** True while sendLatestSlot() is running. */
+  /** True while sendLatest() is running. */
   private sending = false;
 
   /** Callers whose writes will go out with the next push. */
-  private nextBatch: Batch | null = null;
+  private queued: Caller[] = [];
 
   /** Callers whose writes are in the push currently in flight. */
-  private inFlightBatch: Batch | null = null;
+  private inFlight: Caller[] | null = null;
+
+  private retryTimer: number | undefined;
+  private retryDelay = 0;
 
   /**
-   * Connect with an adapter. Once `signal` is aborted this rejects, but only
-   * after any connection the adapter opened has been closed.
+   * Connect with an adapter. Once `signal` is aborted this rejects, but only after any
+   * connection the adapter opened has been closed.
    */
   static async open(
     adapter: MultiplayerAdapter,
@@ -341,7 +355,7 @@ export class MultiplayerSession {
     identity: SessionIdentity
   ): Promise<MultiplayerSession> {
     const cancelled = () =>
-      new MultiplayerCancelledError("MultiplayerAPI: connect() was cancelled before it finished.");
+      new MultiplayerError("cancelled", "connect() was cancelled before it finished.");
     if (signal.aborted) {
       throw cancelled();
     }
@@ -354,6 +368,7 @@ export class MultiplayerSession {
         signal,
         onChange: () => session?.handleChange(),
         onStatus: (status) => session?.handleStatus(status),
+        onResumed: () => session?.handleResumed(),
       });
     } catch (e) {
       throw signal.aborted ? cancelled() : e;
@@ -403,23 +418,27 @@ export class MultiplayerSession {
     this.dropoutTimeout =
       options.dropoutTimeout === undefined
         ? DEFAULT_DROPOUT_TIMEOUT
-        : toTimeout(options.dropoutTimeout);
-    this.remoteJson = JSON.stringify(connection.getAll() ?? {});
-    const { data, metas } = splitMeta(fromJson(this.remoteJson));
-    this.remote = data;
-    this.remoteDataJson = JSON.stringify(data);
-    this.metas = metas;
-    this.slot = this.remote[this.participantId];
-    this.slotJson = this.slot === undefined ? undefined : JSON.stringify(this.slot);
-    const ownMeta = metas[this.participantId];
-    this.previousInstance =
-      ownMeta && ownMeta.instance !== identity.instance ? ownMeta.instance : null;
-    this.refreshPresence();
-    // The announcement that follows open() carries any roster found here
-    if (this.refreshGroup() && this.roster) {
-      this.refreshPresence();
+        : parseTimeout(options.dropoutTimeout, "dropoutTimeout");
+    this.reconnectTimeout = parseTimeout(options.reconnectTimeout, "reconnectTimeout");
+
+    // Pick up this participant's own data from an earlier page load, if there is any
+    const previous = parseSlot(this.readRemote()[this.participantId]);
+    if (previous) {
+      this.own = { session: previous.session, scopes: previous.scopes };
+      this.ownLeft = previous.meta.left ?? [];
     }
+    this.ownJson = JSON.stringify(this.own);
+    this.own = fromJson(this.ownJson);
+    this.restarted = previous !== null && previous.meta.instance !== identity.instance;
+
+    this.readSlots();
+    this.refreshGroup();
+    this.refreshPresence();
+    // Presence can add members to a group the adapter doesn't form
+    this.refreshGroup();
     this.rebuild();
+    // Participants who left before this one arrived aren't news
+    this.events = [];
   }
 
   /** This client's connection status. */
@@ -433,14 +452,30 @@ export class MultiplayerSession {
 
   // ---------------------------------------------------------------- reading
 
-  /** The full group session. The object is frozen and shared, so don't modify it. */
-  getAll(): GroupSessionData {
-    return this.data;
+  /** Every participant's data in a scope. The object is frozen and shared, so don't modify it. */
+  getAll(scope: ScopeName): GroupSessionData {
+    let view = this.views.get(scope);
+    if (!view) {
+      const data: GroupSessionData = {};
+      for (const [id, slot] of Object.entries(this.slots)) {
+        const value = scopeData(slot, scope);
+        if (value !== undefined && (!this.memberFilter || this.memberFilter.has(id))) {
+          data[id] = value;
+        }
+      }
+      const mine = scopeData(this.own, scope);
+      if (mine !== undefined) {
+        data[this.participantId] = mine;
+      }
+      view = Object.freeze(data);
+      this.views.set(scope, view);
+    }
+    return view;
   }
 
-  /** One participant's data, or undefined if they haven't written any. Frozen. */
-  get(participantId: string): Record<string, unknown> | undefined {
-    return this.data[participantId];
+  /** One participant's data in a scope, or undefined if they haven't written any. Frozen. */
+  get(participantId: string, scope: ScopeName): Record<string, unknown> | undefined {
+    return this.getAll(scope)[participantId];
   }
 
   /** The presence status of every participant seen in the session, including this one. Frozen. */
@@ -455,25 +490,18 @@ export class MultiplayerSession {
 
   // ---------------------------------------------------------- randomness
 
-  /**
-   * A float in [0, 1) that is the same for every participant who asks with the
-   * same `key`. Asking again with the same key returns the same value.
-   */
   random(key: string): number {
     return this.rng.random(key);
   }
 
-  /** An integer from `lower` to `upper`, inclusive, shared like random(). */
   randomInt(key: string, lower: number, upper: number): number {
     return this.rng.randomInt(key, lower, upper);
   }
 
-  /** A shuffled copy of `array`, in the same order for every participant who uses `key`. */
   shuffle<T>(key: string, array: readonly T[]): T[] {
     return this.rng.shuffle(key, array);
   }
 
-  /** `size` items drawn from `array` without replacement, shared like shuffle(). */
   sample<T>(key: string, array: readonly T[], size: number): T[] {
     return this.rng.sample(key, array, size);
   }
@@ -481,64 +509,74 @@ export class MultiplayerSession {
   // ---------------------------------------------------------------- writing
 
   /**
-   * Replace this participant's data. Reads reflect the change at once; the
-   * promise resolves when the backend confirms a push that includes it.
+   * Shallow-merge data into this participant's data in a scope. Top-level keys in `data` replace
+   * the existing ones, other keys are kept, and a key set to undefined is removed. Reads reflect
+   * the change at once; the promise resolves when the backend confirms a push that includes it.
    */
-  async push(data: Record<string, unknown>): Promise<void> {
-    this.assertWritable();
+  update(data: Record<string, unknown>, scope: ScopeName): Promise<void> {
+    this.assertOpen();
     assertRecord(data);
-    return this.write(JSON.stringify(data));
+    return this.write(scope, { ...scopeData(this.own, scope), ...data });
   }
 
-  /**
-   * Shallow-merge data into this participant's data. Top-level keys in `data`
-   * replace the existing ones; other keys are kept.
-   */
-  async update(data: Record<string, unknown>): Promise<void> {
-    this.assertWritable();
+  /** Replace this participant's data in a scope. */
+  replace(data: Record<string, unknown>, scope: ScopeName): Promise<void> {
+    this.assertOpen();
     assertRecord(data);
-    return this.write(JSON.stringify({ ...this.slot, ...data }));
+    return this.write(scope, data);
   }
 
-  private assertWritable() {
+  /** Throw if the session can't be written to any more. */
+  assertOpen() {
     if (this.isClosed) {
-      throw this.closeReason instanceof MultiplayerConnectionClosedError
+      throw this.closeReason?.code === "connection_lost"
         ? this.closeReason
-        : new Error("MultiplayerAPI: this session was disconnected.");
+        : new MultiplayerError("not_connected", "this session was disconnected.");
     }
   }
 
   /**
-   * Queue the new slot for sending, then show it to readers. A write that
-   * doesn't change the slot sends and notifies nothing, so a subscriber that
-   * writes the same value on every notification can't start a loop.
+   * Queue the new data for sending, then show it to readers. A write that doesn't change the
+   * data sends and notifies nothing, so a subscriber that writes the same value on every
+   * notification can't start a loop.
    */
-  private write(json: string): Promise<void> {
-    const changed = json !== this.slotJson;
-    if (changed) {
-      this.slot = fromJson(json);
-      this.slotJson = json;
-      this.slotConfirmed = false;
-    } else {
+  private write(scope: ScopeName, data: Record<string, unknown>): Promise<void> {
+    const next: SlotData =
+      scope === null
+        ? { session: data, scopes: this.own.scopes }
+        : { session: this.own.session, scopes: { ...this.own.scopes, [scope]: data } };
+    const json = JSON.stringify(next);
+
+    if (json === this.ownJson) {
       // Share a push already on its way, or skip it if the backend has this data
-      const pending = this.nextBatch ?? this.inFlightBatch;
-      if (pending) return pending.promise;
-      if (this.slotConfirmed) return Promise.resolve();
+      if (this.inFlight && !this.hasUnsentChanges) {
+        return new Promise((resolve, reject) => this.inFlight!.push({ resolve, reject }));
+      }
+      if (this.slotConfirmed) {
+        return Promise.resolve();
+      }
+      const promise = this.enqueue();
+      this.requestSend();
+      return promise;
     }
-    this.nextBatch ??= newBatch();
-    const { promise } = this.nextBatch;
+
+    this.own = fromJson(json);
+    this.ownJson = json;
+    this.slotConfirmed = false;
+    const promise = this.enqueue();
     this.requestSend();
-    if (changed) {
-      this.rebuild();
-      this.notify();
-    }
+    this.rebuild();
+    this.notify();
     return promise;
   }
 
+  private enqueue(): Promise<void> {
+    return new Promise((resolve, reject) => this.queued.push({ resolve, reject }));
+  }
+
   /**
-   * Push this page's identity with a new epoch, so the group can tell that this
-   * participant is (back) on this page load. Runs on connect and whenever the
-   * connection recovers.
+   * Push this page's identity with a new epoch, so the group can tell that this participant is
+   * (back) on this page load. Runs on connect and whenever the connection recovers.
    */
   private announce() {
     if (this.isClosed) {
@@ -549,70 +587,88 @@ export class MultiplayerSession {
     this.sendMeta();
   }
 
-  /** Push the slot so the group sees this participant's current bookkeeping. */
+  /** Push the bookkeeping so the group sees it. */
   private sendMeta() {
     if (this.isClosed) {
       return;
     }
+    this.metaVersion++;
     this.slotConfirmed = false;
-    if (!this.nextBatch) {
-      this.nextBatch = newBatch();
-      // Nobody may be waiting on an announcement; a failure is retried by the next write
-      this.nextBatch.promise.catch(() => {});
+    if (this.announced) {
+      this.requestSend();
     }
-    this.requestSend();
   }
 
-  /** The slot as pushed: this participant's data plus the reserved bookkeeping. */
+  /** What gets pushed: this participant's data plus the bookkeeping. */
   private payload(): Record<string, unknown> {
     const meta: SlotMeta = {
+      v: PROTOCOL_VERSION,
       instance: this.identity.instance,
       epoch: this.identity.epoch,
-      written: this.slot !== undefined,
     };
-    if (this.ownRoster) {
-      meta.sealed = this.ownRoster;
+    if (this.ownLeft.length > 0) {
+      meta.left = [...this.ownLeft];
     }
-    return deepFreeze({ ...this.slot, [RESERVED_KEY]: meta });
+    const payload: Record<string, unknown> = { [META_KEY]: meta, scopes: this.own.scopes };
+    if (this.own.session !== undefined) {
+      payload.session = this.own.session;
+    }
+    return deepFreeze(payload);
   }
 
   /** Start the sender if it's idle; a running sender picks up the change itself. */
   private requestSend() {
     this.hasUnsentChanges = true;
-    if (!this.sending) {
-      // Runs synchronously up to the adapter's push, so an idle write doesn't
-      // wait a turn before reaching the backend.
-      void this.sendLatestSlot();
+    if (this.sending) {
+      return;
     }
+    if (this.retryTimer !== undefined) {
+      // New data goes out now rather than waiting for the retry
+      clearTimeout(this.retryTimer);
+      this.retryTimer = undefined;
+    }
+    // Runs synchronously up to the adapter's push, so an idle write doesn't wait a turn before
+    // reaching the backend.
+    void this.sendLatest();
   }
 
   /**
-   * Push the latest slot, one push at a time, until the backend has caught
-   * up. Writes made during a push go out together in the next one, so values
-   * that are replaced before they are sent are skipped.
+   * Push the latest data, one push at a time, until the backend has caught up. Writes made
+   * during a push go out together in the next one, so values that are replaced before they are
+   * sent are skipped. A failed push is retried with backoff; its callers keep waiting until a
+   * push succeeds or the session closes.
    */
-  private async sendLatestSlot(): Promise<void> {
+  private async sendLatest(): Promise<void> {
     this.sending = true;
     try {
       while (this.hasUnsentChanges && !this.isClosed) {
-        const slot = this.slot;
-        const epoch = this.identity.epoch;
-        const batch = this.nextBatch!;
+        const callers = this.queued;
+        const json = this.ownJson;
+        const metaVersion = this.metaVersion;
+        this.queued = [];
+        this.inFlight = callers;
         this.hasUnsentChanges = false;
-        this.nextBatch = null;
-        this.inFlightBatch = batch;
         try {
           await this.connection.push(this.payload());
-          if (slot === this.slot && epoch === this.identity.epoch) {
+          if (json === this.ownJson && metaVersion === this.metaVersion) {
             this.slotConfirmed = true;
           }
-          batch.resolve();
+          this.retryDelay = 0;
+          for (const caller of callers) caller.resolve();
         } catch (e) {
-          // The data stays in the slot and goes out with the next write
-          batch.reject(e);
+          if (this.isClosed) {
+            // close() has already rejected the callers
+            return;
+          }
+          if (this.retryDelay === 0) {
+            console.warn("MultiplayerAPI: a write failed and will be retried", e);
+          }
+          this.queued = [...callers, ...this.queued];
+          this.scheduleRetry();
+          return;
         } finally {
-          if (this.inFlightBatch === batch) {
-            this.inFlightBatch = null;
+          if (this.inFlight === callers) {
+            this.inFlight = null;
           }
         }
       }
@@ -621,15 +677,26 @@ export class MultiplayerSession {
     }
   }
 
+  private scheduleRetry() {
+    this.retryDelay = Math.min(
+      this.retryDelay === 0 ? RETRY_DELAY_MIN : this.retryDelay * 2,
+      RETRY_DELAY_MAX
+    );
+    this.retryTimer = window.setTimeout(() => {
+      this.retryTimer = undefined;
+      this.requestSend();
+    }, this.retryDelay);
+  }
+
   // ---------------------------------------------------------------- listening
 
   /**
-   * Call `callback` with the group session and presence now, and again after
-   * every change. Returns a function that removes the subscription.
+   * Call `callback` with the current state now, and again after every change. Returns a
+   * function that removes the subscription.
    */
-  subscribe(callback: SessionListener, options: SubscribeOptions = {}): Unsubscribe {
-    const { signal } = options;
-    const listener: Listener = { callback, active: true };
+  subscribe(callback: SessionListener, options: ListenerOptions): Unsubscribe {
+    const { signal, scope, trialBound } = options;
+    const listener: Listener = { callback, active: true, scope, trialBound };
     const unsubscribe: Unsubscribe = () => {
       listener.active = false;
       this.listeners.delete(listener);
@@ -648,24 +715,23 @@ export class MultiplayerSession {
   }
 
   /**
-   * Resolve with the group session once `condition` returns true. Checks the
-   * current state first, so it resolves at once if the condition already holds.
-   * A throwing condition rejects the wait.
+   * Resolve with the scope's data once `condition` returns true. Checks the current state first,
+   * so it resolves at once if the condition already holds. A throwing condition rejects the wait.
    */
   wait(
     condition: (data: GroupSessionData, presence: PresenceData, group: GroupState) => boolean,
-    options: WaitOptions = {}
+    options: SessionWaitOptions
   ): Promise<GroupSessionData> {
-    if (options === null || typeof options !== "object") {
-      // Catches the old wait(condition, timeout) form, which would otherwise mean no timeout
-      return Promise.reject(
-        new TypeError(
-          "MultiplayerAPI: wait()'s second argument must be an options object, e.g. { timeout: 5000 }."
-        )
-      );
+    const { signal, participants = [], scope, trialBound } = options;
+    let timeout: number | null;
+    try {
+      timeout = parseTimeout(options.timeout, "timeout");
+      if (!isIdList(participants)) {
+        throw new TypeError("MultiplayerAPI: participants must be an array of participant IDs.");
+      }
+    } catch (e) {
+      return Promise.reject(e);
     }
-    const { signal, participants = [] } = options;
-    const timeout = toTimeout(options.timeout);
 
     return new Promise((resolve, reject) => {
       let timer: number | undefined;
@@ -676,16 +742,19 @@ export class MultiplayerSession {
         }
         listener.active = false;
         this.listeners.delete(listener);
-        this.pendingWaits.delete(cancel);
         if (timer !== undefined) clearTimeout(timer);
         signal?.removeEventListener("abort", onAbort);
         outcome();
       };
       const cancel = (error: Error) => finish(() => reject(error));
-      const onAbort = () => cancel(new MultiplayerCancelledError());
+      const onAbort = () =>
+        cancel(new MultiplayerError("cancelled", "wait() was cancelled by its signal."));
 
       const listener: Listener = {
         active: true,
+        scope,
+        trialBound,
+        cancel,
         callback: (data, presence, group) => {
           let met: boolean;
           try {
@@ -700,16 +769,22 @@ export class MultiplayerSession {
           }
           const gone = participants.find((id) => presence[id] === "left");
           if (gone !== undefined) {
-            cancel(new MultiplayerParticipantLeftError(gone));
+            cancel(
+              new MultiplayerError(
+                "participant_left",
+                `wait() failed because participant ${gone} left the session.`,
+                gone
+              )
+            );
           }
         },
       };
 
       if (signal?.aborted) {
-        reject(new MultiplayerCancelledError());
+        reject(new MultiplayerError("cancelled", "wait() was cancelled by its signal."));
         return;
       }
-      listener.callback(this.data, this.presenceData, this.groupData);
+      this.deliver(listener);
       if (!listener.active) {
         return;
       }
@@ -718,10 +793,12 @@ export class MultiplayerSession {
         return;
       }
       this.listeners.add(listener);
-      this.pendingWaits.add(cancel);
       signal?.addEventListener("abort", onAbort, { once: true });
       if (timeout !== null) {
-        timer = window.setTimeout(() => cancel(new MultiplayerTimeoutError(timeout)), timeout);
+        timer = window.setTimeout(
+          () => cancel(new MultiplayerError("timeout", `wait() timed out after ${timeout}ms.`)),
+          timeout
+        );
       }
     });
   }
@@ -729,18 +806,17 @@ export class MultiplayerSession {
   // ---------------------------------------------------------------- group
 
   /**
-   * Ask the backend to stop letting new participants join, so the group is
-   * sealed with the members it has now. Use it to start with fewer people than
-   * the group can hold. Resolves once the backend confirms, and at once if the
-   * group is already sealed. Rejects if the adapter can't seal groups.
+   * Ask the backend to stop letting new participants join, so the group is sealed with the
+   * members it has now. Resolves once the backend confirms, and at once if the group is already
+   * sealed.
    */
   async sealGroup(): Promise<void> {
-    this.assertWritable();
+    this.assertOpen();
     if (this.groupData.sealed) {
       return;
     }
     if (typeof this.connection.sealGroup !== "function") {
-      throw new Error("MultiplayerAPI: this adapter can't seal groups.");
+      throw new MultiplayerError("unsupported", "this adapter can't seal groups.");
     }
     this.sealing ??= (async () => {
       try {
@@ -750,33 +826,16 @@ export class MultiplayerSession {
       }
     })();
     await this.sealing;
-    if (this.isClosed || this.ownRoster) {
-      return;
-    }
-    // The backend confirmed, but its group() may not say so yet
-    const members = this.readAdapterGroup()?.members ?? this.groupData.members;
-    this.ownRoster = sortedIds([...members, this.participantId]);
-    this.sendMeta();
-    if (this.refreshGroup()) {
-      this.refreshPresence();
-      this.rebuild();
-      this.notify();
-      this.flushEvents();
-    }
+    // The adapter reports the seal through group(), which may not have been announced yet
+    this.handleChange();
   }
 
-  /**
-   * Resolve with the group's state once it is sealed, e.g. to hold everyone in
-   * a waiting room until the group is complete. Rejects at once if the adapter
-   * doesn't form groups, since the group could then never be sealed.
-   */
-  async waitForGroup(options: GroupWaitOptions = {}): Promise<GroupState> {
-    if (
-      typeof this.connection.group !== "function" &&
-      typeof this.connection.sealGroup !== "function"
-    ) {
-      throw new Error(
-        "MultiplayerAPI: this adapter doesn't form groups, so waitForGroup() would never resolve. " +
+  /** Resolve with the group's state once it is sealed. */
+  async waitForGroup(options: SessionWaitOptions): Promise<GroupState> {
+    if (typeof this.connection.group !== "function") {
+      throw new MultiplayerError(
+        "unsupported",
+        "this adapter doesn't form groups, so waitForGroup() would never resolve. " +
           "Wait for a number of participants with wait() instead."
       );
     }
@@ -784,39 +843,56 @@ export class MultiplayerSession {
     return this.groupData;
   }
 
+  // ---------------------------------------------------------------- lifetimes
+
   /**
-   * Remove every subscription and reject pending waits with a
-   * MultiplayerCancelledError. The connection stays open.
+   * Remove subscriptions and reject pending waits with a `cancelled` error: those bound to the
+   * trial that just ended, or all of them. The connection stays open.
    */
-  cancelAllSubscriptions(): void {
-    this.cancelListeners(new MultiplayerCancelledError());
+  cancelListeners(which: "trial" | "all"): void {
+    this.cancelMatching(
+      (listener) => which === "all" || listener.trialBound,
+      new MultiplayerError(
+        "cancelled",
+        which === "all"
+          ? "the experiment ended before the wait finished."
+          : "the trial ended before the wait finished."
+      )
+    );
   }
 
-  private cancelListeners(error: Error) {
-    for (const cancel of [...this.pendingWaits]) {
-      cancel(error);
+  private cancelMatching(matches: (listener: Listener) => boolean, error: Error) {
+    for (const listener of [...this.listeners]) {
+      if (!matches(listener)) continue;
+      if (listener.cancel) {
+        listener.cancel(error);
+      } else {
+        listener.active = false;
+        this.listeners.delete(listener);
+      }
     }
-    for (const listener of this.listeners) {
-      listener.active = false;
-    }
-    this.listeners.clear();
   }
 
   private deliver(listener: Listener) {
     if (!listener.active) {
       return;
     }
+    const data = this.getAll(listener.scope);
+    if (listener.cancel) {
+      // A wait handles its own errors
+      listener.callback(data, this.presenceData, this.groupData);
+      return;
+    }
     try {
-      listener.callback(this.data, this.presenceData, this.groupData);
+      listener.callback(data, this.presenceData, this.groupData);
     } catch (e) {
       console.error("MultiplayerAPI: subscriber callback threw", e);
     }
   }
 
   /**
-   * Deliver the current snapshot to every listener. A change made by a
-   * listener starts another round after this one, instead of a nested one,
-   * so each listener sees snapshots in order.
+   * Deliver the current state to every listener. A change made by a listener starts another
+   * round after this one, instead of a nested one, so each listener sees snapshots in order.
    */
   private notify() {
     if (this.notifying) {
@@ -844,14 +920,9 @@ export class MultiplayerSession {
     }
   }
 
-  /** Rebuild the shared snapshots. Only the top level is new; nested data is already frozen. */
+  /** Drop the cached views and rebuild the presence snapshot. */
   private rebuild() {
-    const data = { ...this.remote };
-    if (this.slot !== undefined) {
-      data[this.participantId] = this.slot;
-    }
-    this.data = Object.freeze(data);
-
+    this.views.clear();
     const self: Record<ConnectionStatus, PresenceStatus> = {
       connected: "connected",
       reconnecting: "away",
@@ -865,35 +936,61 @@ export class MultiplayerSession {
 
   // ---------------------------------------------------------------- adapter events
 
+  private readRemote(): Record<string, unknown> {
+    const raw = this.connection.getAll();
+    return isRecord(raw) ? raw : {};
+  }
+
+  /** Re-read everyone else's data from the adapter. Returns whether their data changed. */
+  private readSlots(): boolean {
+    let json: string;
+    try {
+      json = JSON.stringify(this.readRemote());
+    } catch (e) {
+      console.error("MultiplayerAPI: could not read the adapter's session data", e);
+      return false;
+    }
+    if (json === this.remoteJson) {
+      return false;
+    }
+    this.remoteJson = json;
+    const slots: Record<string, Slot> = {};
+    for (const [id, raw] of Object.entries(fromJson<Record<string, unknown>>(json))) {
+      if (id === this.participantId) continue;
+      const slot = parseSlot(raw);
+      if (slot) slots[id] = slot;
+    }
+    this.slots = slots;
+    const dataJson = JSON.stringify(
+      Object.entries(slots).map(([id, slot]) => [id, slot.session, slot.scopes])
+    );
+    if (dataJson === this.remoteDataJson) {
+      return false;
+    }
+    this.remoteDataJson = dataJson;
+    return true;
+  }
+
   private handleChange() {
     if (this.isClosed) {
       return;
     }
-    let dataChanged = false;
-    try {
-      const json = JSON.stringify(this.connection.getAll() ?? {});
-      if (json !== this.remoteJson) {
-        this.remoteJson = json;
-        const { data, metas } = splitMeta(fromJson(json));
-        this.metas = metas;
-        const dataJson = JSON.stringify(data);
-        if (dataJson !== this.remoteDataJson) {
-          this.remote = data;
-          this.remoteDataJson = dataJson;
-          dataChanged = true;
-        }
-      }
-    } catch (e) {
-      console.error("MultiplayerAPI: could not read the adapter's session data", e);
-    }
-    let presenceChanged = this.refreshPresence();
+    const dataChanged = this.readSlots();
     const groupChanged = this.refreshGroup();
-    if (groupChanged) {
-      // A newly sealed roster can add members to track
-      presenceChanged = this.refreshPresence() || presenceChanged;
+    const presenceChanged = this.refreshPresence();
+    // Presence can add members to a group the adapter doesn't form
+    const membersChanged = presenceChanged && this.refreshGroup();
+    if (this.isEvicted()) {
+      void this.close(
+        new MultiplayerError(
+          "connection_lost",
+          "the rest of the group counted this participant as having left."
+        )
+      );
+      return;
     }
     // Echoes of our own writes and repeated calls change nothing
-    if (dataChanged || presenceChanged || groupChanged) {
+    if (dataChanged || groupChanged || presenceChanged || membersChanged) {
       this.rebuild();
       this.notify();
     }
@@ -905,17 +1002,33 @@ export class MultiplayerSession {
       return;
     }
     if (status === "closed") {
-      void this.close(new MultiplayerConnectionClosedError());
+      void this.close(
+        new MultiplayerError("connection_lost", "the connection to the backend was lost.")
+      );
       return;
     }
     this.currentStatus = status;
     if (status === "reconnecting") {
+      this.hasBeenAway = true;
       // While our own channel is down, others' dropout clocks pause
       this.clearAwayTimers();
+      if (this.reconnectTimeout !== null) {
+        this.reconnectTimer = window.setTimeout(() => {
+          void this.close(
+            new MultiplayerError(
+              "connection_lost",
+              `gave up reconnecting after ${this.reconnectTimeout}ms.`
+            )
+          );
+        }, this.reconnectTimeout);
+      }
     } else {
+      this.clearReconnectTimer();
       for (const [id, presence] of this.presenceStatus) {
         if (presence === "away") this.startAwayTimer(id);
       }
+      this.readSlots();
+      this.refreshGroup();
       this.refreshPresence();
       // Others may have seen us drop out: show them we're back on the same page
       this.announce();
@@ -924,6 +1037,14 @@ export class MultiplayerSession {
     this.notify();
     this.reportStatus();
     this.flushEvents();
+  }
+
+  private handleResumed() {
+    if (this.isClosed) {
+      return;
+    }
+    this.hasBeenAway = true;
+    this.announce();
   }
 
   private reportStatus() {
@@ -937,8 +1058,9 @@ export class MultiplayerSession {
   // ---------------------------------------------------------------- presence
 
   /**
-   * Compare the adapter's connected list with what we know, starting or
-   * stopping dropout clocks. Returns whether any presence status changed.
+   * Compare the adapter's connected list with what we know, starting or stopping dropout
+   * clocks, and adopt departures other participants have seen. Returns whether any presence
+   * status changed.
    */
   private refreshPresence(): boolean {
     // Our own outage says nothing about the others
@@ -955,7 +1077,7 @@ export class MultiplayerSession {
     // A sealed group's roster says who should be here, even members never seen yet
     const ids = new Set([
       ...connectedNow,
-      ...Object.keys(this.remote),
+      ...Object.keys(this.slots).filter((id) => !this.memberFilter || this.memberFilter.has(id)),
       ...this.presenceStatus.keys(),
       ...(this.roster ?? []),
     ]);
@@ -964,7 +1086,10 @@ export class MultiplayerSession {
     let changed = false;
     for (const id of ids) {
       const current = this.presenceStatus.get(id);
-      const meta = this.metas[id];
+      if (current === "left") {
+        continue;
+      }
+      const meta = this.slots[id]?.meta;
       if (!connectedNow.has(id)) {
         if (current === undefined || current === "connected") {
           this.presenceStatus.set(id, "away");
@@ -982,27 +1107,34 @@ export class MultiplayerSession {
         // A new page load can take over the ID without the drop ever being visible
         const known = this.knownInstance.get(id);
         if (meta && known !== undefined && meta.instance !== known) {
-          changed = this.markRestarted(id, meta, known) || changed;
+          this.markLeft(id);
+          changed = true;
         } else if (meta) {
           this.knownInstance.set(id, meta.instance);
         }
-      } else {
-        // Away or left: presence alone could be a reloaded page whose new identity
-        // hasn't arrived yet, so wait for a write made since the drop.
+      } else if (meta) {
+        // Away: presence alone could be a reloaded page whose new identity hasn't arrived yet,
+        // so wait for a write made since the drop.
         const drop = this.dropMeta.get(id) ?? null;
-        if (!meta) {
-          continue;
-        }
         if (drop && meta.instance !== drop.instance) {
-          changed = this.markRestarted(id, meta, drop.instance) || changed;
+          this.markLeft(id);
+          changed = true;
         } else if (!drop || meta.epoch > drop.epoch) {
           this.presenceStatus.set(id, "connected");
           this.clearAwayTimer(id);
           this.dropMeta.delete(id);
           this.knownInstance.set(id, meta.instance);
-          if (current === "left") {
-            this.events.push(() => this.options.onParticipantRejoined?.(id));
-          }
+          changed = true;
+        }
+      }
+    }
+
+    // Agree with others who saw someone leave, as long as we've lost sight of them too
+    for (const [declarer, slot] of Object.entries(this.slots)) {
+      if (this.presenceStatus.get(declarer) !== "connected") continue;
+      for (const id of slot.meta.left ?? []) {
+        if (this.presenceStatus.get(id) === "away") {
+          this.markLeft(id);
           changed = true;
         }
       }
@@ -1011,25 +1143,30 @@ export class MultiplayerSession {
   }
 
   /**
-   * A participant came back from a new page load, so their experiment restarted.
-   * They stay (or become) `left`. Returns whether their presence changed.
+   * Whether a connected participant has told the group that this one left. Only believed when
+   * the others may really have seen this participant drop out.
    */
-  private markRestarted(id: string, meta: SlotMeta, previous: string): boolean {
-    const key = `${id}\n${meta.instance}`;
-    if (this.restartsReported.has(key)) {
+  private isEvicted(): boolean {
+    if (!this.hasBeenAway && !this.restarted) {
       return false;
     }
-    this.restartsReported.add(key);
-    // Keep comparing later writes against the page load they left from
-    this.dropMeta.set(id, { instance: previous, epoch: Infinity, written: true });
-    this.clearAwayTimer(id);
-    const wasLeft = this.presenceStatus.get(id) === "left";
+    return Object.entries(this.slots).some(
+      ([declarer, slot]) =>
+        this.presenceStatus.get(declarer) === "connected" &&
+        (slot.meta.left ?? []).includes(this.participantId)
+    );
+  }
+
+  /** A participant is gone for good. Tell the group and the researcher. */
+  private markLeft(id: string) {
     this.presenceStatus.set(id, "left");
-    if (!wasLeft) {
-      this.events.push(() => this.options.onParticipantLeft?.(id));
+    this.clearAwayTimer(id);
+    this.dropMeta.delete(id);
+    if (!this.ownLeft.includes(id)) {
+      this.ownLeft = [...this.ownLeft, id];
+      this.sendMeta();
     }
-    this.events.push(() => this.options.onParticipantRestarted?.(id));
-    return !wasLeft;
+    this.events.push(() => this.options.onParticipantLeft?.(id));
   }
 
   /** Run queued researcher callbacks, after the session's state and snapshots are settled. */
@@ -1038,7 +1175,7 @@ export class MultiplayerSession {
       try {
         event();
       } catch (e) {
-        console.error("MultiplayerAPI: a participant callback threw", e);
+        console.error("MultiplayerAPI: onParticipantLeft threw", e);
       }
     }
   }
@@ -1048,7 +1185,16 @@ export class MultiplayerSession {
     if (this.dropoutTimeout !== null) {
       this.awayTimers.set(
         id,
-        window.setTimeout(() => this.markLeft(id), this.dropoutTimeout)
+        window.setTimeout(() => {
+          this.awayTimers.delete(id);
+          if (this.isClosed || this.presenceStatus.get(id) !== "away") {
+            return;
+          }
+          this.markLeft(id);
+          this.rebuild();
+          this.notify();
+          this.flushEvents();
+        }, this.dropoutTimeout)
       );
     }
   }
@@ -1068,16 +1214,11 @@ export class MultiplayerSession {
     this.awayTimers.clear();
   }
 
-  private markLeft(id: string) {
-    this.awayTimers.delete(id);
-    if (this.isClosed) {
-      return;
+  private clearReconnectTimer() {
+    if (this.reconnectTimer !== undefined) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = undefined;
     }
-    this.presenceStatus.set(id, "left");
-    this.rebuild();
-    this.notify();
-    this.events.push(() => this.options.onParticipantLeft?.(id));
-    this.flushEvents();
   }
 
   // ---------------------------------------------------------------- group state
@@ -1106,78 +1247,61 @@ export class MultiplayerSession {
     };
   }
 
-  /**
-   * Work out the group's state from the adapter and the rosters in everyone's
-   * slots. Returns whether it changed. A newly sealed report from this
-   * participant's own backend is sent on to the group.
-   */
+  /** Work out the group's state from the adapter, or from presence. Returns whether it changed. */
   private refreshGroup(): boolean {
     const reported = this.readAdapterGroup();
-    if (!this.ownRoster) {
-      // A roster in this participant's slot from before a reload still holds
-      const previous = this.metas[this.participantId]?.sealed;
-      if (reported?.sealed) {
-        this.ownRoster = sortedIds([...reported.members, this.participantId]);
-      } else if (isIdList(previous)) {
-        this.ownRoster = sortedIds([...previous, this.participantId]);
+    let next: GroupState;
+    if (reported) {
+      if (reported.sealed || this.roster) {
+        this.roster ??= new Set([this.participantId]);
+        if (reported.sealed) {
+          for (const id of reported.members) this.roster.add(id);
+        }
       }
-      // Before open() finishes, its announcement sends the roster instead
-      if (this.ownRoster && this.announced) {
-        this.sendMeta();
-      }
-    }
-
-    const rosters = Object.values(this.metas)
-      .map((meta) => meta.sealed)
-      .filter(isIdList);
-    if (this.ownRoster) {
-      rosters.push(this.ownRoster);
-    }
-    if (rosters.length > 0) {
-      this.roster ??= new Set([this.participantId]);
-      for (const id of rosters.flat()) {
-        this.roster.add(id);
-      }
-    }
-
-    let members: string[];
-    if (this.roster) {
-      members = sortedIds(this.roster);
-    } else if (reported) {
-      members = sortedIds([...reported.members, this.participantId]);
+      next = {
+        size: reported.size ?? this.groupData.size,
+        members: sortedIds(this.roster ?? [...reported.members, this.participantId]),
+        sealed: this.roster !== null,
+      };
     } else {
       // Without a backend that forms groups, the group is whoever has shown up
-      members = sortedIds([this.participantId, ...this.presenceStatus.keys()]);
+      next = {
+        size: null,
+        members: sortedIds([this.participantId, ...this.presenceStatus.keys()]),
+        sealed: false,
+      };
     }
-    const next: GroupState = {
-      size: reported?.size ?? this.groupData.size,
-      members,
-      sealed: this.roster !== null,
-    };
+    this.memberFilter = reported ? new Set(next.members) : null;
     if (JSON.stringify(next) === JSON.stringify(this.groupData)) {
       return false;
     }
     this.groupData = deepFreeze(next);
+    this.views.clear();
     return true;
   }
 
   // ---------------------------------------------------------------- closing
 
   /**
-   * Close the connection. Subscribers are called one last time, then removed.
-   * Pending waits reject with a MultiplayerCancelledError and unsent writes
-   * reject. Reads keep returning the last snapshot.
+   * Close the connection. Subscribers are called one last time, then removed. Pending waits
+   * reject with a `cancelled` error and unsent writes reject. Reads keep returning the last
+   * snapshot.
    */
   disconnect(): Promise<void> {
-    return this.close(new MultiplayerCancelledError());
+    return this.close(new MultiplayerError("cancelled", "the session was disconnected."));
   }
 
-  private close(reason: Error): Promise<void> {
+  private close(reason: MultiplayerError): Promise<void> {
     if (!this.closing) {
-      const lost = reason instanceof MultiplayerConnectionClosedError;
+      const lost = reason.code === "connection_lost";
       this.currentStatus = "closed";
       this.closeReason = reason;
       this.clearAwayTimers();
+      this.clearReconnectTimer();
+      if (this.retryTimer !== undefined) {
+        clearTimeout(this.retryTimer);
+        this.retryTimer = undefined;
+      }
 
       // Set `closing` before anything below can call back into the session
       const disconnecting = (async () => this.connection.disconnect())();
@@ -1189,20 +1313,20 @@ export class MultiplayerSession {
       // The in-flight push may never settle, so don't leave its callers waiting
       const writeError = lost
         ? reason
-        : new Error("MultiplayerAPI: disconnect() was called before this write was sent.");
-      const unsent = [this.inFlightBatch, this.nextBatch];
-      this.inFlightBatch = null;
-      this.nextBatch = null;
+        : new MultiplayerError("cancelled", "disconnect() was called before this write was sent.");
+      const unsent = [...(this.inFlight ?? []), ...this.queued];
+      this.inFlight = null;
+      this.queued = [];
       this.hasUnsentChanges = false;
-      for (const batch of unsent) {
-        batch?.reject(writeError);
+      for (const caller of unsent) {
+        caller.reject(writeError);
       }
 
-      // One last call, with this participant's presence now `left`, so a
-      // plugin that only subscribes learns the session has closed
+      // One last call, with this participant's presence now `left`, so a plugin that only
+      // subscribes learns the session has closed
       this.rebuild();
       this.notify();
-      this.cancelListeners(reason);
+      this.cancelMatching(() => true, reason);
       this.reportStatus();
     }
     return this.closing;

@@ -271,6 +271,29 @@ export class Trial extends TimelineNode {
     this.dependencies.onTrialFinished(this);
   }
 
+  /**
+   * The name of this trial's part of the multiplayer shared data: the `multiplayer_scope`
+   * parameter, or else the trial's position in the timeline. Each timeline counts every child
+   * it runs, across repetitions and loops, so the position is the same for every participant
+   * running the same timeline, even when a conditional timeline runs for some and not others.
+   */
+  public getMultiplayerScope(): string {
+    const named = this.getParameterValue("multiplayer_scope");
+    if (named !== undefined && named !== null) {
+      if (typeof named !== "string" || named === "") {
+        throw new TypeError("multiplayer_scope must be a non-empty string.");
+      }
+      return named;
+    }
+    const path: number[] = [];
+    let node: TimelineNode = this;
+    while (node.parent) {
+      path.unshift(node.parent.children.indexOf(node));
+      node = node.parent;
+    }
+    return `#${path.join(".")}`;
+  }
+
   public evaluateTimelineVariable(variable: TimelineVariable) {
     // Timeline variable values are specified at the timeline level, not at the trial level, hence
     // deferring to the parent timeline here
