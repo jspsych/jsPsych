@@ -344,6 +344,9 @@ export class MultiplayerSession {
   private retryTimer: number | undefined;
   private retryDelay = 0;
 
+  /** Set once a run of failures has been reported as an error, so it's reported once. */
+  private reportedStuck = false;
+
   /**
    * Connect with an adapter. Once `signal` is aborted this rejects, but only after any
    * connection the adapter opened has been closed.
@@ -415,6 +418,8 @@ export class MultiplayerSession {
       throw new TypeError("MultiplayerAPI: randomSeed must be a string.");
     }
     this.rng = new SharedRandom(randomSeed ?? this.sessionId);
+    // An earlier session from this page means the group may have seen this participant go
+    this.hasBeenAway = identity.epoch > 0;
     this.dropoutTimeout =
       options.dropoutTimeout === undefined
         ? DEFAULT_DROPOUT_TIMEOUT
@@ -654,6 +659,7 @@ export class MultiplayerSession {
             this.slotConfirmed = true;
           }
           this.retryDelay = 0;
+          this.reportedStuck = false;
           for (const caller of callers) caller.resolve();
         } catch (e) {
           if (this.isClosed) {
@@ -665,6 +671,15 @@ export class MultiplayerSession {
           }
           this.queued = [...callers, ...this.queued];
           this.scheduleRetry();
+          if (this.retryDelay === RETRY_DELAY_MAX && !this.reportedStuck) {
+            // Retrying won't fix a write the backend always refuses, e.g. one that is too large
+            this.reportedStuck = true;
+            console.error(
+              "MultiplayerAPI: writes have been failing for a while, so the group isn't seeing " +
+                "this participant's data. The last error was:",
+              e
+            );
+          }
           return;
         } finally {
           if (this.inFlight === callers) {

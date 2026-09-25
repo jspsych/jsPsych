@@ -586,6 +586,25 @@ describe("writing", () => {
     expect(warn).toHaveBeenCalledTimes(1);
   });
 
+  test("writes that keep failing are reported as an error once", async () => {
+    jest.useFakeTimers();
+    jest.spyOn(console, "warn").mockImplementation(() => {});
+    const error = jest.spyOn(console, "error").mockImplementation(() => {});
+    const { api, connection } = await join("p1");
+    await flushPromises();
+    connection.pushImpl = async () => {
+      throw new Error("too large");
+    };
+    api.update({ a: 1 }).catch(() => {});
+    for (let i = 0; i < 12; i++) {
+      jest.advanceTimersByTime(10000);
+      await flushPromises();
+    }
+    expect(error).toHaveBeenCalledTimes(1);
+    expect(error.mock.calls[0][0]).toContain("failing for a while");
+    await api.disconnect();
+  });
+
   test("a new write during the retry delay goes out at once with the failed data", async () => {
     jest.useFakeTimers();
     jest.spyOn(console, "warn").mockImplementation(() => {});
@@ -1145,6 +1164,19 @@ describe("reloading", () => {
     expect(left).toHaveBeenCalledTimes(1);
   });
 
+  test("reconnecting with connect() after the group counted you as left is refused", async () => {
+    await join("p1", { dropoutTimeout: 5000 });
+    const b = await join("p2");
+    await b.api.disconnect();
+    jest.advanceTimersByTime(5000);
+    await flushPromises();
+
+    await b.api.connect(b.adapter);
+    await flushPromises();
+    expect(b.api.restarted).toBe(false);
+    expect(b.api.status).toBe("closed");
+  });
+
   test("reconnecting on the same page with connect() is not a restart", async () => {
     const a = await join("p1", { dropoutTimeout: 5000 });
     const b = await join("p2");
@@ -1702,10 +1734,21 @@ describe("jsPsych integration", () => {
           multiplayer_scope: "named",
           on_start: write("c"),
         },
+        {
+          timeline: [
+            {
+              type: htmlKeyboardResponse,
+              stimulus: "d",
+              multiplayer_scope: jsPsych.timelineVariable("round"),
+              on_start: write("d"),
+            },
+          ],
+          timeline_variables: [{ round: 7 }],
+        },
       ],
       jsPsych
     );
-    for (let i = 0; i < 4; i++) await pressKey("a");
+    for (let i = 0; i < 5; i++) await pressKey("a");
     await expectFinished();
     await jsPsych.multiplayer.update({ done: true });
 
@@ -1714,6 +1757,7 @@ describe("jsPsych integration", () => {
       "#1.0": { value: "b" },
       "#1.1": { value: "b" },
       named: { value: "c" },
+      "7": { value: "d" },
     });
     expect(stored("p1")).toEqual({ done: true });
   });

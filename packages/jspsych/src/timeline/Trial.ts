@@ -280,10 +280,11 @@ export class Trial extends TimelineNode {
   public getMultiplayerScope(): string {
     const named = this.getParameterValue("multiplayer_scope");
     if (named !== undefined && named !== null) {
-      if (typeof named !== "string" || named === "") {
-        throw new TypeError("multiplayer_scope must be a non-empty string.");
+      // Numbers are allowed so a timeline variable like `round: 1` works directly
+      if ((typeof named !== "string" && typeof named !== "number") || named === "") {
+        throw new TypeError("multiplayer_scope must be a non-empty string or a number.");
       }
-      return named;
+      return String(named);
     }
     const path: number[] = [];
     let node: TimelineNode = this;
