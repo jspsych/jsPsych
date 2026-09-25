@@ -41,7 +41,8 @@ export interface ConnectOptions extends SessionOptions {
 
   /**
    * Whether to add `multiplayer_participant_id` and `multiplayer_session_id` to every row of
-   * jsPsych's data, so data from the members of a group can be joined. Defaults to true.
+   * jsPsych's data recorded while connected, so data from the members of a group can be joined.
+   * Defaults to true.
    */
   recordIds?: boolean;
 }
@@ -75,12 +76,6 @@ export interface WaitOptions extends SubscribeOptions {
 /** Options for waitForGroup(). */
 export type GroupWaitOptions = Pick<WaitOptions, "timeout" | "signal">;
 
-/** What jsPsych gives the MultiplayerAPI. */
-export interface MultiplayerDependencies {
-  /** Add properties to every row of jsPsych's data. */
-  addDataProperties(properties: Record<string, unknown>): void;
-}
-
 /** Key of the hooks jsPsych calls as its timeline runs. Not part of the public API. */
 export const timelineHooks = Symbol("multiplayer timeline hooks");
 
@@ -101,6 +96,9 @@ export class MultiplayerAPI {
   /** The running trial's scope name, or null between trials. */
   private trialScope: string | null = null;
 
+  /** The IDs to add to each row of jsPsych's data, or null when not recording them. */
+  private recordedIds: Record<string, string> | null = null;
+
   /**
    * This page load's identity, shared by every session opened from it, so the group can tell a
    * reconnect of this page from a reload.
@@ -110,7 +108,7 @@ export class MultiplayerAPI {
     epoch: 0,
   };
 
-  constructor(private readonly dependencies?: MultiplayerDependencies) {
+  constructor() {
     autoBind(this);
   }
 
@@ -220,12 +218,13 @@ export class MultiplayerAPI {
         throw new MultiplayerError("cancelled", "connect() was cancelled before it finished.");
       }
       this.session = session;
-      if (recordIds) {
-        this.dependencies?.addDataProperties({
-          multiplayer_participant_id: session.participantId,
-          multiplayer_session_id: session.sessionId,
-        });
-      }
+      // Rows recorded from now on get this session's IDs; earlier rows keep theirs
+      this.recordedIds = recordIds
+        ? {
+            multiplayer_participant_id: session.participantId,
+            multiplayer_session_id: session.sessionId,
+          }
+        : null;
     } catch (e) {
       if (timedOut) {
         throw new MultiplayerError("timeout", `connect() timed out after ${timeout}ms.`);
@@ -391,6 +390,10 @@ export class MultiplayerAPI {
     /** The experiment finished or was aborted: end every subscription and wait. */
     experimentEnded: () => {
       this.session?.cancelListeners("all");
+      // A trial that threw never reported finishing
+      this.trialScope = null;
     },
+    /** Properties to add to a trial's data row, or null for none. */
+    dataProperties: (): Record<string, string> | null => this.recordedIds,
   };
 }

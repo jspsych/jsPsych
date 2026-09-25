@@ -311,7 +311,7 @@ dropoutTimeout | number | How long, in milliseconds, a participant can stay disc
 reconnectTimeout | number | How long, in milliseconds, this participant's own connection can stay `"reconnecting"` before the session gives up and closes with a `connection_lost` error. Defaults to `null`: keep trying as long as the adapter does.
 connectTimeout | number | How long, in milliseconds, to wait for the adapter to connect before rejecting with a `timeout` error. Defaults to `20000`. `null` means no limit.
 randomSeed | string | Seed for [shared randomness](#shared-randomness) in place of the session ID. Every participant in the group must pass the same value.
-recordIds | boolean | Whether to add `multiplayer_participant_id` and `multiplayer_session_id` to every row of jsPsych's data, so you can match up the data from the members of a group. Defaults to `true`.
+recordIds | boolean | Whether to add `multiplayer_participant_id` and `multiplayer_session_id` to every row of jsPsych's data recorded while connected, so you can match up the data from the members of a group. Each row keeps the IDs of the session it was recorded in. Defaults to `true`.
 onParticipantLeft | function | Called with a participant's ID once, when that participant's status becomes `left`.
 onStatusChange | function | Called with the new status whenever this participant's connection status changes.
 signal | `AbortSignal` | Aborting this signal cancels a `connect()` that hasn't finished.

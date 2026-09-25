@@ -112,9 +112,7 @@ export class JsPsych {
 
     // initialize modules
     this.data = new JsPsychData(this.dataDependencies);
-    this.multiplayer = new MultiplayerAPI({
-      addDataProperties: (properties) => this.data.addProperties(properties),
-    });
+    this.multiplayer = new MultiplayerAPI();
     this.pluginAPI = createJointPluginAPIObject(this);
 
     this.extensionManager = new ExtensionManager(
@@ -419,6 +417,7 @@ export class JsPsych {
       this.multiplayer[timelineHooks].trialEnded();
       const result = trial.getResult();
       if (result) {
+        Object.assign(result, this.multiplayer[timelineHooks].dataProperties());
         result.time_elapsed = this.getTotalTime();
         this.data.write(trial);
       }

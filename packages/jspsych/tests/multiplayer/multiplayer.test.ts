@@ -405,17 +405,18 @@ describe("connecting and disconnecting", () => {
     expect(stored("p1")).toEqual({ first: true, second: true });
   });
 
-  test("recordIds adds the IDs to jsPsych's data by default", async () => {
-    const properties: Record<string, unknown>[] = [];
-    const api = new MultiplayerAPI({ addDataProperties: (p) => properties.push(p) });
+  test("recordIds gives jsPsych the IDs to add to each row by default", async () => {
+    const api = new MultiplayerAPI();
+    expect(api[timelineHooks].dataProperties()).toBeNull();
     await api.connect(new MockAdapter(hub, "p1"));
-    expect(properties).toEqual([
-      { multiplayer_participant_id: "p1", multiplayer_session_id: "session-1" },
-    ]);
+    expect(api[timelineHooks].dataProperties()).toEqual({
+      multiplayer_participant_id: "p1",
+      multiplayer_session_id: "session-1",
+    });
 
-    const quiet = new MultiplayerAPI({ addDataProperties: (p) => properties.push(p) });
+    const quiet = new MultiplayerAPI();
     await quiet.connect(new MockAdapter(hub, "p2"), { recordIds: false });
-    expect(properties).toHaveLength(1);
+    expect(quiet[timelineHooks].dataProperties()).toBeNull();
   });
 });
 
@@ -1582,6 +1583,42 @@ describe("group formation", () => {
     expect(left).toHaveBeenCalledWith("p2");
   });
 
+  test("a failed group() read keeps the sealed group and its members' data", async () => {
+    const error = jest.spyOn(console, "error").mockImplementation(() => {});
+    hub.groups = { size: 3, sealed: false };
+    hub.data = { outsider: wire({ x: 1 }) };
+    const a = await join("p1");
+    const b = await join("p2");
+    await b.api.update({ said: "hi" });
+    hub.groups.sealed = true;
+    hub.broadcast();
+
+    const group = a.connection.group!;
+    a.connection.group = () => {
+      throw new Error("flaky");
+    };
+    hub.broadcast();
+    expect(a.api.group()).toEqual({ size: 3, members: ["p1", "p2"], sealed: true });
+    expect(a.api.getAll()).toEqual({ p2: { said: "hi" } });
+    a.connection.group = group;
+    hub.broadcast();
+    expect(a.api.getAll()).toEqual({ p2: { said: "hi" } });
+    expect(error).toHaveBeenCalled();
+  });
+
+  test("sealGroup can be retried after the adapter throws synchronously", async () => {
+    hub.groups = { size: 3, sealed: false };
+    const a = await join("p1");
+    const seal = a.connection.sealGroup!;
+    a.connection.sealGroup = (() => {
+      throw new Error("not yet");
+    }) as unknown as () => Promise<void>;
+    await expect(a.api.sealGroup()).rejects.toThrow("not yet");
+    a.connection.sealGroup = seal;
+    await a.api.sealGroup();
+    expect(a.api.group().sealed).toBe(true);
+  });
+
   test("a malformed group() report is ignored", async () => {
     const error = jest.spyOn(console, "error").mockImplementation(() => {});
     hub.groups = { size: 2, sealed: false };
@@ -1629,6 +1666,16 @@ describe("scopes", () => {
     // p2 is still in round 1 and sees p1's round-1 answer
     b.api[timelineHooks].trialStarted("round-1");
     expect(b.api.get("p1")).toEqual({ choice: "left" });
+  });
+
+  test("a scope named like an Object.prototype key starts empty", async () => {
+    const a = await join("p1");
+    await join("p2");
+    for (const name of ["constructor", "toString", "__proto__", "hasOwnProperty"]) {
+      a.api[timelineHooks].trialStarted(name);
+      expect(a.api.getAll()).toEqual({});
+      a.api[timelineHooks].trialFinished();
+    }
   });
 
   test("outside a trial, calls use the session scope", async () => {
@@ -1773,6 +1820,35 @@ describe("jsPsych integration", () => {
       "7": { value: "d" },
     });
     expect(stored("p1")).toEqual({ done: true });
+  });
+
+  test("rows keep the IDs of the session they were recorded in", async () => {
+    const jsPsych = initJsPsych();
+    await jsPsych.multiplayer.connect(new MockAdapter(hub, "p1"));
+    const { expectFinished, getData } = await startTimeline(
+      [
+        {
+          type: htmlKeyboardResponse,
+          stimulus: "lobby",
+          on_finish: async () => {
+            await jsPsych.multiplayer.disconnect();
+            hub = new MockHub();
+            hub.sessionId = "session-2";
+            await jsPsych.multiplayer.connect(new MockAdapter(hub, "p1"));
+          },
+        },
+        { type: htmlKeyboardResponse, stimulus: "game" },
+      ],
+      jsPsych
+    );
+    await pressKey("a");
+    await pressKey("a");
+    await expectFinished();
+    expect(
+      getData()
+        .values()
+        .map((row) => row.multiplayer_session_id)
+    ).toEqual(["session-1", "session-2"]);
   });
 
   test("the IDs are recorded in every row of data", async () => {

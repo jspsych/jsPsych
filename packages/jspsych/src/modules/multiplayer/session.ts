@@ -200,7 +200,8 @@ function parseSlot(raw: unknown): Slot | null {
   const scopes: Record<string, Record<string, unknown>> = {};
   if (isRecord(raw.scopes)) {
     for (const [name, data] of Object.entries(raw.scopes)) {
-      if (isRecord(data)) scopes[name] = data;
+      // "__proto__" would set the object's prototype instead of adding a scope
+      if (isRecord(data) && name !== "__proto__") scopes[name] = data;
     }
   }
   return {
@@ -216,7 +217,11 @@ function parseSlot(raw: unknown): Slot | null {
 }
 
 function scopeData(slot: SlotData, scope: ScopeName): Record<string, unknown> | undefined {
-  return scope === null ? slot.session : slot.scopes[scope];
+  if (scope === null) {
+    return slot.session;
+  }
+  // Own keys only, so a scope named "constructor" doesn't find Object.prototype.constructor
+  return Object.prototype.hasOwnProperty.call(slot.scopes, scope) ? slot.scopes[scope] : undefined;
 }
 
 function assertRecord(data: unknown): asserts data is Record<string, unknown> {
@@ -835,13 +840,16 @@ export class MultiplayerSession {
     if (typeof this.connection.sealGroup !== "function") {
       throw new MultiplayerError("unsupported", "this adapter can't seal groups.");
     }
-    this.sealing ??= (async () => {
-      try {
-        await this.connection.sealGroup!();
-      } finally {
-        this.sealing = null;
-      }
-    })();
+    if (!this.sealing) {
+      // Through a promise, so an adapter that throws synchronously still clears the memo
+      const sealing = Promise.resolve().then(() => this.connection.sealGroup!());
+      this.sealing = sealing;
+      sealing
+        .finally(() => {
+          if (this.sealing === sealing) this.sealing = null;
+        })
+        .catch(() => {});
+    }
     await this.sealing;
     // The adapter reports the seal through group(), which may not have been announced yet
     this.handleChange();
@@ -973,7 +981,7 @@ export class MultiplayerSession {
     this.remoteJson = json;
     const slots: Record<string, Slot> = {};
     for (const [id, raw] of Object.entries(fromJson<Record<string, unknown>>(json))) {
-      if (id === this.participantId) continue;
+      if (id === this.participantId || id === "__proto__") continue;
       const slot = parseSlot(raw);
       if (slot) slots[id] = slot;
     }
@@ -1047,6 +1055,15 @@ export class MultiplayerSession {
       this.readSlots();
       this.refreshGroup();
       this.refreshPresence();
+      if (this.isEvicted()) {
+        void this.close(
+          new MultiplayerError(
+            "connection_lost",
+            "the rest of the group counted this participant as having left."
+          )
+        );
+        return;
+      }
       // Others may have seen us drop out: show them we're back on the same page
       this.announce();
     }
@@ -1267,6 +1284,10 @@ export class MultiplayerSession {
   /** Work out the group's state from the adapter, or from presence. Returns whether it changed. */
   private refreshGroup(): boolean {
     const reported = this.readAdapterGroup();
+    if (!reported && typeof this.connection.group === "function") {
+      // A failed read says nothing new; keep the last good state rather than unseal the group
+      return false;
+    }
     let next: GroupState;
     if (reported) {
       if (reported.sealed || this.roster) {
