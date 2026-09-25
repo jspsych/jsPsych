@@ -75,7 +75,7 @@ Property | Meaning
 `members` | The participants in the group, including you.
 `sealed` | `true` once nobody new can join.
 
-A group is *forming* until it is sealed. While it forms, a participant who leaves frees their place, and the backend can give it to someone new. Once it is sealed, `members` is the final roster: a member who leaves stays on it and counts as a dropout, and new arrivals go to another group. A sealed group never becomes unsealed.
+A group is *forming* until it is sealed. While it forms, a participant who leaves frees their place, and the backend can give it to someone new. Once it is sealed, `members` is the final roster: a member who leaves stays on it and counts as a dropout, and new arrivals go to another group. A sealed group never becomes unsealed. Every member of a sealed group appears in `presence()`, even one who never connected: they start out `away` and become `left` after the dropout timeout, so nobody waits for them forever.
 
 Adapters seal a group when it is full. To hold participants in a waiting room until then, wait for the seal:
 

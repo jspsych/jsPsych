@@ -1354,6 +1354,20 @@ describe("group formation", () => {
     expect(meta.sealed).toEqual(["p1", "p2"]);
   });
 
+  test("a roster member who never shows up becomes away, then left", async () => {
+    jest.useFakeTimers();
+    const left = jest.fn();
+    hub.groups = { size: 2, sealed: true, tellsEveryone: true };
+    // The backend assigned p2 a place, but p2 never connected
+    hub.members.add("p2");
+    const a = await join("p1", { dropoutTimeout: 5000, onParticipantLeft: left });
+    expect(a.api.group().members).toEqual(["p1", "p2"]);
+    expect(a.api.presence().p2).toBe("away");
+    jest.advanceTimersByTime(5000);
+    expect(a.api.presence().p2).toBe("left");
+    expect(left).toHaveBeenCalledWith("p2");
+  });
+
   test("a malformed group() report is ignored", async () => {
     const error = jest.spyOn(console, "error").mockImplementation(() => {});
     hub.groups = { size: 2, sealed: false, tellsEveryone: true };

@@ -416,7 +416,9 @@ export class MultiplayerSession {
       ownMeta && ownMeta.instance !== identity.instance ? ownMeta.instance : null;
     this.refreshPresence();
     // The announcement that follows open() carries any roster found here
-    this.refreshGroup();
+    if (this.refreshGroup() && this.roster) {
+      this.refreshPresence();
+    }
     this.rebuild();
   }
 
@@ -756,7 +758,10 @@ export class MultiplayerSession {
     this.ownRoster = sortedIds([...members, this.participantId]);
     this.sendMeta();
     if (this.refreshGroup()) {
+      this.refreshPresence();
+      this.rebuild();
       this.notify();
+      this.flushEvents();
     }
   }
 
@@ -881,8 +886,12 @@ export class MultiplayerSession {
     } catch (e) {
       console.error("MultiplayerAPI: could not read the adapter's session data", e);
     }
-    const presenceChanged = this.refreshPresence();
+    let presenceChanged = this.refreshPresence();
     const groupChanged = this.refreshGroup();
+    if (groupChanged) {
+      // A newly sealed roster can add members to track
+      presenceChanged = this.refreshPresence() || presenceChanged;
+    }
     // Echoes of our own writes and repeated calls change nothing
     if (dataChanged || presenceChanged || groupChanged) {
       this.rebuild();
@@ -943,10 +952,12 @@ export class MultiplayerSession {
       console.error("MultiplayerAPI: could not read the adapter's connected participants", e);
       return false;
     }
+    // A sealed group's roster says who should be here, even members never seen yet
     const ids = new Set([
       ...connectedNow,
       ...Object.keys(this.remote),
       ...this.presenceStatus.keys(),
+      ...(this.roster ?? []),
     ]);
     ids.delete(this.participantId);
 
