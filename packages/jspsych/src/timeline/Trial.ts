@@ -1,6 +1,6 @@
 import { Class } from "type-fest";
 
-import { ParameterInfos } from "../modules/plugins";
+import { ParameterInfos, universalPluginParameters } from "../modules/plugins";
 import { JsPsychPlugin, ParameterType, PluginInfo } from "../modules/plugins";
 import { deepCopy, deepMerge } from "../modules/utils";
 import { Timeline } from "./Timeline";
@@ -78,7 +78,7 @@ export class Trial extends TimelineNode {
     await this.onFinish();
     this.removeCssClasses();
 
-    const gap = this.getParameterValue("post_trial_gap") ?? this.dependencies.getDefaultIti();
+    const gap = this.getPostTrialGap();
     if (gap !== 0 && this.dependencies.getSimulationMode() !== "data-only") {
       await delay(gap);
     }
@@ -196,9 +196,14 @@ export class Trial extends TimelineNode {
     for (const [parameterName, shouldParameterBeIncluded] of Object.entries(
       this.getParameterValue("save_trial_parameters") ?? {}
     )) {
-      if (this.pluginInfo.parameters[parameterName]) {
+      const isPluginParameter = Object.hasOwn(this.pluginInfo.parameters, parameterName);
+      const isUniversalParameter = Object.hasOwn(universalPluginParameters, parameterName);
+
+      if (isPluginParameter || isUniversalParameter) {
         if (shouldParameterBeIncluded && !Object.hasOwn(result, parameterName)) {
-          let parameterValue = this.trialObject[parameterName];
+          let parameterValue = isPluginParameter
+            ? this.trialObject[parameterName]
+            : this.getUniversalParameterValue(parameterName);
           if (typeof parameterValue === "function") {
             parameterValue = parameterValue.toString();
           }
@@ -234,6 +239,35 @@ export class Trial extends TimelineNode {
     }
 
     return result;
+  }
+
+  /**
+   * Returns the gap (in milliseconds) to wait after this trial, falling back to the `default_iti`
+   * setting if the `post_trial_gap` parameter is not specified.
+   */
+  private getPostTrialGap(): number {
+    return this.getParameterValue("post_trial_gap") ?? this.dependencies.getDefaultIti();
+  }
+
+  /**
+   * Resolves the value of a universal plugin parameter (e.g. `css_classes`) for the
+   * `save_trial_parameters` parameter. Universal parameters are not part of `this.trialObject`, so
+   * they are looked up the same way they are looked up when running the trial.
+   */
+  private getUniversalParameterValue(parameterName: string) {
+    if (parameterName === "post_trial_gap") {
+      return this.getPostTrialGap();
+    }
+    if (parameterName === "data") {
+      return this.getDataParameter();
+    }
+
+    const parameterConfig = universalPluginParameters[parameterName];
+    return (
+      this.getParameterValue(parameterName, {
+        evaluateFunctions: parameterConfig.type !== ParameterType.FUNCTION,
+      }) ?? parameterConfig.default
+    );
   }
 
   /**
