@@ -36,6 +36,16 @@ describe("Trial", () => {
     return trial;
   };
 
+  /** The values of universal plugin parameters in a trial object when they are not specified */
+  const defaultUniversalParameterValues = {
+    on_start: expect.any(Function),
+    on_finish: expect.any(Function),
+    on_load: expect.any(Function),
+    post_trial_gap: 0,
+    css_classes: "",
+    simulation_options: {},
+  };
+
   it("throws an error upon construction when the `type` parameter or plugin info object is undefined", () => {
     for (const description of [{}, { type: {} }] as TrialDescription[]) {
       expect(
@@ -62,7 +72,10 @@ describe("Trial", () => {
       await trial.run();
 
       expect(onStartCallback).toHaveBeenCalledTimes(1);
-      expect(onStartCallback).toHaveBeenCalledWith(description);
+      expect(onStartCallback).toHaveBeenCalledWith({
+        ...defaultUniversalParameterValues,
+        ...description,
+      });
       expect(dependencies.onTrialStart).toHaveBeenCalledTimes(1);
       expect(dependencies.onTrialStart).toHaveBeenCalledWith(trial);
     });
@@ -75,9 +88,42 @@ describe("Trial", () => {
       expect(trial.pluginInstance.trial).toHaveBeenCalledTimes(1);
       expect(trial.pluginInstance.trial).toHaveBeenCalledWith(
         expect.any(HTMLElement),
-        { type: TestPlugin },
+        { ...defaultUniversalParameterValues, type: TestPlugin },
         expect.any(Function)
       );
+    });
+
+    it("provides the evaluated universal plugin parameters to the plugin", async () => {
+      dependencies.getDefaultIti.mockReturnValue(100);
+      jest
+        .mocked(timeline)
+        .evaluateTimelineVariable.mockImplementation((variable: TimelineVariable) =>
+          variable.name === "cssClass" ? "my-class" : undefined
+        );
+      const onFinish = jest.fn();
+
+      const trial = createTrial({
+        type: TestPlugin,
+        css_classes: new TimelineVariable("cssClass"),
+        on_finish: onFinish,
+      });
+      const runPromise = trial.run();
+      await flushPromises();
+      jest.advanceTimersByTime(100);
+      await runPromise;
+
+      expect(trial.pluginInstance.trial).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          css_classes: "my-class",
+          // `default_iti` is used when `post_trial_gap` is not specified
+          post_trial_gap: 100,
+          // Function parameters are not evaluated
+          on_finish: onFinish,
+        }),
+        expect.anything()
+      );
+      expect(onFinish).toHaveBeenCalledTimes(1);
     });
 
     it("accepts changes to the trial description made by the `on_start` callback", async () => {
@@ -294,6 +340,68 @@ describe("Trial", () => {
       consoleSpy.mockRestore();
     });
 
+    it("respects universal plugin parameters in `save_trial_parameters`", async () => {
+      const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+      jest
+        .mocked(timeline)
+        .evaluateTimelineVariable.mockImplementation((variable: TimelineVariable) =>
+          variable.name === "cssClass" ? "my-class" : undefined
+        );
+
+      const onStart = jest.fn();
+      const postTrialGap = jest.fn(() => 200);
+      TestPlugin.defaultTrialResult = { on_finish: "added by plugin" };
+
+      const trial = createTrial({
+        type: TestPlugin,
+        css_classes: new TimelineVariable("cssClass"),
+        post_trial_gap: postTrialGap,
+        on_start: onStart,
+        save_trial_parameters: {
+          css_classes: true,
+          post_trial_gap: true,
+          on_start: true,
+          on_finish: false,
+        },
+      });
+
+      const runPromise = trial.run();
+      await flushPromises();
+      jest.advanceTimersByTime(200);
+      await runPromise;
+      const result = trial.getResult();
+
+      // Timeline variables and dynamic parameters are saved with their evaluated value
+      expect(result).toHaveProperty("css_classes", "my-class");
+      expect(result).toHaveProperty("post_trial_gap", 200);
+      expect(postTrialGap).toHaveBeenCalledTimes(1);
+
+      // Callback functions are stringified
+      expect(result).toHaveProperty("on_start", onStart.toString());
+
+      // Universal parameters can be removed from the data, too
+      expect(result).not.toHaveProperty("on_finish");
+
+      expect(consoleSpy).not.toHaveBeenCalled();
+      consoleSpy.mockRestore();
+    });
+
+    it("saves the effective `post_trial_gap` value when it is not specified", async () => {
+      dependencies.getDefaultIti.mockReturnValue(100);
+
+      const trial = createTrial({
+        type: TestPlugin,
+        save_trial_parameters: { post_trial_gap: true },
+      });
+
+      const runPromise = trial.run();
+      await flushPromises();
+      jest.advanceTimersByTime(100);
+      await runPromise;
+
+      expect(trial.getResult()).toHaveProperty("post_trial_gap", 100);
+    });
+
     it("respects the `save_timeline_variables` parameter", async () => {
       jest.mocked(timeline.getAllTimelineVariables).mockReturnValue({ a: 1, b: 2, c: 3 });
 
@@ -374,6 +482,7 @@ describe("Trial", () => {
         expect(trial.pluginInstance.trial).toHaveBeenCalledWith(
           expect.anything(),
           {
+            ...defaultUniversalParameterValues,
             type: TestPlugin,
             string: null,
             requiredString: "foo",
@@ -797,7 +906,7 @@ describe("Trial", () => {
 
         expect(trial.pluginInstance.simulate).toHaveBeenCalledTimes(1);
         expect(trial.pluginInstance.simulate).toHaveBeenCalledWith(
-          { type: TestPlugin },
+          { ...defaultUniversalParameterValues, type: TestPlugin },
           "data-only",
           {},
           expect.any(Function)

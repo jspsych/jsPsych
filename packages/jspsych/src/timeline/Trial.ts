@@ -1,6 +1,6 @@
 import { Class } from "type-fest";
 
-import { ParameterInfos } from "../modules/plugins";
+import { ParameterInfos, universalPluginParameters } from "../modules/plugins";
 import { JsPsychPlugin, ParameterType, PluginInfo } from "../modules/plugins";
 import { deepCopy, deepMerge } from "../modules/utils";
 import { Timeline } from "./Timeline";
@@ -196,7 +196,10 @@ export class Trial extends TimelineNode {
     for (const [parameterName, shouldParameterBeIncluded] of Object.entries(
       this.getParameterValue("save_trial_parameters") ?? {}
     )) {
-      if (this.pluginInfo.parameters[parameterName]) {
+      if (
+        Object.hasOwn(this.pluginInfo.parameters, parameterName) ||
+        Object.hasOwn(universalPluginParameters, parameterName)
+      ) {
         if (shouldParameterBeIncluded && !Object.hasOwn(result, parameterName)) {
           let parameterValue = this.trialObject[parameterName];
           if (typeof parameterValue === "function") {
@@ -486,7 +489,33 @@ export class Trial extends TimelineNode {
 
     const trialObject = deepCopy(this.description);
     assignParameterValues(trialObject, this.pluginInfo.parameters);
+    this.assignUniversalParameterValues(trialObject);
     this.trialObject = trialObject;
+  }
+
+  /**
+   * Evaluates the universal plugin parameters (like `css_classes` or `post_trial_gap`) that are not
+   * defined by the plugin itself and adds their values to the provided trial object. This way,
+   * plugins and the `save_trial_parameters` parameter can access them. Since parameter lookups are
+   * cached, the trial uses the same values when it applies these parameters.
+   */
+  private assignUniversalParameterValues(trialObject: TrialDescription) {
+    for (const [parameterName, parameterConfig] of Object.entries(universalPluginParameters)) {
+      // `data` properties are evaluated when the trial result is created (see `getDataParameter()`)
+      if (parameterName === "data" || Object.hasOwn(this.pluginInfo.parameters, parameterName)) {
+        continue;
+      }
+
+      const parameterValue = this.getParameterValue(parameterName, {
+        evaluateFunctions: parameterConfig.type !== ParameterType.FUNCTION,
+      });
+
+      trialObject[parameterName] =
+        parameterValue ??
+        (parameterName === "post_trial_gap"
+          ? this.dependencies.getDefaultIti()
+          : deepCopy(parameterConfig.default));
+    }
   }
 
   public getLatestNode() {
