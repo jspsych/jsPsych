@@ -66,3 +66,22 @@ export type { JsPsychPlugin, PluginInfo, TrialType } from "./modules/plugins";
 export { ParameterType } from "./modules/plugins";
 export type { JsPsychExtension, JsPsychExtensionInfo } from "./modules/extensions";
 export { DataCollection } from "./modules/data/DataCollection";
+export type {
+  AdapterConnectOptions,
+  ConnectionStatus,
+  ConnectOptions,
+  GroupSessionData,
+  GroupState,
+  GroupWaitOptions,
+  MultiplayerAdapter,
+  MultiplayerConnection,
+  MultiplayerErrorCode,
+  PresenceData,
+  PresenceStatus,
+  ScopeOptions,
+  SessionListener,
+  SubscribeOptions,
+  Unsubscribe,
+  WaitOptions,
+} from "./modules/multiplayer";
+export { MultiplayerError } from "./modules/multiplayer";

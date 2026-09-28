@@ -6,6 +6,7 @@ import { version } from "../package.json";
 import { ExtensionManager, ExtensionManagerDependencies } from "./ExtensionManager";
 import { JsPsychData, JsPsychDataDependencies } from "./modules/data";
 import { JsPsychExtension } from "./modules/extensions";
+import { MultiplayerAPI, timelineHooks } from "./modules/multiplayer";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
 import { JsPsychPlugin } from "./modules/plugins";
 import * as randomization from "./modules/randomization";
@@ -30,6 +31,7 @@ export class JsPsych {
   randomization = randomization;
   utils = utils;
   data: JsPsychData;
+  multiplayer: MultiplayerAPI;
   pluginAPI: PluginAPI;
 
   version() {
@@ -110,6 +112,7 @@ export class JsPsych {
 
     // initialize modules
     this.data = new JsPsychData(this.dataDependencies);
+    this.multiplayer = new MultiplayerAPI();
     this.pluginAPI = createJointPluginAPIObject(this);
 
     this.extensionManager = new ExtensionManager(
@@ -147,7 +150,13 @@ export class JsPsych {
 
     this.experimentStartTime = new Date();
 
-    await this.timeline.run();
+    try {
+      await this.timeline.run();
+    } finally {
+      // Before on_finish, so partner updates can't redraw over the end screen.
+      // The connection stays open, so on_finish can still write final data.
+      this.multiplayer[timelineHooks].experimentEnded();
+    }
     await Promise.resolve(this.options.on_finish(this.data.get()));
 
     if (this.endMessage) {
@@ -201,6 +210,7 @@ export class JsPsych {
     this.timeline.abort();
     this.pluginAPI.cancelAllKeyboardResponses();
     this.pluginAPI.clearAllTimeouts();
+    this.multiplayer[timelineHooks].experimentEnded();
     this.finishTrial(data);
   }
 
@@ -394,6 +404,7 @@ export class JsPsych {
 
   private timelineDependencies: TimelineNodeDependencies = {
     onTrialStart: (trial: Trial) => {
+      this.multiplayer[timelineHooks].trialStarted(trial.getMultiplayerScope());
       this.options.on_trial_start(trial.trialObject);
 
       // apply the focus to the element containing the experiment.
@@ -403,14 +414,17 @@ export class JsPsych {
     },
 
     onTrialResultAvailable: (trial: Trial) => {
+      this.multiplayer[timelineHooks].trialEnded();
       const result = trial.getResult();
       if (result) {
+        Object.assign(result, this.multiplayer[timelineHooks].dataProperties());
         result.time_elapsed = this.getTotalTime();
         this.data.write(trial);
       }
     },
 
     onTrialFinished: (trial: Trial) => {
+      this.multiplayer[timelineHooks].trialFinished();
       const result = trial.getResult();
       this.options.on_trial_finish(result);
 

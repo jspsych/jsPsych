@@ -60,6 +60,14 @@ export interface TrialDescription extends Record<string, any> {
    */
   record_data?: Parameter<boolean>;
 
+  /**
+   * Names the part of the multiplayer shared data this trial reads and writes. Defaults to the
+   * trial's position in the timeline, which is the same for every participant running the same
+   * timeline. Trials that use the same name share data, so a trial that repeats needs a name that
+   * changes with each repetition, e.g. one built from a timeline variable.
+   */
+  multiplayer_scope?: Parameter<string>;
+
   // Events
 
   /** https://www.jspsych.org/latest/overview/events/#on_start-trial */
