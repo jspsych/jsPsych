@@ -1,0 +1,40 @@
+{
+  "name": "@jspsych/test-utils",
+  "version": "1.2.0",
+  "description": "Test utility functions for jsPsych-related test cases",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "typings": "dist/index.d.ts",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "source": "src/index.ts",
+  "scripts": {
+    "tsc": "tsc",
+    "build": "rollup --config",
+    "build:watch": "npm run build -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jspsych/jsPsych.git",
+    "directory": "packages/test-utils"
+  },
+  "author": "bjoluc <mail@bjoluc.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jspsych/jsPsych/issues"
+  },
+  "peerDependencies": {
+    "jspsych": ">=7.0.0",
+    "@types/jest": "*"
+  },
+  "devDependencies": {
+    "@jspsych/config": "^3.0.0",
+    "jspsych": "^8.0.0"
+  }
+}
