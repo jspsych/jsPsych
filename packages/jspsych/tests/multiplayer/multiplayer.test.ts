@@ -988,12 +988,43 @@ describe("presence", () => {
     await expect(join("p1", { dropoutTimeout: 0 })).rejects.toThrow("dropoutTimeout");
   });
 
-  test("a participant with data who isn't connected at join starts out away", async () => {
-    hub.data = { ghost: wire({ x: 1 }) };
+  test("data left by someone who is gone before this participant arrives doesn't count", async () => {
+    // e.g. a link used for an earlier session
+    hub.data = { ghost: wire({ x: 1 }, { scopes: { "#0": { choice: "A" } } }) };
+    const left = jest.fn();
+    const a = await join("p1", { dropoutTimeout: 5000, onParticipantLeft: left });
+    expect(a.api.presence()).toEqual({ p1: "connected" });
+    expect(a.api.getAll()).toEqual({});
+    a.api[timelineHooks].trialStarted("#0");
+    expect(a.api.getAll()).toEqual({});
+    a.api[timelineHooks].trialFinished();
+    expect(a.api.group().members).toEqual(["p1"]);
+
+    jest.advanceTimersByTime(60000);
+    expect(left).not.toHaveBeenCalled();
+    expect(a.api.presence().ghost).toBeUndefined();
+  });
+
+  test("someone whose connection was down when this participant joined counts once it's back", async () => {
+    const b = await join("p2");
+    await b.api.update({ name: "Sam" });
+    // p2's network drops just before p1 arrives
+    b.connection.online = false;
     const a = await join("p1", { dropoutTimeout: 5000 });
-    expect(a.api.presence().ghost).toBe("away");
+    expect(a.api.presence().p2).toBeUndefined();
+    expect(a.api.get("p2")).toBeUndefined();
+
+    b.connection.setOnline(false);
+    b.connection.setOnline(true);
+    await flushPromises();
+    expect(a.api.presence().p2).toBe("connected");
+    expect(a.api.get("p2")).toEqual({ name: "Sam" });
+
+    // From then on they are tracked like anyone else
+    b.connection.setOnline(false);
     jest.advanceTimersByTime(5000);
-    expect(a.api.presence().ghost).toBe("left");
+    expect(a.api.presence().p2).toBe("left");
+    expect(a.api.get("p2")).toEqual({ name: "Sam" });
   });
 
   test("a wait on a participant who leaves rejects with participant_left", async () => {

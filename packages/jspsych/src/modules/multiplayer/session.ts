@@ -471,7 +471,7 @@ export class MultiplayerSession {
       const data: GroupSessionData = {};
       for (const [id, slot] of Object.entries(this.slots)) {
         const value = scopeData(slot, scope);
-        if (value !== undefined && (!this.memberFilter || this.memberFilter.has(id))) {
+        if (value !== undefined && this.isVisible(id)) {
           data[id] = value;
         }
       }
@@ -483,6 +483,16 @@ export class MultiplayerSession {
       this.views.set(scope, view);
     }
     return view;
+  }
+
+  /**
+   * Whether another participant's data is shown. When the adapter forms groups, that is its
+   * members. Otherwise it is whoever this client has seen connected, so data left behind by
+   * someone who was gone before this participant arrived, e.g. from an earlier use of the same
+   * link, doesn't count as part of the group.
+   */
+  private isVisible(id: string): boolean {
+    return this.memberFilter ? this.memberFilter.has(id) : this.presenceStatus.has(id);
   }
 
   /** One participant's data in a scope, or undefined if they haven't written any. Frozen. */
@@ -1108,13 +1118,10 @@ export class MultiplayerSession {
       console.error("MultiplayerAPI: could not read the adapter's connected participants", e);
       return false;
     }
-    // A sealed group's roster says who should be here, even members never seen yet
-    const ids = new Set([
-      ...connectedNow,
-      ...Object.keys(this.slots).filter((id) => !this.memberFilter || this.memberFilter.has(id)),
-      ...this.presenceStatus.keys(),
-      ...(this.roster ?? []),
-    ]);
+    // Only participants seen connected are tracked, so data left behind by someone who was gone
+    // before this participant arrived never counts as a departure. A sealed group's roster is
+    // the exception: it says who should be here, even members never seen yet.
+    const ids = new Set([...connectedNow, ...this.presenceStatus.keys(), ...(this.roster ?? [])]);
     ids.delete(this.participantId);
 
     let changed = false;

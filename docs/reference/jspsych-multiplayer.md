@@ -157,6 +157,8 @@ Status | Meaning
 
 `left` is final: a participant who has left stays `left`, even if their connection comes back. The group agrees on it. When one participant sees someone leave, they tell the rest of the group, and the others who have also lost sight of that participant count them as left at once, without waiting for their own dropout timers. A participant the group counted as left finds out when their connection recovers: their session closes with a `connection_lost` error.
 
+A participant is tracked from the moment this participant sees them connected. Data left behind by someone who was already gone when this participant arrived, for example from an earlier session that used the same link, isn't counted: they don't appear in `presence()` or `getAll()`, and `onParticipantLeft` is never called for them. If they come back from the page they were on, they are counted from then on. In a sealed group every member on the roster is tracked, even one who never connects, so that member becomes `away` and then `left`.
+
 While your own connection is down, the session pauses everyone else's dropout timers, because it can't tell whether they are still there.
 
 To give participants more time to come back, choose a longer `dropoutTimeout` when you connect.
