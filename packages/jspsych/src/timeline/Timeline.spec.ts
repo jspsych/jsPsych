@@ -787,6 +787,17 @@ describe("Timeline", () => {
         parent_prop: 2,
       });
     });
+
+    it("ignores a `null` `data` parameter", async () => {
+      const timeline = createTimeline({
+        timeline: [{ timeline: [], data: { custom: "value" } }],
+        data: null,
+      });
+
+      await timeline.run();
+
+      expect((timeline.children[0] as Timeline).getDataParameter()).toEqual({ custom: "value" });
+    });
   });
 
   describe("getResults()", () => {
@@ -837,6 +848,7 @@ describe("Timeline", () => {
                 type: TestPlugin,
                 data: { leaf: "trial_leaf", override_me: "trial_override" },
               },
+              { type: TestPlugin },
             ],
             data: { mid: "mid_timeline", override_me: "mid_override" },
           },
@@ -852,6 +864,11 @@ describe("Timeline", () => {
           mid: "mid_timeline",
           leaf: "trial_leaf",
           override_me: "trial_override",
+        }),
+        expect.objectContaining({
+          root: "root_timeline",
+          mid: "mid_timeline",
+          override_me: "mid_override",
         }),
       ]);
     });
