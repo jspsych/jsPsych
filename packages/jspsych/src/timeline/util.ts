@@ -69,15 +69,15 @@ export class ParameterObjectPathCache {
     let doesPathExist: boolean = false;
     let childValue: any;
 
-    if (Number.isNaN(Number.parseInt(childName))) {
-      // `childName` refers to an object property
-      if (Object.hasOwn(objectOrArray, childName)) {
+    if (Array.isArray(objectOrArray) && !Number.isNaN(Number.parseInt(childName))) {
+      // `childName` refers to an array index
+      if (Number.parseInt(childName) < objectOrArray.length) {
         doesPathExist = true;
         childValue = objectOrArray[childName];
       }
     } else {
-      // `childName` refers to an array index
-      if (Number.parseInt(childName) < objectOrArray.length) {
+      // `childName` refers to an object property
+      if (Object.hasOwn(objectOrArray, childName)) {
         doesPathExist = true;
         childValue = objectOrArray[childName];
       }
