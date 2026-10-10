@@ -772,6 +772,21 @@ describe("Timeline", () => {
         other: "value",
       });
     });
+
+    it("overrides parent node `data` parameters with child node `data` parameters", async () => {
+      const timeline = createTimeline({
+        timeline: [{ timeline: [], data: { custom: "child_value", child_prop: 1 } }],
+        data: { custom: "parent_value", parent_prop: 2 },
+      });
+
+      await timeline.run();
+
+      expect((timeline.children[0] as Timeline).getDataParameter()).toEqual({
+        custom: "child_value",
+        child_prop: 1,
+        parent_prop: 2,
+      });
+    });
   });
 
   describe("getResults()", () => {
@@ -791,6 +806,54 @@ describe("Timeline", () => {
       expect(timeline.getResults()).toEqual(
         Array(2).fill(expect.objectContaining({ my: "result" }))
       );
+    });
+
+    it("respects child trial data overrides in results of nested timelines (#3714)", async () => {
+      const timeline = createTimeline({
+        timeline: [
+          { type: TestPlugin },
+          {
+            type: TestPlugin,
+            data: { exp_trial_type: "press_b_trial" },
+          },
+        ],
+        data: { exp_trial_type: "press_a_trial", shared: "kept" },
+      });
+
+      await timeline.run();
+
+      expect(timeline.getResults()).toEqual([
+        expect.objectContaining({ exp_trial_type: "press_a_trial", shared: "kept" }),
+        expect.objectContaining({ exp_trial_type: "press_b_trial", shared: "kept" }),
+      ]);
+    });
+
+    it("properly cascades data parameter overrides across multiple nested timeline levels", async () => {
+      const timeline = createTimeline({
+        timeline: [
+          {
+            timeline: [
+              {
+                type: TestPlugin,
+                data: { leaf: "trial_leaf", override_me: "trial_override" },
+              },
+            ],
+            data: { mid: "mid_timeline", override_me: "mid_override" },
+          },
+        ],
+        data: { root: "root_timeline", override_me: "root_override" },
+      });
+
+      await timeline.run();
+
+      expect(timeline.getResults()).toEqual([
+        expect.objectContaining({
+          root: "root_timeline",
+          mid: "mid_timeline",
+          leaf: "trial_leaf",
+          override_me: "trial_override",
+        }),
+      ]);
     });
   });
 
