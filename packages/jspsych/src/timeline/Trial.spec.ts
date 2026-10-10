@@ -226,6 +226,28 @@ describe("Trial", () => {
       expect(trial.getResult()).toEqual(expect.objectContaining({ my: "result", custom: "value" }));
     });
 
+    it("overrides parent timeline `data` parameter with trial `data` parameter", async () => {
+      timeline.getDataParameter = jest.fn().mockReturnValue({
+        custom: "parent_value",
+        parent_prop: "parent",
+      });
+
+      const trial = createTrial({
+        type: TestPlugin,
+        data: { custom: "trial_value", trial_prop: "trial" },
+      });
+      await trial.run();
+
+      expect(trial.getResult()).toEqual(
+        expect.objectContaining({
+          my: "result",
+          custom: "trial_value",
+          trial_prop: "trial",
+          parent_prop: "parent",
+        })
+      );
+    });
+
     it("includes a set of trial-specific result properties", async () => {
       const trial = createTrial({ type: TestPlugin });
       await trial.run();

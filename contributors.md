@@ -58,6 +58,7 @@ The following people have contributed to the development of jsPsych by writing c
 * Ellen Shapiro - https://github.com/designatednerd
 * Jan Simson - https://github.com/jansim
 * Hannah Small - https://github.com/hesmall
+* Soham Mitra - https://github.com/SohamXYZDev
 * sprengholz - https://github.com/sprengholz
 * Dominik Strohmeier - https://github.com/onkeltom
 * Nabeel Sulieman - https://github.com/nabsul

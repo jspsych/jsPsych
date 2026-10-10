@@ -156,19 +156,19 @@ export abstract class TimelineNode {
 
   /**
    * Retrieves and evaluates the `data` parameter. It is different from other parameters in that
-   * it's properties may be functions that have to be evaluated, and parent nodes' data parameter
-   * properties are merged into the result.
+   * its properties may be functions that have to be evaluated, and parent nodes' data parameter
+   * properties are merged into the result, with child properties taking precedence.
    */
   public getDataParameter(): Record<string, any> | undefined {
     const data = this.getParameterValue("data", { recursive: false });
 
     return {
+      ...this.parent?.getDataParameter(),
       ...Object.fromEntries(
-        typeof data === "object"
+        typeof data === "object" && data !== null
           ? Object.keys(data).map((key) => [key, this.getParameterValue(["data", key])])
           : []
       ),
-      ...this.parent?.getDataParameter(),
     };
   }
 }
