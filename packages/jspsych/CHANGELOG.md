@@ -1,5 +1,11 @@
 # jspsych
 
+## 8.3.1
+
+### Patch Changes
+
+- [#3725](https://github.com/jspsych/jsPsych/pull/3725) [`cf3ba827fe65a5aedb95f424575d463fe5eb2a64`](https://github.com/jspsych/jsPsych/commit/cf3ba827fe65a5aedb95f424575d463fe5eb2a64) Thanks [@SohamXYZDev](https://github.com/SohamXYZDev)! - Fix an issue where nested timeline and trial `data` parameters did not override parent timeline `data` parameters (#3714).
+
 ## 8.3.0
 
 ### Minor Changes
