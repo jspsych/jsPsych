@@ -241,6 +241,40 @@ const trial_procedure = {
 
 See the "css-classes-parameter.html" file in jsPsych's examples subfolder for more explanation and examples.
 
+## Optional mobile layout
+
+jsPsych ships a second, optional stylesheet at `css/jspsych-mobile.css`. On touch devices it moves the response buttons into a bar fixed to the bottom of the screen, where they are within reach of a thumb instead of requiring a stretch to the middle of the page. Load it after `jspsych.css` to opt in:
+
+```html
+<head>
+  <script src="https://unpkg.com/jspsych@8.3.0"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.2.0"></script>
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@8.3.0/css/jspsych.css">
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@8.3.0/css/jspsych-mobile.css">
+</head>
+```
+
+All of its rules are inside a `@media (pointer: coarse)` query, so including it has no effect on devices with a mouse. It applies to every button-response plugin, since it targets the `.jspsych-btn-group-flex` and `.jspsych-btn-group-grid` classes that those plugins share.
+
+This layout is opt-in rather than a default because it is not right for every task. If your response options carry spatial meaning — as in a Simon task, or any design where the position of a button is part of the manipulation — a fixed bottom bar will interfere with what you are measuring.
+
+Two things you may want to override:
+
+```css
+/* The bar is painted with the browser's default page background. If your
+   experiment sets its own, match it here so content does not show through. */
+.jspsych-btn-group-flex,
+.jspsych-btn-group-grid {
+  background: black;
+}
+
+/* Space reserved below the trial content so it is not hidden behind the bar.
+   Increase it if you make the buttons larger. */
+.jspsych-content {
+  padding-bottom: 140px;
+}
+```
+
 ## Tips for working with CSS
 
 Your browser's developer tools contain very useful features for exploring and debugging your experiment's style and formatting. Open your browser's developer tools and click on the Element Inspector button or go to the Elements tab. Once you have selected an element on the page, you can see all of the information that can be used to select it, including:
