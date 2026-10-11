@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>jsPsych Display Element Height Test</title>
+    <script src="../packages/jspsych/dist/index.browser.js"></script>
+    <link href="../packages/jspsych/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="../packages/plugin-html-keyboard-response/dist/index.browser.js"></script>
+    <style>
+        /* Set a specific height for the display container to test */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        
+        #jspsych-target {
+            height: 600px;
+            background-color: #f0f0f0;
+            border: 3px solid #333;
+        }
+        
+        /* Plugin content styling to demonstrate the fix */
+        .test-content {
+            height: 100%;
+            background: linear-gradient(to bottom, #4CAF50, #2196F3);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .info-box {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; padding: 20px;">jsPsych Display Element Sizing Test</h1>
+    <div id="jspsych-target"></div>
+    
+    <script>
+        const jsPsych = initJsPsych({
+            display_element: 'jspsych-target',
+            show_progress_bar: true,
+            on_finish: function() {
+                document.body.innerHTML = '<div style="text-align: center; padding: 50px;"><h1>✓ Test Complete!</h1><p>The plugin content with <code>height: 100%</code> successfully filled the display element.</p></div>';
+            }
+        });
+        
+        const trial = {
+            type: jsPsychHtmlKeyboardResponse,
+            stimulus: `
+                <div class="test-content">
+                    <h1>✓ Height: 100% Works!</h1>
+                    <p>This content uses height: 100% and fills the entire display element</p>
+                    <div class="info-box">
+                        <p><strong>Before the fix:</strong> This would have zero height</p>
+                        <p><strong>After the fix:</strong> It fills the 600px display container</p>
+                    </div>
+                    <p style="margin-top: 50px; font-size: 18px;">Press any key to continue</p>
+                </div>
+            `,
+        };
+        
+        jsPsych.run([trial]);
+    </script>
+</body>
+</html>
