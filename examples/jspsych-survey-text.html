@@ -3,7 +3,7 @@
   <head>
     <script src="../packages/jspsych/dist/index.browser.js"></script>
     <script src="../packages/plugin-survey-text/dist/index.browser.js"></script>
-    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css">
+    <link rel="stylesheet" href="../packages/jspsych/css/jspsych.css" />
   </head>
   <body></body>
   <script>
@@ -30,7 +30,30 @@
       ]
     };
 
-    jsPsych.run([survey_page1, survey_page2]);
+    var survey_page3 = {
+      type: jsPsychSurveyText,
+      questions: [
+              {
+                  prompt: "What are your hobbies?",
+                  name: "hobbies",
+                  placeholder: "Enter a hobby..."
+              },
+              {
+                  prompt: "What are your favorite foods?",
+                  name: "foods",
+                  placeholder: "Enter a food...",
+                  required: true
+              },
+              {
+                  prompt: "What skills do you have?",
+                  name: "skills",
+                  placeholder: "Enter a skill..."
+              }
+          ],
+          preamble: "<p>Please answer the following questions. Press <strong>Enter</strong> or <strong>spacebar</strong> in any input field to create additional fields for that question. Press <strong>Backspace</strong> on an empty field to delete it.</p>",
+          dynamic_input_fields: true
+    };
 
+    jsPsych.run([survey_page1, survey_page2, survey_page3]);
   </script>
 </html>
