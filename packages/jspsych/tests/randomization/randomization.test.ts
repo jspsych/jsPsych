@@ -1,5 +1,6 @@
 import {
   factorial,
+  getSeed,
   randomID,
   randomInt,
   repeat,
@@ -216,5 +217,13 @@ describe("setSeed", () => {
 
     expect(r1_1).toEqual(r2_1);
     expect(r1_2).toEqual(r2_2);
+  });
+
+  test("getSeed() returns the seed that was applied most recently", () => {
+    expect(setSeed("jspsych")).toBe("jspsych");
+    expect(getSeed()).toBe("jspsych");
+
+    const generatedSeed = setSeed();
+    expect(getSeed()).toBe(generatedSeed);
   });
 });

@@ -45,6 +45,20 @@ describe("ProgressBar", () => {
       );
     });
 
+    it("invokes the `onProgressSet` callback, but `setProgress()` does not", () => {
+      const onProgressSet = jest.fn();
+      containerElement = document.createElement("div");
+      progressBar = new ProgressBar(containerElement, "My message", onProgressSet);
+
+      progressBar.progress = 0.25;
+      expect(onProgressSet).toHaveBeenCalledWith(0.25);
+
+      onProgressSet.mockClear();
+      progressBar.setProgress(0.75);
+      expect(progressBar.progress).toEqual(0.75);
+      expect(onProgressSet).not.toHaveBeenCalled();
+    });
+
     it("should work when message is a function", () => {
       // Override default container element and progress bar
       containerElement = document.createElement("div");

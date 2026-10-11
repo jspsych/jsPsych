@@ -23,6 +23,18 @@ export interface JsPsychDataDependencies {
   onInteractionRecordAdded: (record: InteractionRecord) => void;
 
   getDisplayElement: () => HTMLElement;
+
+  /**
+   * Returns the data properties that the module starts out with. jsPsych uses this to restore the
+   * properties that were added in a session that is being resumed.
+   */
+  getInitialDataProperties?: () => Record<string, any>;
+
+  /**
+   * Called with the full set of data properties whenever `addProperties()` is used, so that they
+   * can be persisted with the session.
+   */
+  onDataPropertiesChanged?: (properties: Record<string, any>) => void;
 }
 
 export class JsPsychData {
@@ -40,6 +52,7 @@ export class JsPsychData {
 
   constructor(private dependencies: JsPsychDataDependencies) {
     this.reset();
+    this.dataProperties = { ...dependencies.getInitialDataProperties?.() };
   }
 
   reset() {
@@ -69,6 +82,8 @@ export class JsPsychData {
 
     // now add to list so that it gets appended to all future data
     this.dataProperties = Object.assign({}, this.dataProperties, properties);
+
+    this.dependencies.onDataPropertiesChanged?.(this.dataProperties);
   }
 
   addDataToLastTrial(data) {

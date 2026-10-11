@@ -25,6 +25,15 @@ export class Trial extends TimelineNode {
   private result: TrialResult;
   private readonly pluginInfo: PluginInfo;
 
+  /** Whether this trial's result was taken from a saved session instead of being produced live */
+  private resultWasReplayed = false;
+
+  /**
+   * The index of the session log entry that this trial's fresh result has to replace. Only set for
+   * `run_on_resume` trials that are re-executed while a saved session is being replayed.
+   */
+  private rerunLogIndex?: number;
+
   constructor(
     dependencies: TimelineNodeDependencies,
     public readonly description: TrialDescription,
@@ -62,6 +71,11 @@ export class Trial extends TimelineNode {
 
   public async run() {
     this.status = TimelineNodeStatus.RUNNING;
+
+    if (this.replayResultFromSession()) {
+      return;
+    }
+
     this.processParameters();
 
     this.onStart();
@@ -84,6 +98,54 @@ export class Trial extends TimelineNode {
     }
 
     this.resetParameterValueCache();
+  }
+
+  /**
+   * While a saved session is being replayed, takes this trial's result from the session log instead
+   * of running the plugin, and returns `true` to signal that `run()` is done. Returns `false` if the
+   * trial has to be executed live, which is the case when the session log is exhausted or when the
+   * trial's `run_on_resume` parameter is `true`.
+   */
+  private replayResultFromSession() {
+    const recorder = this.dependencies.getSessionRecorder?.();
+    if (!recorder?.isReplaying()) {
+      return false;
+    }
+
+    const entry = recorder.consume("trial");
+    if (!entry) {
+      return false;
+    }
+
+    if (this.getParameterValue("run_on_resume") === true) {
+      // The trial runs live and its fresh result takes the place of the logged one. Control flow
+      // stays deterministic because every other decision still comes from the log.
+      this.rerunLogIndex = recorder.getLastConsumedIndex();
+      recorder.checkReplayTransition();
+      return false;
+    }
+
+    this.result = entry.result ?? undefined;
+    this.resultWasReplayed = true;
+    this.dependencies.onTrialResultAvailable(this);
+    this.status = TimelineNodeStatus.COMPLETED;
+    recorder.checkReplayTransition();
+    this.resetParameterValueCache();
+
+    return true;
+  }
+
+  /** Whether this trial's result was replayed from a saved session rather than produced live */
+  public wasResultReplayed() {
+    return this.resultWasReplayed;
+  }
+
+  /**
+   * The index of the session log entry that this trial's result has to replace, or `undefined` if
+   * the result is to be appended to the log.
+   */
+  public getRerunLogIndex() {
+    return this.rerunLogIndex;
   }
 
   private async executeTrial() {

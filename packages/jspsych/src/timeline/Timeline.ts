@@ -6,6 +6,7 @@ import {
   shuffle,
   shuffleAlternateGroups,
 } from "../modules/randomization";
+import { SessionRecorder } from "../modules/resume";
 import { TimelineNode } from "./TimelineNode";
 import { Trial } from "./Trial";
 import { PromiseWrapper } from "./util";
@@ -49,15 +50,17 @@ export class Timeline extends TimelineNode {
 
     const { conditional_function, loop_function, repetitions = 1 } = this.description;
 
+    const recorder = this.dependencies.getSessionRecorder?.();
+
     // Generate initial timeline variable order so the first set of timeline variables is already
     // available to the `on_timeline_start` and `conditional_function` callbacks
-    let timelineVariableOrder = this.generateTimelineVariableOrder();
+    let timelineVariableOrder = this.getTimelineVariableOrder(recorder);
     this.setCurrentTimelineVariablesByIndex(timelineVariableOrder[0]);
     let isInitialTimelineVariableOrder = true; // So we don't regenerate the order in the first iteration
 
     let currentLoopIterationResults: TrialResult[];
 
-    if (!conditional_function || conditional_function()) {
+    if (this.evaluateConditionalFunction(conditional_function, recorder)) {
       this.onStart();
 
       for (let repetition = 0; repetition < repetitions; repetition++) {
@@ -69,7 +72,7 @@ export class Timeline extends TimelineNode {
           if (isInitialTimelineVariableOrder) {
             isInitialTimelineVariableOrder = false;
           } else {
-            timelineVariableOrder = this.generateTimelineVariableOrder();
+            timelineVariableOrder = this.getTimelineVariableOrder(recorder);
           }
 
           for (const timelineVariableIndex of timelineVariableOrder) {
@@ -98,13 +101,91 @@ export class Timeline extends TimelineNode {
               currentLoopIterationResults.push(...this.currentChild.getResults());
             }
           }
-        } while (loop_function && loop_function(new DataCollection(currentLoopIterationResults)));
+        } while (this.evaluateLoopFunction(loop_function, currentLoopIterationResults, recorder));
       }
 
       this.onFinish();
     }
 
     this.status = TimelineNodeStatus.COMPLETED;
+  }
+
+  /**
+   * Returns the timeline variable order to be used for the next iteration. When a saved session is
+   * being replayed, the order is taken from the session log instead of being generated anew.
+   */
+  private getTimelineVariableOrder(recorder?: SessionRecorder) {
+    if (!recorder) {
+      return this.generateTimelineVariableOrder();
+    }
+
+    if (recorder.isReplaying()) {
+      const entry = recorder.consume("tv-order");
+      if (entry) {
+        return entry.order;
+      }
+    }
+
+    const order = this.generateTimelineVariableOrder();
+    recorder.record({ type: "tv-order", order });
+    return order;
+  }
+
+  /**
+   * Evaluates the timeline's `conditional_function`. When a saved session is being replayed, the
+   * logged outcome is used and the user's function is not invoked.
+   */
+  private evaluateConditionalFunction(
+    conditional_function: TimelineDescription["conditional_function"],
+    recorder?: SessionRecorder
+  ) {
+    if (!conditional_function) {
+      return true;
+    }
+
+    if (!recorder) {
+      return Boolean(conditional_function());
+    }
+
+    if (recorder.isReplaying()) {
+      const entry = recorder.consume("conditional");
+      if (entry) {
+        return entry.result;
+      }
+    }
+
+    const result = Boolean(conditional_function());
+    recorder.record({ type: "conditional", result });
+    return result;
+  }
+
+  /**
+   * Evaluates the timeline's `loop_function`. When a saved session is being replayed, the logged
+   * outcome is used and the user's function is not invoked.
+   */
+  private evaluateLoopFunction(
+    loop_function: TimelineDescription["loop_function"],
+    currentLoopIterationResults: TrialResult[],
+    recorder?: SessionRecorder
+  ) {
+    if (!loop_function) {
+      return false;
+    }
+
+    if (!recorder) {
+      return Boolean(loop_function(new DataCollection(currentLoopIterationResults)));
+    }
+
+    if (recorder.isReplaying()) {
+      const entry = recorder.consume("loop");
+      if (entry) {
+        return entry.result;
+      }
+    }
+
+    const result = Boolean(loop_function(new DataCollection(currentLoopIterationResults)));
+    recorder.record({ type: "loop", result });
+    return result;
   }
 
   private onStart() {

@@ -24,6 +24,8 @@ Returns nothing.
 
 This method appends a set of properties to every trial in the data object, including trials that have already occurred and trials that have yet to occur. You can use this to record things like the subject ID or condition assignment.
 
+The properties are part of the state that jsPsych saves when [resuming after a page reload](../overview/resume.md) is enabled, so properties that were added before a reload are still added to the trials that run after it, even though the code that called this method does not run again.
+
 ### Examples
 
 #### Assigning a subject ID and condition code

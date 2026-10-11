@@ -95,6 +95,34 @@ full_design = {
 
 ---
 
+## jsPsych.randomization.getSeed
+
+```javascript
+jsPsych.randomization.getSeed()
+```
+
+### Parameters
+
+None.
+
+### Return value
+
+Returns the seed that was most recently applied by [`jsPsych.randomization.setSeed()`](#jspsychrandomizationsetseed), or `undefined` if the random number generator has never been seeded.
+
+### Description
+
+Because `initJsPsych()` seeds the random number generator itself, this function returns a seed in any experiment. The seed that `initJsPsych()` applied is also stored in [`jsPsych.state._rng_seed`](jspsych.md#jspsychstate), which is usually the more convenient place to read it from.
+
+### Example
+
+```javascript
+jsPsych.data.addProperties({
+	rng_seed: jsPsych.randomization.getSeed()
+});
+```
+
+---
+
 ## jsPsych.randomization.randomID
 
 ```javascript
@@ -499,14 +527,23 @@ If you have non-jsPsych components on the page that use `Math.random()` they wil
 Using `setSeed()` without passing in a seed will generate a random 32-bit seed.
 The seed value will be returned from the function call, allowing you to save it in the data for the experiment if needed.
 
+*Changed in 9.0:* You do not have to call this function to get a seeded experiment.
+`initJsPsych()` seeds the random number generator itself and stores the seed in [`jsPsych.state._rng_seed`](jspsych.md#jspsychstate), which means that `Math.random()` is replaced for the entire document in every jsPsych experiment.
+If the generator has already been seeded when `initJsPsych()` runs, the existing seed is adopted and stored instead of a new one being generated.
+Calling `setSeed()` after `initJsPsych()` changes all of the draws that follow it, but does not change the value of `jsPsych.state._rng_seed`.
+
+When the experiment can be [resumed after a page reload](../overview/resume.md), the stored seed is applied again on the reloaded page, so that randomization which happens while your code builds the timeline comes out the same way.
+See [Randomization is reproduced](../overview/resume.md#randomization-is-reproduced) for what this means for `setSeed()` calls of your own.
+
+The seed that is currently in effect can be read with [`jsPsych.randomization.getSeed()`](#jspsychrandomizationgetseed).
+
 ### Examples
 
-#### Use a random 32-bit seed and save to data
+#### Save the seed of the experiment to the data
 
 ```javascript
-const seed = jsPsych.randomization.setSeed();
 jsPsych.data.addProperties({
-	rng_seed: seed
+	rng_seed: jsPsych.state._rng_seed
 });
 ```
 
