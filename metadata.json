@@ -1,0 +1,8 @@
+{
+  "pr_number": 3730,
+  "head_sha": "de29d0ebd89efe05aebf8430bcf360ddfc8c6973",
+  "head_ref": "fix/on-start-trial-data",
+  "changed_packages": [
+    "jspsych"
+  ]
+}
