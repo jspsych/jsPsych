@@ -248,6 +248,93 @@ describe("Trial", () => {
       );
     });
 
+    it("records modifications to trial.data made in on_start callback (#3727)", async () => {
+      const trial = createTrial({
+        type: TestPlugin,
+        data: { stimulus_type: "congruent" },
+        on_start: (trial) => {
+          trial.data.stimulus_type = "incongruent";
+          trial.data.target_direction = "right";
+        },
+      });
+      await trial.run();
+
+      expect(trial.getResult()).toEqual(
+        expect.objectContaining({
+          my: "result",
+          stimulus_type: "incongruent",
+          target_direction: "right",
+        })
+      );
+    });
+
+    it("merges parent timeline data underneath on_start trial.data changes (#3727)", async () => {
+      timeline.getDataParameter = jest.fn().mockReturnValue({
+        custom: "parent_value",
+        parent_prop: "parent",
+      });
+
+      const trial = createTrial({
+        type: TestPlugin,
+        data: { custom: "trial_value" },
+        on_start: (trial) => {
+          trial.data.custom = "on_start_value";
+          trial.data.trial_prop = "trial";
+        },
+      });
+      await trial.run();
+
+      expect(trial.getResult()).toEqual(
+        expect.objectContaining({
+          my: "result",
+          custom: "on_start_value",
+          trial_prop: "trial",
+          parent_prop: "parent",
+        })
+      );
+    });
+
+    it("records new trial.data properties added in on_start when data was not initially set (#3727)", async () => {
+      const trial = createTrial({
+        type: TestPlugin,
+        on_start: (trial) => {
+          trial.data = { added_in_start: "val" };
+        },
+      });
+      await trial.run();
+
+      expect(trial.getResult()).toEqual(
+        expect.objectContaining({
+          my: "result",
+          added_in_start: "val",
+        })
+      );
+    });
+
+    it("passes evaluated on_start data changes to on_finish (#3727)", async () => {
+      let capturedFinishData: any;
+      const trial = createTrial({
+        type: TestPlugin,
+        data: { initial: 1 },
+        on_start: (trial) => {
+          trial.data.initial = 2;
+          trial.data.computed = "done";
+        },
+        on_finish: (data) => {
+          capturedFinishData = data;
+        },
+      });
+      await trial.run();
+
+      expect(capturedFinishData).toEqual(
+        expect.objectContaining({
+          my: "result",
+          initial: 2,
+          computed: "done",
+        })
+      );
+    });
+
     it("includes a set of trial-specific result properties", async () => {
       const trial = createTrial({ type: TestPlugin });
       await trial.run();
