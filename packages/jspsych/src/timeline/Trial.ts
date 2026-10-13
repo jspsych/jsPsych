@@ -486,7 +486,51 @@ export class Trial extends TimelineNode {
 
     const trialObject = deepCopy(this.description);
     assignParameterValues(trialObject, this.pluginInfo.parameters);
+
+    const data = this.getParameterValue("data", { recursive: false });
+    if (typeof data === "object" && data !== null) {
+      trialObject.data = Object.fromEntries(
+        Object.keys(data).map((key) => [key, this.getParameterValue(["data", key])])
+      );
+    } else if (data !== undefined) {
+      trialObject.data = data;
+    }
+
     this.trialObject = trialObject;
+  }
+
+  /**
+   * Retrieves and evaluates the `data` parameter for this trial.
+   * If `on_start` modified or added properties to `trial.data`, those modifications
+   * are preserved in the trial's own data contribution, with parent timeline data
+   * merged underneath.
+   */
+  public override getDataParameter(): Record<string, any> | undefined {
+    let ownData: Record<string, any> | undefined;
+
+    if (this.trialObject && "data" in this.trialObject) {
+      const data = this.trialObject.data;
+      if (typeof data === "object" && data !== null) {
+        ownData = Object.fromEntries(
+          Object.keys(data).map((key) => {
+            const val = data[key];
+            return [key, typeof val === "function" ? val() : val];
+          })
+        );
+      }
+    } else {
+      const data = this.getParameterValue("data", { recursive: false });
+      if (typeof data === "object" && data !== null) {
+        ownData = Object.fromEntries(
+          Object.keys(data).map((key) => [key, this.getParameterValue(["data", key])])
+        );
+      }
+    }
+
+    return {
+      ...this.parent?.getDataParameter(),
+      ...ownData,
+    };
   }
 
   public getLatestNode() {
