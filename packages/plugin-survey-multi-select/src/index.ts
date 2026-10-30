@@ -357,7 +357,8 @@ class SurveyMultiSelectPlugin implements JsPsychPlugin<Info> {
     this.trial(display_element, trial);
     load_callback();
 
-    const answers: [string, []][] = Object.entries(data.response);
+    // A null response (e.g. from simulation_options) means nothing is selected.
+    const answers: [string, []][] = Object.entries(data.response ?? {});
     for (let i = 0; i < answers.length; i++) {
       for (const a of answers[i][1]) {
         this.jsPsych.pluginAPI.clickTarget(
