@@ -119,6 +119,29 @@ describe("survey-multi-choice plugin", () => {
     expect(surveyData.response.Q0).toBe("");
     expect(surveyData.response_index[0]).toBe(-1);
   });
+
+  test("records options that contain double quotes", async () => {
+    const options = ['"I agree" she said', 'He said "no"', "Neither"];
+    const { getData, expectFinished, displayElement } = await startTimeline([
+      {
+        type: surveyMultiChoice,
+        questions: [
+          { prompt: "Q0", options },
+          { prompt: "Q1", options },
+        ],
+      },
+    ]);
+
+    getInputElementByIndex(0, 0, displayElement).checked = true;
+    getInputElementByIndex(1, 1, displayElement).checked = true;
+
+    await clickTarget(displayElement.querySelector("#jspsych-survey-multi-choice-next"));
+    await expectFinished();
+
+    const surveyData = getData().values()[0];
+    expect(surveyData.response).toEqual({ Q0: '"I agree" she said', Q1: 'He said "no"' });
+    expect(surveyData.response_index).toEqual([0, 1]);
+  });
 });
 
 describe("survey-multi-choice plugin simulation", () => {

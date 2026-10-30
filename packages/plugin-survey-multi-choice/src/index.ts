@@ -228,8 +228,10 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
         var selected_index = -1;
         var checked = match.querySelector<HTMLInputElement>("input[type=radio]:checked");
         if (checked !== null) {
-          val = checked.value;
           selected_index = Number(checked.dataset.optionIndex);
+          // Read the option from the trial rather than the input's value attribute, which is cut
+          // short when the option contains a double quote.
+          val = trial.questions[i].options[selected_index];
         } else {
           val = "";
         }
