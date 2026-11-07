@@ -80,6 +80,7 @@ To be maximally flexible, jsPsych doesn't provide a single built-in solution for
 Some options for running your jsPsych experiment online include:
 
 * [Cognition.run](https://www.cognition.run/) - A free service designed specifically for hosting jsPsych experiments, with an easy-to-use interface. 
+* [VibeMyExpt](https://vibemyexpt.com/) - A hosted service where you can describe a study in plain language and get editable jsPsych code, then run it online with consent forms, live session monitoring and CSV data export. Has a free plan. Studies can be shared by link or listed on its participant portal, which can pay participants.
 * [JATOS](https://www.jatos.org/Whats-JATOS.html) - A free program that runs on your own server and provides a GUI for setting up experiments and accessing the data. Offers lots of features for creating more complex experiments and managing multiple researchers.
 * [Pavlovia](https://pavlovia.org/) - A paid hosting service for web-based experiments, run by the PsychoPy team. Experiment files are managed on a GitLab repository. Participants will access the experiment through a link to Pavlovia.
 * [PsiTurk](https://psiturk.org/) - Python-based program to help you host your experiment on your own computer and collect data from MTurk (see Recruiting Participants below). Relatively easy for a DIY option.
