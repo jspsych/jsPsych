@@ -65,6 +65,7 @@ nav:
   - 'Automatic Progress Bar': 'overview/progress-bar.md'
   - 'Integrating with Prolific': 'overview/prolific.md'
   - 'Integrating with Mechanical Turk': 'overview/mturk.md'
+  - 'Integrating with Populiva': 'overview/populiva.md'
   - 'Browser and Device Support': 'overview/browser-device-support.md'
   - 'Timing Accuracy': 'overview/timing-accuracy.md'
 - Reference:
