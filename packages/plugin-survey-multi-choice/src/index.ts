@@ -192,7 +192,9 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
         html += `
         <div id="${option_id_name}" class="${plugin_id_name}-option">
           <label class="${plugin_id_name}-text" for="${input_id}">
-            <input type="radio" name="${input_name}" id="${input_id}" value="${question.options[j]}" data-option-index="${j}" ${required_attr} />
+            <input type="radio" name="${input_name}" id="${input_id}" value="${String(
+          question.options[j]
+        ).replace(/"/g, "&quot;")}" data-option-index="${j}" ${required_attr} />
             ${question.options[j]}
             </label>
         </div>`;
@@ -228,8 +230,10 @@ class SurveyMultiChoicePlugin implements JsPsychPlugin<Info> {
         var selected_index = -1;
         var checked = match.querySelector<HTMLInputElement>("input[type=radio]:checked");
         if (checked !== null) {
-          val = checked.value;
           selected_index = Number(checked.dataset.optionIndex);
+          // read the option from the trial parameters rather than the HTML value attribute,
+          // so that options containing quotation marks are recorded exactly as written
+          val = trial.questions[i].options[selected_index];
         } else {
           val = "";
         }
