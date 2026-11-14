@@ -8,6 +8,43 @@
 
 import { deepCopy } from "./utils";
 
+/**
+ * What every adaptive procedure provides, so that procedures can be interleaved and saved the same
+ * way. `Level` is what the procedure asks you to present (a number for a staircase) and
+ * `Response` is what `update()` takes (`true`/`false` for a staircase).
+ *
+ * A procedure's state must depend only on its config, the sequence of responses passed to
+ * `update()`, and `Math.random()` (which `jsPsych.randomization.setSeed()` controls).
+ */
+export interface AdaptiveProcedure<Level = number, Response = boolean> {
+  /** The kind of procedure, e.g. `'staircase'`. Also included in `toJSON()`. */
+  readonly procedure: string;
+  /** Optional name, e.g. to tell interleaved tracks apart. */
+  readonly label?: string;
+  /** What to present on the next trial. */
+  readonly level: Level;
+  /** `true` once the procedure has ended. */
+  readonly done: boolean;
+  /** Why the procedure ended, or `null` while it is running. */
+  readonly stop_reason: string | null;
+  /** Number of calls to `update()` so far. */
+  readonly trial_count: number;
+  /** Record the response to the trial presented at `level` and return the next level. */
+  update(response: Response): Level;
+  /** Plain-object snapshot for saving in the data. */
+  toJSON(): AdaptiveSnapshot;
+}
+
+/** The fields every `toJSON()` snapshot has. Each procedure adds its own. */
+export interface AdaptiveSnapshot {
+  procedure: string;
+  label: string | null;
+  done: boolean;
+  stop_reason: string | null;
+  trial_count: number;
+  [key: string]: unknown;
+}
+
 export type StepSize = number | { up: number; down: number };
 
 export interface StaircaseStopRules {
@@ -105,7 +142,8 @@ const STOP_RULES = ["trials", "reversals", "consecutive_failures", "failures_at_
 /** Options that `ascending_discontinue` mode has no use for. */
 const STAIRCASE_ONLY = ["up", "down", "correct_moves", "step_sizes"] as const;
 
-export class Staircase {
+export class Staircase implements AdaptiveProcedure<number, boolean> {
+  readonly procedure = "staircase";
   private readonly config: StaircaseConfig;
   private readonly n_up: number;
   private readonly n_down: number;
@@ -333,6 +371,7 @@ export class Staircase {
 
   toJSON() {
     return {
+      procedure: this.procedure,
       label: this.config.label ?? null,
       mode: this.mode,
       config: deepCopy(this.config) as StaircaseConfig,
@@ -385,21 +424,36 @@ export interface InterleavedOptions {
   order?: "random" | "alternate";
 }
 
-export class InterleavedStaircases {
-  readonly tracks: Staircase[];
+/** Any adaptive procedure, whatever its level and response types. */
+type AnyProcedure = AdaptiveProcedure<any, any>;
+
+type LevelOf<T> = T extends AdaptiveProcedure<infer L, any> ? L : never;
+type ResponseOf<T> = T extends AdaptiveProcedure<any, infer R> ? R : never;
+
+function isProcedure(x: unknown): x is AnyProcedure {
+  return typeof x === "object" && x !== null && typeof (x as AnyProcedure).update === "function";
+}
+
+/**
+ * Runs several adaptive procedures ("tracks") together and chooses which one to use on each trial.
+ * The tracks can be of different kinds.
+ */
+export class Interleaved<T extends AnyProcedure = Staircase> {
+  readonly tracks: T[];
   private readonly order: "random" | "alternate";
   private _current: number | null = null;
   private _last = -1;
   /** Whether the track chosen by the last `next()` is still waiting for its `update()`. */
   private _awaiting_update = false;
 
-  constructor(tracks: (StaircaseConfig | Staircase)[], options: InterleavedOptions = {}) {
+  /** Each track is a procedure, or a plain object, which is taken as a staircase config. */
+  constructor(tracks: (T | StaircaseConfig)[], options: InterleavedOptions = {}) {
     if (tracks.length === 0) throw new Error("jsPsych.adaptive: need at least one track.");
     this.order = options.order ?? "random";
     if (this.order !== "random" && this.order !== "alternate") {
       throw new Error(`jsPsych.adaptive: unknown order "${this.order}".`);
     }
-    this.tracks = tracks.map((t) => (t instanceof Staircase ? t : new Staircase(t)));
+    this.tracks = tracks.map((t) => (isProcedure(t) ? t : (new Staircase(t) as AnyProcedure as T)));
   }
 
   get done() {
@@ -412,7 +466,7 @@ export class InterleavedStaircases {
   }
 
   /** The track chosen by the last call to `next()`. */
-  get current(): Staircase | null {
+  get current(): T | null {
     return this._current === null ? null : this.tracks[this._current];
   }
 
@@ -420,7 +474,7 @@ export class InterleavedStaircases {
    * Choose the track for the next trial among those not yet done and return it. Random choice uses
    * `Math.random()`, so it follows `jsPsych.randomization.setSeed()`.
    */
-  next(): Staircase {
+  next(): T {
     const active = this.tracks.map((_, i) => i).filter((i) => !this.tracks[i].done);
     if (active.length === 0) {
       throw new Error("jsPsych.adaptive: next() called but all tracks are done.");
@@ -441,7 +495,7 @@ export class InterleavedStaircases {
    * Update the track chosen by the last `next()` and return its next level. Throws if `update()`
    * was already called since the last `next()`.
    */
-  update(correct: boolean): number {
+  update(response: ResponseOf<T>): LevelOf<T> {
     const track = this.current;
     if (!track) throw new Error("jsPsych.adaptive: call next() before update().");
     if (!this._awaiting_update) {
@@ -451,13 +505,18 @@ export class InterleavedStaircases {
     }
     // Only consume the next() once the track accepts the update, so a rejected response can be
     // retried.
-    const level = track.update(correct);
+    const level = track.update(response);
     this._awaiting_update = false;
     return level;
   }
 
   toJSON() {
-    return { order: this.order, done: this.done, tracks: this.tracks.map((t) => t.toJSON()) };
+    return {
+      procedure: "interleaved",
+      order: this.order,
+      done: this.done,
+      tracks: this.tracks.map((t) => t.toJSON()),
+    };
   }
 }
 
@@ -465,9 +524,25 @@ export function createStaircase(config: StaircaseConfig): Staircase {
   return new Staircase(config);
 }
 
+/**
+ * Interleave several adaptive procedures. Each track is a procedure (e.g. from `createStaircase()`)
+ * or a plain object, which is taken as a staircase config.
+ */
 export function createInterleaved(
-  configs: (StaircaseConfig | Staircase)[],
+  tracks: StaircaseConfig[],
   options?: InterleavedOptions
-): InterleavedStaircases {
-  return new InterleavedStaircases(configs, options);
+): Interleaved<Staircase>;
+export function createInterleaved<T extends AnyProcedure>(
+  tracks: T[],
+  options?: InterleavedOptions
+): Interleaved<T>;
+export function createInterleaved<T extends AnyProcedure = Staircase>(
+  tracks: (T | StaircaseConfig)[],
+  options?: InterleavedOptions
+): Interleaved<T | Staircase>;
+export function createInterleaved(
+  tracks: (AnyProcedure | StaircaseConfig)[],
+  options?: InterleavedOptions
+): Interleaved<AnyProcedure> {
+  return new Interleaved(tracks, options);
 }

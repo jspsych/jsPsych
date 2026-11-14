@@ -1,6 +1,6 @@
 # jsPsych.adaptive
 
-The jsPsych.adaptive module provides adaptive staircase procedures: the difficulty (or "level") of the next trial is computed from the participant's previous responses. It contains no DOM or timing code; you call it from your own trial parameters and `on_finish` callbacks.
+The jsPsych.adaptive module provides adaptive procedures: the difficulty (or "level") of the next trial is computed from the participant's previous responses. It currently includes staircases. It contains no DOM or timing code; you call it from your own trial parameters and `on_finish` callbacks.
 
 The module is available on the jsPsych instance as `jsPsych.adaptive`. Anything random (choosing between interleaved tracks) uses `Math.random()`, so it is reproducible after `jsPsych.randomization.setSeed()`.
 
@@ -46,7 +46,7 @@ The config is validated and copied when the staircase is created: an invalid val
 | `trial_count`                 | Number of updates so far. |
 | `history`                     | Array of `{trial, level, correct, next_level, reversal}`, one per update. |
 | `threshold({last_n_reversals})` | Mean of the last `last_n_reversals` reversal levels (all of them if omitted or if fewer have occurred); `null` if there has been no reversal. |
-| `toJSON()`                    | Plain-object snapshot (config, level, done, stop_reason, counts, reversal levels, threshold, history), suitable for saving in the data (see the psychophysics example below). |
+| `toJSON()`                    | Plain-object snapshot (`procedure: 'staircase'`, config, level, done, stop_reason, counts, reversal levels, threshold, history), suitable for saving in the data (see the psychophysics example below). |
 
 Levels are rounded to 10 decimal places so that fractional steps (e.g. 0.1) do not accumulate floating-point error. A level clamped to a bound is set to the bound exactly.
 
@@ -62,7 +62,7 @@ For a 1-up/1-down staircase with equal steps the level converges to the 50% poin
 const tracks = jsPsych.adaptive.createInterleaved([configA, configB], { order: 'random' })
 ```
 
-Interleaves several staircases (each config is a `createStaircase` config, or an existing staircase). Separate staircases per condition that you pick yourself need no special support; use this when the module should choose the track.
+Interleaves several adaptive procedures ("tracks"). Each track is a procedure, such as a staircase from `createStaircase()`, or a plain object, which is taken as a `createStaircase` config. The tracks can be of different kinds. Separate procedures per condition that you pick yourself need no special support; use this when the module should choose the track.
 
 | Parameter | Type   | Default    | Description |
 | --------- | ------ | ---------- | ----------- |
@@ -70,12 +70,30 @@ Interleaves several staircases (each config is a `createStaircase` config, or an
 
 | Name              | Description |
 | ----------------- | ----------- |
-| `next()`          | Chooses the track for the next trial and returns that staircase. Throws if all tracks are done. |
-| `update(correct)` | Updates the track chosen by the last `next()` and returns its new level. Throws if called twice without a `next()` in between. |
+| `next()`          | Chooses the track for the next trial and returns it. Throws if all tracks are done. |
+| `update(response)` | Updates the track chosen by the last `next()` and returns its new level. Throws if called twice without a `next()` in between. |
 | `current`, `current_index` | The chosen track and its index. |
-| `tracks`          | The staircases. |
+| `tracks`          | The tracks. |
 | `done`            | `true` when every track is done. |
-| `toJSON()`        | Snapshot of all tracks. |
+| `toJSON()`        | `{procedure: 'interleaved', order, done, tracks}`, with a snapshot of each track. |
+
+---
+
+## What all adaptive procedures have in common
+
+Every procedure in this module, and any procedure you write yourself to use with `createInterleaved()`, has these members:
+
+| Name | Description |
+| ---- | ----------- |
+| `procedure` | The kind of procedure, e.g. `'staircase'`. |
+| `label` | Optional name for the procedure. |
+| `level` | What to present on the next trial. A number for a staircase; other procedures may use other kinds of values. |
+| `update(response)` | Records the response to the trial presented at `level` and returns the next level. A staircase takes `true`/`false`; other procedures may take other kinds of responses, such as a response time. |
+| `done`, `stop_reason` | Whether the procedure has ended, and why (`null` while running). |
+| `trial_count` | Number of calls to `update()` so far. |
+| `toJSON()` | A plain-object snapshot with at least `procedure`, `label`, `done`, `stop_reason` and `trial_count`. |
+
+A procedure's state depends only on its config, the responses passed to `update()`, and `Math.random()`, which `jsPsych.randomization.setSeed()` controls. In TypeScript, the shared members are the `AdaptiveProcedure` interface.
 
 ---
 
@@ -201,4 +219,4 @@ const window_ms = jsPsych.adaptive.createStaircase({
 
 ## Not yet included
 
-QUEST (Bayesian) and RT-based procedures are not part of this module yet.
+QUEST (Bayesian) and RT-based procedures are not part of this module yet. They will be added as new procedures with the members above, so they can be interleaved with staircases.
