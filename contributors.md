@@ -53,6 +53,7 @@ The following people have contributed to the development of jsPsych by writing c
 * Junyan Qi - https://github.com/GavinQ1
 * Sivananda Rajananda - https://github.com/vrsivananda
 * Dan Rivas - https://github.com/rivasd
+* rmz-oz - https://github.com/rmz-oz
 * Werner Sævland - https://github.com/wernersa
 * Marian Sauter - https://github.com/mariansauter
 * Ellen Shapiro - https://github.com/designatednerd

@@ -128,4 +128,29 @@ describe("Trial parameters in the data", () => {
 
     expect(getData().values()[0].trial_duration).toBe(1000);
   });
+
+  test("Universal plugin parameters can be saved", async () => {
+    const spy = jest.spyOn(console, "warn").mockImplementation();
+
+    const { getData } = await startTimeline([
+      {
+        type: htmlKeyboardResponse,
+        stimulus: "<p>foo</p>",
+        css_classes: "my-class",
+        post_trial_gap: () => 500,
+        save_trial_parameters: {
+          css_classes: true,
+          post_trial_gap: true,
+        },
+      },
+    ]);
+
+    await pressKey(" ");
+
+    const data = getData().values()[0];
+    expect(data.css_classes).toBe("my-class");
+    expect(data.post_trial_gap).toBe(500);
+    expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
+  });
 });
