@@ -194,11 +194,11 @@ describe("stopping rules", () => {
     expect(s.stop_reason).toBe("consecutive_failures");
   });
 
-  test("span 1-up/2-down: start 3, discontinue after 2 consecutive errors", () => {
+  test("span 2-up/1-down: start 3, discontinue after 2 consecutive errors", () => {
     const s = createStaircase({
       start_level: 3,
-      up: 1,
-      down: 2,
+      up: 2,
+      down: 1,
       correct_moves: "up",
       bounds: [2, 12],
       stop: { consecutive_failures: 2 },
@@ -212,8 +212,8 @@ describe("stopping rules", () => {
   });
 });
 
-describe("ascending procedure (correct_moves 'up', up: null)", () => {
-  const ascending = { correct_moves: "up" as const, up: null };
+describe("ascending procedure (correct_moves 'up', down: null)", () => {
+  const ascending = { correct_moves: "up" as const, down: null };
 
   test("goes up after success and stops after failures at a level", () => {
     const s = createStaircase({ start_level: 3, ...ascending, stop: { failures_at_level: 2 } });
@@ -296,7 +296,7 @@ describe("ceiling", () => {
       start_level: 3,
       bounds: [0, 3],
       correct_moves: "up",
-      up: Infinity,
+      down: Infinity,
       stop: { ceiling: 2 },
     });
     s.update(true);

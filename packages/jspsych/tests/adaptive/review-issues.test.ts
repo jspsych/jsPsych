@@ -69,7 +69,7 @@ describe("finding 3: clamp() rounds after clamping", () => {
       step_size: 0.1,
       bounds: [0, 1 / 3],
       correct_moves: "up",
-      up: Infinity,
+      down: Infinity,
       stop: { ceiling: 1 },
     });
     run(s, () => true, 20);
@@ -131,11 +131,28 @@ describe("finding 5: invalid options are rejected", () => {
   });
 });
 
-describe("finding 6: step direction and the Kaernbach target with correct_moves 'up'", () => {
-  // The code matches the "direction of the level" wording of step_size, so this is a docs fix
-  // (the `up` row, the JSDoc on `up`/`down`, and the formula). Whether the step should instead
-  // follow the response is a design decision, so there is no failing test here.
-  test.todo("decide whether step_size.{up,down} follows level direction or response");
+describe("finding 6: up, down and step_size follow the direction of the move", () => {
+  // Decided: `up`, `down` and `step_size.{up,down}` all refer to the direction the level moves,
+  // whichever response caused the move.
+  test("with correct_moves 'up', up and step_size.up apply to correct responses", () => {
+    const s = createStaircase({
+      start_level: 10,
+      correct_moves: "up",
+      up: 2,
+      down: 1,
+      step_size: { up: 3, down: 1 },
+    });
+    expect(s.update(true)).toBe(10); // one correct is not enough to go up
+    expect(s.update(true)).toBe(13); // two correct: up by step_size.up
+    expect(s.update(false)).toBe(12); // one error: down by step_size.down
+  });
+
+  test("with the default correct_moves, up and step_size.up apply to incorrect responses", () => {
+    const s = createStaircase({ start_level: 10, up: 1, down: 2, step_size: { up: 3, down: 1 } });
+    expect(s.update(false)).toBe(13);
+    expect(s.update(true)).toBe(13);
+    expect(s.update(true)).toBe(12);
+  });
 });
 
 describe("finding 7: toJSON() and Infinity", () => {
@@ -152,7 +169,7 @@ describe("finding 7: toJSON() and Infinity", () => {
       start_level: 3,
       bounds: [0, Infinity],
       correct_moves: "up",
-      up: Infinity,
+      down: Infinity,
       stop: { failures_at_level: 2 },
     });
     const rebuilt = createStaircase(JSON.parse(JSON.stringify(original)).config);
@@ -236,7 +253,7 @@ describe("finding 11: ceiling bypasses the other stop rules", () => {
       start_level: 10,
       bounds: [0, 10],
       correct_moves: "up",
-      up: Infinity,
+      down: Infinity,
       stop: { trials: 1, ceiling: 1 },
     });
     s.update(true);

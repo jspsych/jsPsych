@@ -68,23 +68,23 @@ export interface StaircaseConfig {
   /** Level of the first trial. */
   start_level: number;
   /**
-   * Number of consecutive incorrect responses that move the level one step against
-   * `correct_moves` (up, with the default `correct_moves: 'down'`). Default 1. `null` (or
-   * `Infinity`) means incorrect responses never move the level.
+   * Number of consecutive responses needed to move the level up one step. These are incorrect
+   * responses with the default `correct_moves: 'down'`, and correct responses with
+   * `correct_moves: 'up'`. Default 1. `null` (or `Infinity`) means the level never moves up.
    */
   up?: number | null;
   /**
-   * Number of consecutive correct responses that move the level one step in the `correct_moves`
-   * direction (down by default). Default 1. `null` (or `Infinity`) means correct responses never
-   * move the level.
+   * Number of consecutive responses needed to move the level down one step. These are correct
+   * responses with the default `correct_moves: 'down'`, and incorrect responses with
+   * `correct_moves: 'up'`. Default 1. `null` (or `Infinity`) means the level never moves down.
    */
   down?: number | null;
   /**
-   * Which way a run of correct responses moves the level. `'down'` (default) is the psychophysics
+   * Which way correct responses move the level. `'down'` (default) is the psychophysics
    * convention, where the level is stimulus intensity and correct responses make the task harder
    * by lowering it. Use `'up'` when a higher level is harder (stop-signal delay, list length), so
-   * that a run of correct responses raises the level. `up` and `down` always count incorrect and
-   * correct responses respectively, regardless of this setting.
+   * that correct responses raise the level. `up`, `down` and `step_size` always refer to the
+   * direction the level moves.
    */
   correct_moves?: "down" | "up";
   /**
@@ -154,8 +154,10 @@ const isRunLength = (x: unknown) => x === Infinity || isPositiveInteger(x);
 export class Staircase implements AdaptiveProcedure<number, boolean> {
   readonly procedure = "staircase";
   private readonly config: StaircaseConfig;
-  private readonly n_up: number;
-  private readonly n_down: number;
+  /** Run of correct responses needed to move the level in the `correct_moves` direction. */
+  private readonly n_correct: number;
+  /** Run of incorrect responses needed to move the level the other way. */
+  private readonly n_incorrect: number;
   private readonly correct_moves: "down" | "up";
   private readonly steps: { up: number; down: number }[];
   private readonly min: number;
@@ -179,9 +181,11 @@ export class Staircase implements AdaptiveProcedure<number, boolean> {
     const config: StaircaseConfig = deepCopy(input);
     this.config = config;
     // `null` and `Infinity` both mean "never" here; `undefined` means the default.
-    this.n_up = config.up === undefined ? 1 : config.up ?? Infinity;
-    this.n_down = config.down === undefined ? 1 : config.down ?? Infinity;
+    const n_up = config.up === undefined ? 1 : config.up ?? Infinity;
+    const n_down = config.down === undefined ? 1 : config.down ?? Infinity;
     this.correct_moves = config.correct_moves ?? "down";
+    [this.n_correct, this.n_incorrect] =
+      this.correct_moves === "up" ? [n_up, n_down] : [n_down, n_up];
 
     if (typeof config.start_level !== "number" || !Number.isFinite(config.start_level)) {
       throw new Error("jsPsych.adaptive: `start_level` must be a finite number.");
@@ -198,7 +202,7 @@ export class Staircase implements AdaptiveProcedure<number, boolean> {
     }
     this.min = bounds[0] ?? -Infinity;
     this.max = bounds[1] ?? Infinity;
-    if (!isRunLength(this.n_up) || !isRunLength(this.n_down)) {
+    if (!isRunLength(n_up) || !isRunLength(n_down)) {
       throw new Error(
         "jsPsych.adaptive: `up` and `down` must be positive integers, or null (never move)."
       );
@@ -309,10 +313,10 @@ export class Staircase implements AdaptiveProcedure<number, boolean> {
       this._correct_run = 0;
     }
     let move: "up" | "down" | null = null;
-    if (correct && this._correct_run >= this.n_down) {
+    if (correct && this._correct_run >= this.n_correct) {
       move = this.correct_moves;
       this._correct_run = 0;
-    } else if (!correct && this._incorrect_run >= this.n_up) {
+    } else if (!correct && this._incorrect_run >= this.n_incorrect) {
       move = this.correct_moves === "down" ? "up" : "down";
       this._incorrect_run = 0;
     }

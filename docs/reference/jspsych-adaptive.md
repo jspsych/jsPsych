@@ -17,9 +17,9 @@ const staircase = jsPsych.adaptive.createStaircase(config)
 | Parameter     | Type             | Default      | Description |
 | ------------- | ---------------- | ------------ | ----------- |
 | start_level   | numeric          | *required*   | The level of the first trial. Must be inside `bounds`. |
-| up            | integer          | `1`          | Number of consecutive **incorrect** responses that move the level one step against `correct_moves` (up, with the default `correct_moves: 'down'`). `null` means incorrect responses never move the level. |
-| down          | integer          | `1`          | Number of consecutive **correct** responses that move the level one step in the `correct_moves` direction (down by default). A response of the other kind resets the count, as does a move. `null` means correct responses never move the level. |
-| correct_moves | string           | `'down'`     | Which direction a run of correct responses moves the level: `'down'` (psychophysics convention: the level is stimulus intensity, higher is easier) or `'up'` (higher is harder, e.g. stop-signal delay or list length). `up` and `down` always count incorrect and correct responses, whichever way they move the level. |
+| up            | integer          | `1`          | Number of consecutive responses that move the level up one step: incorrect responses with the default `correct_moves: 'down'`, correct responses with `correct_moves: 'up'`. `null` means the level never moves up. |
+| down          | integer          | `1`          | Number of consecutive responses that move the level down one step: correct responses with the default `correct_moves: 'down'`, incorrect responses with `correct_moves: 'up'`. `null` means the level never moves down. For both `up` and `down`, a response of the other kind resets the count, as does a move. |
+| correct_moves | string           | `'down'`     | Which direction correct responses move the level: `'down'` (psychophysics convention: the level is stimulus intensity, higher is easier) or `'up'` (higher is harder, e.g. stop-signal delay or list length). |
 | step_size     | number or object | `1`          | Size of each move. Either a number, or `{up: 20, down: 10}` for unequal sizes. `step_size.up` is the size of a move that raises the level and `step_size.down` of one that lowers it, whichever response caused the move. |
 | step_sizes    | array            | `undefined`  | A schedule of step sizes (numbers or `{up, down}` objects) indexed by the number of reversals so far: entry 0 until the first reversal, entry 1 until the second, and so on; the last entry is used from then on. The move that causes a reversal already uses the new step size. Overrides `step_size`. |
 | bounds        | array            | `[null, null]` | `[min, max]`. The level is clamped to this range. `null` means no bound on that side, e.g. `[0, null]`. |
@@ -57,7 +57,7 @@ Levels are rounded to 10 decimal places so that fractional steps (e.g. 0.1) do n
 
 ### What the rules converge to
 
-For a 1-up/1-down staircase with equal steps the level converges to the 50% point of the psychometric function. With equal steps, 1-up/2-down converges to 70.7% correct and 1-up/3-down to 79.4% (Levitt, 1971). With unequal steps in a 1-up/1-down staircase the hit rate converges to `s_incorrect / (s_incorrect + s_correct)` (Kaernbach, 1991), where `s_incorrect` is the size of the step taken after an incorrect response and `s_correct` the size of the step taken after a correct one. With the default `correct_moves: 'down'`, `s_incorrect` is `step_size.up`; with `correct_moves: 'up'` it is `step_size.down`. For example, steps of +20 after a miss and -10 after a hit give a target of about 67%.
+For a 1-up/1-down staircase with equal steps the level converges to the 50% point of the psychometric function. With equal steps, 1-up/2-down converges to 70.7% correct and 1-up/3-down to 79.4% (Levitt, 1971). These names assume the default `correct_moves: 'down'`; with `correct_moves: 'up'` they swap, so 2-up/1-down (two correct responses to go up, one error to go down) converges to 70.7%. With unequal steps in a 1-up/1-down staircase the hit rate converges to `s_incorrect / (s_incorrect + s_correct)` (Kaernbach, 1991), where `s_incorrect` is the size of the step taken after an incorrect response and `s_correct` the size of the step taken after a correct one. With the default `correct_moves: 'down'`, `s_incorrect` is `step_size.up`; with `correct_moves: 'up'` it is `step_size.down`. For example, steps of +20 after a miss and -10 after a hit give a target of about 67%.
 
 ---
 
@@ -134,14 +134,14 @@ const stop_trial = {
 };
 ```
 
-### Span task (1-up/2-down on list length, start at 3, discontinue after 2 errors in a row)
+### Span task (2-up/1-down on list length, start at 3, discontinue after 2 errors in a row)
 
 ```javascript
 const span = jsPsych.adaptive.createStaircase({
   start_level: 3,
-  up: 1,
-  down: 2,
-  correct_moves: 'up',   // two correct recalls make the list longer
+  up: 2,                 // two correct recalls in a row make the list longer
+  down: 1,               // one error makes it shorter
+  correct_moves: 'up',
   step_size: 1,
   bounds: [2, 12],
   stop: { consecutive_failures: 2 }
@@ -163,8 +163,8 @@ For the classic ascending version ("go up after each success, stop after 2 failu
 ```javascript
 const span = jsPsych.adaptive.createStaircase({
   start_level: 3,
-  down: 1,                 // each correct recall makes the list longer...
-  up: null,                // ...and errors never make it shorter
+  up: 1,                   // each correct recall makes the list longer...
+  down: null,              // ...and errors never make it shorter
   correct_moves: 'up',
   step_size: 1,
   bounds: [2, 12],
