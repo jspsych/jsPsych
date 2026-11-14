@@ -71,6 +71,7 @@ nav:
   - 'jsPsych': 'reference/jspsych.md'
   - 'jsPsych.data': 'reference/jspsych-data.md'
   - 'jsPsych.randomization': 'reference/jspsych-randomization.md'
+  - 'jsPsych.adaptive': 'reference/jspsych-adaptive.md'
   - 'jsPsych.turk': 'reference/jspsych-turk.md'
   - 'jsPsych.utils': 'reference/jspsych-utils.md'
   - 'jsPsych.pluginAPI': 'reference/jspsych-pluginAPI.md'

@@ -4,6 +4,7 @@ import { Class } from "type-fest";
 
 import { version } from "../package.json";
 import { ExtensionManager, ExtensionManagerDependencies } from "./ExtensionManager";
+import * as adaptive from "./modules/adaptive";
 import { JsPsychData, JsPsychDataDependencies } from "./modules/data";
 import { JsPsychExtension } from "./modules/extensions";
 import { PluginAPI, createJointPluginAPIObject } from "./modules/plugin-api";
@@ -28,6 +29,7 @@ import { PromiseWrapper } from "./timeline/util";
 export class JsPsych {
   turk = turk;
   randomization = randomization;
+  adaptive = adaptive;
   utils = utils;
   data: JsPsychData;
   pluginAPI: PluginAPI;

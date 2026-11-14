@@ -66,3 +66,14 @@ export type { JsPsychPlugin, PluginInfo, TrialType } from "./modules/plugins";
 export { ParameterType } from "./modules/plugins";
 export type { JsPsychExtension, JsPsychExtensionInfo } from "./modules/extensions";
 export { DataCollection } from "./modules/data/DataCollection";
+export type {
+  AdaptiveProcedure,
+  AdaptiveSnapshot,
+  StaircaseEstimateOptions,
+  StaircaseConfig,
+  StaircaseHistoryEntry,
+  StaircaseStopRules,
+  StepSize,
+  InterleavedOptions,
+} from "./modules/adaptive";
+export { Staircase, Interleaved } from "./modules/adaptive";
