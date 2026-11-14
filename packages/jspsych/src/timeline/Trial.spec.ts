@@ -335,6 +335,50 @@ describe("Trial", () => {
       );
     });
 
+    it("evaluates data functions once, before on_start (#3727)", async () => {
+      let value = "at start";
+      let seenInOnStart: any;
+      const trial = createTrial({
+        type: TestPlugin,
+        data: { value: () => value },
+        on_start: (trial) => {
+          seenInOnStart = trial.data.value;
+          value = "changed during trial";
+        },
+      });
+      await trial.run();
+
+      expect(seenInOnStart).toEqual("at start");
+      expect(trial.getResult().value).toEqual("at start");
+    });
+
+    it("evaluates a data parameter that is a function before on_start (#3727)", async () => {
+      let seenInOnStart: any;
+      const trial = createTrial({
+        type: TestPlugin,
+        data: () => ({ value: 1 }),
+        on_start: (trial) => {
+          seenInOnStart = trial.data;
+        },
+      });
+      await trial.run();
+
+      expect(seenInOnStart).toEqual({ value: 1 });
+      expect(trial.getResult().value).toEqual(1);
+    });
+
+    it("calls functions assigned to trial.data in on_start when saving the result (#3727)", async () => {
+      const trial = createTrial({
+        type: TestPlugin,
+        on_start: (trial) => {
+          trial.data = { later: () => "computed" };
+        },
+      });
+      await trial.run();
+
+      expect(trial.getResult().later).toEqual("computed");
+    });
+
     it("includes a set of trial-specific result properties", async () => {
       const trial = createTrial({ type: TestPlugin });
       await trial.run();

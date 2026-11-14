@@ -114,6 +114,8 @@ var trial = {
 }
 ```
 
+Like other dynamic parameters, functions in `data` are evaluated right before the trial starts, so they record the value at the start of the trial, and `on_start` sees the evaluated values. To record something that depends on what happens during the trial, such as the participant's response, add it to the data in the trial's `on_finish` function instead.
+
 ### Nested Parameters
 
 Dyanmic parameters work the same way with nested parameters, which are parameters that contain one or more sets of other parameters. For instance, many survey-* plugins have a `questions` parameter that is a nested parameter: it is an array that contains the parameters for one or more questions on the page. To make the `questions` parameter dynamic, you can use a function that returns the array with all of the parameters for each question:
