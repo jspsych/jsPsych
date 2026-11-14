@@ -1,5 +1,19 @@
 # jspsych
 
+## 8.4.0
+
+### Minor Changes
+
+- [#3741](https://github.com/jspsych/jsPsych/pull/3741) [`c0da89493d819abe2120c8a1340b1a4048b11247`](https://github.com/jspsych/jsPsych/commit/c0da89493d819abe2120c8a1340b1a4048b11247) Thanks [@jodeleeuw](https://github.com/jodeleeuw)! - Add the `jsPsych.adaptive` module with `createStaircase()` and `createInterleaved()` for adaptive staircase procedures (n-up/m-down rules, unequal and shrinking step sizes, bounds, stopping rules including discontinue and ceiling rules for span tasks, and interleaved tracks that use the seeded random number generator). Procedures share a common `AdaptiveProcedure` interface, so later procedures (such as QUEST) can be added and interleaved with staircases without changing the existing API.
+
+### Patch Changes
+
+- [#3730](https://github.com/jspsych/jsPsych/pull/3730) [`4a94750ace33e619f65564f0957ae3986fdca939`](https://github.com/jspsych/jsPsych/commit/4a94750ace33e619f65564f0957ae3986fdca939) Thanks [@SohamXYZDev](https://github.com/SohamXYZDev)! - Changes to `trial.data` made in `on_start` are now saved in the trial's data (#3727). This also changes when functions in a trial's `data` parameter are evaluated: they are now called right before the trial starts, like other dynamic parameters, so `on_start` sees their values. Before, they were called after the trial ended, when the data was saved. Values that depend on the response should be added in `on_finish`.
+
+- [#3722](https://github.com/jspsych/jsPsych/pull/3722) [`f764a2b5117528d7d2b211edba48b7dd59a0e7e5`](https://github.com/jspsych/jsPsych/commit/f764a2b5117528d7d2b211edba48b7dd59a0e7e5) Thanks [@rmz-oz](https://github.com/rmz-oz)! - `save_trial_parameters` now works with the parameters that are available in all plugins, such as `css_classes` and `post_trial_gap`. Before, they were ignored with a "Non-existent parameter" warning and their values were not saved to the data.
+
+  Functions passed to these parameters are now called when the trial starts, before `on_start`, so `on_start` and the plugin see their values. Before, they were called when the parameter was used; for example, a function passed to `post_trial_gap` was called after the trial ended.
+
 ## 8.3.1
 
 ### Patch Changes
