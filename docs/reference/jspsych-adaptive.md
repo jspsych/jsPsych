@@ -50,8 +50,8 @@ The config is validated and copied when the staircase is created: an invalid val
 | `reversal_levels`             | The level at which each reversal occurred (the level presented on the trial whose response caused the direction change). |
 | `trial_count`                 | Number of updates so far. |
 | `history`                     | Array of `{trial, level, correct, next_level, reversal}`, one per update. |
-| `threshold({last_n_reversals})` | Mean of the last `last_n_reversals` reversal levels (all of them if omitted or if fewer have occurred); `null` if there has been no reversal. |
-| `toJSON()`                    | Plain-object snapshot (`procedure: 'staircase'`, config, level, done, stop_reason, counts, reversal levels, threshold, history), suitable for saving in the data (see the psychophysics example below). |
+| `estimate({last_n_reversals})` | The staircase's estimate of the level it is tracking (for psychophysics, the threshold): the mean of the last `last_n_reversals` reversal levels (all of them if omitted or if fewer have occurred); `null` if there has been no reversal. |
+| `toJSON()`                    | Plain-object snapshot (`procedure: 'staircase'`, config, level, done, stop_reason, counts, reversal levels, estimate, history), suitable for saving in the data (see the psychophysics example below). |
 
 Levels are rounded to 10 decimal places so that fractional steps (e.g. 0.1) do not accumulate floating-point error. A level clamped to a bound is set to the bound exactly.
 
@@ -96,6 +96,7 @@ Every procedure in this module, and any procedure you write yourself to use with
 | `update(response)` | Records the response to the trial presented at `level` and returns the next level. A staircase takes `true`/`false`; other procedures may take other kinds of responses, such as a response time. |
 | `done`, `stop_reason` | Whether the procedure has ended, and why (`null` while running). |
 | `trial_count` | Number of calls to `update()` so far. |
+| `estimate()` | Optional. The procedure's current best estimate of the level it is tracking, or `null` if it has none yet. How it is computed depends on the procedure, and a procedure may accept its own options (a staircase takes `{last_n_reversals}`). A procedure that only adjusts a level, without estimating anything, may leave it out. |
 | `toJSON()` | A plain-object snapshot with at least `procedure`, `label`, `done`, `stop_reason` and `trial_count`. |
 
 A procedure's state depends only on its config, the responses passed to `update()`, and `Math.random()`, which `jsPsych.randomization.setSeed()` controls. In TypeScript, the shared members are the `AdaptiveProcedure` interface.
@@ -208,7 +209,7 @@ const staircase_trial = {
 const save = {
   type: jsPsychCallFunction,
   func: () => ({
-    threshold: contrast.threshold({ last_n_reversals: 8 }),
+    threshold: contrast.estimate({ last_n_reversals: 8 }),
     staircase: contrast.toJSON()
   })
 };

@@ -96,9 +96,18 @@ describe("other adaptive procedures", () => {
     const tracks = createInterleaved([{ start_level: 1 }, { start_level: 2 }]);
     // These compile only if next() and tracks are typed as Staircase, not the general interface.
     const reversals: number = tracks.next().reversals;
-    const threshold: number | null = tracks.tracks[0].threshold();
+    const estimate: number | null = tracks.tracks[0].estimate({ last_n_reversals: 2 });
     expect(reversals).toBe(0);
-    expect(threshold).toBeNull();
+    expect(estimate).toBeNull();
+  });
+
+  test("estimate() is optional, so code for any procedure can ask for it", () => {
+    const staircase = createStaircase({ start_level: 5 });
+    for (const c of [true, false, true, false]) staircase.update(c);
+    const tracks = createInterleaved([staircase, new ResponseWindow(500, 5)]);
+    // ResponseWindow has no estimate(); the staircase's is the mean of its reversals (4, 5, 4).
+    const estimateOf = (p: AdaptiveProcedure<any, any>) => p.estimate?.() ?? null;
+    expect(tracks.tracks.map(estimateOf)).toEqual([4.3333333333, null]);
   });
 
   test("a staircase snapshot names its procedure", () => {

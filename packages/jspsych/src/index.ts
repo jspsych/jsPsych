@@ -69,7 +69,7 @@ export { DataCollection } from "./modules/data/DataCollection";
 export type {
   AdaptiveProcedure,
   AdaptiveSnapshot,
-  ThresholdOptions,
+  StaircaseEstimateOptions,
   StaircaseConfig,
   StaircaseHistoryEntry,
   StaircaseStopRules,

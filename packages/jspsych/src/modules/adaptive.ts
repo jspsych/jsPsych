@@ -31,6 +31,12 @@ export interface AdaptiveProcedure<Level = number, Response = boolean> {
   readonly trial_count: number;
   /** Record the response to the trial presented at `level` and return the next level. */
   update(response: Response): Level;
+  /**
+   * The procedure's current best estimate of the level it is tracking (e.g. a threshold), or
+   * `null` if it has none yet. Optional: a procedure that only adjusts a level can leave it out.
+   * Implementations may accept a procedure-specific options object.
+   */
+  estimate?(): Level | null;
   /** Plain-object snapshot for saving in the data. */
   toJSON(): AdaptiveSnapshot;
 }
@@ -119,7 +125,7 @@ export interface StaircaseHistoryEntry {
   reversal: boolean;
 }
 
-export interface ThresholdOptions {
+export interface StaircaseEstimateOptions {
   /** Average this many of the most recent reversal levels. Default: all reversals. */
   last_n_reversals?: number;
 }
@@ -349,10 +355,11 @@ export class Staircase implements AdaptiveProcedure<number, boolean> {
   }
 
   /**
-   * Mean level of the last `last_n_reversals` reversals (all reversals if omitted or if fewer have
-   * occurred). Returns `null` if there has been no reversal.
+   * The staircase's estimate of the level it is tracking: the mean level of the last
+   * `last_n_reversals` reversals (all reversals if omitted or if fewer have occurred). Returns
+   * `null` if there has been no reversal.
    */
-  threshold(options: ThresholdOptions = {}): number | null {
+  estimate(options: StaircaseEstimateOptions = {}): number | null {
     const n = options.last_n_reversals;
     if (n !== undefined && (!Number.isInteger(n) || n < 1)) {
       throw new Error("jsPsych.adaptive: `last_n_reversals` must be a positive integer.");
@@ -373,7 +380,7 @@ export class Staircase implements AdaptiveProcedure<number, boolean> {
       trial_count: this.trial_count,
       reversals: this.reversals,
       reversal_levels: this.reversal_levels,
-      threshold: this.threshold(),
+      estimate: this.estimate(),
       history: this.history,
     };
   }

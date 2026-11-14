@@ -28,13 +28,13 @@ describe("convergence (Levitt 1971)", () => {
 
   test("1-up/1-down converges to the 50% point", () => {
     const s = simulate({ ...base, up: 1, down: 1 }, 6000);
-    expect(s.threshold({ last_n_reversals: 200 })).toBeCloseTo(level_for(0.5), 0);
+    expect(s.estimate({ last_n_reversals: 200 })).toBeCloseTo(level_for(0.5), 0);
     expect(Math.abs(mean_level(s) - level_for(0.5))).toBeLessThan(0.4);
   });
 
   test("1-up/2-down converges to the 70.7% point", () => {
     const s = simulate({ ...base, up: 1, down: 2 }, 12000);
-    expect(Math.abs(s.threshold({ last_n_reversals: 300 })! - level_for(0.707))).toBeLessThan(0.4);
+    expect(Math.abs(s.estimate({ last_n_reversals: 300 })! - level_for(0.707))).toBeLessThan(0.4);
     const h = s.history.slice(300);
     const acc = h.filter((x) => x.correct).length / h.length;
     expect(acc).toBeGreaterThan(0.67);
@@ -43,7 +43,7 @@ describe("convergence (Levitt 1971)", () => {
 
   test("1-up/3-down converges to the 79.4% point", () => {
     const s = simulate({ ...base, up: 1, down: 3 }, 20000);
-    expect(Math.abs(s.threshold({ last_n_reversals: 300 })! - level_for(0.794))).toBeLessThan(0.4);
+    expect(Math.abs(s.estimate({ last_n_reversals: 300 })! - level_for(0.794))).toBeLessThan(0.4);
     const h = s.history.slice(300);
     const acc = h.filter((x) => x.correct).length / h.length;
     expect(acc).toBeGreaterThan(0.76);
@@ -125,7 +125,7 @@ describe("basic rules", () => {
   });
 });
 
-describe("reversals, schedule and threshold", () => {
+describe("reversals, schedule and estimate", () => {
   test("counts reversals and records the level where direction changed", () => {
     const s = createStaircase({ start_level: 10, step_size: 1 });
     s.update(true); // 9, first move: not a reversal
@@ -148,16 +148,16 @@ describe("reversals, schedule and threshold", () => {
     expect(s.update(false)).toBe(98);
   });
 
-  test("threshold averages the last n reversals", () => {
+  test("estimate averages the last n reversals", () => {
     const s = createStaircase({ start_level: 10, step_size: 1 });
-    expect(s.threshold()).toBeNull();
+    expect(s.estimate()).toBeNull();
     for (const c of [true, false, true, false, true, false]) s.update(c);
     // levels: 10->9, rev@9 ->10, rev@10 ->9, rev@9 ->10, rev@10 ->9, rev@9 ->10
     expect(s.reversal_levels).toEqual([9, 10, 9, 10, 9]);
-    expect(s.threshold()).toBeCloseTo(9.4);
-    expect(s.threshold({ last_n_reversals: 2 })).toBe(9.5);
-    expect(s.threshold({ last_n_reversals: 50 })).toBeCloseTo(9.4);
-    expect(() => s.threshold({ last_n_reversals: 0 })).toThrow();
+    expect(s.estimate()).toBeCloseTo(9.4);
+    expect(s.estimate({ last_n_reversals: 2 })).toBe(9.5);
+    expect(s.estimate({ last_n_reversals: 50 })).toBeCloseTo(9.4);
+    expect(() => s.estimate({ last_n_reversals: 0 })).toThrow();
   });
 });
 
@@ -423,7 +423,7 @@ describe("toJSON", () => {
       trial_count: 3,
       reversals: 2,
       reversal_levels: [9, 10],
-      threshold: 9.5,
+      estimate: 9.5,
     });
     expect(json.history[1]).toEqual({
       trial: 2,

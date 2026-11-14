@@ -24,11 +24,11 @@ describe("finding 1: saving a staircase as the docs describe", () => {
     const { getData } = await startTimeline([
       {
         type: callFunction,
-        func: () => ({ threshold: s.threshold(), staircase: s.toJSON() }),
+        func: () => ({ estimate: s.estimate(), staircase: s.toJSON() }),
       },
     ]);
     const row = getData().values()[0];
-    expect(row.value.threshold).toBeNull();
+    expect(row.value.estimate).toBeNull();
     expect(row.value.staircase.trial_count).toBe(1);
   });
 });
