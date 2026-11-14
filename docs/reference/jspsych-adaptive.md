@@ -17,21 +17,26 @@ const staircase = jsPsych.adaptive.createStaircase(config)
 | Parameter     | Type             | Default      | Description |
 | ------------- | ---------------- | ------------ | ----------- |
 | start_level   | numeric          | *required*   | The level of the first trial. Must be inside `bounds`. |
-| up            | integer          | `1`          | Number of consecutive **incorrect** responses that move the level one step against `correct_moves` (up, with the default `correct_moves: 'down'`). `staircase` mode only. |
-| down          | integer          | `1`          | Number of consecutive **correct** responses that move the level one step in the `correct_moves` direction (down by default). A response of the other kind resets the count, as does a move. `staircase` mode only. |
-| correct_moves | string           | `'down'`     | Which direction a run of correct responses moves the level: `'down'` (psychophysics convention: the level is stimulus intensity, higher is easier) or `'up'` (higher is harder, e.g. stop-signal delay or list length). `up` and `down` always count incorrect and correct responses, whichever way they move the level. `staircase` mode only. |
+| up            | integer          | `1`          | Number of consecutive **incorrect** responses that move the level one step against `correct_moves` (up, with the default `correct_moves: 'down'`). `null` means incorrect responses never move the level. |
+| down          | integer          | `1`          | Number of consecutive **correct** responses that move the level one step in the `correct_moves` direction (down by default). A response of the other kind resets the count, as does a move. `null` means correct responses never move the level. |
+| correct_moves | string           | `'down'`     | Which direction a run of correct responses moves the level: `'down'` (psychophysics convention: the level is stimulus intensity, higher is easier) or `'up'` (higher is harder, e.g. stop-signal delay or list length). `up` and `down` always count incorrect and correct responses, whichever way they move the level. |
 | step_size     | number or object | `1`          | Size of each move. Either a number, or `{up: 20, down: 10}` for unequal sizes. `step_size.up` is the size of a move that raises the level and `step_size.down` of one that lowers it, whichever response caused the move. |
-| step_sizes    | array            | `undefined`  | A schedule of step sizes (numbers or `{up, down}` objects) indexed by the number of reversals so far: entry 0 until the first reversal, entry 1 until the second, and so on; the last entry is used from then on. The move that causes a reversal already uses the new step size. Overrides `step_size`. `staircase` mode only. |
-| bounds        | array            | `[-Infinity, Infinity]` | `[min, max]`. The level is clamped to this range. |
+| step_sizes    | array            | `undefined`  | A schedule of step sizes (numbers or `{up, down}` objects) indexed by the number of reversals so far: entry 0 until the first reversal, entry 1 until the second, and so on; the last entry is used from then on. The move that causes a reversal already uses the new step size. Overrides `step_size`. |
+| bounds        | array            | `[null, null]` | `[min, max]`. The level is clamped to this range. `null` means no bound on that side, e.g. `[0, null]`. |
 | stop          | object           | `{}`         | Stopping rules; the staircase is `done` when any is met. See below. |
-| mode          | string           | `'staircase'` | `'staircase'` or `'ascending_discontinue'`. See below. |
 | label         | string           | `undefined`  | A name for the track, included in `toJSON()`. |
 
-**`stop` properties:** each is a positive integer. `trials` (stop after this many updates), `reversals` (`staircase` mode only: stop after this many reversals), `consecutive_failures` (stop after this many incorrect responses in a row, regardless of level moves), and `failures_at_level` (`ascending_discontinue` mode only: stop after this many incorrect responses at one level).
+**`stop` properties:** each is a positive integer.
 
-The config is validated and copied when the staircase is created: an invalid value throws an error, as does an option marked as belonging to the other mode (`up`, `down`, `correct_moves`, `step_sizes` and `stop.reversals` in `ascending_discontinue` mode; `stop.failures_at_level` in `staircase` mode). Changing the config object afterwards has no effect.
+- `trials`: stop after this many updates.
+- `reversals`: stop after this many reversals.
+- `consecutive_failures`: stop after this many incorrect responses in a row, whether or not the level moved.
+- `failures_at_level`: stop after this many incorrect responses since the level last changed.
+- `ceiling`: stop after this many correct responses at the hardest level, counted since the level last reached it. The hardest level is the bound that correct responses move toward: `max` with `correct_moves: 'up'`, `min` with `'down'`. That bound must be finite.
 
-**Modes.** In `staircase` mode the n-up/m-down rule above applies. In `ascending_discontinue` mode the level moves up by the `up` step size after each correct response, never moves after an incorrect response, and the procedure ends when a stop rule is met or when a correct response is given at the upper bound (`stop_reason` is `'ceiling'`, unless another stop rule is met on the same trial). Reversals are not tracked in this mode.
+If several rules are met on the same trial, `stop_reason` is the first one in this list.
+
+The config is validated and copied when the staircase is created: an invalid value throws an error. Changing the config object afterwards has no effect. `Infinity` is also accepted wherever `null` is (`-Infinity` for a lower bound), but it is stored and saved as `null`, so the `config` in `toJSON()` can be passed back to `createStaircase()` unchanged.
 
 ### Staircase properties and methods
 
@@ -153,17 +158,21 @@ const span_procedure = {
 };
 ```
 
-For the classic "go up after a success, stop after N failures at the same length" version, use `ascending_discontinue` mode. It does not accept `up`, `down` or `correct_moves`, so the config becomes:
+For the classic ascending version ("go up after each success, stop after 2 failures at the same length, or when the longest list is recalled"), let correct responses move the level and incorrect ones never move it:
 
 ```javascript
 const span = jsPsych.adaptive.createStaircase({
   start_level: 3,
+  down: 1,                 // each correct recall makes the list longer...
+  up: null,                // ...and errors never make it shorter
+  correct_moves: 'up',
   step_size: 1,
   bounds: [2, 12],
-  mode: 'ascending_discontinue',
-  stop: { failures_at_level: 2 }
+  stop: { failures_at_level: 2, ceiling: 1 }
 });
 ```
+
+Because the level only ever moves one way, this staircase has no reversals.
 
 ### Psychophysics threshold (shrinking steps, mean of the last reversals)
 

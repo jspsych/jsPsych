@@ -63,12 +63,14 @@ describe("finding 2: stop-signal example records ssd and track", () => {
 });
 
 describe("finding 3: clamp() rounds after clamping", () => {
-  test("ascending_discontinue reaches the 'ceiling' stop with a fractional upper bound", () => {
+  test("an ascending procedure reaches the 'ceiling' stop with a fractional upper bound", () => {
     const s = createStaircase({
       start_level: 0,
       step_size: 0.1,
       bounds: [0, 1 / 3],
-      mode: "ascending_discontinue",
+      correct_moves: "up",
+      up: Infinity,
+      stop: { ceiling: 1 },
     });
     run(s, () => true, 20);
     expect(s.done).toBe(true);
@@ -108,22 +110,24 @@ describe("finding 4: update() accepts non-boolean responses", () => {
   });
 });
 
-describe("finding 5: options that the mode cannot use are rejected", () => {
+describe("finding 5: invalid options are rejected", () => {
+  // The original finding was about options that a mode ignored. The modes have since been replaced
+  // by general options, so this checks that those options are validated.
   test.each<[string, object]>([
-    [
-      "stop.reversals in ascending_discontinue",
-      { mode: "ascending_discontinue", stop: { reversals: 4 } },
-    ],
-    ["stop.failures_at_level in staircase", { mode: "staircase", stop: { failures_at_level: 2 } }],
-    [
-      "correct_moves in ascending_discontinue",
-      { mode: "ascending_discontinue", correct_moves: "down" },
-    ],
-    ["up in ascending_discontinue", { mode: "ascending_discontinue", up: 2 }],
-    ["down in ascending_discontinue", { mode: "ascending_discontinue", down: 2 }],
-    ["step_sizes in ascending_discontinue", { mode: "ascending_discontinue", step_sizes: [2, 1] }],
+    ["up: 0", { up: 0 }],
+    ["down: -Infinity", { down: -Infinity }],
+    ["an unknown correct_moves", { correct_moves: "sideways" }],
+    ["a non-integer stop.ceiling", { stop: { ceiling: 1.5 } }],
+    ["a non-integer stop.failures_at_level", { stop: { failures_at_level: 0.5 } }],
   ])("%s throws", (_, extra) => {
-    expect(() => createStaircase({ start_level: 1, bounds: [0, 10], ...extra })).toThrow();
+    expect(() => createStaircase({ start_level: 1, bounds: [0, 10], ...extra } as any)).toThrow();
+  });
+
+  test("up and down accept null and Infinity", () => {
+    for (const never of [null, Infinity]) {
+      expect(() => createStaircase({ start_level: 1, up: never })).not.toThrow();
+      expect(() => createStaircase({ start_level: 1, down: never })).not.toThrow();
+    }
   });
 });
 
@@ -134,15 +138,38 @@ describe("finding 6: step direction and the Kaernbach target with correct_moves 
   test.todo("decide whether step_size.{up,down} follows level direction or response");
 });
 
-describe("finding 7: toJSON() keeps Infinity bounds", () => {
-  test("config.bounds keeps Infinity", () => {
-    const s = createStaircase({ start_level: 1, bounds: [0, Infinity] });
-    expect(s.toJSON().config.bounds).toEqual([0, Infinity]);
+describe("finding 7: toJSON() and Infinity", () => {
+  // JSON has no Infinity, so "no bound" and "never move" are stored and saved as null.
+  test("infinite bounds and run lengths are saved as null", () => {
+    const s = createStaircase({ start_level: 1, bounds: [-Infinity, Infinity], up: Infinity });
+    const { config } = s.toJSON();
+    expect(config.bounds).toEqual([null, null]);
+    expect(config.up).toBeNull();
   });
 
-  test("a staircase can be rebuilt from its snapshot config", () => {
-    const s = createStaircase({ start_level: 1, bounds: [0, Infinity] });
-    expect(() => createStaircase(s.toJSON().config)).not.toThrow();
+  test("a staircase rebuilt from a JSON round-trip of its config behaves the same", () => {
+    const original = createStaircase({
+      start_level: 3,
+      bounds: [0, Infinity],
+      correct_moves: "up",
+      up: Infinity,
+      stop: { failures_at_level: 2 },
+    });
+    const rebuilt = createStaircase(JSON.parse(JSON.stringify(original)).config);
+    for (const c of [true, true, false, true, false, false]) {
+      expect(rebuilt.update(c)).toBe(original.update(c));
+    }
+    expect(rebuilt.toJSON()).toEqual(original.toJSON());
+  });
+
+  test("null means the default for neither up nor down", () => {
+    const s = createStaircase({ start_level: 5, up: null });
+    for (let i = 0; i < 5; i++) s.update(false);
+    expect(s.level).toBe(5);
+  });
+
+  test("a bounds entry that is neither a number nor null throws", () => {
+    expect(() => createStaircase({ start_level: 1, bounds: [0, undefined] } as any)).toThrow();
   });
 });
 
@@ -208,8 +235,9 @@ describe("finding 11: ceiling bypasses the other stop rules", () => {
     const s = createStaircase({
       start_level: 10,
       bounds: [0, 10],
-      mode: "ascending_discontinue",
-      stop: { trials: 1 },
+      correct_moves: "up",
+      up: Infinity,
+      stop: { trials: 1, ceiling: 1 },
     });
     s.update(true);
     expect(s.done).toBe(true);

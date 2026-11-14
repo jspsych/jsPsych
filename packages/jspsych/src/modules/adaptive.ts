@@ -54,8 +54,14 @@ export interface StaircaseStopRules {
   reversals?: number;
   /** Stop after this many consecutive incorrect responses (at any level). */
   consecutive_failures?: number;
-  /** `ascending_discontinue` mode only: stop after this many incorrect responses at one level. */
+  /** Stop after this many incorrect responses since the level last changed. */
   failures_at_level?: number;
+  /**
+   * Stop after this many correct responses at the hardest level: the bound that correct responses
+   * move toward (`max` with `correct_moves: 'up'`, `min` with `'down'`). Counted since the level
+   * last reached that bound. Requires that bound to be finite.
+   */
+  ceiling?: number;
 }
 
 export interface StaircaseConfig {
@@ -63,15 +69,16 @@ export interface StaircaseConfig {
   start_level: number;
   /**
    * Number of consecutive incorrect responses that move the level one step against
-   * `correct_moves` (up, with the default `correct_moves: 'down'`). Default 1. (`staircase` mode
-   * only.)
+   * `correct_moves` (up, with the default `correct_moves: 'down'`). Default 1. `null` (or
+   * `Infinity`) means incorrect responses never move the level.
    */
-  up?: number;
+  up?: number | null;
   /**
    * Number of consecutive correct responses that move the level one step in the `correct_moves`
-   * direction (down by default). Default 1. (`staircase` mode only.)
+   * direction (down by default). Default 1. `null` (or `Infinity`) means correct responses never
+   * move the level.
    */
-  down?: number;
+  down?: number | null;
   /**
    * Which way a run of correct responses moves the level. `'down'` (default) is the psychophysics
    * convention, where the level is stimulus intensity and correct responses make the task harder
@@ -90,16 +97,12 @@ export interface StaircaseConfig {
    * reversal, entry 1 after it, ...). The last entry is used from then on. Overrides `step_size`.
    */
   step_sizes?: StepSize[];
-  /** `[min, max]`. Levels are clamped to this range. Default unbounded. */
-  bounds?: [number, number];
-  stop?: StaircaseStopRules;
   /**
-   * `'staircase'` (default): n-up/m-down rule.
-   * `'ascending_discontinue'`: the level moves up by the up-step after a correct response and
-   * never moves otherwise; the procedure ends on a stop rule or on a correct response at the
-   * upper bound.
+   * `[min, max]`. Levels are clamped to this range. `null` (or `-Infinity`/`Infinity`) means no
+   * bound on that side. Default `[null, null]`.
    */
-  mode?: "staircase" | "ascending_discontinue";
+  bounds?: [number | null, number | null];
+  stop?: StaircaseStopRules;
   /** Optional label, copied into `toJSON()` and `history` (useful for interleaved tracks). */
   label?: string;
 }
@@ -137,10 +140,16 @@ function resolveStep(step: StepSize): { up: number; down: number } {
   return { up: s.up, down: s.down };
 }
 
-const STOP_RULES = ["trials", "reversals", "consecutive_failures", "failures_at_level"] as const;
+const STOP_RULES = [
+  "trials",
+  "reversals",
+  "consecutive_failures",
+  "failures_at_level",
+  "ceiling",
+] as const;
 
-/** Options that `ascending_discontinue` mode has no use for. */
-const STAIRCASE_ONLY = ["up", "down", "correct_moves", "step_sizes"] as const;
+/** A run length for `up`/`down`: a positive integer, or Infinity for "never moves". */
+const isRunLength = (x: unknown) => x === Infinity || isPositiveInteger(x);
 
 export class Staircase implements AdaptiveProcedure<number, boolean> {
   readonly procedure = "staircase";
@@ -148,7 +157,6 @@ export class Staircase implements AdaptiveProcedure<number, boolean> {
   private readonly n_up: number;
   private readonly n_down: number;
   private readonly correct_moves: "down" | "up";
-  private readonly mode: "staircase" | "ascending_discontinue";
   private readonly steps: { up: number; down: number }[];
   private readonly min: number;
   private readonly max: number;
@@ -160,42 +168,43 @@ export class Staircase implements AdaptiveProcedure<number, boolean> {
   private _correct_run = 0;
   private _incorrect_run = 0;
   private _failures_at_level = 0;
+  private _ceiling_hits = 0;
   private _consecutive_failures = 0;
   private _done = false;
   private _stop_reason: string | null = null;
 
   constructor(input: StaircaseConfig) {
     // Snapshot the config so later changes to the caller's object (or to an object shared between
-    // tracks) cannot change this staircase. deepCopy keeps Infinity, unlike a JSON round-trip.
+    // tracks) cannot change this staircase.
     const config: StaircaseConfig = deepCopy(input);
     this.config = config;
-    this.mode = config.mode ?? "staircase";
-    this.n_up = config.up ?? 1;
-    this.n_down = config.down ?? 1;
+    // `null` and `Infinity` both mean "never" here; `undefined` means the default.
+    this.n_up = config.up === undefined ? 1 : config.up ?? Infinity;
+    this.n_down = config.down === undefined ? 1 : config.down ?? Infinity;
     this.correct_moves = config.correct_moves ?? "down";
 
-    if (this.mode !== "staircase" && this.mode !== "ascending_discontinue") {
-      throw new Error(`jsPsych.adaptive: unknown mode "${this.mode}".`);
-    }
     if (typeof config.start_level !== "number" || !Number.isFinite(config.start_level)) {
       throw new Error("jsPsych.adaptive: `start_level` must be a finite number.");
     }
-    const bounds = config.bounds ?? [-Infinity, Infinity];
+    const bounds = config.bounds ?? [null, null];
     if (
       !Array.isArray(bounds) ||
       bounds.length !== 2 ||
-      bounds.some((b) => typeof b !== "number" || Number.isNaN(b))
+      bounds.some((b) => b !== null && (typeof b !== "number" || Number.isNaN(b)))
     ) {
-      throw new Error("jsPsych.adaptive: `bounds` must be [min, max] with numeric min and max.");
+      throw new Error(
+        "jsPsych.adaptive: `bounds` must be [min, max], where each is a number or null (no bound)."
+      );
     }
-    [this.min, this.max] = bounds;
-    if (
-      !Number.isInteger(this.n_up) ||
-      this.n_up < 1 ||
-      !Number.isInteger(this.n_down) ||
-      this.n_down < 1
-    ) {
-      throw new Error("jsPsych.adaptive: `up` and `down` must be positive integers.");
+    this.min = bounds[0] ?? -Infinity;
+    this.max = bounds[1] ?? Infinity;
+    if (!isRunLength(this.n_up) || !isRunLength(this.n_down)) {
+      throw new Error(
+        "jsPsych.adaptive: `up` and `down` must be positive integers, or null (never move)."
+      );
+    }
+    if (this.correct_moves !== "down" && this.correct_moves !== "up") {
+      throw new Error("jsPsych.adaptive: `correct_moves` must be 'down' or 'up'.");
     }
     if (!(this.min < this.max)) {
       throw new Error("jsPsych.adaptive: `bounds` must be [min, max] with min < max.");
@@ -212,23 +221,11 @@ export class Staircase implements AdaptiveProcedure<number, boolean> {
         throw new Error(`jsPsych.adaptive: \`stop.${rule}\` must be a positive integer.`);
       }
     }
-    if (this.mode === "ascending_discontinue") {
-      for (const option of STAIRCASE_ONLY) {
-        if (config[option] !== undefined) {
-          throw new Error(
-            `jsPsych.adaptive: \`${option}\` has no effect in 'ascending_discontinue' mode.`
-          );
-        }
-      }
-      if (config.stop?.reversals !== undefined) {
-        throw new Error(
-          "jsPsych.adaptive: `stop.reversals` has no effect in 'ascending_discontinue' mode, " +
-            "which does not track reversals."
-        );
-      }
-    } else if (config.stop?.failures_at_level !== undefined) {
+    if (config.stop?.ceiling !== undefined && !Number.isFinite(this.hardest)) {
       throw new Error(
-        "jsPsych.adaptive: `stop.failures_at_level` is only used in 'ascending_discontinue' mode."
+        `jsPsych.adaptive: \`stop.ceiling\` needs a finite ${
+          this.correct_moves === "up" ? "upper" : "lower"
+        } bound.`
       );
     }
     const schedule = config.step_sizes ?? [config.step_size ?? 1];
@@ -237,6 +234,17 @@ export class Staircase implements AdaptiveProcedure<number, boolean> {
     }
     this.steps = schedule.map(resolveStep);
     this._level = config.start_level;
+
+    // Store "no bound" and "never move" as null, so that toJSON() output (JSON has no Infinity)
+    // can be passed back to createStaircase() unchanged.
+    if (config.up === Infinity) config.up = null;
+    if (config.down === Infinity) config.down = null;
+    if (config.bounds) {
+      config.bounds = [
+        Number.isFinite(this.min) ? this.min : null,
+        Number.isFinite(this.max) ? this.max : null,
+      ];
+    }
   }
 
   /** The level to present on the next trial. */
@@ -292,50 +300,37 @@ export class Staircase implements AdaptiveProcedure<number, boolean> {
     const presented = this._level;
     this._consecutive_failures = correct ? 0 : this._consecutive_failures + 1;
     let reversal = false;
-    let ceiling = false;
 
-    if (this.mode === "ascending_discontinue") {
-      if (correct) {
-        this._correct_run++;
-        this._incorrect_run = 0;
-        this._failures_at_level = 0;
-        if (presented >= this.max) {
-          ceiling = true;
-        } else {
-          this._level = this.clamp(presented + this.currentStep().up);
-        }
-      } else {
-        this._incorrect_run++;
-        this._correct_run = 0;
-        this._failures_at_level++;
-      }
+    if (correct) {
+      this._correct_run++;
+      this._incorrect_run = 0;
     } else {
-      if (correct) {
-        this._correct_run++;
-        this._incorrect_run = 0;
-      } else {
-        this._incorrect_run++;
-        this._correct_run = 0;
-      }
-      let move: "up" | "down" | null = null;
-      if (correct && this._correct_run >= this.n_down) {
-        move = this.correct_moves;
-        this._correct_run = 0;
-      } else if (!correct && this._incorrect_run >= this.n_up) {
-        move = this.correct_moves === "down" ? "up" : "down";
-        this._incorrect_run = 0;
-      }
-      if (move) {
-        if (this._last_move !== null && move !== this._last_move) {
-          reversal = true;
-          this._reversal_levels.push(presented);
-        }
-        // The move that causes a reversal already uses the post-reversal step size.
-        const step = this.currentStep();
-        this._last_move = move;
-        this._level = this.clamp(presented + (move === "up" ? step.up : -step.down));
-      }
+      this._incorrect_run++;
+      this._correct_run = 0;
     }
+    let move: "up" | "down" | null = null;
+    if (correct && this._correct_run >= this.n_down) {
+      move = this.correct_moves;
+      this._correct_run = 0;
+    } else if (!correct && this._incorrect_run >= this.n_up) {
+      move = this.correct_moves === "down" ? "up" : "down";
+      this._incorrect_run = 0;
+    }
+    if (move) {
+      if (this._last_move !== null && move !== this._last_move) {
+        reversal = true;
+        this._reversal_levels.push(presented);
+      }
+      // The move that causes a reversal already uses the post-reversal step size.
+      const step = this.currentStep();
+      this._last_move = move;
+      this._level = this.clamp(presented + (move === "up" ? step.up : -step.down));
+    }
+
+    if (this._level !== presented) this._failures_at_level = 0;
+    else if (!correct) this._failures_at_level++;
+    if (presented !== this.hardest) this._ceiling_hits = 0;
+    if (correct && presented === this.hardest) this._ceiling_hits++;
 
     const entry: StaircaseHistoryEntry = {
       trial: this._history.length + 1,
@@ -346,12 +341,6 @@ export class Staircase implements AdaptiveProcedure<number, boolean> {
     };
     this._history.push(entry);
     this.checkStop();
-    // The ceiling is checked after the other stop rules, so a rule met on the same trial (e.g.
-    // `stop.trials`) is the reported reason.
-    if (ceiling && !this._done) {
-      this._done = true;
-      this._stop_reason = "ceiling";
-    }
     return this._level;
   }
 
@@ -373,7 +362,6 @@ export class Staircase implements AdaptiveProcedure<number, boolean> {
     return {
       procedure: this.procedure,
       label: this.config.label ?? null,
-      mode: this.mode,
       config: deepCopy(this.config) as StaircaseConfig,
       level: this._level,
       done: this._done,
@@ -384,6 +372,11 @@ export class Staircase implements AdaptiveProcedure<number, boolean> {
       threshold: this.threshold(),
       history: this.history,
     };
+  }
+
+  /** The bound that correct responses move toward. */
+  private get hardest() {
+    return this.correct_moves === "up" ? this.max : this.min;
   }
 
   private currentStep() {
@@ -407,11 +400,11 @@ export class Staircase implements AdaptiveProcedure<number, boolean> {
     )
       reason = "consecutive_failures";
     else if (
-      this.mode === "ascending_discontinue" &&
       stop.failures_at_level !== undefined &&
       this._failures_at_level >= stop.failures_at_level
     )
       reason = "failures_at_level";
+    else if (stop.ceiling !== undefined && this._ceiling_hits >= stop.ceiling) reason = "ceiling";
     if (reason) {
       this._done = true;
       this._stop_reason = reason;

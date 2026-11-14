@@ -212,17 +212,15 @@ describe("stopping rules", () => {
   });
 });
 
-describe("ascending_discontinue", () => {
+describe("ascending procedure (correct_moves 'up', up: null)", () => {
+  const ascending = { correct_moves: "up" as const, up: null };
+
   test("goes up after success and stops after failures at a level", () => {
-    const s = createStaircase({
-      start_level: 3,
-      mode: "ascending_discontinue",
-      stop: { failures_at_level: 2 },
-    });
+    const s = createStaircase({ start_level: 3, ...ascending, stop: { failures_at_level: 2 } });
     expect(s.update(true)).toBe(4);
     expect(s.update(false)).toBe(4);
     expect(s.done).toBe(false);
-    expect(s.update(true)).toBe(5); // failure count resets on advancing
+    expect(s.update(true)).toBe(5); // failure count resets when the level changes
     s.update(false);
     expect(s.done).toBe(false);
     s.update(false);
@@ -232,9 +230,15 @@ describe("ascending_discontinue", () => {
   });
 
   test("ends with 'ceiling' on a success at the upper bound", () => {
-    const s = createStaircase({ start_level: 2, mode: "ascending_discontinue", bounds: [2, 3] });
+    const s = createStaircase({
+      start_level: 2,
+      ...ascending,
+      bounds: [2, 3],
+      stop: { ceiling: 1 },
+    });
     s.update(true);
     expect(s.level).toBe(3);
+    expect(s.done).toBe(false);
     s.update(true);
     expect(s.done).toBe(true);
     expect(s.stop_reason).toBe("ceiling");
@@ -242,9 +246,84 @@ describe("ascending_discontinue", () => {
   });
 
   test("no reversals are recorded", () => {
-    const s = createStaircase({ start_level: 1, mode: "ascending_discontinue" });
+    const s = createStaircase({ start_level: 1, ...ascending });
     for (const c of [true, false, true, false]) s.update(c);
     expect(s.reversals).toBe(0);
+  });
+});
+
+describe("failures_at_level", () => {
+  test("counts failures since the level last changed in an n-up/m-down staircase", () => {
+    const s = createStaircase({ start_level: 5, up: 3, down: 2, stop: { failures_at_level: 2 } });
+    s.update(false);
+    s.update(true); // the level does not change, so the count is kept
+    expect(s.done).toBe(false);
+    s.update(false);
+    expect(s.done).toBe(true);
+    expect(s.stop_reason).toBe("failures_at_level");
+  });
+
+  test("a failure that moves the level starts the count again", () => {
+    const s = createStaircase({ start_level: 5, up: 1, stop: { failures_at_level: 2 } });
+    for (let i = 0; i < 5; i++) s.update(false);
+    expect(s.done).toBe(false);
+  });
+});
+
+describe("ceiling", () => {
+  test("the hardest level is the lower bound with correct_moves 'down'", () => {
+    const s = createStaircase({ start_level: 1, bounds: [1, 10], stop: { ceiling: 2 } });
+    s.update(true);
+    expect(s.done).toBe(false);
+    s.update(true);
+    expect(s.done).toBe(true);
+    expect(s.stop_reason).toBe("ceiling");
+  });
+
+  test("counts restart when the level leaves the hardest level", () => {
+    const s = createStaircase({ start_level: 1, bounds: [1, 10], stop: { ceiling: 2 } });
+    s.update(true); // at 1, count 1
+    s.update(false); // moves up to 2
+    s.update(true); // at 2, back down to 1; count restarts
+    s.update(true); // at 1, count 1
+    expect(s.done).toBe(false);
+    s.update(true);
+    expect(s.stop_reason).toBe("ceiling");
+  });
+
+  test("an incorrect response at the hardest level does not reset the count", () => {
+    const s = createStaircase({
+      start_level: 3,
+      bounds: [0, 3],
+      correct_moves: "up",
+      up: Infinity,
+      stop: { ceiling: 2 },
+    });
+    s.update(true);
+    s.update(false);
+    expect(s.done).toBe(false);
+    s.update(true);
+    expect(s.stop_reason).toBe("ceiling");
+  });
+
+  test("needs a finite hardest bound", () => {
+    expect(() => createStaircase({ start_level: 1, stop: { ceiling: 1 } })).toThrow();
+    expect(() =>
+      createStaircase({
+        start_level: 1,
+        bounds: [0, null],
+        correct_moves: "up",
+        stop: { ceiling: 1 },
+      })
+    ).toThrow();
+    expect(() =>
+      createStaircase({
+        start_level: 1,
+        bounds: [-Infinity, 5],
+        correct_moves: "up",
+        stop: { ceiling: 1 },
+      })
+    ).not.toThrow();
   });
 });
 
@@ -338,7 +417,6 @@ describe("toJSON", () => {
     const json = JSON.parse(JSON.stringify(s));
     expect(json).toMatchObject({
       label: "x",
-      mode: "staircase",
       level: 9,
       done: true,
       stop_reason: "trials",
