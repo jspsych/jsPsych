@@ -1,12 +1,12 @@
 /**
- * Failing tests for the issues found in the review of PR #3741. Each describe block names the
+ * Regression tests for the issues found in the review of PR #3741. Each describe block names the
  * finding it covers. Loops are capped so that a "never done" bug fails an assertion instead of
  * hanging the test run.
  */
+import callFunction from "@jspsych/plugin-call-function";
 import htmlKeyboardResponse from "@jspsych/plugin-html-keyboard-response";
 import { pressKey, startTimeline } from "@jspsych/test-utils";
 
-import { initJsPsych } from "../../src";
 import { createInterleaved, createStaircase } from "../../src/modules/adaptive";
 
 /** Calls update() up to `max` times while the staircase is not done. */
@@ -16,17 +16,20 @@ function run(s: ReturnType<typeof createStaircase>, response: () => boolean, max
 }
 
 describe("finding 1: saving a staircase as the docs describe", () => {
-  // docs/reference/jspsych-adaptive.md documents `jsPsych.data.write({...})` for saving
-  // `toJSON()`. If the fix is to change the docs instead of core, update this test to the new
-  // documented pattern.
-  test("jsPsych.data.write accepts the documented plain object", () => {
-    const jsPsych = initJsPsych();
+  // `jsPsych.data.write()` is internal (it takes a Trial), so the docs now save `toJSON()` by
+  // returning it from a call-function trial. This tests that documented pattern.
+  test("a call-function trial saves the snapshot in its data", async () => {
     const s = createStaircase({ start_level: 1, stop: { trials: 1 } });
     s.update(true);
-    expect(() =>
-      jsPsych.data.write({ threshold: s.threshold(), staircase: s.toJSON() } as any)
-    ).not.toThrow();
-    expect(jsPsych.data.get().values()[0].staircase.trial_count).toBe(1);
+    const { getData } = await startTimeline([
+      {
+        type: callFunction,
+        func: () => ({ threshold: s.threshold(), staircase: s.toJSON() }),
+      },
+    ]);
+    const row = getData().values()[0];
+    expect(row.value.threshold).toBeNull();
+    expect(row.value.staircase.trial_count).toBe(1);
   });
 });
 

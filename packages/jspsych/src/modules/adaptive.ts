@@ -6,6 +6,8 @@
  * order reproducible.
  */
 
+import { deepCopy } from "./utils";
+
 export type StepSize = number | { up: number; down: number };
 
 export interface StaircaseStopRules {
@@ -23,13 +25,14 @@ export interface StaircaseConfig {
   /** Level of the first trial. */
   start_level: number;
   /**
-   * Number of consecutive incorrect responses that moves the level in the "up" direction.
-   * Default 1. (`staircase` mode only.)
+   * Number of consecutive incorrect responses that move the level one step against
+   * `correct_moves` (up, with the default `correct_moves: 'down'`). Default 1. (`staircase` mode
+   * only.)
    */
   up?: number;
   /**
-   * Number of consecutive correct responses that moves the level in the "down" direction.
-   * Default 1. (`staircase` mode only.)
+   * Number of consecutive correct responses that move the level one step in the `correct_moves`
+   * direction (down by default). Default 1. (`staircase` mode only.)
    */
   down?: number;
   /**
@@ -41,8 +44,8 @@ export interface StaircaseConfig {
    */
   correct_moves?: "down" | "up";
   /**
-   * Step magnitude. A number, or `{ up, down }` with the (positive) size of a move in each
-   * direction of the level. Default 1.
+   * Step magnitude. A number, or `{ up, down }` with the (positive) size of a move that raises and
+   * a move that lowers the level, whichever response caused the move. Default 1.
    */
   step_size?: StepSize;
   /**
@@ -83,13 +86,24 @@ export interface ThresholdOptions {
 
 const round = (x: number) => Math.round(x * 1e10) / 1e10;
 
+const isPositiveFinite = (x: unknown): x is number =>
+  typeof x === "number" && Number.isFinite(x) && x > 0;
+
+const isPositiveInteger = (x: unknown): x is number =>
+  typeof x === "number" && Number.isInteger(x) && x >= 1;
+
 function resolveStep(step: StepSize): { up: number; down: number } {
   const s = typeof step === "number" ? { up: step, down: step } : step;
-  if (!(s.up > 0) || !(s.down > 0)) {
-    throw new Error("jsPsych.adaptive: step sizes must be positive numbers.");
+  if (typeof s !== "object" || s === null || !isPositiveFinite(s.up) || !isPositiveFinite(s.down)) {
+    throw new Error("jsPsych.adaptive: step sizes must be positive finite numbers.");
   }
   return { up: s.up, down: s.down };
 }
+
+const STOP_RULES = ["trials", "reversals", "consecutive_failures", "failures_at_level"] as const;
+
+/** Options that `ascending_discontinue` mode has no use for. */
+const STAIRCASE_ONLY = ["up", "down", "correct_moves", "step_sizes"] as const;
 
 export class Staircase {
   private readonly config: StaircaseConfig;
@@ -112,17 +126,31 @@ export class Staircase {
   private _done = false;
   private _stop_reason: string | null = null;
 
-  constructor(config: StaircaseConfig) {
+  constructor(input: StaircaseConfig) {
+    // Snapshot the config so later changes to the caller's object (or to an object shared between
+    // tracks) cannot change this staircase. deepCopy keeps Infinity, unlike a JSON round-trip.
+    const config: StaircaseConfig = deepCopy(input);
     this.config = config;
     this.mode = config.mode ?? "staircase";
     this.n_up = config.up ?? 1;
     this.n_down = config.down ?? 1;
     this.correct_moves = config.correct_moves ?? "down";
-    [this.min, this.max] = config.bounds ?? [-Infinity, Infinity];
 
-    if (typeof config.start_level !== "number" || isNaN(config.start_level)) {
-      throw new Error("jsPsych.adaptive: `start_level` must be a number.");
+    if (this.mode !== "staircase" && this.mode !== "ascending_discontinue") {
+      throw new Error(`jsPsych.adaptive: unknown mode "${this.mode}".`);
     }
+    if (typeof config.start_level !== "number" || !Number.isFinite(config.start_level)) {
+      throw new Error("jsPsych.adaptive: `start_level` must be a finite number.");
+    }
+    const bounds = config.bounds ?? [-Infinity, Infinity];
+    if (
+      !Array.isArray(bounds) ||
+      bounds.length !== 2 ||
+      bounds.some((b) => typeof b !== "number" || Number.isNaN(b))
+    ) {
+      throw new Error("jsPsych.adaptive: `bounds` must be [min, max] with numeric min and max.");
+    }
+    [this.min, this.max] = bounds;
     if (
       !Number.isInteger(this.n_up) ||
       this.n_up < 1 ||
@@ -137,8 +165,33 @@ export class Staircase {
     if (config.start_level < this.min || config.start_level > this.max) {
       throw new Error("jsPsych.adaptive: `start_level` is outside `bounds`.");
     }
-    if (this.mode !== "staircase" && this.mode !== "ascending_discontinue") {
-      throw new Error(`jsPsych.adaptive: unknown mode "${this.mode}".`);
+    if (config.stop !== undefined && (typeof config.stop !== "object" || config.stop === null)) {
+      throw new Error("jsPsych.adaptive: `stop` must be an object.");
+    }
+    for (const rule of STOP_RULES) {
+      const value = config.stop?.[rule];
+      if (value !== undefined && !isPositiveInteger(value)) {
+        throw new Error(`jsPsych.adaptive: \`stop.${rule}\` must be a positive integer.`);
+      }
+    }
+    if (this.mode === "ascending_discontinue") {
+      for (const option of STAIRCASE_ONLY) {
+        if (config[option] !== undefined) {
+          throw new Error(
+            `jsPsych.adaptive: \`${option}\` has no effect in 'ascending_discontinue' mode.`
+          );
+        }
+      }
+      if (config.stop?.reversals !== undefined) {
+        throw new Error(
+          "jsPsych.adaptive: `stop.reversals` has no effect in 'ascending_discontinue' mode, " +
+            "which does not track reversals."
+        );
+      }
+    } else if (config.stop?.failures_at_level !== undefined) {
+      throw new Error(
+        "jsPsych.adaptive: `stop.failures_at_level` is only used in 'ascending_discontinue' mode."
+      );
     }
     const schedule = config.step_sizes ?? [config.step_size ?? 1];
     if (schedule.length === 0) {
@@ -184,16 +237,24 @@ export class Staircase {
   }
 
   /**
-   * Record the response to the trial presented at `level` and return the next level.
-   * Throws if the procedure is already `done`.
+   * Record whether the response to the trial presented at `level` was correct and return the next
+   * level. Throws if `correct` is not a boolean or if the procedure is already `done`.
    */
   update(correct: boolean): number {
     if (this._done) {
       throw new Error("jsPsych.adaptive: update() called on a staircase that is already done.");
     }
+    if (typeof correct !== "boolean") {
+      throw new Error(
+        `jsPsych.adaptive: update() expects true or false, but received ${
+          typeof correct === "string" ? `"${correct}"` : String(correct)
+        }.`
+      );
+    }
     const presented = this._level;
     this._consecutive_failures = correct ? 0 : this._consecutive_failures + 1;
     let reversal = false;
+    let ceiling = false;
 
     if (this.mode === "ascending_discontinue") {
       if (correct) {
@@ -201,10 +262,10 @@ export class Staircase {
         this._incorrect_run = 0;
         this._failures_at_level = 0;
         if (presented >= this.max) {
-          this._finish("ceiling", presented, correct, false);
-          return this._level;
+          ceiling = true;
+        } else {
+          this._level = this.clamp(presented + this.currentStep().up);
         }
-        this._level = this.clamp(presented + this.currentStep().up);
       } else {
         this._incorrect_run++;
         this._correct_run = 0;
@@ -247,6 +308,12 @@ export class Staircase {
     };
     this._history.push(entry);
     this.checkStop();
+    // The ceiling is checked after the other stop rules, so a rule met on the same trial (e.g.
+    // `stop.trials`) is the reported reason.
+    if (ceiling && !this._done) {
+      this._done = true;
+      this._stop_reason = "ceiling";
+    }
     return this._level;
   }
 
@@ -268,7 +335,7 @@ export class Staircase {
     return {
       label: this.config.label ?? null,
       mode: this.mode,
-      config: JSON.parse(JSON.stringify(this.config)),
+      config: deepCopy(this.config) as StaircaseConfig,
       level: this._level,
       done: this._done,
       stop_reason: this._stop_reason,
@@ -284,20 +351,9 @@ export class Staircase {
     return this.steps[Math.min(this._reversal_levels.length, this.steps.length - 1)];
   }
 
+  /** Round first, then clamp, so that rounding can never push a level past a bound. */
   private clamp(x: number) {
-    return round(Math.min(this.max, Math.max(this.min, x)));
-  }
-
-  private _finish(reason: string, level: number, correct: boolean, reversal: boolean) {
-    this._history.push({
-      trial: this._history.length + 1,
-      level,
-      correct,
-      next_level: this._level,
-      reversal,
-    });
-    this._done = true;
-    this._stop_reason = reason;
+    return Math.min(this.max, Math.max(this.min, round(x)));
   }
 
   private checkStop() {
@@ -334,6 +390,8 @@ export class InterleavedStaircases {
   private readonly order: "random" | "alternate";
   private _current: number | null = null;
   private _last = -1;
+  /** Whether the track chosen by the last `next()` is still waiting for its `update()`. */
+  private _awaiting_update = false;
 
   constructor(tracks: (StaircaseConfig | Staircase)[], options: InterleavedOptions = {}) {
     if (tracks.length === 0) throw new Error("jsPsych.adaptive: need at least one track.");
@@ -375,14 +433,27 @@ export class InterleavedStaircases {
     }
     this._last = idx;
     this._current = idx;
+    this._awaiting_update = true;
     return this.tracks[idx];
   }
 
-  /** Update the track chosen by the last `next()` and return its next level. */
+  /**
+   * Update the track chosen by the last `next()` and return its next level. Throws if `update()`
+   * was already called since the last `next()`.
+   */
   update(correct: boolean): number {
     const track = this.current;
     if (!track) throw new Error("jsPsych.adaptive: call next() before update().");
-    return track.update(correct);
+    if (!this._awaiting_update) {
+      throw new Error(
+        "jsPsych.adaptive: update() was already called for this trial; call next() first."
+      );
+    }
+    // Only consume the next() once the track accepts the update, so a rejected response can be
+    // retried.
+    const level = track.update(correct);
+    this._awaiting_update = false;
+    return level;
   }
 
   toJSON() {
