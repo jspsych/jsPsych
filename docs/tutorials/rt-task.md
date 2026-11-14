@@ -840,6 +840,20 @@ var jsPsych = initJsPsych({
 });
 ```
 
+If you would rather look at the data in a spreadsheet or another program, you can also save it as a file on your computer. The [`.localSave()` method](../reference/jspsych-data.md#localsave) will download the data as a CSV or JSON file, without needing to set up a server. The first argument is the format (`'csv'` or `'json'`) and the second argument is the file name. You can use it on its own or together with `displayData()`:
+
+```javascript
+var jsPsych = initJsPsych({
+  on_finish: function() {
+    jsPsych.data.get().localSave('csv', 'mydata.csv');
+    jsPsych.data.displayData();
+  }
+});
+```
+
+!!! warning
+    When conducting an online experiment, `.localSave()` will download the file onto the *participant's* computer, so it is not a way to collect data from participants. See the [data overview page](../overview/data.md) for ways to store data on a server.
+
 ??? example "The complete code so far"
 
     ```html
