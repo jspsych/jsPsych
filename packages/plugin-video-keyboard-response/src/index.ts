@@ -31,7 +31,7 @@ const info = <const>{
     width: {
       type: ParameterType.INT,
       pretty_name: "Width",
-      default: "",
+      default: null,
     },
     /** The height of the video display in pixels. If `null`, the video will take the original video's dimensions,
      * or properly scaled with the aspect ratio if the width is also specified.
@@ -39,7 +39,7 @@ const info = <const>{
     height: {
       type: ParameterType.INT,
       pretty_name: "Height",
-      default: "",
+      default: null,
     },
     /** If true, the video will begin playing as soon as it has loaded. */
     autoplay: {
