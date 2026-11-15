@@ -744,6 +744,15 @@ describe("Timeline", () => {
       expect(timeline.getDataParameter()).toEqual({ custom: "value" });
     });
 
+    it("preserves data properties whose names start with digits", () => {
+      const timeline = createTimeline({
+        timeline: [],
+        data: { "2back": "yes", "1": "one", normal: "ok" },
+      });
+
+      expect(timeline.getDataParameter()).toEqual({ "2back": "yes", "1": "one", normal: "ok" });
+    });
+
     it("evaluates nested functions and timeline variables", async () => {
       const timeline = createTimeline({
         timeline: [],
