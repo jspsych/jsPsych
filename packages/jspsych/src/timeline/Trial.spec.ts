@@ -823,7 +823,6 @@ describe("Trial", () => {
     });
 
     describe("with parameter type mismatches", () => {
-      //TODO: redo these to expect errors on v9!
       let consoleSpy: jest.SpyInstance;
 
       beforeEach(() => {
@@ -841,11 +840,16 @@ describe("Trial", () => {
 
         // this should work:
         await createTrial({ type: TestPlugin, boolParameter: true }).run();
+        await createTrial({ type: TestPlugin, boolParameter: false }).run();
 
         // this shouldn't:
-        await createTrial({ type: TestPlugin, boolParameter: "foo" }).run();
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'A non-boolean value (`foo`) was provided for the boolean parameter "boolParameter" in the "test" plugin.'
+        await expect(
+          createTrial({ type: TestPlugin, boolParameter: "foo" }).run()
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          '"A non-boolean value (`foo`) was provided for the boolean parameter "boolParameter" in the "test" plugin."'
+        );
+        await expect(createTrial({ type: TestPlugin, boolParameter: 0 }).run()).rejects.toThrow(
+          "A non-boolean value (`0`)"
         );
       });
 
@@ -856,11 +860,47 @@ describe("Trial", () => {
 
         // this should work:
         await createTrial({ type: TestPlugin, stringParameter: "foo" }).run();
+        await createTrial({ type: TestPlugin, stringParameter: "" }).run();
 
         // this shouldn't:
-        await createTrial({ type: TestPlugin, stringParameter: 1 }).run();
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'A non-string value (`1`) was provided for the parameter "stringParameter" in the "test" plugin.'
+        await expect(
+          createTrial({ type: TestPlugin, stringParameter: 1 }).run()
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          '"A non-string value (`1`) was provided for the string parameter "stringParameter" in the "test" plugin."'
+        );
+      });
+
+      it.each(["HTML_STRING", "KEY", "IMAGE", "AUDIO", "VIDEO"] as const)(
+        "errors on non-string values for %s parameters",
+        async (typeName) => {
+          const type = ParameterType[typeName];
+          TestPlugin.setParameterInfos({ stringLikeParameter: { type } });
+
+          // this should work:
+          await createTrial({ type: TestPlugin, stringLikeParameter: "foo" }).run();
+
+          // this shouldn't:
+          await expect(
+            createTrial({ type: TestPlugin, stringLikeParameter: { foo: "bar" } }).run()
+          ).rejects.toThrow(
+            'A non-string value (`[object Object]`) was provided for the string parameter "stringLikeParameter"'
+          );
+        }
+      );
+
+      it("accepts key arrays and special values for `KEYS` parameters, but errors on other values", async () => {
+        TestPlugin.setParameterInfos({
+          keysParameter: { type: ParameterType.KEYS },
+        });
+
+        // this should work:
+        await createTrial({ type: TestPlugin, keysParameter: ["a", "b"] }).run();
+        await createTrial({ type: TestPlugin, keysParameter: "ALL_KEYS" }).run();
+        await createTrial({ type: TestPlugin, keysParameter: "NO_KEYS" }).run();
+
+        // this shouldn't:
+        await expect(createTrial({ type: TestPlugin, keysParameter: 1 }).run()).rejects.toThrow(
+          'A non-string value (`1`) was provided for the string parameter "keysParameter"'
         );
       });
 
@@ -872,22 +912,53 @@ describe("Trial", () => {
 
         // this should work:
         await createTrial({ type: TestPlugin, intParameter: 1, floatParameter: 1.5 }).run();
+        await createTrial({ type: TestPlugin, intParameter: 0, floatParameter: 0 }).run();
+        expect(consoleSpy).not.toHaveBeenCalled();
 
         // this shouldn't:
-        await createTrial({ type: TestPlugin, intParameter: "foo", floatParameter: 1.5 }).run();
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'A non-numeric value (`foo`) was provided for the numeric parameter "intParameter" in the "test" plugin.'
+        await expect(
+          createTrial({ type: TestPlugin, intParameter: "foo", floatParameter: 1.5 }).run()
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          '"A non-numeric value (`foo`) was provided for the numeric parameter "intParameter" in the "test" plugin."'
         );
 
-        await createTrial({ type: TestPlugin, intParameter: 1, floatParameter: "foo" }).run();
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'A non-numeric value (`foo`) was provided for the numeric parameter "floatParameter" in the "test" plugin.'
+        await expect(
+          createTrial({ type: TestPlugin, intParameter: 1, floatParameter: "1.5" }).run()
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          '"A non-numeric value (`1.5`) was provided for the numeric parameter "floatParameter" in the "test" plugin."'
         );
 
-        // this should warn but not error (behavior in v9):
-        await createTrial({ type: TestPlugin, intParameter: 1.5, floatParameter: 1.5 }).run();
+        // a non-numeric value for an integer parameter should error rather than being truncated
+        await expect(
+          createTrial({ type: TestPlugin, intParameter: "1.5", floatParameter: 1.5 }).run()
+        ).rejects.toThrow("A non-numeric value (`1.5`) was provided for the numeric parameter");
+        expect(consoleSpy).not.toHaveBeenCalled();
+      });
+
+      it("truncates float values for integer parameters with a warning instead of erroring", async () => {
+        TestPlugin.setParameterInfos({
+          intParameter: { type: ParameterType.INT },
+        });
+
+        const trial = createTrial({ type: TestPlugin, intParameter: 1.5 });
+        await trial.run();
+
         expect(consoleSpy).toHaveBeenCalledWith(
-          `A float value (\`1.5\`) was provided for the integer parameter "intParameter" in the "test" plugin. The value will be truncated to an integer.`
+          'A float value (`1.5`) was provided for the integer parameter "intParameter" in the "test" plugin. The value will be truncated to an integer.'
+        );
+        expect(trial.pluginInstance.trial).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({ intParameter: 1 }),
+          expect.anything()
+        );
+
+        // negative floats are truncated towards zero
+        const negativeTrial = createTrial({ type: TestPlugin, intParameter: -1.5 });
+        await negativeTrial.run();
+        expect(negativeTrial.pluginInstance.trial).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({ intParameter: -1 }),
+          expect.anything()
         );
       });
 
@@ -900,9 +971,10 @@ describe("Trial", () => {
         await createTrial({ type: TestPlugin, functionParameter: () => {} }).run();
 
         // this shouldn't:
-        await createTrial({ type: TestPlugin, functionParameter: "foo" }).run();
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'A non-function value (`foo`) was provided for the function parameter "functionParameter" in the "test" plugin.'
+        await expect(
+          createTrial({ type: TestPlugin, functionParameter: "foo" }).run()
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          '"A non-function value (`foo`) was provided for the function parameter "functionParameter" in the "test" plugin."'
         );
       });
 
@@ -918,10 +990,91 @@ describe("Trial", () => {
         await createTrial({ type: TestPlugin, selectParameter: "foo" }).run();
 
         // this shouldn't:
+        await expect(
+          createTrial({ type: TestPlugin, selectParameter: "baz" }).run()
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          '"The value "baz" is not a valid option for the parameter "selectParameter" in the "test" plugin. Valid options are: foo, bar."'
+        );
+      });
 
-        await createTrial({ type: TestPlugin, selectParameter: "baz" }).run();
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'The value "baz" is not a valid option for the parameter "selectParameter" in the "test" plugin. Valid options are: foo, bar.'
+      it("errors on select parameters without an options array", async () => {
+        TestPlugin.setParameterInfos({
+          selectParameter: { type: ParameterType.SELECT, default: null },
+        });
+
+        await expect(
+          createTrial({ type: TestPlugin, selectParameter: "foo" }).run()
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          '"The "options" array is required for the "select" parameter "selectParameter" in the "test" plugin."'
+        );
+
+        // the plugin's parameter info is invalid regardless of the provided value
+        await expect(createTrial({ type: TestPlugin }).run()).rejects.toThrow(
+          'The "options" array is required'
+        );
+      });
+
+      it("accepts `null` values for parameters of any type", async () => {
+        TestPlugin.setParameterInfos({
+          boolParameter: { type: ParameterType.BOOL, default: true },
+          stringParameter: { type: ParameterType.STRING, default: "foo" },
+          intParameter: { type: ParameterType.INT, default: 1 },
+          functionParameter: { type: ParameterType.FUNCTION, default: () => {} },
+          selectParameter: { type: ParameterType.SELECT, options: ["foo"], default: "foo" },
+        });
+
+        const trial = createTrial({
+          type: TestPlugin,
+          boolParameter: null,
+          stringParameter: null,
+          intParameter: null,
+          functionParameter: null,
+          selectParameter: null,
+        });
+        await trial.run();
+
+        expect(trial.pluginInstance.trial).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            boolParameter: null,
+            stringParameter: null,
+            intParameter: null,
+            functionParameter: null,
+            selectParameter: null,
+          }),
+          expect.anything()
+        );
+        expect(consoleSpy).not.toHaveBeenCalled();
+      });
+
+      it("does not check the element types of array parameters", async () => {
+        TestPlugin.setParameterInfos({
+          stringArray: { type: ParameterType.STRING, array: true },
+        });
+
+        await createTrial({ type: TestPlugin, stringArray: [1, true] }).run();
+      });
+
+      it("errors on type mismatches in nested `COMPLEX` parameters", async () => {
+        TestPlugin.setParameterInfos({
+          complexArray: {
+            type: ParameterType.COMPLEX,
+            array: true,
+            nested: { intChild: { type: ParameterType.INT } },
+          },
+        });
+
+        // this should work:
+        await createTrial({ type: TestPlugin, complexArray: [{ intChild: 1 }] }).run();
+
+        // this shouldn't:
+        await expect(
+          createTrial({
+            type: TestPlugin,
+            complexArray: [{ intChild: 1 }, { intChild: "foo" }],
+          }).run()
+        ).rejects.toThrowErrorMatchingInlineSnapshot(
+          '"A non-numeric value (`foo`) was provided for the numeric parameter "complexArray[1].intChild" in the "test" plugin."'
         );
       });
     });
