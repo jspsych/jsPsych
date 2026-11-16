@@ -76,3 +76,4 @@ The following people have contributed to the development of jsPsych by writing c
 * Haotian Tu - https://github.com/thtTNT
 * Joshua Unrau - https://github.com/joshunrau
 * Victor Zhang - https://github.com/vzhang03
+* Tyler Horan - https://github.com/tylerhoran
