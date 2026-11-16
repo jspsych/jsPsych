@@ -74,4 +74,4 @@ When workers click the button, the contents of the `code` text field will be sen
 
 ## Limitations
 
-jsPsych is not designed to communicate with the Mechanical Turk API in a comprehensive manner. If you are looking for software to help you post and manage HITs, then you may want to look at [PsiTurk](http://www.psiturk.org). jsPsych and PsiTurk complement each other nicely, and there is [an example of combining the two platforms](https://psiturk.org/ee/W4v3TPAsiD6FUVY8PDyajH) on PsiTurk's experiment exchange.
+jsPsych is not designed to communicate with the Mechanical Turk API in a comprehensive manner. If you are looking for software to help you post and manage HITs, then you may want to look at [PsiTurk](https://psiturk.org). jsPsych and PsiTurk complement each other nicely.
