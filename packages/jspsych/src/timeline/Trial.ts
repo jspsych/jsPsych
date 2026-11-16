@@ -1,6 +1,6 @@
 import { Class } from "type-fest";
 
-import { ParameterInfos, universalPluginParameters } from "../modules/plugins";
+import { ParameterInfo, ParameterInfos, universalPluginParameters } from "../modules/plugins";
 import { JsPsychPlugin, ParameterType, PluginInfo } from "../modules/plugins";
 import { deepCopy, deepMerge } from "../modules/utils";
 import { Timeline } from "./Timeline";
@@ -349,6 +349,97 @@ export class Trial extends TimelineNode {
   }
 
   /**
+   * Checks that a (non-array) parameter value matches the type declared for it in the plugin's
+   * info object and throws an error if it does not. `null` values are always accepted.
+   *
+   * Float values for `INT` parameters are not considered a mismatch: they are truncated to an
+   * integer and a warning is logged.
+   *
+   * @returns The validated parameter value (truncated if necessary)
+   */
+  private validateParameterType(
+    parameterValue: any,
+    parameterConfig: ParameterInfo,
+    parameterPath: string[]
+  ) {
+    const getParameterDescription = () =>
+      `"${parameterPathArrayToString(parameterPath)}" in the "${this.pluginInfo.name}" plugin`;
+
+    // A `SELECT` parameter without options is an error in the plugin itself, so we check it
+    // regardless of the provided value.
+    if (parameterConfig.type === ParameterType.SELECT && !Array.isArray(parameterConfig.options)) {
+      throw new Error(
+        `The "options" array is required for the "select" parameter ${getParameterDescription()}.`
+      );
+    }
+
+    if (parameterConfig.array || parameterValue === null) {
+      return parameterValue;
+    }
+
+    const throwMismatchError = (expected: string) => {
+      throw new Error(
+        `A non-${expected} value (\`${parameterValue}\`) was provided for the ${expected} parameter ${getParameterDescription()}.`
+      );
+    };
+
+    switch (parameterConfig.type) {
+      case ParameterType.BOOL:
+        if (typeof parameterValue !== "boolean") {
+          throwMismatchError("boolean");
+        }
+        break;
+
+      // @ts-ignore falls through
+      case ParameterType.KEYS: // "ALL_KEYS", "NO_KEYS", and single key strings are checked below
+        if (Array.isArray(parameterValue)) break;
+      case ParameterType.STRING:
+      case ParameterType.HTML_STRING:
+      case ParameterType.KEY:
+      case ParameterType.AUDIO:
+      case ParameterType.VIDEO:
+      case ParameterType.IMAGE:
+        if (typeof parameterValue !== "string") {
+          throwMismatchError("string");
+        }
+        break;
+
+      case ParameterType.FLOAT:
+      case ParameterType.INT:
+        if (typeof parameterValue !== "number") {
+          throwMismatchError("numeric");
+        }
+
+        // truncate floats to integers if the parameter type is INT
+        if (parameterConfig.type === ParameterType.INT && parameterValue % 1 !== 0) {
+          console.warn(
+            `A float value (\`${parameterValue}\`) was provided for the integer parameter ${getParameterDescription()}. The value will be truncated to an integer.`
+          );
+          return Math.trunc(parameterValue);
+        }
+        break;
+
+      case ParameterType.FUNCTION:
+        if (typeof parameterValue !== "function") {
+          throwMismatchError("function");
+        }
+        break;
+
+      case ParameterType.SELECT:
+        if (!parameterConfig.options.includes(parameterValue)) {
+          throw new Error(
+            `The value "${parameterValue}" is not a valid option for the parameter ${getParameterDescription()}. Valid options are: ${parameterConfig.options.join(
+              ", "
+            )}.`
+          );
+        }
+        break;
+    }
+
+    return parameterValue;
+  }
+
+  /**
    * Checks that the parameters provided in the trial description align with the plugin's info
    * object, resolves missing parameter values from the parent timeline, resolves timeline variable
    * parameters, evaluates parameter functions if the expected parameter type is not `FUNCTION`, and
@@ -383,81 +474,7 @@ export class Trial extends TimelineNode {
           },
         });
 
-        // TODO: ensure that this throws an error in v9!
-        // major parameter type validation
-        if (!parameterConfig.array && parameterValue !== null) {
-          switch (parameterConfig.type) {
-            case ParameterType.BOOL:
-              if (typeof parameterValue !== "boolean") {
-                const parameterPathString = parameterPathArrayToString(parameterPath);
-                console.warn(
-                  `A non-boolean value (\`${parameterValue}\`) was provided for the boolean parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
-                );
-              }
-              break;
-            // @ts-ignore falls through
-            case ParameterType.KEYS: // "ALL_KEYS", "NO_KEYS", and single key strings are checked here
-              if (Array.isArray(parameterValue)) break;
-            case ParameterType.STRING:
-            case ParameterType.HTML_STRING:
-            case ParameterType.KEY:
-            case ParameterType.AUDIO:
-            case ParameterType.VIDEO:
-            case ParameterType.IMAGE:
-              if (typeof parameterValue !== "string") {
-                const parameterPathString = parameterPathArrayToString(parameterPath);
-                console.warn(
-                  `A non-string value (\`${parameterValue}\`) was provided for the parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
-                );
-              }
-              break;
-            case ParameterType.FLOAT:
-            case ParameterType.INT:
-              if (typeof parameterValue !== "number") {
-                const parameterPathString = parameterPathArrayToString(parameterPath);
-                console.warn(
-                  `A non-numeric value (\`${parameterValue}\`) was provided for the numeric parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
-                );
-              }
-              break;
-            case ParameterType.FUNCTION:
-              if (typeof parameterValue !== "function") {
-                const parameterPathString = parameterPathArrayToString(parameterPath);
-                console.warn(
-                  `A non-function value (\`${parameterValue}\`) was provided for the function parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
-                );
-              }
-              break;
-            case ParameterType.SELECT:
-              if (!parameterConfig.options) {
-                const parameterPathString = parameterPathArrayToString(parameterPath);
-                console.warn(
-                  `The "options" array is required for the "select" parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin.`
-                );
-              }
-          }
-
-          // truncate floats to integers if the parameter type is INT
-          if (parameterConfig.type === ParameterType.INT && parameterValue % 1 !== 0) {
-            const parameterPathString = parameterPathArrayToString(parameterPath);
-            console.warn(
-              `A float value (\`${parameterValue}\`) was provided for the integer parameter "${parameterPathString}" in the "${this.pluginInfo.name}" plugin. The value will be truncated to an integer.`
-            );
-
-            parameterValue = Math.trunc(parameterValue);
-          }
-        }
-
-        if (parameterConfig.type === ParameterType.SELECT) {
-          if (!parameterConfig.options.includes(parameterValue)) {
-            const parameterPathString = parameterPathArrayToString(parameterPath);
-            console.warn(
-              `The value "${parameterValue}" is not a valid option for the parameter "${parameterPathString}" in the "${
-                this.pluginInfo.name
-              }" plugin. Valid options are: ${parameterConfig.options.join(", ")}.`
-            );
-          }
-        }
+        parameterValue = this.validateParameterType(parameterValue, parameterConfig, parameterPath);
 
         // array validation
         if (parameterConfig.array && !Array.isArray(parameterValue)) {
