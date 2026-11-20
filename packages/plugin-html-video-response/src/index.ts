@@ -136,6 +136,13 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     this.recorder = this.jsPsych.pluginAPI.getCameraRecorder();
 
+    if (!this.recorder) {
+      throw new Error(
+        "The html-video-response plugin requires access to the camera, but the camera has not been " +
+          "initialized. Add the initialize-camera plugin to the timeline before this trial."
+      );
+    }
+
     this.setupRecordingEvents(display_element, trial);
 
     this.startRecording();

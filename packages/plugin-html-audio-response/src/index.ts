@@ -127,6 +127,13 @@ class HtmlAudioResponsePlugin implements JsPsychPlugin<Info> {
   trial(display_element: HTMLElement, trial: TrialType<Info>) {
     this.recorder = this.jsPsych.pluginAPI.getMicrophoneRecorder();
 
+    if (!this.recorder) {
+      throw new Error(
+        "The html-audio-response plugin requires access to the microphone, but the microphone has not been " +
+          "initialized. Add the initialize-microphone plugin to the timeline before this trial."
+      );
+    }
+
     this.setupRecordingEvents(display_element, trial);
 
     this.startRecording();
