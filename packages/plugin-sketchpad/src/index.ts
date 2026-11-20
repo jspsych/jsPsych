@@ -545,17 +545,36 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
   }
 
   private add_background_image() {
-    return new Promise((resolve, reject) => {
-      if (this.params.background_image !== null) {
-        this.background_image = new Image();
-        this.background_image.src = this.params.background_image;
-        this.background_image.onload = () => {
-          this.ctx.drawImage(this.background_image, 0, 0);
+    return new Promise((resolve) => {
+      if (this.params.background_image === null) {
+        resolve(false);
+        return;
+      }
+      const load = (use_cors: boolean) => {
+        const image = new Image();
+        // A cross-origin image without CORS taints the canvas, and toDataURL() then throws.
+        if (use_cors) {
+          image.crossOrigin = "anonymous";
+        }
+        image.onload = () => {
+          this.background_image = image;
+          this.ctx.drawImage(image, 0, 0);
           resolve(true);
         };
-      } else {
-        resolve(false);
-      }
+        image.onerror = () => {
+          if (use_cors) {
+            // The server does not send CORS headers: show the image anyway, but the PNG can't be saved.
+            load(false);
+          } else {
+            console.warn(
+              `jsPsych sketchpad: could not load background_image "${this.params.background_image}".`
+            );
+            resolve(false);
+          }
+        };
+        image.src = this.params.background_image;
+      };
+      load(this.params.save_final_image);
     });
   }
 
@@ -726,7 +745,15 @@ class SketchpadPlugin implements JsPsychPlugin<Info> {
     trial_data.response = response;
 
     if (this.params.save_final_image) {
-      trial_data.png = this.sketchpad.toDataURL();
+      try {
+        trial_data.png = this.sketchpad.toDataURL();
+      } catch (error) {
+        console.warn(
+          "jsPsych sketchpad: the final image could not be saved because the background_image is cross-origin and its server does not allow CORS.",
+          error
+        );
+        trial_data.png = null;
+      }
     }
 
     if (this.params.save_strokes) {
