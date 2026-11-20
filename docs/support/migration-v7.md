@@ -114,7 +114,7 @@ var trial = {
 
 ## Custom plugins
 
-If you have custom plugins that you would like to upgrade to be compatible with v7.x we recommend using our [plugin template](https://github.com/jspsych/jspsych-contrib/blob/main/packages/plugin-template/index.js).
+If you have custom plugins that you would like to upgrade to be compatible with v7.x we recommend using our [plugin template](https://github.com/jspsych/jspsych-dev/blob/main/packages/new-plugin/templates/plugin-template-js/src/index.js).
 
 The new template implements plugins as a class, but the core components are essentially unchanged. 
 
