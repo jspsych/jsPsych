@@ -103,6 +103,30 @@ describe("survey-multi-choice plugin", () => {
     expect(surveyData.response_index[0]).toBe(2);
   });
 
+  test("records options that contain quotation marks", async () => {
+    const options = ['I said "yes"', "It's <b>fine</b> & good", "plain"];
+    const { getData, expectFinished, displayElement } = await startTimeline([
+      {
+        type: surveyMultiChoice,
+        questions: [
+          { prompt: "Q0", options },
+          { prompt: "Q1", options },
+        ],
+      },
+    ]);
+
+    getInputElementByIndex(0, 0, displayElement).checked = true;
+    getInputElementByIndex(1, 1, displayElement).checked = true;
+
+    await clickTarget(displayElement.querySelector("#jspsych-survey-multi-choice-next"));
+    await expectFinished();
+
+    const surveyData = getData().values()[0];
+    expect(surveyData.response.Q0).toBe('I said "yes"');
+    expect(surveyData.response.Q1).toBe("It's <b>fine</b> & good");
+    expect(surveyData.response_index).toEqual([0, 1]);
+  });
+
   test("records -1 in response_index for unanswered questions", async () => {
     const options = ["Little", "", "", "Much"];
     const { getData, expectFinished, displayElement } = await startTimeline([
