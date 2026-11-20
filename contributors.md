@@ -4,6 +4,7 @@ The following people have contributed to the development of jsPsych by writing c
 * aucuparia - https://github.com/aucuparia
 * Xiaolu Bai - https://github.com/lbai001
 * Niranjan Baskaran - https://github.com/Bankminer78
+* Kelob Branch - https://github.com/kbranchuser
 * brchristian - https://github.com/brchristian
 * bjoluc - https://github.com/bjoluc
 * Christian Brickhouse - https://github.com/chrisbrickhouse
