@@ -213,3 +213,78 @@ describe("sketchpad", () => {
     await expectFinished();
   });
 });
+
+describe("sketchpad background_image", () => {
+  let images: HTMLImageElement[];
+
+  beforeEach(() => {
+    images = [];
+    jest.spyOn(window, "Image").mockImplementation(() => {
+      const image = document.createElement("img");
+      images.push(image);
+      return image;
+    });
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test("requests the background image with CORS so the final image can be saved", async () => {
+    const { displayElement, expectFinished, getData } = await startTimeline([
+      {
+        type: sketchpad,
+        background_image: "https://example.com/image.png",
+      },
+    ]);
+
+    expect(images).toHaveLength(1);
+    expect(images[0].crossOrigin).toBe("anonymous");
+    images[0].dispatchEvent(new Event("load"));
+
+    await clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await expectFinished();
+    expect(getData().values()[0].png).toMatch(/^data:image\/png/);
+  });
+
+  test("does not use CORS when save_final_image is false", async () => {
+    const { displayElement, expectFinished } = await startTimeline([
+      {
+        type: sketchpad,
+        background_image: "https://example.com/image.png",
+        save_final_image: false,
+      },
+    ]);
+
+    expect(images[0].hasAttribute("crossorigin")).toBe(false);
+    images[0].dispatchEvent(new Event("load"));
+
+    await clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await expectFinished();
+  });
+
+  test("falls back to a plain request when the server does not allow CORS", async () => {
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+    const { displayElement, expectFinished, getData } = await startTimeline([
+      {
+        type: sketchpad,
+        background_image: "https://example.com/image.png",
+      },
+    ]);
+
+    images[0].dispatchEvent(new Event("error"));
+    expect(images).toHaveLength(2);
+    expect(images[1].hasAttribute("crossorigin")).toBe(false);
+    images[1].dispatchEvent(new Event("load"));
+
+    // The canvas is now tainted, so the browser refuses to export it.
+    jest.spyOn(HTMLCanvasElement.prototype, "toDataURL").mockImplementation(() => {
+      throw new DOMException("Tainted canvases may not be exported.", "SecurityError");
+    });
+
+    await clickTarget(displayElement.querySelector("#sketchpad-end"));
+    await expectFinished();
+    expect(getData().values()[0].png).toBeNull();
+    expect(warn).toHaveBeenCalled();
+  });
+});
