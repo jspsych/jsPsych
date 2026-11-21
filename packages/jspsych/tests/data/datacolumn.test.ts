@@ -69,4 +69,35 @@ describe("DataColumn", () => {
       })
     ).toBe(false);
   });
+
+  describe("skips null and undefined values like #mean", () => {
+    const withMissing = () =>
+      new DataCollection([{ rt: 100 }, { rt: 300 }, { rt: null }, { rt: 200 }, {}]).select("rt");
+
+    test("#mean", () => {
+      expect(withMissing().mean()).toBe(200);
+    });
+    test("#median", () => {
+      expect(withMissing().median()).toBe(200);
+    });
+    test("#min", () => {
+      expect(withMissing().min()).toBe(100);
+    });
+    test("#max", () => {
+      expect(new DataCollection([{ x: -300 }, { x: -100 }, { x: null }]).select("x").max()).toBe(
+        -100
+      );
+    });
+    test("#variance", () => {
+      expect(withMissing().variance()).toBe(10000);
+    });
+    test("#sd", () => {
+      expect(withMissing().sd()).toBe(100);
+    });
+    test("#median returns undefined when there are no valid values", () => {
+      expect(
+        new DataCollection([{ rt: null }, { rt: null }]).select("rt").median()
+      ).toBeUndefined();
+    });
+  });
 });

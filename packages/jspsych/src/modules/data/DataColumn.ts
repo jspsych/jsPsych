@@ -1,6 +1,14 @@
 export class DataColumn {
   constructor(public values = []) {}
 
+  /**
+   * The values that are not `null` or `undefined`. Plugins record `null` for missing responses
+   * (e.g. `rt` when a trial times out), so the summary statistics skip them, like `mean()` does.
+   */
+  private validValues() {
+    return this.values.filter((value) => typeof value !== "undefined" && value !== null);
+  }
+
   sum() {
     let s = 0;
     for (const v of this.values) {
@@ -25,10 +33,11 @@ export class DataColumn {
   }
 
   median() {
-    if (this.values.length === 0) {
+    const numbers = this.validValues();
+    if (numbers.length === 0) {
       return undefined;
     }
-    const numbers = this.values.slice(0).sort(function (a, b) {
+    numbers.sort(function (a, b) {
       return a - b;
     });
     const middle = Math.floor(numbers.length / 2);
@@ -37,11 +46,11 @@ export class DataColumn {
   }
 
   min() {
-    return Math.min.apply(null, this.values);
+    return Math.min.apply(null, this.validValues());
   }
 
   max() {
-    return Math.max.apply(null, this.values);
+    return Math.max.apply(null, this.validValues());
   }
 
   count() {
@@ -49,12 +58,13 @@ export class DataColumn {
   }
 
   variance() {
+    const values = this.validValues();
     const mean = this.mean();
     let sum_square_error = 0;
-    for (const x of this.values) {
+    for (const x of values) {
       sum_square_error += Math.pow(x - mean, 2);
     }
-    const mse = sum_square_error / (this.values.length - 1);
+    const mse = sum_square_error / (values.length - 1);
     return mse;
   }
 
