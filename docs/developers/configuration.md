@@ -31,14 +31,9 @@ Then run `npm install`.
 This will create a `node_modules` directory and install all the dependencies into it that are required to build and test jsPsych.
 
 !!! info
-The jsPsych (-contrib) repositories depend on the `canvas` package which comes with pre-built binaries.
-On systems for which no pre-built binaries are available, `npm install` will try to build the binaries from scratch, sometimes failing with an error message mentioning the `canvas` package.
-If you are facing such installation issues, please follow the [installation instructions](https://github.com/Automattic/node-canvas/wiki#installation-guides) of the `canvas` package and run `npm install` again afterwards.
-
-!!! info
-If you are running `npm install` in the core jsPsych repository, this will also execute the build chain for all packages in the jsPsych repository.
-This step may take a few minutes.
-If you would like to use that time efficiently, consider reading the following two sections to know what's happening.
+    If you are running `npm install` in the core jsPsych repository, this will also execute the build chain for all packages in the jsPsych repository.
+    This step may take a few minutes.
+    If you would like to use that time efficiently, consider reading the following two sections to know what's happening.
 
 ## Repository structure
 
