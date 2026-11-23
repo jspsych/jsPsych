@@ -137,4 +137,29 @@ describe("survey-likert plugin simulation", () => {
       expect(scale).toEqual(expect.arrayContaining(r[1] as []));
     }
   });
+
+  test("visual mode works when the simulated response is null", async () => {
+    const scale = ["a", "b", "c"];
+    const { getData, expectFinished, expectRunning } = await simulateTimeline(
+      [
+        {
+          type: surveyMultiSelect,
+          questions: [
+            { prompt: "Q0", options: scale },
+            { prompt: "Q1", options: scale },
+          ],
+          simulation_options: { data: { response: null } },
+        },
+      ],
+      "visual"
+    );
+
+    await expectRunning();
+
+    jest.runAllTimers();
+
+    await expectFinished();
+
+    expect(getData().values()[0].response).toEqual({ Q0: [], Q1: [] });
+  });
 });
