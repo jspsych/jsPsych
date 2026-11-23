@@ -1,5 +1,8 @@
 /**
- * Webpack configuration to compile `src/index.scss` => `css/jspsych.css` and inline font files
+ * Webpack configuration to compile the stylesheets in `src/` => `css/` and inline font files.
+ *
+ * Each entry name becomes an output filename, so `src/index.scss` => `css/jspsych.css` and
+ * `src/mobile.scss` => `css/jspsych-mobile.css`.
  */
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -8,20 +11,25 @@ const ReplaceInFileWebpackPlugin = require("replace-in-file-webpack-plugin");
 const path = require("path");
 
 const outputPath = path.resolve(__dirname, "css");
-const outputFilename = "jspsych.css";
+
+// Only index.scss imports the font files, so the .woff cleanup below applies to it alone.
+const fontStylesheet = "jspsych.css";
 
 module.exports = {
   mode: "development",
-  entry: "./src/index.scss",
+  entry: {
+    jspsych: "./src/index.scss",
+    "jspsych-mobile": "./src/mobile.scss",
+  },
   output: { path: outputPath },
   plugins: [
-    new MiniCssExtractPlugin({ filename: outputFilename }),
+    new MiniCssExtractPlugin({ filename: "[name].css" }),
     new RemoveEmptyScriptsPlugin(),
     new ReplaceInFileWebpackPlugin([
       // Remove .woff format in favor of .woff2
       {
         dir: outputPath,
-        files: [outputFilename],
+        files: [fontStylesheet],
         rules: [{ search: /, url\(.*\) format\('woff'\)/g, replace: "" }],
       },
     ]),
