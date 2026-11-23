@@ -60,6 +60,29 @@ const info = <const>{
       type: ParameterType.BOOL,
       default: false,
     },
+    /** A message shown to participants while the video file is being uploaded to a remote server
+     * (i.e., when `save_via_api` is set to a valid API endpoint). During this time, a loading spinner
+     * will appear along with this message. */
+    upload_wait_message: {
+      type: ParameterType.STRING,
+      default: "Uploading data...",
+    },
+
+    /** If a string is provided (e.g., "https://yourserver.com/upload"), the recorded video will be uploaded
+     * directly to the specified API endpoint as a video file (e.g., .webm, .mp4). A reference ID returned
+     * by the server (in a field named `ref_id` in the JSON response) will be stored under `response`.
+     * If `null` or empty, no upload is performed. */
+    save_via_api: {
+      type: ParameterType.STRING,
+      default: null,
+    },
+
+    /** If `true`, the recorded video will be saved locally using a randomly generated filename
+     * (e.g., "a8sjw93kd.webm"). The browser saves to the user's default Downloads folder. */
+    save_locally: {
+      type: ParameterType.BOOL,
+      default: false,
+    },
   },
   data: {
     /** The time, since the onset of the stimulus, for the participant to click the done button. If the button is not clicked (or not enabled), then `rt` will be `null`. */
@@ -130,6 +153,8 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
   private stop_event_handler;
   private data_available_handler;
   private recorded_data_chunks = [];
+  private video_data: Blob;
+  private video_extension: string;
 
   constructor(private jsPsych: JsPsych) {}
 
@@ -152,7 +177,9 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
   }
 
   private hideStimulus(display_element: HTMLElement) {
-    const el: HTMLElement = display_element.querySelector("#jspsych-html-video-response-stimulus");
+    const el: HTMLElement = display_element.querySelector(
+      "#jspsych-html-video-response-stimulus"
+    );
     if (el) {
       el.style.visibility = "hidden";
     }
@@ -175,6 +202,102 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
     }
   }
 
+  private showLoadingStateSpinner(display_element, trial) {
+    const html = `
+          <style>
+            .spinner {
+              width: 40px;
+              height: 40px;
+              border: 4px solid rgba(0, 0, 0, 0.1);
+              border-left-color: #2b2b2a;
+              border-radius: 50%;
+              animation: spin 1s linear infinite;
+              margin: 20px auto;
+            }
+
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+          </style>
+
+          <p>${trial.upload_wait_message}</p>
+          <div class="spinner"></div>
+        `;
+    display_element.innerHTML = html;
+  }
+
+  private async saveVideoData(
+    display_element: HTMLElement,
+    trial: TrialType<Info>
+  ): Promise<void> {
+    const isApi =
+      typeof trial.save_via_api === "string" &&
+      trial.save_via_api.trim() !== "";
+    const wantsLocalSave = trial.save_locally === true;
+
+    // UUID-style filename
+    const randomId = Math.random().toString(36).slice(2, 11);
+    const filename = `${randomId}.${this.video_extension}`;
+
+    if (isApi) {
+      const formData = new FormData();
+      formData.append("video", this.video_data, filename);
+
+      try {
+        this.showLoadingStateSpinner(display_element, trial);
+        const response = await fetch(trial.save_via_api, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(
+            `Upload failed (${response.status}): ${text.slice(0, 300)}`
+          );
+        }
+
+        let result: any;
+        try {
+          result = await response.json();
+        } catch {
+          const text = await response.text();
+          throw new Error(`Expected JSON but got: ${text.slice(0, 300)}`);
+        }
+
+        this.response = result.ref_id ?? "Uploaded with no ref_id";
+      } catch (error) {
+        console.error("Error uploading video:", error);
+        this.response = "Error uploading video: " + error;
+      }
+    }
+
+    if (wantsLocalSave) {
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = this.video_url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      if (!isApi) {
+        this.response = filename;
+      }
+    }
+
+    if (!isApi && !wantsLocalSave) {
+      this.response = await new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          const base64 = (reader.result as string).split(",")[1];
+          resolve(base64);
+        });
+        reader.readAsDataURL(this.video_data);
+      });
+    }
+  }
+
   private setupRecordingEvents(display_element, trial) {
     this.data_available_handler = (e) => {
       if (e.data.size > 0) {
@@ -183,15 +306,34 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
     };
 
     this.stop_event_handler = () => {
-      const data = new Blob(this.recorded_data_chunks, { type: this.recorder.mimeType });
-      this.video_url = URL.createObjectURL(data);
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        const base64 = (reader.result as string).split(",")[1];
-        this.response = base64;
-        this.load_resolver();
+      this.video_data = new Blob(this.recorded_data_chunks, {
+        type: this.recorder.mimeType,
       });
-      reader.readAsDataURL(data);
+
+      this.video_url = URL.createObjectURL(this.video_data);
+
+      // derive extension from MIME type (e.g., "video/webm;codecs=vp8" → "webm")
+      const mimeType = this.video_data.type.split("/");
+      if (mimeType.length > 1) {
+        const raw = mimeType[1].split(";")[0];
+        switch (raw) {
+          case "mp4":
+            this.video_extension = "mp4";
+            break;
+          case "webm":
+            this.video_extension = "webm";
+            break;
+          case "x-matroska":
+            this.video_extension = "mkv";
+            break;
+          default:
+            this.video_extension = raw;
+        }
+      } else {
+        this.video_extension = "webm"; // safe default
+      }
+
+      this.load_resolver();
     };
 
     this.start_event_handler = (e) => {
@@ -227,7 +369,10 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
       }
     };
 
-    this.recorder.addEventListener("dataavailable", this.data_available_handler);
+    this.recorder.addEventListener(
+      "dataavailable",
+      this.data_available_handler
+    );
 
     this.recorder.addEventListener("stop", this.stop_event_handler);
 
@@ -252,11 +397,13 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
       <button id="continue" class="jspsych-btn">${trial.accept_button_label}</button>
     `;
 
-    display_element.querySelector("#record-again").addEventListener("click", () => {
-      // release object url to save memory
-      URL.revokeObjectURL(this.video_url);
-      this.startRecording();
-    });
+    display_element
+      .querySelector("#record-again")
+      .addEventListener("click", () => {
+        // release object url to save memory
+        URL.revokeObjectURL(this.video_url);
+        this.startRecording();
+      });
     display_element.querySelector("#continue").addEventListener("click", () => {
       this.endTrial(display_element, trial);
     });
@@ -265,10 +412,14 @@ class HtmlVideoResponsePlugin implements JsPsychPlugin<Info> {
     // video.src =
   }
 
-  private endTrial(display_element, trial) {
+  private async endTrial(display_element, trial) {
+    await this.saveVideoData(display_element, trial);
     // clear recordering event handler
 
-    this.recorder.removeEventListener("dataavailable", this.data_available_handler);
+    this.recorder.removeEventListener(
+      "dataavailable",
+      this.data_available_handler
+    );
     this.recorder.removeEventListener("start", this.start_event_handler);
     this.recorder.removeEventListener("stop", this.stop_event_handler);
 
