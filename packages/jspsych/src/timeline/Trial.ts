@@ -259,6 +259,7 @@ export class Trial extends TimelineNode {
   }
 
   private onLoad = () => {
+    this.dependencies.onTrialLoad(this);
     this.runParameterCallback("on_load");
     this.dependencies.runOnLoadExtensionCallbacks(this.getParameterValue("extensions"));
   };
