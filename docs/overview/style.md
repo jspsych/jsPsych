@@ -241,6 +241,22 @@ const trial_procedure = {
 
 See the "css-classes-parameter.html" file in jsPsych's examples subfolder for more explanation and examples.
 
+## Default sizing of buttons and inputs
+
+`jspsych.css` sizes buttons and text inputs to be comfortable to tap as well as click, so experiments work on phones and tablets without additional styling:
+
+* Buttons (`.jspsych-btn`) compute to roughly 48px tall, clearing the 44px minimum target size recommended by [WCAG 2.5.5](https://www.w3.org/WAI/WCAG21/Understanding/target-size.html) and the Apple Human Interface Guidelines.
+* Text inputs use a 16px font. Below that size, iOS Safari zooms the viewport when the field receives focus, which leaves the participant looking at a partial view of the trial.
+
+These are ordinary defaults, so you can override them like any other rule:
+
+```css
+.jspsych-btn {
+  padding: 8px 12px;
+  font-size: 14px;
+}
+```
+
 ## Tips for working with CSS
 
 Your browser's developer tools contain very useful features for exploring and debugging your experiment's style and formatting. Open your browser's developer tools and click on the Element Inspector button or go to the Elements tab. Once you have selected an element on the page, you can see all of the information that can be used to select it, including:
